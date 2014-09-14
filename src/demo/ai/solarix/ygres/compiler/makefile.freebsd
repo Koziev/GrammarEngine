@@ -1,0 +1,22 @@
+SRC      = ../../../../../../..
+OBJDIR   = /mnt/ad0s6.fat/tmp/Ygres
+EXEDIR     = .
+LEM_PATH = ../../../../..
+BOOST_PATH = $(SRC)/boost
+
+CC       = gcc
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D SOL_NO_NGRAMS -D LEM_CONSOLE -D _MAK_TARGET_OS_linux -D NDEBUG -D SOL_SAVEBIN -D SOL_LOADTXT -D SOL_SAVETXT -D SOL_COMPILER -D SOL_LOADBIN -D SOL_REPORT -D SOLARIX_PRO -D BOOST_ALL_NO_LIB -D _GLIBCPP_USE_WCHAR_T -c -march=pentium -Wall -O3 
+LFLAGS =
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+#LEM_LIBS = $(LEM_PATH)/lib/libsqlite3.so
+LEM_LIBS = 
+
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	rm $(EXEDIR)/compiler

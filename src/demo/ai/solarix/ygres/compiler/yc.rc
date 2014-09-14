@@ -1,0 +1,44 @@
+MainIcon ICON ygres.ico
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+#include <Windows.h>
+#include "../../../../../include/lem/solarix/project_version.h"
+
+#define Stringize(x) #x
+
+1 VERSIONINFO
+ FILEVERSION PROJVER_MAJOR,PROJVER_MINOR,0,PROJVER_BUILD
+ PRODUCTVERSION PROJVER_MAJOR,PROJVER_MINOR,0,PROJVER_BUILD
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "04090000"
+        BEGIN
+            VALUE "FileDescription", "Dictionary compiler"
+            VALUE "InternalName", "Compiler"
+            VALUE "LegalCopyright", "Copyright (C) Elijah Koziev 2009 www.solarix.ru"
+            VALUE "OriginalFilename", "compiler.exe"
+            VALUE "CompanyName", "Elijah Koziev"
+            VALUE "ProductName", "Solarix SDK"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0
+    END
+END
+
