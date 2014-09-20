@@ -1,0 +1,795 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-MySQL|Win32">
+      <Configuration>Release-MySQL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-MySQL|x64">
+      <Configuration>Release-MySQL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Grammar_Engine</ProjectName>
+    <ProjectGuid>{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}</ProjectGuid>
+    <RootNamespace>Grammar_Engine_Pro</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(TMP)\Grammar_Engine\Debug_Pro\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Debug_Pro\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(TMP)\Grammar_Engine\Debug-Pro64\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Debug-Pro64\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(TMP)\Grammar_Engine\Release_Pro\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Release_Pro\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(TMP)\Grammar_Engine\Release-Pro64\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Release-Pro64\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|x64'">
+    <OutDir>$(TMP)\Grammar_Engine\Release64-MySQL\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Release64-MySQL\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOLARIX_PRO;SOLARIX_PREMIUM;GM_PHRASE_GENERATOR;GM_THESAURUS;SOLARIX_GRAMMAR_ENGINE;GM_STEMMER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4025;4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)solarix_grammar_engined.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Grammar_Engine.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)solarix_grammar_engined.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;GM_THESAURUS;SOLARIX_GRAMMAR_ENGINE;GM_STEMMER;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4025;4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)/lib64/solarix_grammar_engined.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Grammar_Engine.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)/lib64/solarix_grammar_engined.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/EHac %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_PHRASE_GENERATOR;GM_THESAURUS;GM_STEMMER;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <DisableSpecificWarnings>4025;4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)/lib-pro/solarix_grammar_engine.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)/lib-pro/Solarix_Grammar_Engine.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/EHac %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <DisableSpecificWarnings>4025;4995;4996;4103;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(LEM_PATH)/lib64/solarix_grammar_engine.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;$(LEM_PATH)\lib64\firebird;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)/lib64/Solarix_Grammar_Engine.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy e:\mvoice\lem\lib64\solarix_grammar_engine.dll e:\mvoice\lem\exe64</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/EHac %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_PHRASE_GENERATOR;GM_THESAURUS;GM_STEMMER;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <DisableSpecificWarnings>4025;4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)/lib-pro/solarix_grammar_engine.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)/lib-pro/Solarix_Grammar_Engine.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/EHac %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_MYSQL_DICTIONARY_STORAGE;SOL_MYSQL_NGRAMS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <DisableSpecificWarnings>4025;4995;4996;4103;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(LEM_PATH)/lib64/solarix_grammar_engine_mysql.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)/lib64/Solarix_Grammar_Engine.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\system\src\error_code.cpp" />
+    <ClCompile Include="EngineDllMain.cpp" />
+    <ClCompile Include="errors_api.cpp" />
+    <ClCompile Include="grammar_engine_api.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_acstring.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_afstring.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_astr.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_bitv.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_fp1.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_ucstring.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_ufstring.cpp" />
+    <ClCompile Include="..\..\..\..\contain\lem_ustr.cpp" />
+    <ClCompile Include="..\..\..\..\io\base_lexer.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_base_stream.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_binary_file.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_fast_file_reader.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_kbd.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_memory_stream.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_text_file.cpp" />
+    <ClCompile Include="..\..\..\..\io\io_tty.cpp" />
+    <ClCompile Include="..\..\..\..\io\lem_logfile.cpp" />
+    <ClCompile Include="..\..\..\..\io\lem_mime.cpp" />
+    <ClCompile Include="..\..\..\..\io\oformatter.cpp" />
+    <ClCompile Include="..\..\..\..\io\sol_io.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_base_reader.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_char_reader.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_html_decoder.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_laguage_filter.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_utf16_reader.cpp" />
+    <ClCompile Include="..\..\..\..\io\char_reader\chr_utf8_reader.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_error.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_group.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_head.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_if.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_parser.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_subst.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_table.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_macro_text.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_operator.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_parser_stack.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\Ir_parser_variable.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_prep_pars_token.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_print_error.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_readl.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_tokens.cpp" />
+    <ClCompile Include="..\..\..\..\io\iridium\ir_var_table.cpp" />
+    <ClCompile Include="..\..\..\..\io\cfg_parser\cfg_base_parser.cpp" />
+    <ClCompile Include="..\..\..\..\io\cfg_parser\cfg_ini_parser.cpp" />
+    <ClCompile Include="..\..\..\..\io\xml\xp_iterator.cpp" />
+    <ClCompile Include="..\..\..\..\io\xml\xp_node.cpp" />
+    <ClCompile Include="..\..\..\..\io\xml\xp_parser.cpp" />
+    <ClCompile Include="..\..\..\..\tools\base_application.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_application.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_chec.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_coap.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_conv.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_critical_section.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_dir.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_dll.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_event.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_interlocked_value.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_reflection.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_shell.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_startup.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_thread.cpp" />
+    <ClCompile Include="..\..\..\..\tools\lem_time.cpp" />
+    <ClCompile Include="..\..\..\..\tools\win32_registry.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cast_to_url.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_1250.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_1251.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_1252.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_437.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_847.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_866.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_8859_1.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_code_page.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_recodings.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_sgml.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\cp_unicode_data.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\transliterator.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\ucs4_to_utf8.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\Ucs4ToWideString.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\utf_converters.cpp" />
+    <ClCompile Include="..\..\..\..\tools\unicode\WideString2Ucs4.cpp" />
+    <ClCompile Include="..\..\..\..\tools\ui\ui_user_interface.cpp" />
+    <ClCompile Include="..\..\..\..\tools\system_config\system_config.cpp" />
+    <ClCompile Include="..\..\..\..\math\approx\interpol.cpp" />
+    <ClCompile Include="..\..\..\..\math\lem_imat.cpp" />
+    <ClCompile Include="..\..\..\..\math\macheps.cpp" />
+    <ClCompile Include="..\..\..\..\math\random\randu.cpp" />
+    <ClCompile Include="..\..\..\..\math\stat\statkep1.cpp" />
+    <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />
+    <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp" />
+    <ClCompile Include="get_integra_folder.cpp" />
+    <ClCompile Include="NodeVisitor.cpp" />
+    <ClCompile Include="OtherCollector.cpp" />
+    <ClCompile Include="picker_ru.cpp" />
+    <ClCompile Include="RawOtherCollector.cpp" />
+    <ClCompile Include="search_engine.cpp" />
+    <ClCompile Include="SynonymData.cpp" />
+    <ClCompile Include="..\..\..\..\ai\aa\aa_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\BackRefCorrel.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\BasicLexer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\BasicModel.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ClassifierModel.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction_Add.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction_Except.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction_IfContains.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction_IfExported.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportCoordFunction_Remove.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ExportNode.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\GrafBuilder.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_Argument.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_CachedFacts.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_Checker.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_CheckingResult.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_Fact.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KB_Facts.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\KnowledgeBase.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_BackTrace.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_BackTraceItem.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_CropRule.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_fuzzy.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_lex.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_phaa.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticCondictor.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticMatcherForLanguage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticResult.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticRule.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PhoneticRuleEnumerator_MCollect.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_Preprocessor.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_PreprocessorRules.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_processing.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_proj_list.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_project_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_RecognitionRule.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_RecognitionRules.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_Recognizer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_SynPatternPointCall.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_SynPatternResult.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_SynPatternTrees.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_UnbreakableRule.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\la_word_projection.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LA_WordEntrySet.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\lemmatizator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LemmatizatorStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LemmatizatorStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\LexerTextPos.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ModelCodeBook.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ModelTagMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\MorphologyModels.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\MultiwordMerger.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternConstraint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternConstraints.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternDefaultLinkage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternExportFuncContext_Tree.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternExportFuncContext_Wordform.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternExportSection.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternLink.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternLinks.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternNGram.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternNGramFunction.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternNGrams.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PatternOptionalPoints.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PredicateTemplate.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PredicateTemplates.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\PreparedLexer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SequenceLabeler.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SlotProperties.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPattern.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternCompilation.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternExport.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternOptions.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternPoint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatterns.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternTreeNode.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\SynPatternTreeNodeMatchingResults.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TextAnalysisSession.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TextRecognitionParameters.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TextTokenizationRules.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TF_CaseFilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TF_ClassFilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TokenSplitterRx.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeMatchingExperience.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeMatchingExperienceItem.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerApplicationContext.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerBoundVariables.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerCall.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerPoint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerPredicate.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerPredicateArg.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerQuantification.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorerResult.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\TreeScorers.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\VariatorLexer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\VariatorLexerTokens.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\ViolationHandler.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WordAssociation.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WordEntrySetEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WordSetChecker.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WordSetEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WrittenTextAnalyzerSession.cpp" />
+    <ClCompile Include="..\..\..\..\ai\la\WrittenTextLexer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\pm_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\PM_FunctionLoader.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrClosureVars.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrCompilationContext.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrContextInvokation.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Assign.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Break.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_BuiltIn.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Constant.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_CreateWordform.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Declare.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_For.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Group.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_If.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Lambda.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Return.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_Var.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFun_While.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFunCall.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFunContext.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFunction.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFunctions.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrFunUser.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrKnownVars.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrMorphologyTracer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrProcedureDeclaration.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrTrace.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrTraceActor.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrTraceFunCall.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrTraceFunGroupStep.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrTuple.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrType.cpp" />
+    <ClCompile Include="..\..\..\..\ai\pm\TrValue.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\Alphabet.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\AlphabetEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\Alphabets.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\AlphabetStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\AlphabetStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\CharOperationEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\gg_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\GG_CharOperation.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\GG_CharOperations.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\GG_CoordEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\GG_Coordinates.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\gg_entry.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\gg_form.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabCondition.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabConditionPoint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabContext.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabContextPoint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabResult.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabResultPoint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabRule.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabRules.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SyllabRulesForLanguage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SymbolClassEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SymbolClasses.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\SymbolEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\gg\Symbols.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\AuxFormTypes.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\casing_coder.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\CharNode.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\Charpos2EntryEnumerator_SQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\Charpos2EntryStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\Charpos2EntryStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\dsa_form.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\dsa_main.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\dsa_table.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ExactWordEntryLocator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LanguageEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\Languages.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LanguageUsage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexemeEnumerator_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexemeEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexemEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexiconStorage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexiconStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LexiconStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LS_ResultSet_MCollectCref.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LS_ResultSet_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\LS_ResultSet_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ParadigmaFinder.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ParadigmaMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\PartOfSpeechEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\PartsOfSpeech.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\PhraseEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\PhraseLinkEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\PhraseNoteEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_affix_table.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_and_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_autom_sql_generator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_calibrator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_class.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_complex_link.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_coord_context.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\SG_CoordEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\SG_Coordinates.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_doesnot_have_tag_filter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_entry.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_entry_group.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_explicit_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_form.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_language.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_ld_seeker.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_lexem_dictionary.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_link_generator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\SG_MetaEntry.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_net.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_net_link.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_notag_filter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_only_main_translations_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_or_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_prefix_entry_searcher.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_preparing.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_ref_tag_filter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_stemmer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_tag_or_null_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\TagsSets.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusLinkFlags.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusTag.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusTagDefs.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThesaurusTagDefsEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\ThTranslator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\TransactionGuard_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\TransactionGuard_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntries_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntries_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntries_SQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntries_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntryEnumerator_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntryEnumerator_File_ByGroup.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntryEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordEntryEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumerator_File1.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumerator_File2.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumerator_File3.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumeratorFuzzy_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumeratorGlobbing_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordFormEnumeratorListing_File.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\WordLinkEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\automata_names.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\automaton.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\base_entry.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\CompilationContext.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\coord_adr.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\coord_ex.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\coord_pair.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\coord_state.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\coordinate.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\criteria_list.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\CriteriaInStorage.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\criterion.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\CriterionEnumerator_SQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\CriterionEnumeratorInFile.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\DebugSymbols.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\dictionary.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ElapsedTimeConstraint.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ExternalTokenizer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\form_table.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\gram_class.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\GramCoordUpdator_DB.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\grammar.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\lexem.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\load_options.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ml_net_node.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ml_proj_job.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ml_proj_list.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\print_variator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ref_name.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\SegmentingSentenceTokenizer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\sentence.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\SentenceBroker.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\SentenceTokenizer.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\SentenceWord.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\sol_ling.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\some_strings.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\SourceFilenameEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\sql_production.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\StorageConnection_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\StorageConnection_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\StorageConnections.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\string_set.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\ThesaurusNotesProcessor.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\tokens.cpp" />
+    <ClCompile Include="..\..\..\..\ai\some\version.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\res_pack.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\tree_link.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\tree_node.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\TreeDimension.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\TreeMarks.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\variator.cpp" />
+    <ClCompile Include="..\..\..\..\ai\tree\word_form.cpp" />
+    <ClCompile Include="..\..\..\..\ai\ngrams\ngrams.cpp" />
+    <ClCompile Include="..\..\..\..\ai\ngrams\NGramsDBMS.cpp" />
+    <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_FireBird.cpp" />
+    <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\icu.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\instances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp" />
+    <ClCompile Include="..\..\..\..\ai\search\crawler\se_fuzzy_comparator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\include\lem\solarix\solarix_grammar_engine.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

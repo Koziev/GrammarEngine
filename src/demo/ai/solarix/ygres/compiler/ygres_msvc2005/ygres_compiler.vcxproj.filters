@@ -939,27 +939,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\ClassifierModel.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilter.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterCache.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterCompilationContext.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterInnerCondition.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterMarkedForms.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterMatchingContext.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterPoint.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
@@ -1020,9 +999,6 @@
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_lex.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\la_mixer_filter.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_phaa.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
@@ -1047,13 +1023,7 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Preprocessor.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRule.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRules.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorTokRule.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\La\la_Processing.cpp">
@@ -1110,15 +1080,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\ModelTagMatcher.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterResult.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterTreeNode.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterTreeNode2.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\la\MorphologyModels.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
@@ -1165,12 +1126,6 @@
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\la\SequenceLabeler.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\SkipTokenRule.cpp">
-      <Filter>Source Files\Grammar_Engine\LA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\la\SkipTokenRules.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\la\SlotProperties.cpp">

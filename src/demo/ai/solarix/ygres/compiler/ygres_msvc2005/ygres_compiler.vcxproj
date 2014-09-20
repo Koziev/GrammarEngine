@@ -537,13 +537,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\BasicLexer.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\BasicModel.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ClassifierModel.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterCache.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterCompilationContext.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterInnerCondition.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterMarkedForms.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterMatchingContext.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\CollocFilterPoint.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Add.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Except.cpp" />
@@ -564,7 +557,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_CropRule.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_fuzzy.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_lex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\la_mixer_filter.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_phaa.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticCondictor.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticMatcher.cpp" />
@@ -573,9 +565,7 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRule.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRuleEnumerator_MCollect.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Preprocessor.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRule.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRules.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorTokRule.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\La\la_Processing.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_Proj_List.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\La\la_Project_Buffer.cpp" />
@@ -594,9 +584,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\LemmatizatorStorage_SQLITE.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ModelCodeBook.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\ModelTagMatcher.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterResult.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterTreeNode.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphFilterTreeNode2.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\MorphologyModels.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\MultiwordMerger.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\PatternConstraint.cpp" />
@@ -613,8 +600,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplate.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplates.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\SequenceLabeler.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\SkipTokenRule.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\la\SkipTokenRules.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\SlotProperties.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\SynPattern.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternCompilation.cpp" />
