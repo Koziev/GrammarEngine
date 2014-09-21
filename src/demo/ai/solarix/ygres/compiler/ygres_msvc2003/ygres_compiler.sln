@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Compiler", "ygres_compiler.vcproj", "{C649F441-6725-44E0-A646-2069FC59172E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug-MySQL = Debug-MySQL
+		Release = Release
+		Release-MySQL = Release-MySQL
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C649F441-6725-44E0-A646-2069FC59172E}.Debug.ActiveCfg = Release|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Debug.Build.0 = Release|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Debug-MySQL.ActiveCfg = Debug-MySQL|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Debug-MySQL.Build.0 = Debug-MySQL|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Release.ActiveCfg = Release|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Release.Build.0 = Release|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Release-MySQL.ActiveCfg = Release-MySQL|Win32
+		{C649F441-6725-44E0-A646-2069FC59172E}.Release-MySQL.Build.0 = Release-MySQL|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

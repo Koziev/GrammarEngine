@@ -1,0 +1,20 @@
+SRC        = ../../../../../..
+OBJDIR     = /tmp/grammar_engine
+EXEDIR     = ../../../../libmac
+LEM_PATH   = ../../../..
+BOOST_PATH = $(SRC)/boost
+EXT = dylib
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D LEM_THREADS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_USES_NCURSES=0 -D LEM_CONSOLE -D NDEBUG -D BOOST_ALL_NO_LIB -D DLL_EXPORTS -D SOL_CAA -D SOL_LOADBIN -D SOLARIX_PRO -D SOLARIX_GRAMMAR_ENGINE -D GM_THESAURUS -D GM_STEMMER -D SOL_SQLITE_NGRAMS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -c -arch i386 -fPIC -Wall
+LFLAGS = -arch i386 -dynamiclib -Wl,-install_name,libgren.dylib
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+LEM_LIBS = 
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	rm $(EXEDIR)/solarix_grammar_engine.so

@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grammar_Engine", "Grammar_Engine_Pro.vcproj", "{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug-MySQL = Debug-MySQL
+		Release = Release
+		Release-MySQL = Release-MySQL
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Debug.ActiveCfg = Release|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Debug.Build.0 = Release|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Debug-MySQL.ActiveCfg = Debug-MySQL|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Debug-MySQL.Build.0 = Debug-MySQL|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Release.ActiveCfg = Release|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Release.Build.0 = Release|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Release-MySQL.ActiveCfg = Release-MySQL|Win32
+		{BB405659-6EA6-4D1E-9B36-5FB0C5FFFD0D}.Release-MySQL.Build.0 = Release-MySQL|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

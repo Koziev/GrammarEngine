@@ -369,11 +369,13 @@ int PM_Automat::GetSequenceValue( const UCString &name, int step ) const
 #endif
 
 
+#if defined SOL_LOADBIN 
 void PM_Automat::DictionaryLoaded(void)
 {
  Automaton::DictionaryLoaded();
  return;
 }
+#endif
 
 
 void PM_Automat::SetStorage( const wchar_t *SqlPrefix, LexiconStorage *stg )

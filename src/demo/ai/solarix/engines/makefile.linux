@@ -1,0 +1,33 @@
+SRC = ../../../../../..
+OBJDIR = /tmp/grammar_engine
+LEM_PATH = ../../../..
+BOOST_PATH = $(SRC)/boost
+EXEDIR     = .
+EXT = so
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -I $(LEM_PATH)/demo/ai/solarix/CRFSuite/crfsuite-0.12/include -D SOL_CRF_MODEL -D LEM_THREADS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_USES_NCURSES=0 -D LEM_CONSOLE -D LEM_UNICODE_CONSOLE -D NDEBUG -D BOOST_ALL_NO_LIB -D DLL_EXPORTS -D SOL_CAA -D SOL_LOADBIN -D SOLARIX_PRO -D SOLARIX_GRAMMAR_ENGINE -D GM_THESAURUS -D GM_STEMMER -D SOL_SQLITE_NGRAMS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -c -march=pentium -Wall -fPIC -shared -fvisibility=default
+LFLAGS = -l crfsuite -l cqdb -l lbfgs -l dl -l rt -l ncurses -l pthread -l sqlite3 -l boost_regex -l boost_thread -shared -Wl,-soname,libgren.so
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+#LEM_LIBS = $(LEM_PATH)/lib/libsqlite3.so
+LEM_LIBS = 
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/solarix_grammar_engine.so
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/solarix_grammar_engine.so.1
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/solarix_grammar_engine.so.1.0
+
+install:
+	cp solarix_grammar_engine.so /usr/lib
+	rm -f /usr/lib/libgren.so
+	rm -f /usr/lib/libgren.so.1
+	rm -f /usr/lib/libgren.so.1.0
+	ln -s /usr/lib/solarix_grammar_engine.so /usr/lib/libgren.so
+	ln -s /usr/lib/solarix_grammar_engine.so /usr/lib/libgren.so.1
+	ln -s /usr/lib/solarix_grammar_engine.so /usr/lib/libgren.so.1.0
+

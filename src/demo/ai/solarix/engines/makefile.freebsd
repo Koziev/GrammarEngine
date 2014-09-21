@@ -1,0 +1,18 @@
+OBJDIR = /mnt/ad0s6.fat/tmp/syntax
+LEM_PATH = ../../../..
+BOOST_PATH = /mnt/ad0s6.fat/boost
+EXEDIR     = ../../../../libbsd
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D LEM_THREADS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_USES_NCURSES=0 -D LEM_CONSOLE -D NDEBUG -D LEM_TUI -D SOL_CAA -D SOL_LOADBIN -D SOL_REPORT -D SOL_DEBUGGING -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D BOOST_ALL_NO_LIB -c -march=pentium4 -Wall 
+LFLAGS = 
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+
+#LEM_LIBS = $(LEM_PATH)\lib\libsqlite3.so
+LEM_LIBS = 
+
+clean:
+	rm -f $(OBJDIR)/*
+	rm $(EXEDIR)/solarix_grammar_engine.so

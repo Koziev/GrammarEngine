@@ -1,0 +1,3047 @@
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.cc.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.C.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) -o $@ $<
+
+
+OBJS = $(OBJDIR)/TreeScorerResult.o $(OBJDIR)/TreeScorerBoundVariables.o $(OBJDIR)/ExportCoordFunction_Remove.o $(OBJDIR)/TreeScorerCall.o $(OBJDIR)/TreeScorerMatcher.o $(OBJDIR)/PatternExportFuncContext_Wordform.o $(OBJDIR)/PatternExportFuncContext_Tree.o $(OBJDIR)/TreeScorerQuantification.o $(OBJDIR)/ViolationHandler.o $(OBJDIR)/PatternOptionalPoints.o $(OBJDIR)/PatternExportSection.o $(OBJDIR)/PatternConstraint.o $(OBJDIR)/PatternConstraints.o $(OBJDIR)/ExportCoordFunction.o $(OBJDIR)/ExportCoordFunction_Add.o $(OBJDIR)/ExportCoordFunction_Except.o $(OBJDIR)/ExportCoordFunction_IfContains.o $(OBJDIR)/ExportCoordFunction_IfExported.o $(OBJDIR)/TreeScorerPredicate.o $(OBJDIR)/TreeScorerPredicateArg.o $(OBJDIR)/PatternNGramFunction.o $(OBJDIR)/SequenceLabeler.o $(OBJDIR)/ClassifierModel.o $(OBJDIR)/BasicModel.o $(OBJDIR)/ElapsedTimeConstraint.o $(OBJDIR)/VariatorLexerTokens.o $(OBJDIR)/VariatorLexer.o $(OBJDIR)/GrafBuilder.o $(OBJDIR)/TF_ClassFilter.o $(OBJDIR)/TF_CaseFilter.o $(OBJDIR)/SynPatternTreeNodeMatchingResults.o $(OBJDIR)/ModelCodeBook.o $(OBJDIR)/ModelTagMatcher.o $(OBJDIR)/TreeScorerApplicationContext.o $(OBJDIR)/BasicLexer.o $(OBJDIR)/WrittenTextLexer.o $(OBJDIR)/WrittenTextAnalyzerSession.o $(OBJDIR)/TextAnalysisSession.o $(OBJDIR)/TextRecognitionParameters.o $(OBJDIR)/LexerTextPos.o $(OBJDIR)/PreparedLexer.o $(OBJDIR)/SlotProperties.o $(OBJDIR)/SG_MetaEntry.o $(OBJDIR)/TokenSplitterRx.o $(OBJDIR)/PredicateTemplate.o $(OBJDIR)/PredicateTemplates.o $(OBJDIR)/LEMM_Compiler.o $(OBJDIR)/WordAssociation.o $(OBJDIR)/TreeScorers.o $(OBJDIR)/MorphologyModels.o $(OBJDIR)/SentenceWord.o $(OBJDIR)/TreeMatchingExperience.o $(OBJDIR)/TreeMatchingExperienceItem.o $(OBJDIR)/SyllabCondition.o $(OBJDIR)/SyllabConditionPoint.o $(OBJDIR)/SyllabContext.o $(OBJDIR)/SyllabContextPoint.o $(OBJDIR)/SyllabResult.o $(OBJDIR)/SyllabResultPoint.o $(OBJDIR)/SyllabRule.o $(OBJDIR)/SyllabRules.o $(OBJDIR)/SyllabRulesForLanguage.o $(OBJDIR)/PatternLinks.o $(OBJDIR)/PatternLink.o $(OBJDIR)/TreeScorerPoint.o $(OBJDIR)/TreeScorer.o $(OBJDIR)/PatternNGrams.o $(OBJDIR)/KB_Checker.o $(OBJDIR)/WordSetChecker.o $(OBJDIR)/PatternNGram.o $(OBJDIR)/KB_Facts.o $(OBJDIR)/KB_Fact.o $(OBJDIR)/SynPatternExport.o $(OBJDIR)/PatternDefaultLinkage.o $(OBJDIR)/ExportNode.o $(OBJDIR)/KB_CheckingResult.o $(OBJDIR)/KnowledgeBase.o $(OBJDIR)/KB_CachedFacts.o $(OBJDIR)/KB_Argument.o $(OBJDIR)/LemmatizatorStorage_SQLITE.o $(OBJDIR)/WordFormEnumerator_SQLite.o $(OBJDIR)/WordEntryEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQLite.o $(OBJDIR)/LexemeEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQL.o $(OBJDIR)/BackRefCorrel.o $(OBJDIR)/WordSetEnumerator.o $(OBJDIR)/ExactWordEntryLocator.o $(OBJDIR)/LexiconStorage.o $(OBJDIR)/ParadigmaMatcher.o $(OBJDIR)/ParadigmaFinder.o $(OBJDIR)/LA_BackTraceItem.o $(OBJDIR)/LA_BackTrace.o $(OBJDIR)/LA_SynPatternResult.o $(OBJDIR)/LA_SynPatternPointCall.o $(OBJDIR)/SourceFilenameEnumerator.o $(OBJDIR)/lexicon.o $(OBJDIR)/lexicon_shell.o $(OBJDIR)/LexiconDebugger.o $(OBJDIR)/GG_CharOperation.o $(OBJDIR)/CharOperationEnumerator.o $(OBJDIR)/GG_CharOperations.o $(OBJDIR)/WordEntrySetEnumerator.o $(OBJDIR)/LA_SynPatternTrees.o $(OBJDIR)/LA_RecognitionRules.o $(OBJDIR)/LA_CropRule.o $(OBJDIR)/LA_PhoneticRule.o $(OBJDIR)/LA_Recognizer.o $(OBJDIR)/LA_PhoneticMatcherForLanguage.o $(OBJDIR)/LA_UnbreakableRule.o $(OBJDIR)/LA_PhoneticRuleEnumerator_MCollect.o $(OBJDIR)/LA_PhoneticResult.o $(OBJDIR)/LA_PhoneticCondictor.o $(OBJDIR)/LA_PhoneticMatcher.o $(OBJDIR)/MultiwordMerger.o $(OBJDIR)/PM_FunctionLoader.o $(OBJDIR)/LanguageUsage.o $(OBJDIR)/ThesaurusLinkFlags.o $(OBJDIR)/LA_RecognitionRule.o $(OBJDIR)/TrMorphologyTracer.o $(OBJDIR)/LA_WordEntrySet.o $(OBJDIR)/SynPatternCompilation.o $(OBJDIR)/StorageConnection_SQLITE.o $(OBJDIR)/Charpos2EntryStorage_SQLITE.o $(OBJDIR)/Charpos2EntryEnumerator_SQL.o $(OBJDIR)/WideString2Ucs4.o $(OBJDIR)/Ucs4ToWideString.o $(OBJDIR)/CriteriaInStorage.o $(OBJDIR)/CriterionEnumerator_SQL.o $(OBJDIR)/CriterionEnumeratorInFile.o $(OBJDIR)/Symbols.o $(OBJDIR)/AlphabetStorage_SQLITE.o $(OBJDIR)/AlphabetEnumerator.o $(OBJDIR)/SymbolEnumerator.o $(OBJDIR)/Alphabets.o $(OBJDIR)/Alphabet.o $(OBJDIR)/SymbolClasses.o $(OBJDIR)/SymbolClassEnumerator.o $(OBJDIR)/GG_CoordEnumerator.o $(OBJDIR)/GG_Coordinates.o $(OBJDIR)/LemmatizatorStorage_MySQL.o $(OBJDIR)/lemmatizator.o $(OBJDIR)/NGramsStorage_SQLITE.o $(OBJDIR)/NGramsStorage_MySQL.o $(OBJDIR)/StorageConnections.o $(OBJDIR)/Languages.o $(OBJDIR)/sqlite_helpers.o $(OBJDIR)/CoordsInFile.o $(OBJDIR)/CoordEnumeratorInFile.o $(OBJDIR)/WordEntries_File.o $(OBJDIR)/WordFormEnumeratorGlobbing_File.o $(OBJDIR)/WordFormEnumeratorFuzzy_File.o $(OBJDIR)/WordFormEnumeratorListing_File.o $(OBJDIR)/WordEntryEnumerator_File.o $(OBJDIR)/WordFormEnumerator_File3.o $(OBJDIR)/WordFormEnumerator_File2.o $(OBJDIR)/WordFormEnumerator_File1.o $(OBJDIR)/WordEntryEnumerator_File_ByGroup.o $(OBJDIR)/SG_Coordinates.o $(OBJDIR)/LanguageEnumerator.o $(OBJDIR)/PartsOfSpeech.o $(OBJDIR)/SG_CoordEnumerator.o $(OBJDIR)/LexemeEnumerator_File.o $(OBJDIR)/PartOfSpeechEnumerator.o $(OBJDIR)/GramCoordUpdator_DB.o $(OBJDIR)/ThesaurusStorage_SQLITE.o $(OBJDIR)/LexiconStorage_SQLITE.o $(OBJDIR)/PhraseNoteEnumerator.o $(OBJDIR)/PhraseLinkEnumerator.o $(OBJDIR)/TagsSets.o $(OBJDIR)/WordLinkEnumerator.o $(OBJDIR)/AuxFormTypes.o $(OBJDIR)/ThesaurusTagDefs.o $(OBJDIR)/TransactionGuard_SQLITE.o $(OBJDIR)/PhraseEnumerator.o $(OBJDIR)/ThesaurusTagDefsEnumerator.o $(OBJDIR)/LS_ResultSet_SQLITE.o $(OBJDIR)/lem_critical_section.o $(OBJDIR)/lem_startup.o $(OBJDIR)/sg_notag_filter.o $(OBJDIR)/sg_and_tagfilter.o $(OBJDIR)/sg_only_main_translations_tagfilter.o $(OBJDIR)/TrTraceFunGroupStep.o $(OBJDIR)/TrDebugger.o $(OBJDIR)/ExternalTokenizer.o $(OBJDIR)/DebugSymbols.o $(OBJDIR)/TreeMarks.o $(OBJDIR)/TreeDimension.o $(OBJDIR)/xp_node.o $(OBJDIR)/xp_parser.o $(OBJDIR)/xp_iterator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/macheps.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/aa_autom.o $(OBJDIR)/res_pack.o $(OBJDIR)/tree_link.o $(OBJDIR)/tree_node.o $(OBJDIR)/variator.o $(OBJDIR)/word_form.o $(OBJDIR)/automata_names.o $(OBJDIR)/automaton.o $(OBJDIR)/base_entry.o $(OBJDIR)/coordinate.o $(OBJDIR)/coord_adr.o $(OBJDIR)/coord_ex.o $(OBJDIR)/coord_pair.o $(OBJDIR)/coord_state.o $(OBJDIR)/criteria_list.o $(OBJDIR)/criterion.o $(OBJDIR)/dictionary.o $(OBJDIR)/form_table.o $(OBJDIR)/grammar.o $(OBJDIR)/gram_class.o $(OBJDIR)/lexem.o $(OBJDIR)/ml_net_node.o $(OBJDIR)/ml_proj_job.o $(OBJDIR)/ml_proj_list.o $(OBJDIR)/ref_name.o $(OBJDIR)/sol_ling.o $(OBJDIR)/some_strings.o $(OBJDIR)/string_set.o $(OBJDIR)/text_processor.o $(OBJDIR)/version.o $(OBJDIR)/tokens.o $(OBJDIR)/sql_production.o $(OBJDIR)/dsa_form.o $(OBJDIR)/dsa_main.o $(OBJDIR)/dsa_table.o $(OBJDIR)/sg_autom.o $(OBJDIR)/sg_calibrator.o $(OBJDIR)/sg_coord_context.o $(OBJDIR)/sg_entry.o $(OBJDIR)/sg_entry_group.o $(OBJDIR)/sg_form.o $(OBJDIR)/sg_net_link.o $(OBJDIR)/sg_preparing.o $(OBJDIR)/sg_language.o $(OBJDIR)/sg_class.o $(OBJDIR)/sg_lexem_dictionary.o $(OBJDIR)/sg_ld_seeker.o $(OBJDIR)/sg_affix_table.o $(OBJDIR)/sg_autom_sql_generator.o $(OBJDIR)/sg_net.o $(OBJDIR)/sg_link_generator.o $(OBJDIR)/sg_complex_link.o $(OBJDIR)/pm_autom.o $(OBJDIR)/la_autom.o $(OBJDIR)/la_fuzzy.o $(OBJDIR)/la_lex.o $(OBJDIR)/la_phaa.o $(OBJDIR)/la_processing.o $(OBJDIR)/la_project_buffer.o $(OBJDIR)/la_proj_list.o $(OBJDIR)/la_word_projection.o $(OBJDIR)/gg_autom.o $(OBJDIR)/gg_entry.o $(OBJDIR)/gg_form.o $(OBJDIR)/randu.o $(OBJDIR)/ir_macro.o $(OBJDIR)/ir_macro_group.o $(OBJDIR)/ir_macro_head.o $(OBJDIR)/ir_macro_if.o $(OBJDIR)/ir_macro_parser.o $(OBJDIR)/ir_macro_subst.o $(OBJDIR)/ir_macro_table.o $(OBJDIR)/ir_macro_text.o $(OBJDIR)/ir_operator.o $(OBJDIR)/ir_parser_stack.o $(OBJDIR)/ir_parser_variable.o $(OBJDIR)/ir_prep_pars_token.o $(OBJDIR)/ir_print_error.o $(OBJDIR)/ir_readl.o $(OBJDIR)/ir_tokens.o $(OBJDIR)/ir_var_table.o $(OBJDIR)/ygres.o $(OBJDIR)/statkep1.o $(OBJDIR)/interpol.o $(OBJDIR)/base_application.o $(OBJDIR)/cfg_base_parser.o $(OBJDIR)/cfg_ini_parser.o $(OBJDIR)/sg_stemmer.o $(OBJDIR)/load_options.o $(OBJDIR)/ngrams.o $(OBJDIR)/ThesaurusTag.o $(OBJDIR)/CharNode.o $(OBJDIR)/CompilationContext.o $(OBJDIR)/SentenceBroker.o $(OBJDIR)/SentenceTokenizer.o $(OBJDIR)/SegmentingSentenceTokenizer.o $(OBJDIR)/lem_interlocked_value.o $(OBJDIR)/ir_error.o $(OBJDIR)/NGramsDBMS.o $(OBJDIR)/sentence.o $(OBJDIR)/SynPattern.o $(OBJDIR)/SynPatternPoint.o $(OBJDIR)/SynPatternTreeNode.o $(OBJDIR)/TrClosureVars.o $(OBJDIR)/TrCompilationContext.o $(OBJDIR)/TrContextInvokation.o $(OBJDIR)/TrFun_Assign.o $(OBJDIR)/TrFun_Break.o $(OBJDIR)/TrFun_BuiltIn.o $(OBJDIR)/TrFun_Constant.o $(OBJDIR)/TrFun_CreateWordform.o $(OBJDIR)/TrFun_Declare.o $(OBJDIR)/TrFun_For.o $(OBJDIR)/TrFun_Group.o $(OBJDIR)/TrFun_If.o $(OBJDIR)/TrFun_Lambda.o $(OBJDIR)/TrFun_Return.o $(OBJDIR)/TrFun_Var.o $(OBJDIR)/TrFun_While.o $(OBJDIR)/TrFunCall.o $(OBJDIR)/TrFunContext.o $(OBJDIR)/TrFunction.o $(OBJDIR)/TrFunctions.o $(OBJDIR)/TrFunUser.o $(OBJDIR)/TrKnownVars.o $(OBJDIR)/TrProcedureDeclaration.o $(OBJDIR)/TrTrace.o $(OBJDIR)/TrTraceActor.o $(OBJDIR)/TrTraceFunCall.o $(OBJDIR)/TrTuple.o $(OBJDIR)/TrType.o $(OBJDIR)/TrValue.o $(OBJDIR)/sg_ref_tag_filter.o $(OBJDIR)/sg_tag_or_null_tagfilter.o $(OBJDIR)/sg_prefix_entry_searcher.o $(OBJDIR)/print_variator.o $(OBJDIR)/casing_coder.o $(OBJDIR)/LA_Preprocessor.o $(OBJDIR)/TextTokenizationRules.o $(OBJDIR)/LA_PreprocessorRules.o
+
+all: lexicon
+
+lexicon: $(OBJS)
+		$(CXX) $(OBJS) $(LFLAGS) $(LEM_LIBS) -o $(EXEDIR)/lexicon
+
+$(OBJDIR)/TreeScorerResult.o: $(LEM_PATH)/ai/la/TreeScorerResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerResult.cpp -o $(OBJDIR)/TreeScorerResult.o
+
+$(OBJDIR)/TreeScorerBoundVariables.o: $(LEM_PATH)/ai/la/TreeScorerBoundVariables.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerBoundVariables.cpp -o $(OBJDIR)/TreeScorerBoundVariables.o
+
+$(OBJDIR)/ExportCoordFunction_Remove.o: $(LEM_PATH)/ai/la/ExportCoordFunction_Remove.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction_Remove.cpp -o $(OBJDIR)/ExportCoordFunction_Remove.o
+
+$(OBJDIR)/TreeScorerCall.o: $(LEM_PATH)/ai/la/TreeScorerCall.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerCall.cpp -o $(OBJDIR)/TreeScorerCall.o
+
+$(OBJDIR)/TreeScorerMatcher.o: $(LEM_PATH)/ai/la/TreeScorerMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerMatcher.cpp -o $(OBJDIR)/TreeScorerMatcher.o
+
+$(OBJDIR)/PatternExportFuncContext_Wordform.o: $(LEM_PATH)/ai/la/PatternExportFuncContext_Wordform.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternExportFuncContext_Wordform.cpp -o $(OBJDIR)/PatternExportFuncContext_Wordform.o
+
+$(OBJDIR)/PatternExportFuncContext_Tree.o: $(LEM_PATH)/ai/la/PatternExportFuncContext_Tree.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternExportFuncContext_Tree.cpp -o $(OBJDIR)/PatternExportFuncContext_Tree.o
+
+$(OBJDIR)/TreeScorerQuantification.o: $(LEM_PATH)/ai/la/TreeScorerQuantification.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerQuantification.cpp -o $(OBJDIR)/TreeScorerQuantification.o
+
+$(OBJDIR)/ViolationHandler.o: $(LEM_PATH)/ai/la/ViolationHandler.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ViolationHandler.cpp -o $(OBJDIR)/ViolationHandler.o
+
+$(OBJDIR)/PatternOptionalPoints.o: $(LEM_PATH)/ai/la/PatternOptionalPoints.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternOptionalPoints.cpp -o $(OBJDIR)/PatternOptionalPoints.o
+
+$(OBJDIR)/PatternExportSection.o: $(LEM_PATH)/ai/la/PatternExportSection.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternExportSection.cpp -o $(OBJDIR)/PatternExportSection.o
+
+$(OBJDIR)/PatternConstraint.o: $(LEM_PATH)/ai/la/PatternConstraint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternConstraint.cpp -o $(OBJDIR)/PatternConstraint.o
+
+$(OBJDIR)/PatternConstraints.o: $(LEM_PATH)/ai/la/PatternConstraints.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternConstraints.cpp -o $(OBJDIR)/PatternConstraints.o
+
+$(OBJDIR)/ExportCoordFunction.o: $(LEM_PATH)/ai/la/ExportCoordFunction.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction.cpp -o $(OBJDIR)/ExportCoordFunction.o
+
+$(OBJDIR)/ExportCoordFunction_Add.o: $(LEM_PATH)/ai/la/ExportCoordFunction_Add.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction_Add.cpp -o $(OBJDIR)/ExportCoordFunction_Add.o
+
+$(OBJDIR)/ExportCoordFunction_Except.o: $(LEM_PATH)/ai/la/ExportCoordFunction_Except.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction_Except.cpp -o $(OBJDIR)/ExportCoordFunction_Except.o
+
+$(OBJDIR)/ExportCoordFunction_IfContains.o: $(LEM_PATH)/ai/la/ExportCoordFunction_IfContains.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction_IfContains.cpp -o $(OBJDIR)/ExportCoordFunction_IfContains.o
+
+$(OBJDIR)/ExportCoordFunction_IfExported.o: $(LEM_PATH)/ai/la/ExportCoordFunction_IfExported.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportCoordFunction_IfExported.cpp -o $(OBJDIR)/ExportCoordFunction_IfExported.o
+
+$(OBJDIR)/TreeScorerPredicate.o: $(LEM_PATH)/ai/la/TreeScorerPredicate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerPredicate.cpp -o $(OBJDIR)/TreeScorerPredicate.o
+
+$(OBJDIR)/TreeScorerPredicateArg.o: $(LEM_PATH)/ai/la/TreeScorerPredicateArg.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerPredicateArg.cpp -o $(OBJDIR)/TreeScorerPredicateArg.o
+
+$(OBJDIR)/PatternNGramFunction.o: $(LEM_PATH)/ai/la/PatternNGramFunction.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternNGramFunction.cpp -o $(OBJDIR)/PatternNGramFunction.o
+
+$(OBJDIR)/SequenceLabeler.o: $(LEM_PATH)/ai/la/SequenceLabeler.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SequenceLabeler.cpp -o $(OBJDIR)/SequenceLabeler.o
+
+$(OBJDIR)/ClassifierModel.o: $(LEM_PATH)/ai/la/ClassifierModel.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ClassifierModel.cpp -o $(OBJDIR)/ClassifierModel.o
+
+$(OBJDIR)/BasicModel.o: $(LEM_PATH)/ai/la/BasicModel.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/BasicModel.cpp -o $(OBJDIR)/BasicModel.o
+
+$(OBJDIR)/ElapsedTimeConstraint.o: $(LEM_PATH)/ai/some/ElapsedTimeConstraint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ElapsedTimeConstraint.cpp -o $(OBJDIR)/ElapsedTimeConstraint.o
+
+$(OBJDIR)/TrLikeMatcher.o: $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp -o $(OBJDIR)/TrLikeMatcher.o
+
+$(OBJDIR)/TrLikeCondictor.o: $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp -o $(OBJDIR)/TrLikeCondictor.o
+       
+$(OBJDIR)/VariatorLexerTokens.o: $(LEM_PATH)/ai/la/VariatorLexerTokens.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/VariatorLexerTokens.cpp -o $(OBJDIR)/VariatorLexerTokens.o
+
+$(OBJDIR)/TrReplaceMatcherIndexer.o: $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp -o $(OBJDIR)/TrReplaceMatcherIndexer.o
+
+$(OBJDIR)/VariatorLexer.o: $(LEM_PATH)/ai/la/VariatorLexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/VariatorLexer.cpp -o $(OBJDIR)/VariatorLexer.o
+
+$(OBJDIR)/FilterApplicationDebugInfo.o: $(LEM_PATH)/ai/la/FilterApplicationDebugInfo.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/FilterApplicationDebugInfo.cpp -o $(OBJDIR)/FilterApplicationDebugInfo.o
+
+$(OBJDIR)/GrafBuilder.o: $(LEM_PATH)/ai/la/GrafBuilder.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/GrafBuilder.cpp -o $(OBJDIR)/GrafBuilder.o
+
+$(OBJDIR)/NewStartLexer.o: $(LEM_PATH)/ai/la/NewStartLexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/NewStartLexer.cpp -o $(OBJDIR)/NewStartLexer.o
+
+$(OBJDIR)/CollocFilterSourceAccessor.o: $(LEM_PATH)/ai/la/CollocFilterSourceAccessor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterSourceAccessor.cpp -o $(OBJDIR)/CollocFilterSourceAccessor.o
+
+$(OBJDIR)/MixerFilterApplications.o: $(LEM_PATH)/ai/la/MixerFilterApplications.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MixerFilterApplications.cpp -o $(OBJDIR)/MixerFilterApplications.o
+
+$(OBJDIR)/TF_ClassFilter.o: $(LEM_PATH)/ai/la/TF_ClassFilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TF_ClassFilter.cpp -o $(OBJDIR)/TF_ClassFilter.o
+
+$(OBJDIR)/TF_CaseFilter.o: $(LEM_PATH)/ai/la/TF_CaseFilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TF_CaseFilter.cpp -o $(OBJDIR)/TF_CaseFilter.o
+
+$(OBJDIR)/SynPatternTreeNodeMatchingResults.o: $(LEM_PATH)/ai/la/SynPatternTreeNodeMatchingResults.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternTreeNodeMatchingResults.cpp -o $(OBJDIR)/SynPatternTreeNodeMatchingResults.o
+
+$(OBJDIR)/ModelCodeBook.o: $(LEM_PATH)/ai/la/ModelCodeBook.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ModelCodeBook.cpp -o $(OBJDIR)/ModelCodeBook.o
+
+$(OBJDIR)/ModelTagMatcher.o: $(LEM_PATH)/ai/la/ModelTagMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ModelTagMatcher.cpp -o $(OBJDIR)/ModelTagMatcher.o
+
+$(OBJDIR)/TreeScorerApplicationContext.o: $(LEM_PATH)/ai/la/TreeScorerApplicationContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerApplicationContext.cpp -o $(OBJDIR)/TreeScorerApplicationContext.o
+
+$(OBJDIR)/BasicLexer.o: $(LEM_PATH)/ai/la/BasicLexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/BasicLexer.cpp -o $(OBJDIR)/BasicLexer.o
+
+$(OBJDIR)/WrittenTextLexer.o: $(LEM_PATH)/ai/la/WrittenTextLexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WrittenTextLexer.cpp -o $(OBJDIR)/WrittenTextLexer.o
+
+$(OBJDIR)/WrittenTextAnalyzerSession.o: $(LEM_PATH)/ai/la/WrittenTextAnalyzerSession.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WrittenTextAnalyzerSession.cpp -o $(OBJDIR)/WrittenTextAnalyzerSession.o
+
+$(OBJDIR)/TextAnalysisSession.o: $(LEM_PATH)/ai/la/TextAnalysisSession.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TextAnalysisSession.cpp -o $(OBJDIR)/TextAnalysisSession.o
+
+$(OBJDIR)/TextRecognitionParameters.o: $(LEM_PATH)/ai/la/TextRecognitionParameters.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TextRecognitionParameters.cpp -o $(OBJDIR)/TextRecognitionParameters.o
+
+$(OBJDIR)/TextTokenizationRules.o: $(LEM_PATH)/ai/la/TextTokenizationRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TextTokenizationRules.cpp -o $(OBJDIR)/TextTokenizationRules.o
+
+$(OBJDIR)/PreparedLexer2.o: $(LEM_PATH)/ai/la/PreparedLexer2.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PreparedLexer2.cpp -o $(OBJDIR)/PreparedLexer2.o
+
+$(OBJDIR)/LexerTextPos.o: $(LEM_PATH)/ai/la/LexerTextPos.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LexerTextPos.cpp -o $(OBJDIR)/LexerTextPos.o
+
+$(OBJDIR)/PreparedLexer.o: $(LEM_PATH)/ai/la/PreparedLexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PreparedLexer.cpp -o $(OBJDIR)/PreparedLexer.o
+
+$(OBJDIR)/SkipTokenRule.o: $(LEM_PATH)/ai/la/SkipTokenRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SkipTokenRule.cpp -o $(OBJDIR)/SkipTokenRule.o
+
+$(OBJDIR)/SlotProperties.o: $(LEM_PATH)/ai/la/SlotProperties.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SlotProperties.cpp -o $(OBJDIR)/SlotProperties.o
+
+$(OBJDIR)/SG_MetaEntry.o: $(LEM_PATH)/ai/sg/SG_MetaEntry.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/SG_MetaEntry.cpp -o $(OBJDIR)/SG_MetaEntry.o
+
+$(OBJDIR)/TokenSplitterRx.o: $(LEM_PATH)/ai/la/TokenSplitterRx.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TokenSplitterRx.cpp -o $(OBJDIR)/TokenSplitterRx.o
+
+$(OBJDIR)/PredicateTemplate.o: $(LEM_PATH)/ai/la/PredicateTemplate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PredicateTemplate.cpp -o $(OBJDIR)/PredicateTemplate.o
+
+$(OBJDIR)/PredicateTemplates.o: $(LEM_PATH)/ai/la/PredicateTemplates.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PredicateTemplates.cpp -o $(OBJDIR)/PredicateTemplates.o
+
+$(OBJDIR)/LEMM_Compiler.o: $(LEM_PATH)/ai/la/LEMM_Compiler.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LEMM_Compiler.cpp -o $(OBJDIR)/LEMM_Compiler.o
+
+$(OBJDIR)/WordAssociation.o: $(LEM_PATH)/ai/la/WordAssociation.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WordAssociation.cpp -o $(OBJDIR)/WordAssociation.o
+
+$(OBJDIR)/TreeScorers.o: $(LEM_PATH)/ai/la/TreeScorers.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorers.cpp -o $(OBJDIR)/TreeScorers.o
+
+$(OBJDIR)/SkipTokenRules.o: $(LEM_PATH)/ai/la/SkipTokenRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SkipTokenRules.cpp -o $(OBJDIR)/SkipTokenRules.o
+
+$(OBJDIR)/MorphologyModels.o: $(LEM_PATH)/ai/la/MorphologyModels.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphologyModels.cpp -o $(OBJDIR)/MorphologyModels.o
+
+$(OBJDIR)/SentenceWord.o: $(LEM_PATH)/ai/some/SentenceWord.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/SentenceWord.cpp -o $(OBJDIR)/SentenceWord.o
+
+$(OBJDIR)/TreeMatchingExperience.o: $(LEM_PATH)/ai/la/TreeMatchingExperience.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeMatchingExperience.cpp -o $(OBJDIR)/TreeMatchingExperience.o
+
+$(OBJDIR)/TreeMatchingExperienceItem.o: $(LEM_PATH)/ai/la/TreeMatchingExperienceItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeMatchingExperienceItem.cpp -o $(OBJDIR)/TreeMatchingExperienceItem.o
+
+$(OBJDIR)/SyllabCondition.o: $(LEM_PATH)/ai/gg/SyllabCondition.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabCondition.cpp -o $(OBJDIR)/SyllabCondition.o
+
+$(OBJDIR)/SyllabConditionPoint.o: $(LEM_PATH)/ai/gg/SyllabConditionPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabConditionPoint.cpp -o $(OBJDIR)/SyllabConditionPoint.o
+
+$(OBJDIR)/SyllabContext.o: $(LEM_PATH)/ai/gg/SyllabContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabContext.cpp -o $(OBJDIR)/SyllabContext.o
+
+$(OBJDIR)/SyllabContextPoint.o: $(LEM_PATH)/ai/gg/SyllabContextPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabContextPoint.cpp -o $(OBJDIR)/SyllabContextPoint.o
+
+$(OBJDIR)/SyllabResult.o: $(LEM_PATH)/ai/gg/SyllabResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabResult.cpp -o $(OBJDIR)/SyllabResult.o
+
+$(OBJDIR)/SyllabResultPoint.o: $(LEM_PATH)/ai/gg/SyllabResultPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabResultPoint.cpp -o $(OBJDIR)/SyllabResultPoint.o
+
+$(OBJDIR)/SyllabRule.o: $(LEM_PATH)/ai/gg/SyllabRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabRule.cpp -o $(OBJDIR)/SyllabRule.o
+
+$(OBJDIR)/SyllabRules.o: $(LEM_PATH)/ai/gg/SyllabRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabRules.cpp -o $(OBJDIR)/SyllabRules.o
+
+$(OBJDIR)/SyllabRulesForLanguage.o: $(LEM_PATH)/ai/gg/SyllabRulesForLanguage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabRulesForLanguage.cpp -o $(OBJDIR)/SyllabRulesForLanguage.o
+
+$(OBJDIR)/PatternLinks.o: $(LEM_PATH)/ai/la/PatternLinks.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternLinks.cpp -o $(OBJDIR)/PatternLinks.o
+
+$(OBJDIR)/PatternLink.o: $(LEM_PATH)/ai/la/PatternLink.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternLink.cpp -o $(OBJDIR)/PatternLink.o
+
+$(OBJDIR)/TreeScorerPoint.o: $(LEM_PATH)/ai/la/TreeScorerPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorerPoint.cpp -o $(OBJDIR)/TreeScorerPoint.o
+
+$(OBJDIR)/TreeScorer.o: $(LEM_PATH)/ai/la/TreeScorer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TreeScorer.cpp -o $(OBJDIR)/TreeScorer.o
+
+$(OBJDIR)/PatternNGrams.o: $(LEM_PATH)/ai/la/PatternNGrams.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternNGrams.cpp -o $(OBJDIR)/PatternNGrams.o
+
+$(OBJDIR)/KB_Checker.o: $(LEM_PATH)/ai/la/KB_Checker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Checker.cpp -o $(OBJDIR)/KB_Checker.o
+
+$(OBJDIR)/WordSetChecker.o: $(LEM_PATH)/ai/la/WordSetChecker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WordSetChecker.cpp -o $(OBJDIR)/WordSetChecker.o
+
+$(OBJDIR)/PatternNGram.o: $(LEM_PATH)/ai/la/PatternNGram.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternNGram.cpp -o $(OBJDIR)/PatternNGram.o
+
+$(OBJDIR)/KB_Facts.o: $(LEM_PATH)/ai/la/KB_Facts.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Facts.cpp -o $(OBJDIR)/KB_Facts.o
+
+$(OBJDIR)/KB_Fact.o: $(LEM_PATH)/ai/la/KB_Fact.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Fact.cpp -o $(OBJDIR)/KB_Fact.o
+
+$(OBJDIR)/CollocFilterInnerCondition.o: $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp -o $(OBJDIR)/CollocFilterInnerCondition.o
+
+$(OBJDIR)/CollocFilterPoint.o: $(LEM_PATH)/ai/la/CollocFilterPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterPoint.cpp -o $(OBJDIR)/CollocFilterPoint.o
+
+$(OBJDIR)/SynPatternExport.o: $(LEM_PATH)/ai/la/SynPatternExport.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternExport.cpp -o $(OBJDIR)/SynPatternExport.o
+
+$(OBJDIR)/PatternDefaultLinkage.o: $(LEM_PATH)/ai/la/PatternDefaultLinkage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternDefaultLinkage.cpp -o $(OBJDIR)/PatternDefaultLinkage.o
+
+$(OBJDIR)/ExportNode.o: $(LEM_PATH)/ai/la/ExportNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ExportNode.cpp -o $(OBJDIR)/ExportNode.o
+
+$(OBJDIR)/KB_CheckingResult.o: $(LEM_PATH)/ai/la/KB_CheckingResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_CheckingResult.cpp -o $(OBJDIR)/KB_CheckingResult.o
+
+$(OBJDIR)/KnowledgeBase.o: $(LEM_PATH)/ai/la/KnowledgeBase.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KnowledgeBase.cpp -o $(OBJDIR)/KnowledgeBase.o
+
+$(OBJDIR)/KB_CachedFacts.o: $(LEM_PATH)/ai/la/KB_CachedFacts.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_CachedFacts.cpp -o $(OBJDIR)/KB_CachedFacts.o
+
+$(OBJDIR)/KB_Argument.o: $(LEM_PATH)/ai/la/KB_Argument.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Argument.cpp -o $(OBJDIR)/KB_Argument.o
+
+$(OBJDIR)/MorphFilterTreeNode.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterTreeNode.cpp -o $(OBJDIR)/MorphFilterTreeNode.o
+
+$(OBJDIR)/MorphFilterResult.o: $(LEM_PATH)/ai/la/MorphFilterResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterResult.cpp -o $(OBJDIR)/MorphFilterResult.o
+
+$(OBJDIR)/CollocFilterMatchingContext.o: $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp -o $(OBJDIR)/CollocFilterMatchingContext.o
+
+$(OBJDIR)/CollocFilter.o: $(LEM_PATH)/ai/la/CollocFilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilter.cpp -o $(OBJDIR)/CollocFilter.o
+
+$(OBJDIR)/CollocFilterCompilationContext.o: $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp -o $(OBJDIR)/CollocFilterCompilationContext.o
+
+$(OBJDIR)/MorphFilterTreeNode2.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp -o $(OBJDIR)/MorphFilterTreeNode2.o
+
+$(OBJDIR)/CollocFilterMarkedForms.o: $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp -o $(OBJDIR)/CollocFilterMarkedForms.o
+
+$(OBJDIR)/CollocFilterCache.o: $(LEM_PATH)/ai/la/CollocFilterCache.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCache.cpp -o $(OBJDIR)/CollocFilterCache.o
+
+$(OBJDIR)/LemmatizatorStorage_SQLITE.o: $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp -o $(OBJDIR)/LemmatizatorStorage_SQLITE.o
+
+$(OBJDIR)/WordFormEnumerator_SQLite.o: $(LEM_PATH)/ai/sg/WordFormEnumerator_SQLite.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumerator_SQLite.cpp -o $(OBJDIR)/WordFormEnumerator_SQLite.o
+
+$(OBJDIR)/WordEntryEnumerator_SQLite.o: $(LEM_PATH)/ai/sg/WordEntryEnumerator_SQLite.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntryEnumerator_SQLite.cpp -o $(OBJDIR)/WordEntryEnumerator_SQLite.o
+
+$(OBJDIR)/WordEntries_SQLite.o: $(LEM_PATH)/ai/sg/WordEntries_SQLite.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntries_SQLite.cpp -o $(OBJDIR)/WordEntries_SQLite.o
+
+$(OBJDIR)/LexemeEnumerator_SQLite.o: $(LEM_PATH)/ai/sg/LexemeEnumerator_SQLite.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LexemeEnumerator_SQLite.cpp -o $(OBJDIR)/LexemeEnumerator_SQLite.o
+
+$(OBJDIR)/WordEntries_SQL.o: $(LEM_PATH)/ai/sg/WordEntries_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntries_SQL.cpp -o $(OBJDIR)/WordEntries_SQL.o
+
+$(OBJDIR)/BackRefCorrel.o: $(LEM_PATH)/ai/la/BackRefCorrel.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/BackRefCorrel.cpp -o $(OBJDIR)/BackRefCorrel.o
+
+$(OBJDIR)/WordSetEnumerator.o: $(LEM_PATH)/ai/la/WordSetEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WordSetEnumerator.cpp -o $(OBJDIR)/WordSetEnumerator.o
+
+$(OBJDIR)/ExactWordEntryLocator.o: $(LEM_PATH)/ai/sg/ExactWordEntryLocator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ExactWordEntryLocator.cpp -o $(OBJDIR)/ExactWordEntryLocator.o
+
+$(OBJDIR)/LexiconStorage.o: $(LEM_PATH)/ai/sg/LexiconStorage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LexiconStorage.cpp -o $(OBJDIR)/LexiconStorage.o
+
+$(OBJDIR)/ParadigmaMatcher.o: $(LEM_PATH)/ai/sg/ParadigmaMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ParadigmaMatcher.cpp -o $(OBJDIR)/ParadigmaMatcher.o
+
+$(OBJDIR)/ParadigmaFinder.o: $(LEM_PATH)/ai/sg/ParadigmaFinder.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ParadigmaFinder.cpp -o $(OBJDIR)/ParadigmaFinder.o
+
+$(OBJDIR)/LA_BackTraceItem.o: $(LEM_PATH)/ai/la/LA_BackTraceItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_BackTraceItem.cpp -o $(OBJDIR)/LA_BackTraceItem.o
+
+$(OBJDIR)/LA_BackTrace.o: $(LEM_PATH)/ai/la/LA_BackTrace.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_BackTrace.cpp -o $(OBJDIR)/LA_BackTrace.o
+
+$(OBJDIR)/LA_SynPatternResult.o: $(LEM_PATH)/ai/la/LA_SynPatternResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_SynPatternResult.cpp -o $(OBJDIR)/LA_SynPatternResult.o
+
+$(OBJDIR)/LA_SynPatternPointCall.o: $(LEM_PATH)/ai/la/LA_SynPatternPointCall.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_SynPatternPointCall.cpp -o $(OBJDIR)/LA_SynPatternPointCall.o
+
+$(OBJDIR)/SourceFilenameEnumerator.o: $(LEM_PATH)/ai/some/SourceFilenameEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/SourceFilenameEnumerator.cpp -o $(OBJDIR)/SourceFilenameEnumerator.o
+
+$(OBJDIR)/LexiconDebugger.o: $(LEM_PATH)/demo/ai/solarix/lexicon/LexiconDebugger.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/lexicon/LexiconDebugger.cpp -o $(OBJDIR)/LexiconDebugger.o
+
+$(OBJDIR)/lexicon.o: $(LEM_PATH)/demo/ai/solarix/lexicon/lexicon.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/lexicon/lexicon.cpp -o $(OBJDIR)/lexicon.o
+
+$(OBJDIR)/lexicon_shell.o: $(LEM_PATH)/demo/ai/solarix/lexicon/lexicon_shell.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/lexicon/lexicon_shell.cpp -o $(OBJDIR)/lexicon_shell.o
+
+
+$(OBJDIR)/GG_CharOperation.o: $(LEM_PATH)/ai/gg/GG_CharOperation.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/GG_CharOperation.cpp -o $(OBJDIR)/GG_CharOperation.o
+
+$(OBJDIR)/CharOperationEnumerator.o: $(LEM_PATH)/ai/gg/CharOperationEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/CharOperationEnumerator.cpp -o $(OBJDIR)/CharOperationEnumerator.o
+
+$(OBJDIR)/GG_CharOperations.o: $(LEM_PATH)/ai/gg/GG_CharOperations.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/GG_CharOperations.cpp -o $(OBJDIR)/GG_CharOperations.o
+
+$(OBJDIR)/WordEntrySetEnumerator.o: $(LEM_PATH)/ai/la/WordEntrySetEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/WordEntrySetEnumerator.cpp -o $(OBJDIR)/WordEntrySetEnumerator.o
+
+$(OBJDIR)/LA_SynPatternTrees.o: $(LEM_PATH)/ai/la/LA_SynPatternTrees.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_SynPatternTrees.cpp -o $(OBJDIR)/LA_SynPatternTrees.o
+
+$(OBJDIR)/LA_RecognitionRules.o: $(LEM_PATH)/ai/la/LA_RecognitionRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_RecognitionRules.cpp -o $(OBJDIR)/LA_RecognitionRules.o
+
+$(OBJDIR)/LA_CropRule.o: $(LEM_PATH)/ai/la/LA_CropRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_CropRule.cpp -o $(OBJDIR)/LA_CropRule.o
+
+$(OBJDIR)/la_filter_rule.o: $(LEM_PATH)/ai/la/la_filter_rule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_filter_rule.cpp -o $(OBJDIR)/la_filter_rule.o
+
+$(OBJDIR)/LA_PhoneticRule.o: $(LEM_PATH)/ai/la/LA_PhoneticRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticRule.cpp -o $(OBJDIR)/LA_PhoneticRule.o
+
+$(OBJDIR)/LA_Recognizer.o: $(LEM_PATH)/ai/la/LA_Recognizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_Recognizer.cpp -o $(OBJDIR)/LA_Recognizer.o
+
+$(OBJDIR)/LA_PreprocessorRules.o: $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp -o $(OBJDIR)/LA_PreprocessorRules.o
+
+$(OBJDIR)/LA_Preprocessor.o: $(LEM_PATH)/ai/la/LA_Preprocessor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_Preprocessor.cpp -o $(OBJDIR)/LA_Preprocessor.o
+
+$(OBJDIR)/LA_PhoneticMatcherForLanguage.o: $(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp -o $(OBJDIR)/LA_PhoneticMatcherForLanguage.o
+
+$(OBJDIR)/LA_PreprocessorTokRule.o: $(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp -o $(OBJDIR)/LA_PreprocessorTokRule.o
+
+$(OBJDIR)/LA_Filters.o: $(LEM_PATH)/ai/la/LA_Filters.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_Filters.cpp -o $(OBJDIR)/LA_Filters.o
+
+$(OBJDIR)/LA_UnbreakableRule.o: $(LEM_PATH)/ai/la/LA_UnbreakableRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_UnbreakableRule.cpp -o $(OBJDIR)/LA_UnbreakableRule.o
+
+$(OBJDIR)/LA_PhoneticRuleEnumerator_MCollect.o: $(LEM_PATH)/ai/la/LA_PhoneticRuleEnumerator_MCollect.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticRuleEnumerator_MCollect.cpp -o $(OBJDIR)/LA_PhoneticRuleEnumerator_MCollect.o
+
+$(OBJDIR)/LA_PhoneticResult.o: $(LEM_PATH)/ai/la/LA_PhoneticResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticResult.cpp -o $(OBJDIR)/LA_PhoneticResult.o
+
+$(OBJDIR)/LA_PhoneticCondictor.o: $(LEM_PATH)/ai/la/LA_PhoneticCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticCondictor.cpp -o $(OBJDIR)/LA_PhoneticCondictor.o
+
+$(OBJDIR)/LA_PhoneticMatcher.o: $(LEM_PATH)/ai/la/LA_PhoneticMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticMatcher.cpp -o $(OBJDIR)/LA_PhoneticMatcher.o
+
+$(OBJDIR)/MultiwordMerger.o: $(LEM_PATH)/ai/la/MultiwordMerger.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MultiwordMerger.cpp -o $(OBJDIR)/MultiwordMerger.o
+
+$(OBJDIR)/PM_ProcedureLoader.o: $(LEM_PATH)/ai/pm/PM_ProcedureLoader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_ProcedureLoader.cpp -o $(OBJDIR)/PM_ProcedureLoader.o
+
+$(OBJDIR)/PM_Rules.o: $(LEM_PATH)/ai/pm/PM_Rules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_Rules.cpp -o $(OBJDIR)/PM_Rules.o
+
+$(OBJDIR)/PatternMatcherEnumerator.o: $(LEM_PATH)/ai/pm/PatternMatcherEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PatternMatcherEnumerator.cpp -o $(OBJDIR)/PatternMatcherEnumerator.o
+
+$(OBJDIR)/ProductionRuleEnumerator.o: $(LEM_PATH)/ai/pm/ProductionRuleEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/ProductionRuleEnumerator.cpp -o $(OBJDIR)/ProductionRuleEnumerator.o
+
+$(OBJDIR)/ProcedureEnumerator.o: $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp -o $(OBJDIR)/ProcedureEnumerator.o
+
+$(OBJDIR)/RuleCategoryEnumerator.o: $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp -o $(OBJDIR)/RuleCategoryEnumerator.o
+
+$(OBJDIR)/PM_LenRuleGroup.o: $(LEM_PATH)/ai/pm/PM_LenRuleGroup.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_LenRuleGroup.cpp -o $(OBJDIR)/PM_LenRuleGroup.o
+
+$(OBJDIR)/PM_FunctionLoader.o: $(LEM_PATH)/ai/pm/PM_FunctionLoader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_FunctionLoader.cpp -o $(OBJDIR)/PM_FunctionLoader.o
+
+$(OBJDIR)/LanguageUsage.o: $(LEM_PATH)/ai/sg/LanguageUsage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LanguageUsage.cpp -o $(OBJDIR)/LanguageUsage.o
+
+$(OBJDIR)/VA_GG_to_SG.o: $(LEM_PATH)/ai/va/VA_GG_to_SG.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/VA_GG_to_SG.cpp -o $(OBJDIR)/VA_GG_to_SG.o
+
+
+$(OBJDIR)/ThesaurusLinkFlags.o: $(LEM_PATH)/ai/sg/ThesaurusLinkFlags.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ThesaurusLinkFlags.cpp -o $(OBJDIR)/ThesaurusLinkFlags.o
+
+$(OBJDIR)/TrMorphologyTracer.o: $(LEM_PATH)/ai/pm/TrMorphologyTracer.cpp
+	$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrMorphologyTracer.cpp -o $(OBJDIR)/TrMorphologyTracer.o
+
+$(OBJDIR)/LA_RecognitionRule.o: $(LEM_PATH)/ai/la/LA_RecognitionRule.cpp
+	$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_RecognitionRule.cpp -o $(OBJDIR)/LA_RecognitionRule.o
+
+$(OBJDIR)/LA_PreprocessorRule.o: $(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp
+	$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp -o $(OBJDIR)/LA_PreprocessorRule.o
+
+$(OBJDIR)/TrScopedVarsContext.o: $(LEM_PATH)/ai/pm/TrScopedVarsContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrScopedVarsContext.cpp -o $(OBJDIR)/TrScopedVarsContext.o
+
+$(OBJDIR)/LA_WordEntrySet.o: $(LEM_PATH)/ai/la/LA_WordEntrySet.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_WordEntrySet.cpp -o $(OBJDIR)/LA_WordEntrySet.o
+
+$(OBJDIR)/SynPatternCompilation.o: $(LEM_PATH)/ai/la/SynPatternCompilation.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternCompilation.cpp -o $(OBJDIR)/SynPatternCompilation.o
+
+$(OBJDIR)/rec2_transformator.o: $(LEM_PATH)/ai/pm/reconstructor/rec2_transformator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec2_transformator.cpp -o $(OBJDIR)/rec2_transformator.o
+
+$(OBJDIR)/R2Pattern.o: $(LEM_PATH)/ai/reco2/R2Pattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Pattern.cpp -o $(OBJDIR)/R2Pattern.o
+
+$(OBJDIR)/R2PatternEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2PatternEnumerator_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2PatternEnumerator_SQL.cpp -o $(OBJDIR)/R2PatternEnumerator_SQL.o
+
+$(OBJDIR)/R2Patterns.o: $(LEM_PATH)/ai/reco2/R2Patterns.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Patterns.cpp -o $(OBJDIR)/R2Patterns.o
+
+$(OBJDIR)/R2Point.o: $(LEM_PATH)/ai/reco2/R2Point.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Point.cpp -o $(OBJDIR)/R2Point.o
+
+$(OBJDIR)/R2Point2Pattern.o: $(LEM_PATH)/ai/reco2/R2Point2Pattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Point2Pattern.cpp -o $(OBJDIR)/R2Point2Pattern.o
+
+$(OBJDIR)/R2PointEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2PointEnumerator_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2PointEnumerator_SQL.cpp -o $(OBJDIR)/R2PointEnumerator_SQL.o
+
+$(OBJDIR)/R2Points.o: $(LEM_PATH)/ai/reco2/R2Points.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Points.cpp -o $(OBJDIR)/R2Points.o
+
+$(OBJDIR)/R2ProductionNode.o: $(LEM_PATH)/ai/reco2/R2ProductionNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2ProductionNode.cpp -o $(OBJDIR)/R2ProductionNode.o
+
+$(OBJDIR)/R2TranformEnumerator.o: $(LEM_PATH)/ai/reco2/R2TranformEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2TranformEnumerator.cpp -o $(OBJDIR)/R2TranformEnumerator.o
+
+$(OBJDIR)/R2Transform.o: $(LEM_PATH)/ai/reco2/R2Transform.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Transform.cpp -o $(OBJDIR)/R2Transform.o
+
+$(OBJDIR)/R2Transforms.o: $(LEM_PATH)/ai/reco2/R2Transforms.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Transforms.cpp -o $(OBJDIR)/R2Transforms.o
+
+$(OBJDIR)/R2Utils.o: $(LEM_PATH)/ai/reco2/R2Utils.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Utils.cpp -o $(OBJDIR)/R2Utils.o
+
+$(OBJDIR)/R2Word2Point.o: $(LEM_PATH)/ai/reco2/R2Word2Point.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Word2Point.cpp -o $(OBJDIR)/R2Word2Point.o
+
+$(OBJDIR)/R2WordEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2WordEnumerator_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2WordEnumerator_SQL.cpp -o $(OBJDIR)/R2WordEnumerator_SQL.o
+
+$(OBJDIR)/R2Words.o: $(LEM_PATH)/ai/reco2/R2Words.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Words.cpp -o $(OBJDIR)/R2Words.o
+
+$(OBJDIR)/Reconstructor2.o: $(LEM_PATH)/ai/reco2/Reconstructor2.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2.cpp -o $(OBJDIR)/Reconstructor2.o
+
+$(OBJDIR)/Reconstructor2Storage_MySQL.o: $(LEM_PATH)/ai/reco2/Reconstructor2Storage_MySQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2Storage_MySQL.cpp -o $(OBJDIR)/Reconstructor2Storage_MySQL.o
+
+$(OBJDIR)/Reconstructor2Storage_SQLITE.o: $(LEM_PATH)/ai/reco2/Reconstructor2Storage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2Storage_SQLITE.cpp -o $(OBJDIR)/Reconstructor2Storage_SQLITE.o
+
+$(OBJDIR)/StorageConnection_SQLITE.o: $(LEM_PATH)/ai/some/StorageConnection_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/StorageConnection_SQLITE.cpp -o $(OBJDIR)/StorageConnection_SQLITE.o
+
+$(OBJDIR)/Charpos2EntryStorage_SQLITE.o: $(LEM_PATH)/ai/sg/Charpos2EntryStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/Charpos2EntryStorage_SQLITE.cpp -o $(OBJDIR)/Charpos2EntryStorage_SQLITE.o
+
+$(OBJDIR)/Charpos2EntryEnumerator_SQL.o: $(LEM_PATH)/ai/sg/Charpos2EntryEnumerator_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/Charpos2EntryEnumerator_SQL.cpp -o $(OBJDIR)/Charpos2EntryEnumerator_SQL.o
+
+$(OBJDIR)/WideString2Ucs4.o: $(LEM_PATH)/tools/unicode/WideString2Ucs4.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/WideString2Ucs4.cpp -o $(OBJDIR)/WideString2Ucs4.o
+
+$(OBJDIR)/Ucs4ToWideString.o: $(LEM_PATH)/tools/unicode/Ucs4ToWideString.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/Ucs4ToWideString.cpp -o $(OBJDIR)/Ucs4ToWideString.o
+
+$(OBJDIR)/CriteriaInStorage.o: $(LEM_PATH)/ai/some/CriteriaInStorage.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/CriteriaInStorage.cpp -o $(OBJDIR)/CriteriaInStorage.o
+
+$(OBJDIR)/CriterionEnumerator_SQL.o: $(LEM_PATH)/ai/some/CriterionEnumerator_SQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/CriterionEnumerator_SQL.cpp -o $(OBJDIR)/CriterionEnumerator_SQL.o
+
+$(OBJDIR)/CriterionEnumeratorInFile.o: $(LEM_PATH)/ai/some/CriterionEnumeratorInFile.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/CriterionEnumeratorInFile.cpp -o $(OBJDIR)/CriterionEnumeratorInFile.o
+
+$(OBJDIR)/Symbols.o: $(LEM_PATH)/ai/gg/Symbols.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/Symbols.cpp -o $(OBJDIR)/Symbols.o
+
+$(OBJDIR)/AlphabetStorage_SQLITE.o: $(LEM_PATH)/ai/gg/AlphabetStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/AlphabetStorage_SQLITE.cpp -o $(OBJDIR)/AlphabetStorage_SQLITE.o
+
+$(OBJDIR)/AlphabetEnumerator.o: $(LEM_PATH)/ai/gg/AlphabetEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/AlphabetEnumerator.cpp -o $(OBJDIR)/AlphabetEnumerator.o
+
+$(OBJDIR)/SymbolEnumerator.o: $(LEM_PATH)/ai/gg/SymbolEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SymbolEnumerator.cpp -o $(OBJDIR)/SymbolEnumerator.o
+
+$(OBJDIR)/Alphabets.o: $(LEM_PATH)/ai/gg/Alphabets.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/Alphabets.cpp -o $(OBJDIR)/Alphabets.o
+
+$(OBJDIR)/Alphabet.o: $(LEM_PATH)/ai/gg/Alphabet.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/Alphabet.cpp -o $(OBJDIR)/Alphabet.o
+
+$(OBJDIR)/SymbolClasses.o: $(LEM_PATH)/ai/gg/SymbolClasses.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SymbolClasses.cpp -o $(OBJDIR)/SymbolClasses.o
+
+$(OBJDIR)/SymbolClassEnumerator.o: $(LEM_PATH)/ai/gg/SymbolClassEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SymbolClassEnumerator.cpp -o $(OBJDIR)/SymbolClassEnumerator.o
+
+$(OBJDIR)/GG_CoordEnumerator.o: $(LEM_PATH)/ai/gg/GG_CoordEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/GG_CoordEnumerator.cpp -o $(OBJDIR)/GG_CoordEnumerator.o
+
+$(OBJDIR)/GG_Coordinates.o: $(LEM_PATH)/ai/gg/GG_Coordinates.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/GG_Coordinates.cpp -o $(OBJDIR)/GG_Coordinates.o
+
+$(OBJDIR)/lemmatizator.o: $(LEM_PATH)/ai/la/lemmatizator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/lemmatizator.cpp -o $(OBJDIR)/lemmatizator.o
+
+$(OBJDIR)/LemmatizatorStorage_MySQL.o: $(LEM_PATH)/ai/la/LemmatizatorStorage_MySQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LemmatizatorStorage_MySQL.cpp -o $(OBJDIR)/LemmatizatorStorage_MySQL.o
+
+$(OBJDIR)/NGramsStorage_SQLITE.o: $(LEM_PATH)/ai/ngrams/NGramsStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ngrams/NGramsStorage_SQLITE.cpp -o $(OBJDIR)/NGramsStorage_SQLITE.o
+
+$(OBJDIR)/NGramsStorage_MySQL.o: $(LEM_PATH)/ai/ngrams/NGramsStorage_MySQL.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ngrams/NGramsStorage_MySQL.cpp -o $(OBJDIR)/NGramsStorage_MySQL.o
+
+$(OBJDIR)/StorageConnections.o: $(LEM_PATH)/ai/some/StorageConnections.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/StorageConnections.cpp -o $(OBJDIR)/StorageConnections.o
+		
+$(OBJDIR)/CoordsInFile.o: $(LEM_PATH)/ai/gg/CoordsInFile.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/CoordsInFile.cpp -o $(OBJDIR)/CoordsInFile.o
+
+$(OBJDIR)/CoordEnumeratorInFile.o: $(LEM_PATH)/ai/gg/CoordEnumeratorInFile.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/CoordEnumeratorInFile.cpp -o $(OBJDIR)/CoordEnumeratorInFile.o
+
+$(OBJDIR)/WordEntries_File.o: $(LEM_PATH)/ai/sg/WordEntries_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntries_File.cpp -o $(OBJDIR)/WordEntries_File.o
+
+$(OBJDIR)/WordFormEnumeratorGlobbing_File.o: $(LEM_PATH)/ai/sg/WordFormEnumeratorGlobbing_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumeratorGlobbing_File.cpp -o $(OBJDIR)/WordFormEnumeratorGlobbing_File.o
+
+$(OBJDIR)/WordFormEnumeratorFuzzy_File.o: $(LEM_PATH)/ai/sg/WordFormEnumeratorFuzzy_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumeratorFuzzy_File.cpp -o $(OBJDIR)/WordFormEnumeratorFuzzy_File.o
+
+$(OBJDIR)/WordFormEnumeratorListing_File.o: $(LEM_PATH)/ai/sg/WordFormEnumeratorListing_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumeratorListing_File.cpp -o $(OBJDIR)/WordFormEnumeratorListing_File.o
+
+$(OBJDIR)/WordEntryEnumerator_File.o: $(LEM_PATH)/ai/sg/WordEntryEnumerator_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntryEnumerator_File.cpp -o $(OBJDIR)/WordEntryEnumerator_File.o
+
+$(OBJDIR)/WordFormEnumerator_File3.o: $(LEM_PATH)/ai/sg/WordFormEnumerator_File3.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumerator_File3.cpp -o $(OBJDIR)/WordFormEnumerator_File3.o
+
+$(OBJDIR)/WordFormEnumerator_File2.o: $(LEM_PATH)/ai/sg/WordFormEnumerator_File2.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumerator_File2.cpp -o $(OBJDIR)/WordFormEnumerator_File2.o
+
+$(OBJDIR)/WordFormEnumerator_File1.o: $(LEM_PATH)/ai/sg/WordFormEnumerator_File1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordFormEnumerator_File1.cpp -o $(OBJDIR)/WordFormEnumerator_File1.o
+
+$(OBJDIR)/WordEntryEnumerator_File_ByGroup.o: $(LEM_PATH)/ai/sg/WordEntryEnumerator_File_ByGroup.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntryEnumerator_File_ByGroup.cpp -o $(OBJDIR)/WordEntryEnumerator_File_ByGroup.o
+
+$(OBJDIR)/SG_Coordinates.o: $(LEM_PATH)/ai/sg/SG_Coordinates.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/SG_Coordinates.cpp -o $(OBJDIR)/SG_Coordinates.o
+
+$(OBJDIR)/LanguageEnumerator.o: $(LEM_PATH)/ai/sg/LanguageEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LanguageEnumerator.cpp -o $(OBJDIR)/LanguageEnumerator.o
+
+$(OBJDIR)/PartsOfSpeech.o: $(LEM_PATH)/ai/sg/PartsOfSpeech.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/PartsOfSpeech.cpp -o $(OBJDIR)/PartsOfSpeech.o
+
+$(OBJDIR)/SG_CoordEnumerator.o: $(LEM_PATH)/ai/sg/SG_CoordEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/SG_CoordEnumerator.cpp -o $(OBJDIR)/SG_CoordEnumerator.o
+
+$(OBJDIR)/LexemeEnumerator_File.o: $(LEM_PATH)/ai/sg/LexemeEnumerator_File.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LexemeEnumerator_File.cpp -o $(OBJDIR)/LexemeEnumerator_File.o
+
+$(OBJDIR)/PartOfSpeechEnumerator.o: $(LEM_PATH)/ai/sg/PartOfSpeechEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/PartOfSpeechEnumerator.cpp -o $(OBJDIR)/PartOfSpeechEnumerator.o
+
+$(OBJDIR)/GramCoordUpdator_DB.o: $(LEM_PATH)/ai/some/GramCoordUpdator_DB.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/GramCoordUpdator_DB.cpp -o $(OBJDIR)/GramCoordUpdator_DB.o
+
+$(OBJDIR)/ThesaurusStorage_SQLITE.o: $(LEM_PATH)/ai/sg/ThesaurusStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ThesaurusStorage_SQLITE.cpp -o $(OBJDIR)/ThesaurusStorage_SQLITE.o
+
+$(OBJDIR)/LexiconStorage_SQLITE.o: $(LEM_PATH)/ai/sg/LexiconStorage_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LexiconStorage_SQLITE.cpp -o $(OBJDIR)/LexiconStorage_SQLITE.o
+
+$(OBJDIR)/Languages.o: $(LEM_PATH)/ai/sg/Languages.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/Languages.cpp -o $(OBJDIR)/Languages.o
+
+$(OBJDIR)/sqlite_helpers.o: $(LEM_PATH)/db/sqlite_helpers.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/db/sqlite_helpers.cpp -o $(OBJDIR)/sqlite_helpers.o
+		
+$(OBJDIR)/PhraseNoteEnumerator.o: $(LEM_PATH)/ai/sg/PhraseNoteEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/PhraseNoteEnumerator.cpp -o $(OBJDIR)/PhraseNoteEnumerator.o
+
+$(OBJDIR)/PhraseLinkEnumerator.o: $(LEM_PATH)/ai/sg/PhraseLinkEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/PhraseLinkEnumerator.cpp -o $(OBJDIR)/PhraseLinkEnumerator.o
+
+$(OBJDIR)/TagsSets.o: $(LEM_PATH)/ai/sg/TagsSets.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/TagsSets.cpp -o $(OBJDIR)/TagsSets.o
+
+$(OBJDIR)/WordLinkEnumerator.o: $(LEM_PATH)/ai/sg/WordLinkEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordLinkEnumerator.cpp -o $(OBJDIR)/WordLinkEnumerator.o
+
+$(OBJDIR)/AuxFormTypes.o: $(LEM_PATH)/ai/sg/AuxFormTypes.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/AuxFormTypes.cpp -o $(OBJDIR)/AuxFormTypes.o
+
+$(OBJDIR)/ThesaurusTagDefs.o: $(LEM_PATH)/ai/sg/ThesaurusTagDefs.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ThesaurusTagDefs.cpp -o $(OBJDIR)/ThesaurusTagDefs.o
+
+$(OBJDIR)/TransactionGuard_SQLITE.o: $(LEM_PATH)/ai/sg/TransactionGuard_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/TransactionGuard_SQLITE.cpp -o $(OBJDIR)/TransactionGuard_SQLITE.o
+
+$(OBJDIR)/PhraseEnumerator.o: $(LEM_PATH)/ai/sg/PhraseEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/PhraseEnumerator.cpp -o $(OBJDIR)/PhraseEnumerator.o
+
+$(OBJDIR)/ThesaurusTagDefsEnumerator.o: $(LEM_PATH)/ai/sg/ThesaurusTagDefsEnumerator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ThesaurusTagDefsEnumerator.cpp -o $(OBJDIR)/ThesaurusTagDefsEnumerator.o
+
+$(OBJDIR)/LS_ResultSet_SQLITE.o: $(LEM_PATH)/ai/sg/LS_ResultSet_SQLITE.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/LS_ResultSet_SQLITE.cpp -o $(OBJDIR)/LS_ResultSet_SQLITE.o
+        
+
+$(OBJDIR)/lem_startup.o: $(LEM_PATH)/tools/lem_startup.cpp
+		$(CXX) $(LFLAGS) $(CXXFLAGS) $(LEM_PATH)/tools/lem_startup.cpp -o $(OBJDIR)/lem_startup.o
+
+$(OBJDIR)/lem_critical_section.o: $(LEM_PATH)/tools/lem_critical_section.cpp
+		$(CXX) $(LFLAGS) $(CXXFLAGS) $(LEM_PATH)/tools/lem_critical_section.cpp -o $(OBJDIR)/lem_critical_section.o
+
+$(OBJDIR)/tr_transformators.o: $(LEM_PATH)/ai/pm/tr_transformators.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/tr_transformators.cpp -o $(OBJDIR)/tr_transformators.o
+
+$(OBJDIR)/AtomizedDetectors.o: $(LEM_PATH)/ai/pm/neurogen/AtomizedDetectors.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/AtomizedDetectors.cpp -o $(OBJDIR)/AtomizedDetectors.o
+
+$(OBJDIR)/AtomizedProducers.o: $(LEM_PATH)/ai/pm/neurogen/AtomizedProducers.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/AtomizedProducers.cpp -o $(OBJDIR)/AtomizedProducers.o
+
+$(OBJDIR)/cell.o: $(LEM_PATH)/ai/pm/neurogen/cell.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/cell.cpp -o $(OBJDIR)/cell.o
+
+$(OBJDIR)/net.o: $(LEM_PATH)/ai/pm/neurogen/net.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/net.cpp -o $(OBJDIR)/net.o
+
+$(OBJDIR)/NeuroDetector.o: $(LEM_PATH)/ai/pm/neurogen/NeuroDetector.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/NeuroDetector.cpp -o $(OBJDIR)/NeuroDetector.o
+
+$(OBJDIR)/NeuroProducer.o: $(LEM_PATH)/ai/pm/neurogen/NeuroProducer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/NeuroProducer.cpp -o $(OBJDIR)/NeuroProducer.o
+
+$(OBJDIR)/NG_Transformator.o: $(LEM_PATH)/ai/pm/neurogen/NG_Transformator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/NG_Transformator.cpp -o $(OBJDIR)/NG_Transformator.o
+
+$(OBJDIR)/rpattern.o: $(LEM_PATH)/ai/pm/neurogen/rpattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/rpattern.cpp -o $(OBJDIR)/rpattern.o
+
+$(OBJDIR)/RPatterns.o: $(LEM_PATH)/ai/pm/neurogen/RPatterns.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/RPatterns.cpp -o $(OBJDIR)/RPatterns.o
+
+$(OBJDIR)/rule.o: $(LEM_PATH)/ai/pm/neurogen/rule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/rule.cpp -o $(OBJDIR)/rule.o
+
+$(OBJDIR)/RuleCluster.o: $(LEM_PATH)/ai/pm/neurogen/RuleCluster.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/RuleCluster.cpp -o $(OBJDIR)/RuleCluster.o
+
+$(OBJDIR)/Transformators1.o: $(LEM_PATH)/ai/pm/neurogen/Transformators1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/Transformators1.cpp -o $(OBJDIR)/Transformators1.o
+
+$(OBJDIR)/WordDetector.o: $(LEM_PATH)/ai/pm/neurogen/WordDetector.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/WordDetector.cpp -o $(OBJDIR)/WordDetector.o
+
+$(OBJDIR)/WordDetectors.o: $(LEM_PATH)/ai/pm/neurogen/WordDetectors.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/WordDetectors.cpp -o $(OBJDIR)/WordDetectors.o
+
+$(OBJDIR)/WordProducer.o: $(LEM_PATH)/ai/pm/neurogen/WordProducer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/WordProducer.cpp -o $(OBJDIR)/WordProducer.o
+
+$(OBJDIR)/WordProducers.o: $(LEM_PATH)/ai/pm/neurogen/WordProducers.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/WordProducers.cpp -o $(OBJDIR)/WordProducers.o
+
+$(OBJDIR)/Yields.o: $(LEM_PATH)/ai/pm/neurogen/Yields.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/Yields.cpp -o $(OBJDIR)/Yields.o
+
+$(OBJDIR)/YieldSlot.o: $(LEM_PATH)/ai/pm/neurogen/YieldSlot.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/neurogen/YieldSlot.cpp -o $(OBJDIR)/YieldSlot.o
+
+$(OBJDIR)/lem_coap.o: $(LEM_PATH)/tools/lem_coap.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_coap.cpp -o $(OBJDIR)/lem_coap.o
+
+$(OBJDIR)/lem_application.o: $(LEM_PATH)/tools/lem_application.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_application.cpp -o $(OBJDIR)/lem_application.o
+
+$(OBJDIR)/lem_dll.o: $(LEM_PATH)/tools/lem_dll.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_dll.cpp -o $(OBJDIR)/lem_dll.o
+
+$(OBJDIR)/lem_opti.o: $(LEM_PATH)/tools/lem_opti.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_opti.cpp -o $(OBJDIR)/lem_opti.o
+
+$(OBJDIR)/lem_chec.o: $(LEM_PATH)/tools/lem_chec.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_chec.cpp -o $(OBJDIR)/lem_chec.o
+
+$(OBJDIR)/lem_conv.o: $(LEM_PATH)/tools/lem_conv.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_conv.cpp -o $(OBJDIR)/lem_conv.o
+
+$(OBJDIR)/lem_dir.o: $(LEM_PATH)/tools/lem_dir.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_dir.cpp -o $(OBJDIR)/lem_dir.o
+
+$(OBJDIR)/lem_time.o: $(LEM_PATH)/tools/lem_time.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_time.cpp -o $(OBJDIR)/lem_time.o
+
+$(OBJDIR)/lem_shell.o: $(LEM_PATH)/tools/lem_shell.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_shell.cpp -o $(OBJDIR)/lem_shell.o
+
+$(OBJDIR)/lem_interlocked_value.o: $(LEM_PATH)/tools/lem_interlocked_value.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_interlocked_value.cpp -o $(OBJDIR)/lem_interlocked_value.o
+
+$(OBJDIR)/ui_user_interface.o: $(LEM_PATH)/tools/ui/ui_user_interface.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/ui/ui_user_interface.cpp -o $(OBJDIR)/ui_user_interface.o
+
+$(OBJDIR)/system_config.o: $(LEM_PATH)/tools/system_config/system_config.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/system_config.cpp -o $(OBJDIR)/system_config.o
+
+$(OBJDIR)/hardware.o: $(LEM_PATH)/tools/system_config/hardware.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/hardware.cpp -o $(OBJDIR)/hardware.o
+
+$(OBJDIR)/cp_437.o: $(LEM_PATH)/tools/unicode/cp_437.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_437.cpp -o $(OBJDIR)/cp_437.o
+
+$(OBJDIR)/cp_8859_1.o: $(LEM_PATH)/tools/unicode/cp_8859_1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_8859_1.cpp -o $(OBJDIR)/cp_8859_1.o
+
+$(OBJDIR)/cast_to_url.o: $(LEM_PATH)/tools/unicode/cast_to_url.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cast_to_url.cpp -o $(OBJDIR)/cast_to_url.o
+
+$(OBJDIR)/cp_847.o: $(LEM_PATH)/tools/unicode/cp_847.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_847.cpp -o $(OBJDIR)/cp_847.o
+
+$(OBJDIR)/cp_866.o: $(LEM_PATH)/tools/unicode/cp_866.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_866.cpp -o $(OBJDIR)/cp_866.o
+
+$(OBJDIR)/cp_1250.o: $(LEM_PATH)/tools/unicode/cp_1250.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1250.cpp -o $(OBJDIR)/cp_1250.o
+
+$(OBJDIR)/cp_1251.o: $(LEM_PATH)/tools/unicode/cp_1251.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1251.cpp -o $(OBJDIR)/cp_1251.o
+
+$(OBJDIR)/cp_1252.o: $(LEM_PATH)/tools/unicode/cp_1252.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1252.cpp -o $(OBJDIR)/cp_1252.o
+
+$(OBJDIR)/cp_code_page.o: $(LEM_PATH)/tools/unicode/cp_code_page.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_code_page.cpp -o $(OBJDIR)/cp_code_page.o
+
+$(OBJDIR)/cp_recodings.o: $(LEM_PATH)/tools/unicode/cp_recodings.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_recodings.cpp -o $(OBJDIR)/cp_recodings.o
+
+$(OBJDIR)/cp_sgml.o: $(LEM_PATH)/tools/unicode/cp_sgml.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_sgml.cpp -o $(OBJDIR)/cp_sgml.o
+
+$(OBJDIR)/ucs4_to_utf8.o: $(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp -o $(OBJDIR)/ucs4_to_utf8.o
+
+$(OBJDIR)/transliterator.o: $(LEM_PATH)/tools/unicode/transliterator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/transliterator.cpp -o $(OBJDIR)/transliterator.o
+
+$(OBJDIR)/utf_converters.o: $(LEM_PATH)/tools/unicode/utf_converters.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/utf_converters.cpp -o $(OBJDIR)/utf_converters.o
+
+$(OBJDIR)/lem_process.o: $(LEM_PATH)/tools/lem_process.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_process.cpp -o $(OBJDIR)/lem_process.o
+
+$(OBJDIR)/lem_reflection.o: $(LEM_PATH)/tools/lem_reflection.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_reflection.cpp -o $(OBJDIR)/lem_reflection.o
+
+$(OBJDIR)/macheps.o: $(LEM_PATH)/math/macheps.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/macheps.cpp -o $(OBJDIR)/macheps.o
+
+$(OBJDIR)/lem_ustr.o: $(LEM_PATH)/contain/lem_ustr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ustr.cpp -o $(OBJDIR)/lem_ustr.o
+
+$(OBJDIR)/lem_astr.o: $(LEM_PATH)/contain/lem_astr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_astr.cpp -o $(OBJDIR)/lem_astr.o
+
+$(OBJDIR)/lem_acstring.o: $(LEM_PATH)/contain/lem_acstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_acstring.cpp -o $(OBJDIR)/lem_acstring.o
+
+$(OBJDIR)/lem_ucstring.o: $(LEM_PATH)/contain/lem_ucstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ucstring.cpp -o $(OBJDIR)/lem_ucstring.o
+
+$(OBJDIR)/lem_afstring.o: $(LEM_PATH)/contain/lem_afstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_afstring.cpp -o $(OBJDIR)/lem_afstring.o
+
+$(OBJDIR)/lem_ufstring.o: $(LEM_PATH)/contain/lem_ufstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ufstring.cpp -o $(OBJDIR)/lem_ufstring.o
+
+$(OBJDIR)/lem_fp1.o: $(LEM_PATH)/contain/lem_fp1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_fp1.cpp -o $(OBJDIR)/lem_fp1.o
+
+$(OBJDIR)/oformatter.o: $(LEM_PATH)/io/oformatter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/oformatter.cpp -o $(OBJDIR)/oformatter.o
+
+$(OBJDIR)/xp_parser.o: $(LEM_PATH)/io/xml/xp_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_parser.cpp -o $(OBJDIR)/xp_parser.o
+
+$(OBJDIR)/xp_node.o: $(LEM_PATH)/io/xml/xp_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_node.cpp -o $(OBJDIR)/xp_node.o
+
+$(OBJDIR)/xp_iterator.o: $(LEM_PATH)/io/xml/xp_iterator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_iterator.cpp -o $(OBJDIR)/xp_iterator.o
+
+$(OBJDIR)/io_base_stream.o: $(LEM_PATH)/io/io_base_stream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_base_stream.cpp -o $(OBJDIR)/io_base_stream.o
+
+$(OBJDIR)/io_binary_file.o: $(LEM_PATH)/io/io_binary_file.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_binary_file.cpp -o $(OBJDIR)/io_binary_file.o
+
+$(OBJDIR)/io_memory_stream.o: $(LEM_PATH)/io/io_memory_stream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_memory_stream.cpp -o $(OBJDIR)/io_memory_stream.o
+
+$(OBJDIR)/io_text_file.o: $(LEM_PATH)/io/io_text_file.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_text_file.cpp -o $(OBJDIR)/io_text_file.o
+
+$(OBJDIR)/io_tty.o: $(LEM_PATH)/io/io_tty.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_tty.cpp -o $(OBJDIR)/io_tty.o
+
+$(OBJDIR)/base_lexer.o: $(LEM_PATH)/io/base_lexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/base_lexer.cpp -o $(OBJDIR)/base_lexer.o
+
+$(OBJDIR)/io_kbd.o: $(LEM_PATH)/io/io_kbd.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_kbd.cpp -o $(OBJDIR)/io_kbd.o
+
+$(OBJDIR)/lem_mime.o: $(LEM_PATH)/io/lem_mime.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/lem_mime.cpp -o $(OBJDIR)/lem_mime.o
+
+$(OBJDIR)/lem_logfile.o: $(LEM_PATH)/io/lem_logfile.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/lem_logfile.cpp -o $(OBJDIR)/lem_logfile.o
+
+$(OBJDIR)/chr_base_reader.o: $(LEM_PATH)/io/char_reader/chr_base_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_base_reader.cpp -o $(OBJDIR)/chr_base_reader.o
+
+$(OBJDIR)/chr_char_reader.o: $(LEM_PATH)/io/char_reader/chr_char_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_char_reader.cpp -o $(OBJDIR)/chr_char_reader.o
+
+$(OBJDIR)/chr_utf16_reader.o: $(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp -o $(OBJDIR)/chr_utf16_reader.o
+
+$(OBJDIR)/chr_utf8_reader.o: $(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp -o $(OBJDIR)/chr_utf8_reader.o
+
+$(OBJDIR)/lem_imat.o: $(LEM_PATH)/math/lem_imat.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/lem_imat.cpp -o $(OBJDIR)/lem_imat.o
+
+$(OBJDIR)/TrDebugger.o: $(LEM_PATH)/demo/ai/solarix/syntax/TrDebugger.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/syntax/TrDebugger.cpp -o $(OBJDIR)/TrDebugger.o
+
+$(OBJDIR)/aa_autom.o: $(LEM_PATH)/ai/aa/aa_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/aa/aa_autom.cpp -o $(OBJDIR)/aa_autom.o
+
+$(OBJDIR)/vg_autom.o: $(LEM_PATH)/ai/vg/vg_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/vg/vg_autom.cpp -o $(OBJDIR)/vg_autom.o
+
+$(OBJDIR)/vg_syllabema.o: $(LEM_PATH)/ai/vg/vg_syllabema.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/vg/vg_syllabema.cpp -o $(OBJDIR)/vg_syllabema.o
+
+$(OBJDIR)/va_analizator.o: $(LEM_PATH)/ai/va/va_analizator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_analizator.cpp -o $(OBJDIR)/va_analizator.o
+
+$(OBJDIR)/va_autom.o: $(LEM_PATH)/ai/va/va_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_autom.cpp -o $(OBJDIR)/va_autom.o
+
+$(OBJDIR)/va_buil.o: $(LEM_PATH)/ai/va/va_buil.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_buil.cpp -o $(OBJDIR)/va_buil.o
+
+$(OBJDIR)/va_processing.o: $(LEM_PATH)/ai/va/va_processing.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_processing.cpp -o $(OBJDIR)/va_processing.o
+
+$(OBJDIR)/va_space.o: $(LEM_PATH)/ai/va/va_space.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_space.cpp -o $(OBJDIR)/va_space.o
+
+$(OBJDIR)/va_synt1.o: $(LEM_PATH)/ai/va/va_synt1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_synt1.cpp -o $(OBJDIR)/va_synt1.o
+
+$(OBJDIR)/va_unpa.o: $(LEM_PATH)/ai/va/va_unpa.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/va/va_unpa.cpp -o $(OBJDIR)/va_unpa.o
+
+$(OBJDIR)/action_step.o: $(LEM_PATH)/ai/tree/action_step.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/action_step.cpp -o $(OBJDIR)/action_step.o
+
+$(OBJDIR)/CompilationContext.o: $(LEM_PATH)/ai/some/CompilationContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/CompilationContext.cpp -o $(OBJDIR)/CompilationContext.o
+
+$(OBJDIR)/clear_section.o: $(LEM_PATH)/ai/tree/clear_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/clear_section.cpp -o $(OBJDIR)/clear_section.o
+
+$(OBJDIR)/correlate_item.o: $(LEM_PATH)/ai/tree/correlate_item.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/correlate_item.cpp -o $(OBJDIR)/correlate_item.o
+
+$(OBJDIR)/plain_argument_list.o: $(LEM_PATH)/ai/tree/plain_argument_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/plain_argument_list.cpp -o $(OBJDIR)/plain_argument_list.o
+
+$(OBJDIR)/correlate_section.o: $(LEM_PATH)/ai/tree/correlate_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/correlate_section.cpp -o $(OBJDIR)/correlate_section.o
+
+$(OBJDIR)/cut_item.o: $(LEM_PATH)/ai/tree/cut_item.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/cut_item.cpp -o $(OBJDIR)/cut_item.o
+
+$(OBJDIR)/cut_section.o: $(LEM_PATH)/ai/tree/cut_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/cut_section.cpp -o $(OBJDIR)/cut_section.o
+
+$(OBJDIR)/mark_section.o: $(LEM_PATH)/ai/tree/mark_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/mark_section.cpp -o $(OBJDIR)/mark_section.o
+
+$(OBJDIR)/pack_maker.o: $(LEM_PATH)/ai/tree/pack_maker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/pack_maker.cpp -o $(OBJDIR)/pack_maker.o
+
+$(OBJDIR)/refresh_section.o: $(LEM_PATH)/ai/tree/refresh_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/refresh_section.cpp -o $(OBJDIR)/refresh_section.o
+
+$(OBJDIR)/reset_item.o: $(LEM_PATH)/ai/tree/reset_item.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/reset_item.cpp -o $(OBJDIR)/reset_item.o
+
+$(OBJDIR)/reset_section.o: $(LEM_PATH)/ai/tree/reset_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/reset_section.cpp -o $(OBJDIR)/reset_section.o
+
+$(OBJDIR)/result_section.o: $(LEM_PATH)/ai/tree/result_section.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/result_section.cpp -o $(OBJDIR)/result_section.o
+
+$(OBJDIR)/res_pack.o: $(LEM_PATH)/ai/tree/res_pack.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/res_pack.cpp -o $(OBJDIR)/res_pack.o
+
+$(OBJDIR)/tree_hash.o: $(LEM_PATH)/ai/tree/tree_hash.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/tree_hash.cpp -o $(OBJDIR)/tree_hash.o
+
+$(OBJDIR)/tree_link.o: $(LEM_PATH)/ai/tree/tree_link.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/tree_link.cpp -o $(OBJDIR)/tree_link.o
+
+$(OBJDIR)/tree_list.o: $(LEM_PATH)/ai/tree/tree_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/tree_list.cpp -o $(OBJDIR)/tree_list.o
+
+$(OBJDIR)/tree_node.o: $(LEM_PATH)/ai/tree/tree_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/tree_node.cpp -o $(OBJDIR)/tree_node.o
+
+$(OBJDIR)/TreeMarks.o: $(LEM_PATH)/ai/tree/TreeMarks.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/TreeMarks.cpp -o $(OBJDIR)/TreeMarks.o
+
+$(OBJDIR)/TreeDimension.o: $(LEM_PATH)/ai/tree/TreeDimension.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/TreeDimension.cpp -o $(OBJDIR)/TreeDimension.o
+
+$(OBJDIR)/SentenceBroker.o: $(LEM_PATH)/ai/some/SentenceBroker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/SentenceBroker.cpp -o $(OBJDIR)/SentenceBroker.o
+
+$(OBJDIR)/ExternalTokenizer.o: $(LEM_PATH)/ai/some/ExternalTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ExternalTokenizer.cpp -o $(OBJDIR)/ExternalTokenizer.o
+
+$(OBJDIR)/print_variator.o: $(LEM_PATH)/ai/some/print_variator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/print_variator.cpp -o $(OBJDIR)/print_variator.o
+
+$(OBJDIR)/SentenceTokenizer.o: $(LEM_PATH)/ai/some/SentenceTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/SentenceTokenizer.cpp -o $(OBJDIR)/SentenceTokenizer.o
+
+$(OBJDIR)/SegmentingSentenceTokenizer.o: $(LEM_PATH)/ai/some/SegmentingSentenceTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/SegmentingSentenceTokenizer.cpp -o $(OBJDIR)/SegmentingSentenceTokenizer.o
+
+$(OBJDIR)/tree_node_maker.o: $(LEM_PATH)/ai/tree/tree_node_maker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/tree_node_maker.cpp -o $(OBJDIR)/tree_node_maker.o
+
+$(OBJDIR)/undress_convolution.o: $(LEM_PATH)/ai/tree/undress_convolution.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/undress_convolution.cpp -o $(OBJDIR)/undress_convolution.o
+
+$(OBJDIR)/variator.o: $(LEM_PATH)/ai/tree/variator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/variator.cpp -o $(OBJDIR)/variator.o
+
+$(OBJDIR)/word_form.o: $(LEM_PATH)/ai/tree/word_form.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/word_form.cpp -o $(OBJDIR)/word_form.o
+
+$(OBJDIR)/word_form_maker.o: $(LEM_PATH)/ai/tree/word_form_maker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/tree/word_form_maker.cpp -o $(OBJDIR)/word_form_maker.o
+
+$(OBJDIR)/automata_names.o: $(LEM_PATH)/ai/some/automata_names.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/automata_names.cpp -o $(OBJDIR)/automata_names.o
+
+$(OBJDIR)/sentence.o: $(LEM_PATH)/ai/some/sentence.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/sentence.cpp -o $(OBJDIR)/sentence.o
+
+$(OBJDIR)/automaton.o: $(LEM_PATH)/ai/some/automaton.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/automaton.cpp -o $(OBJDIR)/automaton.o
+
+$(OBJDIR)/base_entry.o: $(LEM_PATH)/ai/some/base_entry.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/base_entry.cpp -o $(OBJDIR)/base_entry.o
+
+$(OBJDIR)/bitarray32.o: $(LEM_PATH)/ai/some/bitarray32.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/bitarray32.cpp -o $(OBJDIR)/bitarray32.o
+
+$(OBJDIR)/DebugSymbols.o: $(LEM_PATH)/ai/some/DebugSymbols.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/DebugSymbols.cpp -o $(OBJDIR)/DebugSymbols.o
+
+$(OBJDIR)/coordinate.o: $(LEM_PATH)/ai/some/coordinate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/coordinate.cpp -o $(OBJDIR)/coordinate.o
+
+$(OBJDIR)/coord_adr.o: $(LEM_PATH)/ai/some/coord_adr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/coord_adr.cpp -o $(OBJDIR)/coord_adr.o
+
+$(OBJDIR)/coord_ex.o: $(LEM_PATH)/ai/some/coord_ex.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/coord_ex.cpp -o $(OBJDIR)/coord_ex.o
+
+$(OBJDIR)/coord_pair.o: $(LEM_PATH)/ai/some/coord_pair.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/coord_pair.cpp -o $(OBJDIR)/coord_pair.o
+
+$(OBJDIR)/coord_state.o: $(LEM_PATH)/ai/some/coord_state.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/coord_state.cpp -o $(OBJDIR)/coord_state.o
+
+$(OBJDIR)/criteria_list.o: $(LEM_PATH)/ai/some/criteria_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/criteria_list.cpp -o $(OBJDIR)/criteria_list.o
+
+$(OBJDIR)/criterion.o: $(LEM_PATH)/ai/some/criterion.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/criterion.cpp -o $(OBJDIR)/criterion.o
+
+$(OBJDIR)/dictionary.o: $(LEM_PATH)/ai/some/dictionary.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/dictionary.cpp -o $(OBJDIR)/dictionary.o
+
+$(OBJDIR)/load_options.o: $(LEM_PATH)/ai/some/load_options.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/load_options.cpp -o $(OBJDIR)/load_options.o
+
+$(OBJDIR)/form_table.o: $(LEM_PATH)/ai/some/form_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/form_table.cpp -o $(OBJDIR)/form_table.o
+
+$(OBJDIR)/frasema.o: $(LEM_PATH)/ai/some/frasema.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/frasema.cpp -o $(OBJDIR)/frasema.o
+
+$(OBJDIR)/grammar.o: $(LEM_PATH)/ai/some/grammar.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/grammar.cpp -o $(OBJDIR)/grammar.o
+
+$(OBJDIR)/gram_class.o: $(LEM_PATH)/ai/some/gram_class.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/gram_class.cpp -o $(OBJDIR)/gram_class.o
+
+$(OBJDIR)/lexem.o: $(LEM_PATH)/ai/some/lexem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/lexem.cpp -o $(OBJDIR)/lexem.o
+
+$(OBJDIR)/ml_net_node.o: $(LEM_PATH)/ai/some/ml_net_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ml_net_node.cpp -o $(OBJDIR)/ml_net_node.o
+
+$(OBJDIR)/ml_proj_job.o: $(LEM_PATH)/ai/some/ml_proj_job.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ml_proj_job.cpp -o $(OBJDIR)/ml_proj_job.o
+
+$(OBJDIR)/ml_proj_list.o: $(LEM_PATH)/ai/some/ml_proj_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ml_proj_list.cpp -o $(OBJDIR)/ml_proj_list.o
+
+$(OBJDIR)/plain_text.o: $(LEM_PATH)/ai/some/plain_text.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/plain_text.cpp -o $(OBJDIR)/plain_text.o
+
+$(OBJDIR)/sol_random.o: $(LEM_PATH)/ai/some/sol_random.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/sol_random.cpp -o $(OBJDIR)/sol_random.o
+
+$(OBJDIR)/reentry_point.o: $(LEM_PATH)/ai/some/reentry_point.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/reentry_point.cpp -o $(OBJDIR)/reentry_point.o
+
+$(OBJDIR)/ref_name.o: $(LEM_PATH)/ai/some/ref_name.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ref_name.cpp -o $(OBJDIR)/ref_name.o
+
+$(OBJDIR)/sol_ling.o: $(LEM_PATH)/ai/some/sol_ling.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/sol_ling.cpp -o $(OBJDIR)/sol_ling.o
+
+$(OBJDIR)/some_strings.o: $(LEM_PATH)/ai/some/some_strings.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/some_strings.cpp -o $(OBJDIR)/some_strings.o
+
+$(OBJDIR)/sound_record.o: $(LEM_PATH)/ai/some/sound_record.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/sound_record.cpp -o $(OBJDIR)/sound_record.o
+
+$(OBJDIR)/string_set.o: $(LEM_PATH)/ai/some/string_set.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/string_set.cpp -o $(OBJDIR)/string_set.o
+
+$(OBJDIR)/text_processor.o: $(LEM_PATH)/ai/some/text_processor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/text_processor.cpp -o $(OBJDIR)/text_processor.o
+
+$(OBJDIR)/version.o: $(LEM_PATH)/ai/some/version.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/version.cpp -o $(OBJDIR)/version.o
+
+$(OBJDIR)/tokens.o: $(LEM_PATH)/ai/some/tokens.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/tokens.cpp -o $(OBJDIR)/tokens.o
+
+$(OBJDIR)/sql_production.o: $(LEM_PATH)/ai/some/sql_production.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/sql_production.cpp -o $(OBJDIR)/sql_production.o
+
+$(OBJDIR)/dsa_form.o: $(LEM_PATH)/ai/sg/dsa_form.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/dsa_form.cpp -o $(OBJDIR)/dsa_form.o
+
+$(OBJDIR)/dsa_main.o: $(LEM_PATH)/ai/sg/dsa_main.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/dsa_main.cpp -o $(OBJDIR)/dsa_main.o
+
+$(OBJDIR)/dsa_table.o: $(LEM_PATH)/ai/sg/dsa_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/dsa_table.cpp -o $(OBJDIR)/dsa_table.o
+
+$(OBJDIR)/sg_autom.o: $(LEM_PATH)/ai/sg/sg_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_autom.cpp -o $(OBJDIR)/sg_autom.o
+
+$(OBJDIR)/sg_notag_filter.o: $(LEM_PATH)/ai/sg/sg_notag_filter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_notag_filter.cpp -o $(OBJDIR)/sg_notag_filter.o
+        
+$(OBJDIR)/sg_ref_tag_filter.o: $(LEM_PATH)/ai/sg/sg_ref_tag_filter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_ref_tag_filter.cpp -o $(OBJDIR)/sg_ref_tag_filter.o
+
+$(OBJDIR)/sg_prefix_entry_searcher.o: $(LEM_PATH)/ai/sg/sg_prefix_entry_searcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_prefix_entry_searcher.cpp -o $(OBJDIR)/sg_prefix_entry_searcher.o
+
+$(OBJDIR)/sg_tag_or_null_tagfilter.o: $(LEM_PATH)/ai/sg/sg_tag_or_null_tagfilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_tag_or_null_tagfilter.cpp -o $(OBJDIR)/sg_tag_or_null_tagfilter.o
+
+$(OBJDIR)/sg_and_tagfilter.o: $(LEM_PATH)/ai/sg/sg_and_tagfilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_and_tagfilter.cpp -o $(OBJDIR)/sg_and_tagfilter.o
+
+$(OBJDIR)/sg_only_main_translations_tagfilter.o: $(LEM_PATH)/ai/sg/sg_only_main_translations_tagfilter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_only_main_translations_tagfilter.cpp -o $(OBJDIR)/sg_only_main_translations_tagfilter.o
+
+$(OBJDIR)/sg_calibrator.o: $(LEM_PATH)/ai/sg/sg_calibrator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_calibrator.cpp -o $(OBJDIR)/sg_calibrator.o
+
+$(OBJDIR)/sg_coord_context.o: $(LEM_PATH)/ai/sg/sg_coord_context.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_coord_context.cpp -o $(OBJDIR)/sg_coord_context.o
+
+$(OBJDIR)/sg_entry.o: $(LEM_PATH)/ai/sg/sg_Entry.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_Entry.cpp -o $(OBJDIR)/sg_entry.o
+
+$(OBJDIR)/sg_entry_group.o: $(LEM_PATH)/ai/sg/sg_entry_group.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_entry_group.cpp -o $(OBJDIR)/sg_entry_group.o
+
+$(OBJDIR)/sg_form.o: $(LEM_PATH)/ai/sg/sg_form.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_form.cpp -o $(OBJDIR)/sg_form.o
+
+$(OBJDIR)/sg_net_link.o: $(LEM_PATH)/ai/sg/sg_net_link.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_net_link.cpp -o $(OBJDIR)/sg_net_link.o
+
+$(OBJDIR)/sg_preparing.o: $(LEM_PATH)/ai/sg/sg_preparing.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_preparing.cpp -o $(OBJDIR)/sg_preparing.o
+
+$(OBJDIR)/sg_language.o: $(LEM_PATH)/ai/sg/sg_language.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_language.cpp -o $(OBJDIR)/sg_language.o
+        
+$(OBJDIR)/sg_class.o: $(LEM_PATH)/ai/sg/sg_class.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_class.cpp -o $(OBJDIR)/sg_class.o
+
+$(OBJDIR)/sg_lexem_dictionary.o: $(LEM_PATH)/ai/sg/sg_lexem_dictionary.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_lexem_dictionary.cpp -o $(OBJDIR)/sg_lexem_dictionary.o
+
+$(OBJDIR)/sg_ld_seeker.o: $(LEM_PATH)/ai/sg/sg_ld_seeker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_ld_seeker.cpp -o $(OBJDIR)/sg_ld_seeker.o
+
+$(OBJDIR)/sg_affix_table.o: $(LEM_PATH)/ai/sg/sg_affix_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_affix_table.cpp -o $(OBJDIR)/sg_affix_table.o
+
+$(OBJDIR)/sg_autom_sql_generator.o: $(LEM_PATH)/ai/sg/sg_autom_sql_generator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_autom_sql_generator.cpp -o $(OBJDIR)/sg_autom_sql_generator.o
+
+$(OBJDIR)/sg_net.o: $(LEM_PATH)/ai/sg/sg_net.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_net.cpp -o $(OBJDIR)/sg_net.o
+
+$(OBJDIR)/sg_link_generator.o: $(LEM_PATH)/ai/sg/sg_link_generator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_link_generator.cpp -o $(OBJDIR)/sg_link_generator.o
+
+$(OBJDIR)/sg_complex_link.o: $(LEM_PATH)/ai/sg/sg_complex_link.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_complex_link.cpp -o $(OBJDIR)/sg_complex_link.o
+
+
+$(OBJDIR)/sg_stemmer.o: $(LEM_PATH)/ai/sg/sg_stemmer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/sg_stemmer.cpp -o $(OBJDIR)/sg_stemmer.o
+
+$(OBJDIR)/ThesaurusTag.o: $(LEM_PATH)/ai/sg/ThesaurusTag.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/ThesaurusTag.cpp -o $(OBJDIR)/ThesaurusTag.o
+
+$(OBJDIR)/CharNode.o: $(LEM_PATH)/ai/sg/CharNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/CharNode.cpp -o $(OBJDIR)/CharNode.o
+
+$(OBJDIR)/pm_actor.o: $(LEM_PATH)/ai/pm/pm_actor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor.cpp -o $(OBJDIR)/pm_actor.o
+
+$(OBJDIR)/pm_actor_context.o: $(LEM_PATH)/ai/pm/pm_actor_context.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_context.cpp -o $(OBJDIR)/pm_actor_context.o
+
+$(OBJDIR)/pm_actor_cut.o: $(LEM_PATH)/ai/pm/pm_actor_cut.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_cut.cpp -o $(OBJDIR)/pm_actor_cut.o
+
+$(OBJDIR)/pm_actor_print.o: $(LEM_PATH)/ai/pm/pm_actor_print.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_print.cpp -o $(OBJDIR)/pm_actor_print.o
+
+$(OBJDIR)/pm_cond_debug.o: $(LEM_PATH)/ai/pm/pm_cond_debug.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_debug.cpp -o $(OBJDIR)/pm_cond_debug.o
+
+$(OBJDIR)/pm_actor_do.o: $(LEM_PATH)/ai/pm/pm_actor_do.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_do.cpp -o $(OBJDIR)/pm_actor_do.o
+
+$(OBJDIR)/pm_actor_group.o: $(LEM_PATH)/ai/pm/pm_actor_group.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_group.cpp -o $(OBJDIR)/pm_actor_group.o
+
+$(OBJDIR)/pm_actor_if.o: $(LEM_PATH)/ai/pm/pm_actor_if.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_if.cpp -o $(OBJDIR)/pm_actor_if.o
+
+$(OBJDIR)/pm_actor_iterate.o: $(LEM_PATH)/ai/pm/pm_actor_iterate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_iterate.cpp -o $(OBJDIR)/pm_actor_iterate.o
+
+$(OBJDIR)/pm_actor_list.o: $(LEM_PATH)/ai/pm/pm_actor_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_list.cpp -o $(OBJDIR)/pm_actor_list.o
+
+$(OBJDIR)/pm_actor_pass.o: $(LEM_PATH)/ai/pm/pm_actor_pass.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_pass.cpp -o $(OBJDIR)/pm_actor_pass.o
+
+$(OBJDIR)/pm_actor_predicate.o: $(LEM_PATH)/ai/pm/pm_actor_predicate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_predicate.cpp -o $(OBJDIR)/pm_actor_predicate.o
+
+$(OBJDIR)/pm_actor_say.o: $(LEM_PATH)/ai/pm/pm_actor_say.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_say.cpp -o $(OBJDIR)/pm_actor_say.o
+
+$(OBJDIR)/pm_actor_shift.o: $(LEM_PATH)/ai/pm/pm_actor_shift.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_shift.cpp -o $(OBJDIR)/pm_actor_shift.o
+
+$(OBJDIR)/pm_actor_sound.o: $(LEM_PATH)/ai/pm/pm_actor_sound.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_sound.cpp -o $(OBJDIR)/pm_actor_sound.o
+
+$(OBJDIR)/pm_Actor_CreateVar.o: $(LEM_PATH)/ai/pm/pm_Actor_CreateVar.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_Actor_CreateVar.cpp -o $(OBJDIR)/pm_Actor_CreateVar.o
+
+$(OBJDIR)/pm_actor_switch.o: $(LEM_PATH)/ai/pm/pm_actor_switch.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_actor_switch.cpp -o $(OBJDIR)/pm_actor_switch.o
+
+$(OBJDIR)/pm_autom.o: $(LEM_PATH)/ai/pm/pm_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_autom.cpp -o $(OBJDIR)/pm_autom.o
+
+$(OBJDIR)/PM_Yield.o: $(LEM_PATH)/ai/pm/PM_Yield.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_Yield.cpp -o $(OBJDIR)/PM_Yield.o
+
+$(OBJDIR)/pm_condictor.o: $(LEM_PATH)/ai/pm/pm_condictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_condictor.cpp -o $(OBJDIR)/pm_condictor.o
+
+$(OBJDIR)/pm_condition_node.o: $(LEM_PATH)/ai/pm/pm_condition_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_condition_node.cpp -o $(OBJDIR)/pm_condition_node.o
+
+$(OBJDIR)/pm_cond_context.o: $(LEM_PATH)/ai/pm/pm_cond_context.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_context.cpp -o $(OBJDIR)/pm_cond_context.o
+
+$(OBJDIR)/pm_cond_do.o: $(LEM_PATH)/ai/pm/pm_cond_do.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_do.cpp -o $(OBJDIR)/pm_cond_do.o
+
+$(OBJDIR)/pm_cond_count.o: $(LEM_PATH)/ai/pm/pm_cond_count.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_count.cpp -o $(OBJDIR)/pm_cond_count.o
+
+$(OBJDIR)/pm_cond_or.o: $(LEM_PATH)/ai/pm/pm_cond_or.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_or.cpp -o $(OBJDIR)/pm_cond_or.o
+
+$(OBJDIR)/pm_cond_and.o: $(LEM_PATH)/ai/pm/pm_cond_and.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_and.cpp -o $(OBJDIR)/pm_cond_and.o
+
+$(OBJDIR)/pm_cond_not.o: $(LEM_PATH)/ai/pm/pm_cond_not.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_not.cpp -o $(OBJDIR)/pm_cond_not.o
+
+$(OBJDIR)/pm_cond_text.o: $(LEM_PATH)/ai/pm/pm_cond_text.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_text.cpp -o $(OBJDIR)/pm_cond_text.o
+		
+$(OBJDIR)/pm_cond_lexem.o: $(LEM_PATH)/ai/pm/pm_cond_lexem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_lexem.cpp -o $(OBJDIR)/pm_cond_lexem.o
+
+$(OBJDIR)/pm_cond_pass.o: $(LEM_PATH)/ai/pm/pm_cond_pass.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_pass.cpp -o $(OBJDIR)/pm_cond_pass.o
+
+$(OBJDIR)/pm_cond_predicate.o: $(LEM_PATH)/ai/pm/pm_cond_predicate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_predicate.cpp -o $(OBJDIR)/pm_cond_predicate.o
+
+$(OBJDIR)/pm_context_req.o: $(LEM_PATH)/ai/pm/pm_context_req.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_context_req.cpp -o $(OBJDIR)/pm_context_req.o
+
+$(OBJDIR)/pm_context_req_hash.o: $(LEM_PATH)/ai/pm/pm_context_req_hash.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_context_req_hash.cpp -o $(OBJDIR)/pm_context_req_hash.o
+
+$(OBJDIR)/pm_cont_item.o: $(LEM_PATH)/ai/pm/pm_cont_item.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cont_item.cpp -o $(OBJDIR)/pm_cont_item.o
+
+$(OBJDIR)/pm_CondNGram.o: $(LEM_PATH)/ai/pm/pm_CondNGram.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_CondNGram.cpp -o $(OBJDIR)/pm_CondNGram.o
+
+$(OBJDIR)/pm_cond_correlate.o: $(LEM_PATH)/ai/pm/pm_cond_correlate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_cond_correlate.cpp -o $(OBJDIR)/pm_cond_correlate.o
+
+$(OBJDIR)/pm_correlation.o: $(LEM_PATH)/ai/pm/pm_correlation.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_correlation.cpp -o $(OBJDIR)/pm_correlation.o
+
+$(OBJDIR)/pm_correl_pattern.o: $(LEM_PATH)/ai/pm/pm_correl_pattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_correl_pattern.cpp -o $(OBJDIR)/pm_correl_pattern.o
+
+$(OBJDIR)/pm_correl_point.o: $(LEM_PATH)/ai/pm/pm_correl_point.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_correl_point.cpp -o $(OBJDIR)/pm_correl_point.o
+
+$(OBJDIR)/pm_dis1.o: $(LEM_PATH)/ai/pm/pm_dis1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_dis1.cpp -o $(OBJDIR)/pm_dis1.o
+
+$(OBJDIR)/pm_ActorNGrams.o: $(LEM_PATH)/ai/pm/pm_ActorNGrams.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_ActorNGrams.cpp -o $(OBJDIR)/pm_ActorNGrams.o
+
+$(OBJDIR)/pm_dis2.o: $(LEM_PATH)/ai/pm/pm_dis2.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_dis2.cpp -o $(OBJDIR)/pm_dis2.o
+
+$(OBJDIR)/pm_disa.o: $(LEM_PATH)/ai/pm/pm_disa.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_disa.cpp -o $(OBJDIR)/pm_disa.o
+
+$(OBJDIR)/pm_filtered_list.o: $(LEM_PATH)/ai/pm/pm_filtered_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_filtered_list.cpp -o $(OBJDIR)/pm_filtered_list.o
+
+$(OBJDIR)/pm_input.o: $(LEM_PATH)/ai/pm/pm_input.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_input.cpp -o $(OBJDIR)/pm_input.o
+
+$(OBJDIR)/pm_mark.o: $(LEM_PATH)/ai/pm/pm_mark.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_mark.cpp -o $(OBJDIR)/pm_mark.o
+
+$(OBJDIR)/pm_processing.o: $(LEM_PATH)/ai/pm/pm_processing.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_processing.cpp -o $(OBJDIR)/pm_processing.o
+
+$(OBJDIR)/pm_rule.o: $(LEM_PATH)/ai/pm/pm_rule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rule.cpp -o $(OBJDIR)/pm_rule.o
+
+$(OBJDIR)/pm_rules_in_category.o: $(LEM_PATH)/ai/pm/pm_rules_in_category.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rules_in_category.cpp -o $(OBJDIR)/pm_rules_in_category.o
+
+$(OBJDIR)/pm_rule_element.o: $(LEM_PATH)/ai/pm/pm_rule_element.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rule_element.cpp -o $(OBJDIR)/pm_rule_element.o
+
+$(OBJDIR)/pm_super_index.o: $(LEM_PATH)/ai/pm/pm_super_index.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_super_index.cpp -o $(OBJDIR)/pm_super_index.o
+
+$(OBJDIR)/pm_sup_context.o: $(LEM_PATH)/ai/pm/pm_sup_context.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_sup_context.cpp -o $(OBJDIR)/pm_sup_context.o
+        
+        
+$(OBJDIR)/TrAddLinkResultItem.o: $(LEM_PATH)/ai/pm/TrAddLinkResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrAddLinkResultItem.cpp -o $(OBJDIR)/TrAddLinkResultItem.o
+        
+$(OBJDIR)/TrArithFun.o: $(LEM_PATH)/ai/pm/TrArithFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrArithFun.cpp -o $(OBJDIR)/TrArithFun.o
+        
+$(OBJDIR)/TrClosureVars.o: $(LEM_PATH)/ai/pm/TrClosureVars.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrClosureVars.cpp -o $(OBJDIR)/TrClosureVars.o
+        
+$(OBJDIR)/TrCompilationContext.o: $(LEM_PATH)/ai/pm/TrCompilationContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrCompilationContext.cpp -o $(OBJDIR)/TrCompilationContext.o
+        
+$(OBJDIR)/TrCondictor.o: $(LEM_PATH)/ai/pm/TrCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrCondictor.cpp -o $(OBJDIR)/TrCondictor.o
+        
+$(OBJDIR)/TrContextCondictor.o: $(LEM_PATH)/ai/pm/TrContextCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrContextCondictor.cpp -o $(OBJDIR)/TrContextCondictor.o
+        
+$(OBJDIR)/TrContextInCondictor.o: $(LEM_PATH)/ai/pm/TrContextInCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrContextInCondictor.cpp -o $(OBJDIR)/TrContextInCondictor.o
+        
+$(OBJDIR)/TrContextInvokation.o: $(LEM_PATH)/ai/pm/TrContextInvokation.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrContextInvokation.cpp -o $(OBJDIR)/TrContextInvokation.o
+        
+$(OBJDIR)/TrEnvironment.o: $(LEM_PATH)/ai/pm/TrEnvironment.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrEnvironment.cpp -o $(OBJDIR)/TrEnvironment.o
+        
+$(OBJDIR)/TrFun_Assign.o: $(LEM_PATH)/ai/pm/TrFun_Assign.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Assign.cpp -o $(OBJDIR)/TrFun_Assign.o
+        
+$(OBJDIR)/TrFun_Break.o: $(LEM_PATH)/ai/pm/TrFun_Break.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Break.cpp -o $(OBJDIR)/TrFun_Break.o
+        
+$(OBJDIR)/TrFun_BuiltIn.o: $(LEM_PATH)/ai/pm/TrFun_BuiltIn.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_BuiltIn.cpp -o $(OBJDIR)/TrFun_BuiltIn.o
+        
+$(OBJDIR)/TrFun_Constant.o: $(LEM_PATH)/ai/pm/TrFun_Constant.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Constant.cpp -o $(OBJDIR)/TrFun_Constant.o
+        
+$(OBJDIR)/TrFun_CreateWordform.o: $(LEM_PATH)/ai/pm/TrFun_CreateWordform.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_CreateWordform.cpp -o $(OBJDIR)/TrFun_CreateWordform.o
+        
+$(OBJDIR)/TrFun_Declare.o: $(LEM_PATH)/ai/pm/TrFun_Declare.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Declare.cpp -o $(OBJDIR)/TrFun_Declare.o
+        
+$(OBJDIR)/TrFun_For.o: $(LEM_PATH)/ai/pm/TrFun_For.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_For.cpp -o $(OBJDIR)/TrFun_For.o
+        
+$(OBJDIR)/TrFun_Group.o: $(LEM_PATH)/ai/pm/TrFun_Group.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Group.cpp -o $(OBJDIR)/TrFun_Group.o
+        
+$(OBJDIR)/TrFun_If.o: $(LEM_PATH)/ai/pm/TrFun_If.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_If.cpp -o $(OBJDIR)/TrFun_If.o
+        
+$(OBJDIR)/TrFun_Lambda.o: $(LEM_PATH)/ai/pm/TrFun_Lambda.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Lambda.cpp -o $(OBJDIR)/TrFun_Lambda.o
+        
+$(OBJDIR)/TrFun_Procedure.o: $(LEM_PATH)/ai/pm/TrFun_Procedure.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Procedure.cpp -o $(OBJDIR)/TrFun_Procedure.o
+        
+$(OBJDIR)/TrFun_Return.o: $(LEM_PATH)/ai/pm/TrFun_Return.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Return.cpp -o $(OBJDIR)/TrFun_Return.o
+        
+$(OBJDIR)/TrFun_Scan.o: $(LEM_PATH)/ai/pm/TrFun_Scan.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Scan.cpp -o $(OBJDIR)/TrFun_Scan.o
+        
+$(OBJDIR)/TrFun_Var.o: $(LEM_PATH)/ai/pm/TrFun_Var.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Var.cpp -o $(OBJDIR)/TrFun_Var.o
+        
+$(OBJDIR)/TrFun_While.o: $(LEM_PATH)/ai/pm/TrFun_While.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_While.cpp -o $(OBJDIR)/TrFun_While.o
+        
+$(OBJDIR)/TrFunCall.o: $(LEM_PATH)/ai/pm/TrFunCall.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunCall.cpp -o $(OBJDIR)/TrFunCall.o
+        
+$(OBJDIR)/TrFunContext.o: $(LEM_PATH)/ai/pm/TrFunContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunContext.cpp -o $(OBJDIR)/TrFunContext.o
+        
+$(OBJDIR)/TrFunction.o: $(LEM_PATH)/ai/pm/TrFunction.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunction.cpp -o $(OBJDIR)/TrFunction.o
+        
+$(OBJDIR)/TrFunctionResultItem.o: $(LEM_PATH)/ai/pm/TrFunctionResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctionResultItem.cpp -o $(OBJDIR)/TrFunctionResultItem.o
+        
+$(OBJDIR)/TrFunctions.o: $(LEM_PATH)/ai/pm/TrFunctions.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctions.cpp -o $(OBJDIR)/TrFunctions.o
+        
+$(OBJDIR)/TrFunctionStep.o: $(LEM_PATH)/ai/pm/TrFunctionStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctionStep.cpp -o $(OBJDIR)/TrFunctionStep.o
+        
+$(OBJDIR)/TrFunUser.o: $(LEM_PATH)/ai/pm/TrFunUser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunUser.cpp -o $(OBJDIR)/TrFunUser.o
+        
+$(OBJDIR)/TrGramFun.o: $(LEM_PATH)/ai/pm/TrGramFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGramFun.cpp -o $(OBJDIR)/TrGramFun.o
+        
+$(OBJDIR)/TrGroupResultItem.o: $(LEM_PATH)/ai/pm/TrGroupResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGroupResultItem.cpp -o $(OBJDIR)/TrGroupResultItem.o
+        
+$(OBJDIR)/TrGroupStep.o: $(LEM_PATH)/ai/pm/TrGroupStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGroupStep.cpp -o $(OBJDIR)/TrGroupStep.o
+        
+$(OBJDIR)/TrIfFunction.o: $(LEM_PATH)/ai/pm/TrIfFunction.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIfFunction.cpp -o $(OBJDIR)/TrIfFunction.o
+        
+$(OBJDIR)/TrIfResultItem.o: $(LEM_PATH)/ai/pm/TrIfResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIfResultItem.cpp -o $(OBJDIR)/TrIfResultItem.o
+        
+$(OBJDIR)/TrIfStep.o: $(LEM_PATH)/ai/pm/TrIfStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIfStep.cpp -o $(OBJDIR)/TrIfStep.o
+        
+$(OBJDIR)/TrIndexResultItem.o: $(LEM_PATH)/ai/pm/TrIndexResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIndexResultItem.cpp -o $(OBJDIR)/TrIndexResultItem.o
+        
+$(OBJDIR)/TrIterateResultItem.o: $(LEM_PATH)/ai/pm/TrIterateResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIterateResultItem.cpp -o $(OBJDIR)/TrIterateResultItem.o
+        
+$(OBJDIR)/TrIterateStep.o: $(LEM_PATH)/ai/pm/TrIterateStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrIterateStep.cpp -o $(OBJDIR)/TrIterateStep.o
+        
+$(OBJDIR)/TrKnownVars.o: $(LEM_PATH)/ai/pm/TrKnownVars.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrKnownVars.cpp -o $(OBJDIR)/TrKnownVars.o
+        
+$(OBJDIR)/TrLambdaFunctionResultItem.o: $(LEM_PATH)/ai/pm/TrLambdaFunctionResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLambdaFunctionResultItem.cpp -o $(OBJDIR)/TrLambdaFunctionResultItem.o
+        
+$(OBJDIR)/TrLogicFun.o: $(LEM_PATH)/ai/pm/TrLogicFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLogicFun.cpp -o $(OBJDIR)/TrLogicFun.o
+        
+$(OBJDIR)/TrMapContext.o: $(LEM_PATH)/ai/pm/TrMapContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrMapContext.cpp -o $(OBJDIR)/TrMapContext.o
+        
+$(OBJDIR)/TrMapPoint.o: $(LEM_PATH)/ai/pm/TrMapPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrMapPoint.cpp -o $(OBJDIR)/TrMapPoint.o
+
+$(OBJDIR)/TrTraceFunGroupStep.o: $(LEM_PATH)/ai/pm/TrTraceFunGroupStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceFunGroupStep.cpp -o $(OBJDIR)/TrTraceFunGroupStep.o
+        
+$(OBJDIR)/TrMatchFun.o: $(LEM_PATH)/ai/pm/TrMatchFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrMatchFun.cpp -o $(OBJDIR)/TrMatchFun.o
+        
+$(OBJDIR)/TrPattern.o: $(LEM_PATH)/ai/pm/TrPattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPattern.cpp -o $(OBJDIR)/TrPattern.o
+        
+$(OBJDIR)/TrPatternFun.o: $(LEM_PATH)/ai/pm/TrPatternFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPatternFun.cpp -o $(OBJDIR)/TrPatternFun.o
+        
+$(OBJDIR)/TrPatternMatcher.o: $(LEM_PATH)/ai/pm/TrPatternMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPatternMatcher.cpp -o $(OBJDIR)/TrPatternMatcher.o
+        
+$(OBJDIR)/TrPatternPoint.o: $(LEM_PATH)/ai/pm/TrPatternPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPatternPoint.cpp -o $(OBJDIR)/TrPatternPoint.o
+        
+$(OBJDIR)/TrPatternTreeNode.o: $(LEM_PATH)/ai/pm/TrPatternTreeNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPatternTreeNode.cpp -o $(OBJDIR)/TrPatternTreeNode.o
+        
+$(OBJDIR)/TrPrefixTreeMatcher.o: $(LEM_PATH)/ai/pm/TrPrefixTreeMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrPrefixTreeMatcher.cpp -o $(OBJDIR)/TrPrefixTreeMatcher.o
+        
+$(OBJDIR)/TrProcedure.o: $(LEM_PATH)/ai/pm/TrProcedure.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrProcedure.cpp -o $(OBJDIR)/TrProcedure.o
+        
+$(OBJDIR)/TrProcedureDeclaration.o: $(LEM_PATH)/ai/pm/TrProcedureDeclaration.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrProcedureDeclaration.cpp -o $(OBJDIR)/TrProcedureDeclaration.o
+        
+$(OBJDIR)/TrProcedureStep.o: $(LEM_PATH)/ai/pm/TrProcedureStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrProcedureStep.cpp -o $(OBJDIR)/TrProcedureStep.o
+        
+$(OBJDIR)/TrProduction.o: $(LEM_PATH)/ai/pm/TrProduction.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrProduction.cpp -o $(OBJDIR)/TrProduction.o
+        
+$(OBJDIR)/TrReplaceMatcher.o: $(LEM_PATH)/ai/pm/TrReplaceMatcher.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrReplaceMatcher.cpp -o $(OBJDIR)/TrReplaceMatcher.o
+        
+$(OBJDIR)/TrReplaceStep.o: $(LEM_PATH)/ai/pm/TrReplaceStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrReplaceStep.cpp -o $(OBJDIR)/TrReplaceStep.o
+        
+$(OBJDIR)/TrResult.o: $(LEM_PATH)/ai/pm/TrResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrResult.cpp -o $(OBJDIR)/TrResult.o
+        
+$(OBJDIR)/TrResultItem.o: $(LEM_PATH)/ai/pm/TrResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrResultItem.cpp -o $(OBJDIR)/TrResultItem.o
+        
+$(OBJDIR)/TrResultItemArg.o: $(LEM_PATH)/ai/pm/TrResultItemArg.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrResultItemArg.cpp -o $(OBJDIR)/TrResultItemArg.o
+        
+$(OBJDIR)/TrSubroutineStep.o: $(LEM_PATH)/ai/pm/TrSubroutineStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrSubroutineStep.cpp -o $(OBJDIR)/TrSubroutineStep.o
+        
+$(OBJDIR)/TrTrace.o: $(LEM_PATH)/ai/pm/TrTrace.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTrace.cpp -o $(OBJDIR)/TrTrace.o
+        
+$(OBJDIR)/TrTraceActor.o: $(LEM_PATH)/ai/pm/TrTraceActor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceActor.cpp -o $(OBJDIR)/TrTraceActor.o
+        
+$(OBJDIR)/TrTraceCondictor.o: $(LEM_PATH)/ai/pm/TrTraceCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceCondictor.cpp -o $(OBJDIR)/TrTraceCondictor.o
+        
+$(OBJDIR)/TrTraceFunCall.o: $(LEM_PATH)/ai/pm/TrTraceFunCall.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceFunCall.cpp -o $(OBJDIR)/TrTraceFunCall.o
+        
+$(OBJDIR)/TrTracePMActor.o: $(LEM_PATH)/ai/pm/TrTracePMActor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTracePMActor.cpp -o $(OBJDIR)/TrTracePMActor.o
+        
+$(OBJDIR)/TrTraceProcedure.o: $(LEM_PATH)/ai/pm/TrTraceProcedure.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceProcedure.cpp -o $(OBJDIR)/TrTraceProcedure.o
+        
+$(OBJDIR)/TrTraceProcedureStep.o: $(LEM_PATH)/ai/pm/TrTraceProcedureStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceProcedureStep.cpp -o $(OBJDIR)/TrTraceProcedureStep.o
+        
+$(OBJDIR)/TrTraceResult.o: $(LEM_PATH)/ai/pm/TrTraceResult.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceResult.cpp -o $(OBJDIR)/TrTraceResult.o
+
+$(OBJDIR)/TrTraceRule.o: $(LEM_PATH)/ai/pm/TrTraceRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceRule.cpp -o $(OBJDIR)/TrTraceRule.o
+
+$(OBJDIR)/TrTraceTrCondictor.o: $(LEM_PATH)/ai/pm/TrTraceTrCondictor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceTrCondictor.cpp -o $(OBJDIR)/TrTraceTrCondictor.o
+
+$(OBJDIR)/TrTraceTrRule.o: $(LEM_PATH)/ai/pm/TrTraceTrRule.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceTrRule.cpp -o $(OBJDIR)/TrTraceTrRule.o
+
+$(OBJDIR)/TrTraceActorGroupStep.o: $(LEM_PATH)/ai/pm/TrTraceActorGroupStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceActorGroupStep.cpp -o $(OBJDIR)/TrTraceActorGroupStep.o
+        
+$(OBJDIR)/TrTraceResultItem.o: $(LEM_PATH)/ai/pm/TrTraceResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTraceResultItem.cpp -o $(OBJDIR)/TrTraceResultItem.o
+        
+$(OBJDIR)/TrTransformResultItem.o: $(LEM_PATH)/ai/pm/TrTransformResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTransformResultItem.cpp -o $(OBJDIR)/TrTransformResultItem.o
+        
+$(OBJDIR)/TrTreeStep.o: $(LEM_PATH)/ai/pm/TrTreeStep.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTreeStep.cpp -o $(OBJDIR)/TrTreeStep.o
+        
+$(OBJDIR)/TrTuple.o: $(LEM_PATH)/ai/pm/TrTuple.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrTuple.cpp -o $(OBJDIR)/TrTuple.o
+        
+$(OBJDIR)/TrType.o: $(LEM_PATH)/ai/pm/TrType.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrType.cpp -o $(OBJDIR)/TrType.o
+        
+$(OBJDIR)/TrUserIfFun.o: $(LEM_PATH)/ai/pm/TrUserIfFun.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrUserIfFun.cpp -o $(OBJDIR)/TrUserIfFun.o
+        
+$(OBJDIR)/TrValue.o: $(LEM_PATH)/ai/pm/TrValue.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrValue.cpp -o $(OBJDIR)/TrValue.o
+        
+$(OBJDIR)/TrVariator.o: $(LEM_PATH)/ai/pm/TrVariator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrVariator.cpp -o $(OBJDIR)/TrVariator.o
+        
+$(OBJDIR)/TrWhen.o: $(LEM_PATH)/ai/pm/TrWhen.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrWhen.cpp -o $(OBJDIR)/TrWhen.o
+        
+$(OBJDIR)/TrWhenItem.o: $(LEM_PATH)/ai/pm/TrWhenItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrWhenItem.cpp -o $(OBJDIR)/TrWhenItem.o
+        
+$(OBJDIR)/TrWideContext.o: $(LEM_PATH)/ai/pm/TrWideContext.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrWideContext.cpp -o $(OBJDIR)/TrWideContext.o
+        
+$(OBJDIR)/TrWordformResultItem.o: $(LEM_PATH)/ai/pm/TrWordformResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrWordformResultItem.cpp -o $(OBJDIR)/TrWordformResultItem.o
+        
+$(OBJDIR)/TrWordResultItem.o: $(LEM_PATH)/ai/pm/TrWordResultItem.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrWordResultItem.cpp -o $(OBJDIR)/TrWordResultItem.o
+        
+$(OBJDIR)/TrYield.o: $(LEM_PATH)/ai/pm/TrYield.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrYield.cpp -o $(OBJDIR)/TrYield.o
+
+$(OBJDIR)/pa_autom.o: $(LEM_PATH)/ai/pa/pa_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_autom.cpp -o $(OBJDIR)/pa_autom.o
+
+$(OBJDIR)/pa_built_in_predicates.o: $(LEM_PATH)/ai/pa/pa_built_in_predicates.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_built_in_predicates.cpp -o $(OBJDIR)/pa_built_in_predicates.o
+
+$(OBJDIR)/pa_content.o: $(LEM_PATH)/ai/pa/pa_content.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_content.cpp -o $(OBJDIR)/pa_content.o
+
+$(OBJDIR)/pa_default_names.o: $(LEM_PATH)/ai/pa/pa_default_names.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_default_names.cpp -o $(OBJDIR)/pa_default_names.o
+
+$(OBJDIR)/pa_inference_engine.o: $(LEM_PATH)/ai/pa/pa_inference_engine.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_inference_engine.cpp -o $(OBJDIR)/pa_inference_engine.o
+
+$(OBJDIR)/pa_logic_node.o: $(LEM_PATH)/ai/pa/pa_logic_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_logic_node.cpp -o $(OBJDIR)/pa_logic_node.o
+
+$(OBJDIR)/pa_logic_var.o: $(LEM_PATH)/ai/pa/pa_logic_var.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_logic_var.cpp -o $(OBJDIR)/pa_logic_var.o
+
+$(OBJDIR)/pa_log_node_built_in.o: $(LEM_PATH)/ai/pa/pa_log_node_built_in.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_log_node_built_in.cpp -o $(OBJDIR)/pa_log_node_built_in.o
+
+$(OBJDIR)/pa_log_var_table.o: $(LEM_PATH)/ai/pa/pa_log_var_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_log_var_table.cpp -o $(OBJDIR)/pa_log_var_table.o
+
+$(OBJDIR)/pa_operator_info.o: $(LEM_PATH)/ai/pa/pa_operator_info.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_operator_info.cpp -o $(OBJDIR)/pa_operator_info.o
+
+$(OBJDIR)/pa_predicate.o: $(LEM_PATH)/ai/pa/pa_predicate.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_predicate.cpp -o $(OBJDIR)/pa_predicate.o
+
+$(OBJDIR)/pa_predicate_hash.o: $(LEM_PATH)/ai/pa/pa_predicate_hash.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_predicate_hash.cpp -o $(OBJDIR)/pa_predicate_hash.o
+
+$(OBJDIR)/pa_predicate_maker.o: $(LEM_PATH)/ai/pa/pa_predicate_maker.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_predicate_maker.cpp -o $(OBJDIR)/pa_predicate_maker.o
+
+$(OBJDIR)/pa_predicate_node.o: $(LEM_PATH)/ai/pa/pa_predicate_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_predicate_node.cpp -o $(OBJDIR)/pa_predicate_node.o
+
+$(OBJDIR)/pa_pred_make_node.o: $(LEM_PATH)/ai/pa/pa_pred_make_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_pred_make_node.cpp -o $(OBJDIR)/pa_pred_make_node.o
+
+$(OBJDIR)/pa_pred_make_stack.o: $(LEM_PATH)/ai/pa/pa_pred_make_stack.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_pred_make_stack.cpp -o $(OBJDIR)/pa_pred_make_stack.o
+
+$(OBJDIR)/pa_processing.o: $(LEM_PATH)/ai/pa/pa_processing.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_processing.cpp -o $(OBJDIR)/pa_processing.o
+
+$(OBJDIR)/pa_prolog_space.o: $(LEM_PATH)/ai/pa/pa_prolog_space.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_prolog_space.cpp -o $(OBJDIR)/pa_prolog_space.o
+
+$(OBJDIR)/pa_prolog_token.o: $(LEM_PATH)/ai/pa/pa_prolog_token.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_prolog_token.cpp -o $(OBJDIR)/pa_prolog_token.o
+
+$(OBJDIR)/pa_utilities.o: $(LEM_PATH)/ai/pa/pa_utilities.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pa/pa_utilities.cpp -o $(OBJDIR)/pa_utilities.o
+
+$(OBJDIR)/la_autom.o: $(LEM_PATH)/ai/la/la_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_autom.cpp -o $(OBJDIR)/la_autom.o
+
+$(OBJDIR)/la_fuzzy.o: $(LEM_PATH)/ai/la/la_fuzzy.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_fuzzy.cpp -o $(OBJDIR)/la_fuzzy.o
+
+$(OBJDIR)/la_lex.o: $(LEM_PATH)/ai/la/la_lex.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_lex.cpp -o $(OBJDIR)/la_lex.o
+
+$(OBJDIR)/la_phaa.o: $(LEM_PATH)/ai/la/la_phaa.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_phaa.cpp -o $(OBJDIR)/la_phaa.o
+
+$(OBJDIR)/la_processing.o: $(LEM_PATH)/ai/la/la_processing.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_processing.cpp -o $(OBJDIR)/la_processing.o
+
+$(OBJDIR)/la_project_buffer.o: $(LEM_PATH)/ai/la/la_project_buffer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_project_buffer.cpp -o $(OBJDIR)/la_project_buffer.o
+
+$(OBJDIR)/la_proj_list.o: $(LEM_PATH)/ai/la/la_proj_list.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_proj_list.cpp -o $(OBJDIR)/la_proj_list.o
+
+$(OBJDIR)/la_mixer_filter.o: $(LEM_PATH)/ai/la/la_mixer_filter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_mixer_filter.cpp -o $(OBJDIR)/la_mixer_filter.o
+
+$(OBJDIR)/la_word_projection.o: $(LEM_PATH)/ai/la/la_word_projection.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_word_projection.cpp -o $(OBJDIR)/la_word_projection.o
+
+$(OBJDIR)/gg_autom.o: $(LEM_PATH)/ai/gg/gg_autom.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/gg_autom.cpp -o $(OBJDIR)/gg_autom.o
+
+$(OBJDIR)/gg_entry.o: $(LEM_PATH)/ai/gg/gg_entry.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/gg_entry.cpp -o $(OBJDIR)/gg_entry.o
+
+$(OBJDIR)/gg_form.o: $(LEM_PATH)/ai/gg/gg_form.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/gg_form.cpp -o $(OBJDIR)/gg_form.o
+
+$(OBJDIR)/ngrams.o: $(LEM_PATH)/ai/ngrams/ngrams.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ngrams/ngrams.cpp -o $(OBJDIR)/ngrams.o
+
+$(OBJDIR)/NGramsDBMS.o: $(LEM_PATH)/ai/ngrams/NGramsDBMS.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ngrams/NGramsDBMS.cpp -o $(OBJDIR)/NGramsDBMS.o
+
+$(OBJDIR)/randu.o: $(LEM_PATH)/math/random/randu.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/random/randu.cpp -o $(OBJDIR)/randu.o
+
+$(OBJDIR)/ir_macro.o: $(LEM_PATH)/io/iridium/ir_macro.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro.cpp -o $(OBJDIR)/ir_macro.o
+
+$(OBJDIR)/ir_macro_group.o: $(LEM_PATH)/io/iridium/ir_macro_group.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_group.cpp -o $(OBJDIR)/ir_macro_group.o
+
+$(OBJDIR)/ir_macro_head.o: $(LEM_PATH)/io/iridium/ir_macro_head.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_head.cpp -o $(OBJDIR)/ir_macro_head.o
+
+$(OBJDIR)/ir_macro_if.o: $(LEM_PATH)/io/iridium/ir_macro_if.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_if.cpp -o $(OBJDIR)/ir_macro_if.o
+
+$(OBJDIR)/ir_macro_parser.o: $(LEM_PATH)/io/iridium/ir_macro_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_parser.cpp -o $(OBJDIR)/ir_macro_parser.o
+
+$(OBJDIR)/ir_macro_subst.o: $(LEM_PATH)/io/iridium/ir_macro_subst.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_subst.cpp -o $(OBJDIR)/ir_macro_subst.o
+
+$(OBJDIR)/ir_macro_table.o: $(LEM_PATH)/io/iridium/ir_macro_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_table.cpp -o $(OBJDIR)/ir_macro_table.o
+
+$(OBJDIR)/ir_macro_text.o: $(LEM_PATH)/io/iridium/ir_macro_text.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_macro_text.cpp -o $(OBJDIR)/ir_macro_text.o
+
+$(OBJDIR)/ir_operator.o: $(LEM_PATH)/io/iridium/ir_operator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_operator.cpp -o $(OBJDIR)/ir_operator.o
+
+$(OBJDIR)/ir_parser_stack.o: $(LEM_PATH)/io/iridium/ir_parser_stack.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_parser_stack.cpp -o $(OBJDIR)/ir_parser_stack.o
+
+$(OBJDIR)/ir_parser_variable.o: $(LEM_PATH)/io/iridium/ir_parser_variable.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_parser_variable.cpp -o $(OBJDIR)/ir_parser_variable.o
+
+$(OBJDIR)/ir_prep_pars_token.o: $(LEM_PATH)/io/iridium/ir_prep_pars_token.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_prep_pars_token.cpp -o $(OBJDIR)/ir_prep_pars_token.o
+
+$(OBJDIR)/ir_print_error.o: $(LEM_PATH)/io/iridium/ir_print_error.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_print_error.cpp -o $(OBJDIR)/ir_print_error.o
+
+$(OBJDIR)/ir_readl.o: $(LEM_PATH)/io/iridium/ir_readl.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_readl.cpp -o $(OBJDIR)/ir_readl.o
+
+$(OBJDIR)/ir_error.o: $(LEM_PATH)/io/iridium/ir_error.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_error.cpp -o $(OBJDIR)/ir_error.o
+
+$(OBJDIR)/ir_tokens.o: $(LEM_PATH)/io/iridium/ir_tokens.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_tokens.cpp -o $(OBJDIR)/ir_tokens.o
+
+$(OBJDIR)/ir_var_table.o: $(LEM_PATH)/io/iridium/ir_var_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/iridium/ir_var_table.cpp -o $(OBJDIR)/ir_var_table.o
+
+$(OBJDIR)/ygres.o: $(LEM_PATH)/ai/ygres/ygres.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ygres/ygres.cpp -o $(OBJDIR)/ygres.o
+
+$(OBJDIR)/statkep1.o: $(LEM_PATH)/math/stat/statkep1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/stat/statkep1.cpp -o $(OBJDIR)/statkep1.o
+
+$(OBJDIR)/interpol.o: $(LEM_PATH)/math/approx/interpol.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/approx/interpol.cpp -o $(OBJDIR)/interpol.o
+
+$(OBJDIR)/base_application.o: $(LEM_PATH)/tools/base_application.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/base_application.cpp -o $(OBJDIR)/base_application.o
+
+$(OBJDIR)/cfg_base_parser.o: $(LEM_PATH)/io/cfg_parser/cfg_base_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/cfg_parser/cfg_base_parser.cpp -o $(OBJDIR)/cfg_base_parser.o
+
+$(OBJDIR)/cfg_ini_parser.o: $(LEM_PATH)/io/cfg_parser/cfg_ini_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/cfg_parser/cfg_ini_parser.cpp -o $(OBJDIR)/cfg_ini_parser.o
+
+$(OBJDIR)/c_regex_traits.o: $(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp -o $(OBJDIR)/c_regex_traits.o
+
+$(OBJDIR)/cpp_regex_traits.o: $(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp -o $(OBJDIR)/cpp_regex_traits.o
+
+$(OBJDIR)/fileiter.o: $(BOOST_PATH)/libs/regex/src/fileiter.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/fileiter.cpp -o $(OBJDIR)/fileiter.o
+
+$(OBJDIR)/instances.o: $(BOOST_PATH)/libs/regex/src/instances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/instances.cpp -o $(OBJDIR)/instances.o
+
+$(OBJDIR)/icu.o: $(BOOST_PATH)/libs/regex/src/icu.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/icu.cpp -o $(OBJDIR)/icu.o
+
+$(OBJDIR)/static_mutex.o: $(BOOST_PATH)/libs/regex/src/static_mutex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/static_mutex.cpp -o $(OBJDIR)/static_mutex.o
+
+$(OBJDIR)/posix_api.o: $(BOOST_PATH)/libs/regex/src/posix_api.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/posix_api.cpp -o $(OBJDIR)/posix_api.o
+
+$(OBJDIR)/cregex.o: $(BOOST_PATH)/libs/regex/src/cregex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/cregex.cpp -o $(OBJDIR)/cregex.o
+
+$(OBJDIR)/regex.o: $(BOOST_PATH)/libs/regex/src/regex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex.cpp -o $(OBJDIR)/regex.o
+
+$(OBJDIR)/regex_debug.o: $(BOOST_PATH)/libs/regex/src/regex_debug.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_debug.cpp -o $(OBJDIR)/regex_debug.o
+
+$(OBJDIR)/w32_regex_traits.o: $(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp -o $(OBJDIR)/w32_regex_traits.o
+
+$(OBJDIR)/wc_regex_traits.o: $(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp -o $(OBJDIR)/wc_regex_traits.o
+
+$(OBJDIR)/wide_posix_api.o: $(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp -o $(OBJDIR)/wide_posix_api.o
+
+$(OBJDIR)/winstances.o: $(BOOST_PATH)/libs/regex/src/winstances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/winstances.cpp -o $(OBJDIR)/winstances.o
+
+$(OBJDIR)/usinstances.o: $(BOOST_PATH)/libs/regex/src/usinstances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/usinstances.cpp -o $(OBJDIR)/usinstances.o
+
+$(OBJDIR)/regex_traits_defaults.o: $(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp -o $(OBJDIR)/regex_traits_defaults.o
+
+$(OBJDIR)/regex_raw_buffer.o: $(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp -o $(OBJDIR)/regex_raw_buffer.o
+
+$(OBJDIR)/SynPattern.o: $(LEM_PATH)/ai/la/SynPattern.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPattern.cpp -o $(OBJDIR)/SynPattern.o
+
+$(OBJDIR)/SynPatternPoint.o: $(LEM_PATH)/ai/la/SynPatternPoint.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternPoint.cpp -o $(OBJDIR)/SynPatternPoint.o
+
+$(OBJDIR)/SynPatternTreeNode.o: $(LEM_PATH)/ai/la/SynPatternTreeNode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternTreeNode.cpp -o $(OBJDIR)/SynPatternTreeNode.o
+
+$(OBJDIR)/clc_calc_variable.o: $(LEM_PATH)/tools/calculator/clc_calc_variable.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_calc_variable.cpp -o $(OBJDIR)/clc_calc_variable.o
+
+$(OBJDIR)/clc_pars_token.o: $(LEM_PATH)/tools/calculator/clc_pars_token.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_pars_token.cpp -o $(OBJDIR)/clc_pars_token.o
+
+$(OBJDIR)/clc_parser_stack.o: $(LEM_PATH)/tools/calculator/clc_parser_stack.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_parser_stack.cpp -o $(OBJDIR)/clc_parser_stack.o
+
+$(OBJDIR)/clc_print_error.o: $(LEM_PATH)/tools/calculator/clc_print_error.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_print_error.cpp -o $(OBJDIR)/clc_print_error.o
+
+$(OBJDIR)/clc_tokens.o: $(LEM_PATH)/tools/calculator/clc_tokens.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_tokens.cpp -o $(OBJDIR)/clc_tokens.o
+
+$(OBJDIR)/clc_var_table.o: $(LEM_PATH)/tools/calculator/clc_var_table.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/calculator/clc_var_table.cpp -o $(OBJDIR)/clc_var_table.o
+        
+
+$(OBJDIR)/rec_ngram.o: $(LEM_PATH)/ai/pm/reconstructor/rec_ngram.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_ngram.cpp -o $(OBJDIR)/rec_ngram.o
+
+$(OBJDIR)/rec_ngrams.o: $(LEM_PATH)/ai/pm/reconstructor/rec_ngrams.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_ngrams.cpp -o $(OBJDIR)/rec_ngrams.o
+
+$(OBJDIR)/rec_ngram_links.o: $(LEM_PATH)/ai/pm/reconstructor/rec_ngram_links.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_ngram_links.cpp -o $(OBJDIR)/rec_ngram_links.o
+
+$(OBJDIR)/rec_transformator.o: $(LEM_PATH)/ai/pm/reconstructor/rec_transformator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_transformator.cpp -o $(OBJDIR)/rec_transformator.o
+
+$(OBJDIR)/rec_transformators.o: $(LEM_PATH)/ai/pm/reconstructor/rec_transformators.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_transformators.cpp -o $(OBJDIR)/rec_transformators.o
+
+$(OBJDIR)/rec_yield_words.o: $(LEM_PATH)/ai/pm/reconstructor/rec_yield_words.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec_yield_words.cpp -o $(OBJDIR)/rec_yield_words.o
+
+$(OBJDIR)/casing_coder.o: $(LEM_PATH)/ai/sg/casing_coder.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/casing_coder.cpp -o $(OBJDIR)/casing_coder.o
+       
+
+$(LEM_PATH)/tools/lem_coap.cpp:
+
+$(LEM_PATH)/tools/lem_application.cpp:
+
+$(LEM_PATH)/tools/lem_opti.cpp:
+
+$(LEM_PATH)/tools/lem_chec.cpp:
+
+$(LEM_PATH)/tools/lem_conv.cpp:
+
+$(LEM_PATH)/tools/lem_dir.cpp:
+
+$(LEM_PATH)/tools/lem_time.cpp:
+
+$(LEM_PATH)/tools/lem_shell.cpp:
+
+$(LEM_PATH)/tools/ui/ui_user_interface.cpp:
+
+$(LEM_PATH)/tools/system_config/system_config.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_437.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_847.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_866.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1250.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1251.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1252.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_8859_1.cpp:
+
+$(LEM_PATH)/tools/unicode/cast_to_url.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_code_page.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_recodings.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_sgml.cpp:
+
+$(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp:
+
+$(LEM_PATH)/tools/unicode/transliterator.cpp:
+
+$(LEM_PATH)/tools/unicode/utf_converters.cpp:
+
+$(LEM_PATH)/tools/lem_process.cpp:
+
+$(LEM_PATH)/tools/lem_dll.cpp:
+
+$(LEM_PATH)/tools/lem_reflection.cpp:
+
+$(LEM_PATH)/math/macheps.cpp:
+
+$(LEM_PATH)/contain/lem_ustr.cpp:
+
+$(LEM_PATH)/contain/lem_astr.cpp:
+
+$(LEM_PATH)/contain/lem_acstring.cpp:
+
+$(LEM_PATH)/contain/lem_ucstring.cpp:
+
+$(LEM_PATH)/contain/lem_afstring.cpp:
+
+$(LEM_PATH)/contain/lem_ufstring.cpp:
+
+$(LEM_PATH)/contain/lem_fp1.cpp:
+
+$(LEM_PATH)/io/oformatter.cpp:
+
+$(LEM_PATH)/io/io_base_stream.cpp:
+
+$(LEM_PATH)/io/io_binary_file.cpp:
+
+$(LEM_PATH)/io/io_memory_stream.cpp:
+
+$(LEM_PATH)/io/io_text_file.cpp:
+
+$(LEM_PATH)/io/io_tty.cpp:
+
+$(LEM_PATH)/io/base_lexer.cpp:
+
+$(LEM_PATH)/io/io_kbd.cpp:
+
+$(LEM_PATH)/io/lem_mime.cpp:
+
+$(LEM_PATH)/io/lem_logfile.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_base_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_char_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp:
+
+$(LEM_PATH)/math/lem_imat.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/syntax/syntax.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/syntax/syntax_shell.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/syntax/TrDebugger.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/syntax/tpu.cpp:
+
+$(LEM_PATH)/ai/aa/aa_autom.cpp:
+
+$(LEM_PATH)/ai/vg/vg_autom.cpp:
+
+$(LEM_PATH)/ai/vg/vg_syllabema.cpp:
+
+$(LEM_PATH)/ai/va/va_analizator.cpp:
+
+$(LEM_PATH)/ai/va/va_autom.cpp:
+
+$(LEM_PATH)/ai/va/va_buil.cpp:
+
+$(LEM_PATH)/ai/va/va_processing.cpp:
+
+$(LEM_PATH)/ai/va/va_space.cpp:
+
+$(LEM_PATH)/ai/va/va_synt1.cpp:
+
+$(LEM_PATH)/ai/va/va_unpa.cpp:
+
+$(LEM_PATH)/ai/tree/action_step.cpp:
+
+$(LEM_PATH)/ai/tree/clear_section.cpp:
+
+$(LEM_PATH)/ai/tree/correlate_item.cpp:
+
+$(LEM_PATH)/ai/tree/correlate_section.cpp:
+
+$(LEM_PATH)/ai/tree/cut_item.cpp:
+
+$(LEM_PATH)/ai/tree/cut_section.cpp:
+
+$(LEM_PATH)/ai/tree/mark_section.cpp:
+
+$(LEM_PATH)/ai/tree/pack_maker.cpp:
+
+$(LEM_PATH)/ai/tree/refresh_section.cpp:
+
+$(LEM_PATH)/ai/tree/reset_item.cpp:
+
+$(LEM_PATH)/ai/tree/reset_section.cpp:
+
+$(LEM_PATH)/ai/tree/result_section.cpp:
+
+$(LEM_PATH)/ai/tree/res_pack.cpp:
+
+$(LEM_PATH)/ai/tree/tree_hash.cpp:
+
+$(LEM_PATH)/ai/tree/tree_link.cpp:
+
+$(LEM_PATH)/ai/tree/tree_list.cpp:
+
+$(LEM_PATH)/ai/tree/tree_node.cpp:
+
+$(LEM_PATH)/ai/tree/tree_node_maker.cpp:
+
+$(LEM_PATH)/ai/tree/undress_convolution.cpp:
+
+$(LEM_PATH)/ai/tree/variator.cpp:
+
+$(LEM_PATH)/ai/tree/plain_argument_list.cpp:
+
+$(LEM_PATH)/ai/tree/word_form.cpp:
+
+$(LEM_PATH)/ai/tree/word_form_maker.cpp:
+
+$(LEM_PATH)/ai/some/automata_names.cpp:
+
+$(LEM_PATH)/ai/some/CompilationContext.cpp:
+
+$(LEM_PATH)/ai/some/SentenceBroker.cpp:
+
+$(LEM_PATH)/ai/some/SentenceTokenizer.cpp:
+
+$(LEM_PATH)/ai/some/SegmentingSentenceTokenizer.cpp:
+
+$(LEM_PATH)/ai/some/automaton.cpp:
+
+$(LEM_PATH)/ai/some/base_entry.cpp:
+
+$(LEM_PATH)/ai/some/bitarray32.cpp:
+
+$(LEM_PATH)/ai/some/coordinate.cpp:
+
+$(LEM_PATH)/ai/some/coord_adr.cpp:
+
+$(LEM_PATH)/ai/some/coord_ex.cpp:
+
+$(LEM_PATH)/ai/some/coord_pair.cpp:
+
+$(LEM_PATH)/ai/some/coord_state.cpp:
+
+$(LEM_PATH)/ai/some/criteria_list.cpp:
+
+$(LEM_PATH)/ai/some/criterion.cpp:
+
+$(LEM_PATH)/ai/some/dictionary.cpp:
+
+$(LEM_PATH)/ai/some/form_table.cpp:
+
+$(LEM_PATH)/ai/some/frasema.cpp:
+
+$(LEM_PATH)/ai/some/sentence.cpp:
+
+$(LEM_PATH)/ai/some/grammar.cpp:
+
+$(LEM_PATH)/ai/some/gram_class.cpp:
+
+$(LEM_PATH)/ai/some/lexem.cpp:
+
+$(LEM_PATH)/ai/some/load_options.cpp:
+
+$(LEM_PATH)/ai/some/print_variator.cpp:
+
+$(LEM_PATH)/ai/some/ml_net_node.cpp:
+
+$(LEM_PATH)/ai/some/ml_proj_job.cpp:
+
+$(LEM_PATH)/ai/some/ml_proj_list.cpp:
+
+$(LEM_PATH)/ai/some/plain_text.cpp:
+
+$(LEM_PATH)/ai/some/sol_random.cpp:
+
+$(LEM_PATH)/ai/some/reentry_point.cpp:
+
+$(LEM_PATH)/ai/some/ref_name.cpp:
+
+$(LEM_PATH)/ai/some/sol_ling.cpp:
+
+$(LEM_PATH)/ai/some/some_strings.cpp:
+
+$(LEM_PATH)/ai/some/sound_record.cpp:
+
+$(LEM_PATH)/ai/some/string_set.cpp:
+
+$(LEM_PATH)/ai/some/text_processor.cpp:
+
+$(LEM_PATH)/ai/some/version.cpp:
+
+$(LEM_PATH)/ai/some/tokens.cpp:
+
+$(LEM_PATH)/ai/some/sql_production.cpp:
+
+$(LEM_PATH)/ai/some/ExternalTokenizer.cpp:
+
+$(LEM_PATH)/ai/sg/dsa_form.cpp:
+
+$(LEM_PATH)/ai/sg/dsa_main.cpp:
+
+$(LEM_PATH)/ai/sg/dsa_table.cpp:
+
+$(LEM_PATH)/ai/sg/sg_autom.cpp:
+
+$(LEM_PATH)/ai/sg/sg_notag_filter.cpp:
+
+$(LEM_PATH)/ai/sg/ThesaurusTag.cpp:
+
+$(LEM_PATH)/ai/sg/CharNode.cpp:
+
+$(LEM_PATH)/ai/sg/sg_calibrator.cpp:
+
+$(LEM_PATH)/ai/sg/sg_coord_context.cpp:
+
+$(LEM_PATH)/ai/sg/sg_Entry.cpp:
+
+$(LEM_PATH)/ai/sg/sg_entry_group.cpp:
+
+$(LEM_PATH)/ai/sg/sg_form.cpp:
+
+$(LEM_PATH)/ai/sg/sg_net_link.cpp:
+
+$(LEM_PATH)/ai/sg/sg_preparing.cpp:
+
+$(LEM_PATH)/ai/sg/sg_language.cpp:
+
+$(LEM_PATH)/ai/sg/sg_class.cpp:
+
+$(LEM_PATH)/ai/sg/sg_stemmer.cpp:
+
+$(LEM_PATH)/ai/sg/sg_lexem_dictionary.cpp:
+
+$(LEM_PATH)/ai/sg/sg_ld_seeker.cpp:
+
+$(LEM_PATH)/ai/sg/sg_affix_table.cpp:
+
+$(LEM_PATH)/ai/sg/sg_autom_sql_generator.cpp:
+
+$(LEM_PATH)/ai/sg/sg_net.cpp:
+
+$(LEM_PATH)/ai/sg/sg_link_generator.cpp:
+
+$(LEM_PATH)/ai/sg/sg_complex_link.cpp:
+
+$(LEM_PATH)/ai/sg/sg_tree_ref.cpp:
+
+$(LEM_PATH)/ai/sg/sg_simple_tree.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_context.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_cut.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_do.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_group.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_if.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_iterate.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_list.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_pass.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_predicate.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_say.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_shift.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_sound.cpp:
+
+$(LEM_PATH)/ai/pm/pm_ActorNGrams.cpp:
+
+$(LEM_PATH)/ai/pm/pm_CondNGram.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_correlate.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_debug.cpp:
+
+$(LEM_PATH)/ai/pm/pm_actor_switch.cpp:
+
+$(LEM_PATH)/ai/pm/pm_autom.cpp:
+
+$(LEM_PATH)/ai/pm/pm_condictor.cpp:
+
+$(LEM_PATH)/ai/pm/pm_condition_node.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_context.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_do.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_count.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_or.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_text.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_and.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_not.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_debug.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_lexem.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_pass.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cond_predicate.cpp:
+
+$(LEM_PATH)/ai/pm/pm_context_req.cpp:
+
+$(LEM_PATH)/ai/pm/pm_context_req_hash.cpp:
+
+$(LEM_PATH)/ai/pm/pm_cont_item.cpp:
+
+$(LEM_PATH)/ai/pm/pm_correlation.cpp:
+
+$(LEM_PATH)/ai/pm/pm_correl_pattern.cpp:
+
+$(LEM_PATH)/ai/pm/pm_correl_point.cpp:
+
+$(LEM_PATH)/ai/pm/pm_dis1.cpp:
+
+$(LEM_PATH)/ai/pm/pm_dis2.cpp:
+
+$(LEM_PATH)/ai/pm/pm_disa.cpp:
+
+$(LEM_PATH)/ai/pm/PM_Yield.cpp:
+
+$(LEM_PATH)/ai/pm/pm_filtered_list.cpp:
+
+$(LEM_PATH)/ai/pm/pm_input.cpp:
+
+$(LEM_PATH)/ai/pm/pm_mark.cpp:
+
+$(LEM_PATH)/ai/pm/pm_processing.cpp:
+
+$(LEM_PATH)/ai/pm/pm_rule.cpp:
+
+$(LEM_PATH)/ai/pm/pm_rules_in_category.cpp:
+
+$(LEM_PATH)/ai/pm/pm_rule_element.cpp:
+
+$(LEM_PATH)/ai/pm/pm_super_index.cpp:
+
+$(LEM_PATH)/ai/pm/pm_sup_context.cpp:
+
+$(LEM_PATH)/ai/pm/TrAddLinkResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrArithFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrClosureVars.cpp:
+
+$(LEM_PATH)/ai/pm/TrCompilationContext.cpp:
+
+$(LEM_PATH)/ai/pm/TrCondictor.cpp:
+
+$(LEM_PATH)/ai/pm/TrContextCondictor.cpp:
+
+$(LEM_PATH)/ai/pm/TrContextInCondictor.cpp:
+
+$(LEM_PATH)/ai/pm/TrContextInvokation.cpp:
+
+$(LEM_PATH)/ai/pm/TrEnvironment.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Assign.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Break.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_BuiltIn.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Constant.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_CreateWordform.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Declare.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_For.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Group.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_If.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Lambda.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Procedure.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Return.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Scan.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_Var.cpp:
+
+$(LEM_PATH)/ai/pm/TrFun_While.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunCall.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunContext.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunction.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunctionResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunctions.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunctionStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrFunUser.cpp:
+
+$(LEM_PATH)/ai/pm/TrGramFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrGroupResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrGroupStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrIfFunction.cpp:
+
+$(LEM_PATH)/ai/pm/TrIfResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrIfStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrIndexResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrIterateResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrIterateStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrKnownVars.cpp:
+
+$(LEM_PATH)/ai/pm/TrLambdaFunctionResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrLogicFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrMapContext.cpp:
+
+$(LEM_PATH)/ai/pm/TrMapPoint.cpp:
+
+$(LEM_PATH)/ai/pm/TrMatchFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrPattern.cpp:
+
+$(LEM_PATH)/ai/pm/TrPatternFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrPatternMatcher.cpp:
+
+$(LEM_PATH)/ai/pm/TrPatternPoint.cpp:
+
+$(LEM_PATH)/ai/pm/TrPatternTreeNode.cpp:
+
+$(LEM_PATH)/ai/pm/TrPrefixTreeMatcher.cpp:
+
+$(LEM_PATH)/ai/pm/TrProcedure.cpp:
+
+$(LEM_PATH)/ai/pm/TrProcedureDeclaration.cpp:
+
+$(LEM_PATH)/ai/pm/TrProcedureStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrProduction.cpp:
+
+$(LEM_PATH)/ai/pm/TrReplaceMatcher.cpp:
+
+$(LEM_PATH)/ai/pm/TrReplaceStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrResult.cpp:
+
+$(LEM_PATH)/ai/pm/TrResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrResultItemArg.cpp:
+
+$(LEM_PATH)/ai/pm/TrSubroutineStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrTrace.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceActor.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceCondictor.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceFunCall.cpp:
+
+$(LEM_PATH)/ai/pm/TrTracePMActor.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceProcedure.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceProcedureStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceResult.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceRule.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceTrRule.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceTrCondictor.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceActorGroupStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrTransformResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrTreeStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrTraceFunGroupStep.cpp:
+
+$(LEM_PATH)/ai/pm/TrTuple.cpp:
+
+$(LEM_PATH)/ai/pm/TrType.cpp:
+
+$(LEM_PATH)/ai/pm/TrUserIfFun.cpp:
+
+$(LEM_PATH)/ai/pm/TrValue.cpp:
+
+$(LEM_PATH)/ai/pm/TrVariator.cpp:
+
+$(LEM_PATH)/ai/pm/TrWhen.cpp:
+
+$(LEM_PATH)/ai/pm/TrWhenItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrWideContext.cpp:
+
+$(LEM_PATH)/ai/pm/TrWordformResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrWordResultItem.cpp:
+
+$(LEM_PATH)/ai/pm/TrYield.cpp:
+
+$(LEM_PATH)/ai/pa/pa_autom.cpp:
+
+$(LEM_PATH)/ai/pa/pa_built_in_predicates.cpp:
+
+$(LEM_PATH)/ai/pa/pa_content.cpp:
+
+$(LEM_PATH)/ai/pa/pa_default_names.cpp:
+
+$(LEM_PATH)/ai/pa/pa_inference_engine.cpp:
+
+$(LEM_PATH)/ai/pa/pa_logic_node.cpp:
+
+$(LEM_PATH)/ai/pa/pa_logic_var.cpp:
+
+$(LEM_PATH)/ai/pa/pa_log_node_built_in.cpp:
+
+$(LEM_PATH)/ai/pa/pa_log_var_table.cpp:
+
+$(LEM_PATH)/ai/pa/pa_operator_info.cpp:
+
+$(LEM_PATH)/ai/pa/pa_predicate.cpp:
+
+$(LEM_PATH)/ai/pa/pa_predicate_hash.cpp:
+
+$(LEM_PATH)/ai/pa/pa_predicate_maker.cpp:
+
+$(LEM_PATH)/ai/pa/pa_predicate_node.cpp:
+
+$(LEM_PATH)/ai/pa/pa_pred_make_node.cpp:
+
+$(LEM_PATH)/ai/pa/pa_pred_make_stack.cpp:
+
+$(LEM_PATH)/ai/pa/pa_processing.cpp:
+
+$(LEM_PATH)/ai/pa/pa_prolog_space.cpp:
+
+$(LEM_PATH)/ai/pa/pa_prolog_token.cpp:
+
+$(LEM_PATH)/ai/pa/pa_utilities.cpp:
+
+$(LEM_PATH)/ai/la/la_autom.cpp:
+
+$(LEM_PATH)/ai/la/la_fuzzy.cpp:
+
+$(LEM_PATH)/ai/la/la_lex.cpp:
+
+$(LEM_PATH)/ai/la/la_phaa.cpp:
+
+$(LEM_PATH)/ai/la/la_processing.cpp:
+
+$(LEM_PATH)/ai/la/la_project_buffer.cpp:
+
+$(LEM_PATH)/ai/la/la_proj_list.cpp:
+
+$(LEM_PATH)/ai/la/la_mixer_filter.cpp:
+
+$(LEM_PATH)/ai/la/la_filter_rule.cpp:
+
+$(LEM_PATH)/ai/la/la_word_projection.cpp:
+
+$(LEM_PATH)/ai/gg/gg_autom.cpp:
+
+$(LEM_PATH)/ai/gg/gg_calibrator.cpp:
+
+$(LEM_PATH)/ai/gg/gg_entry.cpp:
+
+$(LEM_PATH)/ai/gg/gg_form.cpp:
+
+$(LEM_PATH)/ai/gg/gg_interpolator.cpp:
+
+$(LEM_PATH)/ai/gg/gg_syllab.cpp:
+
+$(LEM_PATH)/ai/ngrams/ngrams.cpp:
+
+$(LEM_PATH)/ai/ngrams/NGramsDBMS.cpp:
+
+$(LEM_PATH)/math/random/randu.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro.cpp:
+
+$(LEM_PATH)/io/iridium/ir_error.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_group.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_head.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_if.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_parser.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_subst.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_table.cpp:
+
+$(LEM_PATH)/io/iridium/ir_macro_text.cpp:
+
+$(LEM_PATH)/io/iridium/ir_operator.cpp:
+
+$(LEM_PATH)/io/iridium/ir_parser_stack.cpp:
+
+$(LEM_PATH)/io/iridium/ir_parser_variable.cpp:
+
+$(LEM_PATH)/io/iridium/ir_prep_pars_token.cpp:
+
+$(LEM_PATH)/io/iridium/ir_print_error.cpp:
+
+$(LEM_PATH)/io/iridium/ir_readl.cpp:
+
+$(LEM_PATH)/io/iridium/ir_tokens.cpp:
+
+$(LEM_PATH)/io/iridium/ir_var_table.cpp:
+
+$(LEM_PATH)/io/xml/xp_parser:
+
+$(LEM_PATH)/io/xml/xp_node:
+
+$(LEM_PATH)/io/xml/xp_iterator:
+
+$(LEM_PATH)/ai/ygres/ygres.cpp:
+
+$(LEM_PATH)/math/stat/statkep1.cpp:
+
+$(LEM_PATH)/math/approx/interpol.cpp:
+
+$(LEM_PATH)/tools/base_application.cpp:
+
+$(LEM_PATH)/io/cfg_parser/cfg_base_parser.cpp:
+
+$(LEM_PATH)/io/cfg_parser/cfg_ini_parser.cpp:
+
+$(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/fileiter.cpp:
+
+$(BOOST_PATH)/libs/regex/src/instances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/icu.cpp:
+
+$(BOOST_PATH)/libs/regex/src/static_mutex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/posix_api.cpp:
+
+$(BOOST_PATH)/libs/regex/src/cregex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_debug.cpp:
+
+$(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp:
+
+$(BOOST_PATH)/libs/regex/src/winstances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/usinstances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp:
+
+$(LEM_PATH)/ai/la/SynPattern.cpp:
+
+$(LEM_PATH)/ai/la/SynPatternPoint.cpp:
+
+$(LEM_PATH)/ai/la/SynPatternTreeNode.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_calc_variable.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_pars_token.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_parser_stack.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_print_error.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_tokens.cpp:
+
+$(LEM_PATH)/tools/calculator/clc_var_table.cpp:
+
+$(LEM_PATH)/ai/sg/sg_prefix_entry_searcher.cpp:
+
+
+$(LEM_PATH)/ai/pm/neurogen/AtomizedDetectors.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/AtomizedProducers.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/cell.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/net.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/NeuroDetector.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/NeuroProducer.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/NG_Transformator.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/rpattern.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/RPatterns.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/rule.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/RuleCluster.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/Transformators1.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/WordDetector.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/WordDetectors.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/WordProducer.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/WordProducers.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/Yields.cpp:
+
+$(LEM_PATH)/ai/pm/neurogen/YieldSlot.cpp:
+
+$(LEM_PATH)/ai/pm/tr_transformators.cpp:
+
+$(LEM_PATH)/tools/lem_startup.cpp:
+
+$(LEM_PATH)/ai/tree/TreeMarks.cpp:
+
+$(LEM_PATH)/ai/tree/TreeDimension.cpp:
+
+$(LEM_PATH)/io/xml/xp_parser.cpp:
+
+$(LEM_PATH)/io/xml/xp_node.cpp:
+
+$(LEM_PATH)/io/xml/xp_iterator.cpp:
+
+$(LEM_PATH)/ai/sg/sg_ref_tag_filter.cpp:
+
+$(LEM_PATH)/ai/sg/ThesaurusStorage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/sg/LexiconStorage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/sg/PhraseNoteEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/PhraseLinkEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/TagsSets.cpp:
+
+$(LEM_PATH)/ai/sg/WordLinkEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/AuxFormTypes.cpp:
+
+$(LEM_PATH)/ai/sg/ThesaurusTagDefs.cpp:
+
+$(LEM_PATH)/ai/sg/TransactionGuard_SQLITE.cpp:
+
+$(LEM_PATH)/ai/sg/PhraseEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/ThesaurusTagDefsEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/LS_ResultSet_SQLITE.cpp:
+
+$(LEM_PATH)/ai/gg/SymbolClasses.cpp:
+
+$(LEM_PATH)/ai/gg/CoordsInFile.cpp:
+
+$(LEM_PATH)/ai/gg/CoordEnumeratorInFile.cpp:
+
+$(LEM_PATH)/ai/gg/SymbolClassEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntries_File.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumeratorGlobbing_File.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumeratorFuzzy_File.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumeratorListing_File.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntryEnumerator_File.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumerator_File3.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumerator_File2.cpp:
+
+$(LEM_PATH)/ai/sg/WordFormEnumerator_File1.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntryEnumerator_File_ByGroup.cpp:
+
+$(LEM_PATH)/ai/sg/SG_Coordinates.cpp:
+
+$(LEM_PATH)/ai/sg/LanguageEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/PartsOfSpeech.cpp:
+
+$(LEM_PATH)/ai/sg/SG_CoordEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/LexemeEnumerator_File.cpp:
+
+$(LEM_PATH)/ai/sg/PartOfSpeechEnumerator.cpp:
+
+$(LEM_PATH)/ai/some/GramCoordUpdator_DB.cpp:
+
+$(LEM_PATH)/ai/sg/Languages.cpp:
+
+$(LEM_PATH)/db/sqlite_helpers.cpp:
+
+$(LEM_PATH)/ai/some/StorageConnections.cpp:
+		
+$(LEM_PATH)/ai/la/lemmatizator.cpp:
+
+$(LEM_PATH)/ai/la/LemmatizatorStorage_MySQL.cpp:
+
+$(LEM_PATH)/ai/ngrams/NGramsStorage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/ngrams/NGramsStorage_MySQL.cpp:
+
+$(LEM_PATH)/ai/gg/Symbols.cpp:
+
+$(LEM_PATH)/ai/gg/AlphabetStorage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/gg/AlphabetEnumerator.cpp:
+
+$(LEM_PATH)/ai/gg/SymbolEnumerator.cpp:
+
+$(LEM_PATH)/ai/gg/Alphabets.cpp:
+
+$(LEM_PATH)/ai/gg/Alphabet.cpp:
+
+$(LEM_PATH)/ai/gg/GG_CoordEnumerator.cpp:
+
+$(LEM_PATH)/ai/gg/GG_Coordinates.cpp:
+
+$(LEM_PATH)/ai/some/CriteriaInStorage.cpp:
+
+$(LEM_PATH)/ai/some/CriterionEnumerator_SQL.cpp:
+
+$(LEM_PATH)/ai/some/CriterionEnumeratorInFile.cpp:
+
+$(LEM_PATH)/ai/some/StorageConnection_SQLITE.cpp:
+
+$(LEM_PATH)/ai/sg/Charpos2EntryStorage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/sg/Charpos2EntryEnumerator_SQL.cpp:
+
+$(LEM_PATH)/lem/tools/WideString2Ucs4.cpp:
+
+$(LEM_PATH)/lem/tools/Ucs4ToWideString.cpp:
+		
+$(LEM_PATH)/ai/la/LA_WordEntrySet.cpp:
+
+$(LEM_PATH)/ai/la/SynPatternCompilation.cpp:
+
+$(LEM_PATH)/ai/pm/reconstructor/rec2_transformator.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Pattern.cpp:
+
+$(LEM_PATH)/ai/reco2/R2PatternEnumerator_SQL.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Patterns.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Point.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Point2Pattern.cpp:
+
+$(LEM_PATH)/ai/reco2/R2PointEnumerator_SQL.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Points.cpp:
+
+$(LEM_PATH)/ai/reco2/R2ProductionNode.cpp:
+
+$(LEM_PATH)/ai/reco2/R2TranformEnumerator.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Transform.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Transforms.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Utils.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Word2Point.cpp:
+
+$(LEM_PATH)/ai/reco2/R2WordEnumerator_SQL.cpp:
+
+$(LEM_PATH)/ai/reco2/R2Words.cpp:
+
+$(LEM_PATH)/ai/reco2/Reconstructor2.cpp:
+
+$(LEM_PATH)/ai/reco2/Reconstructor2Storage_MySQL.cpp:
+
+$(LEM_PATH)/ai/reco2/Reconstructor2Storage_SQLITE.cpp:
+
+$(LEM_PATH)/ai/pm/TrScopedVarsContext.cpp:
+
+$(LEM_PATH)/ai/pm/TrMorphologyTracer.cpp:
+
+$(LEM_PATH)/ai/gg/GG_CharOperation.cpp:
+
+$(LEM_PATH)/ai/gg/CharOperationEnumerator.cpp:
+
+$(LEM_PATH)/ai/gg/GG_CharOperations.cpp:
+
+$(LEM_PATH)/ai/la/LA_RecognitionRule.cpp:
+
+$(LEM_PATH)/ai/la/WordEntrySetEnumerator.cpp:
+
+$(LEM_PATH)/ai/la/LA_SynPatternTrees.cpp:
+
+$(LEM_PATH)/ai/la/LA_RecognitionRules.cpp:
+
+$(LEM_PATH)/ai/la/LA_CropRule.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticRule.cpp:
+
+$(LEM_PATH)/ai/la/LA_Recognizer.cpp:
+
+$(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp:
+
+$(LEM_PATH)/ai/la/LA_Preprocessor.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp:
+
+$(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp:
+
+$(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp:
+
+$(LEM_PATH)/ai/la/LA_Filters.cpp:
+
+$(LEM_PATH)/ai/la/LA_UnbreakableRule.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticRuleEnumerator_MCollect.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticResult.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticCondictor.cpp:
+
+$(LEM_PATH)/ai/la/LA_PhoneticMatcher.cpp:
+
+$(LEM_PATH)/ai/la/MultiwordMerger.cpp:
+
+$(LEM_PATH)/ai/pm/PM_ProcedureLoader.cpp:
+
+$(LEM_PATH)/ai/pm/PM_Rules.cpp:
+
+$(LEM_PATH)/ai/pm/PatternMatcherEnumerator.cpp:
+
+$(LEM_PATH)/ai/pm/ProductionRuleEnumerator.cpp:
+
+$(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp:
+
+$(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp:
+
+$(LEM_PATH)/ai/pm/PM_LenRuleGroup.cpp:
+
+$(LEM_PATH)/ai/pm/PM_FunctionLoader.cpp:
+
+$(LEM_PATH)/ai/sg/LanguageUsage.cpp:
+
+$(LEM_PATH)/ai/va/VA_GG_to_SG.cpp:
+
+$(LEM_PATH)/ai/some/SourceFilenameEnumerator.cpp:
+
+$(LEM_PATH)/ai/la/LA_BackTraceItem.cpp:
+
+$(LEM_PATH)/ai/la/LA_BackTrace.cpp:
+
+$(LEM_PATH)/ai/la/LA_SynPatternResult.cpp:
+
+$(LEM_PATH)/ai/la/LA_SynPatternPointCall.cpp:
+
+
+$(LEM_PATH)/ai/sg/ParadigmaMatcher.cpp:
+
+$(LEM_PATH)/ai/sg/ParadigmaFinder.cpp:
+
+
+$(LEM_PATH)/ai/la/WordSetEnumerator.cpp:
+
+$(LEM_PATH)/ai/sg/ExactWordEntryLocator.cpp:
+
+$(LEM_PATH)/ai/sg/LexiconStorage.cpp:
+
+$(LEM_PATH)/ai/la/BackRefCorrel.cpp:
+	
+$(LEM_PATH)/ai/sg/WordFormEnumerator_SQLite.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntryEnumerator_SQLite.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntries_SQLite.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntries_SQLite.cpp:
+
+$(LEM_PATH)/ai/sg/WordEntries_SQL.cpp:
+
+$(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp:

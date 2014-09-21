@@ -25,7 +25,6 @@
 #include <lem/solarix/tokens.h>
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/exceptions.h>
-#include <lem/solarix/phrasoblock.h>
 #include <lem/solarix/some_strings.h>
 #include <lem/solarix/automaton.h>
 

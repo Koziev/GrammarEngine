@@ -22,7 +22,7 @@
 				Optimization="0"
 				FavorSizeOrSpeed="0"
 				OptimizeForProcessor="0"
-				AdditionalIncludeDirectories="$(BOOST_PATH);$(LEM_PATH)\include"
+				AdditionalIncludeDirectories="E:\boost\;&quot;H:\tmp\solarix.git\GrammarEngine-master\src\include\&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;LEM_UNICODE_EX;SOL_LOADTXT;SOL_LOADBIN;SOL_SAVEBIN;SOLARIX_PRO;SOL_REPORT;SOL_SAVETXT;SOL_COMPILER;SOL_NO_NGRAMS;BOOST_ALL_NO_LIB;BOOST_THREAD_BUILD_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -48,7 +48,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/ygres.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(LEM_PATH)\lib"
+				AdditionalLibraryDirectories="H:\tmp\solarix.git\GrammarEngine-master\src\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/ygres_compiler.pdb"
 				SubSystem="1"
@@ -77,8 +77,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(TMP)\Ygres\Release-Pro"
-			IntermediateDirectory="$(TMP)\Ygres\Release-Pro"
+			OutputDirectory="$(TMP)\Ygres\Release.GIT"
+			IntermediateDirectory="$(TMP)\Ygres\Release.GIT"
 			ConfigurationType="1"
 			CharacterSet="0"
 			WholeProgramOptimization="FALSE">
@@ -115,9 +115,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(LEM_PATH)/exe/compiler.exe"
+				OutputFile="compiler.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(LEM_PATH)\lib"
+				AdditionalLibraryDirectories="H:\SolarixGIT\GrammarEngine\src\lib\"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -897,9 +897,6 @@ copy $(LEM_PATH)\lib\libmysql.dll $(OutDir)
 						RelativePath="..\..\..\..\..\..\Ai\Sg\sg_autom.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\ai\Sg\sg_autom_sql_generator.cpp">
-					</File>
-					<File
 						RelativePath="..\..\..\..\..\..\Ai\Sg\sg_Calibrator.cpp">
 					</File>
 					<File
@@ -1637,74 +1634,71 @@ copy $(LEM_PATH)\lib\libmysql.dll $(OutDir)
 					Name="regex"
 					Filter="">
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\c_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\cpp_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp">
+						RelativePath="E:\boost\libs\regex\src\cregex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp">
+						RelativePath="E:\boost\libs\regex\src\fileiter.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\icu.cpp">
+						RelativePath="E:\boost\libs\regex\src\icu.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\instances.cpp">
+						RelativePath="E:\boost\libs\regex\src\instances.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp">
+						RelativePath="E:\boost\libs\regex\src\posix_api.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_debug.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_raw_buffer.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_traits_defaults.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp">
+						RelativePath="E:\boost\libs\regex\src\static_mutex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp">
+						RelativePath="E:\boost\libs\regex\src\usinstances.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\w32_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\wc_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp">
+						RelativePath="E:\boost\libs\regex\src\wide_posix_api.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp">
+						RelativePath="E:\boost\libs\regex\src\winstances.cpp">
 					</File>
 				</Filter>
 				<Filter
 					Name="thread"
 					Filter="">
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\exceptions.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\exceptions.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\thread.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\timeconv.inl">
+						RelativePath="E:\boost\libs\thread\src\win32\tss_dll.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\tss_dll.cpp">
-					</File>
-					<File
-						RelativePath="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\tss_pe.cpp">
 					</File>
 				</Filter>
 				<Filter

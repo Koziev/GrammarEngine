@@ -81,13 +81,13 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(TMP)\Ygres\Release-Pro\</OutDir>
-    <IntDir>$(TMP)\Ygres\Release-Pro\</IntDir>
+    <OutDir>$(TMP)\Ygres\Release.64.GIT</OutDir>
+    <IntDir>$(TMP)\Ygres\Release.64.GIT</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(TMP)/Ygres/Release-Pro64\</OutDir>
-    <IntDir>$(TMP)/Ygres/Release-Pro64\</IntDir>
+    <OutDir>$(TMP)/Ygres/Release.64.GIT\</OutDir>
+    <IntDir>$(TMP)/Ygres/Release.64.GIT\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -177,8 +177,8 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_UNICODE_CONSOLE;SOL_COMPILER;SOL_LOADTXT;SOL_SAVETXT;SOLARIX_PRO;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>e:\boost;F:\tmp\solarix.git\GrammarEngine-master\src\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;LEM_UNICODE_EX;SOL_LOADTXT;SOL_LOADBIN;SOL_SAVEBIN;SOLARIX_PRO;SOL_REPORT;SOL_SAVETXT;SOL_COMPILER;SOL_NO_NGRAMS;BOOST_ALL_NO_LIB;BOOST_THREAD_BUILD_LIB</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -196,7 +196,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)ygres-pro.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\tmp\solarix.git\GrammarEngine-master\src\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -218,7 +218,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>e:\boost;F:\tmp\solarix.git\GrammarEngine-master\src\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_SAVEBIN;SOL_COMPILER;SOL_LOADTXT;SOL_SAVETXT;SOLARIX_PRO;SOL_NO_NGRAMS;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
@@ -238,8 +238,8 @@
       <DisableSpecificWarnings>4103;4025;4995;4996;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <OutputFile>$(LEM_PATH)\exe64\compiler.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>compiler.exe</OutputFile>
+      <AdditionalLibraryDirectories>F:\tmp\solarix.git\GrammarEngine-master\src\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -250,10 +250,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\system\src\error_code.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="..\yc.cpp" />
     <ClCompile Include="..\..\..\..\..\..\tools\System_Config\system_config.cpp" />
     <ClCompile Include="..\..\..\..\..\..\tools\ui\ui_user_interface.cpp" />
@@ -349,8 +345,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_MySQL.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_SQLITE.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\gg\CharOperationEnumerator.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\gg\CoordEnumeratorInFile.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\gg\CoordsInFile.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\Gg\Gg_autom.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperation.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperations.cpp" />
@@ -398,7 +392,6 @@
     <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_affix_table.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_and_tagfilter.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\Sg\sg_autom.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_autom_sql_generator.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Ai\Sg\sg_Calibrator.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_class.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_complex_link.cpp" />
@@ -629,23 +622,27 @@
     <ClCompile Include="..\..\..\..\..\..\Ai\Ygres\ygres.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\ngrams\ngrams.cpp" />
     <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsDBMS.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\icu.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\instances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\icu.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\instances.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\regex.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="E:\boost\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="E:\boost\libs\system\src\error_code.cpp" />
+    <ClCompile Include="E:\boost\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_dll.cpp" />
+    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_pe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\lem\solarix\sg_autom.h" />

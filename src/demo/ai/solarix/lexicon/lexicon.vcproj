@@ -74,8 +74,8 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(TMP)\Lexicon\Release-Pro"
-			IntermediateDirectory="$(TMP)\Lexicon\Release-Pro"
+			OutputDirectory="$(TMP)\Lexicon\Release.GIT"
+			IntermediateDirectory="$(TMP)\Lexicon\Release.GIT"
 			ConfigurationType="1"
 			CharacterSet="0"
 			WholeProgramOptimization="FALSE">
@@ -88,7 +88,7 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="1"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="$(BOOST_PATH);$(LEM_PATH)\include"
+				AdditionalIncludeDirectories="E:\boost\;H:\SolarixGIT\GrammarEngine\src\include\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;LEM_UNICODE_EX;BOOST_ALL_NO_LIB;SOL_SAVETXT;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;SOL_SQLITE_NGRAMS;SOL_OFFSET=AUTO;BOOST_THREAD_BUILD_LIB;SOL_DEBUGGING;SOL_SAVEBIN;SOL_SAVEBIN_PA"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -105,9 +105,9 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(LEM_PATH)/exe/Lexicon.exe"
+				OutputFile="Lexicon.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(LEM_PATH)\lib;$(LEM_PATH)\lib\firebird"
+				AdditionalLibraryDirectories="H:\SolarixGIT\GrammarEngine\src\lib\"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -716,12 +716,6 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 						RelativePath="..\..\..\..\ai\gg\CharOperationEnumerator.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\ai\gg\CoordEnumeratorInFile.cpp">
-					</File>
-					<File
-						RelativePath="..\..\..\..\ai\gg\CoordsInFile.cpp">
-					</File>
-					<File
 						RelativePath="..\..\..\..\ai\Gg\gg_autom.cpp">
 					</File>
 					<File
@@ -880,9 +874,6 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 					</File>
 					<File
 						RelativePath="..\..\..\..\ai\Sg\sg_autom.cpp">
-					</File>
-					<File
-						RelativePath="..\..\..\..\ai\Sg\sg_autom_sql_generator.cpp">
 					</File>
 					<File
 						RelativePath="..\..\..\..\ai\sg\sg_calibrator.cpp">
@@ -1653,68 +1644,71 @@ copy $(LEM_PATH)\lib\firebird\icudt30.dll $(TMP)\lexicon\debug
 					Name="regex"
 					Filter="">
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\c_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\cpp_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp">
+						RelativePath="E:\boost\libs\regex\src\cregex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp">
+						RelativePath="E:\boost\libs\regex\src\fileiter.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\icu.cpp">
+						RelativePath="E:\boost\libs\regex\src\icu.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\instances.cpp">
+						RelativePath="E:\boost\libs\regex\src\instances.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp">
+						RelativePath="E:\boost\libs\regex\src\posix_api.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_debug.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_raw_buffer.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp">
+						RelativePath="E:\boost\libs\regex\src\regex_traits_defaults.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp">
+						RelativePath="E:\boost\libs\regex\src\static_mutex.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp">
+						RelativePath="E:\boost\libs\regex\src\usinstances.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\w32_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp">
+						RelativePath="E:\boost\libs\regex\src\wc_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp">
+						RelativePath="E:\boost\libs\regex\src\wide_posix_api.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp">
+						RelativePath="E:\boost\libs\regex\src\winstances.cpp">
 					</File>
 				</Filter>
 				<Filter
 					Name="thread"
 					Filter="">
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\exceptions.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\exceptions.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\thread.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp">
+						RelativePath="E:\boost\libs\thread\src\win32\tss_dll.cpp">
+					</File>
+					<File
+						RelativePath="E:\boost\libs\thread\src\win32\tss_pe.cpp">
 					</File>
 				</Filter>
 				<Filter
