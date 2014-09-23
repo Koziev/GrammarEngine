@@ -45,7 +45,7 @@
     typedef typename MCollect<ITEM*>::size_type size_type;  
     typedef typename MCollect<ITEM*>::iterator       iterator;
     typedef typename MCollect<ITEM*>::const_iterator const_iterator;
-    #elif _MSC_VER>1700
+    #elif _MSC_VER>=1700
 	typedef typename MCollect<ITEM*>::size_type size_type;
     typedef typename MCollect<ITEM*>::iterator       iterator;
 	typedef typename MCollect<ITEM*>::const_iterator const_iterator;
