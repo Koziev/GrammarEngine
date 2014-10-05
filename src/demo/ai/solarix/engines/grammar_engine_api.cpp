@@ -4659,7 +4659,8 @@ FAIND_API(HGREN_SBROKER) sol_CreateSentenceBroker(
 
    #else
 
-    lem::Ptr<lem::Char_Stream::WideStream> reader = lem::Char_Stream::WideStream::GetReader(filename);
+    bool is_utf8 = wcscmp(DefaultCodepage,L"utf-8")==0 || wcscmp(DefaultCodepage,L"utf8")==0;
+    lem::Ptr<lem::Char_Stream::WideStream> reader = is_utf8 ? new lem::Char_Stream::UTF8_Reader(filename,false) : lem::Char_Stream::WideStream::GetReader(filename);
     SentenceBroker *broker = new SentenceBroker( reader, HandleEngine(hEngine)->dict.get(), LanguageID );
     return broker;
 
