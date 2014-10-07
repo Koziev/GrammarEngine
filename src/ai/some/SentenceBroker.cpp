@@ -347,7 +347,7 @@ bool SentenceBroker::Fetch( lem::UFString &line )
        substr += c2; // добавили еще один символ.
 
        // С символов substr начинается хоть одно исключение?
-       if( !tokenizer->IsUnbreakableFront(substr) || substr.length()==lem::UCString::max_len )
+       if( !tokenizer->IsUnbreakableFront(substr) || substr.length()==lem::UCString::max_len)
         {
          // Возможно, предыдущая подстрока является исключительной ситуацией.
          UCString substr1 = lem::left( substr, substr.length()-1 );
@@ -881,7 +881,7 @@ void SentenceBroker::ReadCharOrUnbreakable( wchar_t first_char, lem::UCString &b
        substr += c2; // добавили еще один символ.
 
        // С символов substr начинается хоть одно исключение?
-       if( !tokenizer->IsUnbreakableFront(substr) )
+       if( !tokenizer->IsUnbreakableFront(substr) || substr.length()==lem::UCString::max_len )
         {
          // Возможно, предыдущая подстрока является исключительной ситуацией.
          UCString substr1 = lem::left( substr, substr.length()-1 );
