@@ -2594,7 +2594,6 @@ FAIND_API(int) sol_GetProjStateId(
 #define SOL_GREN_PRETOKENIZED          0x00000008
 #define SOL_GREN_TOKENIZE_ONLY         0x00000010
 #define SOL_GREN_DISABLE_FILTERS       0x00000020
-#define SOL_GREN_ENABLE_RECONSTRUCTION 0x00000040
 #define SOL_GREN_REORDER_TREE          0x00000400
 #define SOL_GREN_MODEL                 0x00000800
 #define SOL_GREN_FINDFACTS             0x00001000
@@ -2625,7 +2624,6 @@ FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis(
    const bool CompleteAnalysisOnly = (MorphologicalFlags & SOL_GREN_COMPLETE_ONLY) == SOL_GREN_COMPLETE_ONLY;
    const bool Pretokenized = (MorphologicalFlags & SOL_GREN_PRETOKENIZED) == SOL_GREN_PRETOKENIZED;
    const int UseLanguageID = LanguageID==-1 ? HandleEngine(hEngine)->DefaultLanguage : LanguageID;
-   const bool UseTokenReconstruction = (MorphologicalFlags & SOL_GREN_ENABLE_RECONSTRUCTION) == SOL_GREN_ENABLE_RECONSTRUCTION;
    const bool ApplyModel = (MorphologicalFlags & SOL_GREN_MODEL) == SOL_GREN_MODEL;
 
    const bool Schedule1 = (MorphologicalFlags==0 && SyntacticFlags==0);
@@ -2634,7 +2632,6 @@ FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis(
    current_analysis.params.SetLanguageID(UseLanguageID);
    current_analysis.params.Pretokenized = Pretokenized;
    current_analysis.params.AllowPrimaryFuzzyWordRecog = Allow_Fuzzy;
-   current_analysis.params.UseTokenReconstruction = UseTokenReconstruction;
    current_analysis.params.ApplyModel = ApplyModel;
 
    // Ограничение на суммарное затраченное время в миллисекундах
@@ -2758,10 +2755,7 @@ FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis(
    const bool CompleteAnalysisOnly = (MorphologicalFlags & SOL_GREN_COMPLETE_ONLY) == SOL_GREN_COMPLETE_ONLY;
    const bool Pretokenized = (MorphologicalFlags & SOL_GREN_PRETOKENIZED) == SOL_GREN_PRETOKENIZED;
    const int UseLanguageID = LanguageID==-1 ? HandleEngine(hEngine)->DefaultLanguage : LanguageID;
-   const bool UseTokenReconstruction = (MorphologicalFlags & SOL_GREN_ENABLE_RECONSTRUCTION) == SOL_GREN_ENABLE_RECONSTRUCTION;
    const bool ApplyModel = (MorphologicalFlags & SOL_GREN_MODEL) == SOL_GREN_MODEL;
-
-
 
    const bool ReorderTree = (SyntacticFlags&SOL_GREN_REORDER_TREE)==SOL_GREN_REORDER_TREE;
    const bool FindFacts = (SyntacticFlags&SOL_GREN_FINDFACTS)==SOL_GREN_FINDFACTS;
@@ -2772,7 +2766,6 @@ FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis(
 
    current_analysis.params.Pretokenized = Pretokenized;
    current_analysis.params.AllowPrimaryFuzzyWordRecog = Allow_Fuzzy;
-   current_analysis.params.UseTokenReconstruction = UseTokenReconstruction;
    current_analysis.params.ApplyModel = ApplyModel;
 
    // Ограничение на суммарное затраченное время в миллисекундах
@@ -6450,7 +6443,7 @@ FAIND_API(HGREN_INTARRAY) sol_ListEntries(
                                           int Class
                                          )
 {
- if( hEngine==NULL || lem::lem_is_empty(Mask) )
+ if( hEngine==NULL )
   return NULL;
 
  #if !defined SOLARIX_DEMO
@@ -6869,6 +6862,26 @@ FAIND_API(int) sol_FreeSyntaxTree( void * tree )
  delete (SyntaxTreeStreamData*)tree;
  return 0;
 }
+
+
+
+FAIND_API(HGREN_STR) sol_ListEntryForms( HGREN hEngine, int EntryKey )
+{
+ GREN_Strings *res = new GREN_Strings;
+
+ const SG_Entry &e = HandleEngine(hEngine)->dict->GetSynGram().GetEntry(EntryKey);
+
+ for( lem::Container::size_type i=0; i<e.forms().size(); ++i )
+  {
+   const SG_EntryForm &f = e.forms()[i];
+
+   if( res->list.find( f.name().c_str() )==UNKNOWN )
+    res->list.push_back( f.name().c_str() );
+  }
+
+ return res;
+}
+
 
 
 

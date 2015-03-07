@@ -5,7 +5,28 @@
 using namespace Solarix;
 
 
-wchar_t TextTokenizationRules::DefaultSpaceChars[] = L" \u00a0\t\r\n";
+wchar_t TextTokenizationRules::DefaultSpaceChars[] =
+L" "
+L"\u00a0" // NO-BREAK SPACE
+L"\u200b" // ZERO-WIDTH SPACE 
+L"\u2002" // 	EN SPACE
+L"\u2003" // 	EM SPACE
+L"\u2004" // 	THREE-PER-EM SPACE
+L"\u2005" // 	FOUR-PER-EM SPACE
+L"\u2006" // 	SIX-PER-EM SPACE
+L"\u2007" // 	FIGURE SPACE
+L"\u2008" // 	PUNCTUATION SPACE
+L"\u2009" // 	THIN SPACE
+L"\u200A" // 	HAIR SPACE
+L"\u202F" // 	NARROW NO-BREAK SPACE
+L"\u205F" // 	MEDIUM MATHEMATICAL SPACE
+L"\u3000" // 	IDEOGRAPHIC SPACE
+L"\u1680" // 	OGHAM SPACE MARK
+L"\u2000" // 	EN QUAD
+L"\u2001" // 	EM QUAD
+L"\t\r\n";
+
+
 
 
 TextTokenizationRules::TextTokenizationRules( const lem::MCollect<int> & langs, SentenceTokenizer * _tokenizer )

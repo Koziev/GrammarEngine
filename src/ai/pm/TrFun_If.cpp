@@ -150,7 +150,6 @@ void TrFun_If::CompileDeclaration(
                                    PM_Automat &pm,
                                    lem::Iridium::Macro_Parser &txtfile,
                                    TrFunctions &functions,
-                                   const TrProcedureDeclaration &procs,
                                    TrKnownVars &known_vars,
                                    const TrBuiltInFunSignature *signature  
                                   )
@@ -159,18 +158,18 @@ void TrFun_If::CompileDeclaration(
 
  // Условие опционально может быть заключено в круглые скобочки.
  const bool req_paren = txtfile.probe( B_OROUNDPAREN );
- cond = functions.CompileCall( pm, txtfile, procs, known_vars );
+ cond = functions.CompileCall( pm, txtfile, known_vars );
  if( req_paren )
   txtfile.read_it( B_CROUNDPAREN );
 
  txtfile.read_it( B_THEN );
- f_then = functions.CompileCall( pm, txtfile, procs, known_vars );
+ f_then = functions.CompileCall( pm, txtfile, known_vars );
  txtfile.probe( B_SEMICOLON );
 
  if( txtfile.pick().GetToken()==B_ELSE )
   {
    txtfile.read_it(B_ELSE);
-   f_else = functions.CompileCall( pm, txtfile, procs, known_vars );
+   f_else = functions.CompileCall( pm, txtfile, known_vars );
    txtfile.probe( B_SEMICOLON );
   }
 

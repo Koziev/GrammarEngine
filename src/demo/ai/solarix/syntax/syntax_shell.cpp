@@ -839,6 +839,7 @@ bool SyntaxShell::PerformSyntacticAnalysis( const UFString & str )
    current_analysis->params.UseSparsePatterns = false;
    current_analysis->params.UseTopDownThenSparse = UseTopDownThenSparse;
    current_analysis->params.ApplyModel = ApplyModel;
+   current_analysis->params.ReorderTree = true;
    current_analysis->params.timeout.max_elapsed_millisecs = MaxTimeout;
    current_analysis->params.timeout.max_alt = MaxAlt;
    current_analysis->params.timeout.max_bottomup_trees = MaxAlt;

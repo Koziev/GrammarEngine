@@ -54,10 +54,6 @@
     #endif
 
    protected:
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    TrProcedureDeclaration procedure_declarations;
-    #endif
-
     #if defined SOL_CAA
     #if defined LEM_THREADS
     lem::Process::CriticalSection cs_sequence;

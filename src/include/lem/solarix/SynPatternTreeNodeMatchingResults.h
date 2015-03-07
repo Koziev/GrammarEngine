@@ -30,6 +30,7 @@ class SynPatternTreeNodeMatchingResults : lem::NonCopyable
                                    BasicLexer & lexer,
                                    bool DoLinkNodes,
                                    bool CompleteAnalysisOnly,
+                                   const ElapsedTimeConstraint & constraints,
                                    TrTrace *trace_log
                                   );
 
@@ -67,7 +68,9 @@ class SynPatternTreeNodeMatchingResults : lem::NonCopyable
   void ApplyTreeScorers(
                         SynGram &sg,
                         WordEntrySet &sets,
-                        SynPatternResult & res
+                        SynPatternResult & res,
+                        const ElapsedTimeConstraint & constraints,
+                        TrTrace *trace_log
                        ) const;
 
   bool MatchTreeScorer(
@@ -102,6 +105,7 @@ class SynPatternTreeNodeMatchingResults : lem::NonCopyable
                         BasicLexer & lexer,
                         bool DoLinkNodes,
                         bool CompleteAnalysisOnly,
+                        const ElapsedTimeConstraint & constraints,
                         TrTrace *trace_log
                        );
 

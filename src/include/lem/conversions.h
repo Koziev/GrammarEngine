@@ -23,7 +23,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->11.01.1996
-// LC->06.03.2010
+// LC->07.11.2014
 // --------------
 
  #include <lem/config.h>
@@ -250,35 +250,6 @@
 
  extern bool str_c_to_int( const wchar_t *str, lem::int16_t *res );
  extern bool str_c_to_int( const wchar_t *str, lem::int32_t *res );
-
-/*
-  inline bool to_int( const wchar_t *str, int *res, int radix=10 )
-  { return to_int32(str, (lem::int32_t*)res,radix); }
-*/
-
-/*
-  inline bool str_c_to_int( const wchar_t *str, int *res )
-  { return str_c_to_int32(str, (lem::int32_t*)res ); }
-*/
-
-/*
-  inline bool to_int(
-                     const char *str,
-                     int *res,
-                     int radix=10
-                    )
-  { return to_int32( str, (lem::int32_t*)res, radix ); }
-*/
-/*
-  inline bool r_c_to_int( const char *str, lem::int32_t *res )
-  { return str_c_to_int(str,res); }
-*/
-
- inline int char_to_digit( char ch ) { return ch-'0'; }
-
-
- //#define D2W(s) dos_to_win( lem::FString(s) )
-// #define W2D(s) win_to_dos( lem::FString(s) )
 
   extern int parse_ranges(
                           const char *s,

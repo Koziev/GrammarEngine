@@ -13,7 +13,6 @@ void TrFunction::CompileDeclaration(
                                     PM_Automat &pm,
                                     lem::Iridium::Macro_Parser &txtfile,
                                     TrFunctions &functions,
-                                    const TrProcedureDeclaration &procs,
                                     const TrKnownVars *lambda_caller
                                    )
 {
@@ -104,7 +103,7 @@ void TrFunction::CompileDeclaration(
      // В фигурных скобочках - тело функции. Оно компилируется как вызов специальной функции-группы {}
      txtfile.read_it( B_OFIGPAREN );
      txtfile.backward();
-     body = functions.CompileCall( pm, txtfile, procs, call_vars );
+     body = functions.CompileCall( pm, txtfile, call_vars );
     }
 
    if( pm.GetDict().GetDebugLevel_ir()>=3 )
@@ -133,7 +132,6 @@ TrFunCall* TrFunction::CompileCall(
                                    PM_Automat &pm,
                                    lem::Iridium::Macro_Parser &txtfile, 
                                    TrFunctions &functions,
-                                   const TrProcedureDeclaration &procs,
                                    TrKnownVars &known_vars
                                   )
 {
@@ -173,7 +171,7 @@ TrFunCall* TrFunction::CompileCall(
    if( iarg>0 )
     txtfile.read_it( B_COMMA );
 
-   TrFunCall *arg_expr = functions.CompileCall(pm,txtfile,procs,known_vars);
+   TrFunCall *arg_expr = functions.CompileCall(pm,txtfile,known_vars);
    fun->arg_name.push_back( arg_name[iarg] );
    fun->arg_expr.push_back( arg_expr );
    iarg++;

@@ -2597,7 +2597,7 @@ bool lem::is_ual_num( wchar_t ch )
 *****************************************************************/
 int lem::uchar_to_digit( wchar_t ch )
 {
- if( ch>=L'0' && ch<='9' )
+ if( ch>=L'0' && ch<=L'9' )
   return ch-L'0';
 
  if( ch>=L'A' && ch<=L'Z' )
@@ -2611,6 +2611,24 @@ int lem::uchar_to_digit( wchar_t ch )
                    to_wstr(ch)
                   );
 }
+
+
+int lem::char_to_digit( char ch )
+{
+ if( ch>='0' && ch<='9' )
+  return ch-'0';
+
+ if( ch>='A' && ch<='Z' )
+  return ch-'A'+10;
+
+ if( ch>='a' && ch<='z' )
+  return ch-'a'+10;
+
+ LEM_STOPIT;
+ return 0;
+}
+
+
 
 /*********************************************************************
  Возвращает символ - представление шестнадцатеричной цифры numer.

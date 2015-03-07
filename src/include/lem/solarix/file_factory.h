@@ -108,6 +108,7 @@
    virtual void read_line( UFString &text )=0;
    virtual void rewind(void)=0;
    virtual lem::Stream::pos_type fsize(void)=0;
+   virtual lem::Stream::pos64_type fsize64(void)=0;
 
    inline const lem::MIMEType& get_Format(void) const { return format; }
 

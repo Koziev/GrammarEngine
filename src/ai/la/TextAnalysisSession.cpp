@@ -112,7 +112,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
 
          UseDefaultScheme=false;
          results->ApplyTokenScores();
-         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, trace );
+         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, constraints, trace );
 
          #if LEM_DEBUGGING==1
          //pack->Print( *lem::mout, dict->GetSynGram(), true );
@@ -164,7 +164,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
          UseDefaultScheme=false;
        
          results->ApplyTokenScores();
-         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, trace );
+         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, constraints, trace );
          break;
         }
       }
@@ -179,7 +179,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
    // Правила анализа не заданы или отключены, поэтому просто сгенерируем вариаторы из путей токенизации с применением
    // всех возможных фильтров.
    SynPatternTreeNodeMatchingResults empty;
-   pack = empty.BuildGrafs( *dict, *lexer, false, params.CompleteAnalysisOnly, trace );
+   pack = empty.BuildGrafs( *dict, *lexer, false, params.CompleteAnalysisOnly, constraints, trace );
   }
 
  #if defined SOL_DEBUGGING

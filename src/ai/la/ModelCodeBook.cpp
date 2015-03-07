@@ -12,6 +12,7 @@ ModelCodeBook::ModelCodeBook()
 {
  suffix_len=UNKNOWN;
  START_id=END_id=UNKNOWN;
+ START_tag_id=END_tag_id=UNKNOWN;
 }
 
 
@@ -72,8 +73,34 @@ void ModelCodeBook::LoadBin( lem::Stream & bin )
  bin.read( &START_id, sizeof(START_id) );
  bin.read( &END_id, sizeof(END_id) );
 
+ bin.read( &START_tag_id, sizeof(START_tag_id) );
+ bin.read( &END_tag_id, sizeof(END_tag_id) );
+
+ lem::int32_t n_param;
+ bin.read( &n_param, sizeof(n_param) );
+ for( int i=0; i<n_param; ++i )
+ {
+  lem::UCString param_name, param_value;
+  LoadUtf8( bin, param_name );
+  LoadUtf8( bin, param_value );
+  model_params.push_back( std::make_pair( param_name, param_value ) );
+ }
+
  return;
 }
+
+
+const lem::UCString ModelCodeBook::FindModelParam( const wchar_t * param_name, const wchar_t * default_value ) const
+{
+ for( lem::Container::size_type i=0; i<model_params.size(); ++i )
+ {
+  if( model_params[i].first.eqi( param_name ) )
+   return model_params[i].second;
+ }
+
+ return lem::UCString( default_value );
+}
+
 
 
 const ModelTagMatcher* ModelCodeBook::GetTagMatcher( int id ) const

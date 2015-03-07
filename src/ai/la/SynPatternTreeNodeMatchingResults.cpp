@@ -14,6 +14,7 @@
 #include <lem/solarix/TreeScorerApplicationContext.h>
 #include <lem/solarix/TreeScorerMatcher.h>
 #include <lem/solarix/TreeScorerGroupParams.h>
+#include <lem/solarix/pm_functionloader.h>
 #include <lem/solarix/SynPatternTreeNodeMatchingResults.h>
 
 using namespace Solarix;
@@ -94,6 +95,7 @@ Res_Pack * SynPatternTreeNodeMatchingResults::BuildGrafs(
                                                          BasicLexer & lexer,
                                                          bool DoLinkNodes,
                                                          bool CompleteAnalysisOnly,
+                                                         const ElapsedTimeConstraint & constraints,
                                                          TrTrace *trace_log
                                                         )
 {
@@ -104,7 +106,7 @@ Res_Pack * SynPatternTreeNodeMatchingResults::BuildGrafs(
   }
  else
   {
-   return GenerateFilteredPaths( dict, lexer, DoLinkNodes, CompleteAnalysisOnly, trace_log );
+   return GenerateFilteredPaths( dict, lexer, DoLinkNodes, CompleteAnalysisOnly, constraints, trace_log );
   }
 }
 
@@ -187,6 +189,7 @@ Res_Pack * SynPatternTreeNodeMatchingResults::GenerateFilteredPaths(
                                                                     BasicLexer & lexer,
                                                                     bool DoLinkNodes,
                                                                     bool CompleteAnalysisOnly,
+                                                                    const ElapsedTimeConstraint & constraints,
                                                                     TrTrace *trace_log
                                                                    )
 {
@@ -218,7 +221,7 @@ Res_Pack * SynPatternTreeNodeMatchingResults::GenerateFilteredPaths(
      if( CompleteAnalysisOnly && !results[k]->res.GetFinalToken()->IsEnd() )
       continue;
 
-     ApplyTreeScorers( dict.GetSynGram(), wordsets, *results[k] );
+     ApplyTreeScorers( dict.GetSynGram(), wordsets, *results[k], constraints, trace_log );
     }
 
    ApplyWordAssociations(dict);
@@ -796,7 +799,9 @@ class LinkEdgeContainer_Wrapper : public LinkEdgeContainer
 void SynPatternTreeNodeMatchingResults::ApplyTreeScorers(
                                                          SynGram &sg,
                                                          WordEntrySet &sets,
-                                                         SynPatternResult & res
+                                                         SynPatternResult & res,
+                                                         const ElapsedTimeConstraint & constraints,
+                                                         TrTrace *trace_log
                                                         ) const
 {
  lem::MCollect<int> headpoint_ids, is_root;
@@ -851,9 +856,10 @@ void SynPatternTreeNodeMatchingResults::ApplyTreeScorers(
        else
         {
          bound_variables.Clear();
-         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, node, edge_container, empty_context, default_params, bound_variables ) )
+         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, node, edge_container, empty_context, default_params, bound_variables, constraints, trace_log ) )
           {
-           const int delta_score = scores[j]->Calculate( sg.GetDict(), bound_variables );
+           scores[j]->Link( sg.GetDict().GetLexAuto().GetFunctions().Get() );
+           const int delta_score = scores[j]->Calculate( sg.GetDict(), bound_variables, constraints, trace_log );
            res.res.AddNGramFreq( NGramScore(delta_score) );
 
            #if defined SOL_DEBUGGING
@@ -918,9 +924,10 @@ void SynPatternTreeNodeMatchingResults::ApplyTreeScorers(
        if( is_root[j]  )
         {
          bound_variables.Clear();
-         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, *node, edge_container, empty_context, default_params, bound_variables ) )
+         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, *node, edge_container, empty_context, default_params, bound_variables, constraints, trace_log ) )
           {
-           const int delta_score = scores[j]->Calculate( sg.GetDict(), bound_variables );
+           scores[j]->Link( sg.GetDict().GetLexAuto().GetFunctions().Get() );
+           const int delta_score = scores[j]->Calculate( sg.GetDict(), bound_variables, constraints, trace_log );
            res.res.AddNGramFreq( NGramScore(delta_score) );
 
            #if defined SOL_DEBUGGING
@@ -950,9 +957,10 @@ void SynPatternTreeNodeMatchingResults::ApplyTreeScorers(
         {
          const int id_headpoint = id_headpoint_nonroots[j];
     
-         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, node, edge_container, empty_context, default_params, bound_variables ) )
+         if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, node, edge_container, empty_context, default_params, bound_variables, constraints, trace_log ) )
           {
-           const int delta_score = nonroot_scores[j]->Calculate( sg.GetDict(), bound_variables );;
+           nonroot_scores[j]->Link( sg.GetDict().GetLexAuto().GetFunctions().Get() );
+           const int delta_score = nonroot_scores[j]->Calculate( sg.GetDict(), bound_variables, constraints, trace_log );
 
            res.res.AddNGramFreq( NGramScore(delta_score) );
     

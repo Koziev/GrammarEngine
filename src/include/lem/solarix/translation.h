@@ -36,28 +36,6 @@
   class Variator;
   
 
-  #if defined SOL_LOADTXT && defined SOL_COMPILER
-  // ******************************************************
-  // Объявления процедур, групп правил, функций, итераторов
-  // в рамках модуля.
-  // ******************************************************
-  class TrProcedureDeclaration : lem::NonCopyable
-  {
-   private:
-    lem::MCollect<UCString> procs; // объявленные процедуры
-    lem::MCollect<UCString> rulegroups;
-
-   public:
-    TrProcedureDeclaration(void);
-   
-    bool IsProcedure( const UCString &name ) const;
-    bool IsRuleGroup( const UCString &name ) const;
-
-    void RegisterProcedure( const UCString &name );
-    void RegisterRuleGroup( const UCString &name );
-  };
-  #endif
-
   class TrFunctions;
   class TrType
   {
@@ -467,7 +445,6 @@
                                     PM_Automat &pm,
                                     lem::Iridium::Macro_Parser &txtfile,
                                     TrFunctions &functions,
-                                    const TrProcedureDeclaration &procs,
                                     TrKnownVars &known_vars,
                                     const TrBuiltInFunSignature *signature  
                                    );
@@ -524,7 +501,6 @@
                                     PM_Automat &pm,
                                     lem::Iridium::Macro_Parser &txtfile,
                                     TrFunctions &functions,
-                                    const TrProcedureDeclaration &procs,
                                     const TrKnownVars *lambda_caller=NULL
                                    );
 
@@ -532,7 +508,6 @@
                                    PM_Automat &pm,
                                    lem::Iridium::Macro_Parser &txtfile, 
                                    TrFunctions &functions,
-                                   const TrProcedureDeclaration &procs,
                                    TrKnownVars &known_vars
                                   );
     #endif
@@ -582,7 +557,6 @@
     TrFun_Lambda* CompileLambdaDeclaration(
                                            PM_Automat &pm,
                                            lem::Iridium::Macro_Parser &txtfile,
-                                           const TrProcedureDeclaration &procs,
                                            const TrKnownVars &lambda_caller
                                           );
     #endif
@@ -598,21 +572,18 @@
     void AddForwardDeclaration( TrFunction *fun );
     const TrFunction * CompileDeclaration(
                                           PM_Automat &pm,
-                                          lem::Iridium::Macro_Parser &txtfile,
-                                          const TrProcedureDeclaration &procs
+                                          lem::Iridium::Macro_Parser &txtfile
                                          );
 
     TrFunCall* CompileCall(
                            PM_Automat &pm,
                            lem::Iridium::Macro_Parser &txtfile,
-                           const TrProcedureDeclaration &procs,
                            TrKnownVars &known_vars
                           );
     bool IsCondictorPointFunction( const lem::UCString &fun ) const;
     void CompileStatic(
                        PM_Automat &pm, 
-                       lem::Iridium::Macro_Parser &txtfile,
-                       const TrProcedureDeclaration &procs
+                       lem::Iridium::Macro_Parser &txtfile
                       );
 
     void CompilationFinished(void);

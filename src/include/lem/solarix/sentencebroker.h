@@ -199,7 +199,7 @@
     int max_sentence_length;
     lem::Ptr<SentenceTokenizer> tokenizer; 
 
-   private:
+   protected:
     lem::MCollect<lem::UCString> sent_delims; // символы-разделители предложений
     lem::MCollect<wchar_t> sent_delims1;
 
@@ -224,7 +224,10 @@
     lem::zbool eof;
     lem::zint count; // кол-во извлеченных предложений
 
+    int cur_paragraph_id; // номер абзаца для последнего извлеченного предложения
+
     lem::UFString last_sentence; // Буфер для последнего извлеченного предложения
+    int last_paragraph_id; // номер абзаца для последнего извлеченного предложения
 
     lem::Stack<wchar_t> chars;
     wchar_t GetChar(void);
@@ -245,6 +248,9 @@
 
     void Prepare( Dictionary * dict, int language );
 
+    static bool IsEndOfSentenceMarker( wchar_t c );
+    static bool IsEndOfParagraphMarker( wchar_t c );
+
 
    public:
     SentenceBroker( void );
@@ -258,8 +264,10 @@
     void Open( lem::Ptr<lem::Char_Stream::WideStream> stream );
 
     // Извлекаем очередное предложение в буфер
-    bool Fetch( lem::UFString &buffer );
-    bool Fetch(void);
+    virtual bool Fetch( lem::UFString & buffer, int & line_paragraph_id );
+    virtual bool Fetch(void);
+
+    virtual int GetFetchedParagraphID() { return last_paragraph_id; }
 
     const lem::UFString & GetFetchedSentence(void) const { return last_sentence; }
 

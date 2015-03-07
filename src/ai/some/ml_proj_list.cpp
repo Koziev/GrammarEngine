@@ -363,7 +363,7 @@ void MLProjList::SortByFrequency( Dictionary &dict )
         {
          p.second.wordform_freq = la.GetWordformFrequency( id_entry, iform );
          coord_val[i].score += p.second.wordform_freq;
-         form[i]->SetScore( coord_val[i].score+p.second.wordform_freq );
+         form[i]->SetScore( coord_val[i].score );
         }
       }
 

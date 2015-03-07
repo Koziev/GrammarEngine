@@ -1,4 +1,4 @@
-// CD->29.09.2013
+// CD->07.11.2014
 
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/la_autom.h>
@@ -38,7 +38,6 @@ void SynPattern::LoadTxt(
                          lem::Iridium::Macro_Parser & txtfile,
                          const SynPatterns &patterns,
                          WordEntrySet &wordentry_set,
-                         const TrProcedureDeclaration &procs,
                          TrFunctions &functions
                         )
 {
@@ -148,7 +147,7 @@ void SynPattern::LoadTxt(
    slot.LoadTxt( dict, txtfile );
 
    SynPatternPoint *p = new SynPatternPoint;
-   p->LoadTxt( dict, txtfile, patterns, *compilation_context, procs, functions );
+   p->LoadTxt( dict, txtfile, patterns, *compilation_context, functions );
 
    points.push_back(p);
    slots.push_back(slot);

@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->04.11.2004
-// LC->20.07.2008
+// LC->11.10.2014
 // --------------
 
 #if !defined FILE_FACTORY_NULL__H
@@ -65,6 +65,7 @@
    virtual void read_line( UFString &text );
    virtual void rewind(void);
    virtual Stream::pos_type fsize(void);
+   virtual Stream::pos64_type fsize64(void);
  };
 
  } // namespace Search_Engine

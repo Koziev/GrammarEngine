@@ -110,8 +110,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(TMP)\Grammar_Engine\Release.64.GIT</OutDir>
-    <IntDir>$(TMP)\Grammar_Engine\Release.64.GIT</IntDir>
+    <OutDir>$(TMP)\Grammar_Engine\Release-Pro64\</OutDir>
+    <IntDir>$(TMP)\Grammar_Engine\Release-Pro64\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'">
@@ -244,8 +244,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <AdditionalIncludeDirectories>e:\boost;F:\tmp\solarix.git\GrammarEngine-master\src\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;F:\tmp\solarix.git\GrammarEngine-master\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;DLL_EXPORTS;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -260,8 +260,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>solarix_grammar_engine.dll</OutputFile>
-      <AdditionalLibraryDirectories>F:\tmp\solarix.git\GrammarEngine-master\src\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(LEM_PATH)/lib64/solarix_grammar_engine.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;$(LEM_PATH)\lib64\firebird;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -354,27 +354,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="E:\boost\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\icu.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\instances.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\regex.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="E:\boost\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="E:\boost\libs\system\src\error_code.cpp" />
-    <ClCompile Include="E:\boost\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_pe.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\system\src\error_code.cpp" />
     <ClCompile Include="EngineDllMain.cpp" />
     <ClCompile Include="errors_api.cpp" />
     <ClCompile Include="grammar_engine_api.cpp" />
@@ -468,6 +448,11 @@
     <ClCompile Include="..\..\..\..\math\stat\statkep1.cpp" />
     <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />
     <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp" />
+    <ClCompile Include="get_integra_folder.cpp" />
+    <ClCompile Include="NodeVisitor.cpp" />
+    <ClCompile Include="OtherCollector.cpp" />
+    <ClCompile Include="picker_ru.cpp" />
+    <ClCompile Include="RawOtherCollector.cpp" />
     <ClCompile Include="search_engine.cpp" />
     <ClCompile Include="SynonymData.cpp" />
     <ClCompile Include="..\..\..\..\ai\aa\aa_autom.cpp" />
@@ -603,7 +588,6 @@
     <ClCompile Include="..\..\..\..\ai\pm\TrFunUser.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrKnownVars.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrMorphologyTracer.cpp" />
-    <ClCompile Include="..\..\..\..\ai\pm\TrProcedureDeclaration.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTrace.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTraceActor.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTraceFunCall.cpp" />
@@ -669,6 +653,7 @@
     <ClCompile Include="..\..\..\..\ai\sg\sg_affix_table.cpp" />
     <ClCompile Include="..\..\..\..\ai\sg\sg_and_tagfilter.cpp" />
     <ClCompile Include="..\..\..\..\ai\sg\sg_autom.cpp" />
+    <ClCompile Include="..\..\..\..\ai\sg\sg_autom_sql_generator.cpp" />
     <ClCompile Include="..\..\..\..\ai\sg\sg_calibrator.cpp" />
     <ClCompile Include="..\..\..\..\ai\sg\sg_class.cpp" />
     <ClCompile Include="..\..\..\..\ai\sg\sg_complex_link.cpp" />
@@ -779,6 +764,25 @@
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_FireBird.cpp" />
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_MySQL.cpp" />
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\icu.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\instances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="..\..\..\..\ai\search\crawler\se_fuzzy_comparator.cpp" />
   </ItemGroup>
   <ItemGroup>

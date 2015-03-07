@@ -1,5 +1,5 @@
 <?php
-// This file is generated 30.08.2014 10:31:20 by Ygres compiler ver. 13.23.11072 Standard Win32  (build date Aug 29 2014).
+// This file is generated 01.02.2015 08:28:10 by Ygres compiler ver. 13.34.11134 Standard Win32  (build date Jan 25 2015).
 namespace Solarix;
 // Languages
 define( 'RUSSIAN_LANGUAGE', 2 );                   // language Russian
@@ -30,40 +30,41 @@ define( 'ADVERB_ru', 21 );                         // class НАРЕЧИЕ
 define( 'PUNCTUATION_class', 22 );                 // class ПУНКТУАТОР
 define( 'POSTPOS_ru', 27 );                        // class ПОСЛЕЛОГ
 define( 'POSESS_PARTICLE', 28 );                   // class ПРИТЯЖ_ЧАСТИЦА
-define( 'VERB_en', 29 );                           // class ENG_VERB
-define( 'NOUN_en', 30 );                           // class ENG_NOUN
-define( 'PRONOUN_en', 31 );                        // class ENG_PRONOUN
-define( 'ARTICLE_en', 32 );                        // class ENG_ARTICLE
-define( 'PREP_en', 33 );                           // class ENG_PREP
-define( 'CONJ_en', 34 );                           // class ENG_CONJ
-define( 'ADV_en', 35 );                            // class ENG_ADVERB
-define( 'ADJ_en', 36 );                            // class ENG_ADJECTIVE
-define( 'PARTICLE_en', 37 );                       // class ENG_PARTICLE
-define( 'NUMERAL_en', 38 );                        // class ENG_NUMERAL
-define( 'INTERJECTION_en', 39 );                   // class ENG_INTERJECTION
-define( 'NUMERAL_fr', 40 );                        // class FR_NUMERAL
-define( 'ARTICLE_fr', 41 );                        // class FR_ARTICLE
-define( 'PREP_fr', 42 );                           // class FR_PREP
-define( 'ADV_fr', 43 );                            // class FR_ADVERB
-define( 'CONJ_fr', 44 );                           // class FR_CONJ
-define( 'NOUN_fr', 45 );                           // class FR_NOUN
-define( 'ADJ_fr', 46 );                            // class FR_ADJ
-define( 'PRONOUN_fr', 47 );                        // class FR_PRONOUN
-define( 'VERB_fr', 48 );                           // class FR_VERB
-define( 'PARTICLE_fr', 49 );                       // class FR_PARTICLE
-define( 'PRONOUN2_fr', 50 );                       // class FR_PRONOUN2
-define( 'NOUN_es', 51 );                           // class ES_NOUN
-define( 'ROOT_es', 52 );                           // class ES_ROOT
-define( 'JAP_NOUN', 53 );                          // class JAP_NOUN
-define( 'JAP_NUMBER', 54 );                        // class JAP_NUMBER
-define( 'JAP_ADJECTIVE', 55 );                     // class JAP_ADJECTIVE
-define( 'JAP_ADVERB', 56 );                        // class JAP_ADVERB
-define( 'JAP_CONJ', 57 );                          // class JAP_CONJ
-define( 'JAP_VERB', 58 );                          // class JAP_VERB
-define( 'JAP_PRONOUN', 59 );                       // class JAP_PRONOUN
-define( 'JAP_VERB_POSTFIX2', 62 );                 // class JAP_VERB_POSTFIX2
-define( 'JAP_PARTICLE', 64 );                      // class JAP_PARTICLE
-define( 'UNKNOWN_ENTRIES_CLASS', 75 );             // class UnknownEntries
+define( 'MEASURE_UNIT', 29 );                      // class ЕДИНИЦА_ИЗМЕРЕНИЯ
+define( 'VERB_en', 30 );                           // class ENG_VERB
+define( 'NOUN_en', 31 );                           // class ENG_NOUN
+define( 'PRONOUN_en', 32 );                        // class ENG_PRONOUN
+define( 'ARTICLE_en', 33 );                        // class ENG_ARTICLE
+define( 'PREP_en', 34 );                           // class ENG_PREP
+define( 'CONJ_en', 35 );                           // class ENG_CONJ
+define( 'ADV_en', 36 );                            // class ENG_ADVERB
+define( 'ADJ_en', 37 );                            // class ENG_ADJECTIVE
+define( 'PARTICLE_en', 38 );                       // class ENG_PARTICLE
+define( 'NUMERAL_en', 39 );                        // class ENG_NUMERAL
+define( 'INTERJECTION_en', 40 );                   // class ENG_INTERJECTION
+define( 'NUMERAL_fr', 41 );                        // class FR_NUMERAL
+define( 'ARTICLE_fr', 42 );                        // class FR_ARTICLE
+define( 'PREP_fr', 43 );                           // class FR_PREP
+define( 'ADV_fr', 44 );                            // class FR_ADVERB
+define( 'CONJ_fr', 45 );                           // class FR_CONJ
+define( 'NOUN_fr', 46 );                           // class FR_NOUN
+define( 'ADJ_fr', 47 );                            // class FR_ADJ
+define( 'PRONOUN_fr', 48 );                        // class FR_PRONOUN
+define( 'VERB_fr', 49 );                           // class FR_VERB
+define( 'PARTICLE_fr', 50 );                       // class FR_PARTICLE
+define( 'PRONOUN2_fr', 51 );                       // class FR_PRONOUN2
+define( 'NOUN_es', 52 );                           // class ES_NOUN
+define( 'ROOT_es', 53 );                           // class ES_ROOT
+define( 'JAP_NOUN', 54 );                          // class JAP_NOUN
+define( 'JAP_NUMBER', 55 );                        // class JAP_NUMBER
+define( 'JAP_ADJECTIVE', 56 );                     // class JAP_ADJECTIVE
+define( 'JAP_ADVERB', 57 );                        // class JAP_ADVERB
+define( 'JAP_CONJ', 58 );                          // class JAP_CONJ
+define( 'JAP_VERB', 59 );                          // class JAP_VERB
+define( 'JAP_PRONOUN', 60 );                       // class JAP_PRONOUN
+define( 'JAP_VERB_POSTFIX2', 63 );                 // class JAP_VERB_POSTFIX2
+define( 'JAP_PARTICLE', 65 );                      // class JAP_PARTICLE
+define( 'UNKNOWN_ENTRIES_CLASS', 76 );             // class UnknownEntries
 // ------------------------------------------------------------
 
 
@@ -149,6 +150,7 @@ define( 'COMPAR_FORM_ru', 27 );                    // enum СТЕПЕНЬ
 define( 'ATTRIBUTIVE_FORM_ru', 0 );                // СТЕПЕНЬ : АТРИБ
 define( 'COMPARATIVE_FORM_ru', 1 );                // СТЕПЕНЬ : СРАВН
 define( 'SUPERLATIVE_FORM_ru', 2 );                // СТЕПЕНЬ : ПРЕВОСХ
+define( 'LIGHT_COMPAR_FORM_RU', 3 );               // СТЕПЕНЬ : КОМПАРАТИВ2
 define( 'CASE_GERUND_ru', 28 );                    // enum ПадежВал
 // Coordiname ПадежВал states:
 define( 'MODAL_ru', 29 );                          // enum МОДАЛЬНЫЙ
@@ -177,98 +179,102 @@ define( 'ADJ_TYPE', 34 );                          // enum ТИП_ПРИЛ
 // Coordiname ТИП_ПРИЛ states:
 define( 'ADJ_POSSESSIVE', 0 );                     // ТИП_ПРИЛ : ПРИТЯЖ
 define( 'ADJ_ORDINAL', 1 );                        // ТИП_ПРИЛ : ПОРЯДК
-define( 'TENSE_en', 40 );                          // enum TENSE
+define( 'PARTICLE_TYPE', 36 );                     // enum ТИП_ЧАСТИЦЫ
+// Coordiname ТИП_ЧАСТИЦЫ states:
+define( 'PREFIX_PARTICLE', 0 );                    // ТИП_ЧАСТИЦЫ : ПРЕФИКС
+define( 'POSTFIX_PARTICLE', 1 );                   // ТИП_ЧАСТИЦЫ : ПОСТФИКС
+define( 'TENSE_en', 43 );                          // enum TENSE
 // Coordiname TENSE states:
 define( 'PAST_en', 0 );                            // TENSE : PAST
 define( 'PRESENT_en', 1 );                         // TENSE : PRESENT
 define( 'FUTURE_en', 2 );                          // TENSE : FUTURE
-define( 'DURATION_en', 41 );                       // enum DURATION
+define( 'DURATION_en', 44 );                       // enum DURATION
 // Coordiname DURATION states:
 define( 'SIMPLE_en', 0 );                          // DURATION : INDEFINITE
 define( 'CONTINUOUS_en', 1 );                      // DURATION : CONTINUOUS
 define( 'PERFECT_en', 2 );                         // DURATION : PERFECT
 define( 'PERFECT_CONTINUOS_en', 3 );               // DURATION : PERFECT_CONTINUOUS
-define( 'VOICE_en', 42 );                          // enum VOICE
+define( 'VOICE_en', 45 );                          // enum VOICE
 // Coordiname VOICE states:
 define( 'PASSIVE_en', 0 );                         // VOICE : PASSIVE
 define( 'ACTIVE_en', 1 );                          // VOICE : ACTIVE
-define( 'CASE_en', 43 );                           // enum CASE
+define( 'CASE_en', 46 );                           // enum CASE
 // Coordiname CASE states:
 define( 'NOMINATIVE_CASE_en', 0 );                 // CASE : NOMINATIVE
 define( 'PREPOSITIVE_CASE_en', 1 );                // CASE : PREPOSITIVE
-define( 'NOUN_FORM_en', 44 );                      // enum NOUN_FORM
+define( 'NOUN_FORM_en', 47 );                      // enum NOUN_FORM
 // Coordiname NOUN_FORM states:
 define( 'BASIC_NOUN_FORM_en', 0 );                 // NOUN_FORM : BASIC
 define( 'POSSESSIVE_NOUN_FORM_en', 1 );            // NOUN_FORM : POSSESSIVE
-define( 'PRONOUN_FORM_en', 45 );                   // enum PRONOUN_FORM
+define( 'PRONOUN_FORM_en', 48 );                   // enum PRONOUN_FORM
 // Coordiname PRONOUN_FORM states:
-define( 'ADJ_FORM_en', 46 );                       // enum ADJ_FORM
+define( 'ADJ_FORM_en', 49 );                       // enum ADJ_FORM
 // Coordiname ADJ_FORM states:
 define( 'BASIC_ADJ_en', 0 );                       // ADJ_FORM : BASIC
 define( 'COMPARATIVE_ADJ_en', 1 );                 // ADJ_FORM : COMPARATIVE
 define( 'SUPERLATIVE_ADJ_en', 2 );                 // ADJ_FORM : SUPERLATIVE
-define( 'COMPARABILITY_en', 47 );                  // enum COMPARABILITY
+define( 'COMPARABILITY_en', 50 );                  // enum COMPARABILITY
 // Coordiname COMPARABILITY states:
 define( 'ANALYTIC_en', 0 );                        // COMPARABILITY : ANALYTIC
 define( 'SYNTHETIC_en', 1 );                       // COMPARABILITY : SYNTHETIC
 define( 'COMPARABLE_en', 2 );                      // COMPARABILITY : COMPARABLE
 define( 'NONCOMPARABLE', 3 );                      // COMPARABILITY : NONCOMPARABLE
-define( 'VERB_FORM_en', 48 );                      // enum VERB_FORM
+define( 'VERB_FORM_en', 51 );                      // enum VERB_FORM
 // Coordiname VERB_FORM states:
 define( 'UNDEF_VERBFORM_en', 0 );                  // VERB_FORM : UNDEF
 define( 'ED_VERBFORM_en', 1 );                     // VERB_FORM : ED
 define( 'ING_VERBFORM_en', 2 );                    // VERB_FORM : ING
 define( 'PP_VERBFORM_en', 3 );                     // VERB_FORM : PP
 define( 'INF_VEBFORM_en', 4 );                     // VERB_FORM : INF
-define( 'ARTICLE_FORM', 49 );                      // enum ARTICLE_FORM
+define( 'ARTICLE_FORM', 52 );                      // enum ARTICLE_FORM
 // Coordiname ARTICLE_FORM states:
 define( 'ARTICLE_FORM_1', 0 );                     // ARTICLE_FORM : 1
 define( 'ARTICLE_FORM_2', 1 );                     // ARTICLE_FORM : 2
-define( 'ENG_MODALITY', 50 );                      // enum ENG_MODALITY
+define( 'ENG_MODALITY', 53 );                      // enum ENG_MODALITY
 // Coordiname ENG_MODALITY states:
 define( 'DIRECT_MODALITY_en', 0 );                 // ENG_MODALITY : Direct
 define( 'TO_MODALITY_en', 2 );                     // ENG_MODALITY : To
-define( 'NUMERAL_FORM_en', 51 );                   // enum NUMERAL_FORM
+define( 'NUMERAL_FORM_en', 54 );                   // enum NUMERAL_FORM
 // Coordiname NUMERAL_FORM states:
 define( 'CARDINAL_en', 0 );                        // NUMERAL_FORM : CARDINAL
 define( 'ORDINAL_en', 1 );                         // NUMERAL_FORM : ORDINAL
-define( 'GENDER_en', 52 );                         // enum ENG_GENDER
+define( 'GENDER_en', 55 );                         // enum ENG_GENDER
 // Coordiname ENG_GENDER states:
 define( 'MASCULINE_en', 0 );                       // ENG_GENDER : MASCULINE
 define( 'FEMININE_en', 1 );                        // ENG_GENDER : FEMININE
-define( 'TRANSITIVITY_en', 53 );                   // enum TRANSITIVITY
+define( 'TRANSITIVITY_en', 56 );                   // enum TRANSITIVITY
 // Coordiname TRANSITIVITY states:
 define( 'INTRANSITIVE_VERB_en', 0 );               // TRANSITIVITY : INTRANSITIVE
 define( 'TRANSITIVE_VERB_en', 1 );                 // TRANSITIVITY : TRANSITIVE
-define( 'OBLIG_TRANSITIVITY_en', 54 );             // enum OBLIG_TRANSITIVITY
-define( 'PROPER_NOUN_en', 55 );                    // enum ENG_PROPER_NOUN
-define( 'MASS_NOUN_en', 56 );                      // enum ENG_MASS_NOUN
-define( 'PERSON_fr', 57 );                         // enum FR_PERSON
+define( 'OBLIG_TRANSITIVITY_en', 57 );             // enum OBLIG_TRANSITIVITY
+define( 'PROPER_NOUN_en', 58 );                    // enum ENG_PROPER_NOUN
+define( 'MASS_NOUN_en', 59 );                      // enum ENG_MASS_NOUN
+define( 'PERSON_fr', 60 );                         // enum FR_PERSON
 // Coordiname FR_PERSON states:
 define( 'PERSON_1_fr', 0 );                        // FR_PERSON : 1
 define( 'PERSON_2_fr', 1 );                        // FR_PERSON : 2
 define( 'PERSON_3_fr', 2 );                        // FR_PERSON : 3
-define( 'NUMBER_fr', 58 );                         // enum FR_NOMBRE
+define( 'NUMBER_fr', 61 );                         // enum FR_NOMBRE
 // Coordiname FR_NOMBRE states:
 define( 'SINGULAR_fr', 0 );                        // FR_NOMBRE : SINGULIER
 define( 'PLURAL_fr', 1 );                          // FR_NOMBRE : PLURIEL
-define( 'GENDER_fr', 59 );                         // enum FR_GENRE
+define( 'GENDER_fr', 62 );                         // enum FR_GENRE
 // Coordiname FR_GENRE states:
 define( 'MASCULINE_fr', 0 );                       // FR_GENRE : MASCULINE
 define( 'FEMININE_fr', 1 );                        // FR_GENRE : FEMININE
-define( 'FR_NUMERAL_FORM', 60 );                   // enum FR_NUMERAL_FORM
+define( 'FR_NUMERAL_FORM', 63 );                   // enum FR_NUMERAL_FORM
 // Coordiname FR_NUMERAL_FORM states:
 define( 'CARDINAL_fr', 0 );                        // FR_NUMERAL_FORM : CARDINAL
 define( 'ORDINAL_fr', 1 );                         // FR_NUMERAL_FORM : ORDINAL
-define( 'FR_PRONOUN_FORM', 61 );                   // enum FR_PRONOUN_FORM
+define( 'FR_PRONOUN_FORM', 64 );                   // enum FR_PRONOUN_FORM
 // Coordiname FR_PRONOUN_FORM states:
 define( 'FR_PRONOUN_WEAK', 0 );                    // FR_PRONOUN_FORM : WEAK
 define( 'FR_PRONOUN_STRONG', 1 );                  // FR_PRONOUN_FORM : STRONG
-define( 'TRANSITIVITY_fr', 62 );                   // enum FR_TRANSITIVITY
+define( 'TRANSITIVITY_fr', 65 );                   // enum FR_TRANSITIVITY
 // Coordiname FR_TRANSITIVITY states:
 define( 'INTRANSITIVE_VERB_fr', 0 );               // FR_TRANSITIVITY : INTRANSITIVE
 define( 'TRANSITIVE_VERB_fr', 1 );                 // FR_TRANSITIVITY : TRANSITIVE
-define( 'VERB_FORM_fr', 63 );                      // enum FR_VERB_FORM
+define( 'VERB_FORM_fr', 66 );                      // enum FR_VERB_FORM
 // Coordiname FR_VERB_FORM states:
 define( 'INFINITIVE_fr', 0 );                      // FR_VERB_FORM : INFINITIVE
 define( 'PRESENT_VF_fr', 1 );                      // FR_VERB_FORM : PRESENT
@@ -281,12 +287,12 @@ define( 'SUBJUNCTIVE_PRESENT_fr', 7 );             // FR_VERB_FORM : SUBJUNCTIVE
 define( 'SUBJUNCTIVE_IMPERFECT_fr', 8 );           // FR_VERB_FORM : SUBJUNCTIVE_IMPERFECT
 define( 'CONDITIONAL_fr', 9 );                     // FR_VERB_FORM : CONDITIONAL
 define( 'IMPERATIVE_fr', 10 );                     // FR_VERB_FORM : IMPERATIVE
-define( 'JAP_FORM', 64 );                          // enum JAP_FORM
+define( 'JAP_FORM', 67 );                          // enum JAP_FORM
 // Coordiname JAP_FORM states:
 define( 'KANA_FORM', 0 );                          // JAP_FORM : KANA
 define( 'KANJI_FORM', 1 );                         // JAP_FORM : KANJI
 define( 'ROMAJI_FORM', 2 );                        // JAP_FORM : ROMAJI
-define( 'JAP_VERB_BASE', 65 );                     // enum JAP_VERB_BASE
+define( 'JAP_VERB_BASE', 68 );                     // enum JAP_VERB_BASE
 // Coordiname JAP_VERB_BASE states:
 define( 'JAP_VB_I', 0 );                           // JAP_VERB_BASE : I
 define( 'JAP_VB_II', 1 );                          // JAP_VERB_BASE : II
@@ -298,14 +304,14 @@ define( 'JAP_VB_PARTICIPLE', 6 );                  // JAP_VERB_BASE : PARTICIPLE
 define( 'JAP_VB_POTENTIAL', 7 );                   // JAP_VERB_BASE : POTENTIAL
 define( 'JAP_VB_CONDITIONAL', 8 );                 // JAP_VERB_BASE : CONDITIONAL
 define( 'JAP_VB_CAUSATIVE', 9 );                   // JAP_VERB_BASE : CAUSATIVE
-define( 'JAP_VERB_KIND', 66 );                     // enum JAP_VERB_KIND
+define( 'JAP_VERB_KIND', 69 );                     // enum JAP_VERB_KIND
 // Coordiname JAP_VERB_KIND states:
 define( 'JAP_PRESENT_FUTURE', 1 );                 // JAP_VERB_KIND : PRESENT_FUTURE
 define( 'JAP_NEGATIVE_PRESENT_FUTURE', 3 );        // JAP_VERB_KIND : NEGATIVE_PRESENT_FUTURE
 define( 'JAP_NEGATIVE_PAST', 4 );                  // JAP_VERB_KIND : NEGATIVE_PAST
 define( 'JAP_IMPERATIVE', 5 );                     // JAP_VERB_KIND : IMPERATIVE
 define( 'JAP_NEGATIVE_IMPERATIVE', 6 );            // JAP_VERB_KIND : NEGATIVE_IMPERATIVE
-define( 'JAP_ADJ_BASE', 67 );                      // enum JAP_ADJ_BASE
+define( 'JAP_ADJ_BASE', 70 );                      // enum JAP_ADJ_BASE
 // Coordiname JAP_ADJ_BASE states:
 define( 'JAP_AB_I', 0 );                           // JAP_ADJ_BASE : I
 define( 'JAP_AB_II', 1 );                          // JAP_ADJ_BASE : II
@@ -314,12 +320,12 @@ define( 'JAP_AB_IV', 3 );                          // JAP_ADJ_BASE : IV
 define( 'JAP_AB_V', 4 );                           // JAP_ADJ_BASE : V
 define( 'JAP_AB_T', 5 );                           // JAP_ADJ_BASE : T
 define( 'JAP_AB_PAST', 6 );                        // JAP_ADJ_BASE : PAST
-define( 'JAP_ADJ_FORM2', 68 );                     // enum JAP_ADJ_FORM2
+define( 'JAP_ADJ_FORM2', 71 );                     // enum JAP_ADJ_FORM2
 // Coordiname JAP_ADJ_FORM2 states:
 define( 'JAP_NEGATIVE_PRESENT_ADJ', 0 );           // JAP_ADJ_FORM2 : NEGATIVE_PRESENT
 define( 'JAP_NEGATIVE_PAST_ADJ', 1 );              // JAP_ADJ_FORM2 : NEGATIVE_PAST
-define( 'JAP_TRANSITIVE', 69 );                    // enum JAP_TRANSITIVE
-define( 'CASE_jap', 70 );                          // enum JAP_CASE
+define( 'JAP_TRANSITIVE', 72 );                    // enum JAP_TRANSITIVE
+define( 'CASE_jap', 73 );                          // enum JAP_CASE
 // Coordiname JAP_CASE states:
 define( 'VOCATIVE_jap', 0 );                       // JAP_CASE : VOCATIVE
 define( 'NOMINATIVE_THEM_jap', 1 );                // JAP_CASE : NOMINATIVE_THEM
@@ -334,20 +340,20 @@ define( 'LIMITIVE_jap', 9 );                       // JAP_CASE : LIMITIVE
 define( 'COMPARATIVE_jap', 10 );                   // JAP_CASE : COMPARATIVE
 define( 'COMITATIVE_jap', 11 );                    // JAP_CASE : COMITATIVE
 define( 'SOCIATIVE_jap', 12 );                     // JAP_CASE : SOCIATIVE
-define( 'GENDER_jap', 71 );                        // enum JAP_GENDER
+define( 'GENDER_jap', 74 );                        // enum JAP_GENDER
 // Coordiname JAP_GENDER states:
 define( 'MASCULINE_jap', 0 );                      // JAP_GENDER : MASCULINE
 define( 'FEMININE_jap', 1 );                       // JAP_GENDER : FEMININE
-define( 'PERSON_jap', 72 );                        // enum JAP_PERSON
+define( 'PERSON_jap', 75 );                        // enum JAP_PERSON
 // Coordiname JAP_PERSON states:
 define( 'PERSON_1_jap', 0 );                       // JAP_PERSON : 1
 define( 'PERSON_2_jap', 1 );                       // JAP_PERSON : 2
 define( 'PERSON_3_jap', 2 );                       // JAP_PERSON : 3
-define( 'NUMBER_jap', 73 );                        // enum JAP_NUMBER
+define( 'NUMBER_jap', 76 );                        // enum JAP_NUMBER
 // Coordiname JAP_NUMBER states:
 define( 'SINGULAR_jap', 0 );                       // JAP_NUMBER : SINGULAR
 define( 'PLURAL_jap', 1 );                         // JAP_NUMBER : PLURAL
-define( 'JAP_PRONOUN_TYPE', 74 );                  // enum JAP_PRONOUN_TYPE
+define( 'JAP_PRONOUN_TYPE', 77 );                  // enum JAP_PRONOUN_TYPE
 // Coordiname JAP_PRONOUN_TYPE states:
 define( 'PERSONAL_jap', 0 );                       // JAP_PRONOUN_TYPE : PERSONAL
 define( 'POINTING_jap', 1 );                       // JAP_PRONOUN_TYPE : POINTING
@@ -424,42 +430,39 @@ define( 'INFINITIVE_link', 76 );
 define( 'NEXT_ADJECTIVE_link', 77 );
 define( 'NEXT_NOUN_link', 78 );
 define( 'THEMA_link', 79 );
-define( 'RIGHT_PARTICLE_link', 80 );
-define( 'RIGHT_AUX2INFINITIVE_link', 81 );
-define( 'RIGHT_AUX2PARTICIPLE', 82 );
-define( 'RIGHT_AUX2ADJ', 83 );
-define( 'RIGHT_LOGIC_ITEM_link', 84 );
-define( 'RIGHT_COMPARISON_Y_link', 85 );
-define( 'RIGHT_NOUN_link', 86 );
-define( 'RIGHT_INSTR_OBJECT_link', 87 );
-define( 'RIGHT_DATIVE_OBJECT_link', 88 );
-define( 'RIGHT_NAME_link', 89 );
-define( 'ADJ_PARTICIPLE_link', 90 );
-define( 'PUNCTUATION_link', 91 );
-define( 'IMPERATIVE_SUBJECT_link', 92 );
-define( 'IMPERATIVE_VERB2AUX_link', 93 );
-define( 'AUX2IMPERATIVE_VERB', 94 );
-define( 'PREFIX_PARTICLE_link', 95 );
-define( 'PREFIX_CONJUNCTION_link', 96 );
-define( 'LOGICAL_CONJUNCTION_link', 97 );
-define( 'NEXT_CLAUSE_link', 98 );
-define( 'LEFT_AUX_VERB_link', 99 );
-define( 'BEG_INTRO_link', 100 );
-define( 'RIGHT_PREPOSITION_link', 101 );
-define( 'WH_SUBJECT_link', 102 );
-define( 'IMPERATIVE_PARTICLE_link', 103 );
-define( 'GERUND_link', 104 );
-define( 'PREPOS_ADJUNCT_link', 105 );
-define( 'DIRECT_OBJ_INTENTION_link', 106 );
-define( 'COPULA_link', 107 );
-define( 'DETAILS_link', 108 );
-define( 'SENTENCE_CLOSER_link', 109 );
-define( 'OPINION_link', 110 );
-define( 'APPEAL_link', 111 );
-define( 'TERM_link', 112 );
-define( 'SPEECH_link', 113 );
-define( 'QUESTION_link', 114 );
-define( 'POLITENESS_link', 115 );
-define( 'SEPARATE_ATTR_link', 116 );
+define( 'RIGHT_AUX2INFINITIVE_link', 80 );
+define( 'RIGHT_AUX2PARTICIPLE', 81 );
+define( 'RIGHT_AUX2ADJ', 82 );
+define( 'RIGHT_LOGIC_ITEM_link', 83 );
+define( 'RIGHT_COMPARISON_Y_link', 84 );
+define( 'RIGHT_NOUN_link', 85 );
+define( 'RIGHT_NAME_link', 86 );
+define( 'ADJ_PARTICIPLE_link', 87 );
+define( 'PUNCTUATION_link', 88 );
+define( 'IMPERATIVE_SUBJECT_link', 89 );
+define( 'IMPERATIVE_VERB2AUX_link', 90 );
+define( 'AUX2IMPERATIVE_VERB', 91 );
+define( 'PREFIX_PARTICLE_link', 92 );
+define( 'PREFIX_CONJUNCTION_link', 93 );
+define( 'LOGICAL_CONJUNCTION_link', 94 );
+define( 'NEXT_CLAUSE_link', 95 );
+define( 'LEFT_AUX_VERB_link', 96 );
+define( 'BEG_INTRO_link', 97 );
+define( 'RIGHT_PREPOSITION_link', 98 );
+define( 'WH_SUBJECT_link', 99 );
+define( 'IMPERATIVE_PARTICLE_link', 100 );
+define( 'GERUND_link', 101 );
+define( 'PREPOS_ADJUNCT_link', 102 );
+define( 'DIRECT_OBJ_INTENTION_link', 103 );
+define( 'COPULA_link', 104 );
+define( 'DETAILS_link', 105 );
+define( 'SENTENCE_CLOSER_link', 106 );
+define( 'OPINION_link', 107 );
+define( 'APPEAL_link', 108 );
+define( 'TERM_link', 109 );
+define( 'SPEECH_link', 110 );
+define( 'QUESTION_link', 111 );
+define( 'POLITENESS_link', 112 );
+define( 'SEPARATE_ATTR_link', 113 );
 
 ?>

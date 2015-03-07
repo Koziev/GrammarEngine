@@ -1,4 +1,5 @@
 #include <lem/streams.h>
+#include <lem/strings.h>
 #include <lem/solarix/LexerTextPos.h>
 #include <lem/solarix/word_form.h>
 #include <lem/solarix/dictionary.h>
@@ -54,6 +55,8 @@ bool SequenceLabelerModel::Load()
        codebook = new ModelCodeBook();
        lem::BinaryReader rdr(codebook_path);
        codebook->LoadBin(rdr);
+       SetParamsAfterLoad();
+
        CONTEXT_SIZE = codebook->GetContextSize();
 
        lem::Path model_path( folder );
@@ -68,19 +71,19 @@ bool SequenceLabelerModel::Load()
        /* Obtain the dictionary interface representing the labels in the model. */
        if( ret = model->get_labels(model, &labels) )
        {
-         LEM_STOPIT;
+        LEM_STOPIT;
        }
    
        /* Obtain the dictionary interface representing the attributes in the model. */
        if( ret = model->get_attrs(model, &attrs) )
        {
-         LEM_STOPIT;
+        LEM_STOPIT;
        }
    
        /* Obtain the tagger interface. */
        if( ret = model->get_tagger(model, &tagger) )
        {
-         LEM_STOPIT;
+        LEM_STOPIT;
        }
    
        // ...
@@ -174,35 +177,45 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
     {
      str_features.clear();
 
+     if( EMIT_FORM_TAGS )
+     {
+      for( int k = 0; k < token_features[iword]->allform_tags.size(); ++k )
+      {
+       str_features.push_back( lem::format_str( "%d", token_features[iword]->allform_tags[k] ).c_str() );
+      }
+     }
+
      // -----------------------------
      // признаки для текущего слова
      // -----------------------------
      PullFeatures1( str_features, token_features, iword, 0, true, EMIT_AA_FEATURE );
-   
+
+     const bool rich_context = EMIT_POS_FOR_CONTEXT || EMIT_MORPH_FOR_CONTEXT || EMIT_FORMTAGS_FOR_CONTEXT;
+
      // и соседние слова
      if( CONTEXT_SIZE>3 )
-      PullFeatures1( str_features, token_features, iword, -4, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, -4, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( CONTEXT_SIZE>2 )
-      PullFeatures1( str_features, token_features, iword, -3, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, -3, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( CONTEXT_SIZE>1 )
-      PullFeatures1( str_features, token_features, iword, -2, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, -2, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( CONTEXT_SIZE>0 )
       {
-       PullFeatures1( str_features, token_features, iword, -1, false, EMIT_AA_FOR_CONTEXT );
-       PullFeatures1( str_features, token_features, iword, 1, false, EMIT_AA_FOR_CONTEXT );
+       PullFeatures1( str_features, token_features, iword, -1, rich_context, EMIT_AA_FOR_CONTEXT );
+       PullFeatures1( str_features, token_features, iword, 1, rich_context, EMIT_AA_FOR_CONTEXT );
       }
 
      if( CONTEXT_SIZE>1 )
-      PullFeatures1( str_features, token_features, iword, 2, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, 2, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( CONTEXT_SIZE>2 )
-      PullFeatures1( str_features, token_features, iword, 3, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, 3, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( CONTEXT_SIZE>3 )
-      PullFeatures1( str_features, token_features, iword, 4, false, EMIT_AA_FOR_CONTEXT );
+      PullFeatures1( str_features, token_features, iword, 4, rich_context, EMIT_AA_FOR_CONTEXT );
 
      if( EMIT_PAIRWISE_FEATURE )
       {
@@ -223,12 +236,17 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
        PullFeatures3( str_features, token_features, iword, 1, 2, 3 );
       }
    
-     #if LEM_DEBUGGING==1
-     //for( int q=0; q<str_features.size(); ++q )
-      //dbg_tags.printf( "\t%s", str_features[q].c_str() );
-     //dbg_tags.eol();
-     #endif
 
+/*
+     #if LEM_DEBUGGING==1
+     lem::mout->printf( "CRF token #%d tags==>", iword );
+     for( int q=0; q<str_features.size(); ++q )
+     {
+      lem::mout->printf( " %s", str_features[q].c_str() );
+     }
+     lem::mout->eol();
+     #endif
+*/
      // конвертируем str_features в набор тегов для текущего слова в цепочке
    
      /* Initialize an item. */
@@ -301,11 +319,9 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
     labels->free(labels, label);
    }
 
-  // TODO ...
-
 /*
   #if LEM_DEBUGGING==1
-  lem::mout->printf( "MODEL TAGS:\n" );
+  lem::mout->printf( "MODEL OUTPUT TAGS:\n" );
   for( int k=0; k<inst.num_items; ++k )
    {
     lem::mout->printf( "TAG[%d]=%d --> ", k, tag_ids[k] );
@@ -313,8 +329,10 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
     matcher->Print( *lem::mout, dict );
     lem::mout->eol();
    }
+  lem::mout->eol();
   #endif
 */
+
   //++N;
 
   /* Accumulate the tagging performance. */
@@ -464,6 +482,22 @@ void SequenceLabelerModel::SelectRecognition( BasicLexer & lexer, const LexerTex
   SelectRecognition( lexer, next[i], token2selection, remove_incorrect_alts );
 
  #endif
+
+ return;
+}
+
+
+void SequenceLabelerModel::SetParamsAfterLoad()
+{
+ BasicModel::SetParamsAfterLoad();
+
+ EMIT_PAIRWISE_FEATURE = codebook->FindModelParam( L"EMIT_PAIRWISE_FEATURE", L"false" ).eqi( L"true" );
+ EMIT_TRIPLE_FEATURE = codebook->FindModelParam( L"EMIT_TRIPLE_FEATURE", L"false" ).eqi(  L"true" );
+ EMIT_AA_FEATURE = codebook->FindModelParam( L"EMIT_AA_FEATURE", L"false" ).eqi(  L"true" );
+ EMIT_AA_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_AA_FOR_CONTEXT", L"false" ).eqi(  L"true" );
+ EMIT_MORPH_TAGS = codebook->FindModelParam( L"EMIT_MORPH_TAGS", L"false" ).eqi(  L"true" );
+ EMIT_POS_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_POS_FOR_CONTEXT", L"false" ).eqi(  L"true" );
+ EMIT_MORPH_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_MORPH_FOR_CONTEXT", L"false" ).eqi(  L"true" );
 
  return;
 }

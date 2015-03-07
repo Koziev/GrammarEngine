@@ -1,5 +1,5 @@
 # -*- coding: utf-8
-# This file is generated 30.08.2014 10:31:20 by Ygres compiler ver. 13.23.11072 Standard Win32  (build date Aug 29 2014).
+# This file is generated 01.02.2015 08:28:10 by Ygres compiler ver. 13.34.11134 Standard Win32  (build date Jan 25 2015).
 # Languages
 RUSSIAN_LANGUAGE = 2                               # language Russian
 ENGLISH_LANGUAGE = 3                               # language English
@@ -29,40 +29,41 @@ ADVERB_ru = 21                                     # class НАРЕЧИЕ
 PUNCTUATION_class = 22                             # class ПУНКТУАТОР
 POSTPOS_ru = 27                                    # class ПОСЛЕЛОГ
 POSESS_PARTICLE = 28                               # class ПРИТЯЖ_ЧАСТИЦА
-VERB_en = 29                                       # class ENG_VERB
-NOUN_en = 30                                       # class ENG_NOUN
-PRONOUN_en = 31                                    # class ENG_PRONOUN
-ARTICLE_en = 32                                    # class ENG_ARTICLE
-PREP_en = 33                                       # class ENG_PREP
-CONJ_en = 34                                       # class ENG_CONJ
-ADV_en = 35                                        # class ENG_ADVERB
-ADJ_en = 36                                        # class ENG_ADJECTIVE
-PARTICLE_en = 37                                   # class ENG_PARTICLE
-NUMERAL_en = 38                                    # class ENG_NUMERAL
-INTERJECTION_en = 39                               # class ENG_INTERJECTION
-NUMERAL_fr = 40                                    # class FR_NUMERAL
-ARTICLE_fr = 41                                    # class FR_ARTICLE
-PREP_fr = 42                                       # class FR_PREP
-ADV_fr = 43                                        # class FR_ADVERB
-CONJ_fr = 44                                       # class FR_CONJ
-NOUN_fr = 45                                       # class FR_NOUN
-ADJ_fr = 46                                        # class FR_ADJ
-PRONOUN_fr = 47                                    # class FR_PRONOUN
-VERB_fr = 48                                       # class FR_VERB
-PARTICLE_fr = 49                                   # class FR_PARTICLE
-PRONOUN2_fr = 50                                   # class FR_PRONOUN2
-NOUN_es = 51                                       # class ES_NOUN
-ROOT_es = 52                                       # class ES_ROOT
-JAP_NOUN = 53                                      # class JAP_NOUN
-JAP_NUMBER = 54                                    # class JAP_NUMBER
-JAP_ADJECTIVE = 55                                 # class JAP_ADJECTIVE
-JAP_ADVERB = 56                                    # class JAP_ADVERB
-JAP_CONJ = 57                                      # class JAP_CONJ
-JAP_VERB = 58                                      # class JAP_VERB
-JAP_PRONOUN = 59                                   # class JAP_PRONOUN
-JAP_VERB_POSTFIX2 = 62                             # class JAP_VERB_POSTFIX2
-JAP_PARTICLE = 64                                  # class JAP_PARTICLE
-UNKNOWN_ENTRIES_CLASS = 75                         # class UnknownEntries
+MEASURE_UNIT = 29                                  # class ЕДИНИЦА_ИЗМЕРЕНИЯ
+VERB_en = 30                                       # class ENG_VERB
+NOUN_en = 31                                       # class ENG_NOUN
+PRONOUN_en = 32                                    # class ENG_PRONOUN
+ARTICLE_en = 33                                    # class ENG_ARTICLE
+PREP_en = 34                                       # class ENG_PREP
+CONJ_en = 35                                       # class ENG_CONJ
+ADV_en = 36                                        # class ENG_ADVERB
+ADJ_en = 37                                        # class ENG_ADJECTIVE
+PARTICLE_en = 38                                   # class ENG_PARTICLE
+NUMERAL_en = 39                                    # class ENG_NUMERAL
+INTERJECTION_en = 40                               # class ENG_INTERJECTION
+NUMERAL_fr = 41                                    # class FR_NUMERAL
+ARTICLE_fr = 42                                    # class FR_ARTICLE
+PREP_fr = 43                                       # class FR_PREP
+ADV_fr = 44                                        # class FR_ADVERB
+CONJ_fr = 45                                       # class FR_CONJ
+NOUN_fr = 46                                       # class FR_NOUN
+ADJ_fr = 47                                        # class FR_ADJ
+PRONOUN_fr = 48                                    # class FR_PRONOUN
+VERB_fr = 49                                       # class FR_VERB
+PARTICLE_fr = 50                                   # class FR_PARTICLE
+PRONOUN2_fr = 51                                   # class FR_PRONOUN2
+NOUN_es = 52                                       # class ES_NOUN
+ROOT_es = 53                                       # class ES_ROOT
+JAP_NOUN = 54                                      # class JAP_NOUN
+JAP_NUMBER = 55                                    # class JAP_NUMBER
+JAP_ADJECTIVE = 56                                 # class JAP_ADJECTIVE
+JAP_ADVERB = 57                                    # class JAP_ADVERB
+JAP_CONJ = 58                                      # class JAP_CONJ
+JAP_VERB = 59                                      # class JAP_VERB
+JAP_PRONOUN = 60                                   # class JAP_PRONOUN
+JAP_VERB_POSTFIX2 = 63                             # class JAP_VERB_POSTFIX2
+JAP_PARTICLE = 65                                  # class JAP_PARTICLE
+UNKNOWN_ENTRIES_CLASS = 76                         # class UnknownEntries
 # ------------------------------------------------------------
 
 
@@ -148,6 +149,7 @@ COMPAR_FORM_ru = 27                                # enum СТЕПЕНЬ
 ATTRIBUTIVE_FORM_ru = 0                            # СТЕПЕНЬ : АТРИБ
 COMPARATIVE_FORM_ru = 1                            # СТЕПЕНЬ : СРАВН
 SUPERLATIVE_FORM_ru = 2                            # СТЕПЕНЬ : ПРЕВОСХ
+LIGHT_COMPAR_FORM_RU = 3                           # СТЕПЕНЬ : КОМПАРАТИВ2
 CASE_GERUND_ru = 28                                # enum ПадежВал
 # Coordiname ПадежВал states:
 MODAL_ru = 29                                      # enum МОДАЛЬНЫЙ
@@ -176,98 +178,102 @@ ADJ_TYPE = 34                                      # enum ТИП_ПРИЛ
 # Coordiname ТИП_ПРИЛ states:
 ADJ_POSSESSIVE = 0                                 # ТИП_ПРИЛ : ПРИТЯЖ
 ADJ_ORDINAL = 1                                    # ТИП_ПРИЛ : ПОРЯДК
-TENSE_en = 40                                      # enum TENSE
+PARTICLE_TYPE = 36                                 # enum ТИП_ЧАСТИЦЫ
+# Coordiname ТИП_ЧАСТИЦЫ states:
+PREFIX_PARTICLE = 0                                # ТИП_ЧАСТИЦЫ : ПРЕФИКС
+POSTFIX_PARTICLE = 1                               # ТИП_ЧАСТИЦЫ : ПОСТФИКС
+TENSE_en = 43                                      # enum TENSE
 # Coordiname TENSE states:
 PAST_en = 0                                        # TENSE : PAST
 PRESENT_en = 1                                     # TENSE : PRESENT
 FUTURE_en = 2                                      # TENSE : FUTURE
-DURATION_en = 41                                   # enum DURATION
+DURATION_en = 44                                   # enum DURATION
 # Coordiname DURATION states:
 SIMPLE_en = 0                                      # DURATION : INDEFINITE
 CONTINUOUS_en = 1                                  # DURATION : CONTINUOUS
 PERFECT_en = 2                                     # DURATION : PERFECT
 PERFECT_CONTINUOS_en = 3                           # DURATION : PERFECT_CONTINUOUS
-VOICE_en = 42                                      # enum VOICE
+VOICE_en = 45                                      # enum VOICE
 # Coordiname VOICE states:
 PASSIVE_en = 0                                     # VOICE : PASSIVE
 ACTIVE_en = 1                                      # VOICE : ACTIVE
-CASE_en = 43                                       # enum CASE
+CASE_en = 46                                       # enum CASE
 # Coordiname CASE states:
 NOMINATIVE_CASE_en = 0                             # CASE : NOMINATIVE
 PREPOSITIVE_CASE_en = 1                            # CASE : PREPOSITIVE
-NOUN_FORM_en = 44                                  # enum NOUN_FORM
+NOUN_FORM_en = 47                                  # enum NOUN_FORM
 # Coordiname NOUN_FORM states:
 BASIC_NOUN_FORM_en = 0                             # NOUN_FORM : BASIC
 POSSESSIVE_NOUN_FORM_en = 1                        # NOUN_FORM : POSSESSIVE
-PRONOUN_FORM_en = 45                               # enum PRONOUN_FORM
+PRONOUN_FORM_en = 48                               # enum PRONOUN_FORM
 # Coordiname PRONOUN_FORM states:
-ADJ_FORM_en = 46                                   # enum ADJ_FORM
+ADJ_FORM_en = 49                                   # enum ADJ_FORM
 # Coordiname ADJ_FORM states:
 BASIC_ADJ_en = 0                                   # ADJ_FORM : BASIC
 COMPARATIVE_ADJ_en = 1                             # ADJ_FORM : COMPARATIVE
 SUPERLATIVE_ADJ_en = 2                             # ADJ_FORM : SUPERLATIVE
-COMPARABILITY_en = 47                              # enum COMPARABILITY
+COMPARABILITY_en = 50                              # enum COMPARABILITY
 # Coordiname COMPARABILITY states:
 ANALYTIC_en = 0                                    # COMPARABILITY : ANALYTIC
 SYNTHETIC_en = 1                                   # COMPARABILITY : SYNTHETIC
 COMPARABLE_en = 2                                  # COMPARABILITY : COMPARABLE
 NONCOMPARABLE = 3                                  # COMPARABILITY : NONCOMPARABLE
-VERB_FORM_en = 48                                  # enum VERB_FORM
+VERB_FORM_en = 51                                  # enum VERB_FORM
 # Coordiname VERB_FORM states:
 UNDEF_VERBFORM_en = 0                              # VERB_FORM : UNDEF
 ED_VERBFORM_en = 1                                 # VERB_FORM : ED
 ING_VERBFORM_en = 2                                # VERB_FORM : ING
 PP_VERBFORM_en = 3                                 # VERB_FORM : PP
 INF_VEBFORM_en = 4                                 # VERB_FORM : INF
-ARTICLE_FORM = 49                                  # enum ARTICLE_FORM
+ARTICLE_FORM = 52                                  # enum ARTICLE_FORM
 # Coordiname ARTICLE_FORM states:
 ARTICLE_FORM_1 = 0                                 # ARTICLE_FORM : 1
 ARTICLE_FORM_2 = 1                                 # ARTICLE_FORM : 2
-ENG_MODALITY = 50                                  # enum ENG_MODALITY
+ENG_MODALITY = 53                                  # enum ENG_MODALITY
 # Coordiname ENG_MODALITY states:
 DIRECT_MODALITY_en = 0                             # ENG_MODALITY : Direct
 TO_MODALITY_en = 2                                 # ENG_MODALITY : To
-NUMERAL_FORM_en = 51                               # enum NUMERAL_FORM
+NUMERAL_FORM_en = 54                               # enum NUMERAL_FORM
 # Coordiname NUMERAL_FORM states:
 CARDINAL_en = 0                                    # NUMERAL_FORM : CARDINAL
 ORDINAL_en = 1                                     # NUMERAL_FORM : ORDINAL
-GENDER_en = 52                                     # enum ENG_GENDER
+GENDER_en = 55                                     # enum ENG_GENDER
 # Coordiname ENG_GENDER states:
 MASCULINE_en = 0                                   # ENG_GENDER : MASCULINE
 FEMININE_en = 1                                    # ENG_GENDER : FEMININE
-TRANSITIVITY_en = 53                               # enum TRANSITIVITY
+TRANSITIVITY_en = 56                               # enum TRANSITIVITY
 # Coordiname TRANSITIVITY states:
 INTRANSITIVE_VERB_en = 0                           # TRANSITIVITY : INTRANSITIVE
 TRANSITIVE_VERB_en = 1                             # TRANSITIVITY : TRANSITIVE
-OBLIG_TRANSITIVITY_en = 54                         # enum OBLIG_TRANSITIVITY
-PROPER_NOUN_en = 55                                # enum ENG_PROPER_NOUN
-MASS_NOUN_en = 56                                  # enum ENG_MASS_NOUN
-PERSON_fr = 57                                     # enum FR_PERSON
+OBLIG_TRANSITIVITY_en = 57                         # enum OBLIG_TRANSITIVITY
+PROPER_NOUN_en = 58                                # enum ENG_PROPER_NOUN
+MASS_NOUN_en = 59                                  # enum ENG_MASS_NOUN
+PERSON_fr = 60                                     # enum FR_PERSON
 # Coordiname FR_PERSON states:
 PERSON_1_fr = 0                                    # FR_PERSON : 1
 PERSON_2_fr = 1                                    # FR_PERSON : 2
 PERSON_3_fr = 2                                    # FR_PERSON : 3
-NUMBER_fr = 58                                     # enum FR_NOMBRE
+NUMBER_fr = 61                                     # enum FR_NOMBRE
 # Coordiname FR_NOMBRE states:
 SINGULAR_fr = 0                                    # FR_NOMBRE : SINGULIER
 PLURAL_fr = 1                                      # FR_NOMBRE : PLURIEL
-GENDER_fr = 59                                     # enum FR_GENRE
+GENDER_fr = 62                                     # enum FR_GENRE
 # Coordiname FR_GENRE states:
 MASCULINE_fr = 0                                   # FR_GENRE : MASCULINE
 FEMININE_fr = 1                                    # FR_GENRE : FEMININE
-FR_NUMERAL_FORM = 60                               # enum FR_NUMERAL_FORM
+FR_NUMERAL_FORM = 63                               # enum FR_NUMERAL_FORM
 # Coordiname FR_NUMERAL_FORM states:
 CARDINAL_fr = 0                                    # FR_NUMERAL_FORM : CARDINAL
 ORDINAL_fr = 1                                     # FR_NUMERAL_FORM : ORDINAL
-FR_PRONOUN_FORM = 61                               # enum FR_PRONOUN_FORM
+FR_PRONOUN_FORM = 64                               # enum FR_PRONOUN_FORM
 # Coordiname FR_PRONOUN_FORM states:
 FR_PRONOUN_WEAK = 0                                # FR_PRONOUN_FORM : WEAK
 FR_PRONOUN_STRONG = 1                              # FR_PRONOUN_FORM : STRONG
-TRANSITIVITY_fr = 62                               # enum FR_TRANSITIVITY
+TRANSITIVITY_fr = 65                               # enum FR_TRANSITIVITY
 # Coordiname FR_TRANSITIVITY states:
 INTRANSITIVE_VERB_fr = 0                           # FR_TRANSITIVITY : INTRANSITIVE
 TRANSITIVE_VERB_fr = 1                             # FR_TRANSITIVITY : TRANSITIVE
-VERB_FORM_fr = 63                                  # enum FR_VERB_FORM
+VERB_FORM_fr = 66                                  # enum FR_VERB_FORM
 # Coordiname FR_VERB_FORM states:
 INFINITIVE_fr = 0                                  # FR_VERB_FORM : INFINITIVE
 PRESENT_VF_fr = 1                                  # FR_VERB_FORM : PRESENT
@@ -280,12 +286,12 @@ SUBJUNCTIVE_PRESENT_fr = 7                         # FR_VERB_FORM : SUBJUNCTIVE_
 SUBJUNCTIVE_IMPERFECT_fr = 8                       # FR_VERB_FORM : SUBJUNCTIVE_IMPERFECT
 CONDITIONAL_fr = 9                                 # FR_VERB_FORM : CONDITIONAL
 IMPERATIVE_fr = 10                                 # FR_VERB_FORM : IMPERATIVE
-JAP_FORM = 64                                      # enum JAP_FORM
+JAP_FORM = 67                                      # enum JAP_FORM
 # Coordiname JAP_FORM states:
 KANA_FORM = 0                                      # JAP_FORM : KANA
 KANJI_FORM = 1                                     # JAP_FORM : KANJI
 ROMAJI_FORM = 2                                    # JAP_FORM : ROMAJI
-JAP_VERB_BASE = 65                                 # enum JAP_VERB_BASE
+JAP_VERB_BASE = 68                                 # enum JAP_VERB_BASE
 # Coordiname JAP_VERB_BASE states:
 JAP_VB_I = 0                                       # JAP_VERB_BASE : I
 JAP_VB_II = 1                                      # JAP_VERB_BASE : II
@@ -297,14 +303,14 @@ JAP_VB_PARTICIPLE = 6                              # JAP_VERB_BASE : PARTICIPLE
 JAP_VB_POTENTIAL = 7                               # JAP_VERB_BASE : POTENTIAL
 JAP_VB_CONDITIONAL = 8                             # JAP_VERB_BASE : CONDITIONAL
 JAP_VB_CAUSATIVE = 9                               # JAP_VERB_BASE : CAUSATIVE
-JAP_VERB_KIND = 66                                 # enum JAP_VERB_KIND
+JAP_VERB_KIND = 69                                 # enum JAP_VERB_KIND
 # Coordiname JAP_VERB_KIND states:
 JAP_PRESENT_FUTURE = 1                             # JAP_VERB_KIND : PRESENT_FUTURE
 JAP_NEGATIVE_PRESENT_FUTURE = 3                    # JAP_VERB_KIND : NEGATIVE_PRESENT_FUTURE
 JAP_NEGATIVE_PAST = 4                              # JAP_VERB_KIND : NEGATIVE_PAST
 JAP_IMPERATIVE = 5                                 # JAP_VERB_KIND : IMPERATIVE
 JAP_NEGATIVE_IMPERATIVE = 6                        # JAP_VERB_KIND : NEGATIVE_IMPERATIVE
-JAP_ADJ_BASE = 67                                  # enum JAP_ADJ_BASE
+JAP_ADJ_BASE = 70                                  # enum JAP_ADJ_BASE
 # Coordiname JAP_ADJ_BASE states:
 JAP_AB_I = 0                                       # JAP_ADJ_BASE : I
 JAP_AB_II = 1                                      # JAP_ADJ_BASE : II
@@ -313,12 +319,12 @@ JAP_AB_IV = 3                                      # JAP_ADJ_BASE : IV
 JAP_AB_V = 4                                       # JAP_ADJ_BASE : V
 JAP_AB_T = 5                                       # JAP_ADJ_BASE : T
 JAP_AB_PAST = 6                                    # JAP_ADJ_BASE : PAST
-JAP_ADJ_FORM2 = 68                                 # enum JAP_ADJ_FORM2
+JAP_ADJ_FORM2 = 71                                 # enum JAP_ADJ_FORM2
 # Coordiname JAP_ADJ_FORM2 states:
 JAP_NEGATIVE_PRESENT_ADJ = 0                       # JAP_ADJ_FORM2 : NEGATIVE_PRESENT
 JAP_NEGATIVE_PAST_ADJ = 1                          # JAP_ADJ_FORM2 : NEGATIVE_PAST
-JAP_TRANSITIVE = 69                                # enum JAP_TRANSITIVE
-CASE_jap = 70                                      # enum JAP_CASE
+JAP_TRANSITIVE = 72                                # enum JAP_TRANSITIVE
+CASE_jap = 73                                      # enum JAP_CASE
 # Coordiname JAP_CASE states:
 VOCATIVE_jap = 0                                   # JAP_CASE : VOCATIVE
 NOMINATIVE_THEM_jap = 1                            # JAP_CASE : NOMINATIVE_THEM
@@ -333,20 +339,20 @@ LIMITIVE_jap = 9                                   # JAP_CASE : LIMITIVE
 COMPARATIVE_jap = 10                               # JAP_CASE : COMPARATIVE
 COMITATIVE_jap = 11                                # JAP_CASE : COMITATIVE
 SOCIATIVE_jap = 12                                 # JAP_CASE : SOCIATIVE
-GENDER_jap = 71                                    # enum JAP_GENDER
+GENDER_jap = 74                                    # enum JAP_GENDER
 # Coordiname JAP_GENDER states:
 MASCULINE_jap = 0                                  # JAP_GENDER : MASCULINE
 FEMININE_jap = 1                                   # JAP_GENDER : FEMININE
-PERSON_jap = 72                                    # enum JAP_PERSON
+PERSON_jap = 75                                    # enum JAP_PERSON
 # Coordiname JAP_PERSON states:
 PERSON_1_jap = 0                                   # JAP_PERSON : 1
 PERSON_2_jap = 1                                   # JAP_PERSON : 2
 PERSON_3_jap = 2                                   # JAP_PERSON : 3
-NUMBER_jap = 73                                    # enum JAP_NUMBER
+NUMBER_jap = 76                                    # enum JAP_NUMBER
 # Coordiname JAP_NUMBER states:
 SINGULAR_jap = 0                                   # JAP_NUMBER : SINGULAR
 PLURAL_jap = 1                                     # JAP_NUMBER : PLURAL
-JAP_PRONOUN_TYPE = 74                              # enum JAP_PRONOUN_TYPE
+JAP_PRONOUN_TYPE = 77                              # enum JAP_PRONOUN_TYPE
 # Coordiname JAP_PRONOUN_TYPE states:
 PERSONAL_jap = 0                                   # JAP_PRONOUN_TYPE : PERSONAL
 POINTING_jap = 1                                   # JAP_PRONOUN_TYPE : POINTING
@@ -423,40 +429,37 @@ INFINITIVE_link = 76
 NEXT_ADJECTIVE_link = 77
 NEXT_NOUN_link = 78
 THEMA_link = 79
-RIGHT_PARTICLE_link = 80
-RIGHT_AUX2INFINITIVE_link = 81
-RIGHT_AUX2PARTICIPLE = 82
-RIGHT_AUX2ADJ = 83
-RIGHT_LOGIC_ITEM_link = 84
-RIGHT_COMPARISON_Y_link = 85
-RIGHT_NOUN_link = 86
-RIGHT_INSTR_OBJECT_link = 87
-RIGHT_DATIVE_OBJECT_link = 88
-RIGHT_NAME_link = 89
-ADJ_PARTICIPLE_link = 90
-PUNCTUATION_link = 91
-IMPERATIVE_SUBJECT_link = 92
-IMPERATIVE_VERB2AUX_link = 93
-AUX2IMPERATIVE_VERB = 94
-PREFIX_PARTICLE_link = 95
-PREFIX_CONJUNCTION_link = 96
-LOGICAL_CONJUNCTION_link = 97
-NEXT_CLAUSE_link = 98
-LEFT_AUX_VERB_link = 99
-BEG_INTRO_link = 100
-RIGHT_PREPOSITION_link = 101
-WH_SUBJECT_link = 102
-IMPERATIVE_PARTICLE_link = 103
-GERUND_link = 104
-PREPOS_ADJUNCT_link = 105
-DIRECT_OBJ_INTENTION_link = 106
-COPULA_link = 107
-DETAILS_link = 108
-SENTENCE_CLOSER_link = 109
-OPINION_link = 110
-APPEAL_link = 111
-TERM_link = 112
-SPEECH_link = 113
-QUESTION_link = 114
-POLITENESS_link = 115
-SEPARATE_ATTR_link = 116
+RIGHT_AUX2INFINITIVE_link = 80
+RIGHT_AUX2PARTICIPLE = 81
+RIGHT_AUX2ADJ = 82
+RIGHT_LOGIC_ITEM_link = 83
+RIGHT_COMPARISON_Y_link = 84
+RIGHT_NOUN_link = 85
+RIGHT_NAME_link = 86
+ADJ_PARTICIPLE_link = 87
+PUNCTUATION_link = 88
+IMPERATIVE_SUBJECT_link = 89
+IMPERATIVE_VERB2AUX_link = 90
+AUX2IMPERATIVE_VERB = 91
+PREFIX_PARTICLE_link = 92
+PREFIX_CONJUNCTION_link = 93
+LOGICAL_CONJUNCTION_link = 94
+NEXT_CLAUSE_link = 95
+LEFT_AUX_VERB_link = 96
+BEG_INTRO_link = 97
+RIGHT_PREPOSITION_link = 98
+WH_SUBJECT_link = 99
+IMPERATIVE_PARTICLE_link = 100
+GERUND_link = 101
+PREPOS_ADJUNCT_link = 102
+DIRECT_OBJ_INTENTION_link = 103
+COPULA_link = 104
+DETAILS_link = 105
+SENTENCE_CLOSER_link = 106
+OPINION_link = 107
+APPEAL_link = 108
+TERM_link = 109
+SPEECH_link = 110
+QUESTION_link = 111
+POLITENESS_link = 112
+SEPARATE_ATTR_link = 113

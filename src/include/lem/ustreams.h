@@ -28,7 +28,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->18.11.2004
-// LC->11.07.2010
+// LC->21.10.2014
 // --------------
 
 #ifndef LEM_CHAR_STREAM
@@ -89,7 +89,7 @@
    class Invalid_Charset : public E_BaseException
    {
     public:
-     Invalid_Charset(void)
+     Invalid_Charset()
       : E_BaseException( L"Invalid charset" ) {}
    };
 
@@ -102,8 +102,8 @@
    class Lang_Filter
    {
     public:
-     Lang_Filter(void) {}
-     virtual ~Lang_Filter(void) {}
+     Lang_Filter() {}
+     virtual ~Lang_Filter() {}
 
      // Общий принцип: если символ не из нужного диапазона, то
      // возвращается пробел.
@@ -116,7 +116,7 @@
    class Russian_Filter : public Lang_Filter
    {
     public:
-     Russian_Filter(void) {}
+     Russian_Filter() {}
      virtual wchar_t operator()( wchar_t c ) const; 
    };
 
@@ -126,7 +126,7 @@
    class Latin_Filter : public Lang_Filter
    {
     public:
-     Latin_Filter(void) {}
+     Latin_Filter() {}
      virtual wchar_t operator()( wchar_t c ) const;
    };
 
@@ -137,7 +137,7 @@
    class Central_European_Filter : public Lang_Filter
    {
     public:
-     Central_European_Filter(void) {}
+     Central_European_Filter() {}
      virtual wchar_t operator()( wchar_t c ) const;
    };
 
@@ -172,14 +172,14 @@
      const CodeConverter *cp;
 
      pos_type last_char_pos;
-     virtual wchar_t Read_Char(void)=0;
+     virtual wchar_t Read_Char()=0;
 
      WideStream( lem::Char_Stream::WideStreamType t );
      WideStream( lem::Char_Stream::WideStreamType t, StreamPtr Bin );
 
     public:
 
-     virtual ~WideStream(void);
+     virtual ~WideStream();
 
      // Этот метод пытается подобрать для заданного двоичного потока
      // нужный ридер, который сможет извлечь текстовую информацию.
@@ -189,30 +189,30 @@
      static lem::Ptr<WideStream> GetReader( lem::StreamPtr Bin, const lem::CodeConverter *cp=NULL );
      static lem::Ptr<WideStream> GetReader( const lem::Path &p, const lem::CodeConverter *cp=NULL );
 
-     inline lem::Char_Stream::WideStreamType GetType(void) const { return type; }
+     inline lem::Char_Stream::WideStreamType GetType() const { return type; }
 
      // Путь к открытому документу.
-     virtual const lem::Path& GetName(void) const;
+     virtual const lem::Path& GetName() const;
      
      // Два метода читают и пишут начальную служебную
      // информацию - например, метку BOM.
      // excp - бросать исключение, если служебная информация не найдена.
      // Возвращается - информация успешно прочитана.
      virtual bool Read_Beginning( bool excp=false )=0;
-     virtual void Write_Beginning(void)=0;
+     virtual void Write_Beginning()=0;
 
-     virtual int Bits_Per_Char(void) const { LEM_STOPIT; return -1; }
-     virtual const char* GetFormat(void) const=0;
+     virtual int Bits_Per_Char() const { LEM_STOPIT; return -1; }
+     virtual const char* GetFormat() const=0;
 
-     virtual wchar_t wget(void);
+     virtual wchar_t wget();
      virtual void wput( wchar_t ) { LEM_STOPIT; }
      virtual void wputs( const wchar_t *str );
      virtual void wputs( const lem::UFString &str );
      virtual void wputs( const std::wstring &str );
 
-     virtual bool eof(void) const;
+     virtual bool eof() const;
 
-     virtual int get(void);
+     virtual int get();
      virtual void put( char );
 
      // Read the whole line from the stream (untill '\n')
@@ -223,22 +223,23 @@
 
      virtual void unget( wchar_t ch );
 
-     virtual wchar_t wpeek(void);
+     virtual wchar_t wpeek();
 
-     virtual void flush(void);
-     virtual pos_type tellp(void) const;
+     virtual void flush();
+     virtual pos_type tellp() const;
      virtual pos_type seekp( off_type pos, int whereto=SEEK_SET );
      virtual bool move( off_type offset );
-     virtual void close(void);
-     virtual pos_type fsize(void) const;
+     virtual void close();
+     virtual pos_type fsize() const;
+     virtual pos64_type fsize64() const;
 
      virtual void SetEncoding( const CodeConverter *Cp );
-     virtual const CodeConverter* GetEncoding(void) const;
+     virtual const CodeConverter* GetEncoding() const;
 
      void StripDecoration( bool f );
 
-     bool skip_white(void);
-     bool skip_white2(void);
+     bool skip_white();
+     bool skip_white2();
    };
 
    typedef lem::Ptr<WideStream> WideStreamPtr;
@@ -253,7 +254,7 @@
      char format[32]; // для хранения строки описания формата
 
     protected:
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
 
     public:
      Char_Reader( StreamPtr Bin );
@@ -261,16 +262,16 @@
 
      virtual void wput( wchar_t u );
 
-     virtual void Write_Beginning(void) {}
+     virtual void Write_Beginning() {}
      virtual bool Read_Beginning( bool /*excp*/=false ) { return true; }
-     virtual int Bits_Per_Char(void) const { return 8; }
+     virtual int Bits_Per_Char() const { return 8; }
 
      virtual void SetEncoding( const CodeConverter *CP );
 
-     virtual int get(void);
+     virtual int get();
      virtual void put( char );
 
-     virtual const char* GetFormat(void) const;
+     virtual const char* GetFormat() const;
    };
 
 
@@ -281,21 +282,21 @@
      lem::Ptr<lem::Transliterator> translit;
 
     protected:
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
 
     public:
      Translit_Reader( StreamPtr Bin, lem::Ptr<Transliterator> Translit );
 
      virtual void wput( wchar_t u );
 
-     virtual void Write_Beginning(void) {}
+     virtual void Write_Beginning() {}
      virtual bool Read_Beginning( bool /*excp*/=false ) { return true; }
-     virtual int Bits_Per_Char(void) const { return 16; }
+     virtual int Bits_Per_Char() const { return 16; }
 
-     virtual int get(void);
+     virtual int get();
      virtual void put( char );
 
-     virtual const char* GetFormat(void) const;
+     virtual const char* GetFormat() const;
    };
 
 
@@ -304,7 +305,7 @@
    {
     private:
      const Lang_Filter *filter;
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
 
     public:
      Char_Reader_Lang( StreamPtr Bin, const Lang_Filter *Filter )
@@ -335,11 +336,11 @@
      int out_len; // number of chars in out buffer
      int i_out; // out buffer current position
 
-     void Clear_Fields(void);
+     void Clear_Fields();
 
      // Преобразуется очередная порция символов и запоминается в выходном
      // буфере для посимвольной выдачи.
-     void Fill_Buffer(void);
+     void Fill_Buffer();
 
     protected:
      size_t bufsz;
@@ -355,44 +356,44 @@
     public:
      ICU_Reader( const CodeConverter *Encoding, StreamPtr Bin );
 
-     virtual ~ICU_Reader(void);
+     virtual ~ICU_Reader();
 
      virtual void wput( wchar_t u ) { LEM_STOPIT; }
 
-     virtual void Write_Beginning(void) { LEM_STOPIT; }
+     virtual void Write_Beginning() { LEM_STOPIT; }
      virtual bool Read_Beginning( bool excp=false ) { return true; }
-     virtual int Bits_Per_Char(void) const { return 16; }
+     virtual int Bits_Per_Char() const { return 16; }
 
      virtual void SetEncoding( const CodeConverter *CP ) { LEM_STOPIT; }
 
-     virtual int get(void);
+     virtual int get();
      virtual void put( char ) { LEM_STOPIT; }
 
-     virtual wchar_t Read_Char(void);
-     virtual const char* GetFormat(void) const;
+     virtual wchar_t Read_Char();
+     virtual const char* GetFormat() const;
 
-     virtual void flush(void);
-     virtual pos_type tellp(void) const;
+     virtual void flush();
+     virtual pos_type tellp() const;
      virtual pos_type seekp( off_type pos, int whereto=SEEK_SET );
-     virtual bool eof(void) const;
+     virtual bool eof() const;
    };
    #endif
 
    class UTF16_Reader : public WideStream
    {
     protected:
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
      
     public:
      UTF16_Reader( WideStreamType t, StreamPtr Bin );
 
-     virtual int Bits_Per_Char(void) const { return 16; }
-     virtual void Write_Beginning(void);
+     virtual int Bits_Per_Char() const { return 16; }
+     virtual void Write_Beginning();
      virtual bool Read_Beginning( bool excp=false );
 
      virtual void wput( wchar_t u );
 
-     virtual const char* GetFormat(void) const;
+     virtual const char* GetFormat() const;
    };
 
 
@@ -400,7 +401,7 @@
    {
     protected:
      const Lang_Filter *filter;
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
      
     public:
      UTF16_Reader_Lang( WideStreamType t, StreamPtr Bin, const Lang_Filter *Filter )
@@ -415,26 +416,26 @@
    {
     private:
      UFString *res; // В эту строку записываются символы
-     virtual wchar_t Read_Char(void) { LEM_STOPIT; LEM_NO_RET(0); }
+     virtual wchar_t Read_Char() { LEM_STOPIT; LEM_NO_RET(0); }
      
      UTF16_MemWriter( const UTF16_MemWriter& );
      void operator=( const UTF16_MemWriter& );
 
     public:
-     UTF16_MemWriter(void);
-     virtual ~UTF16_MemWriter(void);
+     UTF16_MemWriter();
+     virtual ~UTF16_MemWriter();
 
      virtual bool Read_Beginning( bool excp=false );
 
      virtual void wput( wchar_t u );
 
-     virtual int get(void)  { LEM_STOPIT; LEM_NO_RET(0); }
+     virtual int get()  { LEM_STOPIT; LEM_NO_RET(0); }
 
      // Возвращает накопленный результат записи. При этом контроль над указателем
      // переходит к вызвавшему коду, а поток создает новый буфер записи.
-     UFString* Pick_String(void);
-     const UFString& string(void) const;
-     void clear(void);
+     UFString* Pick_String();
+     const UFString& string() const;
+     void clear();
    };
 
 
@@ -449,23 +450,23 @@
      bool eof_reached;
 
     protected:
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
      
     public:
      UTF16_MemReader( const UFString &Src );
      UTF16_MemReader( const wchar_t * Src );
      UTF16_MemReader( lem::Ptr<UFString> Src );
 
-     virtual void Write_Beginning(void);
+     virtual void Write_Beginning();
      virtual bool Read_Beginning( bool excp=false );
      virtual void wput( wchar_t u );
-     virtual bool eof(void) const;
+     virtual bool eof() const;
 
      virtual pos_type seekp( off_type pos, int whereto=SEEK_SET );
-     virtual Stream::pos_type fsize(void) const;
-     virtual Stream::pos_type tellp(void) const;
+     virtual Stream::pos_type fsize() const;
+     virtual Stream::pos_type tellp() const;
      virtual void unget( wchar_t ch );
-     virtual wchar_t wpeek(void);
+     virtual wchar_t wpeek();
    };
 
 
@@ -473,7 +474,7 @@
    {
     protected:
      const Lang_Filter *filter;
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
      
     public:
      UTF16_MemReader_Lang( const UFString &Src, const Lang_Filter *Filter );
@@ -483,15 +484,15 @@
    class UTF8_Reader : public WideStream
    {
     protected:
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
      
     public:
      UTF8_Reader( lem::StreamPtr Bin );
      UTF8_Reader( lem::Stream& Bin );
      UTF8_Reader( const lem::Path &filename, bool for_writing=false );
 
-     virtual int Bits_Per_Char(void) const { return 16; }
-     virtual void Write_Beginning(void);
+     virtual int Bits_Per_Char() const { return 16; }
+     virtual void Write_Beginning();
      virtual bool Read_Beginning( bool excp=false );
 
      virtual void wput( wchar_t u );
@@ -500,16 +501,16 @@
      virtual void wputs( const wchar_t *str );
      #endif
 
-     virtual int get(void);
+     virtual int get();
      virtual void put( char );
-     virtual const char* GetFormat(void) const { return "utf8"; }
+     virtual const char* GetFormat() const { return "utf8"; }
    };
 
    class UTF8_Reader_Lang : public UTF8_Reader
    {
     private:
      const Lang_Filter *filter;
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
 
      UTF8_Reader_Lang( const UTF8_Reader_Lang& );
      void operator=( const UTF8_Reader_Lang& );
@@ -549,13 +550,13 @@
 
      std::string format_buffer;
 
-     void Open_Stream(void);
+     void Open_Stream();
 
-     virtual wchar_t get2(void);
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t get2();
+     virtual wchar_t Read_Char();
 
     public:
-     HTML_Decoder(void);
+     HTML_Decoder();
 
      HTML_Decoder(
                   StreamPtr File,
@@ -564,17 +565,17 @@
                   bool OpenStream=false
                  );
 
-     virtual int get(void) { LEM_STOPIT; LEM_NO_RET(0); }
+     virtual int get() { LEM_STOPIT; LEM_NO_RET(0); }
 
-     virtual void Write_Beginning(void) {}
+     virtual void Write_Beginning() {}
      virtual bool Read_Beginning( bool /*excp*/=false ) { return true; }
 
-     virtual int Bits_Per_Char(void) const { return 16; }
-     virtual const char* GetFormat(void) const { return format_buffer.c_str(); }
+     virtual int Bits_Per_Char() const { return 16; }
+     virtual const char* GetFormat() const { return format_buffer.c_str(); }
 
      virtual void wput( wchar_t ) { LEM_STOPIT; }
 
-     HTML_Decoder* Optimize(void);
+     HTML_Decoder* Optimize();
    };
 
 
@@ -584,10 +585,10 @@
    class HTML_UTF8_Decoder : public HTML_Decoder
    {
     private:
-     virtual wchar_t get2(void);
+     virtual wchar_t get2();
 
     public:
-     HTML_UTF8_Decoder(void);
+     HTML_UTF8_Decoder();
      HTML_UTF8_Decoder( StreamPtr File );
    };
 
@@ -597,13 +598,13 @@
    class HTML_ICU_Decoder : public HTML_Decoder
    {
     private:
-     virtual wchar_t get2(void);
+     virtual wchar_t get2();
 
      ICU_Reader *icu_reader;
 
     public:
      HTML_ICU_Decoder( StreamPtr File );
-     virtual ~HTML_ICU_Decoder(void);
+     virtual ~HTML_ICU_Decoder();
 
      virtual pos_type seekp( off_type pos, int whereto=SEEK_SET );
    };
@@ -633,7 +634,7 @@
       JUST just;                  // justification
       const lem::CodeConverter* encoding; // text encoding for paragraph (added by Koziev Elijah)
 
-      PAP(void);
+      PAP();
      };                  // PAragraph Properties
 
      typedef enum {sbkNon, sbkCol, sbkEvn, sbkOdd, sbkPg} SBK;
@@ -660,7 +661,7 @@
       char fLandscape;            // landscape or portrait??
       const lem::CodeConverter* encoding; // text encoding (added by Koziev Elijah)
 
-      DOP(void);
+      DOP();
      };                  // DOcument Properties
 
      typedef enum { rdsNorm, rdsSkip } RDS;              // Rtf Destination State
@@ -736,9 +737,9 @@
      int icur; // положение курсора чтения в буфере.
      Stream::pos_type last_char_pos; // позиция в файле последнего считанного символа
 
-     void Fill_Buffer(void);
+     void Fill_Buffer();
 
-     virtual wchar_t Read_Char(void);
+     virtual wchar_t Read_Char();
 
      int BUFFER_SIZE; // максимальный размер буфера
      int error; // индикатор ошибок парсера
@@ -765,27 +766,27 @@
      int ecChangeDest(IDEST idest);
      int ecEndGroupAction(RDS rds);
      int ecParseSpecialKeyword(IPFN ipfn);
-     int ecPushRtfState(void);
-     int ecPopRtfState(void);
-     int ecParseRtfKeyword(void);
+     int ecPushRtfState();
+     int ecPopRtfState();
+     int ecParseRtfKeyword();
      int ecParseChar(int ch);
      int ecPrintChar( int ch );
 
     public:
      RTF_Decoder( StreamPtr File );
-     virtual ~RTF_Decoder(void);
+     virtual ~RTF_Decoder();
 
-     virtual bool eof(void) const { return eof_reached || error!=ecOK; }
+     virtual bool eof() const { return eof_reached || error!=ecOK; }
 
-     virtual void Write_Beginning(void) {}
+     virtual void Write_Beginning() {}
      virtual bool Read_Beginning( bool /*excp*/=false ) { return true; }
 
-     virtual int Bits_Per_Char(void) const { return 16; }
-     virtual const char* GetFormat(void) const { return "rtf"; }
+     virtual int Bits_Per_Char() const { return 16; }
+     virtual const char* GetFormat() const { return "rtf"; }
 
      virtual void wput( wchar_t ) { LEM_STOPIT; }
 
-     virtual pos_type tellp(void) const { return last_char_pos; }
+     virtual pos_type tellp() const { return last_char_pos; }
    };
 
 
@@ -806,7 +807,7 @@
     CRITICAL_SECTION cs;
     #endif
 
-    void Clear_Fields(void);
+    void Clear_Fields();
 
     void Dump_XLS( 
                   const FString &filename,
@@ -816,7 +817,7 @@
    public:
     XLS_Decoder( StreamPtr File );
 
-    virtual ~XLS_Decoder(void);
+    virtual ~XLS_Decoder();
 
     // Загружает в предоставленный буффер максимум len символов
     void ReadChunk( UFString &text, int len );

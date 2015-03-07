@@ -100,7 +100,7 @@ bool ModelTagMatcher::Match( const Word_Form & wf, Solarix::Dictionary & dict ) 
      continue;
 
     // для бистабильных координат - состояние 0 равнозначно отсутствию вообще такой пары
-    if( dict.GetSynGram().coords()[ p.GetCoord().GetIndex() ].IsBistable() )
+    if( p.GetState()==0 && dict.GetSynGram().coords()[ p.GetCoord().GetIndex() ].IsBistable() )
      {
       if( wf.GetPairs().FindOnce( p.GetCoord().GetIndex() ) != UNKNOWN )
        return false;

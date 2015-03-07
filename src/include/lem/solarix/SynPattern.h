@@ -451,7 +451,6 @@
                  lem::Iridium::Macro_Parser & txtfile,
                  const SynPatterns & pattern_declarations,
                  SynPatternCompilation & compilation_context,
-                 const TrProcedureDeclaration & procs,
                  TrFunctions & functions,
                  const SynPatternPoint & point
                 );
@@ -506,6 +505,7 @@
 
     int ThesaurusCheck_Link, ThesaurusCheck_Entry; // для проверки, что опорная точка связана с заданной статьей указанным типом связи
 
+    lem::zbool not_tokenizer_flags; // true, если нужно, чтобы у словофорсы не было заданного флага токенизатора
     lem::UFString tokenizer_flags; // проверка у словоформы доп. результатов токенизатора
 
     lem::UCString function_name; // если это функциональная точка
@@ -538,7 +538,6 @@
                       SynGram &sg,
                       lem::Iridium::Macro_Parser & txtfile,
                       SynPatternCompilation & compilation_context,
-                      const TrProcedureDeclaration &procs,
                       TrFunctions &functions,
                       int &iclass,
                       lem::MCollect<CoordPairChecker> & coords2,
@@ -551,7 +550,6 @@
                        lem::Iridium::Macro_Parser & txtfile,
                        const SynPatterns & pattern_declarations,
                        SynPatternCompilation & compilation_context,
-                       const TrProcedureDeclaration & procs,
                        TrFunctions & functions
                       );
     #endif
@@ -561,6 +559,7 @@
                                   const SynPatternResultBackTrace * x_result,
                                   SynPatternResult * cur_result,
                                   TreeMatchingExperience &experience,
+                                  const ElapsedTimeConstraint & constraints,
                                   TrTrace *trace_log
                                  ) const;
 
@@ -599,6 +598,7 @@
                         const SynPatternResultBackTrace * x_result,
                         WordEntrySet &wordentry_sets,
                         lem::PtrCollect<SynPatternResult> & results,
+                        const ElapsedTimeConstraint & constraints,
                         TrTrace * trace_log
                        ) const;
 
@@ -612,6 +612,7 @@
                               const SynPatternResultBackTrace * x_result,
                               WordEntrySet &wordentry_sets,
                               lem::PtrCollect<SynPatternResult> & results,
+                              const ElapsedTimeConstraint & constraints,
                               TrTrace * trace_log
                              ) const;
 
@@ -626,6 +627,7 @@
                            const SynPatternResultBackTrace * x_result,
                            WordEntrySet &wordentry_sets,
                            lem::PtrCollect<SynPatternResult> & results,
+                           const ElapsedTimeConstraint & constraints,
                            TrTrace * trace_log
                           ) const;
 
@@ -639,6 +641,7 @@
                                   const SynPatternResultBackTrace * x_result,
                                   WordEntrySet &wordentry_sets,
                                   lem::PtrCollect<SynPatternResult> & results,
+                                  const ElapsedTimeConstraint & constraints,
                                   TrTrace * trace_log
                                  ) const;
 
@@ -653,6 +656,7 @@
                             const SynPatternResultBackTrace * x_result,
                             WordEntrySet &wordentry_sets,
                             lem::PtrCollect<SynPatternResult> & results,
+                            const ElapsedTimeConstraint & constraints,
                             TrTrace * trace_log
                            ) const;
 
@@ -666,6 +670,7 @@
                                    const SynPatternResultBackTrace * x_result,
                                    WordEntrySet &wordentry_sets,
                                    lem::PtrCollect<SynPatternResult> & results,
+                                   const ElapsedTimeConstraint & constraints,
                                    TrTrace * trace_log
                                   ) const;
 
@@ -680,6 +685,7 @@
                               const SynPatternResultBackTrace * x_result,
                               WordEntrySet &wordentry_sets,
                               lem::PtrCollect<SynPatternResult> & results,
+                              const ElapsedTimeConstraint & constraints,
                               TrTrace * trace_log
                              ) const;
 
@@ -693,6 +699,7 @@
                        const SynPatternResultBackTrace * x_result,
                        WordEntrySet &wordentry_sets,
                        lem::PtrCollect<SynPatternResult> & results,
+                       const ElapsedTimeConstraint & constraints,
                        TrTrace * trace_log
                       ) const;
 
@@ -803,7 +810,6 @@
                  lem::Iridium::Macro_Parser & txtfile,
                  const SynPatterns &patterns,
                  SynPatternCompilation & compilation_context,
-                 const TrProcedureDeclaration &procs,
                  TrFunctions &functions,
                  bool ParseExportSection=true
                 );
@@ -1015,7 +1021,6 @@
                  lem::Iridium::Macro_Parser & txtfile,
                  const SynPatterns & patterns,
                  WordEntrySet & wordentry_set,
-                 const TrProcedureDeclaration & procs,
                  TrFunctions & functions
                 );
 

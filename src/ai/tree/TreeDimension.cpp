@@ -159,6 +159,10 @@ static bool node_sorter( const Tree_Node * x, const Tree_Node * y )
 void TreeDimension::SortByWordIndex()
 {
  std::sort( nodes.begin(), nodes.end(), node_sorter );
+
+ for( int i=0; i<nodes.size(); ++i )
+  nodes[i]->leafs().SortByWordIndex();
+
  return;
 }
 

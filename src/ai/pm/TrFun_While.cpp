@@ -116,16 +116,15 @@ void TrFun_While::CompileDeclaration(
                                      PM_Automat &pm,
                                      lem::Iridium::Macro_Parser &txtfile,
                                      TrFunctions &functions,
-                                     const TrProcedureDeclaration &procs,
                                      TrKnownVars &known_vars,
                                      const TrBuiltInFunSignature *signature  
                                     )
 {
  src_location = pm.GetDict().GetDebugSymbols().RegisterLocation( txtfile, txtfile.tellp() );
  txtfile.read_it( B_OROUNDPAREN );
- cond = functions.CompileCall( pm, txtfile, procs, known_vars );
+ cond = functions.CompileCall( pm, txtfile, known_vars );
  txtfile.read_it( B_CROUNDPAREN );
- body = functions.CompileCall( pm, txtfile, procs, known_vars );
+ body = functions.CompileCall( pm, txtfile, known_vars );
  return;
 }
 #endif

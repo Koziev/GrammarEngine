@@ -166,6 +166,7 @@ int PatternNGramFunction::Match(
                                 SynPatternResult * cur_result,
                                 KnowledgeBase & kbase,
                                 TreeMatchingExperience &experience,
+                                const ElapsedTimeConstraint & constraints,
                                 TrTrace *trace_log
                                ) const
 {
@@ -197,7 +198,7 @@ int PatternNGramFunction::Match(
  const Solarix::Word_Form * root_wf = GetRootNode( dict, PatternSequenceNumber, cur_result );
 
  TreeScorerMatcher_Result matching_result;
- TreeScorerMatcher::MatchRootByGroup( root_wf, id_group, dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, matching_result, trace_log );
+ TreeScorerMatcher::MatchRootByGroup( root_wf, id_group, dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, matching_result, constraints, trace_log );
  
  if( matching_result.matched )
   return matching_result.score;

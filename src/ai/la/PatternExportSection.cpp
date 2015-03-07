@@ -95,7 +95,6 @@ void PatternExportSection::LoadTxt(
                                    lem::Iridium::Macro_Parser & txtfile,
                                    const SynPatterns & pattern_declarations,
                                    SynPatternCompilation & compilation_context,
-                                   const TrProcedureDeclaration & procs,
                                    TrFunctions & functions,
                                    const SynPatternPoint & point
                                   )

@@ -78,7 +78,6 @@ void TrFun_Group::CompileDeclaration(
                                      PM_Automat &pm,
                                      lem::Iridium::Macro_Parser &txtfile,
                                      TrFunctions &functions,
-                                     const TrProcedureDeclaration &procs,
                                      TrKnownVars &known_vars,
                                      const TrBuiltInFunSignature *signature  
                                     )
@@ -101,7 +100,7 @@ void TrFun_Group::CompileDeclaration(
      continue;
     }
 
-   items.push_back( functions.CompileCall(pm,txtfile,procs,block_scope) );
+   items.push_back( functions.CompileCall(pm,txtfile,block_scope) );
   }
 
  txtfile.read_it( B_CFIGPAREN );

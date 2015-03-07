@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.1997
-// LC->23.08.2014
+// LC->07.11.2014
 // --------------
 
 #include <lem/set.h>
@@ -92,7 +92,7 @@ bool PM_Automat::ProcessLexem(
 {
  if( t.GetToken()==B_FUNCTION )
  {
-  const TrFunction *fun = functions->Get().CompileDeclaration( *this, txtfile, procedure_declarations );
+  const TrFunction *fun = functions->Get().CompileDeclaration( *this, txtfile );
   return true;
  } 
  else if( t.string().eqi(L"static") )
@@ -100,7 +100,7 @@ bool PM_Automat::ProcessLexem(
   // это должно быть объявление глобальной переменной:
   // static тип = значение;
   // Мы скомпилируем его как функцию, инициализирующую переменную в глобальном пространстве.
-  functions->Get().CompileStatic( *this, txtfile, procedure_declarations );
+  functions->Get().CompileStatic( *this, txtfile );
   return true;
  }
 

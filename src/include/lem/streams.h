@@ -55,7 +55,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->02.03.1996
-// LC->08.10.2009
+// LC->21.10.2014
 // --------------
 
  #include <lem/config.h>
@@ -136,8 +136,8 @@
     #endif
 
     // Проверки перед чтением и записью - можно ли так работать с потоком.
-    inline void CheckWritable(void) const { LEM_CHECKIT_Z(!!writable); }
-    inline void CheckReadable(void) const { LEM_CHECKIT_Z(!!readable); }
+    inline void CheckWritable() const { LEM_CHECKIT_Z(!!writable); }
+    inline void CheckReadable() const { LEM_CHECKIT_Z(!!readable); }
 
     inline void SetMode( bool Readable, bool Writable, bool Seekable=true )
     { readable=Readable; writable=Writable; seekable=Seekable; }
@@ -145,7 +145,7 @@
     inline void SetName( const lem::Path &FileName ) { name=FileName; }
 
     #if LEM_DEBUGGING==1
-    inline void Assert(void) const
+    inline void Assert() const
     {
      guard1.Assert();
      guard2.Assert();
@@ -173,7 +173,7 @@
     Stream( bool Readable=true, bool Writable=true );
     Stream( bool Readable, bool Writable, const lem::Path &Name );
 
-    virtual ~Stream(void);
+    virtual ~Stream();
 
     // Запись блока информации, на который указывает src, размером size, в
     // поток с текущей позиции.
@@ -187,16 +187,16 @@
     // Готовы ли данные для считывания или готов ли канал принимать данные?
     // Имеет смысл для потоков, которые работают с устройствами типа
     // клавиатуры или сетью.
-    virtual bool isready(void) const;
+    virtual bool isready() const;
 
     // Ждем готовности канала данных.
-    virtual void wait_ready(void) const;
+    virtual void wait_ready() const;
 
     // Чтение единичного символа. Может возвращать EOF (-1) при достижении
     // конца файла. Автоматически смещает курсор к концу файла.
-    virtual int get(void)=0;
+    virtual int get()=0;
 
-    inline int operator()(void) { return get(); }
+    inline int operator()() { return get(); }
 
     // Вписывает символ в текущую позицию в файле.
     virtual void put( char )=0;
@@ -206,7 +206,7 @@
     virtual void unget( char c );
     
     // Чтение из потока UNICODE-символа.
-    virtual wchar_t wget(void);
+    virtual wchar_t wget();
 
     // Запись в поток UNICODE-символа
     virtual void wput( wchar_t );
@@ -249,32 +249,32 @@
     void rd( double* i );
     void rd( long double* i );
 
-    int read_int(void);
-    bool read_bool(void);
-    lem::uint8_t read_uint8(void);
+    int read_int();
+    bool read_bool();
+    lem::uint8_t read_uint8();
 
-    const CString read_string(void);
-    const FString read_fstring(void);
-    const UCString read_ustring(void);
-    const UFString read_ufstring(void);
+    const CString read_string();
+    const FString read_fstring();
+    const UCString read_ustring();
+    const UFString read_ufstring();
 
-    virtual const lem::Path& GetName(void) const;
+    virtual const lem::Path& GetName() const;
 
     // Проверка текущего состояния потока - не было ли ошибок в предыдущих
     // операциях. Если были, то обычно выдается сообщение на экран или
     // генерируется исключение.
-    virtual void Check(void) const;
+    virtual void Check() const;
 
     // Синхронизация буферов файла с диском.
-    virtual void flush(void)=0;
+    virtual void flush()=0;
 
     // Вернет true, если при чтении достигнут конец файла.
-    virtual bool eof(void) const=0;
+    virtual bool eof() const=0;
 
     // Возвращает текущую позицию курсора в потоке.
-    virtual pos_type tellp(void) const=0;
+    virtual pos_type tellp() const=0;
 
-    virtual pos64_type tellp64(void) const;
+    virtual pos64_type tellp64() const;
 
     // Перемещает курсор на заданную позицию: отсчитываем позицию от начала
     // файла, текущей позиции или конца файла, согласно константе where_to.
@@ -282,10 +282,10 @@
     virtual pos_type seekp( off_type pos, int whereto=SEEK_SET )=0;
 
     // Перемотка потока (установка курсора) в начало.
-    virtual void rewind(void); 
+    virtual void rewind(); 
 
     // Перемотка потока в конец.
-    virtual void to_end(void); 
+    virtual void to_end(); 
 
     virtual pos64_type seekp64( off64_type pos, int whereto=SEEK_SET );
 
@@ -294,12 +294,12 @@
     virtual bool move( off_type offset )=0;
 
     // Сбрасывает буфера вывода и закрывает поток.
-    virtual void close(void)=0;
+    virtual void close()=0;
 
     // Возвращает текущий размер потока.
-    virtual pos_type fsize(void) const=0;
+    virtual pos_type fsize() const=0;
 
-    virtual lem::uint64_t fsize64(void) const;
+    virtual pos64_type fsize64() const;
 
     // Управление цветовыми атрибутами при выводе на терминалы...
     // Для большинства потоков эти методы пусты, только для терминальных
@@ -307,16 +307,16 @@
     virtual void SetForeGroundColor( int /*iColor*/ );
     virtual void SetBackGroundColor( int /*iColor*/ );
     virtual void SetBlinkMode( bool /*blinks*/ );
-    virtual void SetHighLightMode(void);
-    virtual void SetLowLightMode(void);
-    virtual void SetNormalMode(void);
+    virtual void SetHighLightMode();
+    virtual void SetLowLightMode();
+    virtual void SetNormalMode();
 
     // Вернет true, если при открытии потока или работе с ним возникла ошибка и
     // не было сгенерировано исключение
-    virtual bool is_failed(void) const;
+    virtual bool is_failed() const;
 
     // Возвращает признак бинарности потока.
-    inline bool IsBinary(void) const
+    inline bool IsBinary() const
     {
      #if LEM_DEBUGGING==1
      Assert();
@@ -328,13 +328,13 @@
     // срабатывании деструктора класса.
     inline void SetClosable( bool f )  { closable=f; }
 
-    inline bool CanWrite(void) const { return writable; }
-    inline bool CanRead(void)  const { return readable; }
-    inline bool CanSeek(void)  const { return seekable; }
+    inline bool CanWrite() const { return writable; }
+    inline bool CanRead()  const { return readable; }
+    inline bool CanSeek()  const { return seekable; }
 
 
     // Вернет TRUE если поток работает с реальным дисковым файлом
-    virtual bool IsDiskFile(void) const;
+    virtual bool IsDiskFile() const;
 
     // Возвращает время создания и последней модификации файла
     virtual bool GetTimes(
@@ -343,11 +343,11 @@
                          );
 
    // Отключает буферизацию ввода-вывода (если поток ее использует).
-   virtual void NoBuffer(void);
+   virtual void NoBuffer();
 
    // Если поток поддерживает вывод широких символов через wput и wputs, то вернет >8,
    // иначе 8 - однобайтовый поток. 
-   virtual int Bits_Per_Char(void) const;
+   virtual int Bits_Per_Char() const;
   };
 
 
@@ -369,7 +369,7 @@
    static int n_opened; // Для отладочных целей - счетчик открытых файлов.
 
    #if LEM_DEBUGGING==1
-   inline void Assert(void) const
+   inline void Assert() const
    {
     #if defined LEM_MSC && _MSC_VER<1300
     // ...
@@ -384,7 +384,7 @@
    void OpenDiskFile( const char *amode, const wchar_t *umode, bool do_throw );
 
   public:
-   BinaryFile(void);
+   BinaryFile();
    BinaryFile( const lem::Path &filename );
    BinaryFile( FILE *f );
    BinaryFile( FILE *f, const lem::Path &filename );
@@ -407,7 +407,7 @@
              );
 
    // Деструктор обязательно закроет поток, если он остался открыт.
-   ~BinaryFile(void);
+   ~BinaryFile();
 
 
    virtual void reopen( 
@@ -418,39 +418,39 @@
                        bool do_throw=true      // по умолчанию генерируется исключение, если файл не открывается
                       );
 
-   virtual bool is_failed(void) const;
+   virtual bool is_failed() const;
 
    virtual void write( const void *src, pos_type size );
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
+   virtual int get();
    virtual void put( char ch );
 
    virtual void unget( char c );
-   inline FILE* GetStream(void) { return file; }
+   inline FILE* GetStream() { return file; }
 
-   virtual void Check(void) const;
-   virtual void flush(void);
-   virtual bool eof(void) const;
-   virtual pos_type tellp(void) const;
+   virtual void Check() const;
+   virtual void flush();
+   virtual bool eof() const;
+   virtual pos_type tellp() const;
    virtual pos_type seekp( off_type to, int whereto=SEEK_SET );
    virtual bool move( off_type offset );
-   virtual pos64_type tellp64(void) const;
+   virtual pos64_type tellp64() const;
    virtual pos64_type seekp64( off64_type to, int whereto=SEEK_SET );
-   virtual lem::uint64_t fsize64(void) const;
 
-   virtual void close(void);
+   virtual void close();
 
-   virtual pos_type fsize(void) const;
+   virtual pos_type fsize() const;
+   virtual pos64_type fsize64() const;
 
    virtual bool GetTimes(
                          boost::posix_time::ptime &creat,
                          boost::posix_time::ptime &modif
                         );
 
-   virtual bool IsDiskFile(void) const;
+   virtual bool IsDiskFile() const;
 
    // отмена буферизации (setvbuf).
-   virtual void NoBuffer(void);
+   virtual void NoBuffer();
  };
 
 
@@ -479,7 +479,7 @@
  class TextFile : public BinaryFile
  {
   public:
-   TextFile(void);
+   TextFile();
    TextFile(
             const Path& filename,
             bool for_read,
@@ -490,21 +490,21 @@
 
    // Read characters till EOL ('\n') reached, return collected
    // string.
-   const FString read_till_eol(void);
+   const FString read_till_eol();
  };
 
 
  class TextReader : public TextFile
  {
   public:
-   TextReader(void);
+   TextReader();
    TextReader( const Path& filename );
  };
 
  class TextWriter : public TextFile
  {
   public:
-   TextWriter(void);
+   TextWriter();
    TextWriter( const Path& filename );
  };
 
@@ -515,25 +515,25 @@
    ostream *stream;
 
   public:
-   StdTtyStream(void);
+   StdTtyStream();
    StdTtyStream( std::ostream *s );
 
    virtual void write( const void *src, pos_type size );
    virtual void put( char Ch );
    virtual pos_type read( void * /*dest*/, pos_type /*size*/ );
-   virtual int get(void);
+   virtual int get();
 
-   inline operator ostream*(void) { return stream; }
-   inline ostream* GetStream(void) { return stream; }
+   inline operator ostream*() { return stream; }
+   inline ostream* GetStream() { return stream; }
 
-   virtual void Check(void) const;
-   virtual void flush(void);
-   virtual void close(void);
-   virtual bool eof(void) const;
-   virtual pos_type tellp(void) const;
+   virtual void Check() const;
+   virtual void flush();
+   virtual void close();
+   virtual bool eof() const;
+   virtual pos_type tellp() const;
    virtual pos_type seekp( off_type /*to*/, int /*whereto*/=SEEK_SET );
    virtual bool move( off_type /*offset*/ );
-   virtual pos_type fsize(void) const;
+   virtual pos_type fsize() const;
  };
 
  // ******************************************************************
@@ -546,7 +546,7 @@
    bool do_del;          // можно ли в деструкторе удалять объект stream.
 
   public:
-   StdFileStream(void);
+   StdFileStream();
    StdFileStream( fstream *Stream );
    StdFileStream(
                  const Path& filename,
@@ -555,19 +555,19 @@
                  bool for_append=false
                 );
 
-   virtual ~StdFileStream(void);
+   virtual ~StdFileStream();
    virtual void write( const void *src, pos_type size );
    virtual void put( char Ch );
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
-   virtual void Check(void) const;
-   virtual void flush(void);
-   virtual void close(void);
-   virtual bool eof(void) const;
-   virtual pos_type tellp(void) const;
+   virtual int get();
+   virtual void Check() const;
+   virtual void flush();
+   virtual void close();
+   virtual bool eof() const;
+   virtual pos_type tellp() const;
    virtual pos_type seekp( off_type /*to*/, int /*whereto*/=SEEK_SET );
    virtual bool move( off_type offset );
-   virtual pos_type fsize(void) const;
+   virtual pos_type fsize() const;
  };
 
  // *********************************************************************
@@ -588,23 +588,23 @@
    bool del; // удалять ли stream в деструкторе класса.
 
   public:
-   BitStream(void);
+   BitStream();
    BitStream( Stream *Stream, bool Delete_Stream );
 
-   ~BitStream(void);
+   ~BitStream();
 
    void OutputBit( int bit );
    void OutputBits( unsigned int bits, int bit_count );
    void put( char c ) { OutputBits( (unsigned char)(c), 8 ); }
 
-   int InputBit(void);
+   int InputBit();
    unsigned int InputBits( int bit_count );
-   int get(void) { return int(0x000000ffUL&InputBits(8)); }
+   int get() { return int(0x000000ffUL&InputBits(8)); }
 
    // Этот метод не применим в общем случае, так как если записано количество
    // бит, не выравненное на границу байта, то запись цепочки байтов приведет
    // фактически к появлению нулевых битов в конце.
-   void flush(void)
+   void flush()
    {
     if( mask!=0x80 )
      {
@@ -613,9 +613,9 @@
      }
    }
 
-   inline bool eof(void) { return stream->eof(); }
+   inline bool eof() { return stream->eof(); }
 
-   inline Stream* GetStream(void) { return stream; }
+   inline Stream* GetStream() { return stream; }
  };
 
 
@@ -653,10 +653,10 @@
    lem::zbool allocatable; // Можно ли изменять размеры блока
 
    void reallocate( size_t new_size );
-   void reallocate(void); // Увеличение блока памяти.
+   void reallocate(); // Увеличение блока памяти.
 
    #if LEM_DEBUGGING==1
-   inline void Assert(void) const
+   inline void Assert() const
    {
     #if !defined LEM_MSC || _MSC_VER>=1300
     lem::Stream::Assert();
@@ -668,7 +668,7 @@
    #endif
 
   public:
-   MemStream(void);
+   MemStream();
 
    MemStream(
              char **Block,
@@ -680,38 +680,40 @@
 
    MemStream( bool for_write );
 
-   ~MemStream(void);
+   ~MemStream();
 
-   void SetReadable(void);
+   void SetReadable();
 
    virtual void write( const void *src, pos_type size );
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
+   virtual int get();
    virtual void put( char ch );
    virtual void unget( char c );
 
-   virtual void Check(void) const;
+   virtual void Check() const;
 
-   virtual void flush(void);
+   virtual void flush();
 
-   void clear(void);
+   void clear();
 
-   char* PickBlock(void);
+   char* PickBlock();
 
-   const FString string(void) const;
+   const FString string() const;
 
-   virtual const char* get_Block(void) const;
+   virtual const char* get_Block() const;
 
-   virtual bool eof(void) const;
+   lem::FString Hex() const;
 
-   virtual pos_type tellp(void) const;
+   virtual bool eof() const;
+
+   virtual pos_type tellp() const;
 
    virtual pos_type seekp( lem::Stream::off_type to, int whereto=SEEK_SET );
 
    virtual bool move( lem::Stream::off_type offset );
 
-   virtual void close(void);
-   virtual pos_type fsize(void) const;
+   virtual void close();
+   virtual pos_type fsize() const;
  };
 
 
@@ -730,102 +732,52 @@
    MemReadStream( const void *rBlock, size_t Size );
 
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
+   virtual int get();
    virtual void unget( char c );
 
-   virtual bool eof(void) const { return cursor>=size; }
+   virtual bool eof() const { return cursor>=size; }
 
-   virtual pos_type tellp(void) const { return (long)cursor; }
+   virtual pos_type tellp() const { return (long)cursor; }
 
-   virtual void close(void) {};
-   virtual pos_type fsize(void) const { return size; }
-   virtual void Check(void) const { LEM_CHECKIT_Z(rblock!=NULL); }
-   virtual const char* get_Block(void) const { return (const char*)rblock; }
+   virtual void close() {}
+   virtual pos_type fsize() const { return size; }
+   virtual void Check() const { LEM_CHECKIT_Z(rblock!=NULL); }
+   virtual const char* get_Block() const { return (const char*)rblock; }
    virtual pos_type seekp( lem::Stream::off_type to, int whereto=SEEK_SET );
  };
 
 
- // ***************************************************
- // Sound OUTLET Stream
- // Поток для вывода звуковых данных.
- // ***************************************************
- /*
- class SoundOStream : public Stream
+ class MemReadHexStream : public lem::Stream
  {
   private:
-   FString snd_tmp_fname; // Имя временного файла, куда мы сбросили звукозапись.
-   Collect<UINT8*> Fragment; // Список указателей на блоки для воспроизведения.
-   Collect<size_t> Size; // Список размеров блоков.
-
-   bool CanBeVocalized(void) const;
-   void DoVoiceThemDirectly(void);
-   void ForgetFragments(void);
-
+   int size;
+   lem::uint8_t *block;
+   int cursor;
+     
   public:
-   SoundOStream(void);
-   ~SoundOStream(void);
+   MemReadHexStream( const char *HexData );
+   MemReadHexStream( const wchar_t *HexData );
+   virtual ~MemReadHexStream();
 
-   virtual bool isready(void) const { return CanBeVocalized(); }
+   virtual pos_type read( void *dest, pos_type size );
+   virtual int get();
+   virtual void unget( char c );
 
-   const FString Play(void);
+   virtual bool eof() const;
 
-   void Do_Play_File( const FString &filename );
-   void DoVocalize( const char *filename );
+   virtual pos_type tellp() const { return cursor; }
+   virtual pos_type seekp( lem::Stream::off_type to, int whereto=SEEK_SET );
+   virtual bool move( lem::Stream::off_type offset );
 
-   virtual void write( const void *src, size_t size );
-   virtual void flush(void);
+   virtual void close() {}
+   virtual pos_type fsize() const { return size; }
+   virtual void Check() const;
 
-   virtual void read( void *dest, size_t size ) {};
-   virtual int get(void) { return 0; }
-   virtual void put( int ch );
-   virtual bool eof(void) const { return false; }
-   virtual size_t tellp(void) const { return 0; }
-   virtual size_t seekp( size_t pos, int whereto=SEEK_SET )
-   { return (size_t)-1; }
-
-   virtual bool move( size_t offset ) { return false; }
-   virtual void close(void) {};
-   virtual size_t fsize(void) const { return 0; }
+   virtual void write( const void *src, pos_type size ) { LEM_STOPIT; }
+   virtual void put( char ch ) { LEM_STOPIT; }
+   virtual void flush() {}
  };
-*/
 
- // *************************************************************
- // Sound INLET Stream
- // Поток для считывания звуковых данных с внешнего устройства.
- // *************************************************************
- /*
- class SoundIStream : public Stream
- {
-  private:
-   BaseFString<char> snd_tmp_fname; // Имя временного файла, куда мы поместим звукозапись.
-   BinaryFile *record; // Сформированный файл со звуком.
-
-   void Open(void);
-   void DoRecord(void);
-
-  public:
-   SoundIStream(void);
-   ~SoundIStream(void);
-
-   void Record_If_Needed( bool forced );
-
-   virtual bool isready(void) const;
-   virtual void read( void *src, size_t size );
-   virtual void flush(void);
-
-   virtual int get(void) { return 0; }
-
-   virtual void write( const void *src, size_t size );
-   virtual void put( int ch );
-
-   virtual bool eof(void) const;
-   virtual size_t tellp(void) const { return (size_t)-1; }
-   virtual size_t seekp( size_t pos, int whereto=SEEK_SET ) { return (size_t)-1; }
-   virtual bool move( size_t offset ) { return false; }
-   virtual void close(void);
-   virtual size_t fsize(void) const;
- };
-*/
 
  /*****************************************************************
   Стандартный поток для консоли TTY (печать на алфавитно-цифровом
@@ -847,13 +799,13 @@
    void operator =( const TtyStream &x );
 
   public:
-   TtyStream(void);
+   TtyStream();
 
-   virtual ~TtyStream(void);
+   virtual ~TtyStream();
 
    virtual void write( const void *src, size_t size );
    virtual pos_type read( void * /*dest*/, size_t /*size*/ );
-   virtual int get(void);
+   virtual int get();
 
    virtual void put( char Ch );
    virtual void puts( const char *s );
@@ -861,21 +813,21 @@
    void write_string( const CString& s );
    void write_fstring( const FString& s );
 
-   virtual void flush(void);
-   virtual bool eof(void) const;
-   virtual lem::Stream::pos_type tellp(void) const;
+   virtual void flush();
+   virtual bool eof() const;
+   virtual lem::Stream::pos_type tellp() const;
    virtual lem::Stream::pos_type seekp( off_type /*pos*/, int /*whereto*/=SEEK_SET );
    virtual bool move( off_type /*offset*/ );
-   virtual void close(void);
-   virtual pos_type fsize(void) const;
+   virtual void close();
+   virtual pos_type fsize() const;
 
    // Управление цветовыми атрибутами при выводе на терминалы...
    virtual void SetForeGroundColor( int iColor );
    virtual void SetBackGroundColor( int iColor );
    virtual void SetBlinkMode( bool blinks );
-   virtual void SetHighLightMode(void);
-   virtual void SetLowLightMode(void);
-   virtual void SetNormalMode(void);
+   virtual void SetHighLightMode();
+   virtual void SetLowLightMode();
+   virtual void SetNormalMode();
  };
 
 
@@ -890,14 +842,14 @@
    void operator =( const TtyStreamStd &x );
 
   public:
-   TtyStreamStd(void);
+   TtyStreamStd();
 
-   virtual ~TtyStreamStd(void);
+   virtual ~TtyStreamStd();
 
    virtual void write( const void *src, size_t size );
    virtual pos_type read( void * /*dest*/, size_t /*size*/ );
 
-   virtual int get(void);
+   virtual int get();
 
    virtual void put( char Ch );
    virtual void puts( const char *s );
@@ -905,24 +857,24 @@
 //   void write_string( const CString& s );
 //   void write_fstring( const FString& s );
 
-   virtual void flush(void);
-   virtual bool eof(void) const;
-   virtual pos_type tellp(void) const;
+   virtual void flush();
+   virtual bool eof() const;
+   virtual pos_type tellp() const;
 
    virtual pos_type seekp( off_type /*pos*/, int /*whereto*/=SEEK_SET );
 
    virtual bool move( off_type /*offset*/ );
 
-   virtual void close(void);
+   virtual void close();
 
-   virtual pos_type fsize(void) const;
+   virtual pos_type fsize() const;
 
    virtual void SetForeGroundColor( int iColor );
    virtual void SetBackGroundColor( int iColor );
    virtual void SetBlinkMode( bool blinks );
-   virtual void SetHighLightMode(void);
-   virtual void SetLowLightMode(void);
-   virtual void SetNormalMode(void);
+   virtual void SetHighLightMode();
+   virtual void SetLowLightMode();
+   virtual void SetNormalMode();
  };
 
  // ******************************************************
@@ -934,10 +886,10 @@
  class TtyUcs2Stream : public TtyStream
  {
   public:
-   TtyUcs2Stream(void);
+   TtyUcs2Stream();
 
    virtual void wput( wchar_t );
-   virtual int Bits_Per_Char(void) const;
+   virtual int Bits_Per_Char() const;
  };
  #endif
 
@@ -946,7 +898,7 @@
  class TtyUtf8Stream : public TtyStreamStd
  {
   public:
-   TtyUtf8Stream(void);
+   TtyUtf8Stream();
 
    virtual void put( char Ch );
    virtual void wput( wchar_t );
@@ -962,23 +914,23 @@
  class KbdStream : public Stream
  {
   public:
-   KbdStream(void);
-   ~KbdStream(void);
+   KbdStream();
+   ~KbdStream();
 
-   virtual bool isready(void) const;
-   virtual const FString read_fstring(void);
+   virtual bool isready() const;
+   virtual const FString read_fstring();
 
    virtual void write( const void * /*src*/, size_t /*size*/ );
    virtual pos_type read( void * /*dest*/, size_t /*size*/ );
    virtual void put( char /*ch*/ );
-   virtual int get(void);
-   virtual bool eof(void) const;
-   virtual pos_type tellp(void) const;
+   virtual int get();
+   virtual bool eof() const;
+   virtual pos_type tellp() const;
    virtual pos_type seekp( off_type /*pos*/, int /*whereto*/=SEEK_SET );
    virtual bool move( off_type /*offset*/ );
-   virtual void close(void);
-   virtual pos_type fsize(void) const;
-   virtual void flush(void);
+   virtual void close();
+   virtual pos_type fsize() const;
+   virtual void flush();
  };
 
 
@@ -990,9 +942,9 @@
  class ErrStream : public MemStream
  {
   public:
-   ErrStream(void):MemStream(true) {}
+   ErrStream():MemStream(true) {}
 
-   virtual void flush(void);
+   virtual void flush();
  };
 
   // ********************************************************************** 
@@ -1049,16 +1001,16 @@
 
   lem::FString ip_port, locals;
 
-  ProxyConfig(void);
+  ProxyConfig();
   ProxyConfig( const lem::FString &address );
   ProxyConfig( const ProxyConfig &x );
   void operator=( const ProxyConfig &x );
 
-  inline bool IsAuto(void) const { return type==AutoProxy; }
-  inline bool IsForced(void) const { return type==Forced; }
-  inline bool IsDisabled(void) const { return type==NoProxy; }
+  inline bool IsAuto() const { return type==AutoProxy; }
+  inline bool IsForced() const { return type==Forced; }
+  inline bool IsDisabled() const { return type==NoProxy; }
 
-  inline void Disable(void) { type = NoProxy; }
+  inline void Disable() { type = NoProxy; }
  };
 
  extern ProxyConfig AutoProxy;
@@ -1080,43 +1032,43 @@
    //UrlFile( const lem::Url &url, ProxyType proxy=AutoProxy );
 
    // Деструктор обязательно закроет поток, если он остался открыт.
-   ~UrlFile(void);
+   ~UrlFile();
 
-   virtual bool is_failed(void) const;
+   virtual bool is_failed() const;
 
    virtual void write( const void *src, pos_type size );
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
+   virtual int get();
    virtual void put( char ch );
 
    virtual void unget( char c );
 
-   virtual void Check(void) const;
+   virtual void Check() const;
 
-   virtual void flush(void);
+   virtual void flush();
 
-   virtual bool eof(void) const;
+   virtual bool eof() const;
 
-   virtual pos_type tellp(void) const;
+   virtual pos_type tellp() const;
 
    virtual pos_type seekp( off_type to, int whereto=SEEK_SET );
 
    virtual bool move( off_type offset );
 
-   virtual pos64_type tellp64(void) const;
+   virtual pos64_type tellp64() const;
    virtual pos64_type seekp64( off64_type to, int whereto=SEEK_SET );
-   virtual lem::uint64_t fsize64(void) const;
+   virtual lem::uint64_t fsize64() const;
 
-   virtual void close(void);
+   virtual void close();
 
-   virtual pos_type fsize(void) const;
+   virtual pos_type fsize() const;
 
    virtual bool GetTimes(
                          boost::posix_time::ptime &creat,
                          boost::posix_time::ptime &modif
                         );
 
-   virtual bool IsDiskFile(void) const { return false; }
+   virtual bool IsDiskFile() const { return false; }
  };
 
  #elif defined LEM_WINDOWS
@@ -1130,7 +1082,7 @@
   protected:
    HINTERNET hInternetSession;
    bool InitSession( const ProxyConfig& proxy );
-   void CloseSession(void);
+   void CloseSession();
 
    lem::uint8_t *MemoryBlock;
 
@@ -1139,7 +1091,7 @@
   public:
    UrlFile( const lem::Path &url, const ProxyConfig& proxy=lem::AutoProxy );
    UrlFile( const lem::Url &url, const ProxyConfig& proxy=lem::AutoProxy );
-   ~UrlFile(void);
+   ~UrlFile();
  };
 
  #endif
@@ -1163,36 +1115,36 @@
   public:
    FastFileReader( const lem::Path &filename );
 
-   ~FastFileReader(void);
+   ~FastFileReader();
 
-   virtual bool is_failed(void) const;
+   virtual bool is_failed() const;
 
    virtual void write( const void *src, pos_type size );
    virtual pos_type read( void *dest, pos_type size );
-   virtual int get(void);
+   virtual int get();
    virtual void put( char ch );
 
    virtual void unget( char c );
 
-   virtual void Check(void) const;
-   virtual void flush(void);
+   virtual void Check() const;
+   virtual void flush();
 
-   virtual bool eof(void) const;
+   virtual bool eof() const;
 
-   virtual pos_type tellp(void) const;
+   virtual pos_type tellp() const;
    virtual pos_type seekp( off_type to, int whereto=SEEK_SET );
 
    virtual bool move( off_type offset );
-   virtual pos64_type tellp64(void) const;
+   virtual pos64_type tellp64() const;
    virtual pos64_type seekp64( off64_type to, int whereto=SEEK_SET );
-   virtual lem::uint64_t fsize64(void) const;
-   virtual void close(void);
+   virtual pos64_type fsize64() const;
+   virtual void close();
 
-   virtual pos_type fsize(void) const;
-   virtual bool IsDiskFile(void) const;
+   virtual pos_type fsize() const;
+   virtual bool IsDiskFile() const;
 
    #if defined LEM_WINDOWS
-   const lem::uint8_t* CurPtr(void) const { return CurAdr; }
+   const lem::uint8_t* CurPtr() const { return CurAdr; }
    #endif
  };
  #endif

@@ -1,7 +1,7 @@
 // Морфологический анализатор - опорные точки для правил фильтрации и сортировки
 //
 // CD->12.06.2009
-// LC->23.08.2014
+// LC->07.11.2014
 
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/variator.h>
@@ -65,7 +65,7 @@ SynPatternPoint::SynPatternPoint( const SynPatternPoint &x )
  : mark_name(x.mark_name), id_tree(x.id_tree), greedy(x.greedy), lexeme(x.lexeme), iclass(x.iclass),
    ekey(x.ekey), coords(x.coords ), back_correls(x.back_correls), kb_checkers(x.kb_checkers), set_checkers(x.set_checkers),
    ThesaurusCheck_Link(x.ThesaurusCheck_Link), ThesaurusCheck_Entry(x.ThesaurusCheck_Entry),
-   tokenizer_flags(x.tokenizer_flags),
+   tokenizer_flags(x.tokenizer_flags), not_tokenizer_flags(x.not_tokenizer_flags),
    function_name(x.function_name), terminator(x.terminator), str_arg(x.str_arg),
    correl_fun(x.correl_fun), check_fun(x.check_fun),
    PatternSequenceNumber(x.PatternSequenceNumber), id_src(x.id_src), rx_string(x.rx_string), rx(x.rx)
@@ -134,6 +134,7 @@ void SynPatternPoint::operator=( const SynPatternPoint &x )
  coords = x.coords;
  back_correls = x.back_correls;
  tokenizer_flags = x.tokenizer_flags;
+ not_tokenizer_flags = x.not_tokenizer_flags;
  ThesaurusCheck_Link=x.ThesaurusCheck_Link;
  ThesaurusCheck_Entry=x.ThesaurusCheck_Entry;
  terminator = x.terminator;
@@ -208,7 +209,7 @@ bool SynPatternPoint::Equal( const SynPatternPoint &x ) const
  if( coords != x.coords )
   return false;
 
- if( tokenizer_flags!=x.tokenizer_flags )
+ if( tokenizer_flags!=x.tokenizer_flags || not_tokenizer_flags!=x.not_tokenizer_flags )
   return false;
 
  if( !function_name.eqi(x.function_name) )
@@ -322,7 +323,6 @@ void SynPatternPoint::LoadTxt(
                               lem::Iridium::Macro_Parser & txtfile,
                               const SynPatterns & pattern_declarations,
                               SynPatternCompilation & compilation_context,
-                              const TrProcedureDeclaration & procs,
                               TrFunctions & functions,
                               bool ParseExportSection
                              )
@@ -368,7 +368,7 @@ void SynPatternPoint::LoadTxt(
    if( function_name.eqi(L"mark") )
     {
      SynPatternPoint *arg = new SynPatternPoint();
-     arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+     arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
      args.push_back(arg);
 
      txtfile.read_it( B_COMMA );
@@ -391,8 +391,14 @@ void SynPatternPoint::LoadTxt(
     }
    else if( function_name.eqi(L"regex") || function_name.eqi(L"regex_strict") )
     {
+     // по умолчанию снимаем требования к словарной статье и части речи.
+     // явно задать их можно в идущей следом секции уточнения @regex(....){ ... }
+     ekey=UNKNOWN;
+     iclass=ANY_STATE;
+
+     // Строковое представление паттерна
      rx_string = txtfile.read().GetFullStr();
-     
+    
      if( rx_string.front()==L'"' )
       rx_string.strip( L'"' );
      else if( rx_string.front()==L'\'' )
@@ -422,6 +428,21 @@ void SynPatternPoint::LoadTxt(
       }
 
      txtfile.read_it(B_CROUNDPAREN );
+
+     if( txtfile.probe( B_OFIGPAREN ) )
+      {
+       LoadPreciser(
+                    dict.GetLexAuto(),
+                    dict.GetSynGram(),
+                    txtfile,
+                    compilation_context,
+                    functions, 
+                    iclass,
+                    coords,
+                    back_correls,
+                    set_checkers
+                   );
+      }
     }
    else if( function_name.eqi(L"in_wordentry_set") )
     {
@@ -477,7 +498,7 @@ void SynPatternPoint::LoadTxt(
           txtfile.read_it( B_COMMA );
      
          SynPatternPoint *arg = new SynPatternPoint();
-         arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+         arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
          args.push_back(arg);
         }
       }
@@ -491,7 +512,7 @@ void SynPatternPoint::LoadTxt(
 
    if( ParseExportSection )
     {
-     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
      if( function_name.eqi(L"and") || function_name.eqi(L"or") || function_name.eqi(L"optional") || function_name.eqi(L"coalesce") )
       if( export_section!=NULL )
@@ -529,7 +550,7 @@ void SynPatternPoint::LoadTxt(
      compilation_context.Add(mark_name.GetName());
 
      SynPatternPoint *arg = new SynPatternPoint();
-     arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions, false );
+     arg->LoadTxt( dict, txtfile, pattern_declarations, compilation_context, functions, false );
      args.push_back(arg);
 
      if( arg->export_section!=NULL )
@@ -539,7 +560,7 @@ void SynPatternPoint::LoadTxt(
        throw lem::E_BaseException();
       }
 
-     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
      RegisterRootNodeExport( compilation_context );
 
      return;
@@ -564,7 +585,6 @@ void SynPatternPoint::LoadTxt(
                   dict.GetSynGram(),
                   txtfile,
                   compilation_context,
-                  procs,
                   functions,
                   iclass,
                   coords,
@@ -575,7 +595,7 @@ void SynPatternPoint::LoadTxt(
 
    // опциональный список ре-экспортируемых координат
    if( ParseExportSection )
-    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
    return;
   }
@@ -586,8 +606,24 @@ void SynPatternPoint::LoadTxt(
    function_name = L"in_word_set";
    str_arg = class_name;
 
+   // может идти доп. фильтр по координатам
+   if( txtfile.probe( B_OFIGPAREN ) )
+    {
+     LoadPreciser(
+                  dict.GetLexAuto(),
+                  dict.GetSynGram(),
+                  txtfile,
+                  compilation_context,
+                  functions,
+                  iclass,
+                  coords,
+                  back_correls,
+                  set_checkers
+                 );
+    }
+
    if( ParseExportSection )
-    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
    return;
   }
@@ -598,8 +634,24 @@ void SynPatternPoint::LoadTxt(
    function_name = L"in_wordform_set";
    str_arg = class_name;
 
+   // может идти доп. фильтр по координатам
+   if( txtfile.probe( B_OFIGPAREN ) )
+    {
+     LoadPreciser(
+                  dict.GetLexAuto(),
+                  dict.GetSynGram(),
+                  txtfile,
+                  compilation_context,
+                  functions,
+                  iclass,
+                  coords,
+                  back_correls,
+                  set_checkers
+                 );
+    }
+
    if( ParseExportSection )
-    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
    return;
   }
@@ -610,8 +662,24 @@ void SynPatternPoint::LoadTxt(
    function_name = L"in_collocation_set";
    str_arg = class_name;
 
+   // может идти доп. фильтр по координатам
+   if( txtfile.probe( B_OFIGPAREN ) )
+    {
+     LoadPreciser(
+                  dict.GetLexAuto(),
+                  dict.GetSynGram(),
+                  txtfile,
+                  compilation_context,
+                  functions,
+                  iclass,
+                  coords,
+                  back_correls,
+                  set_checkers
+                 );
+    }
+
    if( ParseExportSection )
-    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+    LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
    return;
   }
@@ -645,7 +713,6 @@ void SynPatternPoint::LoadTxt(
                   dict.GetSynGram(),
                   txtfile,
                   compilation_context,
-                  procs,
                   functions, 
                   id_class_dummy,
                   coords,
@@ -669,7 +736,7 @@ void SynPatternPoint::LoadTxt(
    // опциональный список ре-экспортируемых координат
    if( ParseExportSection )
     {
-     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+     LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
      if( export_section!=NULL )
       {
@@ -711,7 +778,7 @@ void SynPatternPoint::LoadTxt(
    known_vars.RegisterVar( TrIntType(), L"_i" );
 
    txtfile.seekp( t1 );
-   check_fun = functions.CompileCall( dict.GetLexAuto(), txtfile, procs, known_vars );
+   check_fun = functions.CompileCall( dict.GetLexAuto(), txtfile, known_vars );
 
    return;
   }
@@ -736,7 +803,6 @@ void SynPatternPoint::LoadTxt(
                   dict.GetSynGram(),
                   txtfile,
                   compilation_context,
-                  procs,
                   functions, 
                   iclass,
                   coords,
@@ -800,7 +866,6 @@ void SynPatternPoint::LoadTxt(
                   dict.GetSynGram(),
                   txtfile,
                   compilation_context,
-                  procs,
                   functions, 
                   iclass,
                   coords,
@@ -820,7 +885,6 @@ void SynPatternPoint::LoadTxt(
                     dict.GetSynGram(),
                     txtfile,
                     compilation_context,
-                    procs,
                     functions,
                     iclass,
                     coords,
@@ -832,7 +896,7 @@ void SynPatternPoint::LoadTxt(
   }
 
  if( ParseExportSection )
-  LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, procs, functions );
+  LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
  return;
 }
@@ -844,7 +908,6 @@ void SynPatternPoint::LoadExportTxt(
                                     lem::Iridium::Macro_Parser & txtfile,
                                     const SynPatterns & pattern_declarations,
                                     SynPatternCompilation & compilation_context,
-                                    const TrProcedureDeclaration & procs,
                                     TrFunctions & functions
                                    )
 {
@@ -855,7 +918,7 @@ void SynPatternPoint::LoadExportTxt(
    if( txtfile.probe( L"export" ) )
     {
      export_section = new PatternExportSection();
-     export_section->LoadTxt(dict,txtfile,pattern_declarations,compilation_context,procs,functions,*this);
+     export_section->LoadTxt(dict,txtfile,pattern_declarations,compilation_context,functions,*this);
     }
    else
     {
@@ -875,7 +938,6 @@ void SynPatternPoint::LoadPreciser(
                                    SynGram &sg,
                                    lem::Iridium::Macro_Parser & txtfile,
                                    SynPatternCompilation & compilation_context,
-                                   const TrProcedureDeclaration &procs,
                                    TrFunctions &functions,
                                    int &iclass,
                                    lem::MCollect<CoordPairChecker> & coords2,
@@ -896,8 +958,13 @@ void SynPatternPoint::LoadPreciser(
    violation_handler.LoadTxt(txtfile);
 
   
-   // Может быть вызов проверяющей императивной лямбда-функции
-   if( txtfile.probe( L"@" ) )
+   // Может быть вызов проверяющей императивной функции
+   lem::Iridium::BethToken correl_fun_name = txtfile.read();
+
+//if( correl_fun_name.string()==L"НеМестоимениеОтладка" )
+ //lem::mout->printf( "DEBUG!!!" );
+
+   if( functions.IsFunction(correl_fun_name.string()) )
     {
      if( correl_fun.NotNull() )
       {
@@ -906,25 +973,33 @@ void SynPatternPoint::LoadPreciser(
        throw lem::E_BaseException();
       }
 
-     txtfile.read_it(L"lambda");
+     txtfile.seekp( correl_fun_name.GetBegin() );
+
+//     txtfile.read_it(L"lambda");
      
      TrKnownVars known_vars( &functions.global_known_vars );
 
-     lem::Iridium::BSourceState b = txtfile.tellp();
-     txtfile.read_it( B_OFIGPAREN );
-     txtfile.seekp(b);
+     //lem::Iridium::BSourceState b = txtfile.tellp();
+     //txtfile.read_it( B_OFIGPAREN );
+     //txtfile.seekp(b);
 
      // Объявленные оператором declare внутри правила переменные-маркировки.
-     for( lem::Container::size_type i=0; i<compilation_context.GetContext().GetVars().size(); ++i )
-      known_vars.RegisterVar( TrTreesType(), compilation_context.GetContext().GetVars()[i] );
+     //for( lem::Container::size_type i=0; i<compilation_context.GetContext().GetVars().size(); ++i )
+     // known_vars.RegisterVar( TrTreesType(), compilation_context.GetContext().GetVars()[i] );
 
      known_vars.RegisterVar( TrTreesType(), L"_" ); // проверямая словоформа
-     known_vars.RegisterVar( TrTreesType(), L"_0" ); // текущий анализируемый вариатор
 
-     correl_fun = functions.CompileCall( la, txtfile, procs, known_vars );
+     correl_fun = functions.CompileCall( la, txtfile, known_vars );
 
      continue;
     }
+   else
+    {
+     txtfile.seekp( correl_fun_name.GetBegin() );
+    }
+
+
+
 
    // может быть задание простой проверки на связь в тезаурусе
    if( txtfile.pick().GetToken()==B_OTRIPAREN )
@@ -979,6 +1054,22 @@ void SynPatternPoint::LoadPreciser(
      continue;
     }
 
+   lem::Iridium::BSourceState back1 = txtfile.tellp();
+   if( txtfile.probe( B_NEGATIVE ) )
+   {
+    if( txtfile.probe( L"tokenizer_flag" ) )
+     {
+      not_tokenizer_flags = true;
+      txtfile.read_it( B_COLON );
+      tokenizer_flags = txtfile.read().GetFullStr();
+      continue;
+     }
+    else
+     {
+      txtfile.seekp(back1);
+     }
+   }
+
 
    // для обычных: координата:состояние
    // для бистабильных: координата
@@ -989,7 +1080,7 @@ void SynPatternPoint::LoadPreciser(
    lem::Iridium::BethToken coord_name = txtfile.read();
 
 
-   // Если задано имя факта в базе знаний, но загружаем директиву обращения к БЗ
+   // Если задано имя факта в базе знаний, то загружаем директиву обращения к БЗ
    if( la.GetKnowledgeBase().FindFacts( coord_name.string() )!=UNKNOWN )
     {
      txtfile.seekp( coord_name );
@@ -1206,6 +1297,7 @@ void SynPatternPoint::SaveBin( lem::Stream& bin ) const
  kb_checkers.SaveBin(bin);
  set_checkers.SaveBin(bin);
 
+ bin.write_bool( not_tokenizer_flags );
  tokenizer_flags.SaveBin(bin);
 
  bin.write( &function_name, sizeof(function_name) );
@@ -1275,6 +1367,7 @@ void SynPatternPoint::LoadBin( lem::Stream& bin )
  kb_checkers.LoadBin(bin);
  set_checkers.LoadBin(bin);
 
+ not_tokenizer_flags = bin.read_bool();
  tokenizer_flags.LoadBin(bin);
 
  bin.read( &function_name, sizeof(function_name) );
@@ -1562,6 +1655,7 @@ NGramScore SynPatternPoint::CalculateNGramFreq(
                                                const SynPatternResultBackTrace * x_result,
                                                SynPatternResult * cur_result,
                                                TreeMatchingExperience &experience,
+                                               const ElapsedTimeConstraint & constraints,
                                                TrTrace *trace_log
                                               ) const
 {
@@ -1576,6 +1670,7 @@ NGramScore SynPatternPoint::CalculateNGramFreq(
                                 cur_result,
                                 kbase,
                                 experience,
+                                constraints,
                                 trace_log
                                );
 
@@ -1729,7 +1824,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
           GenerateLinks( dict.GetLexAuto(), r );
 
          if( ngrams!=NULL )
-          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
          if( pattern_constraints!=NULL )
           {
@@ -1814,7 +1909,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
         GenerateLinks( dict.GetLexAuto(), r );
 
        if( ngrams!=NULL )
-        r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+        r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
        if( pattern_constraints!=NULL )
         {
@@ -1864,6 +1959,9 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
   
        if( rx_matched )
         {
+         rx_matched = Match_WordformStrict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,constraints,trace_log);
+
+/*
          SynPatternResult *r = new SynPatternResult(parent_trace);
          r->res = SynPatternMatchResult( true, 1, current_token, current_token, NGramScore(0) );
 
@@ -1907,6 +2005,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
           {
            results.push_back(r);
           }
+*/    
         }
   
        #if defined SOL_DEBUGGING
@@ -1937,6 +2036,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                                      x_result,
                                      wordentry_sets,
                                      results,
+                                     constraints,
                                      trace_log
                                    );
   
@@ -1985,7 +2085,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
           GenerateLinks( dict.GetLexAuto(), r );
 
          if( ngrams!=NULL )
-          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
          if( pattern_constraints!=NULL )
           {
@@ -2137,7 +2237,7 @@ lem::mout->eol();
                 GenerateLinks( dict.GetLexAuto(), r );
 
                if( ngrams!=NULL )
-                r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+                r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
         
                if( pattern_constraints!=NULL )
                 {
@@ -2184,6 +2284,7 @@ lem::mout->eol();
                                 x_result,
                                 wordentry_sets,
                                 results,
+                                constraints,
                                 trace_log
                               );
  
@@ -2231,7 +2332,7 @@ lem::mout->eol();
           GenerateLinks( dict.GetLexAuto(), r );
 
          if( ngrams!=NULL )
-          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
          if( pattern_constraints!=NULL )
           {
@@ -2271,6 +2372,7 @@ lem::mout->eol();
                                     x_result,
                                     wordentry_sets,
                                     results,
+                                    constraints,
                                     trace_log
                                   );
 
@@ -2408,7 +2510,7 @@ lem::mout->eol();
           GenerateLinks( dict.GetLexAuto(), r );
   
          if( ngrams!=NULL )
-          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
   
          if( pattern_constraints!=NULL )
           {
@@ -2478,7 +2580,7 @@ lem::mout->eol();
           GenerateLinks( dict.GetLexAuto(), r );
   
          if( ngrams!=NULL )
-          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+          r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
   
          if( pattern_constraints!=NULL )
           {
@@ -2542,7 +2644,7 @@ lem::mout->eol();
               GenerateLinks( dict.GetLexAuto(), q_result );
 
              if( ngrams!=NULL )
-              q_result->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, q_result, experience, trace_log ) );
+              q_result->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, q_result, experience, constraints, trace_log ) );
 
              if( pattern_constraints!=NULL )
               {
@@ -2643,7 +2745,7 @@ lem::mout->eol();
               GenerateLinks( dict.GetLexAuto(), r );
 
              if( ngrams!=NULL )
-              r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+              r->res.SetNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
              if( pattern_constraints!=NULL )
               {
@@ -2895,6 +2997,7 @@ lem::mout->eol();
                                    x_result,
                                    wordentry_sets,
                                    results,
+                                   constraints,
                                    trace_log
                                  );
  
@@ -3136,7 +3239,7 @@ bool SynPatternPoint::Execute_Mark(
       GenerateLinks(dict.GetLexAuto(),r);
 
      if( ngrams!=NULL )
-      r->res.AddNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, trace_log ) );
+      r->res.AddNGramFreq( CalculateNGramFreq( dict, x_result, r, experience, constraints, trace_log ) );
 
      if( pattern_constraints!=NULL )
       {
@@ -3584,7 +3687,6 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
       {
        // если необходима проверка экспортированных из вызванного дерева координат
        bool states_matched=true;
-       // если необходима проверка экспортированных из вызванного дерева координат
        for( lem::Container::size_type i=0; i<coords.size(); ++i )
         {
          const int id_coord = coords[i].GetPair().GetCoord().GetIndex();
@@ -3663,6 +3765,62 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
         }
       }
 
+
+     if( coords_matched && correl_fun.NotNull() )
+      {
+       // Вызываем корреляционную функцию для императивных проверок
+
+       //TrFunContext ctx0( &*pm.functions.static_vars, &env );
+       #if LEM_DEBUGGING
+       //matching_vars.PrintVars( sg.GetDict(), *mout );
+       #endif
+
+//       TrFunContext ctx0( &matching_vars, &env );
+//       TrContextInCondictor ctx( &ctx0, (Variator&)var, i0 );
+
+       TrFunContext ctx0( (TrFunContext*)NULL );
+       TrContextInvokation ctx2( &ctx0 );
+       ctx2.AddVar( L"((return))", lem::Ptr<TrValue>( new TrTypeValue( TrVariantType() ) ) );
+
+
+       const Word_Form * alt = subresult_q->FindExportNode( L"ROOT_NODE" );
+       if( alt==NULL )
+        {
+         lem::MemFormatter mem;
+         mem.printf( "Can not find exported node %us for set checker", L"ROOT_NODE" );
+         throw lem::E_BaseException( mem.string() );
+        }
+
+       lem::Ptr<TrValue> this_wordform( new TrValue( new Tree_Node( new Word_Form(*alt,false),true), true ) );
+       ctx2.AddVar( L"_", this_wordform );
+
+       lem::Ptr<TrValue> ret = correl_fun->Run( constraints, sg.GetDict().GetLexAuto(), ctx2, trace_log );
+
+       //lem::Ptr<TrValue> p = ctx2.GetVar(L"((return))");
+
+       if( ret->GetType().IsBool() )
+        {
+         coords_matched = ret->GetBool();
+        }
+       else if( ret->GetType().IsInt() )
+        {
+         coords_matched = true;
+         check_score += ret->GetInt();
+        }
+       else
+        {
+         #if LEM_DEBUGGING==1
+         if( trace_log!=NULL )
+          trace_log->PrintStack(*lem::mout);
+         #endif
+
+         lem::UFString msg( lem::format_str( L"Can not use lambda function: inappropriate return type=%s", ret->GetType().GetName().c_str() ) );
+         throw E_BaseException(msg.c_str());
+        }
+      }
+
+
+
      if( coords_matched )
       {
        if( !set_checkers.empty() )
@@ -3733,6 +3891,36 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
             {
              if( back_correls[k].GetViolationHandler().HasFalseScore() )
               {
+/*
+#if LEM_DEBUGGING==1
+
+lem::mout->printf( "check=>" );
+back_correls[k].SaveTxt( *lem::mout, sg );
+lem::mout->eol();
+
+lem::mout->printf( "\n\nmark_data=>" );
+mark_data.Print( *lem::mout, sg, true );
+
+lem::mout->printf( "\n\nexported_coords=" );
+for( std::multimap<int,int>::const_iterator it=exported_coords.begin(); it!=exported_coords.end(); ++it )
+ {
+  lem::mout->printf( " %us", sg.coords().GetCoord( it->first ).GetName().string().c_str() );
+
+  if( !sg.coords().GetCoord( it->first ).IsBistable() )
+   {
+    lem::mout->printf( ":" );
+    lem::mout->printf( "%us", sg.coords().GetCoord( it->first ).GetStateName( it->second ).c_str() );
+   }
+  else
+   {
+    lem::mout->printf( ":=%d", it->second );
+   }
+ }
+lem::mout->eol();
+
+#endif
+*/
+
                check_score += back_correls[k].GetViolationHandler().GetFalseScore();
               }
              else
@@ -3853,7 +4041,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
               }
 
              if( ngrams!=NULL )
-              subresult_q->res.AddNGramFreq( CalculateNGramFreq(pm.GetDict(), x_result,subresult_q,experience, trace_log) );
+              subresult_q->res.AddNGramFreq( CalculateNGramFreq(pm.GetDict(), x_result, subresult_q, experience, constraints, trace_log) );
 
              if( pattern_constraints!=NULL )
               {
@@ -3959,7 +4147,7 @@ bool SynPatternPoint::Match_Untill(
          GenerateLinks( pm.GetDict().GetLexAuto(), r );
 
         if( ngrams!=NULL )
-         r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, trace_log ) );
+         r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, constraints, trace_log ) );
 
         if( pattern_constraints!=NULL )
          {
@@ -4019,10 +4207,11 @@ bool SynPatternPoint::Match_WordformSet(
                                         const SynPatternResultBackTrace * x_result,
                                         WordEntrySet &wordentry_sets,
                                         lem::PtrCollect<SynPatternResult> & results,
+                                        const ElapsedTimeConstraint & constraints,
                                         TrTrace * trace_log
                                        ) const
 {
- if( !Match_WordformSet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,trace_log) )
+ if( !Match_WordformSet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,constraints,trace_log) )
   {
    bool any_matched=false;
    if( lexer.GetParams().CanSkipInnerTokens() )
@@ -4061,7 +4250,7 @@ bool SynPatternPoint::Match_WordformSet(
          continue;
 
         const lem::Container::size_type n0 = results.size();
-        if( Match_WordformSet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, trace_log ) )
+        if( Match_WordformSet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, constraints, trace_log ) )
          {
           any_matched=true;
 
@@ -4117,6 +4306,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
                                                const SynPatternResultBackTrace * x_result,
                                                WordEntrySet &wordentry_sets,
                                                lem::PtrCollect<SynPatternResult> & results,
+                                               const ElapsedTimeConstraint & constraints,
                                                TrTrace * trace_log
                                               ) const
 {
@@ -4255,7 +4445,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
         GenerateLinks( pm.GetDict().GetLexAuto(), r );
 
        if( ngrams!=NULL )
-        r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, trace_log ) );
+        r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, constraints, trace_log ) );
 
        if( pattern_constraints!=NULL )
         {
@@ -4312,10 +4502,11 @@ bool SynPatternPoint::Match_Wordform(
                                      const SynPatternResultBackTrace * x_result,
                                      WordEntrySet &wordentry_sets,
                                      lem::PtrCollect<SynPatternResult> & results,
+                                     const ElapsedTimeConstraint & constraints,
                                      TrTrace * trace_log
                                     ) const
 {
- if( !Match_WordformStrict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,trace_log) )
+ if( !Match_WordformStrict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,constraints,trace_log) )
   {
    bool any_matched=false;
    if( lexer.GetParams().CanSkipInnerTokens() )
@@ -4357,7 +4548,7 @@ bool SynPatternPoint::Match_Wordform(
          continue;
 
         const lem::Container::size_type n0 = results.size();
-        if( Match_WordformStrict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, trace_log ) )
+        if( Match_WordformStrict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, constraints, trace_log ) )
          {
           any_matched=true;
 
@@ -4411,24 +4602,10 @@ bool SynPatternPoint::Match_WordformStrict(
                                            const SynPatternResultBackTrace * x_result,
                                            WordEntrySet &wordentry_sets,
                                            lem::PtrCollect<SynPatternResult> & results,
+                                           const ElapsedTimeConstraint & constraints,
                                            TrTrace * trace_log
                                           ) const
 {
-/*
- int dirty_matching=-2; // если переменная получит значение -1, то надо будет сохранить значение акселератора в кэше.
- bool accel_matching=false;
-
- if( id_accel!=UNKNOWN )
-  {
-   // можем быстро прикинуть перспективность более тщательных проверок.
-
-   dirty_matching = experience.FindAccelerator( current_token, id_accel );
-
-   if( dirty_matching==0 )
-    return false; // точно не подходит.
-  }
-*/
-
  // Проверяем словоформу на соответствие требованиям опорной точки
  const Word_Form & wf = * current_token->GetWordform();
 
@@ -4621,23 +4798,28 @@ bool SynPatternPoint::Match_WordformStrict(
        //matching_vars.PrintVars( sg.GetDict(), *mout );
        #endif
 
-/*
-       TrFunContext ctx0( &matching_vars, &env );
-       TrContextInCondictor ctx( &ctx0, (Variator&)var, i0 );
+//       TrFunContext ctx0( &matching_vars, &env );
+//       TrContextInCondictor ctx( &ctx0, (Variator&)var, i0 );
 
-       TrContextInvokation ctx2( &ctx );
+       TrFunContext ctx0( (TrFunContext*)NULL );
+       TrContextInvokation ctx2( &ctx0 );
        ctx2.AddVar( L"((return))", lem::Ptr<TrValue>( new TrTypeValue( TrVariantType() ) ) );
 
        lem::Ptr<TrValue> this_wordform( new TrValue( new Tree_Node( new Word_Form(*alt,false),true), true ) );
        ctx2.AddVar( L"_", this_wordform );
 
-       correl_fun->Run( pm, ctx2, trace_log );
+       correl_fun->Run( constraints, sg.GetDict().GetLexAuto(), ctx2, trace_log );
 
        lem::Ptr<TrValue> p = ctx2.GetVar(L"((return))");
 
        if( p->GetType().IsBool() )
         {
          m = p->GetBool();
+        }
+       else if( p->GetType().IsInt() )
+        {
+         m = true;
+         check_score += p->GetInt();
         }
        else
         {
@@ -4649,7 +4831,6 @@ bool SynPatternPoint::Match_WordformStrict(
          lem::UFString msg( lem::format_str( L"Can not use lambda function: inappropriate return type=%s", p->GetType().GetName().c_str() ) );
          throw E_BaseException(msg.c_str());
         }
-*/
       }
     }
 
@@ -4657,7 +4838,10 @@ bool SynPatternPoint::Match_WordformStrict(
     {
      if( !tokenizer_flags.empty() )
       {
-       m = alt->MatchTokenizerFlag(tokenizer_flags);
+       if( not_tokenizer_flags )
+        m = !alt->MatchTokenizerFlag(tokenizer_flags);
+       else
+        m = alt->MatchTokenizerFlag(tokenizer_flags);
       }
 
      if( m && !kb_checkers.empty() )
@@ -4732,7 +4916,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
        if( check_score!=0 )
         {
-         r->res.SetNGramFreq( Solarix::NGramScore(check_score) );
+         r->res.AddNGramFreq( Solarix::NGramScore(check_score) );
 
          #if defined SOL_DEBUGGING
          SynPatternDebugTrace dbg;
@@ -4742,7 +4926,7 @@ bool SynPatternPoint::Match_WordformStrict(
         }
 
        if( ngrams!=NULL )
-        r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, trace_log ) );
+        r->res.AddNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, constraints, trace_log ) );
 
        if( alt->GetScore()!=0 )
         {
@@ -4828,6 +5012,7 @@ bool SynPatternPoint::Match_WordSet_Strict(
                                            const SynPatternResultBackTrace * x_result,
                                            WordEntrySet &wordentry_sets,
                                            lem::PtrCollect<SynPatternResult> & results,
+                                           const ElapsedTimeConstraint & constraints,
                                            TrTrace * trace_log
                                           ) const
 {
@@ -4888,7 +5073,7 @@ bool SynPatternPoint::Match_WordSet_Strict(
       GenerateLinks( pm.GetDict().GetLexAuto(), r );
 
      if( ngrams!=NULL )
-      r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, trace_log ) );
+      r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, constraints, trace_log ) );
 
      if( alt->GetScore()!=0 )
       {
@@ -4958,10 +5143,11 @@ bool SynPatternPoint::Match_WordSet(
                                     const SynPatternResultBackTrace * x_result,
                                     WordEntrySet &wordentry_sets,
                                     lem::PtrCollect<SynPatternResult> & results,
+                                    const ElapsedTimeConstraint & constraints,
                                     TrTrace * trace_log
                                    ) const
 {
- if( !Match_WordSet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,trace_log) )
+ if( !Match_WordSet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,constraints,trace_log) )
   {
    bool any_matched=false;
    if( lexer.GetParams().CanSkipInnerTokens() )
@@ -5000,7 +5186,7 @@ bool SynPatternPoint::Match_WordSet(
          continue;
 
         const lem::Container::size_type n0 = results.size();
-        if( Match_WordSet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, trace_log ) )
+        if( Match_WordSet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, constraints, trace_log ) )
          {
           any_matched=true;
 
@@ -5054,6 +5240,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
                                                 const SynPatternResultBackTrace * x_result,
                                                 WordEntrySet &wordentry_sets,
                                                 lem::PtrCollect<SynPatternResult> & results,
+                                                const ElapsedTimeConstraint & constraints,
                                                 TrTrace * trace_log
                                                ) const
 {
@@ -5199,7 +5386,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
         GenerateLinks( pm.GetDict().GetLexAuto(), r );
 
        if( ngrams!=NULL )
-        r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, trace_log ) );
+        r->res.SetNGramFreq( CalculateNGramFreq( pm.GetDict(), x_result, r, experience, constraints, trace_log ) );
 
        if( alt->GetScore()!=0 )
         {
@@ -5268,10 +5455,11 @@ bool SynPatternPoint::Match_WordentrySet(
                                          const SynPatternResultBackTrace * x_result,
                                          WordEntrySet &wordentry_sets,
                                          lem::PtrCollect<SynPatternResult> & results,
+                                         const ElapsedTimeConstraint & constraints,
                                          TrTrace * trace_log
                                         ) const
 {
- if( !Match_WordentrySet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,trace_log) )
+ if( !Match_WordentrySet_Strict(pm,sg,experience,current_token,lexer,parent_trace,x_result,wordentry_sets,results,constraints,trace_log) )
   {
    bool any_matched=false;
    if( lexer.GetParams().CanSkipInnerTokens() )
@@ -5310,7 +5498,7 @@ bool SynPatternPoint::Match_WordentrySet(
          continue;
 
         const lem::Container::size_type n0 = results.size();
-        if( Match_WordentrySet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, trace_log ) )
+        if( Match_WordentrySet_Strict( pm, sg, experience, t, lexer, parent_trace, x_result, wordentry_sets, results, constraints, trace_log ) )
          {
           any_matched=true;
 

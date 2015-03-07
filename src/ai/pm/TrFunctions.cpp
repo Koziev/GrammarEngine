@@ -1,4 +1,4 @@
-// LC->24.11.2011
+// LC->07.11.2014
 
 #include <lem/solarix/tokens.h>
 #include <lem/solarix/pm_autom.h>
@@ -295,8 +295,7 @@ void TrFunctions::AddForwardDeclaration( TrFunction *fun )
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 const TrFunction* TrFunctions::CompileDeclaration(
                                                   PM_Automat &pm,
-                                                  lem::Iridium::Macro_Parser &txtfile,
-                                                  const TrProcedureDeclaration &procs
+                                                  lem::Iridium::Macro_Parser &txtfile
                                                  )
 {
  // Синтаксис определения функции:
@@ -314,7 +313,7 @@ const TrFunction* TrFunctions::CompileDeclaration(
  const lem::Iridium::BSourceState &beg = txtfile.tellp();
 
  TrFunction *fun = new TrFunction;
- fun->CompileDeclaration( pm, txtfile, *this, procs );
+ fun->CompileDeclaration( pm, txtfile, *this );
 
  lem::UCString uname( lem::to_upper(fun->GetName()) );
  NAME2FUN::iterator it = name2fun.find( uname );
@@ -356,7 +355,6 @@ const TrFunction* TrFunctions::CompileDeclaration(
 TrFun_Lambda* TrFunctions::CompileLambdaDeclaration(
                                                     PM_Automat &pm,
                                                     lem::Iridium::Macro_Parser &txtfile,
-                                                    const TrProcedureDeclaration &procs,
                                                     const TrKnownVars &lambda_caller
                                                    )
 {
@@ -388,7 +386,7 @@ TrFun_Lambda* TrFunctions::CompileLambdaDeclaration(
 
 
  TrFunction *fun = new TrFunction;
- fun->CompileDeclaration( pm, txtfile, *this, procs, &lambda_caller );
+ fun->CompileDeclaration( pm, txtfile, *this, &lambda_caller );
  funs.push_back(fun);
  if( !fun->GetName().empty() )
   name2fun.insert( std::make_pair( lem::to_upper(fun->GetName()), fun ) );
@@ -404,7 +402,7 @@ TrFun_Lambda* TrFunctions::CompileLambdaDeclaration(
    kvars.RegisterVar( local_type, locals[i] );
   }  
  
- call->CompileDeclaration( pm, txtfile, *this, procs, kvars, NULL );
+ call->CompileDeclaration( pm, txtfile, *this, kvars, NULL );
 
  return call;
 }
@@ -416,7 +414,6 @@ TrFun_Lambda* TrFunctions::CompileLambdaDeclaration(
 TrFunCall* TrFunctions::CompileCall(
                                     PM_Automat &pm,
                                     lem::Iridium::Macro_Parser &txtfile,
-                                    const TrProcedureDeclaration &procs,
                                     TrKnownVars &known_vars
                                    )
 {
@@ -439,7 +436,7 @@ TrFunCall* TrFunctions::CompileCall(
       }
 
      txtfile.read();
-     TrFunCall *right = CompileCall( pm, txtfile, procs, known_vars );
+     TrFunCall *right = CompileCall( pm, txtfile, known_vars );
      txtfile.read_it( B_SEMICOLON );
 
      TrFun_Assign *f = new TrFun_Assign(t.string(),right);
@@ -517,7 +514,7 @@ TrFunCall* TrFunctions::CompileCall(
      if( !f->args.empty() )
       txtfile.read_it( B_COMMA );
 
-     TrFunCall *expr = CompileCall( pm, txtfile, procs, known_vars );
+     TrFunCall *expr = CompileCall( pm, txtfile, known_vars );
      f->args.push_back(expr);
     }
 
@@ -569,7 +566,7 @@ TrFunCall* TrFunctions::CompileCall(
     {
      txtfile.seekp(t);
      TrFun_CreateWordform *f = new TrFun_CreateWordform();
-     f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, NULL );
+     f->CompileDeclaration( pm, txtfile, *this, known_vars, NULL );
      return f; 
     }
    else
@@ -613,7 +610,7 @@ TrFunCall* TrFunctions::CompileCall(
  for( lem::Container::size_type i=0; i<funs.size(); ++i )
   if( funs[i]->GetName().eqi(t.string()) )
    {
-    TrFunCall *f = funs[i]->CompileCall( pm, txtfile, *this, procs, known_vars );
+    TrFunCall *f = funs[i]->CompileCall( pm, txtfile, *this, known_vars );
     return f;  
    }
 
@@ -624,7 +621,7 @@ TrFunCall* TrFunctions::CompileCall(
    // Группа функций в {...}
    TrFun_Group *f = new TrFun_Group();
    txtfile.seekp(t);
-   f->CompileDeclaration(pm,txtfile,*this,procs,known_vars,NULL);
+   f->CompileDeclaration(pm,txtfile,*this,known_vars,NULL);
    return f;
   }
 
@@ -642,7 +639,7 @@ TrFunCall* TrFunctions::CompileCall(
     }
    else
     { 
-     TrFunCall *right = CompileCall( pm, txtfile, procs, known_vars );
+     TrFunCall *right = CompileCall( pm, txtfile, known_vars );
      txtfile.read_it(B_SEMICOLON);
      f = new TrFun_Return(right);
      f->src_location = src_location;
@@ -664,7 +661,7 @@ TrFunCall* TrFunctions::CompileCall(
   {
    // Условный оператор if(условие) then операторы else операторы
    TrFun_If *f = new TrFun_If();
-   f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, NULL );
+   f->CompileDeclaration( pm, txtfile, *this, known_vars, NULL );
    return f;
   }
 
@@ -672,7 +669,7 @@ TrFunCall* TrFunctions::CompileCall(
   {
    // Цикл while(условие) оператор
    TrFun_While *f = new TrFun_While();
-   f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, NULL );
+   f->CompileDeclaration( pm, txtfile, *this, known_vars, NULL );
    return f;
   }
 
@@ -680,7 +677,7 @@ TrFunCall* TrFunctions::CompileCall(
   {
    // Цикл for переменная=нач_значение to кон_значение step шаг оператор
    TrFun_For *f = new TrFun_For();
-   f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, NULL );
+   f->CompileDeclaration( pm, txtfile, *this, known_vars, NULL );
    return f;
   }
 
@@ -693,7 +690,7 @@ TrFunCall* TrFunctions::CompileCall(
    // lambda(связываемые_локальные_переменные) тип( формальные_аргументы )
 
    // Сначала загружаем определение функции
-   TrFun_Lambda *lambda = CompileLambdaDeclaration( pm, txtfile, procs, known_vars );
+   TrFun_Lambda *lambda = CompileLambdaDeclaration( pm, txtfile, known_vars );
    return lambda;
   }
 
@@ -703,7 +700,7 @@ TrFunCall* TrFunctions::CompileCall(
    // тип имя=инициализация, имя, имя ....;
    txtfile.backward();
    TrFun_Declare *f = new TrFun_Declare();
-   f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, NULL );
+   f->CompileDeclaration( pm, txtfile, *this, known_vars, NULL );
    return f;
   }
 
@@ -712,7 +709,7 @@ TrFunCall* TrFunctions::CompileCall(
   {
    txtfile.backward();
    TrFun_BuiltIn *f = new TrFun_BuiltIn();
-   f->CompileDeclaration( pm, txtfile, *this, procs, known_vars, &it->second );
+   f->CompileDeclaration( pm, txtfile, *this, known_vars, &it->second );
 
    if( t.string().eqi(L"replace") )
     {
@@ -876,11 +873,10 @@ void TrFunctions::InitializeStatics(
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 void TrFunctions::CompileStatic(
                                 PM_Automat &pm, 
-                                lem::Iridium::Macro_Parser &txtfile,
-                                const TrProcedureDeclaration &procs
+                                lem::Iridium::Macro_Parser &txtfile
                                )  
 {
- static_functions.push_back( CompileCall( pm, txtfile, procs, global_known_vars ) );
+ static_functions.push_back( CompileCall( pm, txtfile, global_known_vars ) );
  return;
 }
 #endif

@@ -1,7 +1,7 @@
 #if defined SOL_DEBUGGING
 
 // CD->28.07.2009
-// LC->05.09.2014
+// LC->05.03.2015
 
 #include <lem/keyboard.h>
 #include <lem/solarix/variator.h>
@@ -296,7 +296,7 @@ void TrDebugger::BeforePhrase(void)
 
  while(true)
   {
-   mout->printf( "%vf6Debugger commands:%vn %vfER%vnun %vfES%vntep %vfEB%vnreakpoints %vfET%vnriggers\nEnter: " );
+   mout->printf( "%vf6Debugger commands:%vn [%vfER%vn]un [%vfES%vn]tep [%vfEB%vn]reakpoints [%vfET%vn]riggers\nEnter: " );
    char cmd = mkey->getch();
    mout->eol();
 

@@ -109,6 +109,7 @@
               SynPatternResult * cur_result,
               KnowledgeBase & kbase,
               TreeMatchingExperience &experience,
+              const ElapsedTimeConstraint & constraints,
               TrTrace *trace_log
              ) const;
     #endif
@@ -149,6 +150,7 @@
                      SynPatternResult * cur_result,
                      KnowledgeBase & kbase,
                      TreeMatchingExperience &experience,
+                     const ElapsedTimeConstraint & constraints,
                      TrTrace *trace_log
                     ) const;
     #endif

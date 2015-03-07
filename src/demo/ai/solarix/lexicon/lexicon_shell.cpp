@@ -31,7 +31,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.2003
-// LC->10.08.2013
+// LC->05.03.2015
 // --------------
 
 #include <lem/keyboard.h>
@@ -394,18 +394,7 @@ void LexiconShell::main_loop( bool show_menu, const lem::MCollect<int>& menu )
        mode = menu.empty() ? mkey->ask_int() : menu[0];
       }
    
-     switch(mode)
-     {    
-      case 1: TestProjector();      break;
-      case 2: TestThesaurus(menu);  break;
-      case 3: TestNGrams(menu);     break;
-      case 4: SearchByIE(menu);     break;
-      case 5: SearchByName();       break;
-      case 6: ShowParadigma();      break;
-      case 7: ShowSyllabicBreaks(); break;
-      case 8: ShowStatistics();     break;
-      case 0: return;
-     }
+     ExecuteMenu(mode);
 
      show_menu=true;
     }
@@ -417,6 +406,50 @@ void LexiconShell::main_loop( bool show_menu, const lem::MCollect<int>& menu )
 }
 
 
+int LexiconShell::ShowMenu()
+{
+ mout->printf(  
+              "\n\n"
+              " %vfE1%vn - morphological analysis\n"
+              " %vfE2%vn - thesaurus\n"
+              " %vfE3%vn - N-grams\n"
+              " %vfE4%vn - search for entry by ID\n"
+              " %vfE5%vn - search for entry by name\n"
+              " %vfE6%vn - flexer\n"
+              " %vfE7%vn - syllabic breaks\n\n"
+              " %vfE8%vn - dictionary statistics\n\n"
+              " %vf90%vn - exit\n"
+              "\nChoose command: "
+             );
+
+ return mkey->ask_int();
+}
+
+void LexiconShell::ExecuteMenu( int choice )
+{
+ switch(choice)
+ {    
+  case 1: TestProjector();      break;
+  case 2: TestThesaurus();  break;
+  case 3: TestNGrams();     break;
+  case 4: SearchByIE();     break;
+  case 5: SearchByName();       break;
+  case 6: ShowParadigma();      break;
+  case 7: ShowSyllabicBreaks(); break;
+  case 8: ShowStatistics();     break;
+  case 0: exit(0);
+ }
+
+ return;
+}
+
+
+void LexiconShell::EnterMenuLoop()
+{
+ ExecuteMenu( ShowMenu() );
+ return;
+}
+
 void LexiconShell::TestProjector(void)
 {
  (*mout) << "Type #exit to exit\n";
@@ -425,15 +458,20 @@ void LexiconShell::TestProjector(void)
   {
    UFString str = enter_cmd(": ");
 
-   // Ввод "exit" приводит к выходу из цикла.
    if( str==L"#exit" )
-    break;
+    lem::Process::Exit(0);
 
    if( str==L"#help" )
     {
      ShowHelp();
      continue;
     }
+
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    if( str.front()==L'#' )
     {
@@ -852,7 +890,7 @@ void LexiconShell::TestStemmer(void)
 }
 
 
-void LexiconShell::TestThesaurus( const lem::MCollect<int>& menu )
+void LexiconShell::TestThesaurus()
 {
  lem::mout->printf(
                    "\n-----------------------\n" 
@@ -864,7 +902,7 @@ void LexiconShell::TestThesaurus( const lem::MCollect<int>& menu )
                    "Select mode: "
                   );
 
- int k = menu.size()<2 ? mkey->ask_int() : menu[1];
+ int k = mkey->ask_int();
 
  lem::zbool synonyms, translations, all_links;
  if( k==0 )
@@ -944,6 +982,12 @@ void LexiconShell::TestThesaurus( const lem::MCollect<int>& menu )
     {
      break;
     }
+
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    ThesaurusQuery( str, synonyms, translations, tags_ptr.IsNull() ? NULL : &*tags_ptr );
   }
@@ -1269,7 +1313,7 @@ void LexiconShell::SearchNGrams( const lem::Path &filename )
 // *******************************************
 // Запросы разного рода к базе N-грамм
 // *******************************************
-void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
+void LexiconShell::TestNGrams()
 {
  lem::mout->printf( "\n%15h- N-GRAMS DB QUERY MODE %15h-\n\n" );
 
@@ -1312,7 +1356,7 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
                    "[%vfA4%vn] - search in WORDS table\n"
                   );
 
- int mode = menu.size()<2 ? mkey->ask_int() : menu[1];
+ int mode = mkey->ask_int();
 
  if( mode==0 )
   return;
@@ -1331,7 +1375,7 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
                      "\n%vf8Select a mode:%vn "
                     );
 
-   mode = menu.size()<3 ? mkey->ask_int() : menu[2];
+   mode = mkey->ask_int();
 
    if( mode==0 )
     return;
@@ -1356,7 +1400,7 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
                      "\n%vf8Select a mode:%vn "
                     );
 
-   mode = menu.size()<3 ? mkey->ask_int() : menu[2];
+   mode = mkey->ask_int();
 
    if( mode==0 )
     return;
@@ -1383,7 +1427,7 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
                      "\n%vf8Select a mode:%vn "
                     );
 
-   mode = menu.size()<3 ? mkey->ask_int() : menu[2];
+   mode = mkey->ask_int();
 
    if( mode==0 )
     return;
@@ -1437,6 +1481,12 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
    UFString ustr = enter_cmd(": " );
    if( ustr.empty() || to_lower(ustr)==L"#exit" || ustr==L'.' )
     break;
+
+   if( ustr==L"#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    lem::MCollect<lem::UCString> words0;
    lem::parse( ustr, words0, true );
@@ -1873,7 +1923,7 @@ void LexiconShell::TestNGrams( const lem::MCollect<int>& menu )
 
 
 
-void LexiconShell::SearchByIE( const lem::MCollect<int>& menu )
+void LexiconShell::SearchByIE()
 {
  lem::zbool show_forms, decompile;
 
@@ -1889,7 +1939,7 @@ void LexiconShell::SearchByIE( const lem::MCollect<int>& menu )
               "Enter your choise:"
              );
 
- const int k = menu.size()<2 ? mkey->ask_int() : menu[1];
+ const int k = mkey->ask_int();
 
  if( k==0 )
   return;
@@ -1905,6 +1955,12 @@ void LexiconShell::SearchByIE( const lem::MCollect<int>& menu )
     {
      break;
     }
+
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    if( str==L"#help" )
     {
@@ -1986,6 +2042,12 @@ void LexiconShell::ShowParadigma(void)
      ShowHelp();
      continue;
     }
+
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    if( str.front()==L'#' )
     {
@@ -2254,6 +2316,12 @@ void LexiconShell::SearchByName(void)
      continue;
     }
 
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
+
    lem::MCollect<int> ientries;
 
    // Префиксный поиск задается так КОШ*
@@ -2340,6 +2408,12 @@ void LexiconShell::ShowSyllabicBreaks(void)
 
    if( str==L"#exit" )
     break;
+
+   if( str=="#menu" )
+   {
+    EnterMenuLoop();
+    return;
+   }
 
    if( str.front()==L'#' )
     {

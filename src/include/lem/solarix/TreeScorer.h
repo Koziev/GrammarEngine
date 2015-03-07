@@ -6,6 +6,7 @@
  #include <lem/solarix/coord_pair.h>
  #include <lem/solarix/CollocFilterSetChecker.h>
  #include <lem/solarix/BackRefCorrel.h>
+ #include <lem/solarix/translation.h>
 
  #if defined SOL_LOADTXT && defined SOL_COMPILER
  #include <lem/solarix/ExactWordEntryLocator.h>
@@ -111,6 +112,9 @@
 
     void AddBoundMarker( const lem::UCString & uppercased_marker )
     { bound_markers.push_back(uppercased_marker); }
+
+    int CountMarkers() const { return CastSizeToInt(bound_markers.size()); }
+    const lem::UCString& GetMarker( int index ) const { return bound_markers[index]; }
   };
 
   class TreeScorerBoundVariables;
@@ -250,12 +254,21 @@
 
   class TreeScorerResult : lem::NonCopyable
   {
+   public:
+    enum { UnknownScoreType=-1, NumberScoreType=0, NGramScoreType=1, FuncScoreType=2 };
+
    private:
     int type; // 0 - явно заданная числовая оценка, 1 - указание на вызов ngram
     int score;
 
     int id_fact; // id вызываемой ngram
     lem::MCollect<lem::UCString> args; // имя аргументов для передачи в вызываемую функцию
+
+    lem::Ptr<TrFunCall> score_fun; // функция для сложной проверки
+
+    #if defined SOL_LOADTXT && defined SOL_COMPILER
+    void LoadBoundVars( Dictionary & dict, lem::Iridium::Macro_Parser & txtfile, const TreeScorerMarkers & markers );
+    #endif
 
    public:
     TreeScorerResult();
@@ -267,9 +280,15 @@
     int GetExpressionType() const { return type; }
     lem::UFString SerializeExpression() const;
     void DeserializeExpression( int expr_type, const lem::UFString & serialized );
+    void Link( const TrFunctions &funs );
 
     #if defined SOL_CAA
-    int Calculate( Dictionary & dict, const TreeScorerBoundVariables & bound_variables ) const; 
+    int Calculate(
+                  Dictionary & dict,
+                  const TreeScorerBoundVariables & bound_variables,
+                  const ElapsedTimeConstraint & constraints,
+                  TrTrace *trace_log
+                 ) const;
     #endif
   };
 

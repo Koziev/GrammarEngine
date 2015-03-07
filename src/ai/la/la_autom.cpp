@@ -23,7 +23,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->02.12.1995
-// LC->05.09.2014
+// LC->07.11.2014
 // --------------
 
 #if defined SOL_LOADTXT
@@ -313,7 +313,6 @@ bool LexicalAutomat::ProcessLexem2(
               txtfile,
               pattern_declarations,
               GetWordEntrySet(),
-              procedure_declarations,
               functions->Get()
              );
 
@@ -359,7 +358,13 @@ bool LexicalAutomat::ProcessLexem2(
    assoc.LoadTxt( GetDict(), txtfile, GetWordEntrySet() );
    assoc.Save( GetStorage() );
    return true;
-  } 
+  }
+ else if( t.string().eqi( L"function" ) )
+  {
+   PM_Automat::ProcessLexem(t,txtfile,options);
+   return true;
+  }
+
 
  return false;
 }
@@ -481,7 +486,7 @@ void LexicalAutomat::Prepare( const lem::Path & outdir, const Binarization_Optio
     }
 
    const int count_top_down_rules = CastSizeToInt(patterns.size()+named_patterns_list.size());
-   GetIO().mecho().printf( " %d top-down rules...", count_top_down_rules );
+   GetIO().mecho().printf( " %d parser rules...", count_top_down_rules );
   }
 
  // Собираем префиксное дерево для проверки начальных вариаторов.

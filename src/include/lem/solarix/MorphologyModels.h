@@ -48,7 +48,10 @@ namespace Solarix
    std::map<int,const ModelTagMatcher*> id2matcher;
 
    std::map<lem::UCString,int> suffices;
-   lem::int32_t START_id, END_id; // id тегов для границ
+   lem::int32_t START_id, END_id; // id суффиксов для границ
+   lem::int32_t START_tag_id, END_tag_id; // id тегов для границ
+
+   lem::MCollect< std::pair<lem::UCString,lem::UCString> > model_params;
 
   public:
    static void LoadUtf8( lem::Stream & bin, lem::UCString & str );
@@ -62,10 +65,17 @@ namespace Solarix
 
    int GetSuffixId( const LexerTextPos * token ) const;
    bool DetectAa( const LexerTextPos * token ) const;
-   int GetSTART() const { return START_id; }
-   int GetEND() const { return END_id; }
+
+   int GetSTART_suffix() const { return START_id; }
+   int GetEND_suffix() const { return END_id; }
+
+   int GetSTART_Tag() const { return START_tag_id; }
+   int GetEND_Tag() const { return END_tag_id; }
 
    int GetContextSize() const { return context_size; }
+   int GetMaxSuffixLen() const { return suffix_len; }
+
+   const lem::UCString FindModelParam( const wchar_t * param_name, const wchar_t * default_value ) const;
  };
 
 
@@ -73,13 +83,14 @@ namespace Solarix
  {
   int suffix_id;
   bool Aa;
+  bool IsBegin, IsEnd;
   std::string POS_N; // сущ
   std::string POS_PRN ; // местоим
   std::string POS_PRN2; // местоим_сущ
   std::string POS_A; // прил
   std::string POS_V; // гл
-  std::string POS_IMV; // безлич. гл.
   std::string POS_I; // инф
+  std::string POS_IMV; // безлич. гл.
   std::string POS_Y; // нареч
   std::string POS_VY; // дееприч
   std::string POS_D; // числительное
@@ -87,7 +98,9 @@ namespace Solarix
   std::string POS_P; // предлог
   std::string POS_PX; // послелог
   std::string POS_PP; // притяж_частица
+  std::string POS_MU; // единица измерения
 
+  lem::MCollect<int> allform_tags;
   lem::MCollect<lem::UCString> str_features;
 
   ModelTokenFeatures();
@@ -128,9 +141,13 @@ namespace Solarix
 
    virtual bool Load()=0;
 
+   bool EMIT_FORM_TAGS;
+   bool EMIT_FORMTAGS_FOR_CONTEXT;
+   bool EMIT_POS_TAGS;
+
    ModelTokenFeatures* Get_START_Features() const;
    ModelTokenFeatures* Get_END_Features() const;
-   ModelTokenFeatures* GetFeatures( const LexerTextPos * token, const Dictionary & dict ) const;
+   ModelTokenFeatures* GetFeatures( const LexerTextPos * token, Dictionary & dict ) const;
 
    void PullFeatures1( lem::MCollect<lem::CString> & b, const lem::PtrCollect<ModelTokenFeatures> & token_features, int ifocus, int offset, bool rich_set, bool emit_Aa_feature ) const;
    void PullFeatures2( lem::MCollect<lem::CString> & b, const lem::PtrCollect<ModelTokenFeatures> & token_features, int ifocus, int offset1, int offset2 ) const;
@@ -142,6 +159,8 @@ namespace Solarix
 
    bool IsAvailable();
    void SetModelPath( const lem::Path & p ) { folder=p; }
+
+   virtual void SetParamsAfterLoad();
  };
 
 
@@ -159,9 +178,15 @@ namespace Solarix
    bool EMIT_TRIPLE_FEATURE;
    bool EMIT_AA_FEATURE;
    bool EMIT_AA_FOR_CONTEXT;
+   bool EMIT_MORPH_TAGS;
+   bool EMIT_POS_FOR_CONTEXT;
+   bool EMIT_MORPH_FOR_CONTEXT;
+
    int CONTEXT_SIZE;
 
    virtual bool Load();
+   virtual void SetParamsAfterLoad();
+
 
    void SelectRecognition(
                           BasicLexer & lexer,

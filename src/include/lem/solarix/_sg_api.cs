@@ -2,7 +2,7 @@ namespace SolarixGrammarEngineNET
 {
  public sealed class GrammarEngineAPI
  {
-  public const string VERSION_MARK="This file is generated 30.08.2014 10:31:20 by Ygres compiler ver. 13.23.11072 Standard Win32  (build date Aug 29 2014).";
+  public const string VERSION_MARK="This file is generated 01.02.2015 08:28:10 by Ygres compiler ver. 13.34.11134 Standard Win32  (build date Jan 25 2015).";
 // Languages
  public const int RUSSIAN_LANGUAGE = 2;            // language Russian
  public const int ENGLISH_LANGUAGE = 3;            // language English
@@ -32,40 +32,41 @@ namespace SolarixGrammarEngineNET
  public const int PUNCTUATION_class = 22;          // class ПУНКТУАТОР
  public const int POSTPOS_ru = 27;                 // class ПОСЛЕЛОГ
  public const int POSESS_PARTICLE = 28;            // class ПРИТЯЖ_ЧАСТИЦА
- public const int VERB_en = 29;                    // class ENG_VERB
- public const int NOUN_en = 30;                    // class ENG_NOUN
- public const int PRONOUN_en = 31;                 // class ENG_PRONOUN
- public const int ARTICLE_en = 32;                 // class ENG_ARTICLE
- public const int PREP_en = 33;                    // class ENG_PREP
- public const int CONJ_en = 34;                    // class ENG_CONJ
- public const int ADV_en = 35;                     // class ENG_ADVERB
- public const int ADJ_en = 36;                     // class ENG_ADJECTIVE
- public const int PARTICLE_en = 37;                // class ENG_PARTICLE
- public const int NUMERAL_en = 38;                 // class ENG_NUMERAL
- public const int INTERJECTION_en = 39;            // class ENG_INTERJECTION
- public const int NUMERAL_fr = 40;                 // class FR_NUMERAL
- public const int ARTICLE_fr = 41;                 // class FR_ARTICLE
- public const int PREP_fr = 42;                    // class FR_PREP
- public const int ADV_fr = 43;                     // class FR_ADVERB
- public const int CONJ_fr = 44;                    // class FR_CONJ
- public const int NOUN_fr = 45;                    // class FR_NOUN
- public const int ADJ_fr = 46;                     // class FR_ADJ
- public const int PRONOUN_fr = 47;                 // class FR_PRONOUN
- public const int VERB_fr = 48;                    // class FR_VERB
- public const int PARTICLE_fr = 49;                // class FR_PARTICLE
- public const int PRONOUN2_fr = 50;                // class FR_PRONOUN2
- public const int NOUN_es = 51;                    // class ES_NOUN
- public const int ROOT_es = 52;                    // class ES_ROOT
- public const int JAP_NOUN = 53;                   // class JAP_NOUN
- public const int JAP_NUMBER = 54;                 // class JAP_NUMBER
- public const int JAP_ADJECTIVE = 55;              // class JAP_ADJECTIVE
- public const int JAP_ADVERB = 56;                 // class JAP_ADVERB
- public const int JAP_CONJ = 57;                   // class JAP_CONJ
- public const int JAP_VERB = 58;                   // class JAP_VERB
- public const int JAP_PRONOUN = 59;                // class JAP_PRONOUN
- public const int JAP_VERB_POSTFIX2 = 62;          // class JAP_VERB_POSTFIX2
- public const int JAP_PARTICLE = 64;               // class JAP_PARTICLE
- public const int UNKNOWN_ENTRIES_CLASS = 75;      // class UnknownEntries
+ public const int MEASURE_UNIT = 29;               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
+ public const int VERB_en = 30;                    // class ENG_VERB
+ public const int NOUN_en = 31;                    // class ENG_NOUN
+ public const int PRONOUN_en = 32;                 // class ENG_PRONOUN
+ public const int ARTICLE_en = 33;                 // class ENG_ARTICLE
+ public const int PREP_en = 34;                    // class ENG_PREP
+ public const int CONJ_en = 35;                    // class ENG_CONJ
+ public const int ADV_en = 36;                     // class ENG_ADVERB
+ public const int ADJ_en = 37;                     // class ENG_ADJECTIVE
+ public const int PARTICLE_en = 38;                // class ENG_PARTICLE
+ public const int NUMERAL_en = 39;                 // class ENG_NUMERAL
+ public const int INTERJECTION_en = 40;            // class ENG_INTERJECTION
+ public const int NUMERAL_fr = 41;                 // class FR_NUMERAL
+ public const int ARTICLE_fr = 42;                 // class FR_ARTICLE
+ public const int PREP_fr = 43;                    // class FR_PREP
+ public const int ADV_fr = 44;                     // class FR_ADVERB
+ public const int CONJ_fr = 45;                    // class FR_CONJ
+ public const int NOUN_fr = 46;                    // class FR_NOUN
+ public const int ADJ_fr = 47;                     // class FR_ADJ
+ public const int PRONOUN_fr = 48;                 // class FR_PRONOUN
+ public const int VERB_fr = 49;                    // class FR_VERB
+ public const int PARTICLE_fr = 50;                // class FR_PARTICLE
+ public const int PRONOUN2_fr = 51;                // class FR_PRONOUN2
+ public const int NOUN_es = 52;                    // class ES_NOUN
+ public const int ROOT_es = 53;                    // class ES_ROOT
+ public const int JAP_NOUN = 54;                   // class JAP_NOUN
+ public const int JAP_NUMBER = 55;                 // class JAP_NUMBER
+ public const int JAP_ADJECTIVE = 56;              // class JAP_ADJECTIVE
+ public const int JAP_ADVERB = 57;                 // class JAP_ADVERB
+ public const int JAP_CONJ = 58;                   // class JAP_CONJ
+ public const int JAP_VERB = 59;                   // class JAP_VERB
+ public const int JAP_PRONOUN = 60;                // class JAP_PRONOUN
+ public const int JAP_VERB_POSTFIX2 = 63;          // class JAP_VERB_POSTFIX2
+ public const int JAP_PARTICLE = 65;               // class JAP_PARTICLE
+ public const int UNKNOWN_ENTRIES_CLASS = 76;      // class UnknownEntries
 // ------------------------------------------------------------
 
 
@@ -171,6 +172,7 @@ namespace SolarixGrammarEngineNET
  public const int ATTRIBUTIVE_FORM_ru = 0;         // СТЕПЕНЬ : АТРИБ
  public const int COMPARATIVE_FORM_ru = 1;         // СТЕПЕНЬ : СРАВН
  public const int SUPERLATIVE_FORM_ru = 2;         // СТЕПЕНЬ : ПРЕВОСХ
+ public const int LIGHT_COMPAR_FORM_RU = 3;        // СТЕПЕНЬ : КОМПАРАТИВ2
 
  public const int CASE_GERUND_ru = 28;             // enum ПадежВал
 // Coordiname ПадежВал states:
@@ -207,51 +209,56 @@ namespace SolarixGrammarEngineNET
  public const int ADJ_POSSESSIVE = 0;              // ТИП_ПРИЛ : ПРИТЯЖ
  public const int ADJ_ORDINAL = 1;                 // ТИП_ПРИЛ : ПОРЯДК
 
- public const int TENSE_en = 40;                   // enum TENSE
+ public const int PARTICLE_TYPE = 36;              // enum ТИП_ЧАСТИЦЫ
+// Coordiname ТИП_ЧАСТИЦЫ states:
+ public const int PREFIX_PARTICLE = 0;             // ТИП_ЧАСТИЦЫ : ПРЕФИКС
+ public const int POSTFIX_PARTICLE = 1;            // ТИП_ЧАСТИЦЫ : ПОСТФИКС
+
+ public const int TENSE_en = 43;                   // enum TENSE
 // Coordiname TENSE states:
  public const int PAST_en = 0;                     // TENSE : PAST
  public const int PRESENT_en = 1;                  // TENSE : PRESENT
  public const int FUTURE_en = 2;                   // TENSE : FUTURE
 
- public const int DURATION_en = 41;                // enum DURATION
+ public const int DURATION_en = 44;                // enum DURATION
 // Coordiname DURATION states:
  public const int SIMPLE_en = 0;                   // DURATION : INDEFINITE
  public const int CONTINUOUS_en = 1;               // DURATION : CONTINUOUS
  public const int PERFECT_en = 2;                  // DURATION : PERFECT
  public const int PERFECT_CONTINUOS_en = 3;        // DURATION : PERFECT_CONTINUOUS
 
- public const int VOICE_en = 42;                   // enum VOICE
+ public const int VOICE_en = 45;                   // enum VOICE
 // Coordiname VOICE states:
  public const int PASSIVE_en = 0;                  // VOICE : PASSIVE
  public const int ACTIVE_en = 1;                   // VOICE : ACTIVE
 
- public const int CASE_en = 43;                    // enum CASE
+ public const int CASE_en = 46;                    // enum CASE
 // Coordiname CASE states:
  public const int NOMINATIVE_CASE_en = 0;          // CASE : NOMINATIVE
  public const int PREPOSITIVE_CASE_en = 1;         // CASE : PREPOSITIVE
 
- public const int NOUN_FORM_en = 44;               // enum NOUN_FORM
+ public const int NOUN_FORM_en = 47;               // enum NOUN_FORM
 // Coordiname NOUN_FORM states:
  public const int BASIC_NOUN_FORM_en = 0;          // NOUN_FORM : BASIC
  public const int POSSESSIVE_NOUN_FORM_en = 1;     // NOUN_FORM : POSSESSIVE
 
- public const int PRONOUN_FORM_en = 45;            // enum PRONOUN_FORM
+ public const int PRONOUN_FORM_en = 48;            // enum PRONOUN_FORM
 // Coordiname PRONOUN_FORM states:
 
- public const int ADJ_FORM_en = 46;                // enum ADJ_FORM
+ public const int ADJ_FORM_en = 49;                // enum ADJ_FORM
 // Coordiname ADJ_FORM states:
  public const int BASIC_ADJ_en = 0;                // ADJ_FORM : BASIC
  public const int COMPARATIVE_ADJ_en = 1;          // ADJ_FORM : COMPARATIVE
  public const int SUPERLATIVE_ADJ_en = 2;          // ADJ_FORM : SUPERLATIVE
 
- public const int COMPARABILITY_en = 47;           // enum COMPARABILITY
+ public const int COMPARABILITY_en = 50;           // enum COMPARABILITY
 // Coordiname COMPARABILITY states:
  public const int ANALYTIC_en = 0;                 // COMPARABILITY : ANALYTIC
  public const int SYNTHETIC_en = 1;                // COMPARABILITY : SYNTHETIC
  public const int COMPARABLE_en = 2;               // COMPARABILITY : COMPARABLE
  public const int NONCOMPARABLE = 3;               // COMPARABILITY : NONCOMPARABLE
 
- public const int VERB_FORM_en = 48;               // enum VERB_FORM
+ public const int VERB_FORM_en = 51;               // enum VERB_FORM
 // Coordiname VERB_FORM states:
  public const int UNDEF_VERBFORM_en = 0;           // VERB_FORM : UNDEF
  public const int ED_VERBFORM_en = 1;              // VERB_FORM : ED
@@ -259,69 +266,69 @@ namespace SolarixGrammarEngineNET
  public const int PP_VERBFORM_en = 3;              // VERB_FORM : PP
  public const int INF_VEBFORM_en = 4;              // VERB_FORM : INF
 
- public const int ARTICLE_FORM = 49;               // enum ARTICLE_FORM
+ public const int ARTICLE_FORM = 52;               // enum ARTICLE_FORM
 // Coordiname ARTICLE_FORM states:
  public const int ARTICLE_FORM_1 = 0;              // ARTICLE_FORM : 1
  public const int ARTICLE_FORM_2 = 1;              // ARTICLE_FORM : 2
 
- public const int ENG_MODALITY = 50;               // enum ENG_MODALITY
+ public const int ENG_MODALITY = 53;               // enum ENG_MODALITY
 // Coordiname ENG_MODALITY states:
  public const int DIRECT_MODALITY_en = 0;          // ENG_MODALITY : Direct
  public const int TO_MODALITY_en = 2;              // ENG_MODALITY : To
 
- public const int NUMERAL_FORM_en = 51;            // enum NUMERAL_FORM
+ public const int NUMERAL_FORM_en = 54;            // enum NUMERAL_FORM
 // Coordiname NUMERAL_FORM states:
  public const int CARDINAL_en = 0;                 // NUMERAL_FORM : CARDINAL
  public const int ORDINAL_en = 1;                  // NUMERAL_FORM : ORDINAL
 
- public const int GENDER_en = 52;                  // enum ENG_GENDER
+ public const int GENDER_en = 55;                  // enum ENG_GENDER
 // Coordiname ENG_GENDER states:
  public const int MASCULINE_en = 0;                // ENG_GENDER : MASCULINE
  public const int FEMININE_en = 1;                 // ENG_GENDER : FEMININE
 
- public const int TRANSITIVITY_en = 53;            // enum TRANSITIVITY
+ public const int TRANSITIVITY_en = 56;            // enum TRANSITIVITY
 // Coordiname TRANSITIVITY states:
  public const int INTRANSITIVE_VERB_en = 0;        // TRANSITIVITY : INTRANSITIVE
  public const int TRANSITIVE_VERB_en = 1;          // TRANSITIVITY : TRANSITIVE
 
- public const int OBLIG_TRANSITIVITY_en = 54;      // enum OBLIG_TRANSITIVITY
+ public const int OBLIG_TRANSITIVITY_en = 57;      // enum OBLIG_TRANSITIVITY
 
- public const int PROPER_NOUN_en = 55;             // enum ENG_PROPER_NOUN
+ public const int PROPER_NOUN_en = 58;             // enum ENG_PROPER_NOUN
 
- public const int MASS_NOUN_en = 56;               // enum ENG_MASS_NOUN
+ public const int MASS_NOUN_en = 59;               // enum ENG_MASS_NOUN
 
- public const int PERSON_fr = 57;                  // enum FR_PERSON
+ public const int PERSON_fr = 60;                  // enum FR_PERSON
 // Coordiname FR_PERSON states:
  public const int PERSON_1_fr = 0;                 // FR_PERSON : 1
  public const int PERSON_2_fr = 1;                 // FR_PERSON : 2
  public const int PERSON_3_fr = 2;                 // FR_PERSON : 3
 
- public const int NUMBER_fr = 58;                  // enum FR_NOMBRE
+ public const int NUMBER_fr = 61;                  // enum FR_NOMBRE
 // Coordiname FR_NOMBRE states:
  public const int SINGULAR_fr = 0;                 // FR_NOMBRE : SINGULIER
  public const int PLURAL_fr = 1;                   // FR_NOMBRE : PLURIEL
 
- public const int GENDER_fr = 59;                  // enum FR_GENRE
+ public const int GENDER_fr = 62;                  // enum FR_GENRE
 // Coordiname FR_GENRE states:
  public const int MASCULINE_fr = 0;                // FR_GENRE : MASCULINE
  public const int FEMININE_fr = 1;                 // FR_GENRE : FEMININE
 
- public const int FR_NUMERAL_FORM = 60;            // enum FR_NUMERAL_FORM
+ public const int FR_NUMERAL_FORM = 63;            // enum FR_NUMERAL_FORM
 // Coordiname FR_NUMERAL_FORM states:
  public const int CARDINAL_fr = 0;                 // FR_NUMERAL_FORM : CARDINAL
  public const int ORDINAL_fr = 1;                  // FR_NUMERAL_FORM : ORDINAL
 
- public const int FR_PRONOUN_FORM = 61;            // enum FR_PRONOUN_FORM
+ public const int FR_PRONOUN_FORM = 64;            // enum FR_PRONOUN_FORM
 // Coordiname FR_PRONOUN_FORM states:
  public const int FR_PRONOUN_WEAK = 0;             // FR_PRONOUN_FORM : WEAK
  public const int FR_PRONOUN_STRONG = 1;           // FR_PRONOUN_FORM : STRONG
 
- public const int TRANSITIVITY_fr = 62;            // enum FR_TRANSITIVITY
+ public const int TRANSITIVITY_fr = 65;            // enum FR_TRANSITIVITY
 // Coordiname FR_TRANSITIVITY states:
  public const int INTRANSITIVE_VERB_fr = 0;        // FR_TRANSITIVITY : INTRANSITIVE
  public const int TRANSITIVE_VERB_fr = 1;          // FR_TRANSITIVITY : TRANSITIVE
 
- public const int VERB_FORM_fr = 63;               // enum FR_VERB_FORM
+ public const int VERB_FORM_fr = 66;               // enum FR_VERB_FORM
 // Coordiname FR_VERB_FORM states:
  public const int INFINITIVE_fr = 0;               // FR_VERB_FORM : INFINITIVE
  public const int PRESENT_VF_fr = 1;               // FR_VERB_FORM : PRESENT
@@ -335,13 +342,13 @@ namespace SolarixGrammarEngineNET
  public const int CONDITIONAL_fr = 9;              // FR_VERB_FORM : CONDITIONAL
  public const int IMPERATIVE_fr = 10;              // FR_VERB_FORM : IMPERATIVE
 
- public const int JAP_FORM = 64;                   // enum JAP_FORM
+ public const int JAP_FORM = 67;                   // enum JAP_FORM
 // Coordiname JAP_FORM states:
  public const int KANA_FORM = 0;                   // JAP_FORM : KANA
  public const int KANJI_FORM = 1;                  // JAP_FORM : KANJI
  public const int ROMAJI_FORM = 2;                 // JAP_FORM : ROMAJI
 
- public const int JAP_VERB_BASE = 65;              // enum JAP_VERB_BASE
+ public const int JAP_VERB_BASE = 68;              // enum JAP_VERB_BASE
 // Coordiname JAP_VERB_BASE states:
  public const int JAP_VB_I = 0;                    // JAP_VERB_BASE : I
  public const int JAP_VB_II = 1;                   // JAP_VERB_BASE : II
@@ -354,7 +361,7 @@ namespace SolarixGrammarEngineNET
  public const int JAP_VB_CONDITIONAL = 8;          // JAP_VERB_BASE : CONDITIONAL
  public const int JAP_VB_CAUSATIVE = 9;            // JAP_VERB_BASE : CAUSATIVE
 
- public const int JAP_VERB_KIND = 66;              // enum JAP_VERB_KIND
+ public const int JAP_VERB_KIND = 69;              // enum JAP_VERB_KIND
 // Coordiname JAP_VERB_KIND states:
  public const int JAP_PRESENT_FUTURE = 1;          // JAP_VERB_KIND : PRESENT_FUTURE
  public const int JAP_NEGATIVE_PRESENT_FUTURE = 3;  // JAP_VERB_KIND : NEGATIVE_PRESENT_FUTURE
@@ -362,7 +369,7 @@ namespace SolarixGrammarEngineNET
  public const int JAP_IMPERATIVE = 5;              // JAP_VERB_KIND : IMPERATIVE
  public const int JAP_NEGATIVE_IMPERATIVE = 6;     // JAP_VERB_KIND : NEGATIVE_IMPERATIVE
 
- public const int JAP_ADJ_BASE = 67;               // enum JAP_ADJ_BASE
+ public const int JAP_ADJ_BASE = 70;               // enum JAP_ADJ_BASE
 // Coordiname JAP_ADJ_BASE states:
  public const int JAP_AB_I = 0;                    // JAP_ADJ_BASE : I
  public const int JAP_AB_II = 1;                   // JAP_ADJ_BASE : II
@@ -372,14 +379,14 @@ namespace SolarixGrammarEngineNET
  public const int JAP_AB_T = 5;                    // JAP_ADJ_BASE : T
  public const int JAP_AB_PAST = 6;                 // JAP_ADJ_BASE : PAST
 
- public const int JAP_ADJ_FORM2 = 68;              // enum JAP_ADJ_FORM2
+ public const int JAP_ADJ_FORM2 = 71;              // enum JAP_ADJ_FORM2
 // Coordiname JAP_ADJ_FORM2 states:
  public const int JAP_NEGATIVE_PRESENT_ADJ = 0;    // JAP_ADJ_FORM2 : NEGATIVE_PRESENT
  public const int JAP_NEGATIVE_PAST_ADJ = 1;       // JAP_ADJ_FORM2 : NEGATIVE_PAST
 
- public const int JAP_TRANSITIVE = 69;             // enum JAP_TRANSITIVE
+ public const int JAP_TRANSITIVE = 72;             // enum JAP_TRANSITIVE
 
- public const int CASE_jap = 70;                   // enum JAP_CASE
+ public const int CASE_jap = 73;                   // enum JAP_CASE
 // Coordiname JAP_CASE states:
  public const int VOCATIVE_jap = 0;                // JAP_CASE : VOCATIVE
  public const int NOMINATIVE_THEM_jap = 1;         // JAP_CASE : NOMINATIVE_THEM
@@ -395,23 +402,23 @@ namespace SolarixGrammarEngineNET
  public const int COMITATIVE_jap = 11;             // JAP_CASE : COMITATIVE
  public const int SOCIATIVE_jap = 12;              // JAP_CASE : SOCIATIVE
 
- public const int GENDER_jap = 71;                 // enum JAP_GENDER
+ public const int GENDER_jap = 74;                 // enum JAP_GENDER
 // Coordiname JAP_GENDER states:
  public const int MASCULINE_jap = 0;               // JAP_GENDER : MASCULINE
  public const int FEMININE_jap = 1;                // JAP_GENDER : FEMININE
 
- public const int PERSON_jap = 72;                 // enum JAP_PERSON
+ public const int PERSON_jap = 75;                 // enum JAP_PERSON
 // Coordiname JAP_PERSON states:
  public const int PERSON_1_jap = 0;                // JAP_PERSON : 1
  public const int PERSON_2_jap = 1;                // JAP_PERSON : 2
  public const int PERSON_3_jap = 2;                // JAP_PERSON : 3
 
- public const int NUMBER_jap = 73;                 // enum JAP_NUMBER
+ public const int NUMBER_jap = 76;                 // enum JAP_NUMBER
 // Coordiname JAP_NUMBER states:
  public const int SINGULAR_jap = 0;                // JAP_NUMBER : SINGULAR
  public const int PLURAL_jap = 1;                  // JAP_NUMBER : PLURAL
 
- public const int JAP_PRONOUN_TYPE = 74;           // enum JAP_PRONOUN_TYPE
+ public const int JAP_PRONOUN_TYPE = 77;           // enum JAP_PRONOUN_TYPE
 // Coordiname JAP_PRONOUN_TYPE states:
  public const int PERSONAL_jap = 0;                // JAP_PRONOUN_TYPE : PERSONAL
  public const int POINTING_jap = 1;                // JAP_PRONOUN_TYPE : POINTING
@@ -488,43 +495,40 @@ namespace SolarixGrammarEngineNET
  public const int NEXT_ADJECTIVE_link = 77;
  public const int NEXT_NOUN_link = 78;
  public const int THEMA_link = 79;
- public const int RIGHT_PARTICLE_link = 80;
- public const int RIGHT_AUX2INFINITIVE_link = 81;
- public const int RIGHT_AUX2PARTICIPLE = 82;
- public const int RIGHT_AUX2ADJ = 83;
- public const int RIGHT_LOGIC_ITEM_link = 84;
- public const int RIGHT_COMPARISON_Y_link = 85;
- public const int RIGHT_NOUN_link = 86;
- public const int RIGHT_INSTR_OBJECT_link = 87;
- public const int RIGHT_DATIVE_OBJECT_link = 88;
- public const int RIGHT_NAME_link = 89;
- public const int ADJ_PARTICIPLE_link = 90;
- public const int PUNCTUATION_link = 91;
- public const int IMPERATIVE_SUBJECT_link = 92;
- public const int IMPERATIVE_VERB2AUX_link = 93;
- public const int AUX2IMPERATIVE_VERB = 94;
- public const int PREFIX_PARTICLE_link = 95;
- public const int PREFIX_CONJUNCTION_link = 96;
- public const int LOGICAL_CONJUNCTION_link = 97;
- public const int NEXT_CLAUSE_link = 98;
- public const int LEFT_AUX_VERB_link = 99;
- public const int BEG_INTRO_link = 100;
- public const int RIGHT_PREPOSITION_link = 101;
- public const int WH_SUBJECT_link = 102;
- public const int IMPERATIVE_PARTICLE_link = 103;
- public const int GERUND_link = 104;
- public const int PREPOS_ADJUNCT_link = 105;
- public const int DIRECT_OBJ_INTENTION_link = 106;
- public const int COPULA_link = 107;
- public const int DETAILS_link = 108;
- public const int SENTENCE_CLOSER_link = 109;
- public const int OPINION_link = 110;
- public const int APPEAL_link = 111;
- public const int TERM_link = 112;
- public const int SPEECH_link = 113;
- public const int QUESTION_link = 114;
- public const int POLITENESS_link = 115;
- public const int SEPARATE_ATTR_link = 116;
+ public const int RIGHT_AUX2INFINITIVE_link = 80;
+ public const int RIGHT_AUX2PARTICIPLE = 81;
+ public const int RIGHT_AUX2ADJ = 82;
+ public const int RIGHT_LOGIC_ITEM_link = 83;
+ public const int RIGHT_COMPARISON_Y_link = 84;
+ public const int RIGHT_NOUN_link = 85;
+ public const int RIGHT_NAME_link = 86;
+ public const int ADJ_PARTICIPLE_link = 87;
+ public const int PUNCTUATION_link = 88;
+ public const int IMPERATIVE_SUBJECT_link = 89;
+ public const int IMPERATIVE_VERB2AUX_link = 90;
+ public const int AUX2IMPERATIVE_VERB = 91;
+ public const int PREFIX_PARTICLE_link = 92;
+ public const int PREFIX_CONJUNCTION_link = 93;
+ public const int LOGICAL_CONJUNCTION_link = 94;
+ public const int NEXT_CLAUSE_link = 95;
+ public const int LEFT_AUX_VERB_link = 96;
+ public const int BEG_INTRO_link = 97;
+ public const int RIGHT_PREPOSITION_link = 98;
+ public const int WH_SUBJECT_link = 99;
+ public const int IMPERATIVE_PARTICLE_link = 100;
+ public const int GERUND_link = 101;
+ public const int PREPOS_ADJUNCT_link = 102;
+ public const int DIRECT_OBJ_INTENTION_link = 103;
+ public const int COPULA_link = 104;
+ public const int DETAILS_link = 105;
+ public const int SENTENCE_CLOSER_link = 106;
+ public const int OPINION_link = 107;
+ public const int APPEAL_link = 108;
+ public const int TERM_link = 109;
+ public const int SPEECH_link = 110;
+ public const int QUESTION_link = 111;
+ public const int POLITENESS_link = 112;
+ public const int SEPARATE_ATTR_link = 113;
 
   };
  }

@@ -107,7 +107,6 @@ void TrFun_Declare::CompileDeclaration(
                                        PM_Automat &pm,
                                        lem::Iridium::Macro_Parser &txtfile,
                                        TrFunctions &functions,
-                                       const TrProcedureDeclaration &procs,
                                        TrKnownVars &known_vars,
                                        const TrBuiltInFunSignature *signature  
                                       )
@@ -122,7 +121,7 @@ void TrFun_Declare::CompileDeclaration(
    if( txtfile.pick().GetToken()==B_EQUAL )
     {
      txtfile.read();
-     expr = functions.CompileCall( pm, txtfile, procs, known_vars );
+     expr = functions.CompileCall( pm, txtfile, known_vars );
     }
 
    if( var_name.find(vname.string())!=UNKNOWN )

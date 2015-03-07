@@ -4,6 +4,7 @@
 #include <lem/solarix/la_autom.h>
 #include <lem/solarix/TreeScorers.h>
 #include <lem/solarix/SynPatternCompilation.h>
+#include <lem/solarix/PM_FunctionLoader.h>
 #include <lem/solarix/PatternNGrams.h>
 
 using namespace Solarix;
@@ -69,6 +70,11 @@ void PatternNGrams::LoadTxt(
        f->LoadTxt( id_group, dict, txtfile, compilation_context );
        functions.push_back(f);
       }
+     else if( dict.GetLexAuto().GetFunctions().Get().IsFunction(t.string()) )
+      {
+       // Нужно скомпилировать вызов пользовательской функции
+       LEM_STOPIT;
+      }
      else
       {
        txtfile.seekp(t);
@@ -110,6 +116,7 @@ NGramScore PatternNGrams::Match(
                                 SynPatternResult * cur_result,
                                 KnowledgeBase & kbase,
                                 TreeMatchingExperience &experience,
+                                const ElapsedTimeConstraint & constraints,
                                 TrTrace *trace_log
                                ) const
 {
@@ -122,7 +129,7 @@ NGramScore PatternNGrams::Match(
 
  for( lem::Container::size_type i=0; i<functions.size(); ++i )
   {
-   res += NGramScore( functions[i]->Match( dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, trace_log ) );
+   res += NGramScore( functions[i]->Match( dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, constraints, trace_log ) );
   }
 
  return res;

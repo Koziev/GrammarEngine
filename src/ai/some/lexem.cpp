@@ -155,6 +155,11 @@ void Lexem::TranslateThis(
 
          switch( ch=src[i_src++] )
           {
+           case B_COMMAND_METACHAR:
+            buffer[i_res++]=ch; // %% --> %
+            break;
+            
+
            case B_REDUCE_METACHAR:        // %-N
             buffer[i_res++]=ch;           // символ команды '-'
             buffer[i_res++]=str[i_src++]; // аргумент-цифра N

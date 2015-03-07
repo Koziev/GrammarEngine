@@ -73,42 +73,41 @@ void BackTraceItem::Print( lem::OFormatter &to, SynGram &sg, bool detailed ) con
    Solarix::Word_Form dummy( *wf, false );
    wf->Print( to, &sg, detailed );
   }
- else
+
+ if( !export_coords.empty() )
   {
-   if( !export_coords.empty() )
+   to.printf( " export_coords:=%vf6(%vn" );
+ 
+   for( lem::Container::size_type i=0; i<export_coords.size(); ++i )
     {
-     to.printf( "%vf6(%vn" );
-  
-     for( lem::Container::size_type i=0; i<export_coords.size(); ++i )
+     const int id_coord = export_coords[i].GetCoord().GetIndex();
+     const int id_state = export_coords[i].GetState();
+ 
+     const GramCoord &c = sg.coords()[id_coord];
+     if( c.IsBistable() )
       {
-       const int id_coord = export_coords[i].GetCoord().GetIndex();
-       const int id_state = export_coords[i].GetState();
-  
-       const GramCoord &c = sg.coords()[id_coord];
-       if( c.IsBistable() )
+       if( id_state==1 )
         {
-         if( id_state==1 )
-          {
-           to.printf( " %us", c.GetName().string().c_str() );
-          }
-         else
-          {
-           to.printf( " ~%us", c.GetName().string().c_str() );
-          }
+         to.printf( " %us", c.GetName().string().c_str() );
         }
        else
         {
-         to.printf( " %us:%us", c.GetName().string().c_str(), c.GetStateName(id_state).c_str() );
+         to.printf( " ~%us", c.GetName().string().c_str() );
         }
       }
-  
-     to.printf( " %vf6)%vn" );
+     else
+      {
+       to.printf( " %us:%us", c.GetName().string().c_str(), c.GetStateName(id_state).c_str() );
+      }
     }
+ 
+   to.printf( " %vf6)%vn" );
   }
+ 
 
  if( !export_nodes.empty() )
   {
-   to.printf( " export_nodes: " );
+   to.printf( " export_nodes:=" );
    for( lem::Container::size_type i=0; i<export_nodes.size(); ++i )
     {
      to.printf( " %us=", export_nodes[i].first->c_str() );

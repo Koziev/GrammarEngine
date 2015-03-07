@@ -1,4 +1,4 @@
-// LC->17.01.2013
+// LC->11.12.2014
 
 #include <lem/solarix/la_autom.h>
 #include <lem/solarix/sg_autom.h>
@@ -12,7 +12,9 @@ using namespace lem;
 using namespace Solarix;
 
 static const int MAX_SENTENCE_LENGTH=1024;
-#define EOS_CODE L'\x1D'
+// для внутреннего использования - специальные маркеры конца предложения и конца абзаца.
+#define EOS_MARKER_CODE L'\x1D'
+#define EOP_MARKER_CODE L'\x1E'
 
 SentenceBroker::SentenceBroker(void) : eof(true), LanguageID(UNKNOWN)
 {
@@ -61,6 +63,8 @@ SentenceBroker::SentenceBroker( lem::Ptr<lem::Char_Stream::WideStream> _stream, 
 
 void SentenceBroker::Prepare( Dictionary * dict, int language )
 {
+ cur_paragraph_id = 0;
+ last_paragraph_id = 0;
  LanguageID = language;
 
  max_sentence_length = MAX_SENTENCE_LENGTH;
@@ -126,8 +130,11 @@ void SentenceBroker::Prepare( Dictionary * dict, int language )
      if( ip2!=UNKNOWN )
       {
        sent_delims.clear();
-       sent_delims.push_back( lem::UCString(EOS_CODE) );
-       sent_delims1.push_back( EOS_CODE );
+       sent_delims.push_back( lem::UCString(EOS_MARKER_CODE) );
+       sent_delims.push_back( lem::UCString(EOP_MARKER_CODE) );
+
+       sent_delims1.push_back( EOS_MARKER_CODE );
+       sent_delims1.push_back( EOS_MARKER_CODE );
 
        for( lem::Container::size_type q=0; q<lang.params[ip2]->values.size(); ++q )
         {
@@ -166,6 +173,20 @@ void SentenceBroker::Open( lem::Ptr<lem::Char_Stream::WideStream> _stream )
 }
 
 
+
+bool SentenceBroker::IsEndOfSentenceMarker( wchar_t c )
+{
+ return c==EOS_MARKER_CODE || c==EOP_MARKER_CODE;
+}
+
+
+bool SentenceBroker::IsEndOfParagraphMarker( wchar_t c )
+{
+ return c==EOP_MARKER_CODE;
+}
+
+
+
 wchar_t SentenceBroker::GetChar(void)
 {
  if( !chars.empty() )
@@ -187,7 +208,7 @@ wchar_t SentenceBroker::GetChar(void)
 
    wchar_t c2 = stream->wget();
    if( c2==L'\r' || c2==L'\n' )
-    c=EOS_CODE;
+    c=EOP_MARKER_CODE;
    else if( lem::is_uspace(c2) )
     {
      // может идти цепочка пробельных символов, а после них - символ перевода строки.
@@ -196,7 +217,7 @@ wchar_t SentenceBroker::GetChar(void)
       wchar_t c3 = stream->wget();
       if( c3==L'\r' || c3==L'\n' )
        {
-        c=EOS_CODE;
+        c=EOP_MARKER_CODE;
         break;
        }
       else if( lem::is_uspace(c3) )
@@ -233,21 +254,22 @@ void SentenceBroker::UngetChar( wchar_t c )
 
 bool SentenceBroker::Fetch(void)
 {
- return Fetch(last_sentence);
+ return Fetch(last_sentence,last_paragraph_id);
 }
 
 bool SentenceBroker::IsTokenDelimiter( wchar_t c ) const
 {
  return tokenizer.NotNull() ?
          tokenizer->IsTokenDelimiter(c) :
-         (lem::is_uspace(c) || lem::is_udelim(c) || c==L'\r' || c==L'\n' || c==EOS_CODE);
+         (lem::is_uspace(c) || lem::is_udelim(c) || c==L'\r' || c==L'\n' || c==EOS_MARKER_CODE || c==EOP_MARKER_CODE);
 }
 
 
 
-bool SentenceBroker::Fetch( lem::UFString &line )
+bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
 {
  line.clear();
+ line_paragraph_id = cur_paragraph_id;
 
  if( eof )
   return false;
@@ -264,7 +286,7 @@ bool SentenceBroker::Fetch( lem::UFString &line )
      break;
     }
 
-   if( !lem::is_uspace(c) )
+   if( !lem::is_uspace(c) || IsEndOfSentenceMarker(c) )
     {
      UngetChar(c);
      break;
@@ -286,13 +308,10 @@ bool SentenceBroker::Fetch( lem::UFString &line )
      line.Add_Dirty(c);
      continue;
     }
-   else if( c==EOS_CODE )
+   else if( IsEndOfSentenceMarker(c) )
     {
-     // пустая строка - попробуем считать следующую.
-     if( !line.empty() )
-      break;
-
-     continue;
+     line.Add_Dirty(c);
+     break;
     }
 
    bool line_ready=false;
@@ -470,7 +489,7 @@ bool SentenceBroker::Fetch( lem::UFString &line )
    const bool ItIsSentDelim = sent_delims1.find(c)!=UNKNOWN;
    if( ItIsSentDelim )
     {
-     if( c==EOS_CODE )
+     if( IsEndOfSentenceMarker(c) )
       break;
 
      // Обычный конец предложения. Для точки надо проверять, если сразу после точки идет цифра
@@ -601,10 +620,10 @@ bool SentenceBroker::Fetch( lem::UFString &line )
              while( c!=WEOF )
               {
                c = GetChar();
-               if( c==EOS_CODE )
+               line.Add_Dirty( c );
+               if( IsEndOfSentenceMarker(c) )
                 break;
 
-               line.Add_Dirty( c );
                c = PeekChar();
     
                if( !lem::is_uspace(c) )
@@ -705,6 +724,12 @@ bool SentenceBroker::Fetch( lem::UFString &line )
      
    if( line_ready ) 
     {
+     if( line.length()>0 && IsEndOfParagraphMarker( line.last_char() ) )
+      {
+       line.remove( line.length()-1 );
+       cur_paragraph_id++;
+      }
+
      line.calc_hash();
      line.trim();
 
@@ -713,6 +738,12 @@ bool SentenceBroker::Fetch( lem::UFString &line )
 
      return true;
     }
+  }
+
+ if( line.length()>0 && IsEndOfParagraphMarker( line.last_char() ) )
+  {
+   line.remove( line.length()-1 );
+   cur_paragraph_id++;
   }
 
  line.calc_hash();

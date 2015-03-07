@@ -136,7 +136,6 @@ void TrFun_Lambda::CompileDeclaration(
                                       PM_Automat &pm,
                                       lem::Iridium::Macro_Parser &txtfile,
                                       TrFunctions &functions,
-                                      const TrProcedureDeclaration &procs,
                                       TrKnownVars &known_vars,
                                       const TrBuiltInFunSignature *signature  
                                      )

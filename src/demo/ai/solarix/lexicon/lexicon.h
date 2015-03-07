@@ -75,6 +75,11 @@
 
    LexiconDebugger* GetDebugger(void);
 
+   int ShowMenu();
+   void ExecuteMenu( int choice );
+   void EnterMenuLoop();
+
+
    const UFString enter_cmd( const char *Prompt ) const;
    void ShowHelp(void) const;
    void SetMode( const UFString &str );
@@ -82,10 +87,10 @@
    void TestStemmer(void);
    void TestFlexer(void);
    void ShowParadigma(void);
-   void TestThesaurus( const lem::MCollect<int>& menu );
+   void TestThesaurus();
    void TestProjector(void);
-   void TestNGrams( const lem::MCollect<int>& menu );
-   void SearchByIE( const lem::MCollect<int>& menu );
+   void TestNGrams();
+   void SearchByIE();
    void FullMorphologyAnalysis(
                                const UFString &word,
                                bool print_projections,

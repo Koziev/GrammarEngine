@@ -12,9 +12,11 @@
 using namespace Solarix;
 
 
-BasicModel::BasicModel() : available(false), codebook(NULL), loaded(false)
+BasicModel::BasicModel() : available(false), codebook(NULL), loaded(false),
+ EMIT_FORM_TAGS(false), EMIT_FORMTAGS_FOR_CONTEXT(false), EMIT_POS_TAGS(false)
 {
 }
+
 
 BasicModel::~BasicModel()
 {
@@ -33,6 +35,7 @@ ModelTokenFeatures::ModelTokenFeatures()
 {
  suffix_id=UNKNOWN;
  Aa=false;
+ IsBegin=IsEnd = false;
 
  POS_N    = "0"; // сущ
  POS_PRN  = "0"; // местоим
@@ -47,6 +50,8 @@ ModelTokenFeatures::ModelTokenFeatures()
  POS_C    = "0"; // число
  POS_P    = "0"; // предлог
  POS_PX   = "0"; // послелог
+ POS_PP   = "0"; // притяж_частица
+ POS_MU   = "0"; // единицы измерения
 }
 
 
@@ -54,14 +59,24 @@ ModelTokenFeatures::ModelTokenFeatures()
 ModelTokenFeatures* BasicModel::Get_START_Features() const
 {
  ModelTokenFeatures * f = new ModelTokenFeatures(); 
- f->suffix_id = codebook->GetSTART();
+ f->suffix_id = codebook->GetSTART_suffix();
+ f->IsBegin = true;
+
+ if( EMIT_FORM_TAGS )
+  f->allform_tags.push_back( codebook->GetSTART_Tag() );
+
  return f;
 }
 
 ModelTokenFeatures* BasicModel::Get_END_Features() const
 {
  ModelTokenFeatures * f = new ModelTokenFeatures(); 
- f->suffix_id = codebook->GetEND();
+ f->suffix_id = codebook->GetEND_suffix();
+ f->IsEnd = true;
+
+ if( EMIT_FORM_TAGS )
+  f->allform_tags.push_back( codebook->GetEND_Tag() );
+
  return f;
 }
 
@@ -79,7 +94,7 @@ static std::string POS_Prob( int n_pos, int n_tot )
 }
 
 
-ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, const Dictionary & dict ) const
+ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Dictionary & dict ) const
 {
  ModelTokenFeatures * f = new ModelTokenFeatures(); 
 
@@ -103,52 +118,84 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, const D
  std::set<int> ekeys_PRN;
  std::set<int> ekeys_PRN2;
  std::set<int> ekeys_PP;
+ std::set<int> ekeys_MU;
 
  for( int i = 0; i < token->GetWordform()->VersionCount(); ++i )
  {
-  int k = token->GetWordform()->GetVersion(i)->GetEntryKey();
-
-  if( ekeys.find(k)==ekeys.end() )
+  if( EMIT_FORM_TAGS || EMIT_FORMTAGS_FOR_CONTEXT )
    {
-    ekeys.insert( k );
+    const Solarix::Word_Form * version_form = token->GetWordform()->GetVersion(i);
+    const Solarix::ModelTagMatcher * tag_match = codebook->Match( version_form, dict );
+    if( tag_match==NULL )
+     {
+      //#if LEM_DEBUGGING==1
+      lem::MemFormatter mem;
+      mem.printf( "Can not match tag for wordform: " );
+      version_form->Print( mem, &(dict.GetSynGram()), true );
+      lem::UFString str_err = mem.string();
+      throw E_BaseException(str_err);
+      //#endif
+     }
+    else
+     {
+      const int form_tag = tag_match->GetId();
+      if( f->allform_tags.find( form_tag )==UNKNOWN )
+       f->allform_tags.push_back( form_tag );
+     }
+   }
 
-    const int id_class1 = dict.GetSynGram().GetEntry(k).GetClass();
-    switch(id_class1)
-    {
-     case NOUN_ru: ekeys_N.insert( k ); break;
-     case VERB_ru: ekeys_V.insert( k ); break;
-     case IMPERSONAL_VERB_ru: ekeys_IMV.insert( k ); break;
-     case ADJ_ru: ekeys_A.insert( k ); break;
-     case INFINITIVE_ru: ekeys_I.insert( k ); break;
-     case ADVERB_ru: ekeys_Y.insert( k ); break;
-     case GERUND_2_ru: ekeys_VY.insert( k ); break;
-     case NUMBER_CLASS_ru: ekeys_D.insert( k ); break;
-     case NUM_WORD_CLASS: ekeys_C.insert( k ); break;
-     case PREPOS_ru: ekeys_P.insert( k ); break;
-     case POSTPOS_ru: ekeys_PX.insert( k ); break;
-     case PRONOUN_ru: ekeys_PRN.insert( k ); break;
-     case PRONOUN2_ru: ekeys_PRN2.insert( k ); break;
-     case POSESS_PARTICLE: ekeys_PP.insert( k ); break;
+  if( EMIT_POS_TAGS )
+   {
+    int k = token->GetWordform()->GetVersion(i)->GetEntryKey();
+ 
+    if( ekeys.find(k)==ekeys.end() )
+     {
+      ekeys.insert( k );
+ 
+      const int id_class1 = dict.GetSynGram().GetEntry(k).GetClass();
+      switch(id_class1)
+      {
+       case NOUN_ru: ekeys_N.insert( k ); break;
+       case VERB_ru: ekeys_V.insert( k ); break;
+       case IMPERSONAL_VERB_ru: ekeys_IMV.insert( k ); break;
+       case ADJ_ru: ekeys_A.insert( k ); break;
+       case INFINITIVE_ru: ekeys_I.insert( k ); break;
+       case ADVERB_ru: ekeys_Y.insert( k ); break;
+       case GERUND_2_ru: ekeys_VY.insert( k ); break;
+       case NUMBER_CLASS_ru: ekeys_D.insert( k ); break;
+       case NUM_WORD_CLASS: ekeys_C.insert( k ); break;
+       case PREPOS_ru: ekeys_P.insert( k ); break;
+       case POSTPOS_ru: ekeys_PX.insert( k ); break;
+       case PRONOUN_ru: ekeys_PRN.insert( k ); break;
+       case PRONOUN2_ru: ekeys_PRN2.insert( k ); break;
+       case POSESS_PARTICLE: ekeys_PP.insert( k ); break;
+       case MEASURE_UNIT: ekeys_MU.insert( k ); break;
+      }
     }
-  }
+   }
  }
+
 
  const int n_tot = ekeys.size();
 
- f->POS_N = POS_Prob( ekeys_N.size(), n_tot );
- f->POS_V = POS_Prob( ekeys_V.size(), n_tot );
- f->POS_IMV = POS_Prob( ekeys_IMV.size(), n_tot );
- f->POS_A = POS_Prob( ekeys_A.size(), n_tot );
- f->POS_PRN = POS_Prob( ekeys_PRN.size(), n_tot );
- f->POS_PRN2 = POS_Prob( ekeys_PRN2.size(), n_tot );
- f->POS_I = POS_Prob( ekeys_I.size(), n_tot );
- f->POS_Y = POS_Prob( ekeys_Y.size(), n_tot );
- f->POS_VY = POS_Prob( ekeys_VY.size(), n_tot );
- f->POS_C = POS_Prob( ekeys_C.size(), n_tot );
- f->POS_D = POS_Prob( ekeys_D.size(), n_tot );
- f->POS_P = POS_Prob( ekeys_P.size(), n_tot );
- f->POS_PX = POS_Prob( ekeys_PX.size(), n_tot );
- f->POS_PP = POS_Prob( ekeys_PP.size(), n_tot );
+ if( EMIT_POS_TAGS )
+  {
+   f->POS_N = POS_Prob( ekeys_N.size(), n_tot );
+   f->POS_V = POS_Prob( ekeys_V.size(), n_tot );
+   f->POS_IMV = POS_Prob( ekeys_IMV.size(), n_tot );
+   f->POS_A = POS_Prob( ekeys_A.size(), n_tot );
+   f->POS_PRN = POS_Prob( ekeys_PRN.size(), n_tot );
+   f->POS_PRN2 = POS_Prob( ekeys_PRN2.size(), n_tot );
+   f->POS_I = POS_Prob( ekeys_I.size(), n_tot );
+   f->POS_Y = POS_Prob( ekeys_Y.size(), n_tot );
+   f->POS_VY = POS_Prob( ekeys_VY.size(), n_tot );
+   f->POS_C = POS_Prob( ekeys_C.size(), n_tot );
+   f->POS_D = POS_Prob( ekeys_D.size(), n_tot );
+   f->POS_P = POS_Prob( ekeys_P.size(), n_tot );
+   f->POS_PX = POS_Prob( ekeys_PX.size(), n_tot );
+   f->POS_PP = POS_Prob( ekeys_PP.size(), n_tot );
+   f->POS_MU = POS_Prob( ekeys_MU.size(), n_tot );
+  }
 
  #endif
 
@@ -174,13 +221,14 @@ void BasicModel::PullFeatures1(
  {
   const ModelTokenFeatures & f = * token_features[iword];
 
-  b.push_back( lem::format_str( "sfx[%d]=%d", offset, f.suffix_id ).c_str() );
+  if( codebook->GetMaxSuffixLen() > 0 )
+   b.push_back( lem::format_str( "sfx[%d]=%d", offset, f.suffix_id ).c_str() );
 
-  if( emit_Aa_feature )
-   b.push_back( lem::format_str( "Aa[%d]=%d", offset, f.Aa ).c_str() );
+  if( emit_Aa_feature && f.Aa==true && !f.IsBegin && !f.IsEnd )
+   b.push_back( lem::format_str( "Aa[%d]=True", offset ).c_str() );
 
   // здесь можно вывести и другие свойства слова.
-  if( rich_set )
+  if( rich_set && EMIT_POS_TAGS )
   {
    b.push_back( lem::format_str("pos[%d,N]=%s", offset, f.POS_N.c_str() ).c_str() );
    b.push_back( lem::format_str("pos[%d,A]=%s", offset, f.POS_A.c_str() ).c_str() );
@@ -196,7 +244,16 @@ void BasicModel::PullFeatures1(
    b.push_back( lem::format_str("pos[%d,P]=%s", offset, f.POS_P.c_str() ).c_str() );
    b.push_back( lem::format_str("pos[%d,PX]=%s", offset, f.POS_PX.c_str() ).c_str() );
    b.push_back( lem::format_str("pos[%d,PP]=%s", offset, f.POS_PP.c_str() ).c_str() );
+   b.push_back( lem::format_str("pos[%d,MU]=%s", offset, f.POS_MU.c_str() ).c_str() );
   }
+
+  if( EMIT_FORMTAGS_FOR_CONTEXT && offset!=0 )
+   {
+    for( int k = 0; k < f.allform_tags.size(); ++k )
+    {
+     b.push_back( lem::format_str("formtag[%d]=%d", offset, f.allform_tags[k] ).c_str() );
+    }
+   }
  }
 
  return;
@@ -237,3 +294,13 @@ void BasicModel::PullFeatures3( lem::MCollect<lem::CString> & b, const lem::PtrC
 
  return;
 }
+
+
+void BasicModel::SetParamsAfterLoad()
+{
+ EMIT_POS_TAGS = codebook->FindModelParam( L"EMIT_POS_TAGS", L"false" ).eqi( L"true" );
+ EMIT_FORM_TAGS = codebook->FindModelParam( L"EMIT_FORM_TAGS", L"false" ).eqi(  L"true" );
+ EMIT_FORMTAGS_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_FORMTAGS_FOR_CONTEXT", L"false" ).eqi(  L"true" );
+ return;
+}
+

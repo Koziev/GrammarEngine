@@ -1,4 +1,4 @@
-{ This file is generated 30.08.2014 10:31:20 by Ygres compiler ver. 13.23.11072 Standard Win32  (build date Aug 29 2014). }
+{ This file is generated 01.02.2015 08:28:10 by Ygres compiler ver. 13.34.11134 Standard Win32  (build date Jan 25 2015). }
 unit _sg_api;
 interface
 { Languages }
@@ -30,40 +30,41 @@ interface
  const PUNCTUATION_class: integer = 22;            { class œ”Õ “”¿“Œ– }
  const POSTPOS_ru: integer = 27;                   { class œŒ—À≈ÀŒ√ }
  const POSESS_PARTICLE: integer = 28;              { class œ–»“ﬂ∆_◊¿—“»÷¿ }
- const VERB_en: integer = 29;                      { class ENG_VERB }
- const NOUN_en: integer = 30;                      { class ENG_NOUN }
- const PRONOUN_en: integer = 31;                   { class ENG_PRONOUN }
- const ARTICLE_en: integer = 32;                   { class ENG_ARTICLE }
- const PREP_en: integer = 33;                      { class ENG_PREP }
- const CONJ_en: integer = 34;                      { class ENG_CONJ }
- const ADV_en: integer = 35;                       { class ENG_ADVERB }
- const ADJ_en: integer = 36;                       { class ENG_ADJECTIVE }
- const PARTICLE_en: integer = 37;                  { class ENG_PARTICLE }
- const NUMERAL_en: integer = 38;                   { class ENG_NUMERAL }
- const INTERJECTION_en: integer = 39;              { class ENG_INTERJECTION }
- const NUMERAL_fr: integer = 40;                   { class FR_NUMERAL }
- const ARTICLE_fr: integer = 41;                   { class FR_ARTICLE }
- const PREP_fr: integer = 42;                      { class FR_PREP }
- const ADV_fr: integer = 43;                       { class FR_ADVERB }
- const CONJ_fr: integer = 44;                      { class FR_CONJ }
- const NOUN_fr: integer = 45;                      { class FR_NOUN }
- const ADJ_fr: integer = 46;                       { class FR_ADJ }
- const PRONOUN_fr: integer = 47;                   { class FR_PRONOUN }
- const VERB_fr: integer = 48;                      { class FR_VERB }
- const PARTICLE_fr: integer = 49;                  { class FR_PARTICLE }
- const PRONOUN2_fr: integer = 50;                  { class FR_PRONOUN2 }
- const NOUN_es: integer = 51;                      { class ES_NOUN }
- const ROOT_es: integer = 52;                      { class ES_ROOT }
- const JAP_NOUN: integer = 53;                     { class JAP_NOUN }
- const JAP_NUMBER: integer = 54;                   { class JAP_NUMBER }
- const JAP_ADJECTIVE: integer = 55;                { class JAP_ADJECTIVE }
- const JAP_ADVERB: integer = 56;                   { class JAP_ADVERB }
- const JAP_CONJ: integer = 57;                     { class JAP_CONJ }
- const JAP_VERB: integer = 58;                     { class JAP_VERB }
- const JAP_PRONOUN: integer = 59;                  { class JAP_PRONOUN }
- const JAP_VERB_POSTFIX2: integer = 62;            { class JAP_VERB_POSTFIX2 }
- const JAP_PARTICLE: integer = 64;                 { class JAP_PARTICLE }
- const UNKNOWN_ENTRIES_CLASS: integer = 75;        { class UnknownEntries }
+ const MEASURE_UNIT: integer = 29;                 { class ≈ƒ»Õ»÷¿_»«Ã≈–≈Õ»ﬂ }
+ const VERB_en: integer = 30;                      { class ENG_VERB }
+ const NOUN_en: integer = 31;                      { class ENG_NOUN }
+ const PRONOUN_en: integer = 32;                   { class ENG_PRONOUN }
+ const ARTICLE_en: integer = 33;                   { class ENG_ARTICLE }
+ const PREP_en: integer = 34;                      { class ENG_PREP }
+ const CONJ_en: integer = 35;                      { class ENG_CONJ }
+ const ADV_en: integer = 36;                       { class ENG_ADVERB }
+ const ADJ_en: integer = 37;                       { class ENG_ADJECTIVE }
+ const PARTICLE_en: integer = 38;                  { class ENG_PARTICLE }
+ const NUMERAL_en: integer = 39;                   { class ENG_NUMERAL }
+ const INTERJECTION_en: integer = 40;              { class ENG_INTERJECTION }
+ const NUMERAL_fr: integer = 41;                   { class FR_NUMERAL }
+ const ARTICLE_fr: integer = 42;                   { class FR_ARTICLE }
+ const PREP_fr: integer = 43;                      { class FR_PREP }
+ const ADV_fr: integer = 44;                       { class FR_ADVERB }
+ const CONJ_fr: integer = 45;                      { class FR_CONJ }
+ const NOUN_fr: integer = 46;                      { class FR_NOUN }
+ const ADJ_fr: integer = 47;                       { class FR_ADJ }
+ const PRONOUN_fr: integer = 48;                   { class FR_PRONOUN }
+ const VERB_fr: integer = 49;                      { class FR_VERB }
+ const PARTICLE_fr: integer = 50;                  { class FR_PARTICLE }
+ const PRONOUN2_fr: integer = 51;                  { class FR_PRONOUN2 }
+ const NOUN_es: integer = 52;                      { class ES_NOUN }
+ const ROOT_es: integer = 53;                      { class ES_ROOT }
+ const JAP_NOUN: integer = 54;                     { class JAP_NOUN }
+ const JAP_NUMBER: integer = 55;                   { class JAP_NUMBER }
+ const JAP_ADJECTIVE: integer = 56;                { class JAP_ADJECTIVE }
+ const JAP_ADVERB: integer = 57;                   { class JAP_ADVERB }
+ const JAP_CONJ: integer = 58;                     { class JAP_CONJ }
+ const JAP_VERB: integer = 59;                     { class JAP_VERB }
+ const JAP_PRONOUN: integer = 60;                  { class JAP_PRONOUN }
+ const JAP_VERB_POSTFIX2: integer = 63;            { class JAP_VERB_POSTFIX2 }
+ const JAP_PARTICLE: integer = 65;                 { class JAP_PARTICLE }
+ const UNKNOWN_ENTRIES_CLASS: integer = 76;        { class UnknownEntries }
 { ------------------------------------------------------------ }
 
 
@@ -149,6 +150,7 @@ const UNCOUNTABLE_ru: integer = 1;                 // œ≈–≈◊»—À»ÃŒ—“‹ : Õ≈“
 const ATTRIBUTIVE_FORM_ru: integer = 0;            // —“≈œ≈Õ‹ : ¿“–»¡
 const COMPARATIVE_FORM_ru: integer = 1;            // —“≈œ≈Õ‹ : —–¿¬Õ
 const SUPERLATIVE_FORM_ru: integer = 2;            // —“≈œ≈Õ‹ : œ–≈¬Œ—’
+const LIGHT_COMPAR_FORM_RU: integer = 3;           // —“≈œ≈Õ‹ :  ŒÃœ¿–¿“»¬2
  const CASE_GERUND_ru: integer = 28;               { enum œ‡‰ÂÊ¬‡Î }
 { Coordiname œ‡‰ÂÊ¬‡Î states: }
  const MODAL_ru: integer = 29;                     { enum ÃŒƒ¿À‹Õ€… }
@@ -177,98 +179,102 @@ const S_FACTOR: integer = 10;                      // Œ¡—“_¬¿À : ÃÕŒ∆»“≈À‹
 { Coordiname “»œ_œ–»À states: }
 const ADJ_POSSESSIVE: integer = 0;                 // “»œ_œ–»À : œ–»“ﬂ∆
 const ADJ_ORDINAL: integer = 1;                    // “»œ_œ–»À : œŒ–ﬂƒ 
- const TENSE_en: integer = 40;                     { enum TENSE }
+ const PARTICLE_TYPE: integer = 36;                { enum “»œ_◊¿—“»÷€ }
+{ Coordiname “»œ_◊¿—“»÷€ states: }
+const PREFIX_PARTICLE: integer = 0;                // “»œ_◊¿—“»÷€ : œ–≈‘» —
+const POSTFIX_PARTICLE: integer = 1;               // “»œ_◊¿—“»÷€ : œŒ—“‘» —
+ const TENSE_en: integer = 43;                     { enum TENSE }
 { Coordiname TENSE states: }
 const PAST_en: integer = 0;                        // TENSE : PAST
 const PRESENT_en: integer = 1;                     // TENSE : PRESENT
 const FUTURE_en: integer = 2;                      // TENSE : FUTURE
- const DURATION_en: integer = 41;                  { enum DURATION }
+ const DURATION_en: integer = 44;                  { enum DURATION }
 { Coordiname DURATION states: }
 const SIMPLE_en: integer = 0;                      // DURATION : INDEFINITE
 const CONTINUOUS_en: integer = 1;                  // DURATION : CONTINUOUS
 const PERFECT_en: integer = 2;                     // DURATION : PERFECT
 const PERFECT_CONTINUOS_en: integer = 3;           // DURATION : PERFECT_CONTINUOUS
- const VOICE_en: integer = 42;                     { enum VOICE }
+ const VOICE_en: integer = 45;                     { enum VOICE }
 { Coordiname VOICE states: }
 const PASSIVE_en: integer = 0;                     // VOICE : PASSIVE
 const ACTIVE_en: integer = 1;                      // VOICE : ACTIVE
- const CASE_en: integer = 43;                      { enum CASE }
+ const CASE_en: integer = 46;                      { enum CASE }
 { Coordiname CASE states: }
 const NOMINATIVE_CASE_en: integer = 0;             // CASE : NOMINATIVE
 const PREPOSITIVE_CASE_en: integer = 1;            // CASE : PREPOSITIVE
- const NOUN_FORM_en: integer = 44;                 { enum NOUN_FORM }
+ const NOUN_FORM_en: integer = 47;                 { enum NOUN_FORM }
 { Coordiname NOUN_FORM states: }
 const BASIC_NOUN_FORM_en: integer = 0;             // NOUN_FORM : BASIC
 const POSSESSIVE_NOUN_FORM_en: integer = 1;        // NOUN_FORM : POSSESSIVE
- const PRONOUN_FORM_en: integer = 45;              { enum PRONOUN_FORM }
+ const PRONOUN_FORM_en: integer = 48;              { enum PRONOUN_FORM }
 { Coordiname PRONOUN_FORM states: }
- const ADJ_FORM_en: integer = 46;                  { enum ADJ_FORM }
+ const ADJ_FORM_en: integer = 49;                  { enum ADJ_FORM }
 { Coordiname ADJ_FORM states: }
 const BASIC_ADJ_en: integer = 0;                   // ADJ_FORM : BASIC
 const COMPARATIVE_ADJ_en: integer = 1;             // ADJ_FORM : COMPARATIVE
 const SUPERLATIVE_ADJ_en: integer = 2;             // ADJ_FORM : SUPERLATIVE
- const COMPARABILITY_en: integer = 47;             { enum COMPARABILITY }
+ const COMPARABILITY_en: integer = 50;             { enum COMPARABILITY }
 { Coordiname COMPARABILITY states: }
 const ANALYTIC_en: integer = 0;                    // COMPARABILITY : ANALYTIC
 const SYNTHETIC_en: integer = 1;                   // COMPARABILITY : SYNTHETIC
 const COMPARABLE_en: integer = 2;                  // COMPARABILITY : COMPARABLE
 const NONCOMPARABLE: integer = 3;                  // COMPARABILITY : NONCOMPARABLE
- const VERB_FORM_en: integer = 48;                 { enum VERB_FORM }
+ const VERB_FORM_en: integer = 51;                 { enum VERB_FORM }
 { Coordiname VERB_FORM states: }
 const UNDEF_VERBFORM_en: integer = 0;              // VERB_FORM : UNDEF
 const ED_VERBFORM_en: integer = 1;                 // VERB_FORM : ED
 const ING_VERBFORM_en: integer = 2;                // VERB_FORM : ING
 const PP_VERBFORM_en: integer = 3;                 // VERB_FORM : PP
 const INF_VEBFORM_en: integer = 4;                 // VERB_FORM : INF
- const ARTICLE_FORM: integer = 49;                 { enum ARTICLE_FORM }
+ const ARTICLE_FORM: integer = 52;                 { enum ARTICLE_FORM }
 { Coordiname ARTICLE_FORM states: }
 const ARTICLE_FORM_1: integer = 0;                 // ARTICLE_FORM : 1
 const ARTICLE_FORM_2: integer = 1;                 // ARTICLE_FORM : 2
- const ENG_MODALITY: integer = 50;                 { enum ENG_MODALITY }
+ const ENG_MODALITY: integer = 53;                 { enum ENG_MODALITY }
 { Coordiname ENG_MODALITY states: }
 const DIRECT_MODALITY_en: integer = 0;             // ENG_MODALITY : Direct
 const TO_MODALITY_en: integer = 2;                 // ENG_MODALITY : To
- const NUMERAL_FORM_en: integer = 51;              { enum NUMERAL_FORM }
+ const NUMERAL_FORM_en: integer = 54;              { enum NUMERAL_FORM }
 { Coordiname NUMERAL_FORM states: }
 const CARDINAL_en: integer = 0;                    // NUMERAL_FORM : CARDINAL
 const ORDINAL_en: integer = 1;                     // NUMERAL_FORM : ORDINAL
- const GENDER_en: integer = 52;                    { enum ENG_GENDER }
+ const GENDER_en: integer = 55;                    { enum ENG_GENDER }
 { Coordiname ENG_GENDER states: }
 const MASCULINE_en: integer = 0;                   // ENG_GENDER : MASCULINE
 const FEMININE_en: integer = 1;                    // ENG_GENDER : FEMININE
- const TRANSITIVITY_en: integer = 53;              { enum TRANSITIVITY }
+ const TRANSITIVITY_en: integer = 56;              { enum TRANSITIVITY }
 { Coordiname TRANSITIVITY states: }
 const INTRANSITIVE_VERB_en: integer = 0;           // TRANSITIVITY : INTRANSITIVE
 const TRANSITIVE_VERB_en: integer = 1;             // TRANSITIVITY : TRANSITIVE
- const OBLIG_TRANSITIVITY_en: integer = 54;        { enum OBLIG_TRANSITIVITY }
- const PROPER_NOUN_en: integer = 55;               { enum ENG_PROPER_NOUN }
- const MASS_NOUN_en: integer = 56;                 { enum ENG_MASS_NOUN }
- const PERSON_fr: integer = 57;                    { enum FR_PERSON }
+ const OBLIG_TRANSITIVITY_en: integer = 57;        { enum OBLIG_TRANSITIVITY }
+ const PROPER_NOUN_en: integer = 58;               { enum ENG_PROPER_NOUN }
+ const MASS_NOUN_en: integer = 59;                 { enum ENG_MASS_NOUN }
+ const PERSON_fr: integer = 60;                    { enum FR_PERSON }
 { Coordiname FR_PERSON states: }
 const PERSON_1_fr: integer = 0;                    // FR_PERSON : 1
 const PERSON_2_fr: integer = 1;                    // FR_PERSON : 2
 const PERSON_3_fr: integer = 2;                    // FR_PERSON : 3
- const NUMBER_fr: integer = 58;                    { enum FR_NOMBRE }
+ const NUMBER_fr: integer = 61;                    { enum FR_NOMBRE }
 { Coordiname FR_NOMBRE states: }
 const SINGULAR_fr: integer = 0;                    // FR_NOMBRE : SINGULIER
 const PLURAL_fr: integer = 1;                      // FR_NOMBRE : PLURIEL
- const GENDER_fr: integer = 59;                    { enum FR_GENRE }
+ const GENDER_fr: integer = 62;                    { enum FR_GENRE }
 { Coordiname FR_GENRE states: }
 const MASCULINE_fr: integer = 0;                   // FR_GENRE : MASCULINE
 const FEMININE_fr: integer = 1;                    // FR_GENRE : FEMININE
- const FR_NUMERAL_FORM: integer = 60;              { enum FR_NUMERAL_FORM }
+ const FR_NUMERAL_FORM: integer = 63;              { enum FR_NUMERAL_FORM }
 { Coordiname FR_NUMERAL_FORM states: }
 const CARDINAL_fr: integer = 0;                    // FR_NUMERAL_FORM : CARDINAL
 const ORDINAL_fr: integer = 1;                     // FR_NUMERAL_FORM : ORDINAL
- const FR_PRONOUN_FORM: integer = 61;              { enum FR_PRONOUN_FORM }
+ const FR_PRONOUN_FORM: integer = 64;              { enum FR_PRONOUN_FORM }
 { Coordiname FR_PRONOUN_FORM states: }
 const FR_PRONOUN_WEAK: integer = 0;                // FR_PRONOUN_FORM : WEAK
 const FR_PRONOUN_STRONG: integer = 1;              // FR_PRONOUN_FORM : STRONG
- const TRANSITIVITY_fr: integer = 62;              { enum FR_TRANSITIVITY }
+ const TRANSITIVITY_fr: integer = 65;              { enum FR_TRANSITIVITY }
 { Coordiname FR_TRANSITIVITY states: }
 const INTRANSITIVE_VERB_fr: integer = 0;           // FR_TRANSITIVITY : INTRANSITIVE
 const TRANSITIVE_VERB_fr: integer = 1;             // FR_TRANSITIVITY : TRANSITIVE
- const VERB_FORM_fr: integer = 63;                 { enum FR_VERB_FORM }
+ const VERB_FORM_fr: integer = 66;                 { enum FR_VERB_FORM }
 { Coordiname FR_VERB_FORM states: }
 const INFINITIVE_fr: integer = 0;                  // FR_VERB_FORM : INFINITIVE
 const PRESENT_VF_fr: integer = 1;                  // FR_VERB_FORM : PRESENT
@@ -281,12 +287,12 @@ const SUBJUNCTIVE_PRESENT_fr: integer = 7;         // FR_VERB_FORM : SUBJUNCTIVE
 const SUBJUNCTIVE_IMPERFECT_fr: integer = 8;       // FR_VERB_FORM : SUBJUNCTIVE_IMPERFECT
 const CONDITIONAL_fr: integer = 9;                 // FR_VERB_FORM : CONDITIONAL
 const IMPERATIVE_fr: integer = 10;                 // FR_VERB_FORM : IMPERATIVE
- const JAP_FORM: integer = 64;                     { enum JAP_FORM }
+ const JAP_FORM: integer = 67;                     { enum JAP_FORM }
 { Coordiname JAP_FORM states: }
 const KANA_FORM: integer = 0;                      // JAP_FORM : KANA
 const KANJI_FORM: integer = 1;                     // JAP_FORM : KANJI
 const ROMAJI_FORM: integer = 2;                    // JAP_FORM : ROMAJI
- const JAP_VERB_BASE: integer = 65;                { enum JAP_VERB_BASE }
+ const JAP_VERB_BASE: integer = 68;                { enum JAP_VERB_BASE }
 { Coordiname JAP_VERB_BASE states: }
 const JAP_VB_I: integer = 0;                       // JAP_VERB_BASE : I
 const JAP_VB_II: integer = 1;                      // JAP_VERB_BASE : II
@@ -298,14 +304,14 @@ const JAP_VB_PARTICIPLE: integer = 6;              // JAP_VERB_BASE : PARTICIPLE
 const JAP_VB_POTENTIAL: integer = 7;               // JAP_VERB_BASE : POTENTIAL
 const JAP_VB_CONDITIONAL: integer = 8;             // JAP_VERB_BASE : CONDITIONAL
 const JAP_VB_CAUSATIVE: integer = 9;               // JAP_VERB_BASE : CAUSATIVE
- const JAP_VERB_KIND: integer = 66;                { enum JAP_VERB_KIND }
+ const JAP_VERB_KIND: integer = 69;                { enum JAP_VERB_KIND }
 { Coordiname JAP_VERB_KIND states: }
 const JAP_PRESENT_FUTURE: integer = 1;             // JAP_VERB_KIND : PRESENT_FUTURE
 const JAP_NEGATIVE_PRESENT_FUTURE: integer = 3;    // JAP_VERB_KIND : NEGATIVE_PRESENT_FUTURE
 const JAP_NEGATIVE_PAST: integer = 4;              // JAP_VERB_KIND : NEGATIVE_PAST
 const JAP_IMPERATIVE: integer = 5;                 // JAP_VERB_KIND : IMPERATIVE
 const JAP_NEGATIVE_IMPERATIVE: integer = 6;        // JAP_VERB_KIND : NEGATIVE_IMPERATIVE
- const JAP_ADJ_BASE: integer = 67;                 { enum JAP_ADJ_BASE }
+ const JAP_ADJ_BASE: integer = 70;                 { enum JAP_ADJ_BASE }
 { Coordiname JAP_ADJ_BASE states: }
 const JAP_AB_I: integer = 0;                       // JAP_ADJ_BASE : I
 const JAP_AB_II: integer = 1;                      // JAP_ADJ_BASE : II
@@ -314,12 +320,12 @@ const JAP_AB_IV: integer = 3;                      // JAP_ADJ_BASE : IV
 const JAP_AB_V: integer = 4;                       // JAP_ADJ_BASE : V
 const JAP_AB_T: integer = 5;                       // JAP_ADJ_BASE : T
 const JAP_AB_PAST: integer = 6;                    // JAP_ADJ_BASE : PAST
- const JAP_ADJ_FORM2: integer = 68;                { enum JAP_ADJ_FORM2 }
+ const JAP_ADJ_FORM2: integer = 71;                { enum JAP_ADJ_FORM2 }
 { Coordiname JAP_ADJ_FORM2 states: }
 const JAP_NEGATIVE_PRESENT_ADJ: integer = 0;       // JAP_ADJ_FORM2 : NEGATIVE_PRESENT
 const JAP_NEGATIVE_PAST_ADJ: integer = 1;          // JAP_ADJ_FORM2 : NEGATIVE_PAST
- const JAP_TRANSITIVE: integer = 69;               { enum JAP_TRANSITIVE }
- const CASE_jap: integer = 70;                     { enum JAP_CASE }
+ const JAP_TRANSITIVE: integer = 72;               { enum JAP_TRANSITIVE }
+ const CASE_jap: integer = 73;                     { enum JAP_CASE }
 { Coordiname JAP_CASE states: }
 const VOCATIVE_jap: integer = 0;                   // JAP_CASE : VOCATIVE
 const NOMINATIVE_THEM_jap: integer = 1;            // JAP_CASE : NOMINATIVE_THEM
@@ -334,20 +340,20 @@ const LIMITIVE_jap: integer = 9;                   // JAP_CASE : LIMITIVE
 const COMPARATIVE_jap: integer = 10;               // JAP_CASE : COMPARATIVE
 const COMITATIVE_jap: integer = 11;                // JAP_CASE : COMITATIVE
 const SOCIATIVE_jap: integer = 12;                 // JAP_CASE : SOCIATIVE
- const GENDER_jap: integer = 71;                   { enum JAP_GENDER }
+ const GENDER_jap: integer = 74;                   { enum JAP_GENDER }
 { Coordiname JAP_GENDER states: }
 const MASCULINE_jap: integer = 0;                  // JAP_GENDER : MASCULINE
 const FEMININE_jap: integer = 1;                   // JAP_GENDER : FEMININE
- const PERSON_jap: integer = 72;                   { enum JAP_PERSON }
+ const PERSON_jap: integer = 75;                   { enum JAP_PERSON }
 { Coordiname JAP_PERSON states: }
 const PERSON_1_jap: integer = 0;                   // JAP_PERSON : 1
 const PERSON_2_jap: integer = 1;                   // JAP_PERSON : 2
 const PERSON_3_jap: integer = 2;                   // JAP_PERSON : 3
- const NUMBER_jap: integer = 73;                   { enum JAP_NUMBER }
+ const NUMBER_jap: integer = 76;                   { enum JAP_NUMBER }
 { Coordiname JAP_NUMBER states: }
 const SINGULAR_jap: integer = 0;                   // JAP_NUMBER : SINGULAR
 const PLURAL_jap: integer = 1;                     // JAP_NUMBER : PLURAL
- const JAP_PRONOUN_TYPE: integer = 74;             { enum JAP_PRONOUN_TYPE }
+ const JAP_PRONOUN_TYPE: integer = 77;             { enum JAP_PRONOUN_TYPE }
 { Coordiname JAP_PRONOUN_TYPE states: }
 const PERSONAL_jap: integer = 0;                   // JAP_PRONOUN_TYPE : PERSONAL
 const POINTING_jap: integer = 1;                   // JAP_PRONOUN_TYPE : POINTING
@@ -424,42 +430,39 @@ const POSSESSIVE_jap: integer = 2;                 // JAP_PRONOUN_TYPE : POSSESS
  const NEXT_ADJECTIVE_link: integer = 77;
  const NEXT_NOUN_link: integer = 78;
  const THEMA_link: integer = 79;
- const RIGHT_PARTICLE_link: integer = 80;
- const RIGHT_AUX2INFINITIVE_link: integer = 81;
- const RIGHT_AUX2PARTICIPLE: integer = 82;
- const RIGHT_AUX2ADJ: integer = 83;
- const RIGHT_LOGIC_ITEM_link: integer = 84;
- const RIGHT_COMPARISON_Y_link: integer = 85;
- const RIGHT_NOUN_link: integer = 86;
- const RIGHT_INSTR_OBJECT_link: integer = 87;
- const RIGHT_DATIVE_OBJECT_link: integer = 88;
- const RIGHT_NAME_link: integer = 89;
- const ADJ_PARTICIPLE_link: integer = 90;
- const PUNCTUATION_link: integer = 91;
- const IMPERATIVE_SUBJECT_link: integer = 92;
- const IMPERATIVE_VERB2AUX_link: integer = 93;
- const AUX2IMPERATIVE_VERB: integer = 94;
- const PREFIX_PARTICLE_link: integer = 95;
- const PREFIX_CONJUNCTION_link: integer = 96;
- const LOGICAL_CONJUNCTION_link: integer = 97;
- const NEXT_CLAUSE_link: integer = 98;
- const LEFT_AUX_VERB_link: integer = 99;
- const BEG_INTRO_link: integer = 100;
- const RIGHT_PREPOSITION_link: integer = 101;
- const WH_SUBJECT_link: integer = 102;
- const IMPERATIVE_PARTICLE_link: integer = 103;
- const GERUND_link: integer = 104;
- const PREPOS_ADJUNCT_link: integer = 105;
- const DIRECT_OBJ_INTENTION_link: integer = 106;
- const COPULA_link: integer = 107;
- const DETAILS_link: integer = 108;
- const SENTENCE_CLOSER_link: integer = 109;
- const OPINION_link: integer = 110;
- const APPEAL_link: integer = 111;
- const TERM_link: integer = 112;
- const SPEECH_link: integer = 113;
- const QUESTION_link: integer = 114;
- const POLITENESS_link: integer = 115;
- const SEPARATE_ATTR_link: integer = 116;
+ const RIGHT_AUX2INFINITIVE_link: integer = 80;
+ const RIGHT_AUX2PARTICIPLE: integer = 81;
+ const RIGHT_AUX2ADJ: integer = 82;
+ const RIGHT_LOGIC_ITEM_link: integer = 83;
+ const RIGHT_COMPARISON_Y_link: integer = 84;
+ const RIGHT_NOUN_link: integer = 85;
+ const RIGHT_NAME_link: integer = 86;
+ const ADJ_PARTICIPLE_link: integer = 87;
+ const PUNCTUATION_link: integer = 88;
+ const IMPERATIVE_SUBJECT_link: integer = 89;
+ const IMPERATIVE_VERB2AUX_link: integer = 90;
+ const AUX2IMPERATIVE_VERB: integer = 91;
+ const PREFIX_PARTICLE_link: integer = 92;
+ const PREFIX_CONJUNCTION_link: integer = 93;
+ const LOGICAL_CONJUNCTION_link: integer = 94;
+ const NEXT_CLAUSE_link: integer = 95;
+ const LEFT_AUX_VERB_link: integer = 96;
+ const BEG_INTRO_link: integer = 97;
+ const RIGHT_PREPOSITION_link: integer = 98;
+ const WH_SUBJECT_link: integer = 99;
+ const IMPERATIVE_PARTICLE_link: integer = 100;
+ const GERUND_link: integer = 101;
+ const PREPOS_ADJUNCT_link: integer = 102;
+ const DIRECT_OBJ_INTENTION_link: integer = 103;
+ const COPULA_link: integer = 104;
+ const DETAILS_link: integer = 105;
+ const SENTENCE_CLOSER_link: integer = 106;
+ const OPINION_link: integer = 107;
+ const APPEAL_link: integer = 108;
+ const TERM_link: integer = 109;
+ const SPEECH_link: integer = 110;
+ const QUESTION_link: integer = 111;
+ const POLITENESS_link: integer = 112;
+ const SEPARATE_ATTR_link: integer = 113;
 implementation
 end.

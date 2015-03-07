@@ -3740,7 +3740,6 @@ void TrFun_BuiltIn::CompileDeclaration(
                                        PM_Automat &pm,
                                        lem::Iridium::Macro_Parser &txtfile,
                                        TrFunctions &functions,
-                                       const TrProcedureDeclaration &procs,
                                        TrKnownVars &known_vars,
                                        const TrBuiltInFunSignature *signature  
                                       )
@@ -3762,7 +3761,7 @@ void TrFun_BuiltIn::CompileDeclaration(
    if( !args.empty() )
     txtfile.read_it( B_COMMA );
 
-   TrFunCall *expr = functions.CompileCall( pm, txtfile, procs, known_vars );
+   TrFunCall *expr = functions.CompileCall( pm, txtfile, known_vars );
    args.push_back(expr);
   }
 

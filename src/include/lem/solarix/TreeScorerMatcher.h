@@ -32,7 +32,9 @@ namespace Solarix
                                const LinkEdgeContainer & edges,
                                const TreeScorerApplicationContext & parent_context,
                                const TreeScorerGroupParams & params,
-                               TreeScorerBoundVariables & bound_variables
+                               TreeScorerBoundVariables & bound_variables,
+                               const ElapsedTimeConstraint & constraints,
+                               TrTrace *trace_log
                               );
 
    static bool MatchTreeScorer(
@@ -43,7 +45,9 @@ namespace Solarix
                                const LinkEdgeContainer & edges,
                                const TreeScorerApplicationContext & parent_context,
                                const TreeScorerGroupParams & params,
-                               TreeScorerBoundVariables & bound_variables
+                               TreeScorerBoundVariables & bound_variables,
+                               const ElapsedTimeConstraint & constraints,
+                               TrTrace *trace_log
                               );
 
    static void MatchRootByGroup(
@@ -56,6 +60,7 @@ namespace Solarix
                                 KnowledgeBase & kbase,
                                 TreeMatchingExperience &experience,
                                 TreeScorerMatcher_Result & result,
+                                const ElapsedTimeConstraint & constraints,
                                 TrTrace *trace_log
                                );
  };

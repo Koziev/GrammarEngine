@@ -10,7 +10,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->04.11.2004
-// LC->06.12.2008
+// LC->11.10.2014
 // --------------
 
 #ifndef FILE_FACTORY_IMP__H
@@ -44,12 +44,13 @@
    String_Reader( const wchar_t *Beg, const wchar_t *End );
 
    virtual void read( Base_File_Lexem &l );
-   virtual bool eof(void) const { return cur==end; }
+   virtual bool eof() const { return cur==end; }
    virtual void read_whole_text( UFString &text );
    virtual void read_line( UFString &text );
-   virtual void rewind(void);
+   virtual void rewind();
 
-   virtual lem::Stream::pos_type fsize(void) { return end-beg; }
+   virtual lem::Stream::pos_type fsize() { return end-beg; }
+   virtual lem::Stream::pos64_type fsize64() { return end-beg; }
  };
 
 
@@ -62,7 +63,7 @@
    Mem_String_Reader( UFString *Buffer );
    Mem_String_Reader( UFString *Buffer, const wchar_t *Beg, const wchar_t *End );
 
-   virtual ~Mem_String_Reader(void);
+   virtual ~Mem_String_Reader();
  };
 
 
@@ -80,11 +81,11 @@
 
    static MCollect<const lem::CodeConverter*> cplist_intrinsic;
 
-   static void Prepare_Ru_Dict(void);
-   static void Prepare_En_Dict(void);
-   static void Prepare_Fr_Dict(void);
+   static void Prepare_Ru_Dict();
+   static void Prepare_En_Dict();
+   static void Prepare_Fr_Dict();
 
-   static void Prepare_Dict(void);
+   static void Prepare_Dict();
 
    float Project_Words(
                        int n_max_words=64,  // сколько слов проецировать
@@ -93,20 +94,21 @@
    bool Is_Impossible( const UCString &w ) const;
 
    lem::zbool enable_guesser; // флаг - разрешать ли подбор кодовых страниц
-   virtual void Guess_Code_Page(void);
+   virtual void Guess_Code_Page();
 
   public:
    Text_File_Reader( const Scan_Options &Scanning );
 
-   virtual ~Text_File_Reader(void);
+   virtual ~Text_File_Reader();
 
    virtual void read( Base_File_Lexem &l );
-   virtual bool eof(void) const;
+   virtual bool eof() const;
    virtual void read_whole_text( UFString &text );
    virtual void read_line( UFString &text );
-   virtual void rewind(void);
+   virtual void rewind();
 
-   virtual lem::Stream::pos_type fsize(void) { return stream->fsize(); }
+   virtual lem::Stream::pos_type fsize() { return stream->fsize(); }
+   virtual lem::Stream::pos64_type fsize64() { return stream->fsize64(); }
  };
 
 
@@ -116,7 +118,7 @@
  class Txt_Ascii_Reader : public Text_File_Reader
  {
   private:
-   virtual void Prepare_Format(void);
+   virtual void Prepare_Format();
 
   public:
    Txt_Ascii_Reader(
@@ -177,7 +179,7 @@
  class Txt_Detector : public File_Detector
  {
   public:
-   Txt_Detector(void);
+   Txt_Detector();
 
    virtual Base_File_Reader* Test(
                                   const Scan_Options &scanning,
@@ -197,7 +199,7 @@
  class Html_Detector : public File_Detector
  {
   public:
-   Html_Detector(void);
+   Html_Detector();
 
    virtual Base_File_Reader* Test(
                                   const Scan_Options &scanning,
@@ -218,7 +220,7 @@
  class JPEG_Detector : public File_Detector
  {
   public:
-   JPEG_Detector(void);
+   JPEG_Detector();
 
    virtual Base_File_Reader* Test(
                                   const Scan_Options &scanning,
@@ -240,7 +242,7 @@
  class EXE_Detector : public File_Detector
  {
   public:
-   EXE_Detector(void);
+   EXE_Detector();
 
    virtual Base_File_Reader* Test(
                                   const Scan_Options &scanning,
@@ -273,14 +275,15 @@
                    const Scan_Options &Scanning
                   );
 
-   ~Str_File_Reader(void);
+   ~Str_File_Reader();
 
    virtual void read( Base_File_Lexem &l );
-   virtual bool eof(void) const;
+   virtual bool eof() const;
    virtual void read_whole_text( UFString &text );
    virtual void read_line( UFString &text );
-   virtual void rewind(void);
-   virtual lem::Stream::pos_type fsize(void);
+   virtual void rewind();
+   virtual lem::Stream::pos_type fsize();
+   virtual lem::Stream::pos64_type fsize64();
  };
 
  #if defined FAIND_EXE_READER
@@ -321,11 +324,12 @@
                 );
 
    virtual void read( Base_File_Lexem &l );
-   virtual bool eof(void) const;
+   virtual bool eof() const;
    virtual void read_whole_text( UFString &text );
    virtual void read_line( UFString &text );
-   virtual void rewind(void);
-   virtual lem::Stream::pos_type fsize(void);
+   virtual void rewind();
+   virtual lem::Stream::pos_type fsize();
+   virtual lem::Stream::pos64_type fsize64();
  };
 
 

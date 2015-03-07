@@ -1,6 +1,7 @@
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/sg_autom.h>
 #include <lem/solarix/la_autom.h>
+#include <lem/solarix/pm_functionloader.h>
 #include <lem/solarix/SynPatternResult.h>
 #include <lem/solarix/LA_WordEntrySet.h>
 #include <lem/solarix/TreeScorerApplicationContext.h>
@@ -61,6 +62,7 @@ void TreeScorerMatcher::MatchRootByGroup(
                                          KnowledgeBase & kbase,
                                          TreeMatchingExperience &experience,
                                          TreeScorerMatcher_Result & matching_result,
+                                         const ElapsedTimeConstraint & constraints,
                                          TrTrace *trace_log
                                         )
 {
@@ -128,9 +130,10 @@ void TreeScorerMatcher::MatchRootByGroup(
 
      #endif
 
-     if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, *root_wf, edges, context, params, bound_variables ) )
+     if( TreeScorerMatcher::MatchTreeScorer( sg, sets, id_headpoint, *root_wf, edges, context, params, bound_variables, constraints, trace_log ) )
       {
-       const int dscore = scores[j]->Calculate( dict, bound_variables );
+       scores[j]->Link( dict.GetLexAuto().GetFunctions().Get() );
+       const int dscore = scores[j]->Calculate( dict, bound_variables, constraints, trace_log );
        matching_result.score += dscore;
        matching_result.matched = true;
 
@@ -163,13 +166,15 @@ bool TreeScorerMatcher::MatchTreeScorer(
                                         const LinkEdgeContainer & edges,
                                         const TreeScorerApplicationContext & parent_context,
                                         const TreeScorerGroupParams & params,
-                                        TreeScorerBoundVariables & bound_variables
+                                        TreeScorerBoundVariables & bound_variables,
+                                        const ElapsedTimeConstraint & constraints,
+                                        TrTrace *trace_log
                                        )
 {
  // Делаем полную тщательную проверку для текущего корня.
  lem::Ptr<TreeScorerPoint> p( sg.GetStorage().LoadTreeScorerPoint( id_point ) );
 
- return MatchTreeScorer( sg, wordentry_sets, p.get(), node, edges, parent_context, params, bound_variables );
+ return MatchTreeScorer( sg, wordentry_sets, p.get(), node, edges, parent_context, params, bound_variables, constraints, trace_log );
 }
 
 
@@ -182,7 +187,9 @@ bool TreeScorerMatcher::MatchTreeScorer(
                                         const LinkEdgeContainer & edges,
                                         const TreeScorerApplicationContext & parent_context,
                                         const TreeScorerGroupParams & params,
-                                        TreeScorerBoundVariables & bound_variables
+                                        TreeScorerBoundVariables & bound_variables,
+                                        const ElapsedTimeConstraint & constraints,
+                                        TrTrace *trace_log
                                        )
 {
  if( !scorer_leaf->DoesMatch( sg, node, edges, parent_context, bound_variables ) )
@@ -205,7 +212,7 @@ bool TreeScorerMatcher::MatchTreeScorer(
 
      lem::Ptr<TreeScorerPoint> sub_tree( sg.GetStorage().LoadTreeScorerPoint( id_root ) );
 
-     bool m = MatchTreeScorer( sg, wordentry_sets, sub_tree.get(), node, edges, parent_context, params, dummy_variables );
+     bool m = MatchTreeScorer( sg, wordentry_sets, sub_tree.get(), node, edges, parent_context, params, dummy_variables, constraints, trace_log );
      if( m )
       {
        matched=true;
@@ -322,7 +329,7 @@ for( int i=0; i<edges.size(); ++i )
        for( lem::Container::size_type j=0; j<leafs.size(); ++j )
         if( scorer_leafs.front()->link_type==UNKNOWN || link_types[j]==scorer_leafs.front()->link_type )
          {
-          const bool matched = MatchTreeScorer( sg, wordentry_sets, scorer_leafs.front(), *leafs[j], edges, new_context, params, dummy_variables );
+          const bool matched = MatchTreeScorer( sg, wordentry_sets, scorer_leafs.front(), *leafs[j], edges, new_context, params, dummy_variables, constraints, trace_log );
           if( matched )
            {
             all_matched=false;
@@ -344,7 +351,7 @@ for( int i=0; i<edges.size(); ++i )
          {
           if( scorer_leaf->link_type==UNKNOWN || link_types[j]==scorer_leaf->link_type )
            {
-            const bool matched = MatchTreeScorer( sg, wordentry_sets, scorer_leaf, *leafs[j], edges, new_context, params, bound_variables );
+            const bool matched = MatchTreeScorer( sg, wordentry_sets, scorer_leaf, *leafs[j], edges, new_context, params, bound_variables, constraints, trace_log );
             if( scorer_leaf->quantification.IsNot() )
              {
               if( matched )

@@ -76,8 +76,8 @@ copy $(LEM_PATH)\demo\ai\solarix\Speech\eSpeak\platforms\windows\windows_dll\Deb
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(TMP)\syntax\Release.GIT"
-			IntermediateDirectory="$(TMP)\syntax\Release.GIT"
+			OutputDirectory="$(TMP)\syntax\Release-Pro"
+			IntermediateDirectory="$(TMP)\syntax\Release-Pro"
 			ConfigurationType="1"
 			CharacterSet="0"
 			WholeProgramOptimization="FALSE">
@@ -90,7 +90,7 @@ copy $(LEM_PATH)\demo\ai\solarix\Speech\eSpeak\platforms\windows\windows_dll\Deb
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="1"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="E:\boost\;H:\SolarixGIT\GrammarEngine\src\include\;&quot;H:\SolarixGIT\GrammarEngine\src\demo\ai\solarix\CRFSuite\crfsuite-0.12\include&quot;;H:\SolarixGIT\GrammarEngine\src\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\"
+				AdditionalIncludeDirectories="&quot;$(BOOST_PATH)&quot;;&quot;$(LEM_PATH)\include&quot;;&quot;$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include&quot;;&quot;$(LEM_PATH)\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;LEM_UNICODE_EX;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_SAVETXT;SOL_CAA;SOL_REPORT;SOL_DEBUGGING;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;SOL_OFFSET=AUTO;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN_PA;SOL_SAVEBIN;SOL_CRF_MODEL"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -107,10 +107,10 @@ copy $(LEM_PATH)\demo\ai\solarix\Speech\eSpeak\platforms\windows\windows_dll\Deb
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="espeak_lib.lib libcrf.lib cqdb.lib libLBFGS.lib MaxEntTaggerLib.lib"
-				OutputFile="Syntax.exe"
+				AdditionalDependencies="espeak_lib.lib libcrf.lib cqdb.lib libLBFGS.lib $(LEM_PATH)\lib\MaxEntTaggerLib.lib"
+				OutputFile="$(LEM_PATH)/exe/Syntax.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="H:\SolarixGIT\GrammarEngine\src\lib"
+				AdditionalLibraryDirectories="&quot;$(LEM_PATH)\lib&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -1095,9 +1095,6 @@ copy $(LEM_PATH)\lib\firebird\icuuc30.dll .
 						RelativePath="..\..\..\..\ai\pm\TrMorphologyTracer.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\ai\pm\TrProcedureDeclaration.cpp">
-					</File>
-					<File
 						RelativePath="..\..\..\..\ai\pm\TrTrace.cpp">
 					</File>
 					<File
@@ -1625,71 +1622,71 @@ copy $(LEM_PATH)\lib\firebird\icuuc30.dll .
 					Name="regex"
 					Filter="">
 					<File
-						RelativePath="E:\boost\libs\regex\src\c_regex_traits.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\c_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\cpp_regex_traits.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\cpp_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\cregex.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\cregex.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\fileiter.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\fileiter.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\icu.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\icu.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\instances.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\instances.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\posix_api.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\posix_api.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\regex.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\regex_debug.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_debug.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\regex_raw_buffer.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_raw_buffer.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\regex_traits_defaults.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\regex_traits_defaults.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\static_mutex.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\static_mutex.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\usinstances.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\usinstances.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\w32_regex_traits.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\w32_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\wc_regex_traits.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\wc_regex_traits.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\wide_posix_api.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\wide_posix_api.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\regex\src\winstances.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\regex\src\winstances.cpp">
 					</File>
 				</Filter>
 				<Filter
 					Name="thread"
 					Filter="">
 					<File
-						RelativePath="E:\boost\libs\thread\src\win32\exceptions.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\exceptions.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\thread\src\win32\thread.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\thread.cpp">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\thread\src\win32\tss_dll.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\timeconv.inl">
 					</File>
 					<File
-						RelativePath="E:\boost\libs\thread\src\win32\tss_pe.cpp">
+						RelativePath="..\..\..\..\..\..\boost\libs\thread\src\win32\tss_pe.cpp">
 					</File>
 				</Filter>
 			</Filter>

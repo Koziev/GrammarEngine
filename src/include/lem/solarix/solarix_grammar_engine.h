@@ -999,8 +999,10 @@ FAIND_API(int) sol_DeletePhrase( HGREN hEngine, int te_id );
 
 
 
-FAIND_API(HGREN_INTARRAY) sol_ListEntries( HGREN hEng, int Flags, int EntryType, const wchar_t *Mask, int LanguageID, int PartOfSpeechID );
-FAIND_API(HGREN_INTARRAY) sol_ListEntries8( HGREN hEng, int Flags, int EntryType, const char *MaskUtf8, int LanguageID, int PartOfSpeechID );
+FAIND_API(HGREN_INTARRAY) sol_ListEntries( HGREN hEngine, int Flags, int EntryType, const wchar_t *Mask, int LanguageID, int PartOfSpeechID );
+FAIND_API(HGREN_INTARRAY) sol_ListEntries8( HGREN hEngine, int Flags, int EntryType, const char *MaskUtf8, int LanguageID, int PartOfSpeechID );
+FAIND_API(HGREN_STR) sol_ListEntryForms( HGREN hEngine, int EntryKey );
+
 
 FAIND_API(int) sol_SaveDictionary( HGREN hEngine, int Flags, const wchar_t *Folder );
 

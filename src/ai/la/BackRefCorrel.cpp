@@ -13,11 +13,11 @@ void BackRefCorrel::SaveTxt( lem::OFormatter &txt, SynGram &sg ) const
 
  if( id_coord0==id_coord1 )
   {
-   txt.printf( "%us:", name.c_str(), sg.coords()[id_coord0].GetName().string().c_str() );
+   txt.printf( "%us:", name.c_str() );
   }
  else
   {
-   txt.printf( "%us->%us:", sg.coords()[id_coord0].GetName().string().c_str(), name.c_str(), sg.coords()[id_coord1].GetName().string().c_str() );
+   txt.printf( "%us->%us:", sg.coords()[id_coord1].GetName().string().c_str(), name.c_str() );
   }
 
  if( for_group )

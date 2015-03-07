@@ -167,7 +167,6 @@ void TrFun_For::CompileDeclaration(
                                    PM_Automat &pm,
                                    lem::Iridium::Macro_Parser &txtfile,
                                    TrFunctions &functions,
-                                   const TrProcedureDeclaration &procs,
                                    TrKnownVars &known_vars,
                                    const TrBuiltInFunSignature *signature  
                                   )
@@ -185,14 +184,14 @@ void TrFun_For::CompileDeclaration(
   
  txtfile.read_it( B_EQUAL );
 
- i0 = functions.CompileCall( pm, txtfile, procs, known_vars );
+ i0 = functions.CompileCall( pm, txtfile, known_vars );
  txtfile.read_it( L"to" );
- i1 = functions.CompileCall( pm, txtfile, procs, known_vars );
+ i1 = functions.CompileCall( pm, txtfile, known_vars );
 
  if( txtfile.pick().eqi(L"step") )
   {
    txtfile.read();
-   step = functions.CompileCall( pm, txtfile, procs, known_vars );
+   step = functions.CompileCall( pm, txtfile, known_vars );
   }
  else
   {
@@ -201,7 +200,7 @@ void TrFun_For::CompileDeclaration(
    step = s;
   } 
 
- body = functions.CompileCall( pm, txtfile, procs, known_vars );
+ body = functions.CompileCall( pm, txtfile, known_vars );
 
  return;
 }
