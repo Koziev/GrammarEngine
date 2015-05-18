@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas
+END
+exception.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/exception.hpp
+END
+fwd.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/fwd.hpp
+END
+vector_expression.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/vector_expression.hpp
+END
+functional.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/functional.hpp
+END
+vector.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/vector.hpp
+END
+expression_types.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/expression_types.hpp
+END
+matrix_expression.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/matrix_expression.hpp
+END
+matrix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/matrix.hpp
+END
+storage.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/storage.hpp
+END
+matrix_proxy.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/matrix_proxy.hpp
+END
+traits.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/traits.hpp
+END

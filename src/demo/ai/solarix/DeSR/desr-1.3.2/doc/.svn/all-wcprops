@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svnroot/desr/!svn/ver/360/trunk/doc
+END
+footer.html
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/3/trunk/doc/footer.html
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/182/trunk/doc/Makefile.in
+END
+main.txt
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/3/trunk/doc/main.txt
+END
+desr.css
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/3/trunk/doc/desr.css
+END
+doxygen.conf.in
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/360/trunk/doc/doxygen.conf.in
+END
+header.html
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/3/trunk/doc/header.html
+END

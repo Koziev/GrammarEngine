@@ -107,7 +107,8 @@ void LA_RecognitionRules::AddResult(
 
 
 bool LA_RecognitionRules::Apply(
-                                const lem::UCString &word,
+                                const lem::UCString & normalized_word,
+                                const lem::UCString & original_word,
                                 lem::Real1 word_rel,
                                 lem::MCollect<Solarix::Word_Coord> &found_list,
                                 lem::MCollect<Solarix::ProjScore> &val_list,
@@ -120,7 +121,7 @@ bool LA_RecognitionRules::Apply(
  typedef RULES::const_iterator IT;
 
  // Правила, распознающие целые слова, не загружаем сразу из хранилища, так как они нужны очень редко.
- lem::Ptr<Solarix::LS_ResultSet> rs_words( storage->ListRecognitionRulesForWord( id_language, word ) );
+ lem::Ptr<Solarix::LS_ResultSet> rs_words( storage->ListRecognitionRulesForWord( id_language, normalized_word ) );
  while( rs_words->Fetch() )
   {
    const int id_rule = rs_words->GetInt(0);
@@ -136,18 +137,18 @@ bool LA_RecognitionRules::Apply(
    #if defined SOL_DEBUGGING
    if( trace!=NULL )
     {
-     trace->Matched( word, &*rule );
+     trace->Matched( normalized_word, &*rule );
     }
    #endif
   }
 
  if( !matched )
   {
-   std::pair<IT,IT> pp = prefix_rules.equal_range( LA_RecognitionRule::CalcHash( word.c_str(), true, false ) );
+   std::pair<IT,IT> pp = prefix_rules.equal_range( LA_RecognitionRule::CalcHash( normalized_word.c_str(), true, false ) );
    for( IT it=pp.first; it!=pp.second; ++it )
     {
      const LA_RecognitionRule *r = it->second;
-     if( r->Match(word) )
+     if( r->Match(normalized_word,original_word) )
       {
        matched = true;
  
@@ -159,17 +160,17 @@ bool LA_RecognitionRules::Apply(
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
         {
-         trace->Matched( word, r );
+         trace->Matched( normalized_word, r );
         }
        #endif
       }
     }
  
-   pp = affix_rules.equal_range( LA_RecognitionRule::CalcHash( word.c_str(), false, true ) );
+   pp = affix_rules.equal_range( LA_RecognitionRule::CalcHash( normalized_word.c_str(), false, true ) );
    for( IT it=pp.first; it!=pp.second; ++it )
     {
      const LA_RecognitionRule *r = it->second;
-     if( r->Match(word) )
+     if( r->Match(normalized_word,original_word) )
       {
        matched = true;
  
@@ -181,7 +182,7 @@ bool LA_RecognitionRules::Apply(
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
         {
-         trace->Matched( word, r );
+         trace->Matched( normalized_word, r );
         }
        #endif
       }
@@ -190,7 +191,7 @@ bool LA_RecognitionRules::Apply(
    for( lem::Container::size_type i=0; i<rx_rules.size(); ++i )
     {
      const LA_RecognitionRule *r = rx_rules[i];
-     if( r->Match(word) )
+     if( r->Match(normalized_word,original_word) )
       {
        matched = true;
  
@@ -202,7 +203,7 @@ bool LA_RecognitionRules::Apply(
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
         {
-         trace->Matched( word, r );
+         trace->Matched( normalized_word, r );
         }
        #endif
       }
@@ -232,7 +233,7 @@ bool LA_RecognitionRules::ApplyForSyllabs(
  for( IT it=pp.first; it!=pp.second; ++it )
   {
    const LA_RecognitionRule *r = it->second;
-   if( r->Match(syllabs.front()) )
+   if( r->Match(syllabs.front(),syllabs.front()) )
     {
      matched = true;
 
@@ -254,7 +255,7 @@ bool LA_RecognitionRules::ApplyForSyllabs(
  for( IT it=pp.first; it!=pp.second; ++it )
   {
    const LA_RecognitionRule *r = it->second;
-   if( r->Match(syllabs.back()) )
+   if( r->Match(syllabs.back(),syllabs.back()) )
     {
      matched = true;
 

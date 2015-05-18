@@ -1,0 +1,474 @@
+<html>
+<head>
+<title>DeSR Parser Simulator</title>
+
+<!-- Combo-handled YUI CSS files: --> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/treeview/assets/skins/sam/treeview.css"> 
+<!-- Combo-handled YUI JS files: --> 
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/treeview/treeview-min.js"></script> 
+
+<!-- Combo-handled YUI CSS files: --> 
+<link rel="stylesheet" type="text/css"
+href="http://yui.yahooapis.com/combo?2.7.0/build/container/assets/skins/sam/container.css"> 
+<!-- Combo-handled YUI JS files: --> 
+<script type="text/javascript"
+src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/container/container-min.js"></script>
+
+<link rel="stylesheet" type="text/css"
+href="http://yui.yahooapis.com/2.7.0/build/fonts/fonts-min.css" />
+
+<style>
+body { margin:0; padding:0; }
+
+table {
+   border-collapse: collapse;
+}
+table.stack {
+  border: solid black 1pt;
+  background: #E6E6E6;
+  font-family: "Arial";
+}
+
+td.stack {
+  border-right:solid black 1pt;
+}
+
+table.queue {
+  border: solid black 1pt;
+  background: #E3CEF6;
+  font-family: "Arial";
+}
+
+textNode ygtvlabel {
+  background: transparent;
+}
+
+</style>
+
+<script language="JavaScript" type="text/javascript">
+
+function Stack(name) {
+  var stack;
+
+  this.stack = [];
+  this.id = name;
+
+  this.topToken = function(n) {
+    return this.top(n).getRoot().children[0];
+  }
+
+  this.updateTop = function(label, id) {
+    this.treeUpdate(this.topToken(), label, id);
+    itree = this.top().draw();
+  }
+
+  this.treeUpdate = function(node, label, id) {
+    if (node.id == id) {
+	node.label += label;
+	return true;
+    }
+    for (var i in node.children) {
+      var child = node.children[i];
+      if (this.treeUpdate(child, label, id))
+	  return true;
+    }
+    return false;		// not found
+  }
+
+  this.clear = function() {
+    // clear the HTML stack
+    var ni = document.getElementById(this.id);
+    for (var i in this.stack)
+      ni.removeChild(this.stack[i].getEl());
+    this.stack = [];
+  }
+
+  this.size = function() {
+    return this.stack.length;
+  }
+
+  // move the front of queue to top
+  this.move = function(queue) {
+    var tv = queue.top();
+    var nextElement = queue.pop();
+    var ni = document.getElementById(this.id);
+    ni.appendChild(nextElement);
+    this.push(tv);
+  }
+
+  this.push = function(treeView) {
+    this.stack.push(treeView);
+  }
+
+  this.top = function(n) {
+    if (!n) n = 1;
+    return this.stack[this.size()-n];
+  }
+
+  this.pop = function() {
+    var d = document.getElementById(this.id);
+    var child = d.lastChild;
+    d.removeChild(child);
+    this.stack.pop();
+    return child;
+  }
+
+  this.remove = function(n) {
+    var d = document.getElementById(this.id);
+    var children = d.childNodes;
+    var child = children.item(children.length - n);
+    d.removeChild(child);
+    this.stack.splice(this.stack.length - n, 1);
+    return child;
+  }
+
+}
+
+function Queue(name) {
+  this.inheritFrom = Stack;
+  this.inheritFrom(name);
+
+  // move the top of stack to front
+  this.move = function(stack) {
+    var tv = stack.top();
+    var nextElement = stack.pop();
+    var ni = document.getElementById(this.id);
+    ni.insertBefore(nextElement, ni.firstChild);
+    this.push(tv);
+  }
+
+  this.push = function(treeView) {
+    this.stack.unshift(treeView);
+  }
+
+  this.top = function() {
+    if (this.size())
+      return this.stack[0];
+    else
+      return null;
+  }
+
+  // pop both the queue and the DOM, return the popped Element
+  this.pop = function() {
+    var d = document.getElementById(this.id);
+    var child = d.firstChild;
+    d.removeChild(child);
+    this.stack.shift();
+    return child;
+  }
+
+  this.addToken = function(label, id) {
+    // create the element
+    var element = document.createElement('td');  
+    element.setAttribute('class', 'stack');
+    element.setAttribute('className', 'stack'); // IE bug
+    var ni = document.getElementById(this.id);
+    ni.appendChild(element);
+
+    // create the TreeView
+    var tv = new YAHOO.widget.TreeView(element); // shares property id with element
+    // add the token
+    var token = new YAHOO.widget.TextNode(label, tv.getRoot(), true);
+    token.id = id;
+    token.labelStyle = 'textNode';
+
+    this.stack.push(tv);
+    tv.draw();
+  }
+}
+
+// create the basic stacks structure
+var depStack = new Stack("depStack"); 
+var inputQueue = new Queue("inputQueue");
+
+function record(param) {
+  var hist = document.getElementById('actions');
+  hist.value += param + ' ';
+  stepNo++;
+}
+
+//
+// control functions
+//
+
+// link child to head with dep label.
+function link(child, head, dep) {
+    if (dep)
+	child.label += "(" + dep + ")";
+    child.appendTo(head);
+    head.parent.refresh();
+}
+
+function shift(arg) {
+  if (inputQueue.size() < 1)
+    return false;
+  if (!arg)
+    steps.splice(stepNo, steps.length - stepNo, 'S');
+  record('S');
+  depStack.move(inputQueue); 
+  return true;
+}
+
+function left(dep) { return Left(1, dep); }
+function left2(dep) { return Left(2, dep); }
+function left3(dep) { return Left(3, dep); }
+
+function Left(n, dep) {
+  if (depStack.size() < n || inputQueue.size() < 1)
+    return false;
+  if (n == 1)
+    action = 'L';
+  else
+    action = 'l' + n;
+  if (dep == null) {
+    var f = document.getElementById('synlabel');
+    dep = f.options[f.selectedIndex].value;
+    steps.splice(stepNo, steps.length - stepNo, action + dep);
+  }
+  record(action + dep);
+  link(inputQueue.topToken(), depStack.topToken(n), dep);
+  inputQueue.pop();
+  for (i = 0; i < n; i++)
+    inputQueue.move(depStack);
+  return true;
+}
+
+function right(dep) { return Right(1, dep); }
+function right2(dep) { return Right(2, dep); }
+function right3(dep) { return Right(3, dep); }
+
+function Right(n, dep) {
+  if (depStack.size() < n || inputQueue.size() < 1)
+    return false;
+  if (n == 1)
+    action = 'R';
+  else
+    action = 'r' + n;
+  if (dep == null) {
+      var f = document.getElementById('synlabel');
+      dep = f.options[f.selectedIndex].value;
+      steps.splice(stepNo, steps.length - stepNo, action + dep);
+  }
+  record(action + dep);
+  link(depStack.topToken(n), inputQueue.topToken(), dep);
+  depStack.remove(n);
+  if (n > 1)
+    inputQueue.move(depStack);	// anomaly
+  return true;
+}
+
+// Reads sentence and initialize the system
+function init(rewind) {
+  // clear stacks
+  depStack.clear(); 
+  inputQueue.clear();
+  if (!rewind)
+      steps = [];
+  stepNo = 0;
+  var f = document.getElementById('actions');
+  f.value = '';
+
+  var sen = document.getElementById('sentence');
+  var words = sen.value.split(' ');
+  for (var i = 0; i < words.length; ++i)
+    inputQueue.addToken(words[i], i);
+}
+
+function setLanguage() {
+  var f = document.getElementById('languageChoice');
+  var synLabels = synLabelsAll[f.selectedIndex];
+  f = document.getElementById('synlabel');
+  var l = f.length;
+  for (var i = 0; i < l; i++)
+    f.remove(0);
+  for (var i in synLabels) {
+    var opt = document.createElement('option');
+    opt.text = synLabels[i];
+    f.add(opt, null);
+  }
+}
+
+var steps = [];
+var stepNo = 0;
+
+// return whether action succeeded
+function step(action) {
+    var param = action.substr(1);
+    switch (action[0]) {
+    case 'S':
+      return shift(true);
+    case 'L':
+      return Left(1, param);
+    case 'R':
+      return Right(1, param);
+    case 'l':
+      return Left(param[0], param.substr(1));
+    case 'r':
+      return Right(param[0], param.substr(1));
+    }
+    return false; // action failed
+}
+
+// Perform the steps in the Action list
+function actions(dir) {
+  var hist = document.getElementById('actions');
+  switch (dir) {
+   case -2:
+     init(true);
+     break;
+  case -1:
+     var s = stepNo;
+     init(true);
+     for (var i = 0; i < s - 1; i++)
+       step(steps[i]);
+     break;
+  case 1:
+     if (stepNo < steps.length)
+       step(steps[stepNo]);
+     break;
+  case 2:
+     while (stepNo < steps.length)
+       if (!step(steps[stepNo]))
+	 break;
+     break;
+  }
+}
+
+function setActions() {
+  var acts = document.getElementById('actions');
+  steps = acts.value.split(' ');
+  actions(-2);
+}
+
+var synAction = ["shift", "left", "right", "left2", "right2", "left3", "right3"];
+
+var synLabelsAll = [
+   ["_", "SBJ", "OBJ", "IOBJ", "ADV", "COORD", "CONJ", "GAP", "P", "AMOD","NMOD", "PMOD", "VC", "VMOD"],
+   ["_",  "arg", "aux", "clit", "comp", "comp_ind", "comp_loc", "comp_temp",
+    "con", "concat", "conj", "det", "dis", "disj", "mod", "modal", "mod_loc",
+    "mod_rel", "mod_temp", "neg", "obj", "pred", "pred_loc", "prep", "punc",
+    "ROOT", "sub", "subj", "subj_pass"]
+];
+
+var languages = ["English", "Italian"];
+
+</script>
+
+</head>
+<body class="yui-skin-sam" onload="setLanguage()">
+
+<h2 style='text-align: center'>DeSR Parser Simulator</h2>
+<table>
+  <tr><td>
+<table border='0'>
+<tr><td valign="top">
+
+<!-- Syntactic Actions -->
+<table border='1' style='background-color: #DDFFFF'>
+ <tr><th colspan='2'>Action</th></tr>
+ <tr><td><button id="button_shift" style="width: 100%" onclick="shift()">shift</button></td><td></td></tr>
+
+ <tr><td><table border='0'>
+  <script type="text/javascript">
+  for (var i in synAction) {
+    if (i > 0) {
+      var action = synAction[i];
+      document.write('<tr><td><button id="button_' + action + '" style="width: 100%" onclick="' + action + '()">' + action + '</button></td></tr>');
+    }
+  }
+  </script>
+  </table></td>
+  <td><select id="synlabel"> </select>
+   </td></tr></table>
+
+</td>
+</tr>
+</table>
+
+
+<table border='1' style='background-color: #DDFFFF' width='100%'>
+  <tr><th>Language</th></tr>
+  <tr><td>
+  <select id="languageChoice" onchange="setLanguage()">
+  <script type="text/javascript">
+  for (i in languages) {
+    var lang = languages[i];
+    document.write('<option value="' + lang + '">' + lang + '</option>');
+  }
+  </script>
+</select>
+</td></tr></table>
+
+</td>
+
+<td>
+<table>
+ <tr><th>Sentence</th><td><input type="text" id='sentence'
+ onchange='init()' size='80' /></td></tr>
+ <tr><th>Stacks</th>
+     <td><table bgcolor='gray' style="height: 12pt"><tr>
+           <td style='margin-right: 12px'><table class='stack'><tr id="depStack"></tr></table></td>
+           <td><table class='queue'><tr id="inputQueue"></tr></table></td>
+         </tr></table>
+     </td>
+ </tr>
+ <tr><th>Actions</th>
+     <td><input type="text" id='actions' size='80' onchange="setActions()" /></tr>
+ <tr><td></td>
+     <td style='text-align: center'>
+     <button id="rewind" onclick="actions(-2)">&lt;&lt;</button>
+     <button id="back" onclick="actions(-1)">&lt;</button>
+     <button id="forward" onclick="actions(1)">&gt;</button>
+     <button id="finish" onclick="actions(2)">&gt;&gt;</button>
+     </td></tr>
+     </td>
+ </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<script type="text/javascript">
+inputTooltip = new YAHOO.widget.Tooltip("inputTooltip", {  
+    context: "sentence",
+    text: "Type a sentence to parse" } );
+actionsTooltip = new YAHOO.widget.Tooltip("actionsTooltip", {  
+    context: "actions",
+    text: "Show or enter a sequence of parsing actions" } );
+rewindTooltip = new YAHOO.widget.Tooltip("rewindTooltip", {  
+    context: "rewind",
+    text: "Undo all Actions" } );
+backTooltip = new YAHOO.widget.Tooltip("backTooltip", {  
+    context: "back",
+    text: "Undo last Action" } );
+forwardTooltip = new YAHOO.widget.Tooltip("forwardTooltip", {  
+    context: "forward",
+    text: "Perform next Action" } );
+finishTooltip = new YAHOO.widget.Tooltip("finishTooltip", {  
+    context: "finish",
+    text: "Perform all remaining Actions" } );
+deprelTooltip = new YAHOO.widget.Tooltip("deprelTooltip", {  
+    context: "synlabel",
+    text: "Dependency Relation" } );
+
+shiftTooltip = new YAHOO.widget.Tooltip("shiftTooltip", {  
+    context: "button_shift",
+    text: "Move next input to stack" } );
+leftTooltip = new YAHOO.widget.Tooltip("leftTooltip", {  
+    context: "button_left",
+    text: "Link next input to top" } );
+rightTooltip = new YAHOO.widget.Tooltip("rightTooltip", {  
+    context: "button_right",
+    text: "Link top to next input" } );
+left2Tooltip = new YAHOO.widget.Tooltip("left2Tooltip", {  
+    context: "button_left2",
+    text: "Link next input to second on stack" } );
+right2Tooltip = new YAHOO.widget.Tooltip("right2Tooltip", {  
+    context: "button_right2",
+    text: "Link second on stack to next input" } );
+
+</script>
+
+</body>
+</html>

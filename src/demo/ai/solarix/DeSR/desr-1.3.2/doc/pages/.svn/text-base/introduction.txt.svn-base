@@ -1,0 +1,84 @@
+/**
+
+@page introduction Introduction
+
+DeSR is a dependency parser for natural language sentences. 
+
+Among its notable features: 
+
+<UL>
+<li><em>accuracy</em>: close to state of the art accuracy 
+<li><em>efficiency</em>: it can parse up to 200 sentence/sec 
+<li><em>multilingual</em>: it can be trained from an annotated corpus on multiple languages 
+<li><em>customizable</em>: features used in training can be customized. 
+
+
+@section technique Technique
+
+DeSR is a shift-reduce dependency parser, which uses a variant of the approach
+of (Yamada and Matsumoto, 2003).
+
+Dependency structures are built scanning the input from left to right and
+deciding at each step whether to perform a shift or to create a dependency
+between two adjacent tokens.
+
+DeSR uses though a different set of rules and includes additional rules to
+handle non-projective dependencies that allow parsing to be performed
+deterministically in a single pass. The algorithm also produces fully labeled
+dependency trees.
+
+A classifier is used for learning and predicting the proper parsing
+action. The parser can be configured, selecting among several learning
+algorithms (Averaged Perceptron, Maximum Entropy, memory-based learning using
+TiMBL, support vector machines using libSVM), providing user-defined feature
+models, and selecting input-output formats (including the CoNLL shared task
+format).
+
+@section training Training
+
+Suppose you have both the parser and the configuration file in the same
+directory, you call: 
+
+<pre class='fragment'>
+   desr -t -m modelFile trainFile
+</pre>
+
+to produce a model from a training corpus in CoNLL format. 
+
+Be careful using option SecondOrder, since it may considerably increase the
+model size. 
+
+@section parsing Parsing
+
+To parse sentences in CoNLL format, use: 
+
+<pre class='fragment'>
+   desr -m modelFile parseFile > parsedFile
+</pre>
+
+If you plan to use the downloaded model file, first gunzip it. 
+
+For a full list of options, type: 
+
+<pre class='fragment'>
+   desr -h
+</pre>
+
+@section classifiers Classifiers
+
+Several classifiers are available, including:
+Maximum Entropy (-aME), Perceptron (-aAP), MBL (-aMBL) or SVM (-aSVM). The
+algorithm can also be specified in the configuration file desr.conf as well as
+the features to be used. 
+
+<UL>
+<LI> Maximum Entropy classifier
+<LI> Averaged Perceptron
+<LI> SVM
+<LI> Memory Based Learning (requires optional library)
+<LI> SnOW (requires optional library)
+</UL>
+
+@include references
+
+*/

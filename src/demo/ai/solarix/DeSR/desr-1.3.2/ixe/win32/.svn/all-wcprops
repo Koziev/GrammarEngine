@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svnroot/desr/!svn/ver/279/trunk/ixe/win32
+END
+iconv.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/73/trunk/ixe/win32/iconv.h
+END
+timecnv.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/65/trunk/ixe/win32/timecnv.cpp
+END
+platform.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/279/trunk/ixe/win32/platform.h
+END
+timecnv.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/65/trunk/ixe/win32/timecnv.h
+END
+win_iconv.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/70/trunk/ixe/win32/win_iconv.c
+END

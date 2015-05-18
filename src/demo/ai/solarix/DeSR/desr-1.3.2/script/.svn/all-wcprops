@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svnroot/desr/!svn/ver/396/trunk/script
+END
+mergeDep.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/96/trunk/script/mergeDep.py
+END
+wordfreq.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/31/trunk/script/wordfreq.py
+END
+split.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/396/trunk/script/split.py
+END
+match.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/97/trunk/script/match.py
+END
+treeCombine.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/89/trunk/script/treeCombine.py
+END
+dumpPyModel.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/238/trunk/script/dumpPyModel.py
+END
+diffConll.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/290/trunk/script/diffConll.py
+END
+convertModel.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/253/trunk/script/convertModel.py
+END
+treeCombineNoWeight.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/250/trunk/script/treeCombineNoWeight.py
+END
+reader.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/296/trunk/script/reader.py
+END
+retrain.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/86/trunk/script/retrain.py
+END
+sim.html
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/213/trunk/script/sim.html
+END
+projErrors.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/369/trunk/script/projErrors.py
+END
+simEager.html
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/202/trunk/script/simEager.html
+END
+stem.py
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/86/trunk/script/stem.py
+END
+mergeLemma.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/95/trunk/script/mergeLemma.py
+END
+extractGuides.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/232/trunk/script/extractGuides.py
+END
+mergeNum.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/95/trunk/script/mergeNum.py
+END
+mergePos.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/86/trunk/script/mergePos.py
+END
+featSel.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/86/trunk/script/featSel.py
+END
+countErrors.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/256/trunk/script/countErrors.py
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/362/trunk/script/Makefile
+END

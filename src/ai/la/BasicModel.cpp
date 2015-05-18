@@ -13,7 +13,7 @@ using namespace Solarix;
 
 
 BasicModel::BasicModel() : available(false), codebook(NULL), loaded(false),
- EMIT_FORM_TAGS(false), EMIT_FORMTAGS_FOR_CONTEXT(false), EMIT_POS_TAGS(false)
+ EMIT_FORM_TAGS(false), EMIT_FORMTAGS_FOR_CONTEXT(false), EMIT_POS_TAGS(false), EMIT_SEMANTIC_TAGS(false)
 {
 }
 
@@ -128,13 +128,15 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Diction
     const Solarix::ModelTagMatcher * tag_match = codebook->Match( version_form, dict );
     if( tag_match==NULL )
      {
-      //#if LEM_DEBUGGING==1
+      #if LEM_DEBUGGING==1
+      //codebook->PrintTags( *lem::mout, dict );
+      #endif
+
       lem::MemFormatter mem;
       mem.printf( "Can not match tag for wordform: " );
       version_form->Print( mem, &(dict.GetSynGram()), true );
       lem::UFString str_err = mem.string();
       throw E_BaseException(str_err);
-      //#endif
      }
     else
      {
@@ -197,6 +199,11 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Diction
    f->POS_MU = POS_Prob( ekeys_MU.size(), n_tot );
   }
 
+ if( EMIT_SEMANTIC_TAGS )
+ {
+  codebook->GetSemanticTags( dict, token, f->semantic_tags );
+ }
+
  #endif
 
  return f;
@@ -254,6 +261,14 @@ void BasicModel::PullFeatures1(
      b.push_back( lem::format_str("formtag[%d]=%d", offset, f.allform_tags[k] ).c_str() );
     }
    }
+
+  if( EMIT_SEMANTIC_TAGS )
+  {
+   for( int k = 0; k < f.semantic_tags.size(); ++k )
+   {
+    b.push_back( lem::format_str("sem[%d]=%s", offset, lem::to_utf8( f.semantic_tags[k] ).c_str() ).c_str() );
+   }
+  }
  }
 
  return;
@@ -301,6 +316,7 @@ void BasicModel::SetParamsAfterLoad()
  EMIT_POS_TAGS = codebook->FindModelParam( L"EMIT_POS_TAGS", L"false" ).eqi( L"true" );
  EMIT_FORM_TAGS = codebook->FindModelParam( L"EMIT_FORM_TAGS", L"false" ).eqi(  L"true" );
  EMIT_FORMTAGS_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_FORMTAGS_FOR_CONTEXT", L"false" ).eqi(  L"true" );
+ EMIT_SEMANTIC_TAGS = codebook->FindModelParam( L"EMIT_SEMANTIC_TAGS", L"false" ).eqi(  L"true" );
  return;
 }
 

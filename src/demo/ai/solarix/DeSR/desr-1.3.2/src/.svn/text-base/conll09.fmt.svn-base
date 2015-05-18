@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CorpusFormat name="conll09">
+   <field name="ID"     use="ECHO" value="INTEGER"/>
+   <field name="FORM"   use="ECHO" value="STRING"/>
+   <field name="LEMMA"  use="ECHO" value="STRING"/>
+   <field name="PLEMMA"  use="IGNORE" value="STRING"/>
+   <field name="POS"   use="ECHO" value="STRING"/>
+   <field name="PPOS"   use="IGNRE" value="STRING"/>
+   <field name="FEAT"   use="INPUT" value="STRING"/>
+   <field name="PFEAT"   use="IGNORE" value="STRING"/>
+   <field name="HEAD"   use="OUTPUT" link="DEP" role="HEAD"/>
+   <field name="PHEAD"   use="IGNORE" link="DEP" />
+   <field name="DEPREL" use="OUTPUT" label="DEP" role="DEPREL"/>
+   <field name="PDEPREL" use="IGNORE" label="DEP" />
+   <field name="FILLPRED"   use="IGNORE" value="STRING"/>
+   <field name="PRED"   use="OUTPUT" value="STRING" role="PREDICATE"/>
+   <field name="APRED0"  use="OUTPUT" label="APRED0" default="_"/>
+   <field name="APRED1"  use="OUTPUT" label="APRED1" default="_"/>
+   <field name="APRED2"  use="OUTPUT" label="APRED2" default="_"/>
+   <field name="APRED3"  use="OUTPUT" label="APRED3" default="_"/>
+   <field name="APRED4"  use="OUTPUT" label="APRED4" default="_"/>
+</CorpusFormat>

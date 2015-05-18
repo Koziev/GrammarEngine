@@ -2275,7 +2275,7 @@ LS_ResultSet* LexiconStorage_MySQL::ListRecognitionRulesForWord( int id_language
 LA_RecognitionRule* LexiconStorage_MySQL::GetRecognitionRule( int id )
 {
  lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, "
-  "r_condition, id_entry, rel, coords, is_syllab, id_src FROM recog_rule WHERE id=%d", id ) );
+  "r_condition, id_entry, rel, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
 
 
  LA_RecognitionRule *rule = NULL;
@@ -2307,11 +2307,12 @@ LA_RecognitionRule* LexiconStorage_MySQL::GetRecognitionRule( int id )
        lem::UFString str_coords = lem::mysql_column_ufstring(row,8);
        const bool is_syllab = lem::mysql_column_int(row,9)==1;
        const int id_src = lem::mysql_column_int(row,10);
+       const bool case_sensitive = lem::mysql_column_int(row,11)==1;
     
        Solarix::CP_Array coords;
        coords.Parse(str_coords);
     
-       rule = new LA_RecognitionRule( id, name, id_language, is_syllab, is_regex, is_prefix,
+       rule = new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix,
         is_affix, condition, ekey, rel, coords, id_src );
       }
 
@@ -2361,13 +2362,17 @@ void LexiconStorage_MySQL::StoreRecognitionRule( LA_RecognitionRule *rule )
 
  lem::MemFormatter q;
  q.printf( "INSERT INTO recog_rule( name, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-           " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us )",
+           " r_condition, id_entry, rel, coords, id_src,"
+           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us, %d )",
            lem::to_upper(rule->GetName()).c_str(), rule->GetLanguage(),
            rule->IsSyllab() ? 1 : 0,
            rule->IsRegex() ? 1 : 0,
            rule->IsPrefix() ? 1 : 0,
            rule->IsAffix() ? 1 : 0,
-           condition.c_str(), rule->GetEntryKey(), rule->GetRel().GetInt(), coords.c_str(), rule->GetSourceLocation(), word.c_str() );
+           condition.c_str(), rule->GetEntryKey(), rule->GetRel().GetInt(), coords.c_str(), rule->GetSourceLocation(),
+           word.c_str(),
+           case_sensitive
+          );
  
  lem::FString s(lem::to_utf8(q.string()));
  int id = ExecuteAndReturnId(s);
@@ -5772,6 +5777,7 @@ bool LexiconStorage_MySQL::DoesMetaEntryContains( int id_metaentry, int id_entry
 }
 
 
+/*
 LS_ResultSet* LexiconStorage_MySQL::ListLeftFilterSelectors()
 {
  return ListByQuery("SELECT id, word_text,id_entry, id_language, id_body, context_length FROM left_filter_selector");
@@ -5855,7 +5861,7 @@ bool LexiconStorage_MySQL::FindLeftFiltersByEntry( int id_language, int id_entry
 
  return !filters.empty();
 }
-
+*/
 
 
 

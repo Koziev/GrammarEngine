@@ -570,6 +570,7 @@ void LexiconStorage_SQLITE::CreateTables_Recognizer(void)
                              " is_prefix integer not null,"
                              " is_affix integer not null,"
                              " r_condition varchar(100) not null,"
+                             " case_sensitive integer not null,"
                              " word varchar(100),"
                              " id_entry integer not null,"
                              " rel integer not null,"
@@ -2749,7 +2750,7 @@ LS_ResultSet* LexiconStorage_SQLITE::ListRecognitionRulesForWord( int id_languag
 LA_RecognitionRule* LexiconStorage_SQLITE::GetRecognitionRule( int id )
 {
  lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, "
-  "r_condition, id_entry, rel, coords, is_syllab, id_src FROM recog_rule WHERE id=%d", id ) );
+  "r_condition, id_entry, rel, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
 
  sqlite3_stmt *stmt=NULL;
  const char *dummy=NULL;
@@ -2769,13 +2770,14 @@ LA_RecognitionRule* LexiconStorage_SQLITE::GetRecognitionRule( int id )
      lem::UFString str_coords = lem::sqlite_column_ufstring(stmt,8);
      const bool is_syllab = sqlite3_column_int(stmt,9)==1;
      const int id_src = sqlite3_column_int(stmt,10);
+     const bool case_sensitive = sqlite3_column_int(stmt,11)==1;
 
      Solarix::CP_Array coords;
      coords.Parse(str_coords);
 
      sqlite3_finalize(stmt);
 
-     return new LA_RecognitionRule( id, name, id_language, is_syllab, is_regex, is_prefix, is_affix,
+     return new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix,
         condition, ekey, rel, coords, id_src );
     }
    else
@@ -2824,13 +2826,22 @@ void LexiconStorage_SQLITE::StoreRecognitionRule( LA_RecognitionRule *rule )
 
  lem::MemFormatter q;
  q.printf( "INSERT INTO RECOG_RULE( name, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-           " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us )",
-           lem::to_upper(rule->GetName()).c_str(), rule->GetLanguage(),
+           " r_condition, id_entry, rel, coords, id_src,"
+           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us, %d )",
+           lem::to_upper(rule->GetName()).c_str(),
+           rule->GetLanguage(),
            rule->IsSyllab() ? 1 : 0,
            rule->IsRegex() ? 1 : 0,
            rule->IsPrefix() ? 1 : 0,
            rule->IsAffix() ? 1 : 0,
-           condition.c_str(), rule->GetEntryKey(), rule->GetRel().GetInt(), coords.c_str(), rule->GetSourceLocation(), word.c_str() );
+           condition.c_str(),
+           rule->GetEntryKey(),
+           rule->GetRel().GetInt(),
+           coords.c_str(),
+           rule->GetSourceLocation(),
+           word.c_str(),
+           rule->IsCaseSensitive() ? 1 : 0
+         );
  
  lem::FString s(lem::to_utf8(q.string()));
  Execute(s);
@@ -3279,7 +3290,7 @@ void LexiconStorage_SQLITE::CreateTables_Filters(void)
    Execute(ddl16);
 
 
-
+/*
    const char ddl17[] = "CREATE TABLE left_filter_selector( "
                        " id integer PRIMARY KEY NOT NULL,"
                        " id_language integer NOT NULL,"
@@ -3295,7 +3306,7 @@ void LexiconStorage_SQLITE::CreateTables_Filters(void)
 
    const char ddl19[] = "CREATE INDEX left_filter_selector_idx2 ON left_filter_selector(id_entry,id_language)";
    Execute(ddl19);
-
+*/
    // -------------------------
 
    const char ddl20[] = "CREATE TABLE ts_head_word( "

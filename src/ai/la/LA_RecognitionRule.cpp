@@ -15,16 +15,19 @@ LA_RecognitionRule::LA_RecognitionRule(void)
 {
 }
 
-LA_RecognitionRule::LA_RecognitionRule( int Id, const lem::UCString &Name, int Id_Lang,
+LA_RecognitionRule::LA_RecognitionRule( int Id, const lem::UCString &Name, bool CaseSensitive, int Id_Lang,
      bool IsSyllab, bool IsRegex, bool IsPrefix,
      bool IsAffix, const lem::UFString &Condition, int EntryId, lem::Real1 Rel, const Solarix::CP_Array &Coords,
      int SourceID )
- : id(Id), name(Name), id_language(Id_Lang), id_entry(EntryId), str(Condition), is_syllab(IsSyllab),
+ : id(Id), name(Name), case_sensitive(CaseSensitive), id_language(Id_Lang), id_entry(EntryId), str(Condition), is_syllab(IsSyllab),
    is_regex(IsRegex), is_prefix(IsPrefix), is_affix(IsAffix), coords(Coords), rel(Rel), src_location(SourceID)
 {
  if( is_regex )
   {
-   rx = boost::wregex( str.c_str(), boost::basic_regex<wchar_t>::icase );
+   if( CaseSensitive )
+    rx = boost::wregex( str.c_str() );
+   else
+    rx = boost::wregex( str.c_str(), boost::basic_regex<wchar_t>::icase );
   }
 
  return;
@@ -87,6 +90,9 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
 
  is_syllab = txtfile.probe(B_SYLLAB);
 
+ // можно сделать шаблон чувствительным к регистру, обычно для распознавания названий, имен и так далее.
+ case_sensitive = txtfile.probe( L"@" );
+
  str = txtfile.read().GetFullStr();
  str.strip( L'"' );
 
@@ -95,7 +101,6 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
    // Сделаем подстановку групп символов для целевого языка.
    dict.GetSynGram().languages()[id_language].SubstParadigmPattern(str);
   }
-
 
  // Если строка условия имеет вид "(.+)суффикс" или "(.*)суффикс",
  // то упрощаем регулярное выражение до проверки суффикса
@@ -187,7 +192,12 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
     }
 
    if( is_regex )
-    rx = boost::wregex( str.c_str(), boost::basic_regex<wchar_t>::icase );
+    {
+     if( case_sensitive )
+      rx = boost::wregex( str.c_str() );
+     else
+      rx = boost::wregex( str.c_str(), boost::basic_regex<wchar_t>::icase );
+    }
    else
     {
      dict.GetLexAuto().TranslateLexem( str, true, id_language );
@@ -302,24 +312,36 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
 
 
 
-bool LA_RecognitionRule::Match( const lem::UCString & lex ) const
+bool LA_RecognitionRule::Match(
+                               const lem::UCString & normalized_word,
+                               const lem::UCString & original_word
+                              ) const
 {
  if( is_syllab )
   {
-   return lex.eqi(str.c_str());
+   LEM_CHECKIT_Z( case_sensitive==false );
+   return normalized_word.eqi(str.c_str());
   }
  else if( is_regex )
   {
-// lem::mout->printf( "DEBUG LA_RecognitionRule::Match lex=%us str=%us\n", lex.c_str(), str.c_str() ); 
-   return boost::regex_match( lex.c_str(), rx );
+   if( case_sensitive )
+    return boost::regex_match( original_word.c_str(), rx );
+   else
+    return boost::regex_match( normalized_word.c_str(), rx );
   }
  else if( is_prefix )
   {
-   return lex.eq_begi(str.c_str());
+   if( case_sensitive )
+    return original_word.eq_beg(str.c_str());
+   else
+    return normalized_word.eq_begi(str.c_str());
   }
  else if( is_affix )
   {
-   return lex.eq_endi(str.c_str());
+   if( case_sensitive )
+    return original_word.eq_endi(str.c_str());
+   else
+    return normalized_word.eq_endi(str.c_str());
   }
  else
   {

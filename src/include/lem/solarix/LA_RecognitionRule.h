@@ -33,6 +33,7 @@
     int id_entry;
     lem::UFString str;
 
+    lem::zbool case_sensitive;
     lem::zbool is_syllab, is_regex, is_prefix, is_affix;
     boost::wregex rx;
     Solarix::CP_Array coords;
@@ -40,34 +41,39 @@
     int src_location;
 
    public:
-    LA_RecognitionRule(void);
-    LA_RecognitionRule( int Id, const lem::UCString &Name, int Id_lang, bool IsSyllab, bool IsRegex, bool IsPrefix,
+    LA_RecognitionRule();
+    LA_RecognitionRule( int Id, const lem::UCString &Name, bool CaseSensitive, int Id_lang, bool IsSyllab, bool IsRegex, bool IsPrefix,
      bool IsAffix, const lem::UFString &Condition, int EntryID, lem::Real1 Rel, const Solarix::CP_Array &Coord, int SourceID );
     
     #if defined SOL_LOADTXT && defined SOL_COMPILER
     void LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionary &dict );
     #endif
 
-    int GetSourceLocation(void) const { return src_location; }
+    int GetSourceLocation() const { return src_location; }
 
-    bool IsSyllab(void) const { return is_syllab; }
-    bool IsRegex(void) const { return is_regex; }
-    bool IsPrefix(void) const { return is_prefix; }
-    bool IsAffix(void) const { return is_affix; }
-    bool IsWordMatcher(void) const { return !is_regex && !is_syllab && !is_prefix && !is_affix; }
+    bool IsSyllab() const { return is_syllab; }
+    bool IsRegex() const { return is_regex; }
+    bool IsPrefix() const { return is_prefix; }
+    bool IsAffix() const { return is_affix; }
+    bool IsWordMatcher() const { return !is_regex && !is_syllab && !is_prefix && !is_affix; }
+    bool IsCaseSensitive() const { return case_sensitive; }
 
-    int GetId(void) const { return id; }
-    const lem::UCString & GetName(void) const { return name; }
-    const lem::UFString& GetCondition(void) const { return str; }
+    int GetId() const { return id; }
+    const lem::UCString & GetName() const { return name; }
+    const lem::UFString& GetCondition() const { return str; }
 
-    bool Match( const lem::UCString & lex ) const;
-    int GetLanguage(void) const { return id_language; }
-    int GetEntryKey(void) const { return id_entry; }
-    lem::Real1 GetRel(void) const { return rel; }
-    bool IsPrecise(void) const { return rel==lem::Real1(100); }
-    const Solarix::CP_Array & GetCoords(void) const { return coords; }
+    bool Match(
+               const lem::UCString & normalized_word,
+               const lem::UCString & original_word
+              ) const;
 
-    LA_RecognitionRule::HashType GetHash(void) const;
+    int GetLanguage() const { return id_language; }
+    int GetEntryKey() const { return id_entry; }
+    lem::Real1 GetRel() const { return rel; }
+    bool IsPrecise() const { return rel==lem::Real1(100); }
+    const Solarix::CP_Array & GetCoords() const { return coords; }
+
+    LA_RecognitionRule::HashType GetHash() const;
     static LA_RecognitionRule::HashType CalcHash( const wchar_t *str, bool IsPrefix, bool IsAffix );
 
     void SetId( int Id ) { id=Id; }

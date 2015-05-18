@@ -1,0 +1,15 @@
+/**
+
+@mainpage The DeSR Multilanguage Dependency Parser
+
+@section contents Contents
+
+ - @ref introduction - A short introduction to dependency parsing.
+ - @ref training - How to train the parser on an annotatedd corpus.
+ - @ref parsing - How to parse sentences.
+ - @ref classifiers - How to add your own classifier to DeSR.
+ - @ref accuracy - Accuracy and performance.
+ - @ref updates - Changes between releases.
+ - @ref references - Papers describing the techniques used by DeSR.
+
+*/

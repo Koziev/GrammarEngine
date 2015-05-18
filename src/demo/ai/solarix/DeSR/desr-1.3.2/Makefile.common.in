@@ -1,0 +1,416 @@
+######################################################################
+# Definitions
+######################################################################
+
+CC=		@CC@
+CCLD=		$(CC)
+CXX=		@CXX@
+CXXLD=		$(CXX)
+CXXLINK=	$(CXXLD) $(LDFLAGS) -o $@
+
+COMPILE=	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEFINITIONS) $(INCLUDES)
+CXXCOMPILE=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(DEFINITIONS) $(INCLUDES)
+
+SOLINK=		$(CXXCOMPILE) @LD_SHARED@
+
+LTCOMPILE=	$(CC) $(CPPFLAGS) $(CFLAGS) @LTCFLAGS@ @lt_prog_compiler_pic@ $(DEFINITIONS) $(INCLUDES)
+LTCXXCOMPILE=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) @LTCFLAGS@ @lt_prog_compiler_pic_CXX@ $(DEFINITIONS) $(INCLUDES)
+LTCXXSHARED=	$(CXXLD) @LD_SHARED@ @lt_prog_compiler_pic_CXX@
+LTLINK=		$(LIBTOOL) --mode=link $(CCLD) $(CFLAGS) $(LDFLAGS) -o $@
+
+PYTHON_INCLUDE=	@PYTHON_INCLUDE@
+JAVA_INCLUDE=	@JAVA_INCLUDE@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+INSTALL_HEADER = $(INSTALL_DATA)
+INSTALL_LIBRARIES = $(INSTALL_DATA)
+
+######################################################################
+# Standard commands
+######################################################################
+
+SHELL=    @SHELL@
+AR=       @AR@ cr
+CHMOD=    @CHMOD@
+CP=       @CP@
+LN=       @LN@
+MKDIR=    @MKDIR@
+MKDIR_P = @MKDIR_P@
+RANLIB=   @RANLIB@
+RM=       @RM@
+STRIP=    @STRIP@
+AUTOCONF= @AUTOCONF@
+TAR=      @TAR@
+
+# Get CONFIG_HEADERS from config.status. Why configure does not export it?
+CV_CONFIG_HEADERS= $(shell grep config_headers= $(top_builddir)/config.status | sed -e "s/config_headers=//" -e s/\"//g)
+# Get headers in 3 steps:
+# 1. remove parts before ':' and replace with :$(top_builddir)
+# 2. add .in to others
+# 3. remove added ':'
+CONFIG_HEADERS_IN= $(shell echo $(CV_CONFIG_HEADERS) | sed -e "s=[-_a-zA-Z0-9/.]*:=:\$(top_builddir)/=g" -e "s=\(\<[^:][-_a-zA-Z0-9/.]*\>\)=\$(top_builddir)/\1.in=" -e "s=:==g")
+CONFIG_HEADERS:= $(shell echo $(CV_CONFIG_HEADERS) | sed "s/\:[-_a-zA-Z0-9/.]*//g")
+
+######################################################################
+# Targets
+######################################################################
+
+all-generic: Makefile $(HEADERS) $(CONFIG_HEADERS) \
+		$(PROGRAMS) $(LIBRARIES) $(SCRIPTS)
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(top_builddir)/config.status: $(top_builddir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	cd $(top_builddir) && $(SHELL) ./config.status --recheck
+
+$(top_builddir)/configure: $(top_builddir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+	cd $(top_builddir) && $(AUTOCONF)
+
+$(CONFIG_HEADERS): $(CONFIG_HEADERS_IN) $(top_builddir)/config.status
+	cd $(top_builddir) && CONFIG_FILES="$(CV_CONFIG_HEADERS)" CONFIG_HEADERS= $(SHELL) ./config.status
+
+######################################################################
+# Subdirectories
+######################################################################
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+
+@SET_MAKE@
+
+all-recursive install-data-recursive install-exec-recursive \
+installdirs-recursive install-recursive uninstall-recursive \
+check-recursive installcheck-recursive mostlyclean-recursive \
+clean-recursive distclean-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = .; \
+	 	then subdirs="SUBDIRS="; else subdirs=""; fi; \
+	  (cd $$subdir && $(MAKE) $$subdirs $$target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done
+
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) TAGS); \
+	done
+
+TAGS: tags-recursive $(HEADERS) $(SOURCES) $(CONFIG_HEADERS_IN) $(TAGS_DEPENDENCIES)
+	tags=; \
+	here=`pwd`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+		END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$(CONFIG_HEADERS_IN)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags $(CONFIG_HEADERS_IN) $$unique -o $$here/TAGS)
+
+######################################################################
+# Dependencies
+######################################################################
+
+DEP_FILES := $(foreach file,$(SOURCES),$(dir $(file)).deps/$(basename $(notdir $(file))).P)
+
+DEPS_MAGIC := $(shell mkdir $(dir $(DEP_FILES)) > /dev/null 2>&1 || :)
+
+ifneq ($(DEP_FILES),)
+-include $(DEP_FILES)
+endif
+
+######################################################################
+# Build rules
+######################################################################
+
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) @CPPMMD@ -o $@ -c $<
+	@sed -e 's|^$(notdir $@)[ 	]*:|$@ $(basename $@).lo:|' $@.d > $(dir $@).deps/$(*F).P
+	@rm -f $@.d
+
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) @CPPMMD@ -o $@ -c $<
+	@sed -e 's|^$(basename $@).o[ 	]*:|$@ $(basename $@).o:|' $@.d > $(dir $@).deps/$(*F).P
+	@rm -f $@.d
+
+%.o: %.cpp
+	@echo '$(CXXCOMPILE) -c $<'; \
+	$(CXXCOMPILE) @CPPMMD@ -o $@ -c $<
+	@sed -e 's|^$(notdir $@)[ 	]*:|$@ $(basename $@).lo:|' $@.d > $(dir $@).deps/$(*F).P
+	@rm -f $@.d
+
+%.lo: %.cpp
+	@echo '$(LTCXXCOMPILE) -c $<'; \
+	$(LTCXXCOMPILE) @CPPMMD@ -o $@ -c $<
+	@sed -e 's|^$(basename $@).o[ 	]*:|$@ $(basename $@).o:|' $@.d > $(dir $@).deps/$(*F).P
+	@rm -f $@.d
+
+%_py.cxx: %.i
+	swig $(INCLUDES) $(SWIGPYTHON_OPTIONS) -o $@ -c++ -python $<
+
+%_java.cxx: %.i
+	swig $(INCLUDES) $(SWIGJAVA_OPTIONS) -o $@ -c++ -java $<
+
+%.lo: %.cxx
+	@echo '$(LTCXXCOMPILE) @SWIG_FLAGS@ -c $<'; \
+	$(LTCXXCOMPILE) @SWIG_FLAGS@ @CPPMMD@ -o $@ -c $<
+	@sed -e 's|^$(basename $@).o[ 	]*:|$@ $(basename $@).o:|' $@.d > $(dir $@).deps/$(*F).P
+	@rm -f $@.d
+
+%.cpp: %.lex
+	flex++ -o$@ $<
+
+######################################################################
+# Install
+######################################################################
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+
+install: all install-recursive
+	$(MAKE) install-exec install-data
+
+install-exec: install-exec-recursive
+	$(MAKE) install-PROGRAMS install-LIBRARIES
+
+install-data: install-data-recursive
+	$(MAKE) install-HEADERS
+
+uninstall: uninstall-recursive
+	$(MAKE) uninstall-PROGRAMS uninstall-HEADERS
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM_FLAGS=-s install
+
+installdirs: installdirs-recursive
+	for dir in "$(DESTDIR)$(bindir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
+
+install-PROGRAMS: $(PROGRAMS)
+	@$(NORMAL_INSTALL)
+	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	@list='$(PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
+	   $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
+	  else :; fi; \
+	done
+
+uninstall-PROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+	done
+
+install-HEADERS: $(HEADERS)
+	@list='$(HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  test -z "$(pkgincludedir)" || $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; \
+	done
+
+uninstall-HEADERS:
+	list='$(HEADERS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(pkgincludedir)/$$p; \
+	done
+
+install-LIBRARIES:
+	@$(NORMAL_INSTALL)
+	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
+	@list='$(LIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(INSTALL_LIBRARIES) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+	    $(INSTALL_LIBRARIES) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+	  else :; fi; \
+	done
+	@$(POST_INSTALL)
+
+uninstall-LIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(LIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(libdir)/$$p'"; \
+	  rm -f "$(DESTDIR)$(libdir)/$$p"; \
+	done
+
+######################################################################
+# Manuals
+######################################################################
+
+install-man: $(MANS)
+	@$(NORMAL_INSTALL)
+	@list='$(MANS)'; @sect=1\
+	for i in $$list; do \
+	  case "$$i" in \
+	    *.1*) sect=1 ;; \
+	    *.2*) sect=2 ;; \
+	    *.3*) sect=3 ;; \
+	    *.4*) sect=4 ;; \
+	  esac; \
+	  $(mkinstalldirs) $(DESTDIR)$(mandir)$$sect
+	  if test -f $(srcdir)/$$i; then file=$(srcdir)/$$i; \
+	  else file=$$i; fi; \
+	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+	  echo " $(INSTALL_DATA) $$file $(DESTDIR)$(mandir)$$sect/$$inst"; \
+	  $(INSTALL_DATA) $$file $(DESTDIR)$(mandir)$$sect/$$inst; \
+	done
+
+uninstall-man:
+	@$(NORMAL_UNINSTALL)
+	@list='$(MANS)'; @sect=1\
+	for i in $$list; do \
+	  case "$$i" in \
+	    *.1*) sect=1 ;; \
+	    *.2*) sect=2 ;; \
+	    *.3*) sect=3 ;; \
+	    *.4*) sect=4 ;; \
+	  esac; \
+	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+	  echo " rm -f $(DESTDIR)$(mandir)$$sect/$$inst"; \
+	  rm -f $(DESTDIR)$(mandir)$$sect/$$inst; \
+	done
+
+######################################################################
+# Utilities
+######################################################################
+
+clean: clean-recursive
+	-rm -fr .deps .libs *.d TAGS
+	-rm -f $(PROGRAMS) $(LIBRARIES) $(SCRIPTS)
+	-rm -f $(OBJECTS) *.o $(LOBJECTS) *.lo *.a *.so core *.core *.pyc
+
+mostlyclean: mostlyclean-recursive
+
+distclean: distclean-recursive
+	-rm -fr .deps .libs *.d TAGS
+	-rm -f $(PROGRAMS) $(LIBRARIES) $(SCRIPTS)
+	-rm -f $(OBJECTS) *.o $(LOBJECTS) *.lo *.a *.so core *.core *.pyc
+	-rm -f $(CONFIG_HEADERS)
+	-rm -f config.status config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile *~ $(ERASABLES)
+
+.PHONY: \
+install-PROGRAMS uninstall-PROGRAMS \
+install-HEADERS uninstall-HEADERS \
+install-LIBRARIES uninstall-LIBRARIES \
+install-data install-data-recursive \
+uninstall-data uninstall-data-recursive \
+install-exec install-exec-recursive \
+uninstall-exec uninstall-exec-recursive \
+installdirs installdirs-recursive \
+uninstalldirs uninstalldirs-recursive \
+install-man unistall-man \
+install uninstall \
+all all-recursive \
+distclean distclean-recursive dist-hook \
+clean clean-recursive mostlyclean \
+TAGS tags-recursive
+
+######################################################################
+# Distribution
+######################################################################
+
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(EXTRA_DIST)
+
+GZIP_ENV  = --best
+
+# This target untars the dist file and tries a VPATH configuration.  Then
+# it guarantees that the distribution is self-contained by making another
+# tarfile.
+distcheck: dist
+	-rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) zxf $(distdir).tar.gz
+	mkdir $(distdir)/=build
+	mkdir $(distdir)/=inst
+	dc_install_base=`cd $(distdir)/=inst && pwd`; \
+	cd $(distdir)/=build \
+	  && ../configure --srcdir=.. --prefix=$$dc_install_base \
+	  && $(MAKE) \
+	  && $(MAKE) check \
+	  && $(MAKE) install \
+	  && $(MAKE) installcheck \
+	  && $(MAKE) dist
+	-rm -rf $(distdir)
+	@banner="$(distdir).tar.gz is ready for distribution"; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"
+
+dist: distdir
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
+
+dist-all: distdir
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
+
+distdir: $(DISTFILES)
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	-chmod 777 $(distdir)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+	for subdir in $(SUBDIRS); do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d $(distdir)/$$subdir \
+	    || mkdir $(distdir)/$$subdir \
+	    || exit 1; \
+	    chmod 777 $(distdir)/$$subdir; \
+	    (cd $$subdir && $(MAKE) top_distdir=../$(distdir) distdir=../$(distdir)/$$subdir distdir) \
+	      || exit 1; \
+	  fi; \
+	done
+	$(MAKE) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
+
+dist-hook:
+	find $(distdir) -depth -name CVS -print | xargs rm -fr

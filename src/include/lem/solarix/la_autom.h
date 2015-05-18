@@ -294,6 +294,7 @@
 
    bool Project_3(
                   const RC_Lexem &A,
+                  const lem::UCString & original_word,
                   lem::Real1 relA,
                   MCollect<Word_Coord> &found_list,
                   MCollect<ProjScore> &val_list,
@@ -499,6 +500,7 @@
    #if defined SOL_CAA
    void ProjectUnknown(
                        const RC_Lexem &A,
+                       const lem::UCString & original_word,
                        MCollect<Word_Coord> &found_list,
                        MCollect<ProjScore> &val_list,
                        PtrCollect<LA_ProjectInfo> &inf_list,

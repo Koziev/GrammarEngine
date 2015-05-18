@@ -1,0 +1,63 @@
+# Configuration file for the CoNLL 2008 Shared Task
+#
+
+Language		en
+
+InputFormat		conll08.fmt
+OutputFormat		CoNLL
+
+# Parsing and training parameters
+# Tokens on input are numbered 0, 1, ...
+# Tokens on the stack are numbered -1, -2, ...
+# Normally tokens beyond 0 have no children, except after an r2 or r3 action.
+Features		SPLIT_FORM -1 0 1
+Features		SPLIT_LEMMA -1 0 1 prev(0) leftChild(0) rightChild(0)
+# CPOSTAG is missing in CoNLL 2008 (it can be created as PPOSS[0:2]
+#Features		CPOSTAG -1 0 1 prev(0)
+Features		PPOSS -2 -1 0 1 2 3 leftChild(-1) leftChild(0)
+Features		DEPREL leftChild(-1) leftChild(0) rightChild(-1)
+
+LemmaReplace	[0-9]+   0
+LemmaReplace	[0-9]+[0-9,]*.[0-9]*   0.0
+
+# Notice children containing non ASCII letters
+LexChildNonWord		false
+# Notice punctuation in children of focus words
+UseChildPunct		false
+
+StackSize		true
+InputSize		false
+VerbCount		true
+PastActions		1
+WordDistance		false
+PunctCount		false
+# drop features occurring less than this times
+FeatureCutoff		0
+# Form or lemmas occurring less than LexCutoff are collapsed to Unknown
+LexCutoff		5
+
+# Use composite Action+Deprel as predicted outcome
+CompositeActions	true
+
+# Learning algorithm
+Algorithm		MLP
+
+# Multilayer Perceptron parameters
+# Number of hidden variables
+MlpHidden	320
+# Max number of iterations
+MlpIterations	18
+# Terminate if no updates occurr for these many iterations
+MlpVainIterations 10
+# Learning rate
+MlpLearningRate	0.001
+# Random weights range
+RandomRange	0.05
+
+# SVM parameters (libSVM, TinySVM)
+SvmParams		"-s 0 -t 1 -d 2 -g 0.2 -c 0.4 -r 0 -e 0.1"
+# Split model into 3^SvmSplit models, to speed up training.
+SvmSplit		0
+SplitFeature		PPOSS 0
+
+Verbose		true

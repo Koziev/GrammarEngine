@@ -1,0 +1,40 @@
+/**
+@page references References
+
+@anchor connl06
+G. Attardi.
+<a href="http://www.cnts.ua.ac.be/conll/pdf/16670.pdf">
+Experiments with a Multilanguage Non-Projective Dependency Parser</A>,
+<em>Proc. of the Tenth Conference on Natural Language Learning</em>,
+New York, (NY),
+2006.
+
+@anchor hlt07
+G. Attardi, M. Ciaramita,
+<a href="http://research.yahoo.com/node/436/2519">
+Tree revision learning for dependency parsing</a>,
+<em>Proceedings of HLT-NAACL 2007</em>,
+Rochester,
+2007.
+
+@anchor conll07
+G. Attardi, F. Dell'Orletta, M. Simi, A. Chanev and M. Ciaramita.
+<a
+href="http://research.yahoo.com/publication/multilingual_dependency_parsing_and_domain_adaptation_using_desr">
+Multilingual Dependency Parsing and Domain Adaptation using DeSR</a>,
+<EM>Proceedings of EMNLP-CoNLL 2007</EM>,
+Prague,
+2007.
+
+@anchor emnl07
+M. Ciaramita and G. Attardi.
+<a
+href="http://research.yahoo.com/publication/dependency_parsing_with_second_order_feature_maps_and_annotated_semantic_information">
+Dependency Parsing with Second-Order Feature Maps and Annotated Semantic
+Information</a>,
+<EM> Proceedings of the 10th International Conference on Parsing Technology
+(IWPT 2007)</EM>,
+Prague,
+2007.
+
+*/

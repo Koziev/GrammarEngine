@@ -1,0 +1,136 @@
+/**
+
+@mainpage DeSR Dependency Parser
+
+<p>
+DeSR is a dependency parser for natural language sentences.
+</p>
+<p>
+Among its notable features:
+<ul>
+<li><em>accuracy</em>: close to state of the art accuracy
+<li><em>efficiency</em>: it can parse up to 200 sentence/sec
+<li><em>multilingual</em>: it can be trained from an annotated corpus on multiple languages
+<li><em>customizable</em>: features used in training can be customized.
+</ul>
+</p>
+
+<h2>Technique</h2>
+
+DeSR is a shift-reduce dependency parser, which uses a variant of the approach
+of (Yamada and Matsumoto, 2003).
+
+Dependency structures are built scanning the input from left to right and
+deciding at each step whether to perform a shift or to create a dependency
+between two adjacent tokens.
+
+DeSR uses though a different set of rules and includes additional rules to
+handle non-projective dependencies that allow parsing to be performed
+deterministically in a single pass.
+
+The algorithm also produces fully labeled dependency trees.
+
+A classifier is used for learning and predicting the proper parsing
+action.
+
+The parser can be configured, selecting among several learning algorithms
+(Averaged Perceptron, Maximum Entropy, memory-based learning using TiMBL,
+support vector machines using libSVM), providing user-defined feature models,
+and selecting input-output formats (including the CoNLL shared task format).
+
+<h2>Download</h2>
+
+<dl style="background-color: #eee; border: 2pt solid #ccc; padding-left: 8; padding-right: 8;">
+<dt>Linux/Unix</dt><dd><a href="desr">desr</a> (32 bit version), <a href="desr">desr64</a> (64 bit version)</dd>
+<dt>sample configuration file</dt><dd><a href="desr.conf">desr.conf</a></dd>
+<dt>model for Spanish</dt><dd><a href="spanish.AP.gz">spanish.AP.gz</a></dd>.
+</dl>
+The binaries are for Linux Fedora Core 5.
+
+<h2>Usage</h2>
+<p>
+Suppose you have both the parser and the configuration file in the same
+directory, you call:
+</p>
+<pre>
+   desr -t -m modelFile trainFile
+</pre>
+to produce a model from a training corpus in CoNLL format.
+<p>
+To parse sentences in CoNLL format, use:
+</p>
+<pre>
+   desr -m modelFile parseFile > parsedFile
+</pre>
+<p>
+If you plan to use the downloaded model file, first gunzip it.
+</p>
+<p>
+For a full list of options, type:
+<pre>
+   desr -h
+</pre>
+<p>
+Several classifiers are available, including:<br>
+Maximum Entropy (<tt>-aME</tt>), Perceptron (<tt>-aAP</tt>), MBL (<tt>-aMBL</tt>) or SVM (<tt>-aSVM</tt>).
+The algorithm can also be specified in the configuration file
+<tt>desr.conf</tt> as well as the features to be used.
+</p>
+<p>
+Be careful using option <tt>SecondOrder</tt>, since it may considerably
+increase the model size.
+</p>
+
+<h2>References</h2>
+<ul>
+<li>
+G. Attardi,
+<a href="http://www.cnts.ua.ac.be/conll/pdf/16670.pdf">
+Experiments with a Multilanguage Non-Projective Dependency Parser</A>,
+<em>Proc. of the Tenth Conference on Natural Language Learning</em>,
+New York, (NY),
+2006.</li>
+<li>
+G. Attardi, M. Ciaramita.
+<a href="http://research.yahoo.com/node/436/2519">
+Tree revision learning for dependency parsing</a>,
+<EM>Proceedings of HLT-NAACL 2007</EM>,
+Rochester,
+2007.
+</li>
+
+<li>
+M. Ciaramita and G. Attardi.
+<a
+href="http://research.yahoo.com/publication/dependency_parsing_with_second_order_feature_maps_and_annotated_semantic_information">
+Dependency Parsing with Second-Order Feature Maps and Annotated Semantic
+Information</a>,
+<EM> Proceedings of the 10th International Conference on Parsing Technology
+(IWPT 2007)</EM>,
+Prague,
+2007.
+</li>
+
+<li>
+G. Attardi, F. Dell'Orletta, M. Simi, A. Chanev and M. Ciaramita.
+<a
+href="http://research.yahoo.com/publication/multilingual_dependency_parsing_and_domain_adaptation_using_desr">
+Multilingual Dependency Parsing and Domain Adaptation using DeSR</a>,
+<EM>Proceedings of EMNLP-CoNLL 2007</EM>,
+Prague,
+2007.
+</li>
+</ul>
+
+@section contents Contents
+
+ - @ref introduction - a short introduction to the DeSR parser.
+ - @ref training - how to train the parser.
+ - @ref models - specifying a language model.
+ - @ref parsing - how to parse text.
+ - @ref performance - accuracy and performance on different languages.
+ - @ref classifiers - how to add a new type of classifier.
+ - @ref history - changes between releases.
+ - @ref license - the license under which DeSR  is available.
+
+*/

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/286/trunk/boost/preprocessor/detail
+END
+check.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/desr/!svn/ver/254/trunk/boost/preprocessor/detail/check.hpp
+END
+is_binary.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/desr/!svn/ver/208/trunk/boost/preprocessor/detail/is_binary.hpp
+END
+auto_rec.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/desr/!svn/ver/208/trunk/boost/preprocessor/detail/auto_rec.hpp
+END

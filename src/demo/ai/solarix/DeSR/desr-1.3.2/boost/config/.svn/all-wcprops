@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/272/trunk/boost/config
+END
+select_compiler_config.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/desr/!svn/ver/254/trunk/boost/config/select_compiler_config.hpp
+END
+user.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/208/trunk/boost/config/user.hpp
+END
+posix_features.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/254/trunk/boost/config/posix_features.hpp
+END
+suffix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/254/trunk/boost/config/suffix.hpp
+END
+select_stdlib_config.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/desr/!svn/ver/254/trunk/boost/config/select_stdlib_config.hpp
+END
+select_platform_config.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/desr/!svn/ver/254/trunk/boost/config/select_platform_config.hpp
+END

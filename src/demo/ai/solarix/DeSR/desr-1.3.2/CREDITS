@@ -1,0 +1,9 @@
+
+The people that have contributed to the devlopement of DeSR:
+
+Giuseppe Attardi	main developer and software architect
+Fabio Lombardelli	partecipated in the intial stages of development
+Massimiliano Ciaramita	contributed the code for the Averaged Perceptron Classifier
+Joseph Turian		contributed the Theano version of the Multilayer Perceptron
+Carlos G. Rodríguez Penagos	developed Java wrapper and UIMA wrapper
+Maurizio Monge		fixed some bugs with Java wrapper

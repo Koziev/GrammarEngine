@@ -247,6 +247,7 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
      lem::mout->eol();
      #endif
 */
+
      // конвертируем str_features в набор тегов для текущего слова в цепочке
    
      /* Initialize an item. */

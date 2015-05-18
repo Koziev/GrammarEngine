@@ -310,6 +310,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
          // нечеткая проекция.
          if( Project_3(
                        word,
+                       *proj.GetOrgWord(),
                        Real1(100),
                        prj_found_list,
                        prj_val_list,
@@ -615,6 +616,7 @@ void LexicalAutomat::Project(
       case 3:
        Project_3(
                  word,
+                 *proj.GetOrgWord(),
                  Real1(100),
                  prj_found_list,
                  prj_val_list,
@@ -1057,7 +1059,7 @@ bool LexicalAutomat::Project_1(
    if( !ret_hit )
     {
      // пробуем применить точные правила распознавания, например для слов типа "123-е"
-     ret_hit = recognizer_applied = recognizer->Apply( *A, relA, lem::Real1(100), found_list, val_list, inf_list, id_lang, trace );
+     ret_hit = recognizer_applied = recognizer->Apply( *A, original_word, relA, lem::Real1(100), found_list, val_list, inf_list, id_lang, trace );
      LEM_CHECKIT_Z( found_list.size()==val_list.size() );
      LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
     }
@@ -1071,7 +1073,7 @@ bool LexicalAutomat::Project_1(
      MCollect<ProjScore> val_list2;
      PtrCollect<LA_ProjectInfo> inf_list2;
 
-     if( Project_3( A, relA, found_list2, val_list2, inf_list2, id_lang, trace ) )
+     if( Project_3( A, original_word, relA, found_list2, val_list2, inf_list2, id_lang, trace ) )
       {
        #if LEM_DEBUGGING==1
        for( int q=0; q<found_list2.size(); ++q )
@@ -1634,6 +1636,7 @@ bool LexicalAutomat::GetEnding( int id_lang, const lem::UCString &ending, int &n
 // *******************************************************************
 bool LexicalAutomat::Project_3(
                                const RC_Lexem &A,
+                               const lem::UCString & original_word,
                                lem::Real1 relA,
                                MCollect<Word_Coord> &found_list,
                                MCollect<ProjScore> &val_list,
@@ -2236,7 +2239,7 @@ for( int k=0; k<stems2.size(); ++k )
  
    if( !ret_hit )
     {
-     ret_hit = recognizer->Apply( *A, relA, GetMinProjectionRel(), found_list, val_list, inf_list, id_lang, trace );
+     ret_hit = recognizer->Apply( *A, original_word, relA, GetMinProjectionRel(), found_list, val_list, inf_list, id_lang, trace );
     }
 
    LEM_CHECKIT_Z( found_list.size()==val_list.size() );
@@ -2431,6 +2434,7 @@ void LexicalAutomat::ProjectWord(
 #if defined SOL_CAA
 void LexicalAutomat::ProjectUnknown(
                                     const RC_Lexem &A,
+                                    const lem::UCString & original_word,
                                     MCollect<Word_Coord> &found_list,
                                     MCollect<ProjScore> &val_list,
                                     PtrCollect<LA_ProjectInfo> &inf_list,
@@ -2440,7 +2444,7 @@ void LexicalAutomat::ProjectUnknown(
 {
  SynGram &sg = GetDict().GetSynGram();
 
- recognizer->Apply( *A, Real1(100), GetMinProjectionRel(), found_list, val_list, inf_list, id_language, NULL );
+ recognizer->Apply( *A, original_word, Real1(100), GetMinProjectionRel(), found_list, val_list, inf_list, id_language, NULL );
 
  // Обновляем кэш осуществленных проекций.
  #if defined LEM_THREADS

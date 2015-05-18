@@ -1,0 +1,233 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svnroot/desr/!svn/ver/396/trunk/text
+END
+HtmlTokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/115/trunk/text/HtmlTokenizer.cpp
+END
+RegExp.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/384/trunk/text/RegExp.h
+END
+Suffixes.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/112/trunk/text/Suffixes.h
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/386/trunk/text/Makefile.in
+END
+xml.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/351/trunk/text/xml.h
+END
+StringTokenizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/112/trunk/text/StringTokenizer.h
+END
+String.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/202/trunk/text/String.cpp
+END
+xml.lex
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/351/trunk/text/xml.lex
+END
+Utf8Utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/354/trunk/text/Utf8Utils.h
+END
+CharBuffer.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/393/trunk/text/CharBuffer.h
+END
+charmap.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/112/trunk/text/charmap.h
+END
+Char.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/254/trunk/text/Char.h
+END
+XmlReader.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/355/trunk/text/XmlReader.cpp
+END
+Unicode.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/114/trunk/text/Unicode.cpp
+END
+Encoding.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/349/trunk/text/Encoding.cpp
+END
+StreamTokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/114/trunk/text/StreamTokenizer.cpp
+END
+text.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/112/trunk/text/text.h
+END
+RegExp.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/349/trunk/text/RegExp.cpp
+END
+WordSet.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/264/trunk/text/WordSet.h
+END
+Suffixes.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/114/trunk/text/Suffixes.cpp
+END
+strings.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/387/trunk/text/strings.h
+END
+xml.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/386/trunk/text/xml.cpp
+END
+StringTokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/114/trunk/text/StringTokenizer.cpp
+END
+Utf8CharIterator.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/352/trunk/text/Utf8CharIterator.h
+END
+FlexLexer.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/133/trunk/text/FlexLexer.h
+END
+HtmlTokenizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/112/trunk/text/HtmlTokenizer.h
+END
+Utf8Utils.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/352/trunk/text/Utf8Utils.cpp
+END
+WordIndex.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/396/trunk/text/WordIndex.h
+END
+less.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/112/trunk/text/less.h
+END
+charmap.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/115/trunk/text/charmap.cpp
+END
+String.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/112/trunk/text/String.h
+END
+Char.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/114/trunk/text/Char.cpp
+END
+WordSet.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/112/trunk/text/WordSet.cpp
+END
+XmlReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/352/trunk/text/XmlReader.h
+END
+strings.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/387/trunk/text/strings.cpp
+END
+Unicode.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/112/trunk/text/Unicode.h
+END
+Encoding.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/202/trunk/text/Encoding.h
+END
+StreamTokenizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/112/trunk/text/StreamTokenizer.h
+END

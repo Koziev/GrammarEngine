@@ -145,7 +145,8 @@ void LA_Recognizer::LoadAllLangs(void)
 
 
 bool LA_Recognizer::Apply(
-                          const lem::UCString &word,
+                          const lem::UCString & normalized_word,
+                          const lem::UCString & original_word,
                           lem::Real1 word_rel,
                           lem::Real1 min_bound,
                           lem::MCollect<Word_Coord> &found_list,
@@ -165,7 +166,7 @@ bool LA_Recognizer::Apply(
    for( lem::Container::size_type j=0; j<rules.size(); ++j )
     {
      const LA_RecognitionRules *r = rules[j];
-     if( r->Apply( word, word_rel, found_list, val_list, inf_list, trace ) )
+     if( r->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
       matched=true;
     }
   }
@@ -174,11 +175,11 @@ bool LA_Recognizer::Apply(
    LoadRules(id_language);
 
    const LA_RecognitionRules *rules1 = GetRules(id_language);
-   if( rules1->Apply( word, word_rel, found_list, val_list, inf_list, trace ) )
+   if( rules1->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
     matched=true;
 
    const LA_RecognitionRules *rules2 = GetRules(UNKNOWN);
-   if( rules2->Apply( word, word_rel, found_list, val_list, inf_list, trace ) )
+   if( rules2->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
     matched=true;
   }
 

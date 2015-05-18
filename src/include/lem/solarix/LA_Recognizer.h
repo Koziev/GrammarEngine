@@ -47,7 +47,8 @@
     void Connect( LexiconStorage *Storage );
 
     bool Apply(
-               const lem::UCString &word,
+               const lem::UCString & normalized_word,
+               const lem::UCString & original_word,
                lem::Real1 word_rel,
                lem::Real1 min_bound,
                MCollect<Solarix::Word_Coord> &found_list,

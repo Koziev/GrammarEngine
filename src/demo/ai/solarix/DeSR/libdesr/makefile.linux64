@@ -1,0 +1,28 @@
+SRC        = ../../../../../../..
+OBJDIR     = /tmp/lemmatizator
+LEM_PATH   = ../../../../..
+BOOST_PATH = $(SRC)/boost
+EXEDIR     = .
+EXT        = so
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D LEM_USES_NCURSES=0 -D LEM_CONSOLE -D LEM_UNICODE_CONSOLE -D NDEBUG -D BOOST_ALL_NO_LIB -D _GLIBCPP_USE_WCHAR_T -c -fPIC -march=nocona -Wall -O3
+LFLAGS = -shared -Wl,-soname,liblemma.so
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+LEM_LIBS = 
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/lemmatizator.so
+
+install:
+	cp lemmatizator.so /usr/lib64
+	rm -f /usr/lib64/liblemma.so
+	rm -f /usr/lib64/liblemma.so.1
+	ln -s /usr/lib64/lemmatizator.so /usr/lib64/liblemma.so
+	ln -s /usr/lib64/lemmatizator.so /usr/lib64/liblemma.so.1
+	

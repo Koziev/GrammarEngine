@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/176/trunk/classifier/test
+END
+BasicEventStream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/BasicEventStream.cpp
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/Makefile.in
+END
+BasicContextStream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/BasicContextStream.cpp
+END
+zoo.train
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/zoo.train
+END
+BasicEventStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/BasicEventStream.h
+END
+zoo.test
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/zoo.test
+END
+BasicContextStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/BasicContextStream.h
+END
+predict.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/predict.cpp
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/README
+END
+maxent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/maxent.cpp
+END
+train.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/107/trunk/classifier/test/train.cpp
+END

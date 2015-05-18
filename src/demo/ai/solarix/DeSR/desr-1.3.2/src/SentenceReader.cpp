@@ -1,0 +1,432 @@
+/*
+**  DeSR
+**  src/SentenceReader.cpp
+**  ----------------------------------------------------------------------
+**  Copyright (c) 2005  Giuseppe Attardi (attardi@di.unipi.it).
+**  ----------------------------------------------------------------------
+**
+**  This file is part of DeSR.
+**
+**  DeSR is free software; you can redistribute it and/or modify it
+**  under the terms of the GNU General Public License, version 3,
+**  as published by the Free Software Foundation.
+**
+**  DeSR is distributed in the hope that it will be useful,
+**  but WITHOUT ANY WARRANTY; without even the implied warranty of
+**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**  GNU General Public License for more details.
+**
+**  You should have received a copy of the GNU General Public License
+**  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+**  ----------------------------------------------------------------------
+*/
+
+#include "SentenceReader.h"
+
+// standard
+#include <iostream>
+#include <iomanip>
+
+// IXE library
+#include "text/Utf8Utils.h"
+#include "io/Format.h"
+
+// local
+#include "Corpus.h"
+
+using namespace std;
+using namespace Tanl::Text;
+using namespace IXE::io;
+
+namespace Tanl {
+
+//======================================================================
+// SentenceReader
+
+SentenceReader::SentenceReader(istream* is, Corpus* corpus) :
+  is(is),
+  corpus(corpus)
+{ }
+
+// Generic tab format reader
+static RegExp::Pattern reTab("([^\t\n]+)");
+
+static RegExp::Pattern reTag("<.*?>");
+
+bool SentenceReader::MoveNext()
+{
+  string line;
+  // skip XML tags
+  while (true) {
+    if (!getline(*is, line) || line.empty())
+      return false;
+    if (!reTag.test(line))
+      break;
+  }
+
+  sentence = new Sentence(&corpus->language);
+  MorphExtractor const& morphExtractor = *corpus->language.morphExtractor;
+  vector<char const*> const& names = corpus->index.names;
+  vector<int> preds;		// ids of predicates in sentence
+
+  int id = 1;
+  RegExp::MatchGroups match(2);
+
+  do {
+    Attributes attributes(&corpus->index);
+    MorphExtractor::Features mf;
+    string form;
+    int head = 0;
+    string deprel;
+    int fields = corpus->tokenFields.size();
+    TokenLinks links;
+    unordered_map<string, int> linkMap;
+    int argNo = 0;
+    int i = 0;
+    char const* cur = line.c_str();
+    char const* end = cur + line.size();
+    while (reTab.match(cur, end, match) > 0) {
+      TokenField const& tf = corpus->tokenFields[i];
+      char const* fieldStart = cur + match[1].first;
+      int fieldLen = match[1].second - match[1].first;
+      string value(fieldStart, fieldLen);
+      // clear empty fields
+      if (value == tf.default_)
+	value = "";
+      // discard IGNORE fields
+      if (tf.use != TokenField::ignore) {
+	attributes[i] = value;
+	if (!tf.link.empty()) {
+	  // Got target of link: create even when value is missing
+	  int head = value.empty() ? -1 : atoi(value.c_str());
+	  if (linkMap.find(tf.link) == linkMap.end()) {
+	    // Create link and assign position in LinkMap 
+	    linkMap[tf.link] = links.size();
+	    links.push_back(TokenLink(head));
+	  } else
+	    // fill head in previously created link
+	    links[linkMap[tf.link]].head = head;
+	} else if (!tf.label.empty()) {
+	  if (value.empty())
+	    --argNo;
+	  else {
+	    // Got label of link
+	    if (linkMap.find(tf.label) == linkMap.end()) {
+	      // Create link with dummy target and assign position in LinkMap 
+	      linkMap[tf.label] = links.size();
+	      // use negative value to distinguish from real target
+	      links.push_back(TokenLink(--argNo, value.c_str()));
+	    } else
+	      // fill label in previously created link
+	      links[linkMap[tf.label]].label = value;
+	  }
+	} else {
+	  switch (tf.role) {
+	  case TokenField::form:
+	    form = value; break;
+	  case TokenField::predicate:
+	    if (!value.empty())
+	      preds.push_back(id);
+	    break;
+	  case TokenField::morph:
+	    if (!value.empty())
+	      morphExtractor(fieldStart, fieldStart + fieldLen, mf);
+	  }
+	}
+      }
+      i++;
+      cur += match[0].second;
+      if (i == fields || cur == end) {
+	// skip extra fields
+	break;
+      }
+    }
+    if (i < fields) {
+      cerr << "Incomplete token, skipped" << endl;
+      continue;
+    }
+    TreeToken* token = new TreeToken(id++, form, attributes, links);
+    // add morpho features
+    token->token->morpho.set(mf);
+    sentence->push_back(token);
+  } while (getline(*is, line) && !line.empty());
+  if (preds.size()) {
+    // fix ARG links (CoNLL 2008 format)
+    FOR_EACH (Sentence, *sentence, sit) {
+      TO_EACH (TokenLinks, (*sit)->token->links, tit) {
+	if (tit->head < 0)
+	  tit->head = preds[-tit->head - 1];
+      }
+    }
+  }
+  return true;
+}
+
+Sentence* SentenceReader::Current()
+{
+  return sentence;
+}
+
+//======================================================================
+// ConllXSentenceReader
+
+// pattern for analyzing token line in CoNLL format:
+// czech 2007 has extra tab at end of lines.
+static RegExp::Pattern reCoNLL("(\\d+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t\n]+)(?:\t([^\t]+)\t([^\t]+)(?:\t([^\t]+)\t([^\t]+)\t?)?)?");
+
+ConllXSentenceReader::ConllXSentenceReader(istream* is, Corpus* corpus) :
+  SentenceReader(is, corpus)
+{  }
+
+bool ConllXSentenceReader::MoveNext()
+{
+  string line;
+  // skip XML tags
+  while (true) {
+    if (!getline(*is, line) || line.empty())
+      return false;
+    if (!reTag.test(line))
+      break;
+  }
+
+  sentence = new Sentence(&corpus->language);
+  MorphExtractor const& morphExtractor = *corpus->language.morphExtractor;
+  MorphExtractor::Features mf;
+  vector<char const*>& names = corpus->index.names;
+
+  int ln = 1;			// count lines
+  RegExp::MatchGroups match(11);
+  do {
+    int matches = reCoNLL.match(line, match);
+
+    if (matches > 0) {
+      char const* start = line.c_str();
+      morphExtractor(start + match[6].first, start + match[6].second, mf);
+      Attributes attributes(&corpus->index);
+      int id = atoi(start + match[1].first);
+      if (id != ln++)
+	throw CorpusFormatError("Bad numbering: " + line);
+      attributes.insert(names[0], string(start + match[1].first, match[1].second - match[1].first)); // ID
+      string form(start + match[2].first, match[2].second - match[2].first);
+      attributes.insert(names[1], form); // FORM
+      int head = 0;
+      string deprel;
+      for (int i = 3; i < matches; i++) {
+	// LEMMA, CPOSTAG, POSTAG, FEATS, HEAD, DEPREL, PHEAD, PDEPREL
+	char const* tagStart = start + match[i].first;
+	int tagLen = match[i].second - match[i].first;
+	string value;
+	// discard CoNLL empty fields
+	if (tagLen != 1 || tagStart[0] != '_')
+	  value = string(tagStart, tagLen);
+	attributes.insert(names[i-1], value);
+	if (i == 7)		// HEAD
+	  head = atoi(tagStart);
+	else if (i == 8)	// DEPREL
+	  deprel = value;
+      }
+      // sanity check: avoid circularities
+      if (id == head)
+	head = 0;
+      TokenLinks links(1, TokenLink(head, deprel.c_str()));
+      TreeToken* token = new TreeToken(id, form, attributes, links);
+      // add morpho features
+      token->token->morpho.set(mf);
+      sentence->push_back(token);
+    }
+  } while (getline(*is, line) && !line.empty() && !reTag.test(line));
+  // sanity check
+  size_t len = sentence->size();
+  FOR_EACH (Sentence, *sentence, sit) {
+    int head = (*sit)->linkHead();
+    if (head < 0 || head > len) {
+      TreeToken* tok = *sit;
+      Format msg("Wrong head at token: ID=%d FORM='%s' HEAD=%d ",
+		 tok->id, tok->token->form.c_str(), head);
+      throw CorpusFormatError(msg);
+    }
+  }
+  return true;
+}
+
+//======================================================================
+// DgaSentenceReader
+
+// The stream consists of sentences:
+//
+// <s>token+</s>
+//
+// Tokens have the following format:
+//
+// <tok id="...">
+//  <orth>...</orth>
+//  <lemma>...</lemma>
+//  <pos>...</pos>
+//  <gen>...</gen>
+//  <num>...</num>
+//  <per>...</per>
+//  <dep head="..." type="..." />
+// </tok>
+
+/**
+ *	Reader of sentences in DGA XML format: see DGA.DTD.
+ */
+DgaSentenceReader::DgaSentenceReader(istream* is, Corpus* corpus) :
+  SentenceReader(is, corpus),
+  reader(*is)
+{ }
+
+bool DgaSentenceReader::MoveNext()
+{
+  // check for open tag <s>
+  if (!reader.Read() || reader.NodeType != Tanl::XML::Element ||
+      reader.Name != "s")
+    return false;
+
+  sentence = new Sentence(&corpus->language);
+  vector<char const*>& names = corpus->index.names;
+  while (reader.Read()) {
+    if (reader.NodeType == Tanl::XML::Whitespace)
+      continue;
+    if (reader.NodeType == Tanl::XML::EndElement)
+      break;
+    if (reader.NodeType == Tanl::XML::Element &&
+	 reader.Name == "tok") {
+      Attributes attributes(&corpus->index);
+      int id;
+      string form;
+      int head = 0;
+      string deprel;
+      while (reader.MoveToNextAttribute()) {
+	if (reader.Name == "id")
+	  id = atoi(reader.Value.c_str());
+      }
+      // read token contents
+      while (reader.Read()) {
+	if (reader.NodeType == Tanl::XML::Whitespace)
+	  continue;
+	if (reader.NodeType == Tanl::XML::EndElement)
+	  break;
+	if (reader.NodeType != Tanl::XML::Element)
+	  goto fail;
+	string& name = reader.Name;
+	if (name == "dep") {
+	  // read attributes
+	  while (reader.MoveToNextAttribute()) {
+	    string& name = reader.Name;
+	    if (name == "head")
+	      head = atoi(reader.Value.c_str());
+	    else if (name == "type")
+	      deprel = reader.Value;
+	  }
+	} else if (name == "orth") {
+	  if (!reader.Read() || reader.NodeType != Tanl::XML::Text)
+	    goto fail;
+	  form = reader.Value;
+	  if (!reader.Read() || reader.NodeType != Tanl::XML::EndElement ||
+	      reader.Name != "orth")
+	    goto fail;
+	} else {
+	  string tag = reader.Name;
+	  if (!reader.Read() || reader.NodeType != Tanl::XML::Text)
+	    goto fail;
+	  attributes.insert(tag.c_str(), reader.Value);
+	  if (!reader.Read() || reader.NodeType != Tanl::XML::EndElement ||
+	      reader.Name != tag)
+	    goto fail;
+	}
+      }
+      // ckeck closing tag
+      if (reader.Name != "tok")
+	goto fail;
+      TokenLinks links(1, TokenLink(head, deprel.c_str()));
+      TreeToken* tok = new TreeToken(id, form, attributes, links);
+      sentence->push_back(tok);
+    } else
+      goto fail;
+  }
+  // check closing tag
+  if (reader.Name == "s")
+    return true;
+ fail:
+  delete sentence;
+  sentence = 0;
+  return false;
+}
+
+//======================================================================
+// TokenSentenceReader
+
+/**
+ *	Reader of sentences, one per line, space-separated tokens
+ */
+TokenSentenceReader::TokenSentenceReader(istream* is, Corpus* corpus) :
+  SentenceReader(is, corpus)
+{
+# ifdef STEMMER
+  if (corpus && corpus->language)
+    stemmer = sb_stemmer_new(corpus->language, 0); // UTF-8 encoding
+# endif
+}
+
+RegExp::Pattern TokenSentenceReader::reTok("\\s*([^\\s]*?)");
+
+bool TokenSentenceReader::MoveNext()
+{
+  string line;
+  if (!getline(*is, line) || line.empty())
+    return false;
+
+  sentence = new Sentence(&corpus->language);
+  int id = 1;
+  RegExp::MatchGroups matches(2);
+  do {
+    char const* cur = line.c_str();
+    char const* endSent = cur + line.size();;
+    while (reTok.match(cur, endSent, matches) > 0) {
+      const char* tokStart = cur + matches[1].first;
+      int tokSize = matches[1].second - matches[1].first;
+      cur += matches[0].second;
+      string form(tokStart, tokSize);
+      TreeToken* tok = new TreeToken(id++, form.c_str(), &corpus->index);
+      sentence->push_back(tok);
+    }
+  } while (getline(*is, line) && line.size());
+  return true;
+}
+
+//======================================================================
+
+bool TaggedSentenceReader::MoveNext()
+{
+  if (!reader->MoveNext())
+    return false;
+  sentence = reader->Current();
+  if (tagger) {
+    // perform POS tagging
+    Parser::Tagged tagSentence;
+    FOR_EACH (Sentence, *sentence, sit) {
+      TreeToken* token = *sit;
+      tagSentence.words.push_back(token->token->form.c_str());
+      string const* pos = token->get("POS");
+      tagSentence.tags.push_back(pos ? pos->c_str() : 0);
+    }
+    if (tagger->tag(tagSentence)) {
+      for (unsigned i = 0; i < sentence->size(); i++) {
+	(*sentence)[i]->set("POS", tagSentence.tags[i]);
+	TreeToken* node = (*sentence)[i];
+	string const* lemma = node->get("LEMMA");
+	if (lemma && *lemma == "") {
+	  char const* lemma = tagSentence.lemmas[i];
+	  if (strcmp(lemma, "<unknown>"))
+	    node->set("LEMMA", lemma);
+	  else
+	    node->set("LEMMA", node->token->form);
+	}
+      }
+    }
+  }
+  return true;
+}
+
+} // namespace Tanl

@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svnroot/desr/!svn/ver/392/trunk/src/jni
+END
+TreeToken.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/392/trunk/src/jni/TreeToken.java
+END
+Sentence.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Sentence.java
+END
+EnumeratorSentence.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/392/trunk/src/jni/EnumeratorSentence.java
+END
+RefCountable.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/392/trunk/src/jni/RefCountable.java
+END
+ifstream.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/392/trunk/src/jni/ifstream.java
+END
+SWIGTYPE_p_std__vectorTTokenLink_t.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_std__vectorTTokenLink_t.java
+END
+Corpus.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Corpus.java
+END
+Tag.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Tag.java
+END
+SWIGTYPE_p_Sentence.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_Sentence.java
+END
+SWIGTYPE_p_std__vectorTchar_const_p_t.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_std__vectorTchar_const_p_t.java
+END
+Token.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Token.java
+END
+ofstream.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/392/trunk/src/jni/ofstream.java
+END
+Language.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Language.java
+END
+VectorTreeToken.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/desr/!svn/ver/392/trunk/src/jni/VectorTreeToken.java
+END
+Context.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Context.java
+END
+SWIGTYPE_p_Corpus.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_Corpus.java
+END
+Disposable.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Disposable.java
+END
+Attributes.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Attributes.java
+END
+SWIGTYPE_p_std__istream.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/392/trunk/src/jni/SWIGTYPE_p_std__istream.java
+END
+SentenceReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/392/trunk/src/jni/SentenceReader.java
+END
+SWIGTYPE_p_std__string.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/desr/!svn/ver/392/trunk/src/jni/SWIGTYPE_p_std__string.java
+END
+AttributeIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/392/trunk/src/jni/AttributeIndex.java
+END
+Parser.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/392/trunk/src/jni/Parser.java
+END
+SWIGTYPE_p_Language.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_Language.java
+END
+desr.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/392/trunk/src/jni/desr.java
+END
+SWIGTYPE_p_Tanl__EnumeratorTstd__vectorTTanl__Token_p_t_p_t.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/desr/!svn/ver/325/trunk/src/jni/SWIGTYPE_p_Tanl__EnumeratorTstd__vectorTTanl__Token_p_t_p_t.java
+END
+TokenLink.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/392/trunk/src/jni/TokenLink.java
+END
+desrJNI.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/392/trunk/src/jni/desrJNI.java
+END

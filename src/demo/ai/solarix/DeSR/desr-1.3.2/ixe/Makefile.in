@@ -1,0 +1,131 @@
+
+PACKAGE =	@PACKAGE@
+VERSION =	@VERSION@
+
+top_builddir =	@top_builddir@
+subdir =	ixe
+srcdir =	@srcdir@
+top_srcdir =	@top_srcdir@
+
+##################################################
+# Installation directories
+##################################################
+prefix =	@prefix@
+exec_prefix =	@exec_prefix@
+bindir =	@bindir@
+includedir =	@includedir@
+libdir =	@libdir@
+mandir =	@mandir@
+datarootdir=    @datarootdir@
+
+pkgdatadir =	$(datarootdir)/@PACKAGE@
+pkglibdir =	$(libdir)/@PACKAGE@
+pkgincludedir =	$(includedir)/@PACKAGE@
+
+transform =	@program_transform_name@
+
+######################################################################
+# Programs
+######################################################################
+
+PROGRAMS =
+
+######################################################################
+# LIBRARIES
+######################################################################
+
+LIBRARIES =	$(LIBIXE)
+
+LIBIXE =	libixe.a
+
+######################################################################
+# Files
+######################################################################
+
+ixe_COMMON = \
+		conf/conf.cpp \
+		conf/conf_bool.cpp \
+		conf/conf_float.cpp \
+		conf/conf_int.cpp \
+		conf/conf_set.cpp \
+		conf/conf_string.cpp \
+		Common/OptionStream.cpp
+
+ixe_LIB = \
+	io/File.cpp \
+	io/FileHandle.cpp \
+	io/Format.cpp \
+	io/mappedFile.cpp
+
+ixe_HEADERS = \
+	Common/OptionStream.h \
+	Common/util.h \
+	conf/conf_bool.h \
+	conf/conf.h \
+	conf/conf_int.h \
+	conf/conf_set.h \
+	conf/conf_string.h \
+	conf/conf_vector.h \
+	conf/Conversion.h \
+	conf/ExcludeFile.h \
+	conf/FileType.h \
+	conf/IncludeFile.h \
+	conf/PatternMap.h \
+	conf/PatternList.h \
+	conf/PatternSet.h \
+	include/config.h \
+	include/error.h \
+	include/exit_codes.h \
+	include/ixe.h \
+	include/version.h \
+	io/File.h \
+	io/FileHandle.h \
+	io/mappedFile.h \
+
+######################################################################
+
+libixe_SOURCES =  $(ixe_COMMON) $(ixe_INDEX) $(ixe_SEARCH) $(ixe_LIB)
+libixe_CSOURCES=  $(ixe_CLIB)
+
+EXTRA_DIST =	ixe.conf ChangeLog \
+	lib option_spec.cpp README autoconf aclocal.m4 win32
+
+CONFIG_HEADER =	platform.h
+
+##################################################
+# C, C++
+##################################################
+CPPFLAGS=	@CPPFLAGS@
+CFLAGS=	 	@CFLAGS@
+CXXFLAGS =	@CXXFLAGS@
+LDFLAGS=	@LDFLAGS@
+LIBS =		@LIBS@
+INCLUDES=	-I. -I$(top_builddir)
+
+######################################################################
+# Package
+######################################################################
+
+libixe_OBJECTS:= $(libixe_SOURCES:.cpp=.lo) $(libixe_CSOURCES:.c=.lo)
+
+DIST_COMMON =	README COPYING ChangeLog INSTALL THANKS \
+		Makefile.in Makefile.common.in $(CONFIG_HEADER).in
+
+SOURCES =	$(libixe_SOURCES) $(libixe_CSOURCES)
+OBJECTS =	$(libixe_OBJECTS)
+
+#######################################################################
+# Targets
+#######################################################################
+
+all: $(LIBRARIES) $(PROGRAMS)
+
+$(LIBIXE): $(libixe_OBJECTS)
+	$(AR) $@ $(libixe_OBJECTS)
+	test ! -f $(RANLIB) || $(RANLIB) $@
+
+######################################################################
+# Common rules and targets
+######################################################################
+
+-include $(top_builddir)/Makefile.common

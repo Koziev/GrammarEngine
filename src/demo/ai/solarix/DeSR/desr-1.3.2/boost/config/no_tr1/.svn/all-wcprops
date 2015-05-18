@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/272/trunk/boost/config/no_tr1
+END
+cmath.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/265/trunk/boost/config/no_tr1/cmath.hpp
+END
+utility.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/265/trunk/boost/config/no_tr1/utility.hpp
+END

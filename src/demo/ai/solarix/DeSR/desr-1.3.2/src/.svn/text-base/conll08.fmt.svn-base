@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CorpusFormat name="conll08">
+   <field name="ID"     use="ECHO" value="INTEGER"/>
+   <field name="FORM"   use="IGNORE" value="STRING"/>
+   <field name="LEMMA"  use="IGNORE" value="STRING"/>
+   <field name="GPOS"   use="INPUT" value="STRING"/>
+   <field name="PPOS"   use="INPUT" value="STRING"/>
+   <field name="SPLIT_FORM" use="INPUT" value="STRING" role="FORM"/>
+   <field name="SPLIT_LEMMA" use="INPUT" value="STRING"/>
+   <field name="PPOSS"  use="INPUT" value="STRING"/>
+   <field name="HEAD"   use="OUTPUT" link="DEP" role="HEAD"/>
+   <field name="DEPREL" use="OUTPUT" label="DEP" role="DEPREL"/>
+   <field name="PRED"   use="OUTPUT" value="STRING" role="PREDICATE"/>
+   <field name="ROLE0"  use="OUTPUT" label="ROLE0" default="_"/>
+   <field name="ROLE1"  use="OUTPUT" label="ROLE1" default="_"/>
+   <field name="ROLE2"  use="OUTPUT" label="ROLE2" default="_"/>
+   <field name="ROLE3"  use="OUTPUT" label="ROLE3" default="_"/>
+   <field name="ROLE4"  use="OUTPUT" label="ROLE4" default="_"/>
+</CorpusFormat>

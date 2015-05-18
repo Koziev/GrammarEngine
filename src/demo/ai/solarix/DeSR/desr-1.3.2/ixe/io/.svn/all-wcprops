@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svnroot/desr/!svn/ver/399/trunk/ixe/io
+END
+File.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/251/trunk/ixe/io/File.cpp
+END
+FileHandle.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/217/trunk/ixe/io/FileHandle.h
+END
+pstream.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/10/trunk/ixe/io/pstream.h
+END
+File.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/149/trunk/ixe/io/File.h
+END
+mappedFile.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/172/trunk/ixe/io/mappedFile.cpp
+END
+Format.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/194/trunk/ixe/io/Format.cpp
+END
+FileHandle.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/396/trunk/ixe/io/FileHandle.cpp
+END
+mappedFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/399/trunk/ixe/io/mappedFile.h
+END
+Format.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/149/trunk/ixe/io/Format.h
+END

@@ -43,7 +43,8 @@
    void Add( LA_RecognitionRule * rule );
 
    bool Apply(
-              const lem::UCString &word,
+              const lem::UCString & normalized_word,
+              const lem::UCString & original_word,
               lem::Real1 word_rel,
               lem::MCollect<Solarix::Word_Coord> &found_list,
               lem::MCollect<ProjScore> &val_list,

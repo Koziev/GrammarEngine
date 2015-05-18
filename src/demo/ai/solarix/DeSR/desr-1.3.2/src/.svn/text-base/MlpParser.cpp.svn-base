@@ -1,0 +1,1157 @@
+/*
+**  DeSR
+**  src/MlParser.cpp
+**  ----------------------------------------------------------------------
+**  Copyright (c) 2009  Giuseppe Attardi (attardi@di.unipi.it).
+**  ----------------------------------------------------------------------
+**
+**  This file is part of DeSR.
+**
+**  DeSR is free software; you can redistribute it and/or modify it
+**  under the terms of the GNU General Public License, version 3,
+**  as published by the Free Software Foundation.
+**
+**  DeSR is distributed in the hope that it will be useful,
+**  but WITHOUT ANY WARRANTY; without even the implied warranty of
+**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**  GNU General Public License for more details.
+**
+**  You should have received a copy of the GNU General Public License
+**  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+**  ----------------------------------------------------------------------
+*/
+
+/// ======================================================================
+/// Multi Layer Perceptron parser
+
+// Must be first, since it includes <Python.h>
+#include "State.h"
+#include "Parser.h"
+#include "conf/conf_int.h"
+#include "conf/conf_float.h"
+#include "EventStream.h"
+#include "WordCounts.h"
+
+#ifdef _WIN32
+#include "lib/strtok_r.h"
+#endif
+
+// standard
+#include <algorithm>		// swap
+#include <list>
+
+#ifdef HAVE_TR1_RANDOM
+#include <random>
+#endif
+
+// Boost library
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+
+using namespace std;
+using namespace boost::numeric::ublas;
+
+#include "io/Format.h"
+using IXE::io::Format;
+
+using Tanl::Classifier::Event;
+using Tanl::Classifier::Context;
+using Tanl::Classifier::PID;
+using Tanl::Classifier::ClassID;
+
+namespace Parser {
+
+////////////////////////////////////////////////////////////////////////
+// parameters
+
+struct MlpConfig : public ParserConfig
+{
+  MlpConfig(IXE::Configuration::Params& params) :
+    ParserConfig(params),	// inclue generic parameters
+    numHidden		("MlpHidden", 100, params),
+    numLayers		("MlpLayers", 1, params),
+    LR			("MlpLearningRate", 0.01F, params),
+    randomRange		("RandomRange", 0.05F, params),
+    mlpIterations	("MlpIterations", 100, params),
+    mlpMinIterations	("MlpMinIterations", 5, params),
+    mlpVainIterations	("MlpVainIterations", 3, params)
+  { }
+
+  /** Number of hidden variables. */
+  IXE::conf<int>	numHidden;
+
+  /** Number of hidden layers. */
+  IXE::conf<int>	numLayers;
+
+  /** Learning rate. */
+  IXE::conf<float>	LR;
+
+  /** Random weights in interval [-RandomRange, +RandomRange]. */
+  IXE::conf<float>	randomRange;
+
+  /** Maximum number of iterations to perform. */
+  IXE::conf<int>	mlpIterations;
+  /** Minimum number of iterations to perform. */
+  IXE::conf<int>	mlpMinIterations;
+
+  /** Terminate if no updates occurr for these many iterations. */
+  IXE::conf<int>	mlpVainIterations;
+};
+
+////////////////////////////////////////////////////////////////////////
+
+// Use beam search
+#define BEAM
+
+#define MAX_LINE_LEN 8196
+
+typedef boost::numeric::ublas::vector<double>	Vector;
+typedef matrix<double>	Matrix;
+
+static void softsign(Vector& x)
+{
+  for (size_t i = 0; i < x.size(); i++)
+    x[i] /=  1.0 + fabs(x[i]);
+}
+
+#define READLINE(line, file)   if (!ifs.getline(line, MAX_LINE_LEN)) \
+    throw IXE::FileError(string("Wrong file format: ") + file)
+
+#define READ_WEIGHT(w, file) if (!ifs.read((char*)&w, sizeof(w)))	\
+    throw IXE::FileError(string("Wrong file format: ") + file)
+
+/**
+ *	@ingroup parser
+ */
+
+struct MlpModel : public Tanl::Classifier::Classifier
+{
+  typedef std::vector<Tanl::Classifier::PID> X;
+  typedef Tanl::Classifier::ClassID Y;
+  typedef std::pair<X, Y> Case;         // (x_i, y_i)
+  typedef std::vector<Case> Cases;      // (X, Y)^N, N = size of training data
+  typedef std::vector<Case*> ValidationSet;
+
+  MlpModel(MlpConfig& config) :
+    Tanl::Classifier::Classifier(config.verbose),
+    numHidden(config.numHidden),
+    numLayers(config.numLayers),
+    LR(config.LR),
+    minIterations(config.mlpMinIterations),
+    vainIterations(config.mlpVainIterations),
+    featureCutoff(config.featureCutoff),
+    randomRange(config.randomRange)
+  { }
+
+  MlpModel(int numFeatures, int numOutcomes, int numHidden, int numLayers = 1) :
+    w1(numFeatures, numHidden),
+    b1(numHidden),
+    w2(numHidden, numOutcomes),
+    b2(numOutcomes),
+    numHidden(numHidden),
+    numLayers(numLayers)
+  {
+    if (numLayers == 2) {
+      wh.resize(numHidden, numHidden);
+      bh.resize(numHidden);
+    }
+  }
+
+  ~MlpModel() {
+    FOR_EACH (std::vector<char const*>, outcomeLabels, it)
+      free((void*)*it);
+  }
+
+  list<Event*>
+  		collectEvents(Enumerator<Sentence*>& sentenceReader, GlobalInfo& info);
+
+  /** Create numeric @param cases out of training @param events. */
+  void		buildCases(list<Event*>& events, Cases& cases);
+
+  double	train(Case&, int&);
+
+  /**
+   * Train model with @param cases, performing @param epoch iterations,
+   * saving intermediate model weights to @param ofs.
+   */
+  void		train(Cases& cases, int epoch, ofstream& ofs);
+
+  void		validate(ValidationSet& vs, double& avg, double& std);
+
+  int		crossentropy_softmax(Vector& x, double sm[]);
+
+  Vector	gradCrossentropy(Vector& x, int y);
+
+  /** @return the most likely output. */
+  ClassID	estimate(const std::vector<PID>& features, double prob[]);
+
+  void		load(ifstream& ifs, char const* file = "");
+
+  void		save(ofstream& ofs);
+
+  //protected:
+  void		writeLabels(ofstream& ofs);
+
+  /** @return start stream position, so that it can be rewritten. */
+  streampos	writeData(ofstream& ofs);
+
+  void		clearLabels();
+
+protected:
+  Matrix	w1, w2, wh;
+  Vector	b1, b2, bh;
+  int		numLayers;	///< number of hidden layers
+  int		numHidden;	///< number of hidden variables
+  int		numFeatures;	///< number of features
+  WordIndex	outcomeIndex;
+  float		LR;
+  int		minIterations;
+  int		vainIterations;
+  int		featureCutoff;
+  float		randomRange;
+};
+
+/**
+Yoshua Bengio:
+
+    My preferred style of moving average is the following. Let's say you
+    have a series x_t and you want to estimate the mean m of previous
+    (recent) x's:
+
+    m <-- m + (2/t) (x_t - m)
+
+    Note that with (1/t) learning rate instead of (2/t) you get the exact
+    historical average. With a larger learning rate (like 2/t) you give
+    a bit more importance to recent stuff, which makes sense if x's are
+    non-stationary (very likely here [in the setting of computing the
+    moving average of the training error]). With a constant learning rate
+    (independent of t) you get an exponential moving average.
+
+    You can estimate a running average of the gradient variance by running
+    averages of the mean gradient and of the
+    square of the difference to the moving mean.
+*/
+struct MovingAverage
+{
+  double mean;
+  double variance;
+  int count;
+
+  MovingAverage() :
+    mean(0.0),
+    variance(0.0),
+    count(0)
+  { }
+
+  /**        Add value @param v to the moving average. */
+  void add(double v) {
+    count++;
+    mean += (2. / count) * (v - mean);
+    double this_variance = (v - mean) * (v - mean);
+    variance += (2. / count) * (this_variance - variance);
+  }
+};
+
+void MlpModel::save(ofstream& ofs)
+{
+  writeLabels(ofs);
+  writeData(ofs);
+}
+
+void MlpModel::writeLabels(ofstream& ofs)
+{
+  // dump labels
+  ofs << outcomeLabels.size() << endl;
+  FOR_EACH (std::vector<char const*>, outcomeLabels, pit)
+    ofs << *pit << endl;
+  // dump predLabels
+  ofs << predLabels.size() << endl;
+  FOR_EACH (std::vector<string>, predLabels, pit)
+    ofs << *pit << endl;
+}
+
+void MlpModel::clearLabels()
+{
+  predIndex.clear();
+  WordIndex().swap(predIndex); // STL map do not deallocate. resize(0) has no effect
+  predLabels.clear();
+  std::vector<std::string>().swap(predLabels);
+
+  outcomeIndex.clear();
+  WordIndex().swap(outcomeIndex);
+  FOR_EACH (std::vector<char const*>, outcomeLabels, it)
+    free((void*)*it);
+  outcomeLabels.clear();
+  std::vector<char const*>().swap(outcomeLabels);
+}
+
+streampos MlpModel::writeData(ofstream& ofs)
+{
+  streampos startPos = ofs.tellp();
+
+  // write layers
+  ofs << numLayers << endl;
+
+  // read hidden size
+  ofs << numHidden << endl;
+
+  // write weights
+
+  // w1
+  ofs << numFeatures * numHidden << endl;
+  for (int i = 0; i < numFeatures; i++)
+    for (int j = 0; j < numHidden; j++)
+      ofs.write((char*)&w1(i, j), sizeof(double));
+
+  // b1
+  ofs << numHidden << endl;
+  for (int i = 0; i < numHidden; i++)
+    ofs.write((char*)&b1[i], sizeof(double));
+
+  // w2
+  ofs << numHidden * numOutcomes << endl;
+  for (int i = 0; i < numHidden; i++)
+    for (unsigned j = 0; j < numOutcomes; j++)
+      ofs.write((char*)&w2(i, j), sizeof(double));
+
+  // b2
+  ofs << numOutcomes << endl;
+  for (unsigned i = 0; i < numOutcomes; i++)
+    ofs.write((char*)&b2[i], sizeof(double));
+
+  // optional second layer
+  if (numLayers == 2) {
+    // wh
+    ofs << numHidden * numHidden << endl;
+    for (int i = 0; i < numHidden; i++)
+      for (int j = 0; j < numHidden; j++)
+	ofs.write((char*)&wh(i, j), sizeof(double));
+
+    // bh
+    ofs << numHidden << endl;
+    for (int i = 0; i < numHidden; i++)
+      ofs.write((char*)&bh[i], sizeof(double));
+  }
+  return startPos;
+}
+
+void MlpModel::load(ifstream& ifs, char const* file)
+{
+  // load class labels
+  char line[MAX_LINE_LEN];
+  READLINE(line, file);
+  int len = atoi(line);
+  numOutcomes = len;
+  outcomeLabels.resize(numOutcomes);
+  int n = 0;
+  while (len--) {
+    READLINE(line, file);
+    outcomeLabels[n] = strdup(line);
+    outcomeIndex[(char const*)line] = n++;
+  }
+  // load feature labels
+  READLINE(line, file);
+  numFeatures = len = atoi(line);
+  predLabels.resize(numFeatures);
+  n = 0;
+  while (len--) {
+    READLINE(line, file);
+    predLabels[n] = line;
+    predIndex[(char const*)line] = n++;
+  }
+
+  // read layers
+  READLINE(line, file);
+  numLayers = atoi(line);
+
+  // back compatibility:
+  if (numLayers > 3) {
+    numHidden = numLayers;
+    numLayers = 1;
+  } else {
+    // read hidden size
+    READLINE(line, file);
+    numHidden = atoi(line);
+  }
+
+  w1.resize(numFeatures, numHidden);
+  // load weights
+
+  // w1
+  READLINE(line, file);
+  len = atoi(line);		// numFeatures * numHidden
+  if (len != numFeatures * numHidden)
+    throw IXE::FileError(string("Wrong w1 size: ") + file);
+  n = 0;
+  double w;
+  while (len--) {
+    READ_WEIGHT(w, file);
+    w1(n / numHidden, n % numHidden) = w;
+    n++;
+  }
+
+  // b1
+  b1.resize(numHidden);
+  READLINE(line, file);
+  len = atoi(line);		// numHidden
+  n = 0;
+  while (len--) {
+    READ_WEIGHT(w, file);
+    b1[n++] = w;
+  }
+
+  // w2
+  w2.resize(numHidden, numOutcomes);
+  READLINE(line, file);
+  len = atoi(line);		// numHidden * numOutcomes
+  if (len != numHidden * numOutcomes)
+    throw IXE::FileError(string("Wrong w2 size: ") + file);
+  n = 0;
+  while (len--) {
+    READ_WEIGHT(w, file);
+    w2(n / numOutcomes, n % numOutcomes) = w;
+    n++;
+  }
+
+  // b2
+  b2.resize(numOutcomes);
+  READLINE(line, file);
+  len = atoi(line);		// numOutcomes
+  n = 0;
+  while (len--) {
+    READ_WEIGHT(w, file);
+    b2[n++] = w;
+  }
+
+  // optional second layer
+  if (numLayers == 2) {
+    // wh
+    wh.resize(numHidden, numHidden);
+    READLINE(line, file);
+    len = atoi(line);		// numHidden * numHidden
+    if (len != numHidden * numHidden)
+      throw IXE::FileError(string("Wrong wh size: ") + file);
+    n = 0;
+    while (len--) {
+      READ_WEIGHT(w, file);
+      wh(n / numHidden, n % numHidden) = w;
+      n++;
+    }
+
+    // bh
+    bh.resize(numHidden);
+    READLINE(line, file);
+    len = atoi(line);		// numHidden
+    n = 0;
+    while (len--) {
+      READ_WEIGHT(w, file);
+      bh[n++] = w;
+    }
+  }
+}
+
+/**
+ * Compute:
+ *
+ *     softmax(x)[i] = exp(x[i]) / sum_j(exp(x[j]))
+ *
+ * We compute this by subtracting off the max of x. This avoids numerical instability.
+ *
+ *     m = max_j x[j]
+ *     softmax(x)[i] = exp(x[i] -m) / sum_j(exp(x[j] - m))
+ *
+ * Negative log likelihood at index t is:
+ *
+ *     nll(x,t) = -log(softmax(x)[t])
+ *
+ *	@return argmax(softmax)
+ */
+int MlpModel::crossentropy_softmax(Vector& x, double sm[])
+{
+  // get the maximum value of x for numerically safe softmax
+  double m = 0.0;
+  int am = 0;
+  for (unsigned i = 0; i < numOutcomes; i++)
+    if (x[i] > m) {
+      am = i;
+      m = x[i];
+    }
+  // compute the unnormalized softmax, and normalization constant
+  double sum_j = 0.0;
+  for (unsigned i = 0; i < numOutcomes; i++)
+    sum_j += sm[i] = exp(x[i] - m);
+
+  // normalized softmax
+  for (unsigned i = 0; i < numOutcomes; i++)
+    sm[i] /= sum_j;
+  return am;
+}
+
+Vector MlpModel::gradCrossentropy(Vector& x, int y)
+{
+  Vector sm(numOutcomes);
+  crossentropy_softmax(x, &sm[0]);
+  sm[y] -= 1.0;                 // scalar decrement
+  return sm;
+}
+
+ClassID MlpModel::estimate(const std::vector<PID>& features, double prob[])
+{
+  Vector h(numHidden);
+  for (int i = 0; i < numHidden; i++)
+    h[i] = 0.0;
+  for (size_t f = 0; f < features.size(); f++)
+    h += row(w1, features[f]);
+  h += b1;
+  softsign(h);		// first layer
+  if (numLayers > 1) {
+    h = prod(wh, h) + bh;
+    softsign(h);		// second layer
+  }
+  Vector o(numOutcomes);
+  noalias(o) = prod(h, w2) + b2;
+  return crossentropy_softmax(o, prob);
+}
+
+void show(Vector& x)
+{
+  for (size_t i = 0; i < x.size(); i++) {
+    cerr << x[i] << ' '; if ((i+1) % 5 == 0) cerr << endl; }
+  cerr << endl;
+}
+
+/**
+ *  Compute the gradients with respect to negative log likelihodd:
+ *
+ *  x = h w2 + b2
+ *  xw1 = SUM_f w1[f]
+ *  h = softsign(xw1 + b1)
+ *  h' = 1 / (1 + abs(xw1 + b1))^2
+ *  nll = -x[t] + log(Sum_j(exp(x[j])))
+ *  d nll/dx = - d x[t]/dx + 1/Sum_j(exp(x[j])) Sum_j(exp(x[j]) d x[j]/ dx)
+ *           = [0 .. -1@t .. 0] + 1
+ *
+ *  d nll/dw1 = dnll/dx dx/dw1 = dnll/dx (dh/dw1 w2) = dnll/dx (h' w2) dxw1/dx
+ *  d nll/db1 = dnll/dx dx/db1 = dnll/dx (dh/db1 w2) = dnll/dx (h' w2)
+ *  d nll/dw2 = dnll/dx dx/dw2 = dnll/dx h
+ *  d nll/db2 = dnll/dx dx/db2 = dnll/dx
+ *
+ *  Return in @param argmax the most likely result.
+ *
+ *	@return the negative log likelihood.
+ */
+double MlpModel::train(Case& cas, int& argmax)
+{
+  X& features = cas.first;
+  Y y = cas.second;
+  Vector xw1(numHidden);
+  for (int i = 0; i < numHidden; i++)
+    xw1[i] = 0.0;
+  for (size_t f = 0; f < features.size(); f++)
+    xw1 += row(w1, features[f]);
+  Vector h(numHidden);
+  noalias(h) = xw1 + b1;
+  softsign(h);
+  /*
+  if (numLayers > 1) {
+    noalias(h2) = prod(wh, h) + bh;
+    softsign(h2);		// second layer
+  }
+  */
+  Vector o(numOutcomes);
+  noalias(o) = prod(h, w2) + b2;
+
+  std::vector<double> softmax(numOutcomes);
+  argmax = crossentropy_softmax(o, &softmax[0]);
+  double kl = -log(softmax[y]);
+
+  Vector gb2(numOutcomes);
+  gb2 = gradCrossentropy(o, y);
+
+  Matrix gw2(numHidden, numOutcomes);
+  noalias(gw2) = outer_prod(h, gb2); // h x gb2
+
+  Vector hprimeInv(numHidden);	// (1 + |xw1 + b1|)^2
+  for (int i = 0; i < numHidden; i++) {
+    double hi = 1. + abs(xw1[i] + b1[i]);
+    hprimeInv[i] = hi * hi;
+  }
+
+  Vector gb1(numHidden);
+  noalias(gb1) = element_div(prod(w2, gb2), hprimeInv);
+
+  // Only sum the gradient along the non-zeroes.
+  for (size_t i = 0; i < features.size(); i++)
+    for (int j = 0; j < numHidden; j++)
+      w1(features[i], j) -= gb1(j) * LR;
+
+  b1 -= gb1 * LR;
+  if (numLayers == 2) {
+    Matrix gwh(numHidden, numHidden);
+    Vector gbh(numHidden);
+    wh -= gwh * LR;
+    bh -= gbh * LR;
+  }
+  w2 -= gw2 * LR;
+  b2 -= gb2 * LR;
+
+  return kl;
+}
+
+/**
+ * Produces a permutation of the vector @c v.
+ * This is useful for randomizing the processing order of the training data.
+ * @see http://www.techuser.net/randpermgen.html
+ */
+// FIXME: share this with ap.cpp
+static void rand_permutation(std::vector<int>& v) {
+  size_t N = v.size();
+  for (size_t i = 0; i < N; i++)
+    v[i] = i;			// initialize to a sequence
+  for (size_t i = 0; i < N-1; i++) { // nothing to do for i==N-1
+    int r = i + rand() % (N-i); // no need to use high-order bits
+    std::swap(v[i], v[r]);
+  }
+}
+
+void MlpModel::train(Cases& cases, int epochs, ofstream& ofs)
+{
+  if (verbose)
+    cerr << "Starting training.." << endl;
+
+  // save current stream position
+  streampos dataStart = ofs.tellp();
+
+  MovingAverage mvgavg_accuracy;
+  MovingAverage mvgavg_loss;
+
+  double best_validation_accuracy = 0.0;
+  int best_validation_at = 0;
+  int cnt = 0;
+
+  ValidationSet vs;
+
+  int numCases = cases.size();
+  std::vector<int> perm(numCases);
+  for (int it = 0; it < epochs; ++it) {
+    if (verbose)
+      cerr << " EPOCH #" << it << " (" << numCases*it << " examples)" << endl;
+    rand_permutation(perm);
+    vs.clear();
+    for (int i = 0; i < numCases; i++) {
+      cnt++;
+      Case& cas = cases[perm[i]];
+      // save 1% random cases for validation
+      if (rand() < RAND_MAX / 100)
+	vs.push_back(&cas);
+      else {
+	int argmax;
+	double kl = train(cas, argmax);
+	double accuracy = (argmax == cas.second) ? 100.0 : 0.0;
+	mvgavg_accuracy.add(accuracy);
+	mvgavg_loss.add(kl);
+      }
+      if (verbose && cnt % 1000 == 0) {
+	if (cnt % 10000 == 0) {
+	  cerr << '+' << flush;
+	  if (cnt % 80000 == 0) {
+	    cerr << endl
+		 << Format("After %d examples: training accuracy = %f, loss = %f",
+			   cnt, mvgavg_accuracy.mean, mvgavg_loss.mean)
+		 << endl;
+	  }
+	} else if (cnt % 1000 == 0)
+	  cerr << '.' << flush;
+      }
+    }
+    // perform validation
+    double valacc, valstd;
+    validate(vs, valacc, valstd);
+    if (verbose)
+      cerr << endl
+	   << Format("After %d examples: validation accuracy = %.2f%%, stddev= %.2f%% (former best=%.2f%% at %d)\n",
+		     cnt, valacc*100, valstd*100, best_validation_accuracy*100, best_validation_at)
+	   << Parser::procStat() << endl;;
+    // check for improvement
+    if (best_validation_accuracy < valacc) {
+	best_validation_accuracy = valacc;
+	best_validation_at = cnt;
+	if (verbose) 
+	  cerr << Format("NEW BEST VALIDATION ACCURACY: %.2f%%.", valacc*100.)
+	       << " Saving model...";
+	ofs.seekp(dataStart);
+	writeData(ofs);
+	if (verbose) 
+	  cerr << endl;
+      } else if (cnt - best_validation_at >= vainIterations * numCases &&
+		 cnt / numCases >= minIterations) {
+      if (verbose) {
+	cerr << "Have not beaten best validation accuracy for "
+	     << vainIterations << " iterations. Terminating training..."
+	     << endl;
+      }
+      break;
+    }
+  }
+}
+
+void MlpModel::validate(ValidationSet& vs, double& avg, double& std)
+{
+  avg = 0.0;		// average accuracy
+  std = 0.0;
+  for (size_t i = 0; i < vs.size(); i++) {
+    Case& cas = *vs[i];
+    X& x  = cas.first;
+    Y y = cas.second;
+
+    std::vector<double> sm(numOutcomes);
+    int argmax = estimate(x, &sm[0]);
+
+    double acc = double(argmax == y);
+    avg = (avg * i + acc) / (i+1);
+
+    std = (std * i + (acc - avg)*(acc - avg)) / (i+1);
+  }
+}
+
+/**
+ *	@ingroup parser
+ *
+ *	A Parser using a Multi Layer Perceptron classifier.
+ */
+struct MlpParser : public Parser
+{
+  MlpParser(char const* modelFile);
+
+  void		train(SentenceReader* sentenceReader, char const* modelFile);
+
+  Sentence*	parse(Sentence* sentence);
+
+  void		revise(SentenceReader* sentenceReader, char const* actionFile = 0);
+
+  MlpModel	model;
+
+  int		iter;		///< number of epochs
+
+  MlpConfig	config;		///< full configuration (inherits from ParseConfig)
+};
+
+/**
+ *	@ingroup parser
+ *
+ *	Constructor for MlpParser
+ */
+Parser*	MlpParserFactory(char const* modelFile = 0)
+{
+  return new MlpParser(modelFile);
+}
+
+REGISTER_PARSER(MLP, MlpParserFactory);
+
+MlpParser::MlpParser(char const* modelFile) :
+  Parser(model.PredIndex(), config), // use our own config
+  config(params),	      // use our own params, inherited from Parser
+  model(config)
+{
+  model.verbose = config.verbose;
+  if (!modelFile)
+    return;			// training
+  ifstream ifs(modelFile, ios::binary);
+  if (!ifs)
+    throw IXE::FileError(string("Missing model file: ") + modelFile);
+  // load header
+  config.load(ifs);
+  model.load(ifs);
+  // read entities
+  info.load(ifs);
+}
+
+/**
+ * Collect events from @c sentenceReader
+ */
+list<Event*>
+MlpModel::collectEvents(Enumerator<Sentence*>& sentenceReader, GlobalInfo& info)
+{
+  if (verbose)
+    cerr << "Collecting events.." << endl;
+
+  list<Event*> events;
+
+  WordCounts predCount; // count predicate occurrences
+
+  int evCount = 0;
+  PID pID = 0;
+  // create inverted index of predicate names
+  // used to create vector of pIDs
+  EventStream eventStream(&sentenceReader, &info);
+  ClassID oID = 0;
+
+  while (eventStream.hasNext()) {
+    Event* ev = eventStream.next();
+    events.push_back(ev);
+    evCount++;		      // count them explicitly, since size() is costly
+    if (verbose) {
+      if (evCount % 10000 == 0)
+	cerr << '+' << flush;
+      else if (evCount % 1000 == 0)
+	cerr << '.' << flush;
+    }
+    char const* c = ev->className.c_str();
+    if (outcomeIndex.find(c) == outcomeIndex.end()) {
+      outcomeIndex[c] = oID++;
+      outcomeLabels.push_back(strdup(c));
+    }
+    std::vector<string>& ec = ev->features; // ec = {p1, ... , pn}
+    // ASSERT: code will always be found
+    for (unsigned j = 0; j < ec.size(); j++) {
+      string& pred = ec[j];
+      // decide whether to retain it (# occurrences > cutoff)
+      if (predIndex.find(pred.c_str()) == predIndex.end()) {
+	// not yet among those retained
+	// increment # of occurrences
+	int count = predCount.add(pred);
+	if (count >= featureCutoff) {
+	  predLabels.push_back(pred); // accept it into predLabels
+	  predIndex[pred.c_str()] = pID++;
+	  predCount.erase(pred);
+	}
+      }
+    }
+  }
+  if (verbose)
+    cerr << endl;
+  numOutcomes = oID;
+  numFeatures = pID;		// predIndex will be cleared later.
+  // free memory
+  predCount.clear();
+  WordCounts().swap(predCount);
+
+  return events;
+}
+
+#ifdef HAVE_TR1_RANDOM
+#define TWO48 281474976710656
+std::tr1::linear_congruential<unsigned long long, 25214903917, 11, TWO48> drand48Gen;
+#define srand48(x) drand48Gen.seed(x)
+#define drand48() drand48Gen()/double(TWO48)
+#endif
+
+#define RAND_WEIGHT (randomRange * (2.0 * drand48() - 1.0))
+
+void MlpModel::buildCases(list<Event*>& events, Cases& cases)
+{
+  // initialize weights
+  srand48(1);
+
+  w1.resize(numFeatures, numHidden);
+  //double sqrtin = sqrt(numFeatures);
+  for (int i = 0; i < numFeatures; i++)
+    for (int j = 0; j < numHidden; j++)
+      w1(i, j) = RAND_WEIGHT;
+     //w1(i, j) = 0.01 * j * (j % 2 - 0.5)/ sqrtin;
+  b1.resize(numHidden);
+  for (int i = 0; i < numHidden; i++)
+    b1(i) = 0.0;
+  w2.resize(numHidden, numOutcomes);
+  //double sqrth = sqrt(numHidden);
+  for (int i = 0; i < numHidden; i++)
+    for (unsigned j = 0; j < numOutcomes; j++)
+      w2(i, j) = RAND_WEIGHT;
+      //w2(i, j) = 0.01 * j * (j % 2 - 0.5)/ sqrth;
+  b2.resize(numOutcomes);
+  for (unsigned i = 0; i < numOutcomes; i++)
+    b2(i) = 0.0;
+  if (numLayers == 2) {
+    wh.resize(numHidden, numHidden);
+    for (int i = 0; i < numHidden; i++)
+      for (int j = 0; j < numHidden; j++)
+	wh(i, j) = RAND_WEIGHT;
+    bh.resize(numHidden);
+    for (int i = 0; i < numHidden; i++)
+      bh(i) = 0.0;
+  }
+
+  size_t evCount = events.size();
+  cases.reserve(evCount);
+  int n = 0;
+  while (!events.empty()) {
+    Event* ev = events.front();
+    events.pop_front();
+    cases.push_back(Case());
+    X& x = cases[n].first;	// features
+    // add features
+    std::vector<string>& ec = ev->features; // ec = {p1, ... , pn}
+    char const* c = ev->className.c_str();
+    for (unsigned j = 0; j < ec.size(); j++) {
+      string& pred = ec[j];
+      WordIndex::const_iterator pit = predIndex.find(pred.c_str());
+      if (pit != predIndex.end()) {
+	x.push_back(pit->second);
+      }
+    }
+    if (x.size()) {
+      cases[n].second = outcomeIndex[c];
+      n++;
+      if (verbose) {
+	if (n % 10000 == 0)
+	  cerr << '+' << flush;
+	else if (n % 1000 == 0)
+	  cerr << '.' << flush;
+      }
+      //x.push_back(0);		// bias
+    }
+    delete ev;
+  }
+  cases.resize(n);
+  if (verbose)
+    cerr << endl;
+  if (verbose) {
+    cerr << "\t    Number of events: " << evCount << endl;
+    cerr << "\t   Number of Classes: " << outcomeLabels.size() << endl;
+    cerr << "\tNumber of Predicates: " << predIndex.size() << endl;
+  }
+}
+
+void MlpParser::train(SentenceReader* sentenceReader, char const* modelFile)
+{
+  // collect sentences and replace unfrequent token attributes with UNKNOWN.
+  std::deque<Sentence*> sentences = collectSentences(sentenceReader);
+  Tanl::SentenceQueueReader sr(sentences);
+
+  // set params from config:
+  model = MlpModel(config);
+
+  list<Event*> events = model.collectEvents(sr, info);
+
+  MlpModel::Cases cases;
+  model.buildCases(events, cases);
+
+  ofstream ofs(modelFile, ios::binary | ios::trunc);
+  // dump configuration settings
+  config.writeHeader(ofs);
+
+  // dump predicate and outcome labels
+  model.writeLabels(ofs);
+  streampos dataStart = model.writeData(ofs);
+
+  // free memory
+  model.clearLabels();
+
+  // clear memory for unfrequent entities
+  info.clearRareEntities();
+  // dump entities
+  info.save(ofs);
+  info.clear();
+  ofs.seekp(dataStart);		// rewind
+
+  // compute weights and dump best values to ofs.
+  model.train(cases, config.mlpIterations, ofs);
+}
+
+#ifdef BEAM
+// FIXME: this is duplicated in MlpParser.cpp
+/**
+ * Insert @param s in beam vector @param states.
+ * Assume insertion is possible, i.e. there is either space in the beam
+ * or @c s has better @c lprob than the worst in the beam.
+ */
+static double addState(ParseState* s, std::vector<ParseState*>& states)
+{
+  int size = states.size();
+  int beam = states.capacity();
+  assert(size < beam || s->lprob > states[size-1]->lprob);
+  s->incRef();		// will be referenced from states
+  // create space
+  if (size == beam) {
+    ParseState* last = states.back();
+    last->decRef();		// out of states
+    last->prune();
+    states.pop_back();
+  }
+  TO_EACH (std::vector<ParseState*>, states, it)
+    if (s->lprob > (*it)->lprob) {
+      states.insert(it, s);
+      return states.back()->lprob;
+    }
+  states.push_back(s);
+  return s->lprob;
+}
+#endif
+
+Sentence* MlpParser::parse(Sentence* sentence)
+{
+  int numOutcomes = model.NumOutcomes();
+# ifdef _MSC_VER
+  std::vector<double> paramsV(numOutcomes);
+  double* params = &paramsV[0];
+# else
+  double params[numOutcomes];
+# endif
+  preprocess(sentence);
+  ParseState* state = new ParseState(*sentence, &info, predIndex);
+
+# ifdef BEAM
+  Language const* lang = sentence->language;
+  int beam = config.beam;
+
+  std::vector<ParseState*> currStates; currStates.reserve(beam);
+  std::vector<ParseState*> nextStates; nextStates.reserve(beam);
+  std::vector<ParseState*>* bestStates = &currStates;
+  std::vector<ParseState*>* bestNextStates = &nextStates;
+  addState(state, *bestStates);	// calls incRef()
+  int step = 0;
+
+  while (true) {
+#   ifdef DEBUG_MORPH
+    cerr << "STEP: " << step++ << endl;
+#   endif
+    int finished = 0;
+    int numBest = bestStates->size();
+    double worstProb = -numeric_limits<double>::infinity();
+    for (int i = 0; i < numBest; i++) {
+      state = (*bestStates)[i];
+      if (state->hasNext()) {
+	Tanl::Classifier::Context& context = *state->next();
+	model.estimate(context, params);
+	for (int o = 0; o < numOutcomes; o++) {
+	  double prob = params[o];
+	  if (prob < 1e-4)
+	    continue;		// not worth considering
+	  double lprob = log(prob) + state->lprob;
+	  if (bestNextStates->size() == beam && lprob < worstProb)
+	    continue;		// not worth considering
+	  char const* outcome = model.OutcomeName(o);
+	  if (state->stack.size() > 1 && state->input.size()) {
+	    Token* top = state->stack.back()->token;
+	    Token* next = state->input.back()->token;
+	    if ((outcome[0] == 'L' && !lang->morphoRight(*next->pos()) ||
+		 outcome[0] == 'R' && !lang->morphoLeft(*top->pos())) &&
+		((top->morpho.number && next->morpho.number &&
+		  !lang->numbAgree(top->morpho.number, next->morpho.number)) ||
+		 (top->morpho.gender && next->morpho.gender &&
+		  !lang->gendAgree(top->morpho.gender, next->morpho.gender)))) {
+	      lprob = log(prob / 10.) + state->lprob; // best: 10, LAS 87.85
+	      if (bestNextStates->size() == beam && lprob < worstProb)
+		continue;
+	    }
+	  }
+	  ParseState* next = state->transition(outcome);
+	  if (!next) // dead end.
+	    continue;
+#	  ifdef DEBUG_MORPH
+	  cerr << i << " " << outcome << " " << prob << " " << lprob << " ";
+	  for (ParseState* s = next; s; s = (ParseState*)s->previous)
+	    if (s->action)
+	      cerr << s->action << ' ';
+	  cerr << endl;
+#	  endif
+	  next->lprob = lprob;
+	  worstProb = addState(next, *bestNextStates); // does incRef()
+	}
+      } else if (bestNextStates->size() < (size_t)beam || state->lprob > worstProb) {
+	// already finished: promote to bestNextStates
+	worstProb = addState(state, *bestNextStates); // does incRef()
+	finished++;
+      }
+    }
+    if (bestNextStates->empty())
+      break;			// no advance
+    // clear bestStates, purge dead ends
+    // purge after cycle, since if bestNextStates->empty()
+    // these states will be the outputs and will be pruned later.
+    FOR_EACH (std::vector<ParseState*>, *bestStates, it) {
+      ParseState* state = (*it);
+      state->decRef();		// no longer in bestStates
+      state->prune();
+    }
+    bestStates->clear();
+    // swap vectors
+    std::vector<ParseState*>* tmp = bestStates;
+    bestStates = bestNextStates;
+    bestNextStates = tmp;
+    if (finished == numBest)
+      break;
+  }
+  // choose best sentence as output, discard the rest.
+  Sentence* s = (*bestStates)[0]->getSentence();
+  if (config.ShowActions) {
+    ParseState* state = (*bestStates)[0];
+    std::vector<char const*> seq;
+    for (ParseState* s = state; s; s = (ParseState*)s->previous)
+      if (s->action)
+	seq.push_back(s->action);
+    for (int i = seq.size()-1; i >= 0; i--)
+      cerr << seq[i] << ' ';
+    cerr << endl;
+  }
+# ifdef DEBUG_MORPH
+  for (int i = 0; i < bestStates->size(); i++) {
+    ParseState* state = (*bestStates)[i];
+    std::vector<char const*> seq;
+    for (ParseState* s = state; s; s = (ParseState*)s->previous)
+      if (s->action)
+	seq.push_back(s->action);
+    for (int i = seq.size()-1; i >= 0; i--)
+      cerr << seq[i] << ' ';
+    cerr << endl;
+    cerr << "lprob: " << state->lprob << endl;
+  }
+# endif
+  if (config.ShowPerplexity) {
+    double avg = 0.0;
+    double min = 1.0;
+    double n = 0.0;
+    for (ParseState* s = (*bestStates)[0]; s; s = (ParseState*)s->previous) {
+      double prob = exp(s->lprob);
+      avg += prob;
+      if (prob < min)
+	min = prob;
+      n++;
+    }
+    avg /= n;
+    cout << "<LogLikelihood all=" << (*bestStates)[0]->lprob;
+    cout << " avg=" << avg << " min=" << min << " />" << endl;
+  }
+  FOR_EACH (std::vector<ParseState*>, *bestStates, it) {
+    (*it)->decRef();
+    (*it)->prune();
+  }
+
+# ifdef ORACLE
+  // check classifier accuracy with oracle
+  TrainState ts(*sentence, &info);
+  while (ts.hasNext()) {
+    Event* ev = ts.next();
+    string& action = ev->className;
+    Context context(ev->features, predIndex);
+    ClassID best = model.estimate(context, params);
+    if (action == model.OutcomeName(best))
+      oracleCorrect++;
+    oracleCount++;
+    ts.transition(action.c_str());
+  }
+# endif
+  return s;
+
+# else // !BEAM
+
+  while (state->hasNext()) {
+    Context& context = *state->next();
+    model.estimate(context, params);
+    int best = model.BestOutcome(params);
+    char const* outcome = model.OutcomeName(best);
+    ParseState* next = state->transition(outcome);
+    if (!next)
+      next = state->transition("S");
+    state = next;
+  }
+  Sentence* s = state->getSentence();
+  state.prune();
+  return s;
+# endif // BEAM
+}
+
+void MlpParser::revise(SentenceReader* sentenceReader, char const* actionFile)
+{}
+
+} // namespace Parser

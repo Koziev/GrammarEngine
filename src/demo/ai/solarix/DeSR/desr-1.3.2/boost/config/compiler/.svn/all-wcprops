@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler
+END
+sunpro_cc.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/sunpro_cc.hpp
+END
+sgi_mipspro.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/sgi_mipspro.hpp
+END
+gcc.hpp.orig
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/209/trunk/boost/config/compiler/gcc.hpp.orig
+END
+greenhills.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/209/trunk/boost/config/compiler/greenhills.hpp
+END
+gcc.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/gcc.hpp
+END
+digitalmars.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/digitalmars.hpp
+END
+metrowerks.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/metrowerks.hpp
+END
+compaq_cxx.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/compaq_cxx.hpp
+END
+mpw.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/mpw.hpp
+END
+kai.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/kai.hpp
+END
+visualc.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/visualc.hpp
+END
+common_edg.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/common_edg.hpp
+END
+vacpp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/vacpp.hpp
+END
+comeau.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/comeau.hpp
+END
+intel.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/intel.hpp
+END
+hp_acc.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/hp_acc.hpp
+END
+borland.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/desr/!svn/ver/254/trunk/boost/config/compiler/borland.hpp
+END

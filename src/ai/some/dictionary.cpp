@@ -1989,7 +1989,7 @@ void Dictionary::LA_Project_Lexem(
 
  if( res.empty() )
   {
-   GetLexAuto().ProjectUnknown( ml, res, val_list, inf_list, id_language, false );
+   GetLexAuto().ProjectUnknown( ml, Word, res, val_list, inf_list, id_language, false );
    nproj = CastSizeToInt(res.size());
   }
 

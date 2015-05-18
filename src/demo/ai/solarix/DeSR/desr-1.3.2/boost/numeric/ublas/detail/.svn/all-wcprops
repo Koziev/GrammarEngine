@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail
+END
+iterator.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/iterator.hpp
+END
+definitions.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/definitions.hpp
+END
+returntype_deduction.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/desr/!svn/ver/208/trunk/boost/numeric/ublas/detail/returntype_deduction.hpp
+END
+temporary.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/temporary.hpp
+END
+config.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/config.hpp
+END
+vector_assign.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/vector_assign.hpp
+END
+matrix_assign.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/desr/!svn/ver/254/trunk/boost/numeric/ublas/detail/matrix_assign.hpp
+END

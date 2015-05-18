@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/270/trunk/boost/utility
+END
+addressof.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/addressof.hpp
+END
+swap.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/swap.hpp
+END
+compare_pointees.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/compare_pointees.hpp
+END
+value_init.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/value_init.hpp
+END
+in_place_factory.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/in_place_factory.hpp
+END
+result_of.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/result_of.hpp
+END
+base_from_member.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/base_from_member.hpp
+END
+binary.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/binary.hpp
+END
+enable_if.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/enable_if.hpp
+END
+typed_in_place_factory.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/typed_in_place_factory.hpp
+END

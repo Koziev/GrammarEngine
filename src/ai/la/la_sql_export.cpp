@@ -258,9 +258,12 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
      coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetState() ).c_str() );
     }
 
-   out.printf( "INSERT INTO recog_rule( id, name, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-               " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( %d, '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us );\n",
-               rule->GetId(), lem::to_upper(rule->GetName()).c_str(), rule->GetLanguage(),
+   out.printf( "INSERT INTO recog_rule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix,"
+               " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( %d, '%us', %d, %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us );\n",
+               rule->GetId(),
+               lem::to_upper(rule->GetName()).c_str(),
+               rule->IsCaseSensitive() ? 1 : 0,
+               rule->GetLanguage(),
                rule->IsSyllab() ? 1 : 0,
                rule->IsRegex() ? 1 : 0,
                rule->IsPrefix() ? 1 : 0,

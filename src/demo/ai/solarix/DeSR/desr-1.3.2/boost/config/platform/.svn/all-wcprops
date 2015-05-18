@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform
+END
+irix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/209/trunk/boost/config/platform/irix.hpp
+END
+solaris.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform/solaris.hpp
+END
+linux.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/208/trunk/boost/config/platform/linux.hpp
+END
+amigaos.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/desr/!svn/ver/209/trunk/boost/config/platform/amigaos.hpp
+END
+cygwin.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform/cygwin.hpp
+END
+aix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/209/trunk/boost/config/platform/aix.hpp
+END
+macos.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform/macos.hpp
+END
+win32.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/desr/!svn/ver/209/trunk/boost/config/platform/win32.hpp
+END
+hpux.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform/hpux.hpp
+END
+beos.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/209/trunk/boost/config/platform/beos.hpp
+END
+bsd.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/254/trunk/boost/config/platform/bsd.hpp
+END

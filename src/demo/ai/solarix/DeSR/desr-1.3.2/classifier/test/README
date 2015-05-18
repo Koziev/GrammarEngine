@@ -1,0 +1,38 @@
+
+Sample usage of the Maximum Entropy Classifier.
+
+1. Check that in the Makefile you have the proper definitions of
+   the directories for libME.a
+
+	MEDIR = ../model
+
+   On Windows you need also strtok_r which is part of IXE, so you may
+   also need:
+
+	IXEDIR = ../../ixe
+
+2. Compile with:
+
+	make
+
+3. Train the model, for instance on the file gameLocation.dat
+
+	train gameLocation gameLocation.dat
+
+   This produces a model in gameLocation.mem.
+
+4. Test the model:
+
+	predict gameLocation.mem
+
+   Here is a sample transcript:
+
+Sunny
+For context: Sunny
+ Outdoor: 0.998138 Indoor: 0.00186215
+Cloudy Happy
+For context: Cloudy Happy
+ Outdoor: 0.968307 Indoor: 0.0316934
+Rainy
+For context: Rainy
+ Outdoor: 0.00125309 Indoor: 0.998747

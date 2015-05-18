@@ -53,6 +53,10 @@ namespace Solarix
 
    lem::MCollect< std::pair<lem::UCString,lem::UCString> > model_params;
 
+   std::multimap<lem::UCString,lem::UCString> wordform2semantic;
+   std::multimap<lem::UCString,lem::UCString> lemma2semantic;
+
+
   public:
    static void LoadUtf8( lem::Stream & bin, lem::UCString & str );
 
@@ -66,6 +70,8 @@ namespace Solarix
    int GetSuffixId( const LexerTextPos * token ) const;
    bool DetectAa( const LexerTextPos * token ) const;
 
+   void GetSemanticTags( Dictionary & dict, const LexerTextPos * token, lem::MCollect<const wchar_t*> & tags ) const;
+
    int GetSTART_suffix() const { return START_id; }
    int GetEND_suffix() const { return END_id; }
 
@@ -76,6 +82,8 @@ namespace Solarix
    int GetMaxSuffixLen() const { return suffix_len; }
 
    const lem::UCString FindModelParam( const wchar_t * param_name, const wchar_t * default_value ) const;
+
+   void PrintTags( lem::OFormatter & out, Dictionary & dict ) const;
  };
 
 
@@ -100,6 +108,7 @@ namespace Solarix
   std::string POS_PP; // притяж_частица
   std::string POS_MU; // единица измерения
 
+  lem::MCollect<const wchar_t*> semantic_tags;
   lem::MCollect<int> allform_tags;
   lem::MCollect<lem::UCString> str_features;
 
@@ -144,6 +153,7 @@ namespace Solarix
    bool EMIT_FORM_TAGS;
    bool EMIT_FORMTAGS_FOR_CONTEXT;
    bool EMIT_POS_TAGS;
+   bool EMIT_SEMANTIC_TAGS;
 
    ModelTokenFeatures* Get_START_Features() const;
    ModelTokenFeatures* Get_END_Features() const;

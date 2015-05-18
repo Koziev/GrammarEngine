@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/detail
+END
+in_place_factory_prefix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/detail/in_place_factory_prefix.hpp
+END
+result_of_iterate.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/detail/result_of_iterate.hpp
+END
+in_place_factory_suffix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/desr/!svn/ver/270/trunk/boost/utility/detail/in_place_factory_suffix.hpp
+END

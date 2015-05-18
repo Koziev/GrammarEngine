@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/396/trunk/classifier
+END
+MaxEnt.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/217/trunk/classifier/MaxEnt.h
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/135/trunk/classifier/Makefile.in
+END
+LBFGS.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/122/trunk/classifier/LBFGS.h
+END
+EventStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/107/trunk/classifier/EventStream.h
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/373/trunk/classifier/ChangeLog
+END
+lbfgsAlg.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/220/trunk/classifier/lbfgsAlg.cpp
+END
+GIS.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/217/trunk/classifier/GIS.cpp
+END
+lbfgsAlg.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/107/trunk/classifier/lbfgsAlg.h
+END
+StreamTokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/desr/!svn/ver/107/trunk/classifier/StreamTokenizer.cpp
+END
+Event.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/172/trunk/classifier/Event.h
+END
+GIS.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/220/trunk/classifier/GIS.h
+END
+Classifier.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/396/trunk/classifier/Classifier.h
+END
+StreamTokenizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/desr/!svn/ver/115/trunk/classifier/StreamTokenizer.h
+END
+FeatureExtractor.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/desr/!svn/ver/107/trunk/classifier/FeatureExtractor.h
+END
+MaxEnt.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/231/trunk/classifier/MaxEnt.cpp
+END
+LBFGS.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/217/trunk/classifier/LBFGS.cpp
+END

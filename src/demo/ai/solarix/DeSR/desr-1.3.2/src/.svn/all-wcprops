@@ -1,0 +1,473 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svnroot/desr/!svn/ver/404/trunk/src
+END
+desr.conf
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/391/trunk/src/desr.conf
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/403/trunk/src/Makefile.in
+END
+EventStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/396/trunk/src/EventStream.h
+END
+SplitSentenceReader.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/140/trunk/src/SplitSentenceReader.cpp
+END
+Sentence.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/391/trunk/src/Sentence.cpp
+END
+ap.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svnroot/desr/!svn/ver/194/trunk/src/ap.h
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/145/trunk/src/__init__.py
+END
+PyPipe.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/402/trunk/src/PyPipe.cpp
+END
+ApParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/396/trunk/src/ApParser.cpp
+END
+Corpus.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/390/trunk/src/Corpus.h
+END
+PtbTokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/386/trunk/src/PtbTokenizer.cpp
+END
+conll08.conf
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/333/trunk/src/conll08.conf
+END
+Language.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/391/trunk/src/Language.cpp
+END
+Token.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/392/trunk/src/Token.h
+END
+desr_py.cxx
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/401/trunk/src/desr_py.cxx
+END
+Token.i
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/394/trunk/src/Token.i
+END
+Enumerator.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/359/trunk/src/Enumerator.h
+END
+TokenAttributes.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/314/trunk/src/TokenAttributes.cpp
+END
+Enumerator.i
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/312/trunk/src/Enumerator.i
+END
+EventStream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/193/trunk/src/EventStream.cpp
+END
+Parser.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/396/trunk/src/Parser.h
+END
+TokenPath.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/384/trunk/src/TokenPath.h
+END
+desr.i
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/397/trunk/src/desr.i
+END
+desr.py
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/401/trunk/src/desr.py
+END
+MlpParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/396/trunk/src/MlpParser.cpp
+END
+Sentence.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/391/trunk/src/Sentence.h
+END
+Tokenizer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/351/trunk/src/Tokenizer.cpp
+END
+Sentence.i
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/391/trunk/src/Sentence.i
+END
+svm.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svnroot/desr/!svn/ver/384/trunk/src/svm.h
+END
+PyPipe.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/391/trunk/src/PyPipe.h
+END
+IPipe.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/359/trunk/src/IPipe.h
+END
+Corpus.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/390/trunk/src/Corpus.cpp
+END
+config.h.in
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/241/trunk/src/config.h.in
+END
+State.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/396/trunk/src/State.cpp
+END
+SvmParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/396/trunk/src/SvmParser.cpp
+END
+MorphExtractor.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/359/trunk/src/MorphExtractor.h
+END
+PosTaggerStub.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/5/trunk/src/PosTaggerStub.cpp
+END
+MblParser.cc
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/13/trunk/src/MblParser.cc
+END
+version.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/404/trunk/src/version.h
+END
+conf_Replacements.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/396/trunk/src/conf_Replacements.h
+END
+SentenceReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/364/trunk/src/SentenceReader.h
+END
+TokenPath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/384/trunk/src/TokenPath.cpp
+END
+desr.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svnroot/desr/!svn/ver/396/trunk/src/desr.cpp
+END
+conf_feature.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/374/trunk/src/conf_feature.cpp
+END
+PosTagger.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/359/trunk/src/PosTagger.h
+END
+pa.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/115/trunk/src/pa.cpp
+END
+svm.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/384/trunk/src/svm.cpp
+END
+apa.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svnroot/desr/!svn/ver/119/trunk/src/apa.h
+END
+WordCounts.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/396/trunk/src/WordCounts.h
+END
+Test.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/322/trunk/src/Test.java
+END
+MeParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/396/trunk/src/MeParser.cpp
+END
+RefCountable.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/359/trunk/src/RefCountable.h
+END
+desr_java.cxx
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/392/trunk/src/desr_java.cxx
+END
+Tokenizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/359/trunk/src/Tokenizer.h
+END
+ReviseEventStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/392/trunk/src/ReviseEventStream.h
+END
+config.h.msvc
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/327/trunk/src/config.h.msvc
+END
+MorphExtractor.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/329/trunk/src/MorphExtractor.cpp
+END
+std_fstream.i
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/312/trunk/src/std_fstream.i
+END
+State.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/396/trunk/src/State.h
+END
+SentenceReader.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/391/trunk/src/SentenceReader.cpp
+END
+PosTagger.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/5/trunk/src/PosTagger.cpp
+END
+Iterator.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/359/trunk/src/Iterator.h
+END
+ap.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/desr/!svn/ver/290/trunk/src/ap.cpp
+END
+apa.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/desr/!svn/ver/115/trunk/src/apa.cpp
+END
+FlexLexer.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/263/trunk/src/FlexLexer.h
+END
+conf_feature.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/396/trunk/src/conf_feature.h
+END
+pa.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svnroot/desr/!svn/ver/119/trunk/src/pa.h
+END
+SplitSentenceReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/359/trunk/src/SplitSentenceReader.h
+END
+Serializable.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/359/trunk/src/Serializable.h
+END
+ReviseEventStream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/396/trunk/src/ReviseEventStream.cpp
+END
+Token.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/desr/!svn/ver/386/trunk/src/Token.cpp
+END
+conll08.fmt
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/56/trunk/src/conll08.fmt
+END
+conll09.fmt
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/395/trunk/src/conll09.fmt
+END
+PtbTokenizer.lex
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/254/trunk/src/PtbTokenizer.lex
+END
+Language.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/391/trunk/src/Language.h
+END
+TokenAttributes.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/359/trunk/src/TokenAttributes.h
+END
+Parser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/396/trunk/src/Parser.cpp
+END
+MultiSvmParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/396/trunk/src/MultiSvmParser.cpp
+END

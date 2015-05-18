@@ -1,0 +1,91 @@
+######################################################################
+# Directories
+######################################################################
+
+subdir=       text/pcre
+srcdir=       @srcdir@
+top_builddir= ../..
+top_srcdir=   @top_srcdir@
+
+######################################################################
+# Libraries
+######################################################################
+
+LIBRARIES=  libpcre.a libpcre.so
+
+# These are the version numbers for the shared libraries.
+LIBVERSION= 0:1:0
+
+######################################################################
+# Programs
+######################################################################
+
+PROGRAMS = dftables
+
+######################################################################
+# Files
+######################################################################
+
+SOURCES=  pcre_compile.c pcre_config.c \
+	pcre_dfa_exec.c pcre_exec.c pcre_fullinfo.c pcre_get.c \
+	pcre_globals.c pcre_info.c pcre_maketables.c \
+	pcre_newline.c pcre_ord2utf8.c pcre_refcount.c \
+	pcre_study.c pcre_tables.c pcre_try_flipped.c \
+	pcre_ucd.c pcre_valid_utf8.c pcre_version.c \
+	pcre_chartables.c \
+	pcre_xclass.c
+
+OBJECTS=  $(SOURCES:.c=.o)
+SOBJECTS= $(SOURCES:.c=.lo)
+
+######################################################################
+# C, C++
+######################################################################
+
+CPPFLAGS= @CPPFLAGS@
+CFLAGS=   @CFLAGS@
+CXXFLAGS= @CXXFLAGS@
+LDFLAGS=  @LDFLAGS@
+
+DEFINITIONS= -DHAVE_CONFIG_H
+
+######################################################################
+# Targets
+######################################################################
+
+all:	$(LIBRARIES)
+
+libpcre.a: $(OBJECTS)
+	@echo ' '
+	@echo '--- Building static library:' $@
+	@echo ' '
+	$(AR) $@ $^
+	$(RANLIB) $@
+
+libpcre.so: $(SOBJECTS)
+	@echo ' '
+	@echo '--- Building dynamic library:' $@
+	@echo ' '
+	$(AR) $@ $^
+	$(RANLIB) $@
+
+#---------------------------------------------------------------------
+# An auxiliary program makes the default character table source.
+
+pcre_chartables.c: dftables
+	./dftables $@
+
+dftables: dftables.c
+	$(COMPILE) -o $@ $^
+
+######################################################################
+# Distclean files
+######################################################################
+
+ERASABLES= pcre_chartables.c
+
+######################################################################
+# Common rules and targets
+######################################################################
+
+-include $(top_builddir)/Makefile.common

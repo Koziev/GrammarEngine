@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svnroot/desr/!svn/ver/399/trunk/ixe/conf
+END
+PatternSet.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/PatternSet.h
+END
+ExcludeFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/ExcludeFile.h
+END
+conf_int.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_int.cpp
+END
+conf_bool.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_bool.cpp
+END
+conf_set.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf_set.cpp
+END
+conf_PatternSet.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf_PatternSet.h
+END
+conf_int.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_int.h
+END
+conf_bool.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_bool.h
+END
+conf_set.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf_set.h
+END
+conf_float.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf_float.cpp
+END
+conf_string.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_string.cpp
+END
+conf_vector.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/399/trunk/ixe/conf/conf_vector.h
+END
+PatternList.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/399/trunk/ixe/conf/PatternList.h
+END
+conf_float.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf_float.h
+END
+conf_dictionary.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_dictionary.h
+END
+PatternMap.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/9/trunk/ixe/conf/PatternMap.h
+END
+conf_string.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/conf_string.h
+END
+FileType.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/FileType.cpp
+END
+conf.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/conf.cpp
+END
+FileType.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/396/trunk/ixe/conf/FileType.h
+END
+IncludeFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/398/trunk/ixe/conf/IncludeFile.h
+END
+conf.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/399/trunk/ixe/conf/conf.h
+END

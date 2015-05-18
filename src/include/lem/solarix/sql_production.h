@@ -70,6 +70,9 @@
     static lem::UFString Oracle_UNISTR( const lem::UFString & str );
 
     lem::UFString ClearInvalidChars( const lem::UFString & str ) const;
+
+    lem::UFString DropTable( const char * TableName ) const;
+    lem::UFString DropSequence( const char * SequenceName ) const;
   };
 
 

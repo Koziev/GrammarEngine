@@ -1,0 +1,2098 @@
+2013-02-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): Released version 1.3.2.
+
+2013-02-02  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac (Check for TR1 unordered_map): GNU Autoconf 2.68
+	requires AC_LANG_SOURCE in AC_COMPILE_IFELSE macro but this causes
+	the check for tr1/unordered_map to fail.
+	Stick to GNU Autoconf 2.65 for the time being.
+
+	* configure.ac: wrapped code in AC_COMPILE_IFELSE with AC_LANG_SOURCE.
+
+	* PyPipe.cpp (extract_swig_wrapped_pointer): obtain the C++
+	pointer just immediately after the PyObject.
+	* PyPipe.cpp (PySwigObject): dropped.
+
+2013-01-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): Released version 1.3.1.
+
+2013-01-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/PatternList.h (PatternList): added params arg to
+	constructor.
+
+2012-12-23  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/PyPipe.cpp (ParserPipePython): eliminated global variable lang.
+
+	* src/desr.i (Parser::showPerplexity): fixed.
+
+2012-12-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): Released version 1.3.0.
+	Significant changes to handling of configuration parameters.
+
+	* classifier/Classifier.h (Classifier::Classifier): provide
+	verbose argument.
+
+2012-12-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.cpp (parseLine): skip line when unrecognized parameter.
+	( Configuration::load): revise handling of continuation lines.
+
+2012-12-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.h (NoOverride): dropped since configurations can
+	now be kept separate.
+
+2012-12-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.h (Configuration, Item): rewritten so that one can
+	use different configurations at once.
+
+2012-08-01  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/io/FileHandle.cpp: removed PAGE_SIZE
+
+2012-07-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp: rearranged includes.
+	* src/MultiSvmParser.cpp: rearranged includes.
+
+2012-07-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i (Parser::create): increment count.
+
+2012-07-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i (TreeToken): added __getitem__.
+
+2012-07-02  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* Makefile.common.in (SOLINK): added.
+
+2012-06-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/CharBuffer.h: added #include <stddef.h> for missing
+	ptr_diff on gcc 4.6.
+
+2012-06-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (TreeToken): copy token in constructor.
+
+2012-06-09  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.h: added using Tanl::Sentence and others, avoiding to
+	include whole namespace.
+
+	* src/desr.i (showPerplexity): added
+
+	* src/State.h: moved here
+	#include <Python.h>
+	since in python2.6 it must go first, to avoid:
+	/usr/include/python2.6/pyconfig.h:1031:1: warning: "_POSIX_C_SOURCE" redefined
+
+2012-05-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (hasNext): added config parameter SingleRoot to
+	control whether to connect disconnected nodes to root.
+
+2012-05-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (Tanl): added EnglishStanfordLanguage for dealing
+	with Stanford Dependencies.
+
+2012-05-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (SentenceReader::MoveNext): skip
+	incomplete tokens.
+
+2012-04-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.h (VarDefault): initialize noOverride.
+
+2012-04-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): released version 1.2.6.
+
+	* src/desr.cpp (main): added -p comand line option.
+
+	* src/MlpParser.cpp (MlpParser::parse): added ShowPerplexity option.
+
+2012-04-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (commandOptions): added --version option, dropped
+	--show-treelets option.
+
+2012-04-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): released version 1.2.5c.
+
+	* src/Makefile.in (LDLIBS): fixed to get value from LIBS in
+	configure.
+	This solved the problem with iconv on MacOS.
+
+2012-04-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/conf_feature.cpp: include text/strings.h for Mac OS.
+
+	* text/strings.h: use _GNU_SOURCE instead of __GNUC__, for use on
+	Mac OS.
+
+	* text/Makefile.in (INCLUDES): removed -I. needed in order to get
+	<FlexLexer.h> from local copy instead from global copy.
+	This requires a change to xml.cpp to include "FlexLexer.h".
+	(xml.cpp): added sed command to fix above include.
+
+	* src/Makefile.in (PtbTokenizer.cpp): same as above.
+
+2012-04-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i (AttributeIndex): added insert, to allow creating
+	index from scratch.
+
+	* src/Token.i: added %feature("unref") vector<Tanl::Token*>
+
+	* Corpus/Token.cpp (operator <<): fixed printing of values.
+
+2012-04-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i (__setitem__): removed overloaded int version.
+
+	* src/Parser.h: include python.h
+
+2012-03-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.cpp (Parser::parse): added parameter outCorpus.
+
+2012-03-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/svm.cpp: upgraded to version 3.11.
+
+	* text/RegExp.h (MatchGroup::resize): added
+
+2012-03-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h : Released Version 1.2.5b.
+
+	* src/ReviseEventStream.cpp (ReviseContextStream::hasNext): fixed
+	to use methods cpos() and deprel() on tokens.
+
+	* src/Sentence.cpp (Sentence::print): drop printing blank line.
+
+	* src/Token.h (struct Token): added cpos() and deprel().
+
+	* src/Corpus.h (TokenField::Role): added POS role.
+
+2012-02-23  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac: added --disable-python.
+
+	* src/Makefile.in (JAVA_INCLUDES): use configure variable.
+
+	* src/version.h: Released version 1.2.5a.
+
+	* src/TokenPath.cpp: added <stdlib.h>
+
+2012-02-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/TokenPath.h (TokenPath::Direction): added ancestor,
+	leftDescendant and rightDescendant.
+
+	* src/version.h (): version 1.2.5
+
+	* src/State.cpp (UnambiguousFeatures): default to true.
+
+2012-02-07  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (FeatPairs): eliminated, superceded by composite
+	features.
+	* src/State.cpp (LemmaPair): eliminated, can be done with
+	Feature LEMMA(rightChild(-1)) LEMMA(0)
+
+2012-02-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (childPunctFeature): added to compute feature for
+	tokens with punctuation among children.
+	Notice that only root tokens are considered, i.e. those denoted by
+	empty paths, differently from before, when the children of the
+	target token were considered, but he feature mentioned the root.
+
+	* src/TokenPath.h (TokenPath""length): added.
+
+2012-02-04    <attardi@THESEUS>
+
+	* src/conf_feature.h (FeatureSpec): added for expressing composite
+features, made from attributes of more than one token.
+
+	* src/State.cpp (tokenFeatures): handle composite features..
+
+	* src/State.cpp (tokenFeatures): eliminated flag PATHROOT_CHILDNONWORD.
+
+2012-01-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (TrainState::nextAction): removed impossible case
+	of link top <- next2 within case for R.
+
+	* src/Sentence.cpp (Sentence): moved here method definitions for
+	child(), parent(), root(), leftChild(), rightChild(), reverse().
+
+	* src/Sentence.h (Sentence::crossing): method to determine whether
+	link is non projective.
+
+2012-01-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/conllXGuide.fmt: added for guided parsing.
+
+	* src/Language.h (struct ChineseLanguage): adapt to Chinese Penn TreeBank.
+	(struct EnglishLanguage): Use initial of verb POS for determine verbs.
+
+2012-01-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* script/projErrors.py (Sentence.compare): fixed algorithm.
+
+2012-01-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::nextAction): with delayReduce check
+	whether intermediate nodes are resolved before allowing r3 or r4
+	actions.
+
+	* src/version.h: Released version 1.2.4.
+
+2011-12-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.h (VarDefault): added field noOverride.
+	* ixe/conf/conf_int.cpp (parseValue): check noOverride.
+	* ixe/conf/conf_bool.cpp (parseValue): idem.
+	* ixe/conf/conf_string.cpp (parseValue): idem.
+	* ixe/conf/conf_set.cpp (parseValue): idem.
+	* ixe/conf/conf_dictionary.h (parseValue): idem.
+
+	* src/State.cpp (TrainState::TrainState): build tree for annotated
+	(used with delayReduce).
+	(hasRightChild): used to determine whether to delay Reduce, only when
+	the following token has right dependents.
+
+2011-12-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::predicates): add either Unshifted or
+	NotUnshifted.
+
+2011-11-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::Unshift): added new action.
+
+2011-11-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::predicates): added feature LemmaPair.
+
+2011-11-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (Parser): added feature InQuotes.
+
+2011-10-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.cpp (next_token_line): interpret esc only before EOL.
+
+2011-10-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf.cpp (Configuration::load): check for empty line.
+
+2011-10-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::predicates): add MorphoAgreement feature
+	when there is disagreement. This avoids considering missing
+	feature as indication of disagreement. For example there are
+	cases when match is between noun and passive verb ("potuto essere
+	vista"), the head is the modal and it has no gender.
+
+2011-10-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/TokenPath.cpp (TokenPath::parse): moved here from
+	conf_feature.cpp.
+
+	* src/conf_feature.cpp (parse): eliminated nextPath(), subsumed by parse().
+
+2011-10-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (ItalianTutLanguage): added numbAgree() and gendAgree()
+
+	* src/Corpus.cpp (Corpus::parseFormat): added role morph.
+
+	* src/Corpus.h (TokenField::Role): added morph.
+
+	* src/SentenceReader.cpp (SentenceReader::MoveNext): extract morphology
+
+2011-05-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* script/Makefile: added.
+
+2011-03-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (ConllXSentenceReader::MoveNext): skip
+	XML tags before sentences.
+
+2011-03-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* added @ingroup parser to all classes.
+
+	* doc/doxygen.conf.in (EXCLUDE_PATTERNS): .svn
+
+2011-01-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/pcre/Makefile.in: added missing all target.
+
+2011-01-10  Stefano Dei Rossi  <deirossi@di.unipi.it>
+
+	* text/XmlReader.cpp: added include for stdlib.h to avoid compilation errors on g++ 4.4.3.
+
+2010-12-23  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac: patch for RM in libtool.
+
+2010-12-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Tokenizer.h: do not include FlexLexer.h, do it before this
+	file gets included, both in:
+	* src/Tokenizer.cpp and
+	* src/SplitSentenceReader.h
+
+	* text/Makefile.in: specialize rule for xml.cpp.
+
+	* text/XmlReader.h: avoid double inclusion of "FlexLexer.h", since
+	both PtbTokenizer and XmlReader need it.
+
+	* text/Encoding.cpp (encodingTable): avoid using new operator.
+
+	* text/RegExp.cpp (Pattern::replace): fixed handling last portion.
+	* text/RegExp.cpp (Pattern::modify): fixed handling last portion.
+	* text/RegExp.cpp (rewrite): do not deal with initial and final portions.
+
+2010-12-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/XmlReader.cpp: new version, which analyzes XML declaration,
+	in order to extract encoding.
+
+
+2010-11-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/pcre: upgraded to version 8.10.
+
+2010-11-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/PyPipe.cpp (ParserPipePython::Current): fixed access to C++ object.
+
+	* src/Token.i (Token): change argument of constructor to
+	AttributeIndex, so that the tken can be created empty and then filled.
+
+	* src/Corpus.cpp (Corpus::create): initialize corpus.
+
+2010-11-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i: removed () from %newobject.
+
+2010-11-01  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i (pp): removed () from %newobject calls.
+
+2010-10-31  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.cpp (Tag::Tag): exchanged reTag and reAttribute.
+
+2010-10-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.cpp (SpanishLanguage::rootLabel): is "sentence".
+	(CatalanLanguage::rootLabel): is "S".
+
+2010-10-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (struct BanglaLanguage): added constructor.
+	(struct TeluguLanguage): added constructor.
+
+	* src/Makefile.in (SOURCES): drop PyPipe.cpp so that desr can be
+	created without python support.
+
+2010-10-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpModel::writeData): fixed dump of b2.
+	(MlpParser::MlpParser): open in binary mode.
+
+2010-09-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/conll08.conf: updated to use MLP.
+
+	* src/Makefile.in (LIBRARIES): condition on presence of python or java
+
+	* configure.ac: added check for Java headers.
+
+2010-09-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/conll08.conf: updated to use MLP as default.
+
+	* src/Parser.cpp (Parser::preprocess): ensure presence of
+	depenendency link.
+
+	* src/Token.h (Token): added constructor with arg Token, in order
+	to update COntext ref counts.
+
+2010-09-07  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/WordIndex.h (WordIndex::operator[]): invoke HashMap::insert
+	drectly.
+
+2010-09-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (SentenceReader::MoveNext): store values
+	also of link attributes.
+
+	* src/Token.cpp (Token::isNoun, Token::isVerb, Token::isPreposition):
+	use CPosTag.
+
+2010-09-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (addComplementFeature): check with > instead of >=
+	to avoid accepting when both tc and lc are 0.
+
+	* src/Language.cpp (Languages): added class containing table of
+	languages, of which a single static instance is created so that
+	the table gets freed when program terminates.
+
+	* src/Parser.cpp (~Parser): dropped freeLanguageTable since it is
+	too early.
+
+	* src/State.cpp (addComplementFeature): deal with languages with
+	postpositions linke Hindi.
+
+2010-09-02  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (BangaLanguage, HindiLanguage, TeluguLanguage): added.
+
+	* src/MorphExtractor.cpp (IndianMorphExtractor::operator): added.
+
+2010-08-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): Released version 1.2.3.
+
+	* configure.ac (CFLAGS): fixed
+
+2010-08-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac (LTCFLAGS): added -fno-strict-aliasing for gcc as
+	required for code generated by SWIG for Java.
+
+2010-08-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr_java.cxx (Java_jni_desrJNI_SWIGSentenceUpcast): g++
+	version 4.1.2 and 4.4.1 with flag -O2 produces wrong result.
+	At the moment we must compile desr_java.cxx with just -O1 or
+	provide a manually corrected version of desr_java.cxx.
+
+	* src/Token.i (Tag): expose accessors in Java.
+	* src/Token.i (Token): expose accessors in Java.
+	* src/Token.i (TreeToken): expose toString() in Java.
+
+2010-08-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i (Context): added for Java:
+	%delobject Context::Dispose;
+	but seem to have no effects.
+	
+	* src/Sentence.i (Corpus): removed method getCorpusIndex(), rely
+	on method getIndex() generated by SWIG.
+
+	* src/Token.i: added equals() for Java.
+
+	* Makefile.common.in (swig): output different files depending on
+	language to wrap.
+
+	* src/Sentence.i: moved here from desr.i wrappers for Sentence and SentenceReader.
+
+	* src/Token.h (struct Token): use string& as first parameter.
+
+	* text/XmlReader.h: added #ifndef yyFlexLexer to avoid redefinition.
+
+	* src/Token.h (AtributeIndex): moved AttributeIndex to TokenAttributes.h
+
+2010-07-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp (Conll08CorpusFactory): use Conll08Corpus instead
+	on Corpus.
+
+	* src/Token.cpp (Tag::Tag): added FormTag.
+
+2010-07-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.i (Token::context): fixed context->incRef()
+	
+	* src/Token.i (%feture("ref")): moved before class Context
+
+	* src/Token.h (Token::Token): fixed context->incRef().
+
+2010-07-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (Token::Token): added incRef.
+
+	* src/Token.h (Context::Dispose): fixed.
+
+	* src/RefCountable.h (decRef): fixed wrong test.
+
+	* src/Enumerator.i (%unref): moved here to apply to all
+	Enumerator, including all pipes.
+
+	* src/Token.i (__getattr__/__setattr__): renamed to __getimtem__/__setitem__. 
+	
+	* src/Token.h (struct Context): previous renamed parent.
+
+	* src/Token.i (Context): previous renamed parent.
+
+	* src/Token.h (struct Context): added method Dispose().
+
+	* src/RefCountable.h: added.
+
+	* src/Token.i: replaced get/set with __getattr__/__setattr__.
+	added %extend Context { __eq__; __ne__; }
+	added:
+	%feature("ref") Context "$this->incRef();"
+	%feature("unref") Context "$this->Dispose();"
+
+	* Corpus/Token.h (struct Tag): removed methods set.get. Renamed
+	getOpening/getClosing to open/close.
+	Removed methods operator== operator!=.
+
+	* Corpus/Token.h (struct Tag): removed methods set.get. Renamed
+	getOpening/getClosing to open/close.
+	Removed methods operator== operator!=.
+
+2010-07-07  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i (public): added
+	%feature("ref") ParserPipe "$this->incRef();"
+	%feature("unref") ParserPipe "$this->Dispose();"
+
+	%feature("ref") ParserPipePython "$this->incRef();"
+	%feature("unref") ParserPipePython "$this->Dispose();"
+
+	* examples/models/english.conf: added lemma normalization.
+
+	* src/MultiSvmParser.cpp (MultiSvmParser::parse): added call to preprocess().
+	* src/ApParser.cpp (ApParser::parse): added call to preprocess().
+	* src/SvmParser.cpp (SvmParser::parse): added call to preprocess().
+	* src/MeParser.cpp (MeParser::parse): added call to preprocess().
+	* src/MlpParser.cpp (MlpParser::parse): added call to preprocess().
+
+	* text/RegExp.cpp (Pattern::replace): perform inplace replacement.
+
+	* src/Token.cpp (Token::getLemma): renamed to lemma()
+	* src/Token.cpp (Token::lemma(string)): added
+
+	* src/Token.cpp (Token::getPos): renamed to pos()
+	* src/Token.cpp (Token::pos(string)): added
+
+2010-06-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/RegExp.cpp (Pattern::Pattern, ~Pattern::Pattern, Pattern::operator-):
+	use refcount.
+
+	* text/pcre/Makefile.in (SOURCES): added pcre_refcount.c
+
+	* text/RegExp.cpp (Pattern::replace): allow match references in
+	replacement text.
+
+2010-06-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (struct Context): added previous->incRef().
+	(struct Context): dropped return.
+
+2010-06-17  Stefano Dei Rossi  <deirossi@di.unipi.it>
+
+	* Corpus/Token.cpp (Tag::Tag): changed reTag.match to reAttribute.match
+	and fixed other two bugs (= were used instead of -)
+
+2010-05-31  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp (Corpus::toString): eliminated extra strdup().
+
+2010-05-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Makefile.in (SOURCES): drop PyPipe.cpp if Python not available.
+
+2010-05-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/Utf8Utils.cpp (byteLength): fixed length 3.
+
+2010-04-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/PyPipe.cpp (Parser): moved here from Parser.cpp.
+
+	* src/PyPipe.h (ParserPipePython): moved here from Parser.h.
+
+	* src/Language.h (FrenchLanguage): added.
+
+	* src/MorphExtractor.h (FrenchMorphExtractor): added.
+
+2010-02-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.h (Parser::pipe(PyObject*)): creates a pipe from a
+	python iterator.
+	
+	* src/Parser.h (ParserPipePython): added pipe to consume python
+	iterator on list of tokens.
+
+2010-02-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpParser::parse): decrease lprob for Reduce
+	actions where tokens do not agree in gender or number.
+
+	* src/State.cpp (State::predicates): refined features for
+	MorphoAgreement: =NG is added only if the focus terms have proper
+	values for morphoLeft() and morphoRight().
+	=NG!1 and =NG!2 are added if token next disagrees with next+1 or
+	next+2 respectively.
+
+	* src/Language.h (struct Language): added methods morphoLeft() and
+	morphoRight(), which express whether a term requires morphological
+	agreement on the left or the right respectively.
+	For instance "della" is an articulate preposition in Italian that
+	only binds on the right.
+
+2010-02-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* script/diffConll.py (compare): with -a print just differences.
+
+2010-02-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::predicates): removed features =N!1, =N!2,
+        =G!1, =G!2 since they don't solve problem and decrease LAS:
+	"la caserma dei carabinieri piu' vicina".
+
+2010-02-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpModel::train): temp array for computing
+	w2 * gb2 / hprimeInv not needed.
+
+2010-02-09  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (rand_permutation): fixed initialization loop
+	limit: thanks to M. Grella.
+
+2010-02-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (State::predicates): add features =N!1, =N!2,
+	=G!1, =G!2 representing morph disagreement with next two tokens
+
+	* src/Language.h (Language): added numbAgree() and genderAgree()
+
+2010-02-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpParser::parse): print treelets if
+	ShowTreelets is true.
+
+	* src/desr.conf: replaced ShowAction by CheckStrategy.
+
+	* src/desr.cpp (showStrategy): depending on checkStrategy either
+	print the actions only for sentences where the strategy is wrong
+	or for all sentences.
+
+2010-01-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): Released version 1.2.1.
+
+	* ixe/win32/platform.h (HAVE_TR1_RANDOM): added.
+
+	* src/MlpParser.cpp (drand48): implemented using TR1::random.
+
+	* desr.vcproj: updated to work with Visual C++ 2008 Express. 
+	
+	* boost: added missing files from version 1.41, required by MSVC.
+
+	* src/Parser.h (ParserFactory): arg no longer optional.
+
+	* boost/config/no_tr1/utility.hpp: added for MSC
+
+	* src/Makefile.in (INCLUDES): added -I. for FlexLexer.h
+
+	* text/Makefile.in (INCLUDES): added -I. for FlexLexer.h
+
+	* src/FlexLexer.h: restored from flex++ version 2.5.4
+
+2010-01-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.h (ParserPipe::Dispose): method that releases parser
+	before destroying the pipe.
+
+	* src/IPipe.h (RefCountable): added abstract class providing
+	reference counting.
+
+	* src/Enumerator.h (Disposable): added interface for objects
+	providing a Dispose() method for releasing resources. It is used
+	in Python wrappers.
+
+2010-01-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i: provided mechanism to avoid destruction of parser
+	object until all pipes have been closed.
+
+2009-12-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* boost: updated to version 1.41.
+
+	* src/PtbTokenizer.cpp: added using namespace std.
+
+	* src/MorphExtractor.cpp: added include <cstdio>.
+
+	* text/Char.h: added include <cstdio>.
+
+	* ixe/include/Timer.h: added include <cstdio>.
+
+2009-11-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h (Parser): released version 1.2.0.
+
+	* src/State.cpp (State::predicates): number feature according to
+	order in FeatureSpecs instead of order in AttributeIndex.
+	This is to allow for tokens created through pipeline which have
+	different ordering of attributes.
+	This creates incompatible models.
+	For backward compatibiliy, old models can be read based on the
+	version number present in their heading.
+
+	* ixe/conf/conf.cpp (Configuration::load): read version number and
+	store it into parameter Version.
+
+2009-11-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/io/File.cpp: added include <limits.h>
+
+2009-11-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.cpp (TreeToken::printTab): print in the order of the
+	Corpus.
+
+2009-11-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* Makefile.common.in: added install-LIBRARIES
+
+	* src/Makefile.in (LIBRARIES): added desr.py
+
+	* src/desr.i (Corpus::print): renamed to toString since print is
+	reserved in python.
+
+2009-10-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.cpp (Tag::Tag): rewritten using better RE.
+
+2009-10-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac: AC_DEFINE for HAVE_PYTHON.
+
+2009-10-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* Makefile.common.in (bindir): removed bindir.
+	added install-LIBRARIES.
+
+	* src/State.cpp (State::predicates): use snprintf to avoid stack
+	overrun.
+
+2009-10-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* script/dumpPyModel.py: version that produces model from
+	configuration file.
+
+2009-10-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf_set.cpp (conf_set): added constructor from string list.
+
+2009-09-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure: restored previous version, since it was not setting
+	CXXFLAGS.
+
+2009-09-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (ConllXSentenceReader::MoveNext): added
+	check on proper head numbering.
+
+2009-09-18  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* src/Makefile.in (_desr.so): replaced $(LDLIBS) with $(PYTHON_LDLIB).
+
+	* src/PtbTokenizer.cpp: regenerated by Flex++ version 2.5.4; changed
+	#include directive from <FlexLexer.h> to "FlexLexer.h".
+
+2009-09-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* extractGuides.py (Token): handle blind test files.
+
+	* src/SentenceReader.cpp (SentenceReader::MoveNext): only deal
+	with predicates when present (e.g. Conll 2008 SRL).
+
+2009-09-12    <attardi@THESEUS>
+
+	* ixe/win32/platform.h (HAVE_TR1_UNORDERED_MAP, HAVE_TR1_UNORDERED_SET):
+	defined here, rather than in project Properties.
+
+2009-09-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (ItalianLanguage::rootPos): dropped, since any
+	POS could be at the root.
+
+2009-09-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* examples/models/{desr.conf, english.conf, italian.conf}:
+	updated to 1.1.2.
+
+2009-09-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Tokenizer.h: removed include "platform.h"
+
+	* ixe/include/error.h: removed unnecessary include <string>.
+
+	* text/WordSet.h (WordSetBase::insert): removed typename in front of _Base.
+
+2009-09-09  Antonio Fuschetto <fuschett@di.unipi.it>
+
+	* DeSR.sln: fixed command of Pre-Build Event.
+
+	* src/MeParser.cpp (MeParser::parse): changed allocation of "params" array
+	from automatic to dynamic.
+
+	* src/Tokenizer.h: added "platform.h" inclusion.
+
+2009-09-09  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.cpp (Parser::procStat): added Windows version.
+
+	* text/WordSet.h (NormWordSet::insert):
+	use WordSetBase<NormHash, NormEqual> instead of _Base.
+
+2009-09-09  Antonio Fuschetto <fuschett@di.unipi.it>
+
+	* DeSR.sln: added "classifier" directory and files to DeSR project.
+
+	* ixe/include/error.h: added <string> inclusion, necessary to operator
+	overloading.
+	
+	* ixe/io/FileHandle.h, ixe/io/mappedFile.h: restored previous versions.
+
+2009-09-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/WordSet.h (NormWordSet::insert): fixed malloc size.
+
+	* text/strings.h: include include/unordered_map instead of using
+	various ifdefs.
+
+	* ixe/include/error.h (IXE): removed useless include text/strings.h
+
+2009-09-08  Antonio Fuschetto <fuschett@di.unipi.it>
+
+	* DeSR.vcproj: removed references to MaxEntropy directory; changed include
+	directories; added HAVE_TR1_UNORDERED_MAP and HAVE_TR1_UNORDERED_SET
+	preprocessor definitions.
+	
+	* ixe/include/error.h: added "text/strings.h" inclusion.
+	
+	* ixe/include/unordered_map.h: added a specific management of
+	"unordered_map" for VC++ 2008 SP1.
+	
+	* ixe/include/unordered_set.h: added a specific management of
+	"unordered_set" for VC++ 2008 SP1.
+	
+	* text/strings.h: added a specific inclusion of "unordered_map" for VC++
+	2008 SP1.
+	
+	* text/WordSet.h (WordSetBase): restored function insert();
+	(NormWordSet) restored function insert().
+
+2009-09-07  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (commandOptions): added option -b to specify beam size.
+
+	* text/pcre/config.h: removed again from SVN. It is generated by
+	configure or by preproceccing directive on VC Solution.
+
+	* text/pcre/pcre_chartables.c: removed again from SVN. It is
+	generated once on unix to create tables.
+	
+	* ixe/include/error.h (AssertionError): restored use of operator += on strings.
+
+	* ixe/io/mappedFile.h (MappedFileView): restored use of operator += on strings.
+
+	* ixe/io/FileHandle.h (FileHandle): restored use of operator += on strings.
+
+	* src/Parser.cpp (Parser): restored function procStat().
+
+	* src/Parser.h (ParserFactory): restored default parameter.
+
+2009-09-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (ItalianLanguage::rootPos): provided
+	specialization.
+
+	* src/State.cpp (State::Left): replace top when it is root.
+	(State::left): replace nthTop when it is root.
+	(TrainState::nextAction): delay r4 to end of sentence.
+
+2009-09-05  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* DeSR.vcproj, include/error.h, include/unordered_map.h,
+	include/unordered_set.h, src/*: updated to compile in VC++ 2008 SP1.
+
+2009-09-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp (SvmParser::train): apply LexCutoff.
+
+2009-09-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* boost: relevant part of boost library added for MLP.
+
+2009-09-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Language.h (ItalianLanguage): added tags as for Tanl tagset.
+
+	* src/State.cpp (TrainState::TrainState): extract entities before
+	clearing links.
+
+	* src/Token.cpp: corrected name of tag CPOSTAG.
+
+2009-09-02  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Sentence.h (reverse): swap ids, don't change root link.
+
+2009-09-01  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (SentenceReader::MoveNext): dropped
+	obsolete parameter UseGold.
+
+	* src/State.cpp (State::left): fix to handle ROOT node.
+
+2009-08-31  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp (SvmParser::parse): updated to new State
+	architecture.
+
+	* src/Corpus.cpp (Corpus::create): fixed test on return from
+	parseFormat().
+
+	* src/desr.cpp (showStrategy): added command to display the
+	parsing actions computed for analyzing sentences.
+
+	* src/State.cpp (TrainState::nextAction): added action r4,
+	required for handling Penn Treebank 2007.
+
+	* src/State.cpp (State::left): fixed moving tokens to input.
+
+	* src/Token.h (Token): added equality operator.
+
+	* src/State.cpp (ParseState::ParseState): clear dependencies. It
+	was producing a small bias in the results.
+
+	* src/State.cpp (TrainState::nextAction): added ArcEager strategy
+	for parsing.
+	With ArcEager Left actions push next on stask, so that it can be
+	further linked. An additional Pop action is introduced to pop
+	items from the stack. This is similar to the strategy used by
+	MaltParser.
+
+2009-08-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/Encoding.cpp (encodingTable): elements are strctures, not
+	pointer to structures to avoid dynamic allocation.
+
+	* src/Parser.cpp (Parser::procStat): new function.
+
+	* ixe/include/Timer.h (Timer): start in constructor.
+	(stop): renamed to split.
+	(duration): renamed to reading.
+	(seconds): added.
+
+2009-08-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpModel::load): added check on array sizes.
+
+2009-08-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (addState): fixed insertion in proper
+	position, not at back.
+	(MlpModel::clearLabels): use swap() to free memory.
+
+	* src/MlpParser.cpp (Parser): renamed parameters with Mlp prefix.
+
+	* src/MlpParser.cpp (MlpParser::parse): purge bestStates after
+	cycle, since in case of dead ends, they will be returned as outputs.
+
+2009-08-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (MlpParser::train): added training for MLP.
+	
+	* src/MlpParser.cpp (Parser): added parameter RandomRange and
+	assign weight within range [-RandomRange, +RandomRange].
+
+	* src/State.cpp (State::tokenFeatures): fixed handling of
+	LexChildNonWord: feature was repeated.
+
+2009-08-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h ( Attributes::set): resize properly.
+
+	* src/EventStream.h (sentenceReader): generalize SentenceReader to
+	Enumerator<Sentence*>
+
+2009-08-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (mkAction): add DEPREL when action is D.
+
+2009-08-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (TreeToken::get): renamed predicted(), since it
+	returns the computed value for OUTPUT attributes.
+
+	* src/State.cpp (ComnpositeActions): default to true.
+	
+	* src/State.cpp (TrainState::nextAction): handle !CompositeAction case.
+
+	* src/EventStream.h (Parser): added initialization of state and
+	destructor.
+
+2009-08-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (Classifier::Classifier): handle models with 2
+	hidden layers.
+
+	* script/dumpPyModel.py: handle models with 2 hidden layers.
+
+	* src/SentenceReader.cpp (ConllXSentenceReader::MoveNext): throw
+	exception if tokens are not numered sequentially.
+
+2009-08-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (addState): revised ref counting strategy.
+	refCount is incremented/decremented explicitely when state is
+	added/removed from beam, automatically at state creation/deletion.
+
+2009-08-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MlpParser.cpp (addState): dispose of states pushed off the beam.
+
+2009-08-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (TreeToken::linkHead): turned optional argument from
+	unsigned to int to comply to ISO C++ ambiguity rules.
+
+	* src/MlpParser.cpp (MlpParser::parse): dispose of finished states
+	that do not make it to bestNextStates.
+
+	* text/WordSet.h (~WordSetBase): no erase, to avoid duplicate delete.
+
+	* src/MlpParser.cpp (MlpParser::parse): use vector deadEnds for
+	states to be disposed.
+
+	* src/MeParser.cpp (MeParser::parse): similar fix as MlpParser::parse.
+
+2009-08-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* Makefile.common.in (%.o rules): use @CPPMMD@
+
+	* configure.ac (VERSION): changed expr to avoid using \+.
+
+	* autoconf/boost.m4: changed expr to avoid using \+ which
+	is not understood on MacOS:
+	WANT_BOOST_MAJOR=[`expr $boost_min_version : '\([0-9][0-9]*\)'`]
+
+	* src/MlpParser.cpp (MlpParser::parse): fixed leak, deleting states
+	with no successors.
+
+	* src/MeParser.cpp (MlpParser::parse): fixed leak, deleting states
+	with no successors.
+
+	* Makefile.common.in (%.lo%.cpp): fixed rule
+	@sed -e 's|^$(basename $@).o[ 	]*:|$@ $(basename $@).o:|' $@.d > $(dir $@).deps/$(*F).P
+	to apply to .o (as produced by compiler) and to create dependency
+	for both .o and .lo
+	
+2009-08-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* doc/doxygen.conf.in (HAVE_DOT): added config variable.
+	Updated to doxygen 1.5.7.1.
+
+	* configure.ac (HAVE_DOT): added check for presence of dot tool.
+
+	* Makefile.common.in (rules %.o): fixed to refer properly to file
+	names, using $(notdir) notation.
+
+	* Makefile.in (SUBDIRS): restored doc.
+
+	* Makefile.common.in (config.status): fixed misspelled top_builddir.
+
+	* src/Corpus.h (Corpus): field Language turned into reference.
+
+	* autoconf/boost.m4: fixed resetting CXXFLAGS.
+
+	* src/Token.h (TreeToken): added constructor for use in python.
+
+	* src/Token.i (public): fixed to compile with new TreeToken
+	definition.
+
+	* src/State.*, src/SvmParser.cpp: removed experimental additions
+	for EMBEDDING and PMI.
+
+	* Makefile.common.in ($(top_builddir)/configure): reference to
+	top_buildir instead od srcdir.
+
+	* configure.ac: restored computing PAGE_SIZE from original
+	ixe/configure.ac.
+
+	* src/MlpParser.cpp (DlParser): changed to MlpParser (Multi Layer
+	Perceptron). 
+
+2009-08-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/include/unordered_map.h (): added method rehash(), missing in
+	hash_map.
+
+	* configure.ac: check for Boost.
+
+	* autoconf/boost.m4: for checking presence of Boost
+
+	* configure.ac (PYTHON_LIB): escape []
+
+2009-08-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/version.h: Releasing as version 1.1.0 beta.
+	This is largely rewritten with a new class State, divided into
+	TrainState and ParseState.
+	While TrainState is modified by performing an action with
+	transition(action), ParseState::transition() creates a new
+	ParserState, which is linked to the previous.
+	This allows maintaining the history of the process which is used
+	for instance by beam search.
+	Global information about the sentence being parsed is kept in
+	common in structure GlobalInfo, shared by all states.
+	The chage affects many part of the implementation, including the
+	representation of Token.
+	The structure TreeToken is no longer derived from Token, but
+	includes a pointer to Token. Therefore during parsing, each state
+	deals with his own copy of TreeToken, while Token remain shared
+	among all states.
+	
+	* src/DlParser.cpp: rewritten parse() completely in C++.
+	train() still needs to be written.
+
+2009-08-01  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (left): fixed check on stack size.
+	* src/State.cpp (Left): perform also with empty stack, connecting to root.
+
+2009-07-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Makefile.in (desr): updated to use PYTHON_INCLUDES and PYTHON_LIB
+
+	* configure.ac: compute PYTHON_INCLUDES and PYTHON_LIB
+
+	* src/DlParser.cpp: added parser using Deep Learning classifier.
+
+2009-07-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/conf/conf_string.cpp (IXE): read full line as string value,
+	only dropping leading/trailing spaces.
+	This allows reading back values written by serialize(),
+	even if they contain blanks.
+	Alternatively, serialize should enclose strings in quotes,
+	doing proper escaping of ", and next_token_line should do the opposite.
+
+2009-07-01  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/conf_feature.h (reset): free also set<TokenPath*>.
+
+2009-06-29  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* ixe/io/Format.cpp: added #include <cstring.h>.
+
+	* ixe/io/FileHandle.cpp: added #include <alloca.h> for GNU Compiler.
+
+2009-06-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac: changes for Mac OS (darwin).
+
+2009-06-22  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* __init__.py, src/__init__.py: added to repository.
+
+	* src/PtbTokenizer.cpp: regenerated by Flex++ version 2.5.4.
+
+2009-06-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Sentence.h (reverse): update also links.
+
+	* src/Token.cpp (follow): don't use RightToLeft since
+	Sentence::reverse() reverses links too.
+
+2009-06-11  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* src/TreeToken.cpp (printTab): fixed the implementation.
+
+2009-06-09  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* src/Token.h, src/Token.cpp: splitted into Token.{h,cpp} and
+	TreeToken.{h,cpp}. The new Token.{h,cpp} files are the same of Tanl.
+
+	* src/Sentence.h: changed from #include "Token.h" to #include
+	"TreeToken.h".
+
+	* src/desr.i: changed according to Tanl conventions; fixed some bugs:
+	added %newobject Corpus::sentenceReader(),%newobject Parser::create()
+	and other.
+
+	* src/Enumerator.i, src/Token.it: changed in order to Tanl conventions.
+
+2009-05-19  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* Makefile.common.in (CONFIG_HEADERS_IN): fixed wrong paths.
+
+2009-05-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp et al. (namespace Parser): changed namespace to
+	Tanl in order to be compatible with other python modules.
+
+2009-05-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i (Sentence::__repr__): return newobject.
+
+2009-05-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp (Parser): added second optional argument to cfactory()
+	invocation since gcc 4.3 does not accept missing optional
+	arguments of typedef function pointer.
+
+2009-05-01  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* text/FlexLexer.h: added to repository (Flex++ version 2.5.4).
+
+	* text/xml.cpp: regenerated by Flex++ version 2.5.4; changed #include
+	directive from <FlexLexer.h> to "FlexLexer.h".
+
+	* text/XmlReader.h: changed #include directive from <FlexLexer.h> to
+	"FlexLexer.h".
+
+	* text/Makefile.in: cleaned the structure according to
+	Makefile.common.in.
+
+	* text/pcre/Makefile.in: cleaned the structure according to
+	Makefile.common.in.
+
+	* src/PtbTokenizer.cpp: regenerated by Flex++ version 2.5.4; changed
+	#include directive from <FlexLexer.h> to "FlexLexer.h".
+
+	* src/Tokenizer.h: changed #include directive from <FlexLexer.h> to
+	"FlexLexer.h".
+
+2009-04-30  Antonio Fuschetto  <fuschett@di.unipi.it>
+
+	* Makefile.common.in: fixed some directory paths; revised some
+	compilation flags; revised clean target.
+
+	* text/pcre/Makefile.in: fixed some directory paths.
+
+	* doc/doxygen.conf.in (WARN_IF_UNDOCUMENTED): changed to "NO".
+
+	* doc/doxygen.conf.in (INPUT): fixed "text" directory path; removed
+	"MaxEntropy/model" directory path from doc generation.
+
+	* src/desr.py, src/desr_wrap.cxx: added to repository.
+
+2009-04-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Enumerator.i: provides wrapper for Enumerator as well as
+	macro EnumeratorInstance() for instantiating the template and generate
+	Python iterator interface.
+
+2009-04-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* text/WordIndex.h (struct WordIndex): added assignement operator.
+
+	* src/Corpus.cpp (Corpus::create): factory pattern for creating a
+	Corpus from specs.
+
+	* src/desr.cpp (main): create the Corpus with Corpus::create.
+
+	* src/SentenceReader.h (class SentenceReader): switched to
+	Enumerator interface.
+
+	* src/svm.h: updated to version 289.
+
+2009-04-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.h: added IPipe interface.
+
+2009-04-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp: removed modelFile and modelRevise from
+	configuration variables. It was a nuisance to have them saved in
+	the model file: loading the model would clobber their values.
+
+	* ixe/conf/conf.cpp (load, parseLine): allow to provide Map with
+	variables to load.
+
+2009-04-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ixe/include/hash.h: added and updated unordered_map.h/unordered_set.h
+
+	* text/XmlReader.h: removed #undef yyFlexLexer since it does not
+	compile on earlier versions of gcc.
+
+	* src/FlexLexer.h: reverted to flex version 2.5.4.
+
+	* src/Makefile.in (NOPOS_SOURCES): insert explicitely PtbTokenizer.cpp
+
+2009-04-02  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Makefile: removed references to POSDIR.
+
+	* src/FlexLexer.h: updated to flex version 2.5.35.
+
+	* text/XmlReader.h: moved #undef yyFlexLexer here from text/xml.lex.
+
+2009-04-02  Francesco Tamberi  <tamberi@di.unipi.it>
+
+	* text/xml.lex: added #undef yyFlexLexer
+	[bug affecting flex++ version 2.5.35]
+
+	* ixe/Common/util.h: wrong #include directive
+	["include/less.h" became "text/less.h"]
+
+	* text/XmlReader.cpp, text/Encoding.cpp, text/WordSet.h,
+	text/WordIndex.h, classifier/Event.h, classifier/MaxEnt.cpp,
+	classifier/LBFGS.cpp, ixe/conf/conf_int.cpp, ixe/conf/conf_set.cpp,
+	ixe/conf/conf_float.cpp, ixe/io/Format.cpp, ixe/io/FileHandle.cpp,
+	src/apa.h, src/Tokenizer.h, src/Language.cpp, src/conf_feature.h,
+	src/pa.h, src/SvmParser.cpp, src/MultiSvmParser.cpp:
+	added #include directives needed by g++ version >= 4.
+
+2009-03-31  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src: revised to use new Tanl libraries:
+	collection, text
+
+	* configure.ac: check for TR1 unordered_map/set.
+
+2009-03-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.h, etc.: updated to new RegExp names.
+
+2009-02-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (main): fixed memory leak.
+
+2009-02-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (main): allow reading from standard input instead
+	of file.
+
+	* src/SentenceReader.h (SentenceReader): changed the interface to
+	use an istream instead of a filename.
+
+	* src/SentenceReader.cpp (next): rewritten using XmlReader instead
+	of RegExp.
+
+	* ixe/text/XmlReader.cpp (Read): allow calling
+	MoveToNextAttribute() immediately, so that one can iterate with:
+	while (reader.MoveToNextAttribute()) {
+	...
+	}
+
+2008-10-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.cpp (writeHeder, readHeader): include configuration
+	settings in model file, so that configuration file needs not be
+	supplied when parsing.
+
+	* ixe/conf/conf.cpp (load): load configuration from model file header.
+
+	* src/TokenPath.cpp (serialize): serialize path, for dumping
+	configuration.
+
+2008-10-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (tokenFeatures): reverted to representation for
+	feature LexChildNonWord without form but with offset, since it
+	gives better results for swedish.
+
+2008-10-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.cpp (follow): fixed wrong computation of prev/next in RighToLeft
+
+2008-09-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* script/extractGuides.py: avoid adding \r to newlines in stdout.
+
+2008-09-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (transition): fixed return.
+
+2008-09-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* DeSR.{sln, vcproj}: added Visual Studio solution and project
+
+	* src/*: updated to compile in VC++ 2008.
+
+2008-09-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (tokenFeatures): ensure LexChildNonWord feature
+	only added once per token.
+
+	* src/Token.cpp (follow): previous/next depend on direction.
+
+2008-08-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp (SvmParser): handle special case of empty
+	SplitFeature.
+	Handle case of single model.
+
+2008-08-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/EventStream.h (EventStream::splitting): added.
+
+	* src/State.cpp (State::splitting): added.
+
+	* src/SvmParser.cpp (collectEvents): in some corpus (Conll 2007
+	arabic) CPOS is empty, hence we introduce a method
+	EventStream::splitting() to determine whether splitting is required.
+
+2008-08-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp (print): use Tab format.
+
+2008-08-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (main): use default Corpus if no special corpus is
+	registered with the given name.
+
+	added -R option for RightToLeft parsing.
+
+2008-06-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ApaParser.cpp (ApaParser): upgraded to new Parser interface.
+
+	* src/Token.cpp (printTab): print defualt for ignored fields.
+
+2008-06-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.conf: correct names for features POSTAG and CPOSTAG.
+
+	* src/Corpus.cpp (ConllXCorpus::print): print according to Corpus.
+
+	* src/SentenceReader.cpp (ConllXSentenceReader::next): include ID
+	in attributes.
+
+2008-06-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.h (Corpus::print): revised methods for printing
+	sentences, they all now refer to a Corpus to provide proper
+	formatting.
+
+	* src/SentenceReader.cpp (SentenceReader::next): revised to create
+	TreeToken's with links generated according to link/label
+	specification in CorpusFrmat.
+
+	* src/Token.h (struct TreeToken): dropped derivation from
+	DependencyToken.
+
+	* src/Token.h (struct DependencyToken): eliminated: use links
+	attribute to represent also dependency link, by default the first one.
+
+	* src/Corpus.h (struct CorpusMap): added mechanism for dynamic
+	selection of corpus type.
+
+	* src/Corpus.cpp (parseFormat): fill a CorpusFormat object.
+
+2008-06-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (ConllXSentenceReader::next): fixed
+	insertion at wrong attribute index.
+
+2008-05-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (train): use Timer object.
+
+2008-05-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp (collectEvents): fixed wrong selection of
+	problem index.
+
+2008-05-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/svm.h: updated to version 2.86
+
+2008-05-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.h (struct Parser): predIndex turmed into reference to
+	index in each derived class.
+
+2008-05-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (prepChildEntities, predicates): revised to use
+	the abstract token properties introduced below.
+
+	* src/Token.cpp (isNoun, isPreposition, isTime, isLocation,
+	isVerb, getLemma, getPos): added to extract properties correctly
+	depending on language and corpus.
+
+	* src/State.cpp (RightToLeft): added parameter to select direction
+	of parsing.
+
+	* src/Sentence.h (Sentence::reverse): reverse the tokens.
+
+2008-05-08  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Sentence.h (Sentence): turned into vector<TreeToken*> or
+	else when copying will lose links.
+
+2008-05-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Corpus.cpp (CombCorpus): added for converting Conll08 files
+	to difference files, representing arg/predicates in dependency
+	labels using a pair <arg, pathDiff>, where arg is the proper ARG
+	label and pathDiff is the path difference to the predicate, with
+	respect to the dependency link.
+
+	* src/desr.cpp (convert): added option to convert files from input
+	to output format.
+
+2008-05-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (struct TokenLink): added to represent links to
+	other tokens in a sentence, forming a tree.
+
+	* src/Token.h (struct TreeToken): derives from DependencyToken,
+	but has multiple links, to represent for instance Semantic Roles
+	for Conll08.
+
+	* src/Token.h (struct DependencyToken): DependencyToken uses a
+	TokenLink to respresent the dependency link.
+
+	* src/Corpus.h (TokenField, Corpus): changed format to express
+	fields representing links: attribute LINK is the head of the link,
+	attribute LABEL is the label of the link. The name of the label
+	provides the connection.
+	For example one might say:
+	   <field name="HEAD" use="OUTPUT" link="DEP"/>
+	   <field name="DEPREL" use="OUTPUT" label="DEP"/>
+	to identify a link named DEP, made from the values of fields HEAD
+	and DEPREL.
+	This in not currently done, since dependency links are dealt
+	specially in the code.
+
+	* src/Corpus.cpp (print): printing sentences is done in Corpus, so
+	that it can determine format.
+
+2008-04-30  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/State.cpp (predicates): fixed outside boundary access to punctCount.
+	(~State): fixed memory leak: delete sentence in destructor.
+
+2008-04-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp (dumpFeatures): add sentence separator between
+	sentences.
+
+2008-04-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Sentence.h (struct Sentence): representation of sentences.
+
+	* src/State.h (class State): representation of parser state.
+
+	* src/EventStream.h (EventStream): replaces SLREventStream.
+
+	* ixe/text/{xml.lex,XmlReader.cpp} : added reader for XML data,
+	using Flex lexer.
+
+	* src/Corpus.cpp: format is specified through XML configuration file.
+
+	* src/{ApParser.cpp, MultiSvmParser.cpp, SvmParser.cpp} (train):
+	revised to split on feature, chosen with parameter SplitFeature.
+
+	* src/SvmParser.cpp (train): STL maps do not deallocate, so we
+	replace with empty  ones.
+
+2008-03-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Token.h (Token, DependencyToken): new representation for
+	tokens using a map Attributes from names to values.
+	Attributes uses an AttributeIndex, that associates to an attribute
+	name the index of its value in a attribute vector.
+	The AttributeIndex can be shared among tokens in the same Corpus.
+
+	* src/TokenPath.h: specification of a path from a token, through
+	the sentence.
+
+	* src/conf_feature.{h, cpp} (FeatureSpecs): configuration variable
+	providing way to specify features as paths through sentence tokens.
+
+	* src/Corpus.{h, cpp}: representation of a corpus, providing a
+	suitable SentenceReader as well as details on token attributes and
+	language.
+
+	* src/SLREventStream.cpp: updated to use new representation of
+	Tokens and TokenPath.
+
+2008-02-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp: introduced paramater CompositeActions.
+	When set to true, classifier must predict combination
+	Action+Deprel.
+	When set to false, an additional action DepLink (D) is introduced,
+	performed immediately after Right/Left, which adds the dependency
+	label to the link just created. The classifier must predict D+Deprel.
+
+2008-02-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (createActionSequence): removed extra
+	Shift action at the end.
+
+2008-02-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SvmParser.cpp (train):
+	Added a facility to split SVM learning into several models,
+	depending on the previous sequence of actions.
+	The new parameter SvmSplit, with a value N between 0 and 3, allows
+	splitting into 3^N models.
+	With a value of 2, training takes 1/4 of the time on the English
+	CoNLL 2007 corpus, with 4% decrease in labeled accuracy.
+
+	* MaxEntropy/model/text/WordIndex.h (WordIndex::insert): do not copy string if already present.
+
+	* ixe/text/WordSet.h (insert): do not copy string if already present.
+
+2008-02-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp: fix to usage message.
+
+	* CoNLL/*.conf: changed SecondOrder to false in all configurations.
+
+	* src/Parser.cpp: restored missing definition of parameter outputFormat.
+
+	* src/desr.cpp, desr.conf: introduced configuration parameter
+	FeatureCutoff to determine dropping infrequent features.
+	It replaces individual parameters MeCutoff, ApCutoff.
+	Parameter also affects --dump option.
+
+2008-01-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.i: added SWIG interface.
+
+	* */Makefile.in: modified to produce .lo position independent code
+	for SWIG
+
+2008-01-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac: changed option --disable-32bit to --enable-32bit
+
+2008-01-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Iterator.h (class Iterator): added Iterator interface, used
+	by SentenceReader.
+
+	* src/SplitSentenceReader.h (class SplitSentenceReader):
+	provides sentence splitting at token level.
+
+	* src/PtbTokenizer.lex: lex grammar for Penn Treebank tokenization.
+
+	* src/Tokenizer.cpp (Scanner, Tokenizer): added classes providing
+	scanning and tokenization by means of Lex.
+
+2008-01-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.h (Token): renamed pos -> cpos, fpos -> pos
+
+	* src/SLREventStream.cpp (addRightPred): eliminated UseFinePos
+
+2008-01-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/svm.cpp: update to LIBSVM Version 2.85.
+
+	* src/SvmParser.cpp: added SvmParams and SvmCutoff configuration
+	parameters.
+
+	* src/SvmParser.cpp (train): implemented.
+
+2007-10-03  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.conf: set ApPercent to 0.1
+
+2007-07-23  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.cpp (load):
+	* src/ap.h (AFFINE):
+	* src/ApParser.cpp (train): allow affine hyperplanes as decision
+	surfaces by adding 0-th	component to each vector.
+
+2007-05-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addLeftPred, addLeftPred):
+	add individual morpho features depending on new parameter MorphoSplit.
+
+	* src/MorphExtractor.h (struct ItalianTutMorphExtractor): added
+	for handling TUT treebank.
+
+2007-03-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MorphExtractor.h (struct ItalianMorphExtractor): added.
+
+2007-03-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (setup): handle empty sentences.
+
+2007-03-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (next): fixed bug which trimmed  orth
+	when lemma was empty.
+
+2007-02-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.cpp (load, save): revised load/save methods, so that lists of
+	entities can be stored at the end of the file.
+	File format remains backward compatibile.
+
+	* src/SLREventStream.cpp (prepChildEntities): added mechanism for
+	extracting TIME/LOCATION entities from corpus, using dependency
+	labels such as CCT and CCL in Catalan.
+	List of such lemmas are stored in model file and used as features
+	when parameter PrepChildEntityType is specified.
+	To avoid contradictory suggestions, a lemma is attributed to
+	either TIME or LOCATION only if its frequency in one category
+	is at least 1.5 the frequency in the other.
+	E.g. 'tarda' is put in TIME even if rarely is used as LOCATION.
+	Only ApParser at the moment uses these features.
+
+2007-02-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addLeftPred): fixed to output PosTriple
+	only when stack is non empty
+
+2007-02-23  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (ConllSentenceReader::next): perform
+	token clean up here instead of Token constructor.
+
+2007-02-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (SLRStream::ispunct): defined through
+	Unicode category property type Punctuation.
+
+2007-02-09  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.h: eliminated Fs::rand_alpha().
+
+2007-02-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/pa.{h,cpp}: Passive-Aggressive multiclass single-label classifier.
+
+	* src/PaParser.cpp (PaParser): version using PA algorithm.
+
+	* src/ApParser.cpp (train): dump labels to model file before
+	staarting training so that they can be cleared from memory.
+
+2007-01-31  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SentenceReader.cpp (reCoNLL):
+	allows has extra tab at end of lines, for czech CoNLL 2007.
+
+2007-01-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addLeftPred, addRightPred):
+	include pair Lemma+POS with FeatPairs.
+
+	* src/desr.conf: added MorphoAgreement parameter
+
+	* src/SLREventStream.cpp (predicates): added feature
+	MorphoAgreement representing cases where either focus tokens'
+	number or gender agree.
+
+	* src/SentenceReader.h (Token): added fields gender, number and case.
+
+	* src/MorphExtractor.{h,cpp}: added Basque, Catalan, Greek,
+	Hungarian
+
+2007-01-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.cpp (AP::train): added paramater updatePercent to control
+	algorithm termination.
+
+	* src/desr.conf: added ApPercent to control AP::updatePercent
+
+	* src/ApParser.cpp (ApParser): initialize AP::updatePercent from
+	ApPercent
+
+2007-01-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (createActionSequence): allow l2 also to
+	RootNode, in order to handle cases of multiple roots, like in
+	Danish DDT. See sentence in test/danish_l2ROOT.conll.
+	Similarly for l3 and l4.
+
+2007-01-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (createActionSequence): l3 moves 3 tokens
+	back to input, rather than 2.
+
+	* src/Makefile (POS_SOURCES, NOPOS_SOURCES): variables to control
+	whether to link PosTagger.
+
+	* src/PosTaggerStub.cpp (PosTagger): an empty stub to be linked
+	instead of PosTagger.o in configuration where not required.
+
+	* src/desr.cpp (main): create SentenceReader using PosTagger if
+	required.
+
+	* src/SLREventStream.cpp (SLRContextStream): moved use of
+	PosTagger to SentenceReader
+
+	* src/SentenceReader.h (class TaggedSentenceReader): added as
+	wrapper to SentenceReader, performing POS tagging
+
+	* src/SLREventStream.cpp (createActionSequence): added action l4
+	for handling sentence test/swedish_l4.conll from
+	swedish_talbank05_train.conll.
+
+2007-01-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (createActionSequence):
+	added fake Shift action at the end. It causes an extra training
+	event:
+		S )
+	which will never occur in parsing, since it stops when input is empty.
+	However it has shown empirically to improve UAS by 1% on various
+	languages (e.g. Swedish)
+
+2007-01-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addRightPred): added parameters:
+	LexPrev, LexSucc, MorphoPrev, MorphoSucc
+
+	* src/SentenceReader.h 9Token): added fields tag1 and tag2 to
+	represent fields 9 and 10 of CoNLL format.
+	Also used for experiments with NE tagging.
+
+2007-01-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (predicates): SecondOrder only uses
+	pairs, discarding single features.
+
+2007-01-18  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.cpp (APSV): increased MAX_LINE_LEN to 8196, or else
+	reading 2nd-order models (e.g. Danish) will fail.
+
+2007-01-17  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ApParser.cpp (train): reserve space for cases to reduce
+	allocation costs.
+	* src/ApParser.cpp (train): use APSV for training (was changed by mistake)
+
+2007-01-15  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (createActionSequence):
+	force a Shift when doing a Left with the RootNode
+	(hasNext): removed patch for multiple roots in PDT
+
+	* src/ap.cpp (AP::train: added partitioning of cases.
+	Partition size is controlled by parameter ApPartition.
+
+2007-01-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/PosTagger.{h,cpp}: added POS Tagger
+
+	* src/SLREventStream.h (ContextStream): added POS Tagger option
+
+	* src/SLREventStream.h (ContextStream): eliminated REPEAT option
+
+2007-01-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MorphExtractor.h (struct MorphExtractor): revised handling
+	of morpho features. The original value is retained in field
+	'full', unless the parameter MorphoExtract is true, in whicch case
+	it is obtained by combining individual features (gender, number,
+	person, case) extracted from the field.
+
+2007-01-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* configure.ac, configure, aclocal: added
+
+	* ixe: added IXE subset
+
+	* MaxEntropy: added
+
+	* src/SLREventStream.cpp (addRightPred): removed flag PosMorph
+
+	* src/SentenceReader.cpp: updated to new XML syntax.
+
+2006-12-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MultiLrParser.cpp (struct MultiLrParser): added
+	Logistic Regression algorithm, using LR-TRIRLS implementation.
+
+	* src/SLREventStream.cpp (DepFeatures): eliminated since no token
+	on input or stack can have dependencies (only children).
+
+2006-12-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (performAction): do not perform Shift
+	when action is improper, but return false.
+	Caller can decide an alternative action, e.g. second most likely.
+
+2006-12-20  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/Parser.cpp (parseActions): dropped. It is useless to
+	interpret an action file. The actions should be calculated
+	according to the current parser state, which is tantamount to
+	performing normal parsing.
+
+	* src/Parser.cpp (parseActions): added method to interpret an
+	action list file.
+
+2006-12-19  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MeParser.cpp (train): dropped version using Zhang's maxent
+
+	* src/MultiMeParser.cpp (train): dropped version using Zhang's maxent
+
+2006-12-14  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (performAction): avoid extracting dummy
+	root in R actions
+
+2006-12-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/desr.cpp: changed name to desr, and the configuration file
+	to desr.conf
+
+2006-12-11  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (performAction):
+	optimize Left action, anticipating Shift when stack becomes empty.
+
+2006-12-10  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addLeftPred): added CPosFeatures
+
+2006-12-06  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/parser.cpp: update language codes to ISO-639
+
+2006-12-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/parser.cpp (main): dropped option -p
+
+	* src/SLREventStream.cpp (addLeftPred, addRightPred):
+	parameter FeatPairs is used to determine whether to add pairs of
+	features for each item on stack or on input with the same feature
+	of either focus words.
+
+2006-12-04  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ApParser.cpp (train): add cutoff for predicates
+
+2006-10-16  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/ap.h, src/ap.cpp: added Averaged Perceptron algorithm from
+	Massimo Ciaramita
+
+2006-10-13  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (hasNext): connect multiple heads to main head
+
+	* src/SLREventStream.cpp (addLeftPred, addRightPred):
+	removed DepFeatures, since no item on either stack or input can
+	have a head
+
+2006-10-07    <attardi@THESEUS>
+
+	* script/retrain.py (Sentence.computeAction): added actions leading
+	to tokens to left/right of constituent and to thir parents.
+
+	* src/ReviseEventStream.cpp (performAction): handle < and > actions
+
+2006-09-28  root  <root@paleo.di.unipi.it>
+
+	* src/SLREventStream.cpp (predicates):
+	introduced feature VerbCount instead of VerbAfter.
+	Revised computation of feature PunctCount.
+
+2006-09-22  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MeParser.cpp: version using LBFGS trainer
+
+2006-03-12  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MeParser.cpp (train): added a cutoff parameter
+	(TrainingSentences) on the number of training sentences.
+
+2006-03-05  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (addLeftPred): keep morpho feature, even
+	when empty, since it allows to distinguish between
+	finite/non-finite verb form (e.g. in portuguese 'totalizando' has
+	empty FEATS, CPOSTAG v and POSTAG v-ger).
+
+2006-02-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* ../../maxent.Zhang/Jamrules (LINKLIBS): /usr/lib/gcc-lib/i386-redhat-linux/3.2.3/libg2c.a
+	* ../../maxent.Zhang/src/maxent.cpp (get_sample):
+	  Use " \t" as delimiters in tokenizer, or else UFT-8 files (e.g. Czech)
+	  will be parsed incorrectly.
+
+	* installed g77 libraries:
+	yum install compat-gcc-32-g77.i386
+
+2006-01-29  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/parser.cpp (parseSvm): added support for SVM through
+	library libSVM
+
+	* src/SLREventStream.cpp (evalScore): use RE to detect punctuation.
+
+2006-01-28  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (performAction): version handling Nivre's
+	actions.
+	SH action is performed implicitly when stack is empty.
+
+2006-01-27  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/parser.cpp (parseSnow): completed.
+
+2006-01-26  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SnowParse.cpp (Snow): added wrapper for SNoW ML library
+
+	* libsnow: added SNoW library
+
+	* src/parser.cpp (main): use OptionStream and Configuration to
+	read parameter file and handle command line options
+
+	* src/parser.conf: added configuration file
+
+2006-01-25  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/SLREventStream.cpp (SLRStream::performAction):
+	in Right action insert left child in front.
+
+2006-01-24  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/parser.cpp (tableItem): use MorphExtractor const*
+
+	* src/SLREventStream.cpp (hasNext): compute LAS correctly
+
+2006-01-21  Giuseppe Attardi  <attardi@di.unipi.it>
+
+	* src/MorphExtractor.h (struct MorphExtractor): generic functional
+	object to be used for extracting morphological features from
+	sentence tokens.
+
+	(struct PortugueseMorphExtractor): specialized version for
+	Portuguese treebank.
+
+	* src/SLREventStream.cpp (next): use a functional object for
+	extracting morphological features from sentence tokens.

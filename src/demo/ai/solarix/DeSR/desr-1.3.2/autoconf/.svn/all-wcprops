@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svnroot/desr/!svn/ver/186/trunk/autoconf
+END
+install.sh
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/3/trunk/autoconf/install.sh
+END
+boost.m4
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/186/trunk/autoconf/boost.m4
+END
+config.guess
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/3/trunk/autoconf/config.guess
+END
+config.sub
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/3/trunk/autoconf/config.sub
+END
+ltmain.sh
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/3/trunk/autoconf/ltmain.sh
+END

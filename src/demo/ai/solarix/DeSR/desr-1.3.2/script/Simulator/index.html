@@ -1,0 +1,180 @@
+<html>
+<head>
+  <title>Parser + SRL Simulator</title>
+
+  <!-- Combo-handled YUI CSS files: --> 
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/treeview/assets/skins/sam/treeview.css" /> 
+  <!-- Combo-handled YUI JS files: --> 
+  <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/treeview/treeview-min.js"></script> 
+
+  <!-- Combo-handled YUI CSS files: --> 
+  <link rel="stylesheet" type="text/css"
+  href="http://yui.yahooapis.com/combo?2.7.0/build/container/assets/skins/sam/container.css" /> 
+  <!-- Combo-handled YUI JS files: --> 
+  <script type="text/javascript"
+  src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/container/container-min.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/fonts/fonts-min.css" />
+
+  <!-- local css file --> 
+  <link rel="stylesheet" type="text/css" href="style.css" /> 
+  <!-- local javascript file --> 
+  <script src="functions.js" language="JavaScript" type="text/javascript"></script>
+</head>
+
+
+<body class="yui-skin-sam" onload="setLanguage()">
+
+<div id="content">
+
+<h1 style='text-align: center'>Parser + SRL Simulator</h1>
+
+
+<table cellpadding="10" width='100%'>
+  <tr>
+  <td>
+        
+  
+  <table border='0' width='180px'>
+    <tr>
+    <td valign="top">
+    
+    <!-- Syntactic Actions -->
+    <table border='1' style='background-color: #DDFFFF' width='100%'>
+      <tr><th colspan='2'>Syn Action</th></tr>
+      <tr>
+        <td><button id="button_shift" style="width: 100%" onclick="shift()">shift</button></td>
+        <td>
+        <select id="predlabel">
+            <script type="text/javascript">
+            for (var i in predLabels) {
+                var label = predLabels[i];
+                document.write('<option value="' + label + '">' + label + '</option>');
+            }
+            </script>
+        </select>
+        </td>
+      </tr>
+
+      <tr>
+      <td>
+      <table border='0' width='100%'>
+        <script type="text/javascript">
+        for (var i in synAction) {
+          if (i > 0) {
+            var action = synAction[i];
+            document.write('<tr><td><button id="button_' + action +
+                            '" style="width: 100%" onclick="' + action +
+                            '()">' + action + '</button></td></tr>');
+          }
+        }
+        </script>
+      </table>
+      </td>
+      
+      <td><select id="synlabel"> </select></td>
+      </tr>
+    </table>
+
+    <!-- SRL Actions -->
+    <table border='1' style='background-color: #DDAAAA' width='100%'>
+      <tr><th colspan='2'>SRL Action</th></tr>
+
+      <tr>
+      <td>
+      <table border='0' width='100%'>
+        <script type="text/javascript">
+        for (var i in srlAction) {
+          var action = srlAction[i];
+          document.write( '<tr><td><button id="button_' + action +
+                          '" style="width: 100%" onclick="' + action +
+                          '()">' + action + '</button></td></tr>');    }
+        </script>
+      </table>
+      </td>
+      <td><select id="srllabel"></select></td>
+      </tr>
+
+    </table>
+
+    <table border='1' style='background-color: #AAAAAA' width='100%'>
+      <tr><th>Language</th></tr>
+      <tr><td>
+      <select id="languageChoice" onchange="setLanguage()">
+      <script type="text/javascript">
+      for (i in languages) {
+        var lang = languages[i];
+        document.write('<option value="' + lang + '">' + lang + '</option>');
+      }
+      </script>
+      </select>
+      </td></tr>
+    </table>
+
+    </td>
+    </tr>
+  </table>
+  
+  
+  </td>
+  <td>
+  
+  
+  
+  <table>
+    <tr>
+    <th>Sentence</th>
+    <td><input type="text" id='sentence'onchange='init()' size='100' /></td>
+    </tr>
+   
+    <tr><th>Parse</th>
+    <td>
+    <table bgcolor='gray' style="height: 12pt">
+      <tr>
+      <td style='margin-right: 12px'><table class='stack'><tr id="depStack"></tr></table></td>
+      <td><table class='queue'><tr id="inputQueue"></tr></table></td>
+      </tr>
+    </table>
+    </td>
+    </tr>
+    
+    <tr><th>SRL</th>
+    <td>
+    <table bgcolor='gray' style="height: 12pt">
+      <tr>
+      <td style='margin-right: 12px'><table class='stack'><tr id="srlStack"></tr></table></td>
+      <td><table class='queue'><tr id="srlQueue"></tr></table></td>
+      </tr>
+    </table>
+    </td>
+    </tr>
+   
+    <tr><th>Parse Actions</th>
+        <td><input type="text" id='actions' size='100' onchange="setActions()" />
+    </tr>
+    
+    <tr><td></td>
+        <td style='text-align: center'>
+        <button id="rewind"  onclick="actions(-2)">&lt;&lt;</button>
+        <button id="back"    onclick="actions(-1)">&lt;</button>
+        <button id="forward" onclick="actions(1)">&gt;</button>
+        <button id="finish"  onclick="actions(2)">&gt;&gt;</button>
+        </td>
+    </tr>
+  </table>
+  
+  
+  </td>
+  </tr>
+</table>
+
+</div>
+
+
+<!-- local javascript tooltip file --> 
+<script src="tooltips.js" language="JavaScript" type="text/javascript"></script>
+
+
+</body>
+</html>

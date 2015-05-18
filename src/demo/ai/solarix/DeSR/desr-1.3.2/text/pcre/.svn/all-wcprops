@@ -1,0 +1,269 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svnroot/desr/!svn/ver/381/trunk/text/pcre
+END
+pcre.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre.h
+END
+configure
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/381/trunk/text/pcre/configure
+END
+pcre_compile.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_compile.c
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/357/trunk/text/pcre/Makefile.in
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/AUTHORS
+END
+pcre_xclass.c
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_xclass.c
+END
+pcre_newline.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_newline.c
+END
+pcre.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/pcre.vcproj
+END
+config.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/desr/!svn/ver/381/trunk/text/pcre/config.h
+END
+pcre_config.c
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_config.c
+END
+pcre-config.in
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/361/trunk/text/pcre/pcre-config.in
+END
+pcre_maketables.c
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_maketables.c
+END
+pcre_chartables.c
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_chartables.c
+END
+LICENCE
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/LICENCE
+END
+pcre_ucd.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/347/trunk/text/pcre/pcre_ucd.c
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/INSTALL
+END
+pcre_ord2utf8.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_ord2utf8.c
+END
+pcre_fullinfo.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_fullinfo.c
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/COPYING
+END
+pcre_get.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_get.c
+END
+config.in
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/config.in
+END
+ucpinternal.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/ucpinternal.h
+END
+pcre_try_flipped.c
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_try_flipped.c
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/NEWS
+END
+pcre_globals.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_globals.c
+END
+pcre_refcount.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_refcount.c
+END
+pcre_version.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_version.c
+END
+ucptable.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/ucptable.c
+END
+pcre.h.in
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/356/trunk/text/pcre/pcre.h.in
+END
+pcre_info.c
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_info.c
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/ChangeLog
+END
+pcre_dfa_exec.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_dfa_exec.c
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/README
+END
+pcre_valid_utf8.c
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_valid_utf8.c
+END
+config.h.in
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/356/trunk/text/pcre/config.h.in
+END
+pcre_printint.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/pcre_printint.c
+END
+pcre_study.c
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_study.c
+END
+pcre_tables.c
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_tables.c
+END
+NON-UNIX-USE
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/desr/!svn/ver/112/trunk/text/pcre/NON-UNIX-USE
+END
+dftables.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/dftables.c
+END
+pcre_internal.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_internal.h
+END
+ucp.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/ucp.h
+END
+pcre_exec.c
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/desr/!svn/ver/345/trunk/text/pcre/pcre_exec.c
+END
+install-sh
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/desr/!svn/ver/361/trunk/text/pcre/install-sh
+END
