@@ -13,10 +13,10 @@ else
  if [ "$HOSTTYPE" == "x86_64" ]
  then
   make -f makefile.linux64
-  cp parser ../../../../exe64
+  cp parser ../../../../../../exe64
  else
   make -f makefile.linux
-  cp parser ../../../../exe
+  cp parser ../../../../../../exe
  fi
 
 fi

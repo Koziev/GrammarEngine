@@ -10,7 +10,7 @@ LFLAGS = -l crfsuite -l cqdb -l lbfgs -l dl -l rt -l ncurses -l pthread -l sqlit
 
 .SUFFIXES: .c .o .cpp .cc .cxx .C
 
-LEM_LIBS =
+LEM_LIBS = $(LEM_PATH)/lib
 
 include makefile.files
 
