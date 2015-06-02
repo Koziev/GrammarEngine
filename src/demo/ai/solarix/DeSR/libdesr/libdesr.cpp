@@ -1,14 +1,24 @@
 // libdesr.cpp : Defines the exported functions for the DLL application.
 //
 
-#include "stdafx.h"
 
-#include <src\Parser.h>
-#include <src\Corpus.h>
+#if defined _WINDOWS || defined WIN32
+#include "stdafx.h"
+#endif
+
+#include <src/Parser.h>
+#include <src/Corpus.h>
 
 #include <string>
 
+
+
+#if defined _WINDOWS || defined WIN32
 #define EXPORT(RetType) __declspec(dllexport) RetType __stdcall
+#else
+#define EXPORT(RetType) RetType
+#endif
+
 
 using namespace Parser;
 using namespace std;

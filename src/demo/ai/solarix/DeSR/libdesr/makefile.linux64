@@ -1,28 +1,191 @@
-SRC        = ../../../../../../..
-OBJDIR     = /tmp/lemmatizator
+OBJDIR     = /tmp/libdesr
 LEM_PATH   = ../../../../..
-BOOST_PATH = $(SRC)/boost
 EXEDIR     = .
 EXT        = so
+DESR_PATH = $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2
 
 CXX      = g++
-CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D LEM_USES_NCURSES=0 -D LEM_CONSOLE -D LEM_UNICODE_CONSOLE -D NDEBUG -D BOOST_ALL_NO_LIB -D _GLIBCPP_USE_WCHAR_T -c -fPIC -march=nocona -Wall -O3
-LFLAGS = -shared -Wl,-soname,liblemma.so
+
+INCLUDES = -I $(DESR_PATH) -I $(DESR_PATH)/boost -I $(DESR_PATH)/ixe -I $(DESR_PATH)/ixe/win32 -I $(DESR_PATH)/classifier
+
+#DEFINES = -D LIBDESR_EXPORTS -D SUPPORT_UTF8 -D SUPPORT_UCP -D YY_NO_UNISTD_H -D LINK_SIZE=2 -D HAVE_CONFIG_H -D NDEBUG
+DEFINES = -D SUPPORT_UTF8 -D SUPPORT_UCP -D YY_NO_UNISTD_H -D LINK_SIZE=2 -D HAVE_CONFIG_H -D NDEBUG
+
+CXXFLAGS = $(INCLUDES) $(DEFINES) -c -march=nocona -Wall -O3 -fPIC
+#LFLAGS = -shared -Wl,-soname,libdesr.so
+LFLAGS =
 
 .SUFFIXES: .c .o .cpp .cc .cxx .C
 
-LEM_LIBS = 
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
 
-include makefile.files
+.cc.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.C.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) -o $@ $<
+
+OBJS = $(OBJDIR)/libdesr.o $(OBJDIR)/ap.o $(OBJDIR)/ApParser.o $(OBJDIR)/conf_feature.o $(OBJDIR)/Corpus.o $(OBJDIR)/EventStream.o $(OBJDIR)/Language.o $(OBJDIR)/MeParser.o $(OBJDIR)/MlpParser.o $(OBJDIR)/MorphExtractor.o $(OBJDIR)/MultiSvmParser.o $(OBJDIR)/Parser.o $(OBJDIR)/PosTaggerStub.o $(OBJDIR)/PtbTokenizer.o $(OBJDIR)/ReviseEventStream.o $(OBJDIR)/Sentence.o $(OBJDIR)/SentenceReader.o $(OBJDIR)/SplitSentenceReader.o $(OBJDIR)/State.o $(OBJDIR)/svm.o $(OBJDIR)/SvmParser.o $(OBJDIR)/Token.o $(OBJDIR)/TokenAttributes.o $(OBJDIR)/Tokenizer.o $(OBJDIR)/TokenPath.o $(OBJDIR)/Char.o $(OBJDIR)/charmap.o $(OBJDIR)/Encoding.o $(OBJDIR)/HtmlTokenizer.o $(OBJDIR)/RegExp.o $(OBJDIR)/StreamTokenizer_1.o $(OBJDIR)/String.o $(OBJDIR)/strings.o $(OBJDIR)/StringTokenizer.o $(OBJDIR)/Suffixes.o $(OBJDIR)/Unicode.o $(OBJDIR)/Utf8Utils.o $(OBJDIR)/WordSet.o $(OBJDIR)/xml.o $(OBJDIR)/XmlReader.o $(OBJDIR)/GIS.o $(OBJDIR)/LBFGS.o $(OBJDIR)/lbfgsAlg.o $(OBJDIR)/MaxEnt.o $(OBJDIR)/StreamTokenizer_2.o
+
+all: libdesr
+
+libdesr: $(OBJS)
+		ar rcs libdesr.a  $(OBJS)
+
+$(OBJDIR)/libdesr.o: $(LEM_PATH)/demo/ai/solarix/DeSR/libdesr/libdesr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/libdesr/libdesr.cpp -o $(OBJDIR)/libdesr.o
+
+$(OBJDIR)/ap.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ap.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ap.cpp -o $(OBJDIR)/ap.o
+
+$(OBJDIR)/ApParser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ApParser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ApParser.cpp -o $(OBJDIR)/ApParser.o
+
+$(OBJDIR)/conf_feature.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/conf_feature.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/conf_feature.cpp -o $(OBJDIR)/conf_feature.o
+
+$(OBJDIR)/Corpus.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Corpus.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Corpus.cpp -o $(OBJDIR)/Corpus.o
+
+$(OBJDIR)/EventStream.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/EventStream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/EventStream.cpp -o $(OBJDIR)/EventStream.o
+
+$(OBJDIR)/Language.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Language.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Language.cpp -o $(OBJDIR)/Language.o
+
+$(OBJDIR)/MeParser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MeParser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MeParser.cpp -o $(OBJDIR)/MeParser.o
+
+$(OBJDIR)/MlpParser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MlpParser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MlpParser.cpp -o $(OBJDIR)/MlpParser.o
+
+$(OBJDIR)/MorphExtractor.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MorphExtractor.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MorphExtractor.cpp -o $(OBJDIR)/MorphExtractor.o
+
+$(OBJDIR)/MultiSvmParser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MultiSvmParser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/MultiSvmParser.cpp -o $(OBJDIR)/MultiSvmParser.o
+
+$(OBJDIR)/Parser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Parser.cpp -o $(OBJDIR)/Parser.o
+
+$(OBJDIR)/PosTaggerStub.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/PosTaggerStub.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/PosTaggerStub.cpp -o $(OBJDIR)/PosTaggerStub.o
+
+$(OBJDIR)/PtbTokenizer.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/PtbTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/PtbTokenizer.cpp -o $(OBJDIR)/PtbTokenizer.o
+
+$(OBJDIR)/ReviseEventStream.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ReviseEventStream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/ReviseEventStream.cpp -o $(OBJDIR)/ReviseEventStream.o
+
+$(OBJDIR)/Sentence.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Sentence.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Sentence.cpp -o $(OBJDIR)/Sentence.o
+
+$(OBJDIR)/SentenceReader.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SentenceReader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SentenceReader.cpp -o $(OBJDIR)/SentenceReader.o
+
+$(OBJDIR)/SplitSentenceReader.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SplitSentenceReader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SplitSentenceReader.cpp -o $(OBJDIR)/SplitSentenceReader.o
+
+$(OBJDIR)/State.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/State.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/State.cpp -o $(OBJDIR)/State.o
+
+$(OBJDIR)/svm.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/svm.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/svm.cpp -o $(OBJDIR)/svm.o
+
+$(OBJDIR)/SvmParser.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SvmParser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/SvmParser.cpp -o $(OBJDIR)/SvmParser.o
+
+$(OBJDIR)/Token.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Token.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Token.cpp -o $(OBJDIR)/Token.o
+
+$(OBJDIR)/TokenAttributes.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/TokenAttributes.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/TokenAttributes.cpp -o $(OBJDIR)/TokenAttributes.o
+
+$(OBJDIR)/Tokenizer.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Tokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/Tokenizer.cpp -o $(OBJDIR)/Tokenizer.o
+
+$(OBJDIR)/TokenPath.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/TokenPath.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/src/TokenPath.cpp -o $(OBJDIR)/TokenPath.o
+
+
+$(OBJDIR)/Char.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Char.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Char.cpp -o $(OBJDIR)/Char.o
+
+$(OBJDIR)/charmap.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/charmap.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/charmap.cpp -o $(OBJDIR)/charmap.o
+
+$(OBJDIR)/Encoding.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Encoding.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Encoding.cpp -o $(OBJDIR)/Encoding.o
+
+$(OBJDIR)/HtmlTokenizer.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/HtmlTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/HtmlTokenizer.cpp -o $(OBJDIR)/HtmlTokenizer.o
+
+$(OBJDIR)/RegExp.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/RegExp.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/RegExp.cpp -o $(OBJDIR)/RegExp.o
+
+$(OBJDIR)/StreamTokenizer_1.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/StreamTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/StreamTokenizer.cpp -o $(OBJDIR)/StreamTokenizer_1.o
+
+$(OBJDIR)/String.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/String.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/String.cpp -o $(OBJDIR)/String.o
+
+$(OBJDIR)/strings.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/strings.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/strings.cpp -o $(OBJDIR)/strings.o
+
+$(OBJDIR)/StringTokenizer.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/StringTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/StringTokenizer.cpp -o $(OBJDIR)/StringTokenizer.o
+
+$(OBJDIR)/Suffixes.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Suffixes.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Suffixes.cpp -o $(OBJDIR)/Suffixes.o
+
+$(OBJDIR)/Unicode.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Unicode.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Unicode.cpp -o $(OBJDIR)/Unicode.o
+
+$(OBJDIR)/Utf8Utils.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Utf8Utils.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/Utf8Utils.cpp -o $(OBJDIR)/Utf8Utils.o
+
+$(OBJDIR)/WordSet.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/WordSet.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/WordSet.cpp -o $(OBJDIR)/WordSet.o
+
+$(OBJDIR)/xml.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/xml.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/xml.cpp -o $(OBJDIR)/xml.o
+
+$(OBJDIR)/XmlReader.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/XmlReader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/text/XmlReader.cpp -o $(OBJDIR)/XmlReader.o
+
+$(OBJDIR)/GIS.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/GIS.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/GIS.cpp -o $(OBJDIR)/GIS.o
+
+$(OBJDIR)/LBFGS.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/LBFGS.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/LBFGS.cpp -o $(OBJDIR)/LBFGS.o
+
+$(OBJDIR)/lbfgsAlg.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/lbfgsAlg.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/lbfgsAlg.cpp -o $(OBJDIR)/lbfgsAlg.o
+
+$(OBJDIR)/MaxEnt.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/MaxEnt.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/MaxEnt.cpp -o $(OBJDIR)/MaxEnt.o
+
+$(OBJDIR)/StreamTokenizer_2.o: $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/StreamTokenizer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/DeSR/desr-1.3.2/classifier/StreamTokenizer.cpp -o $(OBJDIR)/StreamTokenizer_2.o
+
+
+
+
+
 
 clean:
 	rm -f $(OBJDIR)/*
-	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/lemmatizator.so
 
 install:
-	cp lemmatizator.so /usr/lib64
-	rm -f /usr/lib64/liblemma.so
-	rm -f /usr/lib64/liblemma.so.1
-	ln -s /usr/lib64/lemmatizator.so /usr/lib64/liblemma.so
-	ln -s /usr/lib64/lemmatizator.so /usr/lib64/liblemma.so.1
-	
+	cp libdesr.so /usr/lib64
+	rm -f /usr/lib64/libdesr.so
+	rm -f /usr/lib64/libdesr.so.1
+	ln -s /usr/lib64/libdesr.so /usr/lib64/libdesr.so
+	ln -s /usr/lib64/libdesr.so /usr/lib64/libdesr.so.1
