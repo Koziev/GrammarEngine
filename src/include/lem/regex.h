@@ -236,6 +236,11 @@
  }
 
 
+
+ template < class CHAR >
+ int matche_after_star( const CHAR *p, const CHAR *t );
+
+
  /*----------------------------------------------------------------------------
  *
  *  Match the pattern PATTERN against the string TEXT;

@@ -312,9 +312,9 @@
        
      for( size_type i=0; i<x.size(); ++i )
       if( x[i]!=NULL )
-       push_back( new ITEM( *x[i] ) );
+       Ptr_NC_Collect<ITEM>::push_back( new ITEM( *x[i] ) );
       else
-       push_back( (ITEM*)NULL );
+       Ptr_NC_Collect<ITEM>::push_back( (ITEM*)NULL );
 
      return;
     }
@@ -359,11 +359,11 @@
         {  
          ITEM *x = new ITEM;
          x->LoadBin(bin); 
-         push_back(x);    
+         Ptr_NC_Collect<ITEM>::push_back(x);    
         }
        else
         {
-         push_back( (ITEM*)NULL );
+         Ptr_NC_Collect<ITEM>::push_back( (ITEM*)NULL );
         }
       }
 
@@ -480,11 +480,11 @@
       {
        if( bin.read_bool() )
         {  
-         push_back( ITEM::load_bin(bin) );
+         Ptr_NC_Collect<ITEM>::push_back( ITEM::load_bin(bin) );
         }
        else
         {
-         push_back( (ITEM*)NULL );
+         Ptr_NC_Collect<ITEM>::push_back( (ITEM*)NULL );
         }
       }
 

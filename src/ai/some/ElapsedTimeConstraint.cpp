@@ -29,9 +29,6 @@ ElapsedTimeConstraint::ElapsedTimeConstraint( int _max_elapsed_millisec )
  hTimer = NULL;
  #elif defined LEM_LINUX
  timer_is_armed = false;
- memset(&se, 0, sizeof(se));
- memset(&tv, 0, sizeof(tv));
- memset(&tt, 0, sizeof(tt));
  #endif
 
  if( max_elapsed_millisec>0 && max_elapsed_millisec<10000000 )
@@ -50,7 +47,10 @@ ElapsedTimeConstraint::ElapsedTimeConstraint( int _max_elapsed_millisec )
                                   );
 
    #elif defined LEM_LINUX
-    timer_is_armed=true;
+
+//    timer_is_armed=true;
+
+/*
     se.sigev_notify = SIGEV_THREAD;
     se.sigev_signo = 1;
     se.sigev_notify_function = &timer_routine;
@@ -66,7 +66,31 @@ ElapsedTimeConstraint::ElapsedTimeConstraint( int _max_elapsed_millisec )
     rc = timer_settime(tt, 0, &tv, NULL);
     if( rc!=0 )
      throw lem::E_BaseException( L"Can not set timer by timer_settime" );
+*/
+
+/*
+    // Establishing handler for signal SIG
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_sigaction = timer_routine;
+    sigemptyset(&sa.sa_mask);
+    if (sigaction( SIGRTMIN, &sa, NULL ) == -1)
+     throw lem::E_BaseException( L"ElapsedTimeConstraint: error in sigaction" );
+
+    // Create the timer
+    sev.sigev_notify = SIGEV_SIGNAL;
+    sev.sigev_signo = SIGRTMIN;
+    sev.sigev_value.sival_ptr = this;
+    if( timer_create( CLOCK_REALTIME, &sev, &timerid ) == -1 )
+     throw lem::E_BaseException( L"ElapsedTimeConstraint: error in timer_create" );
+
+    // Start the timer
+    its.it_value.tv_sec = (max_elapsed_millisec/1000) + ( (max_elapsed_millisec%1000)>0 ? 1 : 0 );
+    its.it_value.tv_nsec = 0;
+    its.it_interval.tv_sec = 0;
+    its.it_interval.tv_nsec = 0;
+*/
    #else
+
    thread = new lem::Process::Thread( ThreadFunction );
    thread->Start( (void*)this );
    #endif
@@ -82,10 +106,11 @@ VOID CALLBACK ElapsedTimeConstraint::TimerCallback( PVOID lpParameter, BOOLEAN T
  return;
 }
 #elif defined LEM_LINUX
-void ElapsedTimeConstraint::timer_routine( sigval sv )
+void ElapsedTimeConstraint::timer_routine( int sig, siginfo_t * si, void * uc )
 {
- ElapsedTimeConstraint * self = (ElapsedTimeConstraint*)sv.sival_ptr;
+ ElapsedTimeConstraint * self = (ElapsedTimeConstraint*)si->si_value.sival_ptr;
  self->exceeded = true;
+ signal( sig, SIG_IGN );
  return;
 }
 #else
@@ -110,7 +135,7 @@ ElapsedTimeConstraint::~ElapsedTimeConstraint()
  #elif defined LEM_LINUX
  if( timer_is_armed )
   {
-   timer_delete(&tt);
+   timer_delete(&timerid);
   }
  #else
  if( thread!=NULL )

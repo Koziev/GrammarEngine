@@ -23,10 +23,11 @@ namespace Solarix
    #elif defined LEM_LINUX
    bool timer_is_armed;
    static volatile int time_seq;
-   sigevent se;
-   itimerspec tv;
-   timer_t tt;
-   static void timer_routine( sigval sv );
+   timer_t timerid;
+   struct sigevent sev;
+   struct itimerspec its;
+   struct sigaction sa;
+   static void timer_routine( int sig, siginfo_t * si, void * uc );
    #else
    lem::Process::Thread * thread;
    static void ThreadFunction( void * data );

@@ -87,13 +87,13 @@
     inline ITEM& top( int depth=0 )
     {
      LEM_CHECKIT_Z( int(size())-1-depth>=0);
-     return at(size()-1-depth);
+     return lem::Collect<ITEM>::at(size()-1-depth);
     }
 
     inline const ITEM& top( int depth=0 ) const
     {
      LEM_CHECKIT_Z( int(size())-1-depth>=0);
-     return at(size()-1-depth);
+     return lem::Collect<ITEM>::at(size()-1-depth);
     }
 
 //    inline const ITEM& get( int i ) const { return operator[](i); }

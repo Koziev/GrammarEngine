@@ -144,7 +144,7 @@
    {
     reserve( size() + x.size() );
     for( size_type i=0; i<x.size(); i++ )
-     push_back(x[i]);
+     std::vector<ITEM>::push_back(x[i]);
 
     return;
    }
@@ -217,7 +217,7 @@
     #else
     LEM_CHECKIT_Z( k>=0 && k<size() );
     #endif
-    /*std::vector<ITEM>::*/erase( /*std::vector<ITEM>::*/begin()+k );
+    std::vector<ITEM>::erase( /*std::vector<ITEM>::*/begin()+k );
     return;
    }
 
@@ -252,7 +252,7 @@
     {
      // Контейнер пуст - просто добавляем.
      LEM_CHECKIT_Z(!to);
-     push_back(x);
+     std::vector<ITEM>::push_back(x);
      return;
     }
 
@@ -262,7 +262,7 @@
    LEM_CHECKIT_Z(to>=0 && to<size());
    #endif
 
-   insert( begin()+to, x );
+   std::vector<ITEM>::insert( begin()+to, x );
    return;
   }
 

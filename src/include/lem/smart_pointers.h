@@ -127,7 +127,7 @@
 
     Ptr<T>& operator=( T* p )
     {
-     reset(p);
+     boost::shared_ptr<T>::reset(p);
      return *this;
     }
 
@@ -229,7 +229,7 @@
 
     ClonePtr<T>& operator=( T* p )
     {
-     reset(p);
+     boost::shared_ptr<T>::reset(p);
      return *this;
     }
 
@@ -293,7 +293,7 @@
     void LoadBin( lem::Stream &bin )
     {
      if( bin.read_bool() )
-      reset( T::load_bin(bin) );
+      boost::shared_ptr<T>::reset( T::load_bin(bin) );
      else
       Delete();
 
