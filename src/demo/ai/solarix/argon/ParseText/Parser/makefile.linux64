@@ -1,0 +1,19 @@
+OBJDIR = /tmp/parser
+LEM_PATH = ../../../../../..
+SRC = ../../../../../../../..
+BOOST_PATH = $(SRC)/boost
+EXEDIR     = .
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -I $(LEM_PATH)/demo/ai/solarix/CRFSuite/crfsuite-0.12/include -I $(LEM_PATH)/demo/ai/solarix/DeSR/libdesr -D _DEBUG -D SOL_CRF_MODEL -D LEM_THREADS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_CONSOLE -D LEM_UNICODE_CONSOLE -D NDEBUG -D SOL_CAA -D SOL_LOADBIN -D SOL_REPORT -D SOL_SAVETXT -D SOLARIX_PRO -D SOL_DEBUGGING -D BOOST_ALL_NO_LIB -c -O3 -march=nocona -Wall
+LFLAGS = -l crfsuite -l cqdb -l lbfgs -l dl -l rt -l ncurses -l pthread -l sqlite3 -l boost_regex -l boost_thread
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+LEM_LIBS = $(LEM_PATH)/lib64
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/parser

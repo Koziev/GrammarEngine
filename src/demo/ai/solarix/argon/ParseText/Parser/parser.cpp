@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <windows.h>
+
+
 #include <vector>
 #include <string>
 #include <map>
@@ -21,6 +22,10 @@
 #include <lem/solarix/print_variator.h>
 #include <lem/solarix/casing_coder.h>
 #include <lem/solarix/la_autom.h>
+
+#if defined LEM_WINDOWS
+#include <windows.h>
+#endif
 
 #include <libdesr.h>
 
@@ -391,14 +396,13 @@ int main( int argc, char *argv[] )
    hDESR = DesrInit( 10, desr_conf.GetAscii().c_str(), desr_model.GetAscii().c_str() );
   }
 
-
  // -------------------------------------------------------------------------
 
  int language_id = UNKNOWN;
  language_id = dict.GetSynGram().Find_Language( language_name );
  if( language_id==UNKNOWN )
   {
-   lem::mout->printf( "Unknown language [%us]\n", language_name );
+   lem::mout->printf( "Unknown language [%us]\n", language_name.c_str() );
    exit(1);
   }
 
@@ -410,7 +414,8 @@ int main( int argc, char *argv[] )
  current_analysis.params.ApplyModel = true;
 
  // Ограничение на суммарное затраченное время в миллисекундах
- const int MaxMillisecTimeout = 180000;
+// const int MaxMillisecTimeout = 180000;
+ const int MaxMillisecTimeout = 0;
  current_analysis.params.timeout.max_elapsed_millisecs = MaxMillisecTimeout>0 ? MaxMillisecTimeout : lem::int_max;
 
  // Ограничение на макс. число параллельно проверяемых альтернативных путей построения синтаксического дерева
@@ -420,6 +425,19 @@ int main( int argc, char *argv[] )
  current_analysis.params.ConfigureSkipToken();
 
  Solarix::CasingCoder& cc = dict.GetLexAuto().GetCasingCoder();
+
+
+/*
+ // ------------------------------
+ printf( "DEBUG parser.cpp 1\n" );
+ 
+ lem::UFString sentence0 = lem::from_utf8("РљРѕС€РєР° Рё СЃРѕР±Р°РєРё СЃРїСЏС‚.");
+ current_analysis.ApplyFilters(sentence0);
+
+ printf( "DEBUG parser.cpp 2\n" );
+ exit(0);
+*/
+
 
  // ------------------------------------
  std::vector<lem::Path> filenames;
@@ -431,6 +449,8 @@ int main( int argc, char *argv[] )
   {
    filenames.push_back( input_path );
   }
+
+
 
  lem::OUFormatter out_stream( out_path );
  out_stream.printf( "<?xml version='1.0' encoding='utf-8' ?>\n<parsing>\n" );
@@ -479,6 +499,8 @@ int main( int argc, char *argv[] )
       int paragraph_id = segmenter->GetFetchedParagraphID();
       out_stream.printf( "\n\n<sentence paragraph_id='%d'>\n<text>%us</text>\n", paragraph_id, xml_str.c_str() );
    
+   
+   
       if( verbose )
        lem::mout->printf( "%d: %us\n", counter, sentence.c_str() );
    
@@ -497,9 +519,13 @@ int main( int argc, char *argv[] )
           current_analysis.MorphologicalAnalysis(sentence);
          }
    
+   
+   
         const Res_Pack & pack0 = current_analysis.GetPack();
         const Solarix::Variator & tagging = * pack0.vars().front();
         DumpMorphTokens( dict, cc, tagging, emit_morph, out_stream );
+     
+     
      
         const int n_token = CastSizeToInt(tagging.roots_list().size()-2);
         word_count += n_token;
@@ -507,6 +533,7 @@ int main( int argc, char *argv[] )
       else if( parser_type==0 )
        {
         // DESR вероятностный парсер
+   
    
         // применяем вероятностную модель морфологии для снятия неоднозначностей, но правила не применяем.
         current_analysis.ApplyFilters(sentence);
@@ -517,12 +544,15 @@ int main( int argc, char *argv[] )
         if( tagger_type!=-1 )
          DumpMorphTokens( dict, cc, tagging, emit_morph, out_stream );
      
+     
         const int n_token = CastSizeToInt(tagging.roots_list().size()-2);
         word_count += n_token;
    
         
         // выполним парсинг, используя результаты POS Tagger'а
         out_stream.printf( "\n<syntax_tree>\n" );
+     
+     
      
         lem::FString desr_input;
      
@@ -546,6 +576,7 @@ int main( int argc, char *argv[] )
         // lem::mout->printf( "DEBUG: Before syntax...\n" );
         char * desr_res_str = DesrTag( hDESR, desr_input.c_str() );
         // lem::mout->printf( "DEBUG: After syntax...\n" );
+     
      
         std::string s_res( desr_res_str );
      
@@ -580,9 +611,14 @@ int main( int argc, char *argv[] )
      
         }
      
+     
         DesrFreeResult( hDESR, desr_res_str );
      
+     
+     
         out_stream.printf( "</syntax_tree>\n" );
+        
+        
        }
       else if( parser_type==1 )
        {
