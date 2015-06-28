@@ -345,7 +345,7 @@ Stream::pos_type BinaryFile::fsize(void) const
 }
 
 
-lem::uint64_t BinaryFile::fsize64(void) const
+lem::Stream::pos64_type BinaryFile::fsize64(void) const
 {
  #if !defined LEM_FILE64
   return this->fsize();

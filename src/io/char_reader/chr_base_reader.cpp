@@ -22,7 +22,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->20.11.2004
-// LC->20.02.2010
+// LC->21.10.2014
 // --------------
 
 #include <lem/unicode.h>
@@ -67,7 +67,7 @@ WideStream::WideStream( WideStreamType t )
 }
 
 
-WideStream::~WideStream(void)
+WideStream::~WideStream()
 {}
 
 
@@ -77,7 +77,7 @@ void WideStream::SetEncoding( const CodeConverter *Cp )
  return;
 }
 
-const CodeConverter* WideStream::GetEncoding(void) const
+const CodeConverter* WideStream::GetEncoding() const
 {
  return cp;
 }
@@ -106,7 +106,7 @@ Stream::pos_type WideStream::read( void *dest, pos_type size )
 }
 
 
-wchar_t WideStream::wget(void)
+wchar_t WideStream::wget()
 {
  if( back_ch )
   {
@@ -120,7 +120,7 @@ wchar_t WideStream::wget(void)
 }
 
 
-wchar_t WideStream::wpeek(void)
+wchar_t WideStream::wpeek()
 {
  wchar_t c = wget();
  unget(c);
@@ -129,7 +129,7 @@ wchar_t WideStream::wpeek(void)
 
 
 
-bool WideStream::skip_white2(void)
+bool WideStream::skip_white2()
 {
  bool eol=false;
  wchar_t c;
@@ -162,10 +162,10 @@ bool WideStream::skip_white2(void)
 }
 
 
-bool WideStream::eof(void) const
+bool WideStream::eof() const
 { return bin.IsNull() ? true : bin->eof(); }
 
-void WideStream::flush(void)
+void WideStream::flush()
 {
  if( bin.NotNull() )
   bin->flush();
@@ -173,7 +173,7 @@ void WideStream::flush(void)
  return;
 } 
 
-int WideStream::get(void)
+int WideStream::get()
 {
  wchar_t u = wget();
 
@@ -199,7 +199,7 @@ void WideStream::put( char c )
 }
 
 
-Stream::pos_type WideStream::tellp(void) const
+Stream::pos_type WideStream::tellp() const
 { return back_ch ? back_pos : bin->tellp(); }
 
 
@@ -212,14 +212,17 @@ Stream::pos_type WideStream::seekp( off_type pos, int whereto )
 bool WideStream::move( off_type offset )
 { return bin->move(offset); }
 
-void WideStream::close(void)
+void WideStream::close()
 {
  if( bin.NotNull() ) bin->close();
  return;
 }
 
-Stream::pos_type WideStream::fsize(void) const
+Stream::pos_type WideStream::fsize() const
 { return bin->fsize(); }
+
+Stream::pos64_type WideStream::fsize64() const
+{ return bin->fsize64(); }
 
 
 #if defined LEM_UNICODE_EX && defined LEM_32 && defined LEM_MZ_CHARGUESSER
@@ -241,7 +244,7 @@ class MzCharsetGuesser : public nsUniversalDetector
   }
 
  public:
-  MzCharsetGuesser(void) : nsUniversalDetector( 0xffffffffU ), res(NULL) {}
+  MzCharsetGuesser() : nsUniversalDetector( 0xffffffffU ), res(NULL) {}
 
  public:
   const char* Process( const char *data, int data_len )
@@ -404,7 +407,7 @@ lem::Ptr<WideStream> WideStream::GetReader( const lem::Path &p, const lem::CodeC
 }
 
 
-bool WideStream::skip_white(void)
+bool WideStream::skip_white()
 {
  bool was_eol=false;
 
@@ -476,7 +479,7 @@ void WideStream::read_text( UFString &buffer )
  return;
 }
 
-const lem::Path& WideStream::GetName(void) const
+const lem::Path& WideStream::GetName() const
 {
  if( !!bin )
   return bin->GetName();

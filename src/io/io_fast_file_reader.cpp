@@ -180,7 +180,7 @@ Stream::pos_type FastFileReader::fsize(void) const
 }
 
 
-lem::uint64_t FastFileReader::fsize64(void) const
+lem::Stream::pos64_type FastFileReader::fsize64(void) const
 {
  return filesize.QuadPart;
 }

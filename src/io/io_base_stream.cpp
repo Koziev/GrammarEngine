@@ -348,7 +348,7 @@ void Stream::Check(void) const
 }
 
 
-lem::uint64_t Stream::fsize64(void) const
+lem::Stream::pos64_type Stream::fsize64(void) const
 { return fsize(); }
 
 

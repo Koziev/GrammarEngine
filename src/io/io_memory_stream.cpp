@@ -23,7 +23,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->02.03.1996
-// LC->29.11.2008
+// LC->06.11.2014
 // --------------
 
 
@@ -33,6 +33,7 @@
 
 #include <lem/macros.h>
 #include <lem/path.h>
+#include <lem/conversions.h>
 #include <lem/streams.h>
 
 using namespace lem;
@@ -408,6 +409,22 @@ lem::Stream::pos_type MemStream::fsize(void) const
  return occupied;
 }
 
+
+lem::FString MemStream::Hex() const
+{
+ lem::FString res;
+
+ for( int i=0; i<occupied; ++i )
+ {
+  lem::uint8_t b = (lem::uint8_t)((*block)[i]);
+  res.Add_Dirty( lem::get_numerique( (b>>4) & 0x0f ) );
+  res.Add_Dirty( lem::get_numerique( b & 0x0f ) );
+ }
+
+ return res;
+}
+
+
 // *****************************************************************
 
 MemReadStream::MemReadStream( const char *rBlock )
@@ -540,6 +557,156 @@ Stream::pos_type MemReadStream::seekp( off_type to, int whereto )
   return static_cast<pos_type>(-1);
 
  return cursor;
+}
+
+
+// -----------------------------
+
+
+MemReadHexStream::MemReadHexStream( const char *HexData )
+{
+ LEM_CHECKIT_Z( HexData!=NULL );
+
+ size = strlen( HexData );
+ block = new lem::uint8_t[ size ];
+
+ for( int i=0; i<size; ++i )
+ {
+  char c_hi = HexData[i*2];
+  char c_lo = HexData[i*2+1];
+ 
+  lem::uint8_t b8 = (lem::uint8_t)( (lem::char_to_digit(c_hi)<<4) | lem::char_to_digit(c_lo) );
+  block[size] = b8;
+ }
+
+ cursor=0;
+}
+
+
+MemReadHexStream::MemReadHexStream( const wchar_t *HexData )
+{
+ LEM_CHECKIT_Z( HexData!=NULL );
+
+ size = wcslen( HexData )/2;
+ block = new lem::uint8_t[ size ];
+
+ for( int i=0; i<size; ++i )
+ {
+  wchar_t c_hi = HexData[i*2];
+  wchar_t c_lo = HexData[i*2+1];
+ 
+  lem::uint8_t b8 = (lem::uint8_t)( (lem::uchar_to_digit(c_hi)<<4) | lem::uchar_to_digit(c_lo) );
+  block[i] = b8;
+ }
+
+ cursor=0;
+}
+
+
+MemReadHexStream::~MemReadHexStream()
+{
+ delete[] block;
+}
+
+bool MemReadHexStream::eof() const
+{ return cursor>=size; }
+
+
+
+lem::Stream::pos_type MemReadHexStream::read( void *dest, pos_type dest_size )
+{
+ if( dest==NULL )
+  {
+   LEM_CHECKIT_Z(dest_size==0);
+   return 0;
+  }
+
+ if( block==NULL || cursor==lem::size_t_max )
+  {
+   memset( dest, 0, dest_size );
+   return 0;
+  }
+
+ if( cursor+dest_size > size )
+  {
+   pos_type sz = size-cursor;
+
+   memset( dest, 0, dest_size );
+
+   if( sz>0 )
+    memcpy( dest, block+cursor, sz );
+
+   dest_size = sz;
+  }
+ else
+  {    
+   memcpy( dest, block+cursor, dest_size );
+  }
+
+ cursor += dest_size;
+
+ return dest_size;
+}
+
+
+int MemReadHexStream::get()
+{
+ if( cursor>=size )
+  return EOF;
+ else
+  return block[cursor++];
+}
+
+
+void MemReadHexStream::unget( char c )
+{
+ cursor--;
+ LEM_CHECKIT_Z( cursor>=0 );
+}
+
+
+lem::Stream::pos_type MemReadHexStream::seekp( lem::Stream::off_type to, int whereto )
+{
+ switch(whereto)
+ {
+  case SEEK_SET:
+   // Установка в заданное значение
+   cursor=(size_t)to;
+   if( cursor >= size )
+    cursor = size-1; 
+   break;
+
+  case SEEK_CUR:
+   // Смещение вперед на заданное значение байтов
+   cursor+=(size_t)to;
+   if( cursor >= size )
+    cursor = size-1; 
+   break;
+
+  case SEEK_END:
+   if( size )
+    cursor = size-1;
+
+   break;
+ }
+
+ // TODO ... доп. проверки выходе за правую границу ...
+
+ return cursor;
+}
+
+void MemReadHexStream::Check() const
+{
+ LEM_CHECKIT_Z(block!=NULL); 
+ LEM_CHECKIT_Z(cursor>=0 && cursor<=size);
+ return;
+}
+
+
+bool MemReadHexStream::move( lem::Stream::off_type offset )
+{
+ cursor+=offset;
+ return cursor <= size;
 }
 
 
