@@ -1,7 +1,7 @@
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/sg_autom.h>
 #include <lem/solarix/la_autom.h>
-#include <lem/solarix/pm_functionloader.h>
+#include <lem/solarix/PM_FunctionLoader.h>
 #include <lem/solarix/SynPatternResult.h>
 #include <lem/solarix/LA_WordEntrySet.h>
 #include <lem/solarix/TreeScorerApplicationContext.h>

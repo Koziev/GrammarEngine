@@ -14,7 +14,7 @@
 #include <lem/solarix/TreeScorerApplicationContext.h>
 #include <lem/solarix/TreeScorerMatcher.h>
 #include <lem/solarix/TreeScorerGroupParams.h>
-#include <lem/solarix/pm_functionloader.h>
+#include <lem/solarix/PM_FunctionLoader.h>
 #include <lem/solarix/SynPatternTreeNodeMatchingResults.h>
 
 using namespace Solarix;
