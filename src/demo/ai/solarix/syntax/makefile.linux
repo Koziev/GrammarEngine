@@ -6,7 +6,7 @@ EXEDIR     = .
 
 CXX      = g++
 CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -I $(LEM_PATH)/demo/ai/solarix/CRFSuite/crfsuite-0.12/include -D SOL_CRF_MODEL -D LEM_THREADS -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_CONSOLE -D LEM_UNICODE_CONSOLE -D NDEBUG -D SOL_CAA -D SOL_LOADBIN -D SOL_REPORT -D SOL_SAVETXT -D SOLARIX_PRO -D SOL_DEBUGGING -D BOOST_ALL_NO_LIB -c -march=pentium -Wall 
-LFLAGS = -l crfsuite -l cqdb -l lbfgs -l dl -l rt -l ncurses -l pthread -l sqlite3 -l boost_regex -l boost_thread
+LFLAGS = -l crfsuite -l cqdb -l lbfgs -l dl -l rt -l ncurses -l pthread -l sqlite3 -l boost_regex -l boost_thread -l boost_system
 
 .SUFFIXES: .c .o .cpp .cc .cxx .C
 
