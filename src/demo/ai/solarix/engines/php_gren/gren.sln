@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gren", "gren.vcproj", "{0031F8FD-088F-44D7-AB29-52214D7D7939}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_TS|Win32 = Debug_TS|Win32
+		Release_TS|Win32 = Release_TS|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0031F8FD-088F-44D7-AB29-52214D7D7939}.Debug_TS|Win32.ActiveCfg = Release_TS|Win32
+		{0031F8FD-088F-44D7-AB29-52214D7D7939}.Debug_TS|Win32.Build.0 = Release_TS|Win32
+		{0031F8FD-088F-44D7-AB29-52214D7D7939}.Release_TS|Win32.ActiveCfg = Release_TS|Win32
+		{0031F8FD-088F-44D7-AB29-52214D7D7939}.Release_TS|Win32.Build.0 = Release_TS|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

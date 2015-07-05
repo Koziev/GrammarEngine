@@ -1,0 +1,11 @@
+// $Id: config.w32 146077 2003-12-10 00:47:02Z wez $
+// vim:ft=javascript
+
+ARG_ENABLE("gren", "gren functions", "yes");
+
+if (PHP_BCMATH == "yes") {
+	EXTENSION("gren", "gren.c",	null, "-Iext/gren");
+	ADD_SOURCES("ext/gren", "gren.c", "gren");
+
+	AC_DEFINE('HAVE_GREN', 1, 'Have GREN library');
+}
