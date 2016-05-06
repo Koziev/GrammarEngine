@@ -371,7 +371,7 @@ namespace SolarixGrammarEngineNET
    _hEngine = GrammarEngine.sol_CreateGrammarEngineW( "" );
    int rc = GrammarEngine.sol_LoadDictionaryExW( _hEngine, DictionaryXmlPath, flags );
 
-   if( _hEngine == IntPtr.Zero )
+   if( rc!=1 )
    {
     string msg = GrammarEngine.sol_GetErrorFX( _hEngine );
     throw new ApplicationException( string.Format( "Error has occured when connecting the dictionary database by {0}: {1}", DictionaryXmlPath, msg ) );
@@ -563,6 +563,11 @@ namespace SolarixGrammarEngineNET
    IntPtr hPack = GrammarEngine.sol_MorphologyAnalysis( _hEngine, phrase, flags, 0, constraints, id_language );
    AnalysisResults res = new AnalysisResults( this, hPack );
    return res;
+  }
+
+  public string NormalizePhrase( AnalysisResults linkages )
+  {
+   return SolarixGrammarEngineNET.GrammarEngine.NormalizePhraseFX( _hEngine, linkages.GetHandle() );
   }
 
 

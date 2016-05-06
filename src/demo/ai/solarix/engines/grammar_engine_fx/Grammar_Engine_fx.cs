@@ -690,6 +690,24 @@ namespace SolarixGrammarEngineNET
   public static extern int sol_Free(IntPtr hEngine, IntPtr ptr);
 
 
+
+  [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+  public static extern /* wchar_t* */ IntPtr sol_NormalizePhraseW( IntPtr hEng, IntPtr hLinkages );
+
+  public static string NormalizePhraseFX( IntPtr hEngine, IntPtr hLinkages )
+  {
+   IntPtr wchar_ptr = sol_NormalizePhraseW(hEngine,hLinkages);
+   
+   if( wchar_ptr==(IntPtr)null )
+    return "";
+
+   string res = Marshal.PtrToStringUni(wchar_ptr);
+   sol_Free(hEngine,wchar_ptr);
+   return res;
+  }
+
+
+
   public static string sol_LinksInfoTagsTxtFX(IntPtr hEngine, IntPtr /*HLINKSINFO*/ hList, int Index )
   {
    IntPtr wchar_ptr = sol_LinksInfoTagsTxt( hEngine, hList, Index );
@@ -733,7 +751,12 @@ namespace SolarixGrammarEngineNET
 
   // http://www.solarix.ru/api/ru/sol_ListEntries.shtml
   [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
-  public static extern IntPtr /*HGREN_INTARRAY*/ sol_ListEntries(IntPtr hEng, int Flags, int EntryType, string Mask, int Language, int Class);
+  public static extern IntPtr /*HGREN_INTARRAY*/ sol_ListEntries( IntPtr hEngine, int Flags, int EntryType, string Mask, int Language, int PartOfSpeech );
+
+
+  [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
+  public static extern System.IntPtr sol_ListEntryForms( IntPtr hEngine, int EntryKey );
+
 
 
   [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
