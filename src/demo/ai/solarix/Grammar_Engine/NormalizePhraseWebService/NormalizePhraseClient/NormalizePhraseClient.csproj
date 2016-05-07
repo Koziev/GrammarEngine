@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6CCC4CBD-BE28-47D8-A12C-1CBDD5CBDBFC}</ProjectGuid>
+    <ProjectGuid>{6DAC51B3-B702-40E7-88E3-773F7C4F26F7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NormalizePhraseWebService</RootNamespace>
-    <AssemblyName>NormalizePhraseWebService</AssemblyName>
+    <RootNamespace>NormalizePhraseClient</RootNamespace>
+    <AssemblyName>NormalizePhraseClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,20 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="gren_consts">
-      <HintPath>..\..\..\..\..\..\lib64\gren_consts.dll</HintPath>
-    </Reference>
-    <Reference Include="gren_fx">
-      <HintPath>..\..\..\..\..\..\lib64\gren_fx.dll</HintPath>
-    </Reference>
-    <Reference Include="gren_fx2">
-      <HintPath>..\..\..\..\..\..\lib64\gren_fx2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,25 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INormalizePhraseService.cs" />
-    <Compile Include="NormalizePhraseWebService.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NormalizePhraseService.cs">
-      <SubType>Component</SubType>
+    <Compile Include="..\NormalizePhraseWebService\INormalizePhraseService.cs">
+      <Link>INormalizePhraseService.cs</Link>
     </Compile>
+    <Compile Include="NormalizePhraseClient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy e:\MVoice\lem\lib64\solarix_grammar_engine.dll $(TargetDir)
-copy e:\MVoice\lem\lib64\sqlite.dll $(TargetDir)
-
-</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

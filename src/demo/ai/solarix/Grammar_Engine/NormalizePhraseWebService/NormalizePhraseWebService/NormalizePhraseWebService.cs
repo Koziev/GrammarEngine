@@ -100,32 +100,46 @@ namespace NormalizePhraseWebService
 
             }
 
-            //                                ServiceEndpoint ep = null;
-            //                                ServiceDebugBehavior stp = null;
+            ServiceHost host = new ServiceHost(typeof(WindowsServiceHost.NormalizePhraseService));
 
-            ServiceHost host = new ServiceHost(typeof(WindowsServiceHost.NormalizePhraseService));//, new Uri("http://localhost:9003"));
 
-            //                                    ep = host.AddServiceEndpoint(typeof(ReplicationService2), new WebHttpBinding(), "/ReplicationService");
-            //                                    stp = host.Description.Behaviors.Find<ServiceDebugBehavior>();
-            //stp.HttpHelpPageEnabled = false;
+            /*
+                        Uri base_address = host.Description.Endpoints[0].Address.Uri;
 
-            Uri base_address = host.Description.Endpoints[0].Address.Uri;
+                        ServiceMetadataBehavior smb = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
 
-            ServiceMetadataBehavior smb = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
+                        if (smb == null)
+                            smb = new ServiceMetadataBehavior();
+                        smb.HttpGetEnabled = true;
+                        smb.HttpGetUrl = base_address;
+                        smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                        host.Description.Behaviors.Add(smb);
 
-            if (smb == null)
-                smb = new ServiceMetadataBehavior();
-            smb.HttpGetEnabled = true;
-            smb.HttpGetUrl = base_address;//new Uri("http://127.0.0.1:9003/ReplicationService");
-            smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-            host.Description.Behaviors.Add(smb);
+                        // Add MEX endpoint
+                        host.AddServiceEndpoint(
+                          ServiceMetadataBehavior.MexContractName,
+                          MetadataExchangeBindings.CreateMexHttpBinding(),
+                          base_address.ToString() + "/mex" //"http://127.0.0.1:9003/ReplicationService/mex"
+                        );
+            */
 
-            // Add MEX endpoint
-            host.AddServiceEndpoint(
-              ServiceMetadataBehavior.MexContractName,
-              MetadataExchangeBindings.CreateMexHttpBinding(),
-              base_address.ToString() + "/mex" //"http://127.0.0.1:9003/ReplicationService/mex"
-            );
+
+            #region Net Tcp Binding
+            NetTcpBinding binding = new NetTcpBinding();
+            binding.TransferMode = TransferMode.Buffered;
+            binding.MaxReceivedMessageSize = int.MaxValue;
+            binding.CloseTimeout = TimeSpan.MaxValue;
+            binding.SendTimeout = TimeSpan.MaxValue;
+            host.AddServiceEndpoint(typeof(WindowsServiceHost.INormalizePhraseService), binding, new Uri("net.tcp://localhost:1973/NormalizationService"));
+            #endregion
+
+            /*
+                     #region Matadata Exchange Binding
+                     host.Description.Behaviors.Add(new ServiceMetadataBehavior());
+                     Binding mexBinding = MetadataExchangeBindings.CreateMexTcpBinding();
+                     host.AddServiceEndpoint(typeof(IMetadataExchange), mexBinding, new Uri("net.tcp://localhost:1973/NormalizationService/mex"));
+                     #endregion
+            */
 
             host.Open();
 

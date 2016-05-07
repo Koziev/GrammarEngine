@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ServiceProcess;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 
 
 namespace WindowsServiceHost
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public partial class NormalizePhraseService : ServiceBase, INormalizePhraseService
     {
         /// <summary> 
@@ -19,6 +21,11 @@ namespace WindowsServiceHost
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            if (disposing && gren != null)
+            {
+                gren.Dispose();
+            }
+
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -56,49 +63,43 @@ namespace WindowsServiceHost
             return null;
         }
 
-        protected override void OnStart(string[] args)
-        {
-            try
-            {
-                host = new WebServiceHost(typeof(NormalizePhraseService));
-                stp = host.Description.Behaviors.Find<ServiceDebugBehavior>();
-
-                Uri base_address = host.Description.Endpoints[0].Address.Uri;
-                host.Open();
-            }
-            catch (Exception ex)
-            {
-            }
-        }
-
-        protected override void OnStop()
-        {
-            if (host != null)
-            {
-                host.Close();
-            }
-        }
-
 
         private object gren_lock = new object();
         private SolarixGrammarEngineNET.GrammarEngine2 gren;
+
+        private void LoadDict()
+        {
+            if (gren == null)
+            {
+                lock (gren_lock)
+                {
+                    string dict = System.Configuration.ConfigurationSettings.AppSettings["dictionary_path"];
+                    Console.WriteLine("Loading dictionary {0}", dict);
+                    gren = new SolarixGrammarEngineNET.GrammarEngine2();
+                    gren.Load(dict, true);
+                }
+            }
+        }
+
+        public void StartSession()
+        {
+            Console.WriteLine("NormalizePhraseService.StartSession");
+            LoadDict();
+        }
+
+        public void EndSession()
+        {
+            Console.WriteLine("NormalizePhraseService.EndSession");
+        }
 
         public string NormalizePhrase(string phrase)
         {
             try
             {
-                if (gren == null)
-                {
-                    lock (gren_lock)
-                    {
-                        string dict = System.Configuration.ConfigurationSettings.AppSettings["dictionary_path"];
-                        Console.WriteLine( "Loading dictionary {0}", dict );
-                        gren = new SolarixGrammarEngineNET.GrammarEngine2();
-                        gren.Load(dict, true);
-                    }
-                }
-
                 Console.WriteLine("NormalizePhrase phrase={0}", phrase);
+
+                LoadDict();
+
                 SolarixGrammarEngineNET.GrammarEngine.MorphologyFlags morph_flags = SolarixGrammarEngineNET.GrammarEngine.MorphologyFlags.SOL_GREN_COMPLETE_ONLY;
                 SolarixGrammarEngineNET.GrammarEngine.SyntaxFlags syntax_flags = SolarixGrammarEngineNET.GrammarEngine.SyntaxFlags.DEFAULT;
                 int MaxAlt = 30;
