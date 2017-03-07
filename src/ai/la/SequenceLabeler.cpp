@@ -123,7 +123,7 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
 
  const int nleaf = std::min( CastSizeToInt(leafs.size()), lexer.GetParams().timeout.max_tokenization_paths );
 
- for( int i=0; i<nleaf && !constraints.Exceeded(); ++i )
+ for( int i=0; i<nleaf && !constraints.Exceeded(0); ++i )
   {
    const LexerTextPos * leaf = leafs[i];
    nodes.clear();

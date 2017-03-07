@@ -88,7 +88,7 @@
    void TestFlexer(void);
    void ShowParadigma(void);
    void TestThesaurus();
-   void TestProjector(void);
+   void TestLexiconLookUp(void);
    void TestNGrams();
    void SearchByIE();
    void FullMorphologyAnalysis(

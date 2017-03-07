@@ -569,11 +569,12 @@ void LexiconStorage_SQLITE::CreateTables_Recognizer(void)
                              " is_syllab integer not null,"
                              " is_prefix integer not null,"
                              " is_affix integer not null,"
+                             " is_forced integer not null,"
                              " r_condition varchar(100) not null,"
                              " case_sensitive integer not null,"
                              " word varchar(100),"
                              " id_entry integer not null,"
-                             " rel integer not null,"
+                             " score real not null,"
                              " coords varchar(300) not null"
                              ")";
 
@@ -2749,8 +2750,8 @@ LS_ResultSet* LexiconStorage_SQLITE::ListRecognitionRulesForWord( int id_languag
 
 LA_RecognitionRule* LexiconStorage_SQLITE::GetRecognitionRule( int id )
 {
- lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, "
-  "r_condition, id_entry, rel, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
+ lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, is_forced,"
+  "r_condition, id_entry, score, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
 
  sqlite3_stmt *stmt=NULL;
  const char *dummy=NULL;
@@ -2764,21 +2765,22 @@ LA_RecognitionRule* LexiconStorage_SQLITE::GetRecognitionRule( int id )
      const bool is_regex = sqlite3_column_int(stmt,2)==1;
      const bool is_prefix = sqlite3_column_int(stmt,3)==1;
      const bool is_affix = sqlite3_column_int(stmt,4)==1;
-     lem::UFString condition = lem::sqlite_column_ufstring(stmt,5);
-     const int ekey = sqlite3_column_int(stmt,6);
-     const lem::Real1 rel = lem::Real1(sqlite3_column_int(stmt,7));
-     lem::UFString str_coords = lem::sqlite_column_ufstring(stmt,8);
-     const bool is_syllab = sqlite3_column_int(stmt,9)==1;
-     const int id_src = sqlite3_column_int(stmt,10);
-     const bool case_sensitive = sqlite3_column_int(stmt,11)==1;
+     const bool is_forced = sqlite3_column_int(stmt,5)==1;
+     lem::UFString condition = lem::sqlite_column_ufstring(stmt,6);
+     const int ekey = sqlite3_column_int(stmt,7);
+     const float score = sqlite3_column_double(stmt,8);
+     lem::UFString str_coords = lem::sqlite_column_ufstring(stmt,9);
+     const bool is_syllab = sqlite3_column_int(stmt,10)==1;
+     const int id_src = sqlite3_column_int(stmt,11);
+     const bool case_sensitive = sqlite3_column_int(stmt,12)==1;
 
      Solarix::CP_Array coords;
      coords.Parse(str_coords);
 
      sqlite3_finalize(stmt);
 
-     return new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix,
-        condition, ekey, rel, coords, id_src );
+     return new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix, is_forced,
+        condition, ekey, score, coords, id_src );
     }
    else
     {
@@ -2825,18 +2827,19 @@ void LexiconStorage_SQLITE::StoreRecognitionRule( LA_RecognitionRule *rule )
  
 
  lem::MemFormatter q;
- q.printf( "INSERT INTO RECOG_RULE( name, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-           " r_condition, id_entry, rel, coords, id_src,"
-           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us, %d )",
+ q.printf( "INSERT INTO RECOG_RULE( name, id_language, is_syllab, is_regex, is_prefix, is_affix, is_forced,"
+           " r_condition, id_entry, score, coords, id_src,"
+           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, %d, '%us', %d, %g, '%us', %d, %us, %d )",
            lem::to_upper(rule->GetName()).c_str(),
            rule->GetLanguage(),
            rule->IsSyllab() ? 1 : 0,
            rule->IsRegex() ? 1 : 0,
            rule->IsPrefix() ? 1 : 0,
            rule->IsAffix() ? 1 : 0,
+           rule->IsForced() ? 1 : 0,
            condition.c_str(),
            rule->GetEntryKey(),
-           rule->GetRel().GetInt(),
+           rule->GetScore(),
            coords.c_str(),
            rule->GetSourceLocation(),
            word.c_str(),
@@ -3433,7 +3436,8 @@ void LexiconStorage_SQLITE::CreateTables_Filters(void)
    const char ddl31[] = "CREATE TABLE ts_group( "
                        " id integer PRIMARY KEY NOT NULL,"
                        " name varchar(30) NOT NULL,"
-                       " allow_unmatched_children integer NOT NULL"
+                       " allow_unmatched_children integer NOT NULL,"
+                       " id_language integer NOT NULL"
                        ")";
 
    Execute(ddl31);
@@ -4247,7 +4251,6 @@ void LexiconStorage_SQLITE::SetWordformFrequency( int id_entry, int iform, int f
 {
  LEM_CHECKIT_Z( id_entry!=UNKNOWN );
  LEM_CHECKIT_Z( iform!=UNKNOWN );
- LEM_CHECKIT_Z( frequency>=0 );
 
  // чтобы не допустить дубля и нарушения ограничения уникальности, проверим, нет ли
  // записи для этой словоформы.
@@ -5488,7 +5491,7 @@ int LexiconStorage_SQLITE::StoreTreeScorerGroup( const lem::UCString & name, con
  sqlite_escape(escaped_name);
 
  lem::MemFormatter ms;
- ms.printf( "INSERT INTO ts_group( name, allow_unmatched_children ) VALUES ( '%us', %d )", escaped_name.c_str(), params.allow_unmatched_children );
+ ms.printf( "INSERT INTO ts_group( name, allow_unmatched_children, id_language ) VALUES ( '%us', %d, %d )", escaped_name.c_str(), params.allow_unmatched_children, params.id_language );
  const int id = ExecuteAndReturnId( ms.string() );
  return id;
 }
@@ -5496,11 +5499,12 @@ int LexiconStorage_SQLITE::StoreTreeScorerGroup( const lem::UCString & name, con
 void LexiconStorage_SQLITE::LoadTreeScorerGroupParams( int id, TreeScorerGroupParams & params )
 {
  lem::MemFormatter mem;
- mem.printf( "SELECT allow_unmatched_children FROM ts_group WHERE id=%d", id );
+ mem.printf( "SELECT allow_unmatched_children, id_language FROM ts_group WHERE id=%d", id );
  lem::Ptr<LS_ResultSet> rs( ListByQuery(mem.string()) );
  if( rs->Fetch() )
   {
    params.allow_unmatched_children = rs->GetInt(0)==1;
+   params.id_language = rs->GetInt(1);
   }
  else
   {
@@ -5523,7 +5527,7 @@ int LexiconStorage_SQLITE::FindTreeScorerGroup( const lem::UCString & name )
 
 LS_ResultSet* LexiconStorage_SQLITE::ListTreeScorerGroups()
 {
- return ListByQuery( "SELECT id, name, allow_unmatched_children FROM ts_group" );
+ return ListByQuery( "SELECT id, name, allow_unmatched_children, id_language FROM ts_group" );
 }
 
 
@@ -6131,6 +6135,7 @@ TreeScorerPoint* LexiconStorage_SQLITE::LoadTreeScorerPoint( const lem::UFString
   }
  else
   {
+   lem::UFString err(lem::sqlite_errmsg(hdb));
    LEM_STOPIT;
   }
 

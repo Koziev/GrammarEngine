@@ -19,10 +19,11 @@ using namespace Solarix;
 volatile int ElapsedTimeConstraint::time_seq=0;
 #endif
 
-ElapsedTimeConstraint::ElapsedTimeConstraint( int _max_elapsed_millisec )
+ElapsedTimeConstraint::ElapsedTimeConstraint( int _max_elapsed_millisec, int _max_stack_depth )
 {
  max_elapsed_millisec = _max_elapsed_millisec;
  exceeded=false;
+ max_stack_depth=_max_stack_depth;
 
  #if defined LEM_WINDOWS
  hTimerQueue = NULL;

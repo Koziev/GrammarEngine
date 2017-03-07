@@ -65,7 +65,7 @@ Word_Form::Word_Form( const lem::MCollect<const Word_Form*> &variants )
  normalized = variants[0]->normalized;
  pair = variants[0]->pair;
  entry_key = variants[0]->entry_key;
- val = variants[0]->val;
+ //val = variants[0]->val;
  score=variants[0]->score;
  origin_pos = variants[0]->origin_pos;
  tokenizer_flags = variants[0]->tokenizer_flags;
@@ -80,7 +80,7 @@ Word_Form::Word_Form( const Lexem &s, int EntryKey )
  entry_key = EntryKey;
  name = RC_Lexem(new Lexem(s));
  normalized = name;
- val = Real1(100);
+ //val = Real1(100);
  score=0;
  origin_pos = UNKNOWN;
  iversion = seq_iversion++;
@@ -93,7 +93,7 @@ Word_Form::Word_Form( const Lexem &s, int EntryKey, const CP_Array &attrs )
  entry_key = EntryKey;
  name = RC_Lexem(new Lexem(s));
  normalized = name;
- val = Real1(100);
+ //val = Real1(100);
  score=0;
  origin_pos = UNKNOWN;
  iversion = seq_iversion++;
@@ -123,9 +123,9 @@ Word_Form::Word_Form(
                      const RC_Lexem &NormalizedName,
                      int EntryKey,
                      const CP_Array &Pair,
-                     Real1 Val
+                     float form_score //Real1 Val
                     )
- : name(Name), normalized(NormalizedName), val(Val), score(0), entry_key(EntryKey)
+ : name(Name), normalized(NormalizedName), /*val(Val),*/ score(form_score), entry_key(EntryKey)
 {
  origin_pos = UNKNOWN;
  iversion = seq_iversion++;
@@ -146,9 +146,9 @@ Word_Form::Word_Form(
                      const RC_Lexem &Name,
                      const RC_Lexem &NormalizedName,
                      int EntryKey,
-                     Real1 Val
+                     float form_score //Real1 Val
                     )
- : name(Name), normalized(NormalizedName), val(Val), score(0), entry_key(EntryKey)
+ : name(Name), normalized(NormalizedName), /*val(Val),*/ score(form_score), entry_key(EntryKey)
 {
  origin_pos = UNKNOWN;
  iversion = seq_iversion++;
@@ -189,7 +189,7 @@ void Word_Form::Init( const Word_Form &fw, bool copy_versions )
  normalized  = fw.normalized;
  pair        = fw.pair;
  entry_key   = fw.entry_key;
- val         = fw.val;
+// val         = fw.val;
  score       = fw.score;
  origin_pos  = fw.origin_pos;
  tokenizer_flags = fw.tokenizer_flags;
@@ -200,11 +200,11 @@ void Word_Form::Init( const Word_Form &fw, bool copy_versions )
 
    for( lem::Container::size_type i=0; i<alt.size(); ++i )
     delete alt[i];
+
    alt.clear();
-   {
+
    for( lem::Container::size_type i=0; i<fw.alt.size(); ++i )
     alt.push_back( new Word_Form(*fw.alt[i]) );
-   }
   }
  else
   {
@@ -493,7 +493,7 @@ bool Word_Form::DoesPresent( const GramCoordAdr& pair_index ) const
 
 #if defined SOL_LOADTXT
 /******************************************************************
- —читывание описание узла BETH-дерева из текстового файла —ловар€.
+ —читывание описание узла синтаксического дерева из текстового файла
 *******************************************************************/
 void Word_Form::LoadTxt(
                         CompilationContext &context,
@@ -501,7 +501,7 @@ void Word_Form::LoadTxt(
                         SynGram &gram
                        )
 {
- val=Real1(100);
+ //val=Real1(100);
  score=0;
  iversion = seq_iversion++;
 
@@ -845,8 +845,8 @@ void Word_Form::PrintXML( OFormatter &xml, SynGram &gram ) const
 
  xml.printf( "<origin_pos>%d</origin_pos>\n", GetOriginPos() );
  xml.printf( "<id_entry>%d</id_entry>\n", entry_key );
- xml.printf( "<val>%4.2f</val>\n", val.GetFloat() );
- xml.printf( "<score>%d</score>\n", score );
+// xml.printf( "<val>%4.2f</val>\n", val.GetFloat() );
+ xml.printf( "<score>%g</score>\n", score );
 
  if( !pair.empty() )
   {
@@ -915,7 +915,7 @@ void Word_Form::Print( OFormatter &s, SynGram *gram, bool detailed ) const
     s.printf( "%vf6]%vn" );
 
    if( alt.GetScore()!=0 )
-    s.printf( "|%d|", alt.GetScore() );
+    s.printf( "|%g|", alt.GetScore() );
 
    if( detailed )
     {
@@ -1050,7 +1050,7 @@ void Word_Form::SaveBin( lem::Stream &bin ) const
  pair.SaveBin(bin);
 // bin.write( &tfield,     sizeof(tfield)     );
  bin.write( &entry_key,  sizeof(entry_key)  );
- bin.write( &val,        sizeof(val)        );
+// bin.write( &val,        sizeof(val)        );
  bin.write( &score,        sizeof(score)        );
 // bin.write( &icenter,    sizeof(icenter)    );
  bin.write( &origin_pos, sizeof(origin_pos) );
@@ -1093,7 +1093,7 @@ void Word_Form::LoadBin( lem::Stream &bin )
 
 // bin.read( &tfield,     sizeof(tfield)     );
  bin.read( &entry_key,  sizeof(entry_key)  );
- bin.read( &val,        sizeof(val)        );
+// bin.read( &val,        sizeof(val)        );
  bin.read( &score,        sizeof(score)        );
 // bin.read( &icenter,    sizeof(icenter)    );
  bin.read( &origin_pos, sizeof(origin_pos) );
@@ -1443,7 +1443,7 @@ Predef_Word_Form::Predef_Word_Form( int ientry_key, SynGram &gram )
            RC_Lexem( const_cast<Lexem*>(&gram.GetEntry( ientry_key ).GetName()), null_deleter() ),
            RC_Lexem( const_cast<Lexem*>(&gram.GetEntry( ientry_key ).GetName()), null_deleter() ),
            ientry_key,
-           Real1(100)
+           0 //Real1(100)
           )
 {}
 
@@ -1709,7 +1709,7 @@ void Word_Form::SelectAlt( int i )
 //   e_list = alt[i]->e_list;
 //   lexem_owner = alt[i]->lexem_owner;
 //   tfield = alt[i]->tfield;
-   val = alt[i]->val;
+//   val = alt[i]->val;
    score = alt[i]->score;
 //   icenter = alt[i]->icenter;
    origin_pos = alt[i]->origin_pos;
@@ -1762,9 +1762,9 @@ bool Word_Form::MatchTokenizerFlag( const lem::UFString &str ) const
 
 
 // максимальное значение оценки среди всех версий 
-int Word_Form::GetMaxScore() const
+float Word_Form::GetMaxScore() const
 {
- int s=score;
+ float s=score;
 
  for( lem::Container::size_type i=0; i<alt.size(); ++i )
   s = std::max( s, alt[i]->score );

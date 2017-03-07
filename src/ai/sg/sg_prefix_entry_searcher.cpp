@@ -215,12 +215,14 @@ void PrefixEntrySearcher::PreciseSearch(
 }
 
 
+
 void PrefixEntrySearcher::Save_SQL( const lem::Path &filename, const SQL_Production &sql_version )
 {
  lem::OFormatter out( filename );
 
  if( sql_version.type==SQL_Production::MsSql )
   {
+   out.printf( "SET NOCOUNT ON;\n" );
    out.printf( "!! @echo Loading the prefix entry searcher ...\n" );
   }
  else if( sql_version.type==SQL_Production::Oracle )
@@ -262,12 +264,7 @@ void PrefixEntrySearcher::Save_SQL( const lem::Path &filename, const SQL_Product
     }
    else if( sql_version.type==SQL_Production::FireBird )
     {
-     out.printf(
-                "drop table charpos2entry;\n"
-                "commit;\n"
-                "\n"
-               );              
-
+     out.printf( "%us\n", sql_version.DropTable( "charpos2entry" ).c_str() );
      out.printf(
                 "create table charpos2entry( charpos integer NOT NULL PRIMARY KEY, ies BLOB SUB_TYPE 1 SEGMENT SIZE 64 NOT NULL );\n"
                 "commit;\n"

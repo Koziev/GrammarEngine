@@ -56,8 +56,8 @@
 
    int entry_key;      // Ключ базовой статьи (центра) в списке Синтаксической Грамматики.
 
-   Real1 val;           // Оценка достоверности хранящейся информации
-   int score;           // скоринг
+   //Real1 val;           // Оценка достоверности хранящейся информации
+   float score;           // скоринг
    int origin_pos;      // Начальная позиция в предложении (UNKNOWN, если неизвестно).
 
    lem::Ptr<lem::UFString> tokenizer_flags;
@@ -92,7 +92,7 @@
              const RC_Lexem& ml,
              const RC_Lexem &NormalizedName,
              int entry_key,
-             Real1 v
+             float form_score//Real1 v
             );
 
    Word_Form(
@@ -100,7 +100,7 @@
              const RC_Lexem &NormalizedName,
              int entry_key,
              const CP_Array& Pair,
-             Real1 v
+             float form_score//Real1 v
             );
 
    Word_Form( const Word_Form& fw, bool copy_versions=true );
@@ -156,20 +156,20 @@
 
    inline const CPE_Array& GetPairs(void) const { return pair; }
 
-   inline Real1 GetVal(void) const { return val; }
+   //inline Real1 GetVal(void) const { return val; }
 
-   inline int GetScore() const { return score; }
-   void SetScore( int _score ) { score=_score; }
+   inline float GetScore() const { return score; }
+   void SetScore( float _score ) { score=_score; }
 
    // максимальное значение оценки среди всех версий 
-   int GetMaxScore() const;
+   float GetMaxScore() const;
 
    #if defined SOL_CAA
    /******************************************************
     Коррекция оценки достоверности словоформы посредством
     домножения на указанный коэффициент Factor.
    *******************************************************/
-   inline void Multiply( Real1 f ) { val = val*f; }
+   //inline void Multiply( Real1 f ) { val = val*f; }
    #endif
 
    const lem::IntCollect GetStates( const GramCoordAdr& pair_index ) const;

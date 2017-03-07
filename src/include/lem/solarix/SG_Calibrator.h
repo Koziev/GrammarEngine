@@ -25,15 +25,17 @@
   ****************************************************************************/
   struct SG_calibrator
   {
-   lem::zbool wordform;
+   enum { UnknownType=-1, WordEntryFreq, WordFormScore, WordFormsScore };
+   int freq_type;
+   
    Solarix::Lexem word; // Лексическое содержимое
    int id_class;
    Solarix::CPE_Array coords; 
    int freq;  // Абсолютная частота использования.
 
-   SG_calibrator(void) : id_class(UNKNOWN), freq(0) {}
+   SG_calibrator(void) : id_class(UNKNOWN), freq(0), freq_type(UnknownType) {}
    SG_calibrator( const SG_calibrator &x );
-   SG_calibrator( const Solarix::SynGram &sg, const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile, bool _wordform );
+   SG_calibrator( const lem::UCString & keyword, const Solarix::SynGram &sg, const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile );
 
    void operator=( const SG_calibrator &x );
 
@@ -43,8 +45,9 @@
 
    bool MatchCoords( const CP_Array &form_coords ) const;
 
-   bool IsWordEntry(void) const { return !wordform; }
-   bool IsWordForm(void) const { return wordform; }
+   bool IsWordEntryFreq(void) const { return freq_type==WordEntryFreq; }
+   bool IsWordFormScore(void) const { return freq_type==WordFormScore; }
+   bool IsWordFormsScore(void) const { return freq_type==WordFormsScore; }
 
    void SaveBin( lem::Stream &bin ) const;
    void LoadBin( lem::Stream &bin );

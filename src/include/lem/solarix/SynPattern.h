@@ -585,7 +585,8 @@
                       LA_SynPatternTrees &named_filters,
                       WordEntrySet &wordentry_sets,
                       lem::PtrCollect<SynPatternResult> & results,
-                      TrTrace * trace_log
+                      TrTrace * trace_log,
+                      int recursion_depth
                      ) const;
 
     bool Match_Wordform(
@@ -721,7 +722,8 @@
                              lem::PtrCollect<SynPatternResult> & results,
                              TrTrace *trace_log,
                              int dbg_mark,
-                             TrMorphologyTracerTx &log_tx
+                             TrMorphologyTracerTx &log_tx,
+                             int recursion_depth
                             ) const;
 
     bool Match_NamedPatterns_Strict(
@@ -741,7 +743,8 @@
                                     lem::PtrCollect<SynPatternResult> & results,
                                     TrTrace *trace_log,
                                     int dbg_mark,
-                                    TrMorphologyTracerTx & log_tx
+                                    TrMorphologyTracerTx & log_tx,
+                                    int recursion_depth
                                    ) const;
 
 
@@ -761,7 +764,8 @@
                       bool force_export,
                       bool can_skip_outer_tokens,
                       lem::PtrCollect<SynPatternResult> & results,
-                      TrTrace *trace_log
+                      TrTrace *trace_log,
+                      int recursion_depth
                      ) const;
 
 
@@ -781,7 +785,8 @@
                                   bool force_export,
                                   bool can_skip_outer_tokens,
                                   lem::PtrCollect<SynPatternResult> & results,
-                                  TrTrace *trace_log
+                                  TrTrace *trace_log,
+                                  int recursion_depth
                                  ) const;
     #endif
 
@@ -856,7 +861,8 @@
                bool force_export,
                bool can_skip_outer_tokens,
                lem::PtrCollect<SynPatternResult> &results,
-               TrTrace *trace_log
+               TrTrace *trace_log,
+               int recursion_depth
               ) const;
     #endif
 
@@ -1066,7 +1072,8 @@
                             const BackTrace * parent_trace,
                             lem::PtrCollect<SynPatternResult> &final_results,
                             lem::MCollect<int> & final_result_fragments,
-                            TrTrace *trace_log
+                            TrTrace *trace_log,
+                            int recursion_depth
                            ) const;
     #endif
 
@@ -1087,7 +1094,8 @@
                bool greedy,
                bool can_skip_outer_tokens,
                lem::PtrCollect<SynPatternResult> &results,
-               TrTrace *trace_log
+               TrTrace *trace_log,
+               int recursion_depth
               ) const;
     #endif
 
@@ -1135,7 +1143,8 @@
                    bool greedy,
                    bool can_skip_outer_tokens,
                    lem::PtrCollect<SynPatternResult> &results,
-                   TrTrace *trace_log
+                   TrTrace *trace_log,
+                   int recursion_depth
                   ) const;
     #endif
 

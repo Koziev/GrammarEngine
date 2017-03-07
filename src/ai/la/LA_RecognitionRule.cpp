@@ -11,16 +11,16 @@ using namespace lem;
 using namespace Solarix;
 
 LA_RecognitionRule::LA_RecognitionRule(void)
- : id_language(UNKNOWN), id_entry(UNKNOWN), rel(100), src_location(UNKNOWN)
+ : id_language(UNKNOWN), id_entry(UNKNOWN), score(0), src_location(UNKNOWN)
 {
 }
 
 LA_RecognitionRule::LA_RecognitionRule( int Id, const lem::UCString &Name, bool CaseSensitive, int Id_Lang,
      bool IsSyllab, bool IsRegex, bool IsPrefix,
-     bool IsAffix, const lem::UFString &Condition, int EntryId, lem::Real1 Rel, const Solarix::CP_Array &Coords,
+     bool IsAffix, bool IsForced, const lem::UFString &Condition, int EntryId, float Score, const Solarix::CP_Array &Coords,
      int SourceID )
  : id(Id), name(Name), case_sensitive(CaseSensitive), id_language(Id_Lang), id_entry(EntryId), str(Condition), is_syllab(IsSyllab),
-   is_regex(IsRegex), is_prefix(IsPrefix), is_affix(IsAffix), coords(Coords), rel(Rel), src_location(SourceID)
+   is_regex(IsRegex), is_prefix(IsPrefix), is_affix(IsAffix), is_forced(IsForced), coords(Coords), score(Score), src_location(SourceID)
 {
  if( is_regex )
   {
@@ -44,7 +44,7 @@ static bool IsRegexChar( wchar_t c )
 
 void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionary &dict )
 {
- rel = Real1(100);
+ score = 0;
 
  // запомним положение правила в исходных текстах
  lem::Iridium::BSourceState point_begin = txtfile.tellp();
@@ -56,6 +56,12 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
    lem::Iridium::BethToken t0 = txtfile.read();
    if( t0.GetToken()==B_OFIGPAREN )
     break;
+   else if( t0.string()==L"forced" )
+    {
+     txtfile.read_it( B_EQUAL );
+     is_forced = txtfile.read().string()==L"true";
+     
+    }
    else if( t0.GetToken()==B_LANGUAGE )
     {
      // дальше идет наименование языка, в рамках которого действует правило.
@@ -68,9 +74,6 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
        dict.GetIO().merr().printf( "Unknown language name %us\n", t1.c_str() );
        throw lem::E_BaseException();
       }
-
-     txtfile.read_it( B_OFIGPAREN );
-     break;
     }
    else if( name.empty() )
     {
@@ -297,10 +300,13 @@ void LA_RecognitionRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionar
     }
   }
 
- // может быть задана достоверность
+ // может быть заданы баллы наказания или поощрения за использование правила
  if( txtfile.probe(B_EQUAL) )
   { 
-   rel = lem::Real1( txtfile.read_int() );
+   if( txtfile.probe( B_SUB ) )
+    score = -txtfile.read_real();
+   else
+    score = txtfile.read_real();
   }
 
  txtfile.read_it( B_CFIGPAREN );

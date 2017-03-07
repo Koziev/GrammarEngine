@@ -169,6 +169,7 @@ sol_GetPhraseText8
 sol_AddPhrase
 sol_ListEntries
 sol_ListEntries8
+sol_ListEntryForms
 sol_ProcessPhraseEntry
 sol_DeletePhrase
 sol_AddPhrase8
@@ -226,3 +227,11 @@ sol_FreeSyntaxTree
 sol_GetProjCoordCount
 sol_GetProjCoordId
 sol_GetProjStateId
+sol_NormalizePhraseW
+sol_NormalizePhrase8
+sol_CreateLinkages
+sol_CreateLinkage
+sol_AddBeginMarker
+sol_AddEndMarker
+sol_AddNodeToLinkage
+sol_CreateTreeNodeW

@@ -97,13 +97,13 @@ bool ExactWordEntryLocator::Check( const SG_Entry & e, SynGram & sg ) const
 
  for( lem::Container::size_type k=0; k<pairs.size(); ++k )
   {
-   const int istate = e.GetAttrState( pairs[k].GetCoord() );
-   if( istate!=pairs[k].GetState() )
+   IntCollect e_states = e.GetAttrStates(pairs[k].GetCoord());
+   if( e_states.find( pairs[k].GetState() )==UNKNOWN )
     {
      if( pairs[k].GetState()==0 && sg.coords()[ pairs[k].GetCoord().GetIndex() ].IsBistable() )
       {
        // Задано состояние 0 бистабильной координаты, это равнозначно проверке, что такой координаты вообще нет в списке пар статьи.
-       if( istate==UNKNOWN )
+       if( e_states.empty() )
         continue;
       }
 

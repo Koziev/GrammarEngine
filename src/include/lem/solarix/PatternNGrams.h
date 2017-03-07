@@ -64,8 +64,8 @@
 
   struct SynPatternResultBackTrace;
 
-  // оценочная функция в секции : ngrams { ... }
-  class PatternNGramFunction
+  // оценка с помощью вызова группы tree_scorer в секции : ngrams { ... }
+  class PatternNGramTreeScorer
   {
    private:
     lem::UCString root_marker; // какой узел брать за корень оцениваемого фрагмента графа
@@ -82,12 +82,12 @@
     #endif
 
    public:
-    PatternNGramFunction(void);
+    PatternNGramTreeScorer();
     
-    PatternNGramFunction( const PatternNGramFunction & x );
-    void operator=( const PatternNGramFunction & x );
+    PatternNGramTreeScorer( const PatternNGramTreeScorer & x );
+    void operator=( const PatternNGramTreeScorer & x );
 
-    bool operator!=( const PatternNGramFunction & x ) const;
+    bool operator!=( const PatternNGramTreeScorer & x ) const;
 
     #if defined SOL_LOADTXT && defined SOL_COMPILER
     void LoadTxt( 
@@ -116,10 +116,78 @@
   };
 
 
+  // оценочная функция на основе пользовательской функции в секции : ngrams { ... }
+  class PatternNGramFunction
+  {
+   private:
+    lem::UCString function_name;
+    lem::MCollect<lem::UCString> function_args; // имена маркировок, которые передаются в функцию как аргументы
+    lem::MCollect<TrType> arg_types; // Типы аргументов в сигнатуре функции, чтобы передавать туда просто словоформу или строить дерево для маркировки
+    lem::Ptr<TrFunCall> fun; // если надо вызывать функцию проверки дерева
+
+    #if defined SOL_CAA
+    Solarix::Tree_Node* GetTreeByRootName(
+                                          const lem::UCString & root_name,
+                                          Dictionary & dict,
+                                          const lem::MCollect<int> & PatternSequenceNumber,
+                                          const SynPatternResult * cur_result,
+                                          bool attach_children
+                                         ) const;
+
+    Solarix::Word_Form* GetWordform4Tree( const Solarix::Word_Form * src_wf, Dictionary & dict, const SynPatternResult * cur_result ) const;
+
+    void AttachEdges(
+                     const Solarix::Word_Form * root_wf,
+                     Solarix::Tree_Node * root,
+                     Dictionary & dict,
+                     const lem::MCollect<int> & PatternSequenceNumber,
+                     const SynPatternResult * cur_result
+                    ) const;
+
+    #endif 
+
+
+   public:
+    PatternNGramFunction();
+    
+    PatternNGramFunction( const PatternNGramFunction & x );
+    void operator=( const PatternNGramFunction & x );
+
+    bool operator!=( const PatternNGramFunction & x ) const;
+
+    #if defined SOL_LOADTXT && defined SOL_COMPILER
+    void LoadTxt( 
+                 Dictionary &dict,
+                 lem::Iridium::Macro_Parser & txtfile,
+                 VariableChecker & compilation_context
+                );
+    #endif    
+
+    void SaveBin( lem::Stream &bin ) const;
+    void LoadBin( lem::Stream &bin );
+    void Link( const TrFunctions &funs );
+
+    #if defined SOL_CAA
+    int Match(
+              Dictionary & dict,
+              const lem::MCollect<int> & PatternSequenceNumber,
+              const SynPatternResultBackTrace * x_result,
+              SynPatternResult * cur_result,
+              KnowledgeBase & kbase,
+              TreeMatchingExperience &experience,
+              const ElapsedTimeConstraint & constraints,
+              TrTrace *trace_log
+             ) const;
+    #endif
+  };
+
+
+
   class PatternNGrams
   {
    private:
     lem::PtrCollect<PatternNGram> ngrams;
+    lem::PtrCollect<PatternNGramTreeScorer> tree_scorers;
     lem::PtrCollect<PatternNGramFunction> functions;
     int explicit_scores; // если вес задан явно
 
@@ -135,12 +203,14 @@
     void LoadTxt( 
                  Dictionary &dict,
                  lem::Iridium::Macro_Parser & txtfile,
-                 VariableChecker & compilation_context
+                 VariableChecker & compilation_context,
+                 TrFunctions & user_functions
                 );
     #endif    
 
     void SaveBin( lem::Stream &bin ) const;
     void LoadBin( lem::Stream &bin );
+    void Link( const TrFunctions &funs );
 
     #if defined SOL_CAA
     NGramScore Match(

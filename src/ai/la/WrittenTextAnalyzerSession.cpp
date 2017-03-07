@@ -16,7 +16,7 @@ WrittenTextAnalysisSession::WrittenTextAnalysisSession( Solarix::Dictionary * _d
 
 void WrittenTextAnalysisSession::ApplyFilters( const lem::UFString & str )
 {
- ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs );
+ ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs, params.timeout.max_recursion_depth );
  AnalyzeIt( str, false, false, constraints );
  return;
 }
@@ -24,7 +24,7 @@ void WrittenTextAnalysisSession::ApplyFilters( const lem::UFString & str )
   
 void WrittenTextAnalysisSession::MorphologicalAnalysis( const lem::UFString & str )
 {
- ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs );
+ ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs, params.timeout.max_recursion_depth );
  AnalyzeIt( str, true, false, constraints );
  return;
 }
@@ -33,7 +33,7 @@ void WrittenTextAnalysisSession::MorphologicalAnalysis( const lem::UFString & st
 
 void WrittenTextAnalysisSession::SyntacticAnalysis( const lem::UFString & str )
 {
- ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs );
+ ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs, params.timeout.max_recursion_depth );
  AnalyzeIt( str, true, true, constraints );
 
 /*
@@ -107,7 +107,7 @@ void WrittenTextAnalysisSession::AnalyzeIt( const lem::UFString & str, bool Appl
 
 void WrittenTextAnalysisSession::Tokenize( const lem::UFString & str )
 {
- ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs );
+ ElapsedTimeConstraint constraints( params.timeout.max_elapsed_millisecs, params.timeout.max_recursion_depth );
 
  processed_str = str;
 

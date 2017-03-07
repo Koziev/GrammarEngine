@@ -229,7 +229,7 @@ const Lexem SG_DeclensionAutomat::ProduceForm(
         // Особый вариант этой команды: %aN{RRR..R} позволяет добавить
         // в указанную позицию произвольное количество символов
         const int N = uchar_to_digit(drv[i++]);
-        const int len = lem::lem_strlen(made_string);
+        const int res_len = lem::lem_strlen(made_string);
 
         // Сколько символов вставляем...
         int n_char_to_add = 1;
@@ -244,12 +244,11 @@ const Lexem SG_DeclensionAutomat::ProduceForm(
          }
 
         // Нет ли переполнения буфера результата?
-        if( (len+n_char_to_add)>LEM_CSTRING_LEN )
+        if( (res_len+n_char_to_add)>LEM_CSTRING_LEN )
          {
           gram.GetIO().merr().printf(
                 "Result is too long after application of declension command ADD in [%us] to [%us].\n"
-                , drv, org_lex
-                                    );
+                , drv, org_lex );
           throw E_ParserError();
          }
 
@@ -270,7 +269,7 @@ const Lexem SG_DeclensionAutomat::ProduceForm(
         memmove( &made_string[N+n_char_to_add], &made_string[N], tail_len*sizeof(*made_string) );
 
         // Вписываем символы RRR
-        memmove( &made_string[N], &drv[i_char],        n_char_to_add*sizeof(*made_string) );
+        memmove( &made_string[N], &drv[i_char], n_char_to_add*sizeof(*made_string) );
 
         if( n_char_to_add==1 )
          i++;
@@ -278,6 +277,8 @@ const Lexem SG_DeclensionAutomat::ProduceForm(
          i+=(n_char_to_add+2);
 
         i_dest+=n_char_to_add;
+
+//gram.GetIO().merr().printf( "DEBUG n_char_to_add=%d i=%d drv=%us made_string=%us\n", n_char_to_add, i, drv, made_string );
 
         break;
        }

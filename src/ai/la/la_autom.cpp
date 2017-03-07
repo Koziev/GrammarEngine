@@ -87,7 +87,7 @@ LexicalAutomat::LexicalAutomat(void) : PM_Automat(SOL_LA_INDEX)
 
  do_delete_storage = false;
 
- MIN_PROJ_R = Real1(0);
+ MIN_PROJ_SCORE = -50.0f;
  minrel_loaded = false;
 
  param = new CriteriaInStorage();
@@ -1065,7 +1065,7 @@ void LexicalAutomat::BeforeSyntaxRecompilation(void)
  return;
 }
 
-Real1 LexicalAutomat::GetMinProjectionRel(void)
+float LexicalAutomat::GetMinProjectionScore(void)
 {
  #if defined LEM_THREADS
  lem::Process::RWU_ReaderGuard rlock(cs_minrel);
@@ -1076,12 +1076,12 @@ Real1 LexicalAutomat::GetMinProjectionRel(void)
    lem::Process::RWU_WriterGuard wlock(rlock);
    #endif
    minrel_loaded = true;
-   const int id = params().Find( L"MIN_PROJ_R" );
+   const int id = params().Find( L"MIN_PROJ_SCORE" ); //L"MIN_PROJ_R" );
    if( id!=UNKNOWN )
-    MIN_PROJ_R = lem::Real1(params()[id].GetInt());
+    MIN_PROJ_SCORE = params()[id].GetInt();
   }
  
- return MIN_PROJ_R;
+ return MIN_PROJ_SCORE;
 }
 
 

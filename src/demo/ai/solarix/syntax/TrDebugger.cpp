@@ -42,6 +42,15 @@ TrDebugger::~TrDebugger(void)
 }
 
 
+void TrDebugger::CheckStackOverflow( int current_depth )
+{
+ if( current_depth>500 )
+ {
+  StackOverflow( current_depth );
+ }
+
+ return;
+}
 
 
 void TrDebugger::Enter( TrTraceActor *a )
@@ -53,36 +62,43 @@ void TrDebugger::Enter( TrTraceActor *a )
 
  if( callstack.size()>200 )
   {
-   // зацикливание???
-   lem::mout->printf( "\nPossible stack overflow, current_depth=%d!\n", CastSizeToInt(callstack.size()) );
-
-   // Выведем меню для управления дальнейшим исполнением.
-   while(true)
-    {
-     mout->printf( "%vf6Commands:%vn %vfER%vnun %vfES%vntop %vfEC%vnall_stack\n" );
-
-     mout->printf( "\nEnter: " );
-
-     int cmd = mkey->getch();
-     mout->eol();
-
-     if( cmd=='r' )
-      break;
-
-     if( cmd=='c' )
-      {
-       PrintStack(*mout);
-       continue;
-      }  
-
-     if( cmd=='s' )
-      {
-       throw E_BaseException();
-      }
-    }
+   StackOverflow( callstack.size() );
   }
 
  callstack.push_back(a);
+
+ return;
+}
+
+void TrDebugger::StackOverflow( int stack_depth )
+{
+ // зацикливание???
+ lem::mout->printf( "\nPossible stack overflow, current_depth=%d!\n", stack_depth );
+
+ // Выведем меню для управления дальнейшим исполнением.
+ while(true)
+  {
+   mout->printf( "%vf6Commands:%vn %vfER%vnun %vfES%vntop %vfEC%vnall_stack\n" );
+
+   mout->printf( "\nEnter: " );
+
+   int cmd = mkey->getch();
+   mout->eol();
+
+   if( cmd=='r' )
+    break;
+
+   if( cmd=='c' )
+    {
+     PrintStack(*mout);
+     continue;
+    }  
+
+   if( cmd=='s' )
+    {
+     throw E_BaseException();
+    }
+  }
 
  return;
 }
@@ -575,6 +591,8 @@ void TrDebugger::PrintStack( lem::OFormatter &out )
            txt.PrintLine(*mout); // Распечатываем строку
           }
 
+         a->PrintCurrentToken( *dict, *mout );
+
          mout->printf( "\n%vf6%78h-%vn\n" );
         }
       }
@@ -852,7 +870,7 @@ void LA_RecognitionTrace_Console::Matched( const lem::UCString &word, const LA_R
 {
  if( trace )
   {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for %vfE%us%vn rel=%vf9%4.2rf%vn", rule->GetName().c_str(), word.c_str(), rule->GetRel().GetFloat() );
+   mout->printf( "Recognition rule %vfA%us%vn has been applied for %vfE%us%vn score=%vf9%4.2rf%vn", rule->GetName().c_str(), word.c_str(), rule->GetScore() );
 
    const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
    const int id_class = e.GetClass();
@@ -868,8 +886,8 @@ void LA_RecognitionTrace_Console::MatchedSyllable( const lem::UCString &word, co
 {
  if( trace )
   {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for syllable %vfE%us%vn in word %vfE%us%vn rel=%vf9%4.2rf%vn"
-    , rule->GetName().c_str(), syllable.c_str(), word.c_str(), rule->GetRel().GetFloat() );
+   mout->printf( "Recognition rule %vfA%us%vn has been applied for syllable %vfE%us%vn in word %vfE%us%vn score=%vf9%4.2rf%vn"
+    , rule->GetName().c_str(), syllable.c_str(), word.c_str(), rule->GetScore() );
 
    const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
    const int id_class = e.GetClass();

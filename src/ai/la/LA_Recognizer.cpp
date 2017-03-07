@@ -147,12 +147,13 @@ void LA_Recognizer::LoadAllLangs(void)
 bool LA_Recognizer::Apply(
                           const lem::UCString & normalized_word,
                           const lem::UCString & original_word,
-                          lem::Real1 word_rel,
-                          lem::Real1 min_bound,
-                          lem::MCollect<Word_Coord> &found_list,
-                          lem::MCollect<ProjScore> &val_list,
-                          lem::PtrCollect<LA_ProjectInfo> &inf_list,
+                          float word_score,
+                          float min_bound,
+                          lem::MCollect<Word_Coord> & found_list,
+                          lem::MCollect<ProjScore> & val_list,
+                          lem::PtrCollect<LA_ProjectInfo> & inf_list,
                           int id_language,
+                          bool only_forced,
                           LA_RecognitionTrace *trace
                          )
 {
@@ -166,7 +167,7 @@ bool LA_Recognizer::Apply(
    for( lem::Container::size_type j=0; j<rules.size(); ++j )
     {
      const LA_RecognitionRules *r = rules[j];
-     if( r->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
+     if( r->Apply( normalized_word, original_word, word_score, found_list, val_list, inf_list, only_forced, trace ) )
       matched=true;
     }
   }
@@ -175,11 +176,11 @@ bool LA_Recognizer::Apply(
    LoadRules(id_language);
 
    const LA_RecognitionRules *rules1 = GetRules(id_language);
-   if( rules1->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
+   if( rules1->Apply( normalized_word, original_word, word_score, found_list, val_list, inf_list, only_forced, trace ) )
     matched=true;
 
    const LA_RecognitionRules *rules2 = GetRules(UNKNOWN);
-   if( rules2->Apply( normalized_word, original_word, word_rel, found_list, val_list, inf_list, trace ) )
+   if( rules2->Apply( normalized_word, original_word, word_score, found_list, val_list, inf_list, only_forced, trace ) )
     matched=true;
   }
 
@@ -189,9 +190,9 @@ bool LA_Recognizer::Apply(
 
 bool LA_Recognizer::ApplyForSyllabs(
                                     const lem::UCString &word,
-                                    lem::Real1 word_rel,
+                                    float word_score,
                                     const lem::MCollect<lem::UCString> & syllabs,
-                                    lem::Real1 min_bound,
+                                    float min_bound,
                                     lem::MCollect<Solarix::Word_Coord> &found_list,
                                     lem::MCollect<ProjScore> &val_list,
                                     lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
@@ -211,7 +212,7 @@ bool LA_Recognizer::ApplyForSyllabs(
    for( lem::Container::size_type j=0; j<rules.size(); ++j )
     {
      const LA_RecognitionRules *r = rules[j];
-     if( r->ApplyForSyllabs( word, word_rel, syllabs, found_list, val_list, inf_list, trace ) )
+     if( r->ApplyForSyllabs( word, word_score, syllabs, found_list, val_list, inf_list, trace ) )
       matched=true;
     }
   }
@@ -220,11 +221,11 @@ bool LA_Recognizer::ApplyForSyllabs(
    LoadRules(id_language);
 
    const LA_RecognitionRules *rules1 = GetRules(id_language);
-   if( rules1->ApplyForSyllabs( word, word_rel, syllabs, found_list, val_list, inf_list, trace ) )
+   if( rules1->ApplyForSyllabs( word, word_score, syllabs, found_list, val_list, inf_list, trace ) )
     matched=true;
 
    const LA_RecognitionRules *rules2 = GetRules(UNKNOWN);
-   if( rules2->ApplyForSyllabs( word, word_rel, syllabs, found_list, val_list, inf_list, trace ) )
+   if( rules2->ApplyForSyllabs( word, word_score, syllabs, found_list, val_list, inf_list, trace ) )
     matched=true;
   }
 

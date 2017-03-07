@@ -261,6 +261,11 @@ void Lexem::TranslateThis(
             }
           }
         }
+       else
+        {
+         buffer[i_res++]=ch;
+        }
+
        break;
       }
 

@@ -11,7 +11,10 @@ TreeMatchingExperience::~TreeMatchingExperience(void)
 void TreeMatchingExperience::ClearPatternMatchings()
 {
  for( KEY2ITEM::iterator it=key2item.begin(); it!=key2item.end(); ++it )
-  delete it->second;
+ {
+  TreeMatchingExperienceItem * ptr = it->second;
+  delete ptr;
+ }
  key2item.clear();
  
 
@@ -74,6 +77,14 @@ void TreeMatchingExperience::Add( int id_tree, const LexerTextPos * token, bool 
 
  TreeMatchingExperienceKey key( id_tree, token );
  TreeMatchingExperienceItem *item = new TreeMatchingExperienceItem(success,results);
+
+ KEY2ITEM::iterator it = key2item.find(key);
+ if( it != key2item.end() )
+ {
+  delete it->second;
+  key2item.erase( key );
+ }
+
  key2item.insert( std::make_pair( key, item ) );
  return;
 }

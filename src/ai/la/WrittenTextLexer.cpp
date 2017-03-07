@@ -273,7 +273,7 @@ const Word_Form * WrittenTextLexer::Recognize( const lem::UCString & word, int W
   {
    RC_Lexem rc_word( new Solarix::Lexem(word) );
    RC_Lexem rc_normalized( new Solarix::Lexem( lem::to_upper(word) ) );
-   Word_Form * new_recognition = new Word_Form( rc_word, rc_normalized, UNKNOWN, Real1(100) );
+   Word_Form * new_recognition = new Word_Form( rc_word, rc_normalized, UNKNOWN, 0.0f );
    new_recognition->SetOriginPos( WordIndex );
    wordforms.push_back(new_recognition); // для сборщика мусора
    return new_recognition;

@@ -1,7 +1,8 @@
-// CD->07.11.2014
+// CD->22.01.2016
 
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/la_autom.h>
+#include <lem/solarix/PM_FunctionLoader.h>
 #include <lem/solarix/tokens.h>
 #include <lem/solarix/SG_Coordinates.h>
 #include <lem/solarix/PatternLinks.h>
@@ -388,7 +389,7 @@ void SynPattern::LoadNGrams(
                            )
 {
  PatternNGrams * ngrams = new PatternNGrams();
- ngrams->LoadTxt( dict, txtfile, compilation_context );
+ ngrams->LoadTxt( dict, txtfile, compilation_context, dict.GetLexAuto().GetFunctions().Get() );
  points.back()->SetNGrams( ngrams );
  return;
 }

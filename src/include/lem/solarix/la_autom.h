@@ -135,7 +135,7 @@
 
    // Какова минимальная допустимая достоверность проекций. Инициализируется на
    // основе ПАРАМЕТРА Автомата.
-   Real1 MIN_PROJ_R;
+   float MIN_PROJ_SCORE;
 
    #if defined LEM_THREADS
    lem::Process::RWU_Lock cs_word_assoc;
@@ -244,7 +244,7 @@
 
    volatile bool minrel_loaded;
 
-   Real1 GetMinProjectionRel(void);
+   float GetMinProjectionScore(void);
 
    #if defined SOL_LOADTXT && defined SOL_COMPILER
    lem::PtrCollect<SynPattern> patterns; // паттерны (грамматика НС) для фильтрации
@@ -270,7 +270,7 @@
    bool Project_1(
                   const RC_Lexem &A,
                   const lem::UCString &original_word,
-                  lem::Real1 relA,
+                  float scoreA,
                   MCollect<Word_Coord> &found_list,
                   MCollect<ProjScore> &val_list,
                   lem::PtrCollect<LA_ProjectInfo> &inf_list,
@@ -295,7 +295,7 @@
    bool Project_3(
                   const RC_Lexem &A,
                   const lem::UCString & original_word,
-                  lem::Real1 relA,
+                  float scoreA,
                   MCollect<Word_Coord> &found_list,
                   MCollect<ProjScore> &val_list,
                   lem::PtrCollect<LA_ProjectInfo> &inf_list,

@@ -485,7 +485,12 @@
 
     TrFunction* MakeForwardDeclaration(void) const;
 
+    TrType GetArgType( int arg_index ) const { return arg_type[arg_index]; }
+
     const UCString& GetName(void) const { return name; }
+
+    const TrFunCall& GetBody() const { return *body; }
+
 
     #if LEM_DEBUGGING==1
     void PrintSignature( lem::OFormatter &out ) const;

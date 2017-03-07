@@ -1,5 +1,5 @@
 // CD->07.03.2009
-// LC->26.04.2009
+// LC->13.10.2015
 // --------------
 
 #if defined SOL_CAA
@@ -18,7 +18,7 @@ SegmentingSentenceTokenizer::SegmentingSentenceTokenizer( const Solarix::Diction
  seeker = dict.seeker;
 
  const SG_Language &lang = dict.GetSynGram().languages()[language];
- int ipar = lang.FindParam( L"WordBrokers" );
+ int ipar = lang.FindParam( L"WordDelimiters" );
 
  if( ipar!=UNKNOWN )
   delimiters += lang.params[ipar]->values.front().c_str();

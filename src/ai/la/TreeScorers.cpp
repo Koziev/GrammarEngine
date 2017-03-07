@@ -73,6 +73,20 @@ void TreeScorers::LoadGroup( Dictionary & dict, lem::Iridium::Macro_Parser &txtf
         throw lem::E_ParserError();
        }
      }
+    else if( tparam.string().eqi(L"language") )
+     {
+      txtfile.read_it( B_EQUAL );
+
+      lem::Iridium::BethToken lang = txtfile.read();
+      params.id_language = dict.GetSynGram().Find_Language(lang.string());
+      if( params.id_language==UNKNOWN )
+       {
+        lem::Iridium::Print_Error(lang,txtfile);
+        dict.GetIO().merr().printf( "Unknown language name %us\n", lang.c_str() );
+        throw lem::E_BaseException();
+       }
+
+    }
     else
      {
       lem::Iridium::Print_Error( tparam, txtfile );

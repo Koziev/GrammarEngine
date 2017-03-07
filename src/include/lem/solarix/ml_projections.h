@@ -133,10 +133,10 @@
  #if defined SOL_CAA
  struct MLProjFreq
  {
-  Real1 rel;
+  float score;
   int known_entry; // 0 для кванторных статей, получающихся при нечеткой проекции
   int local_freq, wordform_freq, wordentry_freq;
-  MLProjFreq(void) : rel(0), known_entry(0), local_freq(0), wordform_freq(0), wordentry_freq(0) {}
+  MLProjFreq(void) : score(0.0f), known_entry(0), local_freq(0), wordform_freq(0), wordentry_freq(0) {}
   
   bool operator>( const MLProjFreq &x ) const;
   bool operator<( const MLProjFreq &x ) const;

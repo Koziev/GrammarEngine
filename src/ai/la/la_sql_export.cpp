@@ -258,8 +258,8 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
      coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetState() ).c_str() );
     }
 
-   out.printf( "INSERT INTO recog_rule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-               " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( %d, '%us', %d, %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us );\n",
+   out.printf( "INSERT INTO recog_rule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix, is_forced,"
+               " r_condition, id_entry, rel, coords, id_src, word ) VALUES ( %d, '%us', %d, %d, %d, %d, %d, %d, %d, '%us', %d, %f, '%us', %d, %us );\n",
                rule->GetId(),
                lem::to_upper(rule->GetName()).c_str(),
                rule->IsCaseSensitive() ? 1 : 0,
@@ -268,7 +268,8 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
                rule->IsRegex() ? 1 : 0,
                rule->IsPrefix() ? 1 : 0,
                rule->IsAffix() ? 1 : 0,
-               condition.c_str(), rule->GetEntryKey(), rule->GetRel().GetInt(), coords.c_str(), rule->GetSourceLocation(), word.c_str() );
+               rule->IsForced() ? 1 : 0,
+               condition.c_str(), rule->GetEntryKey(), rule->GetScore(), coords.c_str(), rule->GetSourceLocation(), word.c_str() );
   }
 
  out.eol();
@@ -765,8 +766,9 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
    const int id = ts_group->GetInt(0);
    lem::UFString name( sql_version.SqlStr(ts_group->GetUFString(1)) );
    const int allow_unmatched_children = ts_group->GetInt(2);
+   const int id_language = ts_group->GetInt(3);
  
-   out.printf( "INSERT INTO ts_group(id,name,allow_unmatched_children) VALUES (%d,'%us',%d);\n", id, name.c_str(), allow_unmatched_children );
+   out.printf( "INSERT INTO ts_group(id,name,allow_unmatched_children,id_language) VALUES (%d,'%us',%d,%d);\n", id, name.c_str(), allow_unmatched_children, id_language );
   }
  ts_group.Delete();
  out.printf( "\n\n" );

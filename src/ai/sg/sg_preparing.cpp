@@ -44,6 +44,7 @@
 #include <lem/solarix/LA_ProjectInfo.h>
 #include <lem/solarix/LanguageEnumerator.h>
 #include <lem/solarix/SG_Calibrator.h>
+#include <lem/solarix/WordEntryEnumerator.h>
 
 
 using namespace lem;
@@ -84,6 +85,18 @@ void SynGram::Prepare( const lem::Path &outdir, const Binarization_Options &opts
 
 
  // Инициализируем частоты словарных статей и словоформ.
+ // Нам потребуется быстро найти словарные статьи по их леммам.
+
+ std::multimap<lem::UCString,int> lemma2id;
+
+ lem::Ptr<WordEntryEnumerator> wenum( word_entries->ListEntries() );
+ while( wenum->Fetch() )
+ {
+  lem::UCString entry_name = lem::to_upper( GetEntry( wenum->GetId() ).GetName() );
+  lemma2id.insert( std::make_pair( entry_name, wenum->GetId() ) );
+ }
+
+
 
  if( wordfreq_filename.NotNull() )
   {
@@ -91,19 +104,16 @@ void SynGram::Prepare( const lem::Path &outdir, const Binarization_Options &opts
 
    lem::BinaryReader rdr( *wordfreq_filename );
 
-   const int dbg = 1;
-
-   if( dbg>0 )
-    {
-     // Длительная операция: сообщаем пользователю.
-     GetIO().mecho().printf( "%vfESG%vn: updating word frequencies..." );
-     GetIO().mecho().flush();
-    }
+   // Длительная операция: сообщаем пользователю.
+   GetIO().mecho().printf( "%vfESG%vn: updating word frequencies..." );
+   GetIO().mecho().flush();
 
    MCollect<Word_Coord> found_list;
    MCollect<ProjScore> val_list;
    PtrCollect<LA_ProjectInfo> inf_list;
    LexicalAutomat &la = GetDict().GetLexAuto();
+
+   int counter=0;
 
    while( !rdr.eof() )
     {
@@ -113,51 +123,88 @@ void SynGram::Prepare( const lem::Path &outdir, const Binarization_Options &opts
      if( rdr.eof() )
       break;
 
-     found_list.clear();
-     val_list.clear();
-     inf_list.clear();
-     
-     Lexem uword(c.GetWord());
+     counter++;
 
-     int language_id=UNKNOWN;
-     // если указан грамматический класс, то берем id языка оттуда.
-     if( c.GetClass()!=UNKNOWN )
-      {
-       const Solarix::SG_Class & pos = GetClass( c.GetClass() );
-       language_id = pos.GetLanguage();
-      }
-     
-     la.TranslateLexem( uword, true, language_id );
-     
-     RC_Lexem rc_name( &uword, null_deleter() );
-     la.ProjectWord( rc_name, found_list, val_list, inf_list, LexicalAutomat::Wordforms, 0, language_id, NULL );
+     if( counter>0 && (counter%10000)==0 )
+     {
+      lem::mout->printf( " %d", counter/10000 );
+      lem::mout->flush();
+     }
 
-     if( c.IsWordEntry() )
+     Lexem uword( lem::to_upper( c.GetWord() ) );
+
+
+     if( c.IsWordFormsScore() )
       {
-       lem::MCollect<int> processed;
-       for( lem::Container::size_type j=0; j<found_list.size(); ++j )
+       // Заданы оценки для всех форм слова
+       lem::MCollect<int> ies;
+
+       typedef std::multimap<lem::UCString,int>::const_iterator L2E_CIT;
+       std::pair<L2E_CIT,L2E_CIT> r = lemma2id.equal_range( uword );
+       for( L2E_CIT it=r.first; it!=r.second; ++it )
         {
-         if( processed.find(found_list[j].GetEntry())==UNKNOWN )
+         int id_entry = it->second;
+         if( c.GetClass()==UNKNOWN || GetEntries().GetEntry( id_entry ).GetClass() == c.GetClass() )
           {
-           processed.push_back( found_list[j].GetEntry() );
-           SG_Entry& e = GetEntries().GetEntryForChange( found_list[j].GetEntry() );
+           SG_Entry& e = GetEntries().GetEntryForChange( id_entry );
 
-           if( c.GetClass()!=UNKNOWN && c.GetClass()!=e.GetClass() )
-            continue;
-   
-           // Задаем частоту либо для всей словарной статьи
+           for( int iform=0; iform<e.forms().size(); ++iform )
+            {
+             const SG_EntryForm &f = e.forms()[iform];
+             if( c.MatchCoords( f.coords() ) )
+              {
+               GetStorage().SetWordformFrequency( id_entry, iform, c.GetFreq() );
+              }
+            }
+          }
+        }
+      }
+     else if( c.GetClass()!=UNKNOWN && c.IsWordEntryFreq() )
+      {
+       lem::MCollect<int> ies;
+
+       typedef std::multimap<lem::UCString,int>::const_iterator L2E_CIT;
+       std::pair<L2E_CIT,L2E_CIT> r = lemma2id.equal_range( uword );
+       for( L2E_CIT it=r.first; it!=r.second; ++it )
+        {
+         int id_entry = it->second;
+         if( GetEntries().GetEntry( id_entry ).GetClass() == c.GetClass() )
+          {
+           SG_Entry& e = GetEntries().GetEntryForChange( id_entry );
            e.UpdateFreq( c.GetFreq() );
           }
         }
       }
-     else if( c.IsWordForm() )
+     else if( c.IsWordFormScore() )
       {
+       // задан скоринг для словоформы.
+
+       int language_id=UNKNOWN;
+       // если указан грамматический класс, то берем id языка оттуда.
+       if( c.GetClass()!=UNKNOWN )
+        {
+         const Solarix::SG_Class & pos = GetClass( c.GetClass() );
+         language_id = pos.GetLanguage();
+        }
+       
+       la.TranslateLexem( uword, true, language_id );
+       
+       RC_Lexem rc_name( &uword, null_deleter() );
+
+       found_list.clear();
+       val_list.clear();
+       inf_list.clear();
+
+       la.ProjectWord( rc_name, found_list, val_list, inf_list, LexicalAutomat::Wordforms, 0, language_id, NULL );
+    
+       // задан скоринг для словоформы.
+    
        if( found_list.empty() )
         {
          GetIO().mecho().printf( "\nUnknown word [%us] in word_frequency rule\n", c.GetWord().c_str() );
          throw lem::E_BaseException();
         }
-
+    
        for( lem::Container::size_type j=0; j<found_list.size(); ++j )
         {
          const SG_Entry &e = GetEntry(found_list[j].GetEntry());
@@ -166,7 +213,7 @@ void SynGram::Prepare( const lem::Path &outdir, const Binarization_Options &opts
           {
            continue;
           } 
-
+    
          const SG_EntryForm &f = e.forms()[found_list[j].GetForm()];
          if( c.MatchCoords( f.coords() ) )
           {
@@ -184,12 +231,8 @@ void SynGram::Prepare( const lem::Path &outdir, const Binarization_Options &opts
    rdr.close();
    wordfreq_filename->DoRemove();
 
-   if( dbg>0 )
-    {
-     GetIO().mecho().printf( "%vfAOK%vn\n" );
-    }
-
- }
+   GetIO().mecho().printf( "%vfAOK%vn\n" );
+  }
 
  return;
 }

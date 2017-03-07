@@ -68,11 +68,11 @@ void LA_RecognitionRules::Add( LA_RecognitionRule * rule )
 
 void LA_RecognitionRules::AddResult(
                                     const Solarix::Word_Coord &wc,
-                                    lem::Real1 val,
+                                    float score,
                                     Solarix::LA_ProjectInfo *inf,
-                                    lem::MCollect<Solarix::Word_Coord> &found_list,
-                                    lem::MCollect<Solarix::ProjScore> &val_list,
-                                    lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list
+                                    lem::MCollect<Solarix::Word_Coord> & found_list,
+                                    lem::MCollect<Solarix::ProjScore> & score_list,
+                                    lem::PtrCollect<Solarix::LA_ProjectInfo> & inf_list
                                    ) const
 {
  // Не допускаем внесения в результаты идентичных проекций.
@@ -98,7 +98,7 @@ void LA_RecognitionRules::AddResult(
   }
 
  found_list.push_back(wc);
- val_list.push_back(val);
+ score_list.push_back(score);
  inf_list.push_back(inf);
 
  return;
@@ -109,10 +109,11 @@ void LA_RecognitionRules::AddResult(
 bool LA_RecognitionRules::Apply(
                                 const lem::UCString & normalized_word,
                                 const lem::UCString & original_word,
-                                lem::Real1 word_rel,
-                                lem::MCollect<Solarix::Word_Coord> &found_list,
-                                lem::MCollect<Solarix::ProjScore> &val_list,
-                                lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
+                                float word_score,
+                                lem::MCollect<Solarix::Word_Coord> & found_list,
+                                lem::MCollect<Solarix::ProjScore> & score_list,
+                                lem::PtrCollect<Solarix::LA_ProjectInfo> & inf_list,
+                                bool only_forced,
                                 LA_RecognitionTrace *trace
                                ) const
 {
@@ -129,10 +130,13 @@ bool LA_RecognitionRules::Apply(
 
    matched = true;
 
+   if( only_forced && !rule->IsForced() )
+    continue;
+
    LA_ProjectInfo *info = new LA_ProjectInfo();
    info->coords = rule->GetCoords();
 
-   AddResult( Word_Coord( rule->GetEntryKey(), 0 ), word_rel*rule->GetRel(), info, found_list, val_list, inf_list );
+   AddResult( Word_Coord( rule->GetEntryKey(), 0 ), word_score+rule->GetScore(), info, found_list, score_list, inf_list );
 
    #if defined SOL_DEBUGGING
    if( trace!=NULL )
@@ -148,6 +152,10 @@ bool LA_RecognitionRules::Apply(
    for( IT it=pp.first; it!=pp.second; ++it )
     {
      const LA_RecognitionRule *r = it->second;
+
+     if( only_forced && !r->IsForced() )
+      continue;
+
      if( r->Match(normalized_word,original_word) )
       {
        matched = true;
@@ -155,7 +163,7 @@ bool LA_RecognitionRules::Apply(
        LA_ProjectInfo *info = new LA_ProjectInfo();
        info->coords = r->GetCoords();
  
-       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_rel*r->GetRel(), info, found_list, val_list, inf_list );
+       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_score + r->GetScore(), info, found_list, score_list, inf_list );
  
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
@@ -170,6 +178,10 @@ bool LA_RecognitionRules::Apply(
    for( IT it=pp.first; it!=pp.second; ++it )
     {
      const LA_RecognitionRule *r = it->second;
+
+     if( only_forced && !r->IsForced() )
+      continue;
+
      if( r->Match(normalized_word,original_word) )
       {
        matched = true;
@@ -177,7 +189,7 @@ bool LA_RecognitionRules::Apply(
        LA_ProjectInfo *info = new LA_ProjectInfo();
        info->coords = r->GetCoords();
  
-       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_rel*r->GetRel(), info, found_list, val_list, inf_list );
+       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_score + r->GetScore(), info, found_list, score_list, inf_list );
  
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
@@ -191,6 +203,10 @@ bool LA_RecognitionRules::Apply(
    for( lem::Container::size_type i=0; i<rx_rules.size(); ++i )
     {
      const LA_RecognitionRule *r = rx_rules[i];
+
+     if( only_forced && !r->IsForced() )
+      continue;
+
      if( r->Match(normalized_word,original_word) )
       {
        matched = true;
@@ -198,7 +214,7 @@ bool LA_RecognitionRules::Apply(
        LA_ProjectInfo *info = new LA_ProjectInfo();
        info->coords = r->GetCoords();
  
-       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_rel*r->GetRel(), info, found_list, val_list, inf_list );
+       AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_score + r->GetScore(), info, found_list, score_list, inf_list );
  
        #if defined SOL_DEBUGGING
        if( trace!=NULL )
@@ -217,11 +233,11 @@ bool LA_RecognitionRules::Apply(
 
 bool LA_RecognitionRules::ApplyForSyllabs(
                                           const lem::UCString &word,
-                                          lem::Real1 word_rel,
+                                          float word_score,
                                           const lem::MCollect<lem::UCString> & syllabs,
-                                          lem::MCollect<Solarix::Word_Coord> &found_list,
-                                          lem::MCollect<Solarix::ProjScore> &val_list,
-                                          lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
+                                          lem::MCollect<Solarix::Word_Coord> & found_list,
+                                          lem::MCollect<Solarix::ProjScore> & score_list,
+                                          lem::PtrCollect<Solarix::LA_ProjectInfo> & inf_list,
                                           LA_RecognitionTrace *trace
                                          ) const
 {
@@ -240,7 +256,7 @@ bool LA_RecognitionRules::ApplyForSyllabs(
      LA_ProjectInfo *info = new LA_ProjectInfo();
      info->coords = r->GetCoords();
 
-     AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_rel*r->GetRel(), info, found_list, val_list, inf_list );
+     AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_score + r->GetScore(), info, found_list, score_list, inf_list );
 
      #if defined SOL_DEBUGGING
      if( trace!=NULL )
@@ -262,7 +278,7 @@ bool LA_RecognitionRules::ApplyForSyllabs(
      LA_ProjectInfo *info = new LA_ProjectInfo();
      info->coords = r->GetCoords();
 
-     AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_rel*r->GetRel(), info, found_list, val_list, inf_list );
+     AddResult( Word_Coord( r->GetEntryKey(), 0 ), word_score + r->GetScore(), info, found_list, score_list, inf_list );
 
      #if defined SOL_DEBUGGING
      if( trace!=NULL )

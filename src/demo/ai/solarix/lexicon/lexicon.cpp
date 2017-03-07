@@ -55,7 +55,7 @@ int main( int argc, char *argv[] )
 
  for( int i=1; i<argc; ++i )
   {
-   if( lem_eq(argv[i]+1,"dictdir") )
+   if( lem_eq(argv[i]+1,"dictdir") || lem_eq(argv[i]+1,"dict") )
     {
      dictionary_path = lem::Path( argv[++i] );
     }

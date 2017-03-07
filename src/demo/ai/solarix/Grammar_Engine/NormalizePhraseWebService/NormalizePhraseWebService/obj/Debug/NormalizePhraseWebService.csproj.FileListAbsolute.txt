@@ -1,0 +1,9 @@
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\NormalizePhraseWebService.exe.config
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\NormalizePhraseWebService.exe
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\NormalizePhraseWebService.pdb
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\obj\Debug\NormalizePhraseWebService.exe
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\obj\Debug\NormalizePhraseWebService.pdb
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\gren_consts.dll
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\gren_fx.dll
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\bin\Debug\gren_fx2.dll
+E:\MVoice\lem\demo\ai\solarix\Grammar_Engine\NormalizePhraseWebService\NormalizePhraseWebService\obj\Debug\NormalizePhraseWebService.csprojResolveAssemblyReference.cache

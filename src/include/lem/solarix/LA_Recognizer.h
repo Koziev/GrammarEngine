@@ -49,12 +49,13 @@
     bool Apply(
                const lem::UCString & normalized_word,
                const lem::UCString & original_word,
-               lem::Real1 word_rel,
-               lem::Real1 min_bound,
+               float word_score,
+               float min_bound,
                MCollect<Solarix::Word_Coord> &found_list,
                MCollect<ProjScore> &val_list,
                lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
                int id_language,
+               bool only_forced,
                LA_RecognitionTrace *trace
               );
 
@@ -62,9 +63,9 @@
 
     bool ApplyForSyllabs(
                          const lem::UCString &word,
-                         lem::Real1 word_rel,
+                         float word_score,
                          const lem::MCollect<lem::UCString> & syllabs,
-                         lem::Real1 min_bound,
+                         float min_bound,
                          lem::MCollect<Solarix::Word_Coord> &found_list,
                          lem::MCollect<ProjScore> &val_list,
                          lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,

@@ -442,12 +442,8 @@ void Tree_Node::Print( OFormatter &txtfile, SynGram &gram, int offset, bool deta
 }
 
 
+/*
 #if defined SOL_CAA
-/***********************************************
- Вычисление общей оценки достоверности дерева.
- Получается как суперпозиция достоверности корня
- и подключенных веток.
-************************************************/
 Real1 Tree_Node::ComputeValue(void) const
 {
  Real1 v = GetNode().GetVal();
@@ -457,6 +453,7 @@ Real1 Tree_Node::ComputeValue(void) const
  return v;
 }
 #endif
+*/
 
 
 void Tree_Node::PrintPlain( OFormatter &s, bool EntryKey ) const

@@ -114,6 +114,8 @@
 
    void ShowSynPatternResults( const lem::MCollect<SynPatternResult*> & results, bool sort_by_scores, int items_to_show );
    void AfterModelApplication( Solarix::BasicLexer & lexer );
+   void StackOverflow( int current_depth );
+
 
   public:
    TrDebugger( Solarix::Dictionary *d );
@@ -123,6 +125,7 @@
 
    void ManageTriggers(void);
 
+   virtual void CheckStackOverflow( int current_depth );
    virtual void Enter( TrTraceActor *a );
    virtual void Leave( TrTraceActor *a );
    virtual void Print( const UFString &str );
@@ -180,7 +183,7 @@
  class SyntaxShell
  {
   public:
-   typedef enum { MorphologyMode, SyntaxMode, TokenizerMode, LemmatizerMode, SpeakerMode } RunMode;
+   typedef enum { MorphologyMode, SyntaxMode, TokenizerMode, SegmenterMode, LemmatizerMode, SpeakerMode } RunMode;
 
    void SetMode( RunMode new_mode );
 
@@ -235,6 +238,7 @@
    void Tokenize( const UFString & s );
    void Lemmatize( const UFString & str );
    void Speak( const UFString & str );
+   void Segmentize( const UFString & s );
 
 
    void ShowDictionaryInfo(void);

@@ -37,7 +37,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.2003
-// LC->05.09.2014
+// LC->31.05.2015
 // --------------
 
 #if !defined SOL_CAA
@@ -370,6 +370,10 @@ void SyntaxShell::main_loop(void)
     {
      Tokenize(str);
     }
+   else if( run_mode==SegmenterMode )
+    {
+     Segmentize(str);
+    }
    else if( run_mode==LemmatizerMode )
     {
      Lemmatize(str);
@@ -407,6 +411,7 @@ void SyntaxShell::ShowHelp(void) const
              " %vfE#syntax%vn       - syntax analyzer mode (default)\n"
              " %vfE#morphology%vn   - morphology analyzer mode\n"
              " %vfE#tokenize%vn     - tokenizer mode\n"
+             " %vfE#segmentize%vn   - sentence segmenter mode\n"
              " %vfE#lemmatize%vn    - lemmatizer mode\n"
              " %vfE#speak%vn        - text-to-speech mode\n"
              "\n"
@@ -460,12 +465,12 @@ bool SyntaxShell::TryCommand( const lem::UFString &_str )
    return true;
   }
 
- if( _str.eq_beg( L"#maxalt" ) )
+ if( _str.eq_beg( L"#maxalt" ) || _str.eq_beg( L"#beamsize" ) )
   {
    lem::MCollect<UCString> toks;
    lem::parse( _str, toks, false );
    MaxAlt = lem::to_int( toks[1] );
-   lem::mout->printf( "MaxAlt=%d\n", MaxAlt );
+   lem::mout->printf( "beamsize=%d\n", MaxAlt );
    return true;
   }
 
@@ -764,6 +769,11 @@ bool SyntaxShell::TryCommand( const lem::UFString &_str )
    SetMode(TokenizerMode);
    ret=true;
   }
+ else if( str==L"segmentize" )
+  {
+   SetMode(SegmenterMode);
+   ret=true;
+  }
  else if( str==L"lemmatize" )
   {
    SetMode(LemmatizerMode);
@@ -843,6 +853,7 @@ bool SyntaxShell::PerformSyntacticAnalysis( const UFString & str )
    current_analysis->params.timeout.max_elapsed_millisecs = MaxTimeout;
    current_analysis->params.timeout.max_alt = MaxAlt;
    current_analysis->params.timeout.max_bottomup_trees = MaxAlt;
+   current_analysis->params.timeout.max_recursion_depth = 1000;
 
    if( MaxSkipToken>=0 )
     {
@@ -972,6 +983,33 @@ void SyntaxShell::Tokenize( const UFString &str )
  
  return;
 }
+
+
+
+
+
+
+// Разбивка строки text на предложения с помощью правил, зафиксированных для текущего языка.
+void SyntaxShell::Segmentize( const UFString & text )
+{
+ TrTrace *trace = debugger.NotNull() ? &*debugger : (TrTrace*)NULL;
+
+
+ lem::Ptr<lem::Char_Stream::WideStream> reader2 = new lem::Char_Stream::UTF16_MemReader(text);
+ SentenceBroker segmenter( reader2, sol_id.get(), default_language );
+
+ int sentence_count=0;
+ while( segmenter.Fetch() )
+ {
+  lem::mout->printf( "#%d ==> %us\n", sentence_count, segmenter.GetFetchedSentence().c_str() );
+  sentence_count++;
+ }
+
+
+ 
+ return;
+}
+
 
 
 
@@ -1133,6 +1171,7 @@ void SyntaxShell::ShowDictionaryInfo(void)
  mout->printf( "\n--- Dictionary status ---\n\n" );
  mout->printf( "Database version=%s\n", sol_id->GetVersion().string().c_str() );
  mout->printf( "Number of word entries=%d\n", nentry );
+ mout->printf( "Default language=%us\n", default_language==-1 ? L"n/a" : sol_id->GetSynGram().languages()[default_language].GetName().c_str() );
  return;
 }
 
@@ -1140,252 +1179,4 @@ void SyntaxShell::SetPhrase( const lem::UFString &x )
 {
  pre_entered_phrase = x;
  return;
-}
-
-
-// ------------ ГЕНЕРАТОР
-
-class GeneratorLexer : public BasicLexer
-{
- private:
-  bool UseNGrams; // использовать N-граммы для фильтрации генерируемых токенов
-  lem::MCollect<UCString> words;
-
-  typedef std::map< const LexerTextPos*, int > TOKEN2WORD;
-  TOKEN2WORD token2word;
-
-  typedef std::multimap< int, const Word_Form* > INDEX2WORDFORM;
-  INDEX2WORDFORM index2wordform;
-
-  void CollectUsedWords( const LexerTextPos * t, lem::MCollect<int> & indeces ) const;
-
- public:
-  GeneratorLexer(
-                 const lem::MCollect<UCString> & _words,
-                 Solarix::Dictionary * _dict,
-                 const TextRecognitionParameters & _params,
-                 TrTrace * _trace
-                );
-
-  virtual bool Fetch( const LexerTextPos * current, const TokenExpectation * unused, lem::MCollect<const LexerTextPos*> & next );
-};
-
-
-GeneratorLexer::GeneratorLexer(
-                               const lem::MCollect<UCString> & _words,
-                               Solarix::Dictionary * _dict,
-                               const TextRecognitionParameters & _params,
-                               TrTrace * _trace
-                              )
- : BasicLexer(_dict,_params,_trace), words(_words)
-{
- UseNGrams = dict->IsNgramsAvailable();
-
- for( int index=0; index<words.size(); ++index )
-  {
-   const lem::UCString & word = words[index];
-
-   //int case_flags = casing_coder->Lower;
-   TokenizationTags * tags=NULL;
-   lem::Ptr<Word_Form> wf( dict->GetLexAuto().ProjectWord( word, 0, 1, tags, params, trace==NULL ? NULL : trace->RecognizerTrace() ) );
-   lem_rub_off(tags);
-
-   // Определим словарные статьи.
-   lem::MCollect<int> ekeys;
-   for( int i=0; i<wf->VersionCount(); ++i )
-    {
-     const int ekey = wf->GetVersion(i)->GetEntryKey();
-     if( ekeys.find(ekey)==UNKNOWN )
-      {
-       ekeys.push_back(ekey);
-
-       const SG_Entry & e = dict->GetSynGram().GetEntry(ekey);
-       // Из всех форм генерируем отдельные словоформы.
-       for( int k=0; k<e.forms().size(); ++k )
-        {
-         const SG_EntryForm & f = e.forms()[k];
-
-         RC_Lexem name( new Lexem( lem::to_lower(f.name()) ) );
-         RC_Lexem normalized_name( new Lexem( f.name() ) );
-
-         const CP_Array & pairs = f.coords();
-
-         Word_Form * wf2 = new Word_Form( name, normalized_name, ekey, pairs, lem::Real1(100) );
-         wordforms.push_back( wf2 );
-
-         index2wordform.insert( std::make_pair( index, wf2 ) );
-        }
-      }
-    }
-  }
-
- return;
-}
-
-
-void GeneratorLexer::CollectUsedWords( const LexerTextPos * t, lem::MCollect<int> & indeces ) const
-{
- TOKEN2WORD::const_iterator it = token2word.find(t);
- if( it!=token2word.end() )
-  indeces.push_back( it->second );
-
- if( !t->IsBegin() && t->GetPrev()!=NULL )
-  CollectUsedWords( t->GetPrev(), indeces );
-
- return;
-}
-
-
-bool GeneratorLexer::Fetch( const LexerTextPos * current, const TokenExpectation * unused, lem::MCollect<const LexerTextPos*> & next )
-{
- if( current==NULL )
-  {
-   next.push_back( GetBeginToken() );
-   return true;
-  }
-
- if( current->IsEnd() )
-  {
-   return false;
-  }
-
- next.clear();
-
- // поищем в кэше уже найденные продолжения.
- std::pair<CACHED_EDGES::const_iterator,CACHED_EDGES::const_iterator> p_edges = edges.equal_range(current);
- if( p_edges.first!=p_edges.second )
-  {
-   for( CACHED_EDGES::const_iterator it=p_edges.first; it!=p_edges.second; ++it )
-    {
-     next.push_back( it->second );
-    }
-
-   return true;
-  }
-
- // Посмотрим, какие токены были перед данным, и какие слова они уже использовали.
- lem::MCollect<int> indeces;
- CollectUsedWords( current, indeces );
-
-/*
-#if LEM_DEBUGGING==1
-if( current->GetWordform()->GetName()->eqi(L"ловит") )
- {
-  lem::mout->printf("!\n");
- }
-#endif
-*/
-
- bool token_created=false;
- lem::MCollect<const LexerTextPos*> matched_by_literal_ngrams, matched_by_normalized_ngrams, all_next_tokens;
-
- lem::Ptr<Ngrams> ngrams;
- lem::UCString prev_lemma;
-
- if( UseNGrams )
-  ngrams = dict->GetNgrams();
-
- // Теперь неиспользованные ранее слова порождают новые токены.
- for( lem::Container::size_type i=0; i<words.size(); ++i )
-  if( indeces.find(i)==UNKNOWN )
-   {
-    // слово не использовалось.
-    typedef INDEX2WORDFORM::const_iterator IT;
-    std::pair<IT,IT> p = index2wordform.equal_range( CastSizeToInt(i) );
-
-    for( IT it=p.first; it!=p.second; ++it )
-     {
-      const Word_Form * wordform = it->second;
-      const int word_index = current->IsRealWord() ? current->GetWordIndex()+1 : 0;
-      const int start_pos = current->IsRealWord() ? (current->GetStartPosition()+current->GetWordLength()+1) : 0;
-
-      // Нам нужно создать новый вариант этой словоформы.
-      Word_Form * wf = new Word_Form( *wordform, true );
-      wf->SetOriginPos( word_index );
-      wordforms.push_back(wf);
-
-      LexerTextPos * new_token = new LexerTextPos( current, wf, 0, start_pos, wf->GetName()->length(), word_index );
-      positions.push_back(new_token);
-
-      all_next_tokens.push_back( new_token );
-
-      token2word.insert( std::make_pair(new_token,CastSizeToInt(i)) );
-
-      token_created = true;
-
-      // Слово сочетается с предыдущим?
-      if( UseNGrams && current->IsRealWord() )
-       {
-        const lem::UCString & prev_word = * current->GetWordform()->GetNormalized();
-        const lem::UCString & new_word = * new_token->GetWordform()->GetNormalized();
-        
-        float w2=0;
-        int iw2=0;
-        if( ngrams->FindLiteralNGrams( prev_word, new_word, w2, iw2 ) )
-         {
-          // TODO: использовать частотность подошедшей N-граммы для взвешивания созданных токенов.
-          matched_by_literal_ngrams.push_back( new_token );
-         }
-        else
-         {
-          if( prev_lemma.empty() )
-           {
-            const int prev_ekey = current->GetWordform()->GetEntryKey();
-            const SG_Entry & prev_e = dict->GetSynGram().GetEntry( prev_ekey );
-            prev_lemma = prev_e.GetName();
-           }
-
-          const int new_ekey = new_token->GetWordform()->GetEntryKey();
-          const SG_Entry & new_e = dict->GetSynGram().GetEntry( new_ekey );
-          const lem::UCString & new_lemma = new_e.GetName();
-
-          if( ngrams->FindRawNGrams( prev_lemma, new_lemma, w2, iw2 ) )
-           {
-            // TODO: использовать частотность подошедшей N-граммы для взвешивания созданных токенов.
-            matched_by_normalized_ngrams.push_back( new_token );
-           }
-         }
-       }
-     }
-   }
-
- if( !matched_by_literal_ngrams.empty() )
-  {
-   // найдена по крайней мере одна буквальная 2-грамма, поэтому отбрасываем все неподтвержденные варианты токенов.
-   next = matched_by_literal_ngrams;
-  }
- else if( !matched_by_normalized_ngrams.empty() )
-  {
-   next = matched_by_normalized_ngrams;
-  }
- else
-  {
-   next = all_next_tokens;
-  }
-
- for( lem::Container::size_type i=0; i<next.size(); ++i )
-  {
-   edges.insert( std::make_pair(current, const_cast<LexerTextPos*>( next[i] ) ) );
-  }
-
-
-/*
- #if LEM_DEBUGGING==1
- lem::mout->printf( "%60h-\n" );
- for( lem::Container::size_type i=0; i<next.size(); ++i )
-  {
-   lem::mout->printf( "FETCHED: %us(%p) -> %us(%p)\n", current->GetWordform()->GetName()->c_str(), current, next[i]->GetWordform()->GetName()->c_str(), next[i] );
-  }
- #endif
-*/
-
-
- if( !token_created )
-  {
-   // Возвращаем правую границу.
-   next.push_back( GetEndToken(current) );
-   return true;
-  }
-
- return false;
 }

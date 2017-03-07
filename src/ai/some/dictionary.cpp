@@ -2835,7 +2835,7 @@ TextTokenizationRules * Dictionary::GetTokenizationRules( const lem::MCollect<in
      throw lem::E_BaseException( msg.string() );
     }
 
-   iparam = lang.FindParam(L"WordBrokers");
+   iparam = lang.FindParam(L"WordDelimiters");
    if( iparam!=UNKNOWN )
     {
      const lem::UFString & delimiters = lang.GetParam(iparam).GetValue();

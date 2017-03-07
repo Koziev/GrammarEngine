@@ -43,8 +43,8 @@ int main( int argc, char *argv[] )
 {
  #if LEM_DEBUGGING==1 && defined LEM_MSC
  int m=-1;
-// printf( "Enter _CrtSetBreakAlloc argument:" );
-// scanf( "%d", &m );
+ //printf( "Enter _CrtSetBreakAlloc argument:" );
+ //scanf( "%d", &m );
  if( m>0 )
   _CrtSetBreakAlloc(m);
 
@@ -140,6 +140,10 @@ int main( int argc, char *argv[] )
     {
      selected_mode = SyntaxShell::TokenizerMode;
     }
+   else if( lem_eqi(argv[i]+1,"segmentize") )
+    {
+     selected_mode = SyntaxShell::SegmenterMode;
+    }
    else if( lem_eqi(argv[i]+1,"lemmatize") )
     {
      selected_mode = SyntaxShell::LemmatizerMode;
@@ -180,7 +184,7 @@ int main( int argc, char *argv[] )
     {
      Semantics=true;
     }
-   else if( lem_eqi(argv[i]+1,"maxalt") )
+   else if( lem_eqi(argv[i]+1,"maxalt") || lem_eqi(argv[i]+1,"beamsize") )
     {
      MaxAlt = lem::to_int(argv[i+1]);
      i++; 

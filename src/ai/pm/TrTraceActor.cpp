@@ -42,4 +42,9 @@ void TrTraceActor::PrintContextItem( Solarix::Dictionary &dict, int i, lem::OFor
 {
 }
 
+void TrTraceActor::PrintCurrentToken( Solarix::Dictionary &dict, lem::OFormatter &out ) const
+{
+}
+
+
 #endif

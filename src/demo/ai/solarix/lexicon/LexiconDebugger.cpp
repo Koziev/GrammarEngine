@@ -27,7 +27,7 @@ void LexiconDebugger::Matched( const lem::UCString &word, const LA_RecognitionRu
 {
  if( trace )
   {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for %vfE%us%vn rel=%vf9%4.2rf%vn", rule->GetName().c_str(), word.c_str(), rule->GetRel().GetFloat() );
+   mout->printf( "Recognition rule %vfA%us%vn has been applied for %vfE%us%vn score=%vf9%4.2rf%vn", rule->GetName().c_str(), word.c_str(), rule->GetScore() );
 
    const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
    const int id_class = e.GetClass();
@@ -44,8 +44,8 @@ void LexiconDebugger::MatchedSyllable( const lem::UCString &word, const lem::UCS
 {
  if( trace )
   {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for syllable %vfE%us%vn in word %vfE%us%vn rel=%vf9%4.2rf%vn"
-    , rule->GetName().c_str(), syllable.c_str(), word.c_str(), rule->GetRel().GetFloat() );
+   mout->printf( "Recognition rule %vfA%us%vn has been applied for syllable %vfE%us%vn in word %vfE%us%vn score=%vf9%4.2rf%vn"
+    , rule->GetName().c_str(), syllable.c_str(), word.c_str(), rule->GetScore() );
 
    const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
    const int id_class = e.GetClass();

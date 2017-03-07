@@ -7,11 +7,10 @@ namespace Solarix
 {
  struct ProjScore
  {
-  lem::Real1 val;
-  int score;
+  float score;
 
-  ProjScore() : val(100), score(0) {}
-  ProjScore( lem::Real1 _val ) : val(_val), score(0) {}
+  ProjScore() : score(0) {}
+  ProjScore( float _score ) : score(_score) {}
  };
 }
 

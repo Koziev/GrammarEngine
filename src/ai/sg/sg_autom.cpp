@@ -210,12 +210,11 @@ bool SynGram::ProcessLexem2(
                             const Binarization_Options &options
                            )
 {
- if( t.string().eqi(L"wordform_score") )
+ if( t.string().eqi(L"wordform_score") || t.string().eqi(L"wordentry_freq") || t.string().eqi(L"wordforms_score") )
   {
-   LoadFrequency( txtfile, true );
+   LoadFrequency( txtfile, t.string() );
    return true;
   }
-
 
  switch(t.GetToken())
   {
@@ -229,10 +228,6 @@ bool SynGram::ProcessLexem2(
 
    case B_PHRASE:
     LoadPhrase( txtfile, options );
-    return true;
-
-   case B_CALIBRATE:
-    LoadFrequency( txtfile, false );
     return true;
 
    case B_PARADIGMA:
@@ -414,23 +409,12 @@ void SynGram::LoadAuxWord( Macro_Parser& txtfile )
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void SynGram::LoadFrequency( Macro_Parser & txtfile, bool wordform )
+void SynGram::LoadFrequency( Macro_Parser & txtfile, const lem::UCString & keyword )
 {
  // Загружаем калибратор.
- SG_calibrator c(*this,GetIO(),txtfile,wordform);
+ SG_calibrator c(keyword,*this,GetIO(),txtfile);
 
- // Проверим уникальность.
- if( c.IsWordEntry() )
-  {
-   if( wordfreq_filename.IsNull() )
-    {
-     wordfreq_filename = new lem::Path(lem::Path::GetTmpFilename());
-     wordfreq_file = new lem::BinaryWriter( *wordfreq_filename );
-    }
-
-   c.SaveBin( *wordfreq_file );
-  }
- else if( c.IsWordForm() )
+ if( c.IsWordEntryFreq() || c.IsWordFormScore() || c.IsWordFormsScore() )
   {
    if( wordfreq_filename.IsNull() )
     {

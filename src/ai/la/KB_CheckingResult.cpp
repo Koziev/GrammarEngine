@@ -4,7 +4,7 @@ using namespace Solarix;
 
 
 KB_CheckingResult::KB_CheckingResult(void)
- : type(UNKNOWN), retbool(UNKNOWN), retint(UNKNOWN)
+ : type(UNKNOWN), retbool(UNKNOWN), false_score(0), retint(UNKNOWN)
 {
 }
 

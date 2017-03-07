@@ -74,7 +74,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->20.06.2005
-// LC->15.04.2013
+// LC->28.03.2016
 // --------------
 
 #if defined DLL_EXPORTS || defined FAIND_IENGINES
@@ -129,6 +129,7 @@
  typedef void* HGREN_INTARRAY;
  typedef void* HGREN_WCOORD;
  typedef void* HGREN_RESPACK;
+ typedef void* HGREN_LINKAGE;
  typedef const void* HGREN_TREENODE;
  typedef void* HGREN_PHRASOMAT;
  typedef void* HGREN_FGTEMPLATE;
@@ -746,6 +747,13 @@ typedef HGREN_RESPACK (SX_STDCALL * sol_SyntaxAnalysis8_Fun)(
                                                              int Language
                                                             );
 
+
+
+FAIND_API(wchar_t*) sol_NormalizePhraseW( HGREN hEngine, HGREN_RESPACK hLinkages );
+FAIND_API(char*) sol_NormalizePhrase8( HGREN hEngine, HGREN_RESPACK hLinkages );
+
+
+
 // http://www.solarix.ru/api/ru/sol_DeleteResPack.shtml
 // Удаление результатов морфологического или синтаксического анализа 
 FAIND_API(void) sol_DeleteResPack( HGREN_RESPACK hPack );
@@ -1052,6 +1060,13 @@ FAIND_API(void*) sol_LoadSyntaxTree( HGREN hEngine, void * file_handle );
 FAIND_API(HGREN_RESPACK) sol_GetTreeHandle( void * ptr );
 FAIND_API(const wchar_t*) sol_GetSentenceW( void * ptr );
 FAIND_API(int) sol_FreeSyntaxTree( void * tree );
+FAIND_API(HGREN_RESPACK) sol_CreateLinkages(HGREN hEngine);
+FAIND_API(HGREN_LINKAGE) sol_CreateLinkage(HGREN hEngine, HGREN_RESPACK hLinkages);
+FAIND_API(int) sol_AddBeginMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
+FAIND_API(int) sol_AddEndMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
+FAIND_API(int) sol_AddNodeToLinkage(HGREN hEngine, HGREN_LINKAGE hLinkage, HGREN_TREENODE hNode);
+FAIND_API(HGREN_TREENODE) sol_CreateTreeNodeW(HGREN hEngine, int id_entry, const wchar_t *word, int n_pair, const int * pairs);
+
 
 
 #endif

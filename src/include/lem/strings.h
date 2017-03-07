@@ -22,7 +22,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->16.09.1996
-// LC->06.10.2009
+// LC->10.10.2015
 // --------------
 
 #include <lem/config.h>
@@ -115,11 +115,11 @@
   // Операция '==' (Фортрановский оператор .EQ. 'equal')
   // *************************************************************
          bool lem_eq( const char*, const char* );
-         bool lem_eq( const uch*,  const uch*  );
+         bool lem_eq( const wchar_t*, const wchar_t*  );
          bool lem_eq( const char*, char  );
-         bool lem_eq( const uch*,  uch   );
-  extern bool lem_eq( const char*, const uch*  );
-  extern bool lem_eq( const uch*,  const char* );
+         bool lem_eq( const wchar_t*, wchar_t );
+  extern bool lem_eq( const char*, const wchar_t*  );
+  extern bool lem_eq( const wchar_t*,  const char* );
 
          bool lem_eq_nn( const char*, const char* );
          bool lem_eq_nn( const uch*,  const uch*  );
@@ -560,7 +560,7 @@
   return !strcmp( s1, s2 );
  }
 
- inline bool lem_eq( const uch* s1, const uch* s2 )
+ inline bool lem_eq( const wchar_t* s1, const wchar_t* s2 )
  {
   if( !s1 ) return !s2 || !*s2;
   if( !s2 ) return !s1 || !*s1;
@@ -587,7 +587,7 @@
  }
 
 
- inline bool lem_neq( const uch* s1, const uch* s2 )
+ inline bool lem_neq( const wchar_t* s1, const wchar_t* s2 )
  {
   if( !s1 ) return s2 && *s2;
   if( !s2 ) return s1 && *s1;

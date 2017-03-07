@@ -29,10 +29,10 @@
 
    void AddResult(
                   const Solarix::Word_Coord &wc,
-                  lem::Real1 val,
+                  float word_score,
                   Solarix::LA_ProjectInfo *inf,
                   lem::MCollect<Solarix::Word_Coord> &found_list,
-                  lem::MCollect<ProjScore> &val_list,
+                  lem::MCollect<ProjScore> & score_list,
                   lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list
                  ) const;
 
@@ -45,20 +45,21 @@
    bool Apply(
               const lem::UCString & normalized_word,
               const lem::UCString & original_word,
-              lem::Real1 word_rel,
-              lem::MCollect<Solarix::Word_Coord> &found_list,
-              lem::MCollect<ProjScore> &val_list,
-              lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
+              float word_score,
+              lem::MCollect<Solarix::Word_Coord> & found_list,
+              lem::MCollect<ProjScore> & score_list,
+              lem::PtrCollect<Solarix::LA_ProjectInfo> & inf_list,
+              bool only_forced,
               LA_RecognitionTrace *trace
              ) const;
 
    bool ApplyForSyllabs(
                         const lem::UCString &word,
-                        lem::Real1 word_rel,
-                        const lem::MCollect<lem::UCString> &syllabs,
-                        lem::MCollect<Solarix::Word_Coord> &found_list,
-                        lem::MCollect<ProjScore> &val_list,
-                        lem::PtrCollect<Solarix::LA_ProjectInfo> &inf_list,
+                        float word_score,
+                        const lem::MCollect<lem::UCString> & syllabs,
+                        lem::MCollect<Solarix::Word_Coord> & found_list,
+                        lem::MCollect<ProjScore> & score_list,
+                        lem::PtrCollect<Solarix::LA_ProjectInfo> & inf_list,
                         LA_RecognitionTrace *trace
                        ) const;
   };

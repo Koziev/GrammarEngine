@@ -183,9 +183,9 @@ void Compiler::CompileAsciiProject( lem::Stream &proj_file )
    // найти сбор файлов по маске.
    if( next_fn.search(L'*')!=UNKNOWN || next_fn.search(L'?')!=UNKNOWN )
     {
-     lem::Path p( next_fn );
+     lem::Path p( root_dir + next_fn );
   
-     UFString mask = p.GetUnicode();
+     UFString mask = p.GetFileName();
 
      p.RemoveLastLeaf(); 
      std::vector< lem::Path > file_list;

@@ -52,6 +52,11 @@ ModelTokenFeatures::ModelTokenFeatures()
  POS_PX   = "0"; // послелог
  POS_PP   = "0"; // притяж_частица
  POS_MU   = "0"; // единицы измерения
+ POS_PCA = "0"; // ПРЕФИКС_СОСТАВ_ПРИЛ
+ POS_PCN = "0"; // ПРЕФИКС_СОСТАВ_СУЩ
+
+ POS_PCV = "0"; // ENG_COMPOUND_PREVERB
+ POS_PCM = "0"; // ENG_COMPOUND_PREADV
 }
 
 
@@ -119,6 +124,11 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Diction
  std::set<int> ekeys_PRN2;
  std::set<int> ekeys_PP;
  std::set<int> ekeys_MU;
+ std::set<int> ekeys_PCA;
+ std::set<int> ekeys_PCN;
+ std::set<int> ekeys_PCV;
+ std::set<int> ekeys_PCM;
+
 
  for( int i = 0; i < token->GetWordform()->VersionCount(); ++i )
  {
@@ -170,8 +180,23 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Diction
        case POSTPOS_ru: ekeys_PX.insert( k ); break;
        case PRONOUN_ru: ekeys_PRN.insert( k ); break;
        case PRONOUN2_ru: ekeys_PRN2.insert( k ); break;
-       case POSESS_PARTICLE: ekeys_PP.insert( k ); break;
        case MEASURE_UNIT: ekeys_MU.insert( k ); break;
+       case COMPOUND_ADJ_PREFIX: ekeys_PCA.insert( k ); break;
+       case COMPOUND_NOUN_PREFIX: ekeys_PCN.insert( k ); break;
+
+       case NOUN_en: ekeys_N.insert( k ); break;
+       case VERB_en: ekeys_V.insert( k ); break;
+       case ADJ_en: ekeys_A.insert( k ); break;
+       case ADV_en: ekeys_Y.insert( k ); break;
+       case NUMERAL_en: ekeys_D.insert( k ); break;
+       case PREP_en: ekeys_P.insert( k ); break;
+       //case POSTPOS_en: ekeys_PX.insert( k ); break;
+       case PRONOUN_en: ekeys_PRN.insert( k ); break;
+       case POSESS_PARTICLE: ekeys_PP.insert( k ); break;
+       case COMPOUND_PRENOUN_en: ekeys_PCA.insert( k ); break;
+       case COMPOUND_PREADJ_en: ekeys_PCN.insert( k ); break;
+       case COMPOUND_PREVERB_en: ekeys_PCV.insert(k); break;
+       case COMPOUND_PREADV_en: ekeys_PCM.insert(k); break;
       }
     }
    }
@@ -197,6 +222,11 @@ ModelTokenFeatures* BasicModel::GetFeatures( const LexerTextPos * token, Diction
    f->POS_PX = POS_Prob( ekeys_PX.size(), n_tot );
    f->POS_PP = POS_Prob( ekeys_PP.size(), n_tot );
    f->POS_MU = POS_Prob( ekeys_MU.size(), n_tot );
+   f->POS_PCA = POS_Prob( ekeys_PCA.size(), n_tot );
+   f->POS_PCN = POS_Prob( ekeys_PCN.size(), n_tot );
+
+   f->POS_PCV = POS_Prob( ekeys_PCV.size(), n_tot );
+   f->POS_PCM = POS_Prob( ekeys_PCM.size(), n_tot );
   }
 
  if( EMIT_SEMANTIC_TAGS )
@@ -237,21 +267,47 @@ void BasicModel::PullFeatures1(
   // здесь можно вывести и другие свойства слова.
   if( rich_set && EMIT_POS_TAGS )
   {
-   b.push_back( lem::format_str("pos[%d,N]=%s", offset, f.POS_N.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,A]=%s", offset, f.POS_A.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,V]=%s", offset, f.POS_V.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,IMV]=%s", offset, f.POS_IMV.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,I]=%s", offset, f.POS_I.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,Y]=%s", offset, f.POS_Y.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,VY]=%s", offset, f.POS_VY.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,PRN]=%s", offset, f.POS_PRN.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,PRN2]=%s", offset, f.POS_PRN2.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,C]=%s", offset, f.POS_C.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,D]=%s", offset, f.POS_D.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,P]=%s", offset, f.POS_P.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,PX]=%s", offset, f.POS_PX.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,PP]=%s", offset, f.POS_PP.c_str() ).c_str() );
-   b.push_back( lem::format_str("pos[%d,MU]=%s", offset, f.POS_MU.c_str() ).c_str() );
+   if( language_id==RUSSIAN_LANGUAGE )
+   {
+    b.push_back( lem::format_str("pos[%d,N]=%s", offset, f.POS_N.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,A]=%s", offset, f.POS_A.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,V]=%s", offset, f.POS_V.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,IMV]=%s", offset, f.POS_IMV.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,I]=%s", offset, f.POS_I.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,Y]=%s", offset, f.POS_Y.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,VY]=%s", offset, f.POS_VY.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PRN]=%s", offset, f.POS_PRN.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PRN2]=%s", offset, f.POS_PRN2.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,C]=%s", offset, f.POS_C.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,D]=%s", offset, f.POS_D.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,P]=%s", offset, f.POS_P.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PX]=%s", offset, f.POS_PX.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PP]=%s", offset, f.POS_PP.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,MU]=%s", offset, f.POS_MU.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCA]=%s", offset, f.POS_PCA.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCN]=%s", offset, f.POS_PCN.c_str() ).c_str() );
+   }
+   else if( language_id==ENGLISH_LANGUAGE )
+   {
+    b.push_back( lem::format_str("pos[%d,N]=%s", offset, f.POS_N.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,A]=%s", offset, f.POS_A.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,V]=%s", offset, f.POS_V.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,Y]=%s", offset, f.POS_Y.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PRN]=%s", offset, f.POS_PRN.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,C]=%s", offset, f.POS_C.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,D]=%s", offset, f.POS_D.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,P]=%s", offset, f.POS_P.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PX]=%s", offset, f.POS_PX.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PP]=%s", offset, f.POS_PP.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCA]=%s", offset, f.POS_PCA.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCN]=%s", offset, f.POS_PCN.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCV]=%s", offset, f.POS_PCV.c_str() ).c_str() );
+    b.push_back( lem::format_str("pos[%d,PCM]=%s", offset, f.POS_PCM.c_str() ).c_str() );
+   }
+   else
+   {
+    LEM_STOPIT;
+   }
   }
 
   if( EMIT_FORMTAGS_FOR_CONTEXT && offset!=0 )
@@ -317,6 +373,13 @@ void BasicModel::SetParamsAfterLoad()
  EMIT_FORM_TAGS = codebook->FindModelParam( L"EMIT_FORM_TAGS", L"false" ).eqi(  L"true" );
  EMIT_FORMTAGS_FOR_CONTEXT = codebook->FindModelParam( L"EMIT_FORMTAGS_FOR_CONTEXT", L"false" ).eqi(  L"true" );
  EMIT_SEMANTIC_TAGS = codebook->FindModelParam( L"EMIT_SEMANTIC_TAGS", L"false" ).eqi(  L"true" );
+
+ lem::UCString lang = codebook->FindModelParam( L"LANGUAGE", L"" );
+ if( lang.eqi(  L"en" ) )
+  language_id = ENGLISH_LANGUAGE;
+ else
+  language_id = RUSSIAN_LANGUAGE;
+
  return;
 }
 

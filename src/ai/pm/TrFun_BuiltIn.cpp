@@ -1669,7 +1669,7 @@ if( lem::LogFile::IsOpen() )
        const SG_Entry &e = pm.GetDict().GetSynGram().GetEntry(ie);
        const SG_EntryForm &f = e.forms()[wc.GetForm()];
 
-       Word_Form *wf = new Word_Form( rc, rc, e.GetKey(), f.coords(), val_list[i].val );
+       Word_Form *wf = new Word_Form( rc, rc, e.GetKey(), f.coords(), val_list[i].score );
        Tree_Node *tn = new Tree_Node( wf, true );
        TrValue *tr = new TrValue(tn,true);
        ret_tuple->Add(tr);

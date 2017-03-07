@@ -304,16 +304,18 @@ void Lemmatizator::Lemmatize( const lem::UCString &word, lem::MCollect<lem::UCSt
    if( res.eq_endi( suffices[i].first ) )
     {
      // Нашли замену суффикса!
-     UCString lemma = lem::left( res, res.length()-suffices[i].first.length() );
-     lemma += suffices[i].second;
+     UCString lemma = lem::left( word, word.length()-suffices[i].first.length() );
+     lemma += lem::to_lower( suffices[i].second );
      lemmas.push_back(lemma);
-     return;
     }
   }
 
+ if( lemmas.empty() )
+  {
+   // Лемматизация не выполнена, возвращаем исходное слово в качестве леммы.
+   lemmas.push_back(word);
+  }
 
- // Лемматизация не выполнена, возвращаем исходное слово в качестве леммы.
- lemmas.push_back(res);
  return;
 }
 

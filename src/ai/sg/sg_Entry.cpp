@@ -324,15 +324,24 @@ void SG_Entry::LoadName(
 
  dict.GetLexAuto().TranslateLexem( entry_name, false, id_language );
 
+
+#if LEM_DEBUGGING==1
+
+// if( entry_name=="100%" )
+//  lem::mout->printf( "DEBUG\n" );
+
+#endif
+
+
  if( id_language!=UNKNOWN )
   {
    const SG_Language &lang = dict.GetSynGram().languages()[ id_language ];
    const lem::MCollect<int> & id_alphabets = lang.GetAlphabets();
-   entry_name.Translate( dict.GetGraphGram(), 2, id_alphabets );
+   entry_name.Translate( dict.GetGraphGram(), 1, id_alphabets );
   }
  else
   {
-   entry_name.Translate( dict.GetGraphGram(), 2 );
+   entry_name.Translate( dict.GetGraphGram(), 1 );
   } 
 
  if( entry_name.empty() )

@@ -1,5 +1,6 @@
 #include <lem/containers.h>
 #include <lem/conversions.h>
+#include <lem/oformatter.h>
 #include <lem/solarix/sql_production.h>
 
 using namespace lem;
@@ -69,7 +70,8 @@ SQL_Production::SQL_Production( const FString &Version )
      bulk_inserts=50;
      internal_commit_period=100;
      begin_tx = "SET TRANSACTION;";
-     internal_commit_tx="\nCOMMIT;\nSET TRANSACTION;\n";
+//     internal_commit_tx="\nCOMMIT;\nSET TRANSACTION;\n";
+     internal_commit_tx="\nCOMMIT RETAIN;\n";
     }
    else if( token=="sqlite" )
     {
@@ -364,3 +366,84 @@ lem::UFString SQL_Production::ClearInvalidChars( const lem::UFString & str ) con
 
  return res;
 }
+
+
+// Генерируем команды для удаления таблицы таким образом, что отсутствие удаляемой таблицы не
+// вызовет ошибку.
+lem::UFString SQL_Production::DropTable( const char * TableName ) const
+{
+ lem::MemFormatter mem;
+
+ if( type == FireBird )
+  {
+   mem.printf( "set term #;\n"
+               "EXECUTE BLOCK AS BEGIN\n"
+               "IF (EXISTS(select * from RDB$RELATIONS WHERE UPPER(RDB$RELATION_NAME)=UPPER('%s')) ) then\n"
+               " EXECUTE STATEMENT 'DROP TABLE %s';\n"
+               "END\n"
+               "#\n"
+               "set term ;#\n"
+               "COMMIT;\n"
+              , TableName, TableName );
+  }
+ else if( type==Oracle )
+  {
+   mem.printf( "DECLARE\n"
+               "n INTEGER;\n"
+               "BEGIN\n"
+               "select count(*) into n from dba_tables where UPPER(table_name)=UPPER('%s');\n"
+               "IF n!=0 THEN execute immediate 'DROP TABLE %s'; END IF;\n"
+               "END;\n"
+               "/\n"
+              , TableName, TableName );
+  }
+ else if( type==MySql )
+  {
+   mem.printf( "DROP TABLE IF EXISTS %s;", TableName );
+  }
+ else if( type==SQLite )
+  {
+   mem.printf( "DROP TABLE IF EXISTS %s;", TableName );
+  }
+ else if( type==Postgres )
+  {
+   mem.printf( "DROP TABLE IF EXISTS %s;", TableName );
+  }
+ else if( type==MsSql )
+  {
+   mem.printf( "IF EXISTS(SELECT 1 from information_schema.tables where UPPER(table_name) = UPPER('%s')) drop table %s;\n", TableName, TableName );
+  }
+ else
+  {
+   throw lem::E_BaseException( "Not implemented" );
+  }
+
+ return mem.string();
+}
+
+
+lem::UFString SQL_Production::DropSequence( const char * SequenceName ) const
+{
+ if( type == FireBird )
+  {
+   lem::MemFormatter mem;
+   mem.printf( "set term #;\n"
+               "EXECUTE BLOCK AS BEGIN\n"
+               "IF (EXISTS(SELECT 1 FROM RDB$GENERATORS WHERE RDB$SYSTEM_FLAG=0 AND UPPER(RDB$GENERATOR_NAME)=UPPER('%s')) ) THEN\n"
+               " EXECUTE STATEMENT 'DROP SEQUENCE %s';\n"
+               "END\n"
+               "#\n"
+               "set term ;#\n"
+              , SequenceName, SequenceName );
+
+   return mem.string();
+  }
+ else
+  {
+   throw lem::E_BaseException( "Not implemented" );
+  }
+}
+
+
+
+

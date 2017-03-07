@@ -323,7 +323,7 @@
                      const Binarization_Options &options
                     );
 
-   void LoadFrequency( Macro_Parser &txtfile, bool wordform );
+   void LoadFrequency( Macro_Parser &txtfile, const lem::UCString & keyword );
 
    void LoadAuxWord( Macro_Parser& txtfile );
 

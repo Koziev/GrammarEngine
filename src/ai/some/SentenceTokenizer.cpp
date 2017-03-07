@@ -1016,7 +1016,7 @@ EuroSentenceTokenizer::EuroSentenceTokenizer( const Solarix::Dictionary &dict, i
  if( language!=UNKNOWN )
   {
    const SG_Language &lang = dict.GetSynGram().languages()[language];
-   int ipar = lang.FindParam( L"WordBrokers" );
+   int ipar = lang.FindParam( L"WordDelimiters" );
 
    if( ipar!=UNKNOWN )
     {

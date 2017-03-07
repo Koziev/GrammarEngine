@@ -1,0 +1,9 @@
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\Parsing2NegativeSamples.exe.config
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\Parsing2NegativeSamples.exe
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\Parsing2NegativeSamples.pdb
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\obj\Debug\Parsing2NegativeSamples.csprojResolveAssemblyReference.cache
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\obj\Debug\Parsing2NegativeSamples.exe
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\obj\Debug\Parsing2NegativeSamples.pdb
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\gren_consts.dll
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\gren_fx.dll
+e:\MVoice\lem\demo\ai\solarix\argon\CollectNGramsFromSamples\Parsing2NegativeSamples\Parsing2NegativeSamples\bin\Debug\gren_fx2.dll

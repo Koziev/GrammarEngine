@@ -16,9 +16,10 @@
    int max_elapsed_millisecs;
    int max_alt; // макс. число параллельных путей разбора в нисходящем парсере
    int max_bottomup_trees; // макс. число просматриваемых вариантов построения графа в восходящем парсере
+   int max_recursion_depth;
 
    SyntaxAnalyzerTimeout(void) : 
-    max_variators(SyntaxAnalyzerTimeout::MAX_VARIATORS), max_elapsed_millisecs(3600000), max_alt(0), max_tokenization_paths(1000), max_bottomup_trees(1000) {}
+    max_variators(SyntaxAnalyzerTimeout::MAX_VARIATORS), max_elapsed_millisecs(3600000), max_alt(0), max_tokenization_paths(1000), max_bottomup_trees(1000), max_recursion_depth(10000) {}
   };
 
  }

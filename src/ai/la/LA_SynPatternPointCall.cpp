@@ -27,6 +27,14 @@ void SynPatternPointCall::Print( Dictionary &dict, OFormatter &out, const TrTrac
  return;
 }
 
+void SynPatternPointCall::PrintCurrentToken( Solarix::Dictionary &dict, lem::OFormatter &out ) const
+{
+ out.printf( "\nCurrent token: index=%d wordform=", token->GetWordIndex() );
+ token->GetWordform()->Print( out, &dict.GetSynGram(), true );
+ out.eol();
+ return;
+}
+
 void SynPatternPointCall::PrintContext( Solarix::Dictionary &dict, lem::OFormatter &out ) const
 {
  out.printf( "\nCurrent token: index=%d wordform=", token->GetWordIndex() );

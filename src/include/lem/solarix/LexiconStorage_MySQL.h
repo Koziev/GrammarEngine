@@ -142,6 +142,7 @@
     virtual LA_CropRule* GetPreprocessorCropRule( int id );
     virtual void DeletePreprocessorRules(void);
     virtual int FindCropRule( const lem::UCString &rule_name );
+    virtual void StorePreprocessorCropRule( LA_CropRule *rule );
 
     // Recognition rules
     virtual LS_ResultSet* ListRecognitionRules( int id_language, bool including_word_matchers );
@@ -182,26 +183,6 @@
     virtual std::pair<SynPatternTreeNode*,lem::UCString> GetSynPatternTree( int id );
     virtual int FindSynPatternTree( int id_language, const lem::UCString &name, int pattern_type );
     virtual lem::UCString GetSynPatternTreeName( int id );
-
-    virtual void DeleteProductionRules( const wchar_t *Marker );
-    virtual int RegisterRuleGroup( const lem::UCString &name, const wchar_t *Marker );
-    virtual int CountRuleGroups( const wchar_t *Marker );
-    virtual int FindRuleGroup( const wchar_t *Marker, const lem::UCString &name );
-    virtual LS_ResultSet* ListProductionRuleCategories( const wchar_t *Marker );
-
-
-    virtual int RegisterProcedure( const lem::UCString &name, const wchar_t *Marker );
-    virtual int FindProcedure( const lem::UCString &name, const wchar_t *Marker );
-    virtual void DeleteProcedures( const wchar_t *Marker );
-    virtual void DeletePatternMatchers( const wchar_t *Marker );
-    virtual LS_ResultSet* ListPatternMatchers( const wchar_t *Marker );
-    virtual LS_ResultSet* ListProcedures( const wchar_t *Marker );
-    virtual TrPatternMatcher * GetPatternMatcher( int id );
-    virtual TrProcedure * GetProcedure( int id );
-    virtual void StoreProcedure( const wchar_t *Marker, const TrProcedure *p );
-    virtual void StorePatternMatcher( const wchar_t *Marker, int type, const lem::UCString &name, TrPatternMatcher *m );
-    virtual int FindPatternMatcher( const lem::UCString &name, const wchar_t *Marker );
-
 
     virtual void DeleteFunctions( const wchar_t *Marker );
     virtual TrFunctions* GetFunctions( const wchar_t *Marker );
@@ -318,6 +299,7 @@
    virtual void DeleteWordformSets();
 
 
+
    virtual int StoreTreeScorerGroup( const lem::UCString & name, const TreeScorerGroupParams & params );
    virtual int FindTreeScorerGroup( const lem::UCString & name );
    virtual void LoadTreeScorerGroupParams( int id, TreeScorerGroupParams & params );
@@ -400,10 +382,6 @@
    virtual LS_ResultSet* ListAssociatedEntries();
    virtual WordAssociation* LoadAssocitation( int id );
 
-   virtual LS_ResultSet* ListSkipTokenRules( int id_language );
-   virtual SkipTokenRule* LoadSkipTokenRule( int id );
-   virtual void StoreSkipTokenRule( int id_language, int src_location, int id_pattern, int score );
-
    virtual int StorePredicateTemplate( const lem::UFString & src, const lem::MCollect<lem::UCString> & params );
    virtual PredicateTemplate* LoadPredicateTemplate( int id );
    virtual LS_ResultSet* ListPredicateTemplate();
@@ -411,6 +389,8 @@
    virtual void StoreOmonym( const lem::UCString & entry_name, int id_class );
    virtual bool IsOmonym( const lem::UCString & entry_name, int id_class );
    virtual LS_ResultSet* ListOmonyms();
+
+   virtual void DeleteMorphologicalFilters();
   };
 
  }

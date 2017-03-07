@@ -14,15 +14,17 @@
 // -----------------------------------------------------------------------------
 //
 // CD->28.09.2000
-// LC->11.10.2009
+// LC->10.10.2015
 // --------------
 
 #ifndef LEM_REGEX__H
 #define LEM_REGEX__H
 #pragma once
 
- #include <lem/config.h>
 
+ #include <lem/config.h>
+ #include <lem/strings.h>
+ 
  namespace lem
  {
  /*

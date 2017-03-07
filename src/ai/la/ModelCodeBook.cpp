@@ -2,7 +2,7 @@
 #include <lem/solarix/MorphologyModels.h>
 #include <lem/solarix/word_form.h>
 #include <lem/solarix/LexerTextPos.h>
-#include <lem/solarix/Dictionary.h>
+#include <lem/solarix/dictionary.h>
 #include <lem/solarix/sg_autom.h>
 #include <lem/solarix/WordEntry.h>
 #include <lem/unicode.h>

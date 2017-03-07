@@ -24,6 +24,7 @@
 #include <lem/solarix/WordEntries.h>
 #include <lem/solarix/WordEntryEnumerator.h>
 #include <lem/solarix/SG_Affixtable.h>
+#include <lem/console_streams.h>
 
 using namespace std;
 using namespace lem;
@@ -129,6 +130,13 @@ void Affix_Table::StoreAffix(
 {
  LEM_CHECKIT_Z( !afx.empty() );
  const int ilist = afx.length()-1;
+
+ if( ilist>=NLIST )
+ {
+     return;
+ }
+
+// mout->printf("DEBUG Affix_Table::StoreAffix afx=%us base_afx=%us ilist=%d list.count()=", afx, base_afx, ilist, list.size());
 
 // if( afx == L"мнлс" )
 //  mout.printf( "!" );

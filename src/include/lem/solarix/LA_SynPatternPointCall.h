@@ -22,6 +22,7 @@
     virtual void Print( Dictionary &dict, OFormatter &out, const TrTraceActor *opening=NULL );
     virtual bool IsStatement(void) const { return true; }
     virtual void PrintContext( Solarix::Dictionary &dict, lem::OFormatter &out ) const;
+    virtual void PrintCurrentToken( Solarix::Dictionary &dict, lem::OFormatter &out ) const;
 
     virtual bool ExecuteBreakpoints() const { return false; }
   };

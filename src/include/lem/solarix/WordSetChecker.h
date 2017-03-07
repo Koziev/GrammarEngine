@@ -1,6 +1,8 @@
 #if !defined WordSetChecker__H
  #define WordSetChecker__H
 
+#include <lem/solarix/ViolationHandler.h>
+
  namespace Solarix
  {
   class WordEntrySet;
@@ -13,10 +15,11 @@
     bool positive;
     lem::UCString set_name;
     lem::UCString export_node_name; // если проверяется именованное дерево и не узел ROOT_NODE
+    ViolationHandler violation_handler;
 
    public:
     WordSetChecker(void);
-    WordSetChecker( int type, const lem::UCString &Setname, bool Positive, const lem::UCString & ExportNodeName );
+    WordSetChecker( int type, const lem::UCString &Setname, bool Positive, const lem::UCString & ExportNodeName, ViolationHandler _violation_handler );
     WordSetChecker( const WordSetChecker & x );
     void operator=( const WordSetChecker & x );
 
@@ -30,6 +33,8 @@
     const lem::UCString & GetNodeName() const { return export_node_name; }
     const lem::UCString & GetSetName() const { return set_name; }
     bool Affirmate( bool x ) const { return positive ? x : !x; }
+
+    const ViolationHandler& GetViolationHandler() const { return violation_handler; }
 
     #if defined SOL_SAVEBIN
     void SaveBin( lem::Stream& bin ) const;

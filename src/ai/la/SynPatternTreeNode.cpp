@@ -573,7 +573,8 @@ bool SynPatternTreeNode::MatchTree(
                                    bool greedy,
                                    bool can_skip_outer_tokens,
                                    lem::PtrCollect<SynPatternResult> & results,
-                                   TrTrace * trace_log
+                                   TrTrace * trace_log,
+                                   int recursion_depth
                                   ) const
 {
  if( bottomup )
@@ -585,7 +586,7 @@ bool SynPatternTreeNode::MatchTree(
    lem::PtrCollect<SynPatternResult> StoredResults;
 
    // повторяем сопоставление, пока увеличивается максимальная длина сопоставленного участка.
-   while( !constraints.Exceeded() )
+   while( !constraints.Exceeded(0) )
    {
     int old_max_matched_len=max_matched_len;
 
@@ -606,7 +607,8 @@ bool SynPatternTreeNode::MatchTree(
                                greedy,
                                can_skip_outer_tokens,
                                pass_results,
-                               trace_log
+                               trace_log,
+                               recursion_depth+1
                               );
 
     bool changed=false;
@@ -712,7 +714,8 @@ bool SynPatternTreeNode::MatchTree(
                 greedy,
                 can_skip_outer_tokens,
                 results,
-                trace_log
+                trace_log,
+                recursion_depth+1
                );
   }
 }
@@ -733,9 +736,18 @@ bool SynPatternTreeNode::Match(
                                bool greedy,
                                bool can_skip_outer_tokens,
                                lem::PtrCollect<SynPatternResult> &results,
-                               TrTrace *trace_log
+                               TrTrace *trace_log,
+                               int recursion_depth
                               ) const
 {
+ #if defined SOL_DEBUGGING
+ if( trace_log!=NULL )
+ {
+  trace_log->CheckStackOverflow( recursion_depth );
+ }
+ #endif 
+
+
  bool point_matches=false;
  int max_len=0;
  NGramScore max_ngram_freq(0);
@@ -766,7 +778,8 @@ bool SynPatternTreeNode::Match(
                                       false,
                                       can_skip_outer_tokens,
                                       subresults,
-                                      trace_log
+                                      trace_log,
+                                      recursion_depth+1
                                      );
 
 
@@ -883,7 +896,8 @@ bool SynPatternTreeNode::Match(
                              greedy,
                              true,
                              subresults2,
-                             trace_log
+                             trace_log,
+                             recursion_depth+1
                             );
    
          if( y )
@@ -1152,7 +1166,8 @@ SynPatternTreeNodeMatchingResults* SynPatternTreeNode::CompleteAnalysis(
                           false,
                           false,
                           (PtrCollect<SynPatternResult>&)result->results, 
-                          trace_log
+                          trace_log,
+                          0
                          );
 
 /*
@@ -1231,7 +1246,8 @@ SynPatternTreeNodeMatchingResults* SynPatternTreeNode::IncompleteAnalysis(
                     & result->null_trace,
                     final_results, 
                     final_result_fragments,
-                    trace_log
+                    trace_log,
+                    0
                    );
  
  LEM_CHECKIT_Z( final_results.size() == final_result_fragments.size() );
@@ -1353,7 +1369,8 @@ void SynPatternTreeNode::TryMatchIncomplete(
                                             const BackTrace * parent_trace,
                                             lem::PtrCollect<SynPatternResult> & final_results,
                                             lem::MCollect<int> & final_result_fragments,
-                                            TrTrace *trace_log
+                                            TrTrace *trace_log,
+                                            int recursion_depth
                                            ) const
 {
  lem::MCollect<const LexerTextPos* > current_tokens;
@@ -1370,7 +1387,7 @@ void SynPatternTreeNode::TryMatchIncomplete(
 //       lem::mout->printf( "TryMatchIncomplete AT %us\n", t2->GetWordform()->GetName()->c_str() );
        #endif
 
-       if( t2->IsEnd() || constraints.Exceeded() )
+       if( t2->IsEnd() || constraints.Exceeded(recursion_depth) )
         {
          // Мы на правой границе или закончилось отведенное на анализ время.
 
@@ -1416,7 +1433,8 @@ void SynPatternTreeNode::TryMatchIncomplete(
                               false,
                               lexer.GetParams().SkipOuterToken,
                               results2,
-                              trace_log
+                              trace_log,
+                              recursion_depth
                              );
 
          SynPatternResult::SelectUnique_WithRemoval( results2 );
@@ -1555,7 +1573,8 @@ void SynPatternTreeNode::TryMatchIncomplete(
                             & unused_trace,
                             final_results,
                             final_result_fragments,
-                            trace_log
+                            trace_log,
+                            recursion_depth
                            );
         }
        else
@@ -1599,7 +1618,8 @@ void SynPatternTreeNode::TryMatchIncomplete(
                                 & unused_trace,
                                 final_results,
                                 final_result_fragments,
-                                trace_log
+                                trace_log,
+                                recursion_depth
                                );
             }
           }

@@ -15,7 +15,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->17.04.1997
-// LC->20.11.2010
+// LC->26.10.2015
 // --------------
 
 #include <lem/unicode.h>
@@ -108,7 +108,7 @@ void LA_WordProjection::Add( const LA_WordProjection &src )
    for( int j=0; j<n_our; j++ )
     if( WC[j] == wc )
      {
-      if( val[j].val < src.val[i].val )
+      if( val[j].score < src.val[i].score )
        val[j] = src.val[i];
 
       found=true;
@@ -168,10 +168,9 @@ void LA_WordProjection::PrintInfo(
    const int iform = WC[i].GetForm();
 
    txtfile.printf(
-                  "  Entry #%d %20Y, %40Y form #%d, %60Y rel=%us score=%d:%80Y ",
+                  "  Entry #%d %20Y, %40Y form #%d, %60Y score=%g:%80Y ",
                   e.GetKey(),
                   iform,
-                  to_ustr( val[i].val ).c_str(),
                   val[i].score
                  );
 

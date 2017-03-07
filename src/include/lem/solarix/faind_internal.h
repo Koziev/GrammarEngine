@@ -240,6 +240,7 @@ namespace Solarix
  struct GREN_WordCoords
  {
   lem::MCollect<Solarix::Word_Coord> list;
+  lem::Collect<Solarix::CP_Array> tags;
  };
 
   #if defined SOLARIX_SEARCH_ENGINE
@@ -326,9 +327,11 @@ typedef lem::UFString * HGREN_LONGSTRING;
 #if !defined SOL_NO_AA && defined FAIND_INTERNAL_TYPES
 typedef Solarix::Res_Pack* HGREN_RESPACK;
 typedef const Solarix::Tree_Node* HGREN_TREENODE;
+typedef Solarix::Variator* HGREN_LINKAGE;
 #else
 typedef void* HGREN_RESPACK;
 typedef const void* HGREN_TREENODE;
+typedef void* HGREN_LINKAGE;
 #endif
 
 #include <lem/solarix/faind.h>

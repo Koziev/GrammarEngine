@@ -107,6 +107,12 @@ namespace Solarix
   std::string POS_PX; // послелог
   std::string POS_PP; // притяж_частица
   std::string POS_MU; // единица измерения
+  std::string POS_PCA; // ПРЕФИКС_СОСТАВ_ПРИЛ
+  std::string POS_PCN; // ПРЕФИКС_СОСТАВ_СУЩ
+
+  std::string POS_PCV; // ENG_COMPOUND_PREVERB
+  std::string POS_PCM; // ENG_COMPOUND_PREADV
+
 
   lem::MCollect<const wchar_t*> semantic_tags;
   lem::MCollect<int> allform_tags;
@@ -147,8 +153,11 @@ namespace Solarix
    ModelCodeBook * codebook;
    bool loaded;
    volatile bool available;
+   int language_id;
 
    virtual bool Load()=0;
+
+   void SetLanguage( int id ) { language_id=id; }
 
    bool EMIT_FORM_TAGS;
    bool EMIT_FORMTAGS_FOR_CONTEXT;

@@ -27,12 +27,13 @@ using namespace lem;
 using namespace Solarix;
 
 SG_calibrator::SG_calibrator( const SG_calibrator &x )
- : word(x.word), id_class(x.id_class), coords(x.coords), freq(x.freq)
+ : freq_type(x.freq_type), word(x.word), id_class(x.id_class), coords(x.coords), freq(x.freq)
 {}
 
 
 void SG_calibrator::operator=( const SG_calibrator &x )
 {
+ freq_type = x.freq_type;
  word=x.word;
  id_class=x.id_class;
  coords = x.coords;
@@ -41,21 +42,17 @@ void SG_calibrator::operator=( const SG_calibrator &x )
 }
 
 
-/*************************************************************************
- Загружаем описание калибратора из текстового файла Словаря.
- Формат:
-        calibrate  X  nnn
-            |      |   |
-            |      |   +------ абсолютная встречаемость [0...MAXINT32).
-            |      +---------- словоформа
-            +----------------- ключевое слово (уже прочитано).
-***************************************************************************/
-SG_calibrator::SG_calibrator( const SynGram &sg, const Sol_IO &io, Macro_Parser &txtfile, bool _wordform )
+SG_calibrator::SG_calibrator( const lem::UCString & keyword, const SynGram &sg, const Sol_IO &io, Macro_Parser &txtfile )
 {
+ if( keyword.eqi( L"wordentry_freq" ) )
+  freq_type = WordEntryFreq;
+ else if( keyword.eqi( L"wordform_score" ) )
+  freq_type = WordFormScore;
+ else if( keyword.eqi( L"wordforms_score" ) )
+  freq_type = WordFormsScore;
+
  id_class=UNKNOWN;
  freq=0;
-
- wordform = _wordform;
 
  word = txtfile.read().string();
  word.strip(L'"');
@@ -160,7 +157,7 @@ bool SG_calibrator::MatchCoords( const CP_Array &form_coords ) const
 
 void SG_calibrator::SaveBin( lem::Stream &bin ) const
 {
- bin.write_bool(wordform);
+ bin.write_int(freq_type);
  bin.write( &word, sizeof(word) );
  bin.write_int(id_class);
  coords.SaveBin(bin);
@@ -173,7 +170,8 @@ void SG_calibrator::SaveBin( lem::Stream &bin ) const
 
 void SG_calibrator::LoadBin( lem::Stream &bin )
 {
- wordform = bin.read_bool();
+ freq_type = bin.read_int();
+
  if( !bin.eof() )
   {
    bin.read( &word, sizeof(word) );

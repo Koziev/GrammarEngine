@@ -121,10 +121,9 @@ bool MLProjList::Add( const Word_Coord & Coord, const ProjScore & scoring, const
      {
       // Такая проекция уже производилась. Если надежность новой
       // проекции выше, то запомним новую надежность.
-      if( coord_val[i].val < scoring.val || coord_val[i].score<scoring.score)
+      if( coord_val[i].score<scoring.score )
        {
-        coord_val[i].val = scoring.val;
-        coord_val[i].score += scoring.score;
+        coord_val[i].score = scoring.score;
         changed=true;
        }
 
@@ -143,10 +142,9 @@ bool MLProjList::Add( const Word_Coord & Coord, const ProjScore & scoring, const
        {
         // Такая проекция уже производилась. Если надежность новой
         // проекции выше, то запомним новую надежность.
-        if( coord_val[i].val < scoring.val || coord_val[i].score<scoring.score)
+        if( coord_val[i].score<scoring.score )
          {
-          coord_val[i].val = scoring.val;
-          coord_val[i].score += scoring.score;
+          coord_val[i].score = scoring.score;
           changed=true;
          }
 
@@ -272,10 +270,10 @@ bool MLProjFreq::operator>( const MLProjFreq &x ) const
  if( known_entry<x.known_entry )
   return false;
 
- if( rel > x.rel )
+ if( score > x.score )
   return true;
 
- if( rel < x.rel )
+ if( score < x.score )
   return false;
 
  if( local_freq>x.local_freq )
@@ -302,10 +300,10 @@ bool MLProjFreq::operator<( const MLProjFreq &x ) const
  if( known_entry>x.known_entry )
   return false;
 
- if( rel < x.rel )
+ if( score < x.score )
   return true;
 
- if( rel > x.rel )
+ if( score > x.score )
   return false;
 
  if( local_freq<x.local_freq )
@@ -347,7 +345,7 @@ void MLProjList::SortByFrequency( Dictionary &dict )
     {
      std::pair<int,MLProjFreq> p;
      p.first = CastSizeToInt(i);
-     p.second.rel = coord_val[i].val;
+     p.second.score = coord_val[i].score;
      
      const int id_entry = coord[i].GetEntry();
      const int iform = coord[i].GetForm();

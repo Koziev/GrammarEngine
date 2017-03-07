@@ -51,6 +51,7 @@
 
     virtual bool ExecuteBreakpoints(void) const { return true; }
 
+    virtual void PrintCurrentToken( Solarix::Dictionary &dict, lem::OFormatter &out ) const;
     virtual void PrintContext( Solarix::Dictionary &dict, lem::OFormatter &out ) const;
     virtual int CountContextItems(void) const;
     virtual lem::UFString GetContextItemName( int i ) const;
@@ -94,6 +95,7 @@
     TrTrace(void);
     virtual ~TrTrace(void);
 
+    virtual void CheckStackOverflow( int current_depth )=0;
     virtual void Enter( TrTraceActor *a );
     virtual void Leave( TrTraceActor *a );
     virtual void Print( const lem::UFString &str )=0;

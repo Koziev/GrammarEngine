@@ -128,12 +128,12 @@ void LexicalAutomat::FindParameters(void)
     NMISSMAX = params()[icr].GetInt();
   }
 
- if( MIN_PROJ_R == 0 )
+ if( MIN_PROJ_SCORE == 0 )
   {
-   MIN_PROJ_R = Real1(51); // 0.51
-   const int icr=params().Find(L"MIN_PROJ_R");
+   MIN_PROJ_SCORE = -50.0f;
+   const int icr=params().Find(L"MIN_PROJ_SCORE");
    if( icr!=UNKNOWN )
-    MIN_PROJ_R = Real1( params()[icr].GetInt());
+    MIN_PROJ_SCORE = params()[icr].GetInt();
   }
 
  return;
@@ -142,6 +142,13 @@ void LexicalAutomat::FindParameters(void)
 
 
 
+static inline float Real1ToScore( lem::Real1 fp1 )
+{
+ if( fp1.GetInt()==100 )
+  return 0.0f;
+
+ return -(1.0f-fp1.GetFloat())*10.0f;
+}
 
 
 
@@ -164,7 +171,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
    Project_1(
              word,
              *proj.GetOrgWord(),
-             Real1(100),
+             0.0f,
              prj_found_list,
              prj_val_list,
              prj_extra_inf, 
@@ -207,7 +214,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
      if( Project_1(
                    word,
                    *proj.GetOrgWord(),
-                   Real1(100),
+                   0.0f,
                    prj_found_list,
                    prj_val_list,
                    prj_extra_inf,
@@ -240,7 +247,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
              if( Project_1(
                            word2,
                            *proj.GetOrgWord(),
-                           Real1(100),
+                           0.0f,
                            prj_found_list,
                            prj_val_list,
                            prj_extra_inf,
@@ -283,7 +290,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
              if( Project_1(
                            dynform,
                            *dynform_str,
-                           dynform_rels[i],
+                           Real1ToScore( dynform_rels[i] ),
                            prj_found_list,
                            prj_val_list,
                            prj_extra_inf,
@@ -311,7 +318,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
          if( Project_3(
                        word,
                        *proj.GetOrgWord(),
-                       Real1(100),
+                       0.0f,
                        prj_found_list,
                        prj_val_list,
                        prj_extra_inf,
@@ -334,7 +341,7 @@ bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unkno
      if( iue!=UNKNOWN )
       {
        prj_found_list.push_back( Word_Coord(iue,0) );
-       prj_val_list.push_back( ProjScore( Real1(100) ) );
+       prj_val_list.push_back( ProjScore( 0.0f ) );
        prj_extra_inf.push_back(NULL);
        AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
       }
@@ -532,7 +539,7 @@ void LexicalAutomat::Project(
    Project_1(
              word,
              *proj.GetOrgWord(),
-             Real1(100),
+             0.0f,
              prj_found_list,
              prj_val_list,
              prj_extra_inf, 
@@ -582,7 +589,7 @@ void LexicalAutomat::Project(
        Project_1(
                  word,
                  *proj.GetOrgWord(),
-                 Real1(100),
+                 0.0f,
                  prj_found_list,
                  prj_val_list,
                  prj_extra_inf,
@@ -617,7 +624,7 @@ void LexicalAutomat::Project(
        Project_3(
                  word,
                  *proj.GetOrgWord(),
-                 Real1(100),
+                 0.0f,
                  prj_found_list,
                  prj_val_list,
                  prj_extra_inf,
@@ -852,7 +859,7 @@ static bool MatchWithoutSpaces( const wchar_t * str1, const wchar_t * str2 )
 bool LexicalAutomat::Project_1(
                                const RC_Lexem &A,
                                const lem::UCString &original_word,
-                               lem::Real1 relA,
+                               float scoreA,
                                MCollect<Word_Coord> &found_list,
                                MCollect<ProjScore> &val_list,
                                PtrCollect<LA_ProjectInfo> &inf_list,
@@ -897,7 +904,7 @@ bool LexicalAutomat::Project_1(
       i_number = GetDict().GetSynGram().FindEntry( UCString(L"number_"), ANY_STATE, false );
 
      found_list.push_back( Word_Coord( i_number, 0 ) );
-     val_list.push_back( relA );
+     val_list.push_back( scoreA );
      inf_list.push_back(NULL);
      return true;
     }
@@ -1012,13 +1019,19 @@ bool LexicalAutomat::Project_1(
      const int iform = fenum->GetFormIndex();
 
      found_list.push_back( Word_Coord(ientry,iform) );
-     val_list.push_back( relA );
+     val_list.push_back( scoreA );
      inf_list.push_back(NULL);
      ret_hit=true;
      precise_search_succeeded=true;
     }
   }
 
+
+ if( ret_hit && use_recognition_rules)
+  {
+   // применим только особую группу ќЅя«ј“≈Ћ№Ќџ’ правил.
+   recognizer->Apply( *A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, true, trace );
+  }
 
  if( !ret_hit && use_recognition_rules )
   {
@@ -1037,7 +1050,7 @@ bool LexicalAutomat::Project_1(
        if( Project_1(
                      word2,
                      original_word,
-                     Real1(100),
+                     0.0f,
                      found_list,
                      val_list,
                      inf_list,
@@ -1059,7 +1072,7 @@ bool LexicalAutomat::Project_1(
    if( !ret_hit )
     {
      // пробуем применить точные правила распознавани€, например дл€ слов типа "123-е"
-     ret_hit = recognizer_applied = recognizer->Apply( *A, original_word, relA, lem::Real1(100), found_list, val_list, inf_list, id_lang, trace );
+     ret_hit = recognizer_applied = recognizer->Apply( *A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, false, trace );
      LEM_CHECKIT_Z( found_list.size()==val_list.size() );
      LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
     }
@@ -1073,7 +1086,7 @@ bool LexicalAutomat::Project_1(
      MCollect<ProjScore> val_list2;
      PtrCollect<LA_ProjectInfo> inf_list2;
 
-     if( Project_3( A, original_word, relA, found_list2, val_list2, inf_list2, id_lang, trace ) )
+     if( Project_3( A, original_word, scoreA, found_list2, val_list2, inf_list2, id_lang, trace ) )
       {
        #if LEM_DEBUGGING==1
        for( int q=0; q<found_list2.size(); ++q )
@@ -1500,8 +1513,8 @@ int rtm = CompareThem( a, b, 1 );
        value = value1*value2; // достоверность проекции
 
        // отсев вариантов проекции по граничному значению достоверности.
-       if( value < MIN_PROJ_R )
-        continue;
+       //if( value < MIN_PROJ_R )
+       // continue;
 
        const Word_Coord WC(ientry,iform);
 
@@ -1531,7 +1544,7 @@ int rtm = CompareThem( a, b, 1 );
 */
 
        found_list.push_back( WC );
-       val_list.push_back( value );
+       val_list.push_back( Real1ToScore( value ) );
        inf_list.push_back(NULL);
        was_projection=true;
       } // end if
@@ -1637,7 +1650,7 @@ bool LexicalAutomat::GetEnding( int id_lang, const lem::UCString &ending, int &n
 bool LexicalAutomat::Project_3(
                                const RC_Lexem &A,
                                const lem::UCString & original_word,
-                               lem::Real1 relA,
+                               float scoreA,
                                MCollect<Word_Coord> &found_list,
                                MCollect<ProjScore> &val_list,
                                PtrCollect<LA_ProjectInfo> &inf_list,
@@ -1668,7 +1681,7 @@ bool LexicalAutomat::Project_3(
      bool hit = Project_1(
                           lex,
                           rewritten_word,
-                          relA,
+                          scoreA,
                           found_list,
                           val_list,
                           inf_list,
@@ -1745,7 +1758,6 @@ for( int k=0; k<stems2.size(); ++k )
                for( lem::Container::size_type j=0; j<stems2.size(); ++j )
                 {
                  lem::UCString word2 = stems2[j]+ending;
-                 lem::Real1 rel2 = rels2[j] * relA;
 
                  if( word2==word )
                   continue;
@@ -1755,7 +1767,7 @@ for( int k=0; k<stems2.size(); ++k )
                  bool hit = Project_1(
                                       lex2,
                                       word2,
-                                      rel2,
+                                      Real1ToScore(rels2[j]) + scoreA,
                                       found_list,
                                       val_list,
                                       inf_list,
@@ -1804,8 +1816,6 @@ for( int k=0; k<stems2.size(); ++k )
        // теперь к каждой искаженной основе прикрепл€ем обратно окончание и пытаемс€ найти такое слово.
        for( lem::Container::size_type j=0; j<words2.size(); ++j )
         {
-         lem::Real1 rel2 = rels2[j] * relA;
-
          if( words2[j]==word )
           continue;
 
@@ -1814,7 +1824,7 @@ for( int k=0; k<stems2.size(); ++k )
          bool hit = Project_1(
                               lex2,
                               words2[j],
-                              rel2,
+                              Real1ToScore(rels2[j]) + scoreA,
                               found_list,
                               val_list,
                               inf_list,
@@ -1998,7 +2008,7 @@ for( int k=0; k<stems2.size(); ++k )
                    // нашли.
                
                    found_list.push_back( Word_Coord( id_entry, CastSizeToInt(iform) ) );
-                   val_list.push_back( relA*miss_rel );
+                   val_list.push_back( scoreA + Real1ToScore(miss_rel) );
                    inf_list.push_back(NULL);
                
                    found_by_root = true;
@@ -2198,7 +2208,7 @@ for( int k=0; k<stems2.size(); ++k )
                        // нашли.
                
                        found_list.push_back( Word_Coord( id_entry, CastSizeToInt(iform) ) );
-                       val_list.push_back( relA*miss_rel );
+                       val_list.push_back( scoreA + Real1ToScore(miss_rel) );
                        inf_list.push_back(NULL);
                
                        found_by_root = true;
@@ -2234,12 +2244,12 @@ for( int k=0; k<stems2.size(); ++k )
 
    if( slb_list.size()>1 )
     {
-     ret_hit = recognizer->ApplyForSyllabs( *A, relA, slb_list, GetMinProjectionRel(), found_list, val_list, inf_list, id_lang, trace );
+     ret_hit = recognizer->ApplyForSyllabs( *A, scoreA, slb_list, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, trace );
     }
  
    if( !ret_hit )
     {
-     ret_hit = recognizer->Apply( *A, original_word, relA, GetMinProjectionRel(), found_list, val_list, inf_list, id_lang, trace );
+     ret_hit = recognizer->Apply( *A, original_word, scoreA, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, false, trace );
     }
 
    LEM_CHECKIT_Z( found_list.size()==val_list.size() );
@@ -2294,19 +2304,18 @@ bool LexicalAutomat::AddResults(
                          proj.GetContent(),
                          proj.GetContent(),
                          entry_key,
-                         vals[i].val
+                         vals[i].score
                         );
      }
     else
      {
-      const SG_EntryForm form = s_gram.GetEntry(wc.GetEntry()).
-                                 forms()[wc.GetForm()];
+      const SG_EntryForm form = s_gram.GetEntry(wc.GetEntry()).forms()[wc.GetForm()];
       wf = new Word_Form(
                          proj.GetOrgWord(),
                          proj.GetContent(),
                          entry_key,
                          form.coords(),
-                         vals[i].val
+                         vals[i].score
                         );
      }
 
@@ -2335,8 +2344,7 @@ bool LexicalAutomat::AddResults(
      {
       filter_score = tags->Score(*wf,GetDict());
 
-      ProjScore v = ProjScore( vals[i].val );
-      v.score = filter_score;
+      ProjScore v = ProjScore( vals[i].score + filter_score );
 
       if( proj.Add( coords[i], v, inf_list[i] ) )
        {
@@ -2347,7 +2355,7 @@ bool LexicalAutomat::AddResults(
      }
     else
      {
-      if( proj.Add( coords[i], vals[i].val, inf_list[i] ) )
+      if( proj.Add( coords[i], vals[i].score, inf_list[i] ) )
        {
         proj.Add( wf );
         added = true;
@@ -2403,7 +2411,7 @@ void LexicalAutomat::ProjectWord(
    if( found_list.empty() )
    #endif
     {
-     Project_1( A, *A, Real1(100), found_list, val_list, prj_extra_inf, false, false, false, id_lang, trace );
+     Project_1( A, *A, 0.0f, found_list, val_list, prj_extra_inf, false, false, false, id_lang, trace );
     }
   }
  else
@@ -2444,7 +2452,7 @@ void LexicalAutomat::ProjectUnknown(
 {
  SynGram &sg = GetDict().GetSynGram();
 
- recognizer->Apply( *A, original_word, Real1(100), GetMinProjectionRel(), found_list, val_list, inf_list, id_language, NULL );
+ recognizer->Apply( *A, original_word, 0.0f, GetMinProjectionScore(), found_list, val_list, inf_list, id_language, false, NULL );
 
  // ќбновл€ем кэш осуществленных проекций.
  #if defined LEM_THREADS
@@ -2501,7 +2509,7 @@ int LexicalAutomat::GuessLanguage( const Sentence & phrase )
 
        if( id_lang!=UNKNOWN )
         {
-         lang_points[ id_lang ] += val_list[j].val.GetFloat();
+         lang_points[ id_lang ] += val_list[j].score;
         } 
       }
     }
@@ -2511,7 +2519,6 @@ int LexicalAutomat::GuessLanguage( const Sentence & phrase )
  int imaxlang=UNKNOWN;
  float maxpoint=0.F;
 
- {
  for( int i=0; i<nlang; i++ )
   {
    if( lang_points[i]>maxpoint )
@@ -2520,7 +2527,6 @@ int LexicalAutomat::GuessLanguage( const Sentence & phrase )
      imaxlang = i;
     }
   }
- }
 
  return imaxlang;
 }
@@ -3280,11 +3286,11 @@ Solarix::Word_Form* LexicalAutomat::ProjectWord2Wordform( const lem::UCString &w
 
    if(i==0)
     { 
-     wf = new Solarix::Word_Form( lex, lex, ekey, coords, Real1(100) );
+     wf = new Solarix::Word_Form( lex, lex, ekey, coords, 0 /*Real1(100)*/ );
     }
    else
     {
-     Solarix::Word_Form *alt = new Solarix::Word_Form( lex, lex, ekey, coords, Real1(100) );
+     Solarix::Word_Form *alt = new Solarix::Word_Form( lex, lex, ekey, coords, 0 /*Real1(100)*/ );
      wf->AddAlt(alt);
     }
   }

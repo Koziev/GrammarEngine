@@ -1789,8 +1789,11 @@ void SG_Net::Save_SQL( OFormatter &out, const SQL_Production &sql_version, int m
               "GO\n"
               , path_links.GetUnicode().c_str()
              );
+
+   out.printf( "%s\n", sql_version.CommitTx().c_str() );
                
    out.printf( "!! @echo Loading SG_LINK_TAG ...\n" );
+   out.printf( "%s\n", sql_version.BeginTx().c_str() );
    out.printf(
               "SET IDENTITY_INSERT sg_link_tag ON\n"
               "GO\n"
@@ -1808,6 +1811,18 @@ void SG_Net::Save_SQL( OFormatter &out, const SQL_Production &sql_version, int m
    out.printf( "%us '%us' INTO TABLE sg_link_tag CHARACTER SET utf8 FIELDS TERMINATED BY '#' LINES TERMINATED BY '%s' (id,id_link,id_tag,ivalue);\n"
     , sql_version.GetLoadInfileText(), path_link_tags.GetAbsolutePath().GetUnicode().subst_all( L"\\", L"\\\\" ).c_str(), line_terminator.c_str() );
   }
+ else if (sql_version.loader && sql_version.type == SQL_Production::Postgres)
+ {
+	 //out.printf("%us sg_entry(id,name,uname,id_class,freq,exportable,flags,dic_div) FROM '%us' WITH DELIMITER '#' NULL ''\n"
+		 //, sql_version.GetLoadInfileText(), path_entries.GetUnicode().subst_all(L"\\", L"\\\\").c_str(), line_terminator.c_str());
+
+	 out.printf("%us sg_link(id,id_entry1,id_entry2,icoord,istate,tags) FROM '%us' WITH DELIMITER '#' NULL ''\n"
+		 , sql_version.GetLoadInfileText(), path_links.GetAbsolutePath().GetUnicode().subst_all(L"\\", L"\\\\").c_str(), line_terminator.c_str());
+
+	 out.printf("%us sg_link_tag(id,id_link,id_tag,ivalue) FROM '%us' WITH DELIMITER '#' NULL ''\n"
+		 , sql_version.GetLoadInfileText(), path_link_tags.GetAbsolutePath().GetUnicode().subst_all(L"\\", L"\\\\").c_str(), line_terminator.c_str());
+ }
+
 
  out.printf( "%s\n", sql_version.CommitTx().c_str() );
 

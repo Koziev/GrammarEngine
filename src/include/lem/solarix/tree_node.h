@@ -163,10 +163,6 @@
    void ForgetChild( int ichild );
    void ClearChildren(void);
 
-   #if defined SOL_CAA
-   Real1 ComputeValue(void) const;
-   #endif
-
    inline const Tree_Link& GetLinkIndex( int i ) const { return child[i].GetLink(); }
    inline const Tree_Link& GetLink(void) const { return ilink; }
    inline void SetLink( const Tree_Link& il ) { ilink=il; }

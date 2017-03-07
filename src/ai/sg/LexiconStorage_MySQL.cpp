@@ -20,20 +20,17 @@
 #include <lem/solarix/LA_PhoneticRule.h>
 #include <lem/solarix/LA_UnbreakableRule.h>
 #include <lem/solarix/SynPattern.h>
-#include <lem/solarix/tr_pattern_matchers.h>
 #include <lem/solarix/WordEntrySetItem.h>
 #include <lem/solarix/WordSetItem.h>
 #include <lem/solarix/Paradigma.h>
 #include <lem/solarix/ParadigmaForm.h>
 #include <lem/solarix/MySQLCnx.h>
 #include <lem/solarix/EndingStat.h>
-#include <lem/solarix/CollocFilter.h>
 #include <lem/solarix/KnowledgeBase.h>
 #include <lem/solarix/TreeScorer.h>
 #include <lem/solarix/MetaEntry.h>
 #include <lem/solarix/WordAssociation.h>
 #include <lem/solarix/PredicateTemplate.h>
-#include <lem/solarix/SkipTokenRules.h>
 #include <lem/solarix/PatternLinks.h>
 #include <lem/solarix/TreeScorerGroupParams.h>
 #include <lem/solarix/LexiconStorage_MySQL.h>
@@ -2274,8 +2271,8 @@ LS_ResultSet* LexiconStorage_MySQL::ListRecognitionRulesForWord( int id_language
 
 LA_RecognitionRule* LexiconStorage_MySQL::GetRecognitionRule( int id )
 {
- lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, "
-  "r_condition, id_entry, rel, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
+ lem::FString Select(lem::format_str( "SELECT name, id_language, is_regex, is_prefix, is_affix, is_forced,"
+  "r_condition, id_entry, score, coords, is_syllab, id_src, case_sensitive FROM recog_rule WHERE id=%d", id ) );
 
 
  LA_RecognitionRule *rule = NULL;
@@ -2301,19 +2298,20 @@ LA_RecognitionRule* LexiconStorage_MySQL::GetRecognitionRule( int id )
        const bool is_regex = lem::mysql_column_int(row,2)==1;
        const bool is_prefix = lem::mysql_column_int(row,3)==1;
        const bool is_affix = lem::mysql_column_int(row,4)==1;
-       lem::UFString condition = lem::mysql_column_ufstring(row,5);
-       const int ekey = lem::mysql_column_int(row,6);
-       const lem::Real1 rel = lem::Real1(lem::mysql_column_int(row,7));
-       lem::UFString str_coords = lem::mysql_column_ufstring(row,8);
-       const bool is_syllab = lem::mysql_column_int(row,9)==1;
-       const int id_src = lem::mysql_column_int(row,10);
-       const bool case_sensitive = lem::mysql_column_int(row,11)==1;
+       const bool is_forced = lem::mysql_column_int(row,5)==1;
+       lem::UFString condition = lem::mysql_column_ufstring(row,6);
+       const int ekey = lem::mysql_column_int(row,7);
+       const float score = lem::mysql_column_float(row,8));
+       lem::UFString str_coords = lem::mysql_column_ufstring(row,9);
+       const bool is_syllab = lem::mysql_column_int(row,10)==1;
+       const int id_src = lem::mysql_column_int(row,11);
+       const bool case_sensitive = lem::mysql_column_int(row,12)==1;
     
        Solarix::CP_Array coords;
        coords.Parse(str_coords);
     
-       rule = new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix,
-        is_affix, condition, ekey, rel, coords, id_src );
+       rule = new LA_RecognitionRule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_forced,
+        is_affix, condition, ekey, score, coords, id_src );
       }
 
      mysql_free_result(res);
@@ -2361,18 +2359,26 @@ void LexiconStorage_MySQL::StoreRecognitionRule( LA_RecognitionRule *rule )
   }
 
  lem::MemFormatter q;
- q.printf( "INSERT INTO recog_rule( name, id_language, is_syllab, is_regex, is_prefix, is_affix,"
-           " r_condition, id_entry, rel, coords, id_src,"
-           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, '%us', %d, %d, '%us', %d, %us, %d )",
-           lem::to_upper(rule->GetName()).c_str(), rule->GetLanguage(),
+ q.printf( "INSERT INTO RECOG_RULE( name, id_language, is_syllab, is_regex, is_prefix, is_affix, is_forced,"
+           " r_condition, id_entry, score, coords, id_src,"
+           " word, case_sensitive ) VALUES ( '%us', %d, %d, %d, %d, %d, %d, '%us', %d, %g, '%us', %d, %us, %d )",
+           lem::to_upper(rule->GetName()).c_str(),
+           rule->GetLanguage(),
            rule->IsSyllab() ? 1 : 0,
            rule->IsRegex() ? 1 : 0,
            rule->IsPrefix() ? 1 : 0,
            rule->IsAffix() ? 1 : 0,
-           condition.c_str(), rule->GetEntryKey(), rule->GetRel().GetInt(), coords.c_str(), rule->GetSourceLocation(),
+           rule->IsForced() ? 1 : 0,
+           condition.c_str(),
+           rule->GetEntryKey(),
+           rule->GetScore(),
+           coords.c_str(),
+           rule->GetSourceLocation(),
            word.c_str(),
-           case_sensitive
-          );
+           rule->IsCaseSensitive() ? 1 : 0
+         );
+ 
+
  
  lem::FString s(lem::to_utf8(q.string()));
  int id = ExecuteAndReturnId(s);
@@ -2838,48 +2844,9 @@ std::pair<SynPatternTreeNode*,lem::UCString> LexiconStorage_MySQL::GetSynPattern
 }
 
 
-LS_ResultSet* LexiconStorage_MySQL::ListProductionRuleCategories( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id FROM rules_in_category WHERE marker='%us' ORDER BY id", Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
-
- return ListByQuery(sql);
-}
-
-
-int LexiconStorage_MySQL::CountRuleGroups( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT count(*) FROM rules_in_category WHERE marker='%us'", Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
- return QueryInt(sql);
-}
 
 
 
-
-int LexiconStorage_MySQL::FindRuleGroup( const wchar_t *Marker, const lem::UCString &name )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id FROM rules_in_category WHERE name='%us' AND marker='%us'", lem::to_upper(name).c_str(), Marker );
-
- lem::FString sql( lem::to_utf8( mem.string() ) );
- return QueryInt(sql);
-}
-
-
-
-
-int LexiconStorage_MySQL::RegisterRuleGroup( const lem::UCString &name, const wchar_t *Marker )
-{
- lem::MemFormatter q;
- q.printf( "INSERT INTO rules_in_category( marker, name, bin )"
-           " VALUES ( '%us', '%us', '' )", Marker, lem::to_upper(name).c_str() );
- 
- lem::FString s(lem::to_utf8(q.string()));
- return ExecuteAndReturnId(s);
-}
 
 
 
@@ -2923,252 +2890,11 @@ int LexiconStorage_MySQL::ExecuteAndReturnId( const lem::FString & sql )
 }
 
 
-void LexiconStorage_MySQL::DeleteProcedures( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "DELETE FROM tr_procedure WHERE marker='%us'", Marker );
- lem::FString sql( lem::to_utf8(mem.string()) );
- Execute(sql);
- return;
-}
-
-void LexiconStorage_MySQL::DeletePatternMatchers( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "DELETE FROM pattern_matcher WHERE marker='%us'", Marker );
- lem::FString sql( lem::to_utf8(mem.string()) );
- Execute(sql);
- return;
-}
-
-LS_ResultSet* LexiconStorage_MySQL::ListPatternMatchers( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id, name, type FROM pattern_matcher WHERE marker='%us' ORDER BY id", Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
-
- return ListByQuery(sql);
-}
-
-LS_ResultSet* LexiconStorage_MySQL::ListProcedures( const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id FROM tr_procedure WHERE marker='%us' ORDER BY id", Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
-
- return ListByQuery(sql);
-}
-
-
-int LexiconStorage_MySQL::RegisterProcedure( const lem::UCString &name, const wchar_t *Marker )
-{
- lem::MemFormatter q;
- q.printf( "INSERT INTO tr_procedure( marker, name ) VALUES ( '%us', '%us' )", Marker, lem::to_upper(name).c_str() );
- 
- lem::FString s(lem::to_utf8(q.string()));
- Execute(s);
- const int id = cnx->GetLastId();
- return id;
-}
-
-
-
-int LexiconStorage_MySQL::FindProcedure( const lem::UCString &name, const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id FROM tr_procedure WHERE name='%us' AND marker='%us'", lem::to_upper(name).c_str(), Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
- return QueryInt(sql);
-}
 
 
 
 
-TrPatternMatcher * LexiconStorage_MySQL::GetPatternMatcher( int id )
-{
- lem::FString Select(lem::format_str( "SELECT bin, type, name FROM pattern_matcher WHERE id=%d", id ) );
 
- TrPatternMatcher *matcher = NULL;
-
- MySQLCnx *c = cnx->GetDb();
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&c->cs);
- #endif
-
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
-
- int ok = mysql_query( c->mysql, Select.c_str() );
- if( ok==0 )
-  {
-   MYSQL_RES *res = mysql_store_result( c->mysql );
-   if( res!=NULL )
-    {
-     MYSQL_ROW row = mysql_fetch_row(res);
-     if( row )
-      {
-       lem::FString hex = lem::mysql_column_fstring(row,0);
-       const int type = lem::mysql_column_int(row,1);
-       lem::UCString name = lem::mysql_column_ucstring(row,2);
-    
-       unsigned char *bytes=NULL;
-       int size=0;
-       Solarix::Storage_Hex2Data( hex, &bytes, &size );
-       MemReadStream rdr( bytes, size );
-        
-       if( type==0 )
-        {
-         matcher = new TrPrefixTreeMatcher(name);
-         int t0 = rdr.read_int();
-         LEM_CHECKIT_Z(t0==0);
-        }
-       else if( type==1 )
-        {
-         matcher = new TrReplaceMatcher(name);
-         int t1 = rdr.read_int();
-         LEM_CHECKIT_Z(t1==1);
-        }
-       else if( type==3 )
-        {
-         matcher = new TrLikeMatcher(name);
-         int t1 = rdr.read_int();
-         LEM_CHECKIT_Z(t1==3);
-        }
-       else
-        LEM_STOPIT;
-        
-       matcher->LoadBin(rdr);
-       delete[] bytes;
-      }
-
-     mysql_free_result(res);
-     return matcher;
-    }
-
-   LEM_STOPIT;
-   return NULL;
-  }
- else
-  {
-   cnx->Error(Select);
-   return NULL;
-  }
-}
-
-
-
-TrProcedure * LexiconStorage_MySQL::GetProcedure( int id )
-{
- lem::FString Select(lem::format_str( "SELECT bin FROM tr_procedure WHERE id=%d", id ) );
-
- TrProcedure *proc = NULL;
-
- MySQLCnx *c = cnx->GetDb();
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&c->cs);
- #endif
-
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
-
- int ok = mysql_query( c->mysql, Select.c_str() );
- if( ok==0 )
-  {
-   MYSQL_RES *res = mysql_store_result( c->mysql );
-   if( res!=NULL )
-    {
-     MYSQL_ROW row = mysql_fetch_row(res);
-     if( row )
-      {
-       lem::FString hex = lem::mysql_column_fstring(row,0);
-     
-       unsigned char *bytes=NULL;
-       int size=0;
-       Solarix::Storage_Hex2Data( hex, &bytes, &size );
-       MemReadStream rdr( bytes, size );
-       proc = new TrProcedure();
-       proc->LoadBin(rdr);
-       delete[] bytes;
-      }
-     else
-      {
-       mysql_free_result(res);
-       lem::MemFormatter mem;
-       mem.printf( "Can not load procedure with id=%d", id );
-       throw lem::E_BaseException(mem.string());
-      }
-
-     mysql_free_result(res);
-     return proc;
-    }
-
-   LEM_STOPIT;
-   return NULL;
-  }
- else
-  {
-   cnx->Error(Select);
-   return NULL;
-  }
-}
-
-void LexiconStorage_MySQL::StoreProcedure( const wchar_t *Marker, const TrProcedure *p )
-{
- #if defined SOL_SAVEBIN
- lem::MemStream mem(true);
- p->SaveBin(mem);
- const int sz = mem.tellp();
- const char* bytes = mem.get_Block();
- lem::FString hex;
- Storage_Data2Hex( bytes, sz, hex );
- 
- LEM_CHECKIT_Z( p->GetId()!=UNKNOWN );
-
- lem::MemFormatter q;
- q.printf( "UPDATE tr_procedure SET bin='%s', id_src=%d WHERE id=%d", hex.c_str(), p->GetSourceLocation(), p->GetId() );
- 
- lem::FString s(lem::to_utf8(q.string()));
- Execute(s);
- #else
- LEM_STOPIT;
- #endif
- 
- return;
-}
-
-void LexiconStorage_MySQL::StorePatternMatcher( const wchar_t *Marker, int type, const lem::UCString &name, TrPatternMatcher *m )
-{
- #if defined SOL_SAVEBIN
- lem::MemStream mem(true);
- m->SaveBin(mem);
- const int sz = mem.tellp();
- const char* bytes = mem.get_Block();
-
- lem::FString hex;
- lem::MemFormatter q;
- hex.clear();
- Storage_Data2Hex( bytes, sz, hex );
- 
- q.printf( "INSERT INTO pattern_matcher( type, marker, name, bin )"
-           " VALUES ( %d, '%us', '%us', '%s' )", type, Marker, lem::to_upper(name).c_str(), hex.c_str() );
-
- lem::FString s(lem::to_utf8(q.string()));
-
- const int id = ExecuteAndReturnId(s);
- m->SetId(id);
-
- #else
- LEM_STOPIT;
- #endif
- 
- return;
-}
-
-int LexiconStorage_MySQL::FindPatternMatcher( const lem::UCString &name, const wchar_t *Marker )
-{
- lem::MemFormatter mem;
- mem.printf( "SELECT id FROM pattern_matcher WHERE name='%us' AND marker='%us'", lem::to_upper(name).c_str(), Marker );
- lem::FString sql( lem::to_utf8( mem.string() ) );
- return QueryInt(sql);
-}
 
 
 void LexiconStorage_MySQL::DeleteFunctions( const wchar_t *Marker )
@@ -4980,7 +4706,7 @@ int LexiconStorage_MySQL::StoreTreeScorerGroup( const lem::UCString & name, cons
  mysql_escape(escaped_name);
 
  lem::MemFormatter ms;
- ms.printf( "INSERT INTO ts_group( name, allow_unmatched_children ) VALUES ( '%us', %d )", escaped_name.c_str(), params.allow_unmatched_children );
+ ms.printf( "INSERT INTO ts_group( name, allow_unmatched_children, id_language ) VALUES ( '%us', %d, %d )", escaped_name.c_str(), params.allow_unmatched_children, params.id_language );
  const int id = ExecuteAndReturnId( ms.string() );
  return id;
 }
@@ -4988,11 +4714,12 @@ int LexiconStorage_MySQL::StoreTreeScorerGroup( const lem::UCString & name, cons
 void LexiconStorage_MySQL::LoadTreeScorerGroupParams( int id, TreeScorerGroupParams & params )
 {
  lem::MemFormatter mem;
- mem.printf( "SELECT allow_unmatched_children FROM ts_group WHERE id=%d", id );
+ mem.printf( "SELECT allow_unmatched_children, id_language FROM ts_group WHERE id=%d", id );
  lem::Ptr<LS_ResultSet> rs( ListByQuery(mem.string()) );
  if( rs->Fetch() )
   {
    params.allow_unmatched_children = rs->GetInt(0)==1;
+   params.id_language = rs->GetInt(1);
   }
  else
   {
@@ -5015,7 +4742,7 @@ int LexiconStorage_MySQL::FindTreeScorerGroup( const lem::UCString & name )
 
 LS_ResultSet* LexiconStorage_MySQL::ListTreeScorerGroups()
 {
- return ListByQuery( "SELECT id, name, allow_unmatched_children FROM ts_group" );
+ return ListByQuery( "SELECT id, name, allow_unmatched_children, id_language FROM ts_group" );
 }
 
 

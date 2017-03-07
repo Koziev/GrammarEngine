@@ -135,7 +135,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
 
        results = TopDownParsing( ApplyPatterns, DoSyntaxLinks, experience, constraints );
 
-       if( (results.IsNull() || results->empty()) && !constraints.Exceeded() )
+       if( (results.IsNull() || results->empty()) && !constraints.Exceeded(0) )
         {
          const SynPatternTreeNode & filter = rules->GetIncompleteFilter( params.GetLanguageID() );
       
@@ -169,7 +169,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
         }
       }
 
-     if( constraints.Exceeded() )
+     if( constraints.Exceeded(0) )
       break; // исчерпан лимит времени, отведенный на анализ.
     }
   }

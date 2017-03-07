@@ -429,7 +429,7 @@ void LexiconShell::ExecuteMenu( int choice )
 {
  switch(choice)
  {    
-  case 1: TestProjector();      break;
+  case 1: TestLexiconLookUp();      break;
   case 2: TestThesaurus();  break;
   case 3: TestNGrams();     break;
   case 4: SearchByIE();     break;
@@ -450,9 +450,9 @@ void LexiconShell::EnterMenuLoop()
  return;
 }
 
-void LexiconShell::TestProjector(void)
+void LexiconShell::TestLexiconLookUp(void)
 {
- (*mout) << "Type #exit to exit\n";
+    (*mout) << "Type #exit to exit, #menu to enter a control menu\n";
 
  for(;;)
   {
@@ -482,8 +482,7 @@ void LexiconShell::TestProjector(void)
    if(
       str.search(L'*')==UNKNOWN &&
       str.search(L'?')==UNKNOWN &&
-      str.search(L'~')==UNKNOWN &&
-      str.search(L'/')==UNKNOWN
+      str.search(L'~')==UNKNOWN
      )
     {
      // Точный поиск
@@ -496,7 +495,6 @@ void LexiconShell::TestProjector(void)
       {
        // Нечеткий поиск
        str.subst( L"~", L"" );
-       str.subst( L"/", L"" );
 
        UCString cword( str.c_str() );
 
@@ -670,11 +668,8 @@ void LexiconShell::Display_Projects(
                   , ipr+1, class_name.c_str(), word.c_str()
                  );
 
-     if( val_list[ipr].val!=lem::Real1(100) )
-      mout->printf( " val=%vfE%s%vn", to_str( val_list[ipr].val ).c_str() );
-
      if( val_list[ipr].score!=0 )
-      mout->printf( " score=%vfE%d%vn", val_list[ipr].score );
+      mout->printf( " score=%vfE%g%vn", val_list[ipr].score );
 
      if( print_projections )
       {
