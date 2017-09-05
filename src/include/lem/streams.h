@@ -978,7 +978,7 @@
    #if defined LEM_WINDOWS
    p=0;
    #else
-   memset( &p, sizeof(p), 0 );    
+   memset( &p, 0, sizeof(p) );
    #endif
   }
 
