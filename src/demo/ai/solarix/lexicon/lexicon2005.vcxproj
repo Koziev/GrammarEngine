@@ -54,7 +54,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -227,7 +227,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;SOL_SAVETXT;SOL_NO_AA;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_SAVETXT;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -240,7 +240,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)lexicon-pro.exe</OutputFile>
+      <OutputFile>$(OutDir)lexicon.exe</OutputFile>
       <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -250,6 +250,9 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) $(LEM_PATH)\exe</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -419,7 +422,7 @@
     <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
     <ClCompile Include="lexicon.cpp" />
-    <ClCompile Include="lexicon_shell.cpp" />
+    <ClCompile Include="LexiconShell.cpp" />
     <ClCompile Include="LexiconDebugger.cpp" />
     <ClCompile Include="..\..\..\..\io\base_lexer.cpp" />
     <ClCompile Include="..\..\..\..\io\io_base_stream.cpp" />
@@ -829,9 +832,12 @@
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_FireBird.cpp" />
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_MySQL.cpp" />
     <ClCompile Include="..\..\..\..\ai\ngrams\NGramsStorage_SQLITE.cpp" />
+    <ClCompile Include="NGramPrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lexicon.h" />
+    <ClInclude Include="LexiconDebugger.h" />
+    <ClInclude Include="LexiconShell.h" />
+    <ClInclude Include="NGramPrinter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />

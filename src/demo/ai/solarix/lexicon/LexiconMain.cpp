@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// File LEXICON.CPP
+// File LexiconMain.CPP
 //
 // (c) by Koziev Elijah     all rights reserved 
 //
@@ -20,13 +20,13 @@
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.2003
-// LC->09.03.2013
+// LC->05.09.2017
 // --------------
 
 #include <lem/keyboard.h>
 #include <lem/startup.h>
 #include <lem/solarix/version.h>
-#include "lexicon.h"
+#include "LexiconShell.h"
 
 using namespace lem;
 using namespace Solarix;

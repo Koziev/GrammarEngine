@@ -5,10 +5,13 @@
 #include <lem/solarix/SyllabRule.h>
 #include <lem/solarix/PartOfSpeech.h>
 
-#include "lexicon.h"
+#include "LexiconDebugger.h"
 
 using namespace Solarix;
 using namespace lem;
+
+
+LexiconDebugger::LexiconDebugger(Solarix::Dictionary *Dict) : dict(Dict) {}
 
 void LexiconDebugger::CropRuleApplied(
                                       const lem::UCString &word_before,
