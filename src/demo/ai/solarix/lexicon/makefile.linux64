@@ -17,4 +17,4 @@ include makefile.files
 
 clean:
 	rm -f $(OBJDIR)/*
-	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/lexicon
+	./del.sh $(EXEDIR)/lexicon
