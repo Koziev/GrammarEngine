@@ -1,7 +1,7 @@
 #if defined SOL_DEBUGGING
 
 // CD->28.07.2009
-// LC->05.03.2015
+// LC->06.09.2017
 
 #include <lem/keyboard.h>
 #include <lem/solarix/variator.h>
@@ -19,7 +19,11 @@
 #include <lem/solarix/SynPattern.h>
 #include <lem/solarix/CoordList.h>
 #include <lem/solarix/LexerTextPos.h>
-#include "syntax.h"
+
+#include "LA_RecognitionTrace_Console.h"
+#include "LA_PreprocessorTrace_Console.h"
+#include "TrBreakpoint.h"
+#include "TrDebugger.h"
 
 using namespace lem;
 using namespace Solarix;
@@ -62,7 +66,7 @@ void TrDebugger::Enter( TrTraceActor *a )
 
  if( callstack.size()>200 )
   {
-   StackOverflow( callstack.size() );
+   StackOverflow( CastSizeToInt(callstack.size()) );
   }
 
  callstack.push_back(a);
@@ -171,7 +175,7 @@ void TrDebugger::ExecuteBreakpoints( TrTraceActor *a )
     {
      // Это точка, создаваемая отладчиком перед запуском процесса, срабатывает
      // на первом же операторе.
-     ExecuteBreakpoint( i, a );
+     ExecuteBreakpoint(CastSizeToInt(i), a );
      break;
     }
 
@@ -179,7 +183,7 @@ void TrDebugger::ExecuteBreakpoints( TrTraceActor *a )
     {
      // Точка срабатывает на любой операторной строке - то есть, на шаге процедуры,
      // исполнении шага внутри функции { ... }, начале проверки кондиктора трансформанты.
-     ExecuteBreakpoint( i, a );
+     ExecuteBreakpoint(CastSizeToInt(i), a );
     }
 
    if( p.ifile!=UNKNOWN && a->HasLocation() && a->IsStatement() )
@@ -191,7 +195,7 @@ void TrDebugger::ExecuteBreakpoints( TrTraceActor *a )
  
        if( file==p.ifile && line==p.iline )
         {
-         ExecuteBreakpoint( i, a );
+         ExecuteBreakpoint(CastSizeToInt(i), a );
          break;
         }
       }
@@ -468,7 +472,7 @@ void TrDebugger::ManageBreakpoints(void)
            const TrBreakpoint &p = *breakpoints[i];
            if( p.ifile==ifile && p.iline==iline )
             {
-             breakpoints.Remove(i);
+             breakpoints.Remove(CastSizeToInt(i));
              break; 
             }
           }
@@ -849,114 +853,10 @@ LA_PreprocessorTrace* TrDebugger::PreprocessorTrace(void)
 
 
 
-LA_RecognitionTrace_Console::LA_RecognitionTrace_Console( Solarix::Dictionary *d )
-{
- dict = d;
-}
-
-void LA_RecognitionTrace_Console::CropRuleApplied(
-                                                  const lem::UCString &word_before,
-                                                  const lem::UCString &word_after,
-                                                  const LA_CropRule *rule
-                                                 )
-{
- if( trace )
-  mout->printf( "Crop rule %vfA%us%vn has been applied: %vfE%us%vn -> %vfE%us%vn\n", rule->GetName().c_str(), word_before.c_str(), word_after.c_str() );
-
- return;
-}
-
-void LA_RecognitionTrace_Console::Matched( const lem::UCString &word, const LA_RecognitionRule *rule )
-{
- if( trace )
-  {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for %vfE%us%vn score=%vf9%4.2rf%vn", rule->GetName().c_str(), word.c_str(), rule->GetScore() );
-
-   const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
-   const int id_class = e.GetClass();
-   mout->printf( " %us:%us ", dict->GetSynGram().GetClass(id_class).GetName().c_str(), e.GetName().c_str() );
-   rule->GetCoords().SaveTxt( *mout, dict->GetSynGram() );
-   mout->printf( "\n" );
-  }
-
- return;
-}
-
-void LA_RecognitionTrace_Console::MatchedSyllable( const lem::UCString &word, const lem::UCString &syllable, const LA_RecognitionRule *rule )
-{
- if( trace )
-  {
-   mout->printf( "Recognition rule %vfA%us%vn has been applied for syllable %vfE%us%vn in word %vfE%us%vn score=%vf9%4.2rf%vn"
-    , rule->GetName().c_str(), syllable.c_str(), word.c_str(), rule->GetScore() );
-
-   const Solarix::SG_Entry &e = dict->GetSynGram().GetEntry( rule->GetEntryKey() );
-   const int id_class = e.GetClass();
-   mout->printf( " %us:%us ", dict->GetSynGram().GetClass(id_class).GetName().c_str(), e.GetName().c_str() );
-   rule->GetCoords().SaveTxt( *mout, dict->GetSynGram() );
-   mout->printf( "\n" );
-  }
-
- return;
-}
-
-void LA_RecognitionTrace_Console::PhoneticRuleProduction( const lem::UCString &source, const lem::UCString &result, lem::Real1 val, const LA_PhoneticRule *rule )
-{
- if( trace )
-  {
-   mout->printf( "Phonetic rule %vfA%us%vn has been applied: %vfE%us%vn -> %vfE%us%vn  rel=%vf9%4.2rf%vn\n",
-    rule->GetName().c_str(), source.c_str(), result.c_str(), val.GetFloat() );
-  }
-
- return;
-}
-
-
-void LA_RecognitionTrace_Console::WordSyllabs( const lem::UCString &word, const lem::MCollect<lem::UCString> &slb_list )
-{
- if( trace )
-  {
-   mout->printf( "Word %vfE%us%vn has been split to syllables:", word.c_str() );
-
-   for( lem::Container::size_type i=0; i<slb_list.size(); i++ )
-    lem::mout->printf( " %us", slb_list[i].c_str() );
-
-   mout->eol();
-  }
-
- return;
-}
 
 
 
 
-
-
-
-LA_PreprocessorTrace_Console::LA_PreprocessorTrace_Console( Solarix::Dictionary *d )
-{
- dict = d;
-}
-
-
-
-void LA_PreprocessorTrace_Console::LanguageGuessed( const lem::UFString &phrase, int LanguageID )
-{
- if( trace )
-  {
-   lem::mout->printf( "Language guesser: phrase=%us id_language=%d", phrase.c_str(), LanguageID );
-   if( LanguageID!=UNKNOWN )
-    {
-     const SG_Language &lang = dict->GetSynGram().languages()[LanguageID];
-     lem::mout->printf( " language=%us\n", lang.GetName().c_str() );
-    }
-   else
-    {
-     lem::mout->eol();
-    }
-  }
-
- return;
-}
 
 
 

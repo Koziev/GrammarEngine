@@ -34,7 +34,7 @@
 #include <lem/keyboard.h>
 #include <lem/startup.h>
 #include <lem/solarix/version.h>
-#include "syntax.h"
+#include "SyntaxShell.h"
 
 using namespace lem;
 using namespace Solarix;

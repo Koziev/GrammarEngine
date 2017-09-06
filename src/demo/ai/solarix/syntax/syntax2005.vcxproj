@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -233,8 +233,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_DEBUGGING;SOL_REPORT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -247,7 +247,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <Link>
-      <OutputFile>$(LEM_PATH)/exe/syntax-pro.exe</OutputFile>
+      <OutputFile>$(OutDir)syntax.exe</OutputFile>
       <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -256,7 +256,11 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) $(LEM_PATH)\exe64</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -454,8 +458,10 @@ copy $(LEM_PATH)\lib64\sqlited.dll $(OutDir)
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTraceFunCall.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTuple.cpp" />
-    <ClCompile Include="syntax.cpp" />
-    <ClCompile Include="syntax_shell.cpp" />
+    <ClCompile Include="LA_PreprocessorTrace_Console.cpp" />
+    <ClCompile Include="LA_RecognitionTrace_Console.cpp" />
+    <ClCompile Include="SyntaxMain.cpp" />
+    <ClCompile Include="SyntaxShell.cpp" />
     <ClCompile Include="TrDebugger.cpp" />
     <ClCompile Include="..\..\..\..\io\base_lexer.cpp" />
     <ClCompile Include="..\..\..\..\io\io_base_stream.cpp" />
@@ -852,6 +858,13 @@ copy $(LEM_PATH)\lib64\sqlited.dll $(OutDir)
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LA_PreprocessorTrace_Console.h" />
+    <ClInclude Include="LA_RecognitionTrace_Console.h" />
+    <ClInclude Include="SyntaxShell.h" />
+    <ClInclude Include="TrBreakpoint.h" />
+    <ClInclude Include="TrDebugger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
