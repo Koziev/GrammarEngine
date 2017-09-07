@@ -926,7 +926,7 @@ void lem::trunc_zeros( wchar_t *field )
 
 // ------------------------------------------------------------
 //
-// Преобразование числа типа lem::Math::REAL18 в полноформатное (с выдачей
+// Преобразование числа типа double18 в полноформатное (с выдачей
 // всех знаков) строковое представление.
 //
 // ------------------------------------------------------------
@@ -934,7 +934,7 @@ void lem::trunc_zeros( wchar_t *field )
 #if defined(SETREAL18) && !defined(LEM_NOREAL)
 
 /*
-char* qreal_to_str( const lem::Math::REAL18& val, char* buffer )
+char* qreal_to_str( const double18& val, char* buffer )
 {
  // Порядок.
  char exponent[10];
@@ -1374,7 +1374,7 @@ bool lem::to_int( const wchar_t *str, lem::int64_t *res, int radix )
 
 
 #if !defined(LEM_NOREAL)
-bool lem::to_real( const char *str, lem::Math::REAL *res )
+bool lem::to_real( const char *str, double *res )
 {
  LEM_CHECKIT_Z(res!=NULL);
 
@@ -2993,9 +2993,9 @@ bool lem::to_int(
 
 #if !defined(LEM_NOREAL)
 // ***************************************************
-// Convert string to lem::Math::REAL nuber. Returns success flag.
+// Convert string to double nuber. Returns success flag.
 // ***************************************************
-bool lem::to_real( const wchar_t *str, lem::Math::REAL *res )
+bool lem::to_real( const wchar_t *str, double *res )
 {
  if( !str || !*str )
   {
@@ -3009,7 +3009,7 @@ bool lem::to_real( const wchar_t *str, lem::Math::REAL *res )
     *str!='-'              &&
     *str!='+'
    )
-  // Null string can not be a lem::Math::REAL number representation. lem::Math::REAL number have
+  // Null string can not be a double number representation. double number have
   // one of the formats:
   //   123
   //   .31
@@ -3685,7 +3685,7 @@ const wstring lem::to_text( int val, int lang, bool masculine )
 #endif // !LEM_OFMT_NO_MICROSOL
 
 #if !defined LEM_NOREAL
-lem::Math::REAL lem::share_to_real( const char *str )
+double lem::share_to_real( const char *str )
 {
  if( lem_eq( str, "1" ) )
   return 1.;
@@ -3704,8 +3704,8 @@ lem::Math::REAL lem::share_to_real( const char *str )
  const lem::CString up = left( CString(str), ii ); // Числитель
  const lem::CString bottom = right( CString(str), lem_strlen(str)-ii-1 ); // Знаменатель
 
- lem::Math::REAL r1 = to_real( up.c_str() );
- lem::Math::REAL r2 = to_real( bottom.c_str() );
+ double r1 = to_real( up.c_str() );
+ double r2 = to_real( bottom.c_str() );
 
  if( r2==0.0 )
   LEM_STOPIT;
@@ -3715,22 +3715,22 @@ lem::Math::REAL lem::share_to_real( const char *str )
 #endif
 
 #if !defined LEM_NOREAL
-lem::Math::REAL lem::to_real( const char *str )
+double lem::to_real( const char *str )
 {
- lem::Math::REAL res;
+ double res;
  if( !to_real( str, &res ) )
-  throw ECheckFault( to_wstr("String can not be converted to lem::Math::REAL: ")+to_wstr(str) );
+  throw ECheckFault( to_wstr("String can not be converted to double: ")+to_wstr(str) );
 
  return res;
 }
 #endif
 
 #if !defined LEM_NOREAL
-lem::Math::REAL lem::to_real( const wchar_t *str )
+double lem::to_real( const wchar_t *str )
 {
- lem::Math::REAL res;
+ double res;
  if( !to_real( str, &res ) )
-  throw ECheckFault( to_wstr("String can not be converted to lem::Math::REAL: ")+to_wstr(str) );
+  throw ECheckFault( to_wstr("String can not be converted to double: ")+to_wstr(str) );
 
  return res;
 }
@@ -3890,7 +3890,7 @@ const std::string lem::translit_ru( const wchar_t *src )
 }
 
 
-const lem::CString lem::to_str( lem::Math::REAL val, const char *Format )
+const lem::CString lem::to_str( double val, const char *Format )
 {
  char buf[32]="";
  sprintf( buf, Format, val );
@@ -3919,7 +3919,7 @@ bool lem::are_mixed_languages( const wchar_t *str )
  return has_lat && has_cyr;
 }
 
-const lem::UCString lem::to_ustr( lem::Math::REAL x, const char *fmt )
+const lem::UCString lem::to_ustr( double x, const char *fmt )
 {
  char res[32];
  *res=0;
@@ -4255,21 +4255,21 @@ int lem::to_int( const CStringW &s )
 
 
 #if !defined LEM_NOREAL
-lem::Math::REAL lem::to_real( const lem::UFString& str )
+double lem::to_real( const lem::UFString& str )
 { return lem::to_real(str.c_str()); }
 
-lem::Math::REAL lem::to_real( const lem::FString& str )
+double lem::to_real( const lem::FString& str )
 { return lem::to_real(str.c_str()); }
 
-lem::Math::REAL lem::to_real( const std::wstring& str )
+double lem::to_real( const std::wstring& str )
 { return lem::to_real(str.c_str()); }
 
-lem::Math::REAL lem::to_real( const std::string& str )
+double lem::to_real( const std::string& str )
 { return lem::to_real(str.c_str()); }
 
 
 #if defined LEM_WXWIDGETS
-lem::Math::REAL to_real( const wxString& str )
+double to_real( const wxString& str )
 {
  double v=0;
  str.ToDouble(&v);
@@ -4278,15 +4278,15 @@ lem::Math::REAL to_real( const wxString& str )
 #endif
 
 #if defined LEM_QT
-lem::Math::REAL lem::to_real( const QString &s )
+double lem::to_real( const QString &s )
 { return s.toDouble(); }
 #endif
 
 #if defined LEM_MFC
-lem::Math::REAL lem::to_real( const CStringA &s )
+double lem::to_real( const CStringA &s )
 { return lem::to_real((const char*)s); }
 
-lem::Math::REAL lem::to_real( const CStringW &s )
+double lem::to_real( const CStringW &s )
 { return lem::to_real((const wchar_t*)s); }
 #endif
 

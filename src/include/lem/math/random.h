@@ -53,8 +53,8 @@
    lem::uint32_t LASTY;       // ѕоследнее выработанное случайное число.
 
    
-   #if !defined LEM_NOREAL
-   REAL S; // множитель дл€ отображени€ в действительные числа
+   #if !defined LEM_NOdouble
+   double S; // множитель дл€ отображени€ в действительные числа
    #endif
 
   public:
@@ -77,17 +77,17 @@
    // ¬ычисл€ем следующее псевдослучайное число целого типа.
    inline RandU::result_type operator()(void) { return (LASTY=LASTY*IA+IC); }
 
-   #if !defined LEM_NOREAL
+   #if !defined LEM_NOdouble
    // ¬ычисл€ем следующее псевдослучайное число вещественного типа.
-   inline REAL aget(void) { return S*(LASTY=LASTY*IA+IC); }
+   inline double aget(void) { return S*(LASTY=LASTY*IA+IC); }
 
-   void Generate( int NR, REAL *dest );
+   void Generate( int NR, double *dest );
    #endif
 
    // ¬озвращаетс€ случайное число в диапазоне 0...bound_max-1
    inline RandU::result_type iget( int bound_max ) 
    {
-    LEM_CHECKIT_Z( REAL( result_type(max_value) ) > 0 );
+    LEM_CHECKIT_Z( double( result_type(max_value) ) > 0 );
     return result_type( aget()*bound_max );
    } 
 
@@ -99,7 +99,7 @@
  };
 
 
- #if !defined LEM_NOREAL
+ #if !defined LEM_NOdouble
  /*
    ƒл€ генерации нормально распределенных чисел с использованием
    следстви€ из ÷ентральной ѕредельной “еоремы: сумма большого количества
@@ -111,15 +111,15 @@
  class GaussianRandU : protected RandU
  {
   private:
-   REAL middle, sigma, A, n2;
+   double middle, sigma, A, n2;
    int n;
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    GaussianRandU(void);
-   GaussianRandU( REAL M, REAL Sigma, int N=6 );
+   GaussianRandU( double M, double Sigma, int N=6 );
    result_type aget(void);
    inline result_type operator()(void) { return aget(); }
 
@@ -132,10 +132,10 @@
  class RandErmacov
  {
   private:
-   REAL M,P,N,LASTY;
+   double M,P,N,LASTY;
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    RandErmacov( int igen=-1 );
@@ -149,27 +149,27 @@
    void LoadBin( Stream& bin );
  };
 
- inline REAL RandErmacov::aget(void)
+ inline double RandErmacov::aget(void)
  {
   LASTY = (LASTY*M)/P;
-  LASTY = (LASTY-qfloor(LASTY))*P;
+  LASTY = (LASTY-floor(LASTY))*P;
   return LASTY/N;
  }
 
  class GaussianRnd : protected RandErmacov
  {
   private:
-   REAL middle, sigma, A, n2;
+   double middle, sigma, A, n2;
    int n;
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    GaussianRnd(void) { middle=sigma=A=n2=n=0; }
    GaussianRnd(
-               REAL M,
-               REAL Sigma,
+               double M,
+               double Sigma,
                int igen=-1,
                int N=6
               );
@@ -183,7 +183,7 @@
  class Chi2RndU : public RandU
  {
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    Chi2RndU(void);
@@ -202,14 +202,14 @@
   private:
    RArray F;
    int i0,in;
-   REAL dx, a, b, ab;
+   double dx, a, b, ab;
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    AnyRnd(void);
-   AnyRnd( const RArray& P, REAL A=0., REAL B=1. );
+   AnyRnd( const RArray& P, double A=0., double B=1. );
    AnyRnd( const AnyRnd& ar );
 
    void operator=( const AnyRnd& ar );
@@ -221,7 +221,7 @@
 
  // ----------------------------------------------------------------
 
- #if !defined LEM_NOREAL
+ #if !defined LEM_NOdouble
  class Rnd1
  {
   private:
@@ -231,7 +231,7 @@
    double r[98];
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    Rnd1( int seed=-1 );
@@ -249,15 +249,15 @@
  class GaussianRnd1 : protected Rnd1
  {
   private:
-   REAL middle, sigma, A, n2;
+   double middle, sigma, A, n2;
    int n;
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    GaussianRnd1(void) { middle=sigma=A=n2=n=0; }
-   GaussianRnd1( REAL M, REAL Sigma, int N=6 );
+   GaussianRnd1( double M, double Sigma, int N=6 );
 
    result_type aget(void);
    inline result_type operator()(void) { return aget(); }
@@ -271,7 +271,7 @@
  {
   private:
    long MBIG;
-   REAL FAC;
+   double FAC;
    int inext,inextp;
    long ma[56];
 
@@ -288,7 +288,7 @@
    SubRnd( long idum=1 );
 
    // ¬озвращает очередное псевдослучайное число.
-   inline REAL aget(void)
+   inline double aget(void)
    {
     if( ++inext==56)
      inext=1;
@@ -332,7 +332,7 @@
  class GaussianSubRnd : protected SubRnd
  {
   private:
-   REAL middle, sigma, A, n2;
+   double middle, sigma, A, n2;
    int n;
 
   public:
@@ -341,12 +341,12 @@
   public:
    GaussianSubRnd(void) { middle=sigma=A=n2=n=0; }
    GaussianSubRnd(
-                  REAL M,
-                  REAL Sigma,
+                  double M,
+                  double Sigma,
                   long idum=1,
                   int N=6
                  );
-   REAL aget(void);
+   double aget(void);
 
    void SaveBin( Stream& bin ) const;
    void LoadBin( Stream& bin );
@@ -361,13 +361,13 @@
    double ma[56];
 
   public:
-   typedef REAL result_type;
+   typedef double result_type;
 
   public:
    SubRnd2( double idum=3.1415926 );
 
    // ¬озвращает очередное псевдослучайное число.
-   inline REAL aget(void)
+   inline double aget(void)
    {
     if( ++inext==56)
      inext=1;

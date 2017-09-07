@@ -10,8 +10,9 @@
 // 07.06.2011 - добавлено перечисление записей для файлового хранилища N-грамм
 //
 // CD->09.01.2008
-// LC->24.12.2011
+// LC->07.09.2017
 
+#include <float.h>
 #include <lem/sqlite_helpers.h>
 #include <lem/streams.h>
 #include <lem/solarix/dictionary.h>
@@ -861,7 +862,7 @@ void Ngrams::LoadCovalent( Ngrams::cov &pdb )
     }
 
    pdb.max_w=0;
-   pdb.min_w=lem::Math::MINREAL4;
+   pdb.min_w=FLT_MIN;
    pdb.n=0;
 
    for( lem::Container::size_type i=0; i<pdb.segments.size(); ++i )

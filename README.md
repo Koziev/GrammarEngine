@@ -1,3 +1,20 @@
+## Компиляция утилиты Compiler под Windows с помощью MS VisualStudio 2015
+
+Проект для сборки лежит в папке ...\src\demo\ai\solarix\ygres\compiler\ygres_msvc2005
+
+Так как в проекте стоят ссылки на исходные тексты некоторых библиотек [Boost](http://www.boost.org/), то надо
+либо скачать исходники Boost и поправить пути в проекте, либо переделать проект на
+линковку со [скомпилированными библиотеками](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html).
+
+В результате компиляции получится исполнимый файл compiler.exe в папке ...\src\exe64
+
+
+## Компиляция утилиты Lexicon под Windows с помощью MS VisualStudio 2015
+
+Проект для сборки лежит в папке src\demo\ai\solarix\lexicon
+
+По поводу использования библиотек Boost - см. пояснения для утилиты Compile выше.
+
 ## Компиляция утилиты Lexicon в Ubuntu
 
 Для успешной компиляции необходимо иметь установленные dev-версии библиотек ncurses и sqlite.
@@ -16,9 +33,9 @@ sudo apt-get install sqlite3 libsqlite3-dev
 ## Компиляция утилиты Syntax в Ubuntu
 
 Скачиваем библиотеку liblbfgs либо из гитхаба
-
+```
 git clone https://github.com/chokkan/liblbfgs
-
+```
 Либо берем tar.gz архив и распаковываем:
 ```
 mkdir lbfgs  
@@ -32,9 +49,9 @@ make
 sudo make install
 ```
 Аналогичные шаги делаем для CRFSuite. Берем ее из репозитория
-
+```
 git clone https://github.com/chokkan/crfsuite
-
+```
 Либо скачиваем и распаковываем tar.gz:
 ```
 mkdir crfsuite  

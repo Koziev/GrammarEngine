@@ -57,7 +57,7 @@ Criterion::Criterion( const lem::UCString &_name, const lem::UFString &_str )
 {
  if( lem::is_real(str.c_str()) )
   {
-   lem::Math::REAL dval;
+   double dval;
    to_real( str.c_str(), &dval );
    rval = dval;
   }
@@ -87,7 +87,7 @@ void Criterion::LoadTxt( const Sol_IO &io, Macro_Parser &txtfile )
 
  if( lem::is_real(str.c_str()) )
   {
-   lem::Math::REAL dval;
+   double dval;
    to_real( val.c_str(), &dval );
    rval = dval;
   }

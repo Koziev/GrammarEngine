@@ -881,7 +881,7 @@ bool LexicalAutomat::Project_1(
   {
    LEM_CHECKIT_Z( !A->empty() );
 
-   lem::Math::REAL dummy;
+   double dummy;
 
    if( As[ A->length()-1 ]==L'%' || As[ A->length()-1 ]==L'$' )
     {

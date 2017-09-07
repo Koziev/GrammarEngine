@@ -32,41 +32,41 @@
    class Statis
    {
     private:
-     REAL amin, amax;
-     REAL SUM, SUM2, SUM3, SUM4;
+     double amin, amax;
+     double SUM, SUM2, SUM3, SUM4;
      long N;
 
     public:
      Statis(void);
 
-     void add( REAL y );
-     void add_ex( REAL y );
+     void add( double y );
+     void add_ex( double y );
 
-     inline void operator << ( const REAL y ) { add(y); }
+     inline void operator << ( const double y ) { add(y); }
 
-     inline REAL min(void)  const { return amin; }
-     inline REAL max(void)  const { return amax; }
-     inline REAL Sum(void)  const { return SUM;  }
-     inline REAL Sum2(void) const { return SUM2; }
+     inline double min(void)  const { return amin; }
+     inline double max(void)  const { return amax; }
+     inline double Sum(void)  const { return SUM;  }
+     inline double Sum2(void) const { return SUM2; }
   
      inline long GetN(void) const { return N;    }
  
-     REAL M1(void)    const;
-     REAL M2(void)    const;
-     REAL m3(void)    const;
-     REAL m4(void)    const;
-     REAL M4(void)    const;
-     REAL SIGMA(void) const;
-     REAL KA(void)    const;
-     REAL KE(void)    const;
-     REAL Kv(void)    const;
+     double M1(void)    const;
+     double M2(void)    const;
+     double m3(void)    const;
+     double m4(void)    const;
+     double M4(void)    const;
+     double SIGMA(void) const;
+     double KA(void)    const;
+     double KE(void)    const;
+     double Kv(void)    const;
    };
 
    class StatKeeper : public Statis
    {
     private:
-     REAL amin, amax;
-     REAL SUM, SUM2, SUM3, SUM4;
+     double amin, amax;
+     double SUM, SUM2, SUM3, SUM4;
      long N;
  
     public:
@@ -86,8 +86,8 @@
     public:
      DSignTest(void) {n=n_minus=n_plus=0; }
 
-     void add( REAL x, REAL y );
-     REAL GetP(void) const;
+     void add( double x, double y );
+     double GetP(void) const;
    };
 
   } // namespace Math

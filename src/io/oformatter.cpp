@@ -51,7 +51,7 @@
 
 using namespace std;
 using namespace lem;
-using namespace lem::Math;
+//using namespace lem::Math;
 using namespace lem::Char_Stream;
 
 /**************************************************************************************
@@ -178,9 +178,9 @@ using namespace lem::Char_Stream;
   %...^n...    - число знакомест под порядок числа с плавающей точкой.
 
 
-  %...n...     - тип нормальной длины ( REAL8, INT16 ).
+  %...n...     - тип нормальной длины ( double, INT16 ).
 
-  %...l...     - тип с приставкой 'long' ( long int, REAL10 )
+  %...l...     - тип с приставкой 'long' ( long int, long double )
 
   %...u...     - тип с приставкой 'unsigned' ( unsigned int, unsigned long )
 
@@ -903,14 +903,14 @@ void OFormatter::printf( const char *format, ... )
 
          if( is_normal )
           {
-           REAL8 val = va_arg(ap,REAL8);
+           double val = va_arg(ap,double);
            Print_Real8( FORMAT, val );
            break;
           }
 
          if( is_long )
           {
-           REAL10 val = va_arg(ap,REAL10);
+           long double val = va_arg(ap,long double);
            Print_Real10( FORMAT, val );
            break;
           }
@@ -1606,15 +1606,15 @@ void OFormatter::MakeRealFormat( const char *format, int &i, char *f1 )
  // длину текущего типа REAL.
  if( !is_normal && !is_long && !is_quatro )
   {
-   #if REAL_TYPE==4 || REAL_TYPE==8 || REAL_TYPE==1008
+   //#if REAL_TYPE==4 || REAL_TYPE==8 || REAL_TYPE==1008
     is_normal=true;
-   #elif REAL_TYPE==10 || REAL_TYPE==10010
-    is_long=true;
-   #elif REAL_TYPE==18 || REAL_TYPE==10018
-    is_quatro=true;
-   #else
-    #error UNKNOWN REAL TYPE
-   #endif
+   //#elif REAL_TYPE==10 || REAL_TYPE==10010
+   // is_long=true;
+   //#elif REAL_TYPE==18 || REAL_TYPE==10018
+   // is_quatro=true;
+   //#else
+   // #error UNKNOWN REAL TYPE
+   //#endif
   }
 
  // Начинаем читать спецификацию поля сначала, дабы различить
@@ -1660,14 +1660,14 @@ void OFormatter::MakeRealFormat( const char *format, int &i, char *f1 )
     {
      if( is_normal )
       {
-       // Явно требуется REAL8
+       // Явно требуется double
        field_len = 23;
        after     = 15;
       }
 
      if( is_long )
       {
-       // Явно требуется REAL10
+       // Явно требуется long double
        field_len = 26;
        after     = 17;
       }
@@ -1734,7 +1734,7 @@ void OFormatter::MakeRealFormat( const char *format, int &i, char *f1 )
  return;
 }
 
-void OFormatter::Print_Real8( const char *FORMAT, REAL8 val )
+void OFormatter::Print_Real8( const char *FORMAT, double val )
 {
  char aval[80];
  sprintf( aval, FORMAT, val );
@@ -1742,7 +1742,7 @@ void OFormatter::Print_Real8( const char *FORMAT, REAL8 val )
  return;
 }
 
-void OFormatter::Print_Real10( const char *FORMAT, REAL10 val )
+void OFormatter::Print_Real10( const char *FORMAT, long double val )
 {
  char aval[80];
  sprintf( aval, FORMAT, val );
@@ -1860,7 +1860,7 @@ void OFormatter::Print_Dupel(
 #endif // !defined LEM_NODUP
 
 #if !defined LEM_NODUP
-#if !defined NOREAL10
+#if !defined NOlong double
 void OFormatter::Print_Dupel(
                              char *BUFFER,
                              const char *FORMAT,
@@ -1888,7 +1888,7 @@ void OFormatter::Print_Dupel(
 
  return;
 }
-#endif // !defined NOREAL10
+#endif // !defined NOlong double
 #endif // !defined LEM_NODUP
 
 #if !defined LEM_NODUP

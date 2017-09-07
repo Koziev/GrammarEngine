@@ -131,46 +131,6 @@ void lem::Reflection::PrintCompilationInfo( OFormatter &txt )
 }
 
 
-// *****************************************************************************
-// Распечатка информации об текущей плавающей арифметике, для помещения в файл
-// отчета о работе программы. Помогает при анализе результатов счета прикидывать
-// вероятное влияние машинной арифметики на получаемые числа.
-// *****************************************************************************
-void lem::Reflection::PrintMathInfo( OFormatter &s )
-{
- s.printf( ":::Machine floating point arithmetics:::\n" );
-
- s.printf(
-          " REAL is defined as "
-          #if REAL_TYPE==4
-           "float\n"
-          #elif REAL_TYPE==8
-           "double\n"
-          #elif REAL_TYPE==10
-           "long double\n"
-          #elif REAL_TYPE==18
-           "Real18\n"
-          #elif REAL_TYPE==1008
-           "Dupel8\n"
-          #elif REAL_TYPE==10010
-           "Dupel10\n"
-          #elif REAL_TYPE==10018
-           "Dupel18\n"
-          #else
-           "double\n"
-          #endif
-         );
-
- s.printf( " Field size in bytes %50Y.= %d\n", sizeof(lem::Math::REAL) );
- s.printf( " Number of bit representing a mantissa %50Y.= %d\n", lem::Math::get_mach_bits() );
- s.printf( " Machine EPSILON %50Y.= %Re\n",  lem::Math::compute_mach_eps() );
- s.printf( " Max value MAXREAL %50Y.= %Re\n", lem::Math::MAXREAL );
- s.printf( " Min value MINREAL %50Y.= %Re\n", lem::Math::MINREAL );
-
- return;
-}
-
-
 static lem::Path startup_filename;
 static lem::Path startup_folder;
 

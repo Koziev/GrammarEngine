@@ -17,7 +17,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->17.10.1996
-// LC->21.07.2012
+// LC->10.10.2015
 // --------------
 
 #include <algorithm>
@@ -1378,11 +1378,11 @@ int Macro_Parser::read_signed_int(void)
 
 
 #if !defined LEM_NOREAL
-lem::Math::REAL Macro_Parser::read_real(void)
+double Macro_Parser::read_real(void)
 {
  const BethToken &t = read();
 
- lem::Math::REAL res=0;
+ double res=0;
  const bool correct = to_real(t.c_str(),&res);
 
  if(!correct)

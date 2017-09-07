@@ -17,7 +17,7 @@
 // ------------------------------------------------------------------------
 //
 // CD->21.07.1995
-// LC->01.11.2008
+// LC->07.09.2017
 // --------------
 
 #include <lem/path.h>
@@ -399,13 +399,13 @@ bool Ini_Parser::seek_section( const string& tosection )
     }
 
     #if !defined LEM_NOREAL
-    lem::Math::REAL Ini_Parser::get_real(
+    double Ini_Parser::get_real(
                                          const string &path,
                                          const string &name,
-                                         lem::Math::REAL def
+                                         double def
                                         )
     {
-     lem::Math::REAL res=def;
+     double res=def;
 
      SectionEntry *back=tree.current;
 

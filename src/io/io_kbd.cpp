@@ -678,12 +678,12 @@ bool IKbdFormatter::ask_bool( const char *question, OFormatter &s )
 // *   ббнд вхякю я окюбючыеи рнвйни REAL   *
 // *                                        *
 // ******************************************
-lem::Math::REAL IKbdFormatter::ask_real( const char *question, OFormatter &s )
+double IKbdFormatter::ask_real( const char *question, OFormatter &s )
 {
  CString buffer;
 
  bool first=true;
- lem::Math::REAL res;
+ double res;
 
  while(true)
   {

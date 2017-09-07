@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -205,8 +205,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;LEM_OFMT_MICROSOL;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_PHRASE_GENERATOR;GM_THESAURUS;GM_STEMMER;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -220,7 +220,7 @@
       <DisableSpecificWarnings>4025;4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <OutputFile>$(LEM_PATH)/lib-pro/solarix_grammar_engine.dll</OutputFile>
+      <OutputFile>$(LEM_PATH)/lib/solarix_grammar_engine.dll</OutputFile>
       <AdditionalLibraryDirectories>$(LEM_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
@@ -232,6 +232,7 @@
       <DataExecutionPrevention />
       <ImportLibrary>$(LEM_PATH)/lib-pro/Solarix_Grammar_Engine.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -465,11 +466,8 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
     <ClCompile Include="..\..\..\..\tools\unicode\WideString2Ucs4.cpp" />
     <ClCompile Include="..\..\..\..\tools\ui\ui_user_interface.cpp" />
     <ClCompile Include="..\..\..\..\tools\system_config\system_config.cpp" />
-    <ClCompile Include="..\..\..\..\math\approx\interpol.cpp" />
     <ClCompile Include="..\..\..\..\math\lem_imat.cpp" />
-    <ClCompile Include="..\..\..\..\math\macheps.cpp" />
     <ClCompile Include="..\..\..\..\math\random\randu.cpp" />
-    <ClCompile Include="..\..\..\..\math\stat\statkep1.cpp" />
     <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />
     <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp" />
     <ClCompile Include="search_engine.cpp" />

@@ -543,7 +543,6 @@ copy $(LEM_PATH)\lib64\sqlited.dll $(OutDir)
     <ClCompile Include="..\..\..\..\contain\lem_ufstring.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_ustr.cpp" />
     <ClCompile Include="..\..\..\..\math\lem_imat.cpp" />
-    <ClCompile Include="..\..\..\..\math\approx\interpol.cpp" />
     <ClCompile Include="..\..\..\..\math\stat\statkep1.cpp" />
     <ClCompile Include="..\..\..\..\math\random\randu.cpp" />
     <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />

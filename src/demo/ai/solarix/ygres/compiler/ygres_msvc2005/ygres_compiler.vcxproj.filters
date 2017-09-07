@@ -213,16 +213,7 @@
     <ClCompile Include="..\..\..\..\..\..\io\xml\xp_parser.cpp">
       <Filter>Source Files\lem\IO\Xml</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\math\approx\interpol.cpp">
-      <Filter>Source Files\lem\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\math\macheps.cpp">
-      <Filter>Source Files\lem\Math</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\math\random\randu.cpp">
-      <Filter>Source Files\lem\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\math\stat\statkep1.cpp">
       <Filter>Source Files\lem\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\tools\base_application.cpp">
@@ -516,6 +507,9 @@
     <ClCompile Include="..\..\..\..\..\..\Ai\Sg\sg_autom.cpp">
       <Filter>Source Files\Grammar_Engine\SG</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_autom_sql_generator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\Ai\Sg\sg_Calibrator.cpp">
       <Filter>Source Files\Grammar_Engine\SG</Filter>
     </ClCompile>
@@ -763,9 +757,6 @@
       <Filter>Source Files\Grammar_Engine\PM</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\pm\TrMorphologyTracer.cpp">
-      <Filter>Source Files\Grammar_Engine\PM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrProcedureDeclaration.cpp">
       <Filter>Source Files\Grammar_Engine\PM</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTrace.cpp">
@@ -1206,68 +1197,71 @@
     <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsDBMS.cpp">
       <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\c_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGramTreeScorer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\cpp_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp">
+      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\cregex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp">
+      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\fileiter.cpp">
-      <Filter>Source Files\boost\regex</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
+      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\icu.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\instances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\posix_api.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\regex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\regex_debug.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\regex_raw_buffer.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\regex_traits_defaults.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\static_mutex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\usinstances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\w32_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\wc_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\wide_posix_api.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\regex\src\winstances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost\libs\system\src\error_code.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp">
       <Filter>Source Files\boost\system</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\thread\src\win32\thread.cpp">
-      <Filter>Source Files\boost\thread</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp">
+      <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_dll.cpp">
-      <Filter>Source Files\boost\thread</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp">
+      <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="E:\boost\libs\thread\src\win32\tss_pe.cpp">
-      <Filter>Source Files\boost\thread</Filter>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp">
+      <Filter>Source Files\boost\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp">
+      <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1276,6 +1270,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\include\lem\solarix\TagSets.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\boost.1.60\libs\regex\src\internals.hpp">
+      <Filter>Source Files\boost\regex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

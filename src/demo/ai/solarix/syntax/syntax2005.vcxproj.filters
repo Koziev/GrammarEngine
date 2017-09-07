@@ -41,9 +41,6 @@
     <Filter Include="Source Files\lem\Math">
       <UniqueIdentifier>{4f101585-153f-41a8-81bc-11481aad95e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\lem\Math\Approx">
-      <UniqueIdentifier>{7888970e-3599-4a08-b77c-b1034229f37e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\lem\Math\Stat">
       <UniqueIdentifier>{6f652699-a034-4206-ae59-4b4a0169f51f}</UniqueIdentifier>
     </Filter>
@@ -344,9 +341,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\math\lem_imat.cpp">
       <Filter>Source Files\lem\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\math\approx\interpol.cpp">
-      <Filter>Source Files\lem\Math\Approx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\math\stat\statkep1.cpp">
       <Filter>Source Files\lem\Math\Stat</Filter>
