@@ -332,7 +332,7 @@
    virtual bool probe( const UCString &token );
 
    #if !defined LEM_NOREAL
-   virtual lem::Math::REAL read_real(void);
+   virtual double read_real(void);
    #endif
 
    inline const BethToken& get( const BSourceState &s ) const

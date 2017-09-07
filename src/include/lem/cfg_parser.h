@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->21.07.1995
-// LC->16.08.2007
+// LC->07.09.2017
 // --------------
 
 #ifndef LEM_INI_FILE__H
@@ -147,7 +147,7 @@
     bool get_bool( const string &path, const string &name, bool def );
 
     #if !defined LEM_NOREAL
-    lem::Math::REAL get_real( const string &path, const string &name, lem::Math::REAL def );
+    double get_real( const string &path, const string &name, double def );
     #endif
 
     const string get_string( const string &path, const string &name, const string &def );

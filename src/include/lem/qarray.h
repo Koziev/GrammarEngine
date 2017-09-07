@@ -410,7 +410,7 @@
 
 
   #if !defined LEM_NOREAL
-  typedef BaseArray<lem::Math::REAL> RArray;
+  typedef BaseArray<double> RArray;
   #endif // !defined SOL_NOREAL
 
   typedef BaseArray<int>  IntArray;

@@ -268,10 +268,10 @@
   inline const std::string  to_cstr( int val ) { return int_to_str(val).c_str(); }
   inline const std::wstring to_wstr( int val ) { return int_to_ustr(val).c_str(); }
 
-  extern const CString to_str( lem::Math::REAL val, const char *Format="%g" );
-  extern const UCString to_ustr( lem::Math::REAL val, const char *Format="%g" );
-  extern const std::string to_cstr( lem::Math::REAL val, const char *Format="%g" );
-  extern const std::wstring to_wstr( lem::Math::REAL val, const char *Format="%g" );
+  extern const CString to_str( double val, const char *Format="%g" );
+  extern const UCString to_ustr( double val, const char *Format="%g" );
+  extern const std::string to_cstr( double val, const char *Format="%g" );
+  extern const std::wstring to_wstr( double val, const char *Format="%g" );
 
   inline const std::wstring to_wstr( const char *aText )
   { return std::wstring( UFString(aText).c_str() ); }
@@ -389,27 +389,27 @@
   extern bool is_real( const wchar_t *s );
 
   #if !defined LEM_NOREAL
-  extern bool to_real( const char *str, lem::Math::REAL *res );
-  extern bool to_real( const wchar_t *str, lem::Math::REAL *res );
+  extern bool to_real( const char *str, double *res );
+  extern bool to_real( const wchar_t *str, double *res );
 
-  extern lem::Math::REAL to_real( const char *str );
-  extern lem::Math::REAL to_real( const wchar_t *str );
-  extern lem::Math::REAL to_real( const lem::UFString& str );
-  extern lem::Math::REAL to_real( const lem::FString& str );
-  extern lem::Math::REAL to_real( const std::wstring& str );
-  extern lem::Math::REAL to_real( const std::string& str );
+  extern double to_real( const char *str );
+  extern double to_real( const wchar_t *str );
+  extern double to_real( const lem::UFString& str );
+  extern double to_real( const lem::FString& str );
+  extern double to_real( const std::wstring& str );
+  extern double to_real( const std::string& str );
   #if defined LEM_WXWIDGETS
-  extern lem::Math::REAL to_real( const wxString& str );
+  extern double to_real( const wxString& str );
   #endif
   #if defined LEM_QT
-  extern lem::Math::REAL to_real( const QString &s );
+  extern double to_real( const QString &s );
   #endif
   #if defined LEM_MFC
-  extern lem::Math::REAL to_real( const CStringA &s );
-  extern lem::Math::REAL to_real( const CStringW &s );
+  extern double to_real( const CStringA &s );
+  extern double to_real( const CStringW &s );
   #endif
 
-  extern lem::Math::REAL share_to_real( const char *str );
+  extern double share_to_real( const char *str );
   #endif
 
   extern const std::string to_roman( int i );

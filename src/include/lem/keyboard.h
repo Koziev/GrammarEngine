@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->08.02.1996
-// LC->14.08.2009
+// LC->07.09.2017
 // --------------
 
 #ifndef LEM_SCANFS__H
@@ -57,7 +57,7 @@
     bool isready(void) const;
 
     #if !defined LEM_NOREAL
-    lem::Math::REAL ask_real( const char *question="", lem::OFormatter &s=*mout );
+    double ask_real( const char *question="", lem::OFormatter &s=*mout );
     #endif
 
     int ask_int( const char *question="", lem::OFormatter &s=*mout );

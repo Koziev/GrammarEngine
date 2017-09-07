@@ -16,7 +16,6 @@
   namespace Reflection
   {
    extern void PrintCompilationInfo( lem::OFormatter &txt );
-   extern void PrintMathInfo( lem::OFormatter &s );
 
    // Application target OS. It can differ from current host OS.
    extern const std::string TargetOs(void);

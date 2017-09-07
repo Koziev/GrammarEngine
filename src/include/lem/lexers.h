@@ -675,7 +675,7 @@
     const str_type read_c_char(void);
 
     #if !defined LEM_NOREAL
-     virtual lem::Math::REAL read_real(void);
+     virtual double read_real(void);
     #endif
 
     void Read_C_String( CHAR *Buffer, int maxlen );
@@ -2599,7 +2599,7 @@
 
   #if !defined LEM_NOREAL
   template < class CHAR >
-  inline lem::Math::REAL Base_Parser<CHAR>::read_real(void)
+  inline double Base_Parser<CHAR>::read_real(void)
   {
    const token_type t = read(false);
    str_type str = t.string();
@@ -2607,7 +2607,7 @@
    if( str==L'-' || str==L'+' )
     str += read(false).string();
 
-   lem::Math::REAL res=0.;
+   double res=0.;
    const bool correct = to_real(str.c_str(),&res);
 
    if(correct)
@@ -2616,7 +2616,7 @@
    #if defined LEM_DEBUGON
 
     Error(t);
-    GetMerr() << "Incorrect lem::Math::REAL field: " << str << "\n";
+    GetMerr() << "Incorrect double field: " << str << "\n";
     LEM_STOPIT;
 
    #endif
@@ -2789,7 +2789,7 @@
 
   #if !defined LEM_NOREAL
   template < class CHAR >
-  inline Base_Parser<CHAR>& operator>>( Base_Parser<CHAR>& in, lem::Math::REAL &r )
+  inline Base_Parser<CHAR>& operator>>( Base_Parser<CHAR>& in, double &r )
   {
    r = in.read_real();
    return in;

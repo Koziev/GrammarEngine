@@ -238,7 +238,7 @@
  #endif
 
  #if !defined LEM_NOREAL
- inline OFormatter& operator << ( OFormatter &o, lem::Math::REAL d )
+ inline OFormatter& operator << ( OFormatter &o, double d )
  {
   o.printf( "%re", d );
   return o;
