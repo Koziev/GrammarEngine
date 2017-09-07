@@ -2,30 +2,6 @@
 #define LEM_MSTREAM__H
 #pragma once
 
-// -----------------------------------------------------------------------------
-// File OFORMATTER.H
-//
-// (c) 2005 by Elijah Koziev     all rights reserved 
-//
-// SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// Licensed under the terms of GNU Lesser GPL
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
-//
-// Content:
-// Специальный пакет форматного вывода информации, для использования вместо
-// стандартного библиотечного ...PRINTF. Подробное описание спецификаций
-// смотри в файле \TOOLS\LEM_MSTR.CPP
-//
-// 03.03.2008 - добавлены методы close() и dot()
-// -----------------------------------------------------------------------------
-//
-// CD->29.01.1996
-// LC->15.03.2009
-// --------------
-
  #include <lem/config.h>
 
  #if defined LEM_BORLAND
@@ -42,7 +18,6 @@
   #endif
  #endif
  
- #include <lem/math/real.h>
  #include <lem/integer.h>
  #include <lem/process.h>
  #include <lem/zeroed.h>

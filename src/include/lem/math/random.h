@@ -25,8 +25,7 @@
  #include <lem/streams.h>
  #include <lem/qarray.h>
  #include <lem/math/math_constants.h>
- #include <lem/math/math.h>
-
+ 
  #undef min
  #undef max
 

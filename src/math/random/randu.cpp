@@ -15,7 +15,7 @@
 #if !defined LEM_NOdouble
 
 #include <lem/math/random.h>
-#include <lem/math/math.h>
+
 
 using namespace boost;
 using namespace lem;

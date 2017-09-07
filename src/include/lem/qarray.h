@@ -20,7 +20,6 @@
 #pragma once
 
  #include <lem/containers.h>
- #include <lem/math/real.h>
 
  namespace lem
  {

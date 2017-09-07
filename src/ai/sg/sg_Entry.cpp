@@ -39,7 +39,7 @@
 
 #include <lem/conversions.h>
 #include <lem/oformatter.h>
-#include <lem/math/math.h>
+
 
 #include <lem/solarix/LexiconStorage.h>
 #include <lem/solarix/AuxFormTypes.h>

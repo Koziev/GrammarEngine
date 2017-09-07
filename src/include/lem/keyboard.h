@@ -1,16 +1,3 @@
-// -----------------------------------------------------------------------------
-// File KEYBOARD.H
-//
-// (c) Koziev Elijah
-//
-// Content:
-// Процедуры для ввода значений с консоли.
-// -----------------------------------------------------------------------------
-//
-// CD->08.02.1996
-// LC->07.09.2017
-// --------------
-
 #ifndef LEM_SCANFS__H
 #define LEM_SCANFS__H
 #pragma once
@@ -18,7 +5,6 @@
  #if !defined LEM_NO_MOUT
 
  #include <lem/console_application.h>
- #include <lem/math/real.h>
  #include <lem/fstring.h>
  #include <lem/cstring.h>
  #include <lem/streams.h>

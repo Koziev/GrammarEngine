@@ -1,13 +1,9 @@
-// 26.06.2007 - исправлена печать номера версии wxWidgets в PrintCompilationInfo
-// 06.03.2010 - доработка под Qt
-
 #include <lem/config.h>
 
 #if defined LEM_UNIX
  #include <stdlib.h> // realpath()
 #endif 
 
-#include <lem/math/math.h>
 #include <lem/path.h>
 #include <lem/system_config.h>
 #include <lem/reflection.h>

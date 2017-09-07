@@ -2,30 +2,6 @@
 #define LEM_CONVERT__H
 #pragma once
 
-// -----------------------------------------------------------------------------
-// File CONVERSIONS.H
-//
-// (c) by Koziev Elijah
-//     Solarix Intellectronix project - http://www.solarix.ru
-//
-// Content:
-//
-// Various conversion procedures.
-//
-// Преобразование строк в переменные разных типов, с контролем корректности
-// текстового представления. Перекодировки символов для разных кодовых страниц.
-//
-// Эти же процедуры для UNICODE-строк.
-//
-// Функции для преобразования строки ASCII-кодированных символов в
-// UNICODE-символ, и другие функции того же плана. File contains function
-// prototypes of Unicode-ANSI character transcoding facility.
-// -----------------------------------------------------------------------------
-//
-// CD->11.01.1996
-// LC->07.11.2014
-// --------------
-
  #include <lem/config.h>
 
  #include <ctype.h>
@@ -34,7 +10,6 @@
   #include <afxwin.h>
  #endif
 
- #include <lem/math/real.h>
  #include <lem/cstring.h>
  #include <lem/fstring.h>
  #include <lem/stl.h>
