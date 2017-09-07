@@ -3,7 +3,7 @@
 
 #include <lem/path.h>
 #include <lem/ucstring.h>
-#include <lem/solarix/morphologymodels.h>
+#include <lem/solarix/MorphologyModels.h>
 
 class Lemmatizer2
 {

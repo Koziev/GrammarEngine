@@ -1,4 +1,4 @@
-#include <lem/solarix/Dictionary.h>
+#include <lem/solarix/dictionary.h>
 #include "SentenceEOL.h"
 
 using namespace Solarix;
