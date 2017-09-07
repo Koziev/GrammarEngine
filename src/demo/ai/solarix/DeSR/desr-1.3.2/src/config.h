@@ -1,3 +1,4 @@
+/* src/config.h.  Generated from config.h.in by configure.  */
 /*
 **  DeSR
 **  src/config.h
@@ -24,23 +25,21 @@
 #ifndef DeSR_config_H
 #define DeSR_config_H
 
-// Version for MSVC
-
 // Define if your compiler has std::unordered_map  
-/* #undef HAVE_STD_UNORDERED_MAP   */
+/* #undef HAVE_STD_UNORDERED_MAP */
   
 // Define if your compiler has std::unordered_set  
-/* #undef HAVE_STD_UNORDERED_SET   */
+/* #undef HAVE_STD_UNORDERED_SET */
   
 // Define if your compiler has std::tr1::unordered_map  
-#define HAVE_TR1_UNORDERED_MAP 
+#define HAVE_TR1_UNORDERED_MAP /**/
   
 // Define if your compiler has std::tr1::unordered_set  
-#define HAVE_TR1_UNORDERED_SET 
+#define HAVE_TR1_UNORDERED_SET /**/
 
 // Define if you have hash_map and hash_set includes in ext/ directory.
-#undef HAVE_EXT_HASH_MAP_SET
+/* #undef HAVE_EXT_HASH_MAP_SET */
 
-#undef HAVE_PYTHON 
+/*#define HAVE_PYTHON /**/
 
 #endif // DeSR_config_H

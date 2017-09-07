@@ -46,6 +46,7 @@
 #include "lib/strtok_r.h"
 #else
 #include <ext/functional>
+#include <unistd.h>
 #endif
 
 #include <iostream>

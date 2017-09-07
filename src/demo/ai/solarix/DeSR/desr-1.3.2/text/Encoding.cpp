@@ -354,7 +354,7 @@ size_t Encoding::Encode(Encoding const* from, char const* in, size_t inlen,
 #ifdef _WIN32
   size_t rlen = iconv(converter, &in, &inlen, &outend, &outlen);
 #else
-  size_t rlen = iconv(converter, (char **)&in, &inlen, &outend, &outlen);
+  size_t rlen = iconv(converter, (const char **)&in, &inlen, &outend, &outlen);
 #endif
   
   iconv_close(converter);
