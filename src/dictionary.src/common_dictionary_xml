@@ -1,0 +1,7 @@
+﻿$dictionary_xml <ngrams absolute="false"></ngrams>
+$dictionary_xml <segmentation_engines absolute="false"></segmentation_engines>
+
+$dictionary_xml <models>
+$dictionary_xml  <sequence_labeler>.</sequence_labeler>
+$dictionary_xml  <desr>.</desr>
+$dictionary_xml </models>

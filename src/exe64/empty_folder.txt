@@ -1,1 +1,0 @@
-This folder is necessary as a destination for executables
