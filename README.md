@@ -11,9 +11,9 @@
 
 ## Компиляция под Windows с помощью MS VisualStudio 2015
 
-В папке exe64 выложен готовый бинарник compiler.exe, собранный для MS Windows, но Вы
+В папке [exe64](https://github.com/Koziev/GrammarEngine/tree/master/src/exe64) выложен готовый бинарник compiler.exe, собранный для MS Windows, но Вы
 можете самостоятельно собрать его с помощью MS VisualStudio 2015. Проект для сборки
-лежит в папке ...\src\demo\ai\solarix\ygres\compiler\ygres_msvc2005
+лежит в папке [...\src\demo\ai\solarix\ygres\compiler\ygres_msvc2005](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/ygres/compiler/ygres_msvc2005)
 
 Так как в проекте стоят ссылки на исходные тексты некоторых библиотек [Boost](http://www.boost.org/), то надо
 либо скачать исходники Boost и поправить пути в проекте, либо переделать проект на
@@ -23,7 +23,7 @@
 
 ## Компиляция под Ubuntu
 
-Сборочные файлы находятся в папке ...\src\demo\ai\solarix\ygres\compiler
+Сборочные файлы находятся в папке [...\src\demo\ai\solarix\ygres\compiler](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/ygres/compiler).
 
 Перед сборкой создайте временный каталог
 ```
@@ -41,7 +41,7 @@ mkdir /tmp/ygres
 ## Тестовая сборка пустого словаря
 
 Для быстрой проверки работоспособности компилятора запустите сборку пустого словаря с помощью
-скрипта empty.sh в папке .../src/scripts/dictionary
+скрипта empty.sh в папке [.../src/scripts/dictionary](https://github.com/Koziev/GrammarEngine/tree/master/src/scripts/dictionary).
 
 В папке .../src/bin-linux64 появятся файлы данных.
 
@@ -51,7 +51,7 @@ mkdir /tmp/ygres
 ## Сборка русской словарной базы
 
 Исходные тексты с описанием морфологии, лексики и синтаксиса русского языка находятся
-в папке .../src/dictionary.src
+в папке [.../src/dictionary.src](https://github.com/Koziev/GrammarEngine/tree/master/src/dictionary.src).
 
 Для сборки русской словарной базы достаточно запустить скрипт russian.sh или russian.cmd
 в подкаталоге .../src/scripts/dictionary. Примерно через 30 минут в папке bin-windows64
