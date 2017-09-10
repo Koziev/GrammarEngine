@@ -19,7 +19,7 @@
 
  #include <lem/containers.h>
  #include <lem/set.h>
- #include <lem/bit_vector.h>
+//#include <lem/bit_vector.h>
  #include <lem/math/fp1.h>
 
  #include <lem/solarix/tree_node.h>

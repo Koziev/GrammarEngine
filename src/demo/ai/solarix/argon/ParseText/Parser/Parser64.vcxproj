@@ -529,7 +529,6 @@ copy e:\mvoice\lem\lib64\libdesr.dll $(OutDir)
     <ClCompile Include="..\..\..\..\..\..\contain\lem_acstring.cpp" />
     <ClCompile Include="..\..\..\..\..\..\contain\lem_afstring.cpp" />
     <ClCompile Include="..\..\..\..\..\..\contain\lem_astr.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\contain\lem_bitv.cpp" />
     <ClCompile Include="..\..\..\..\..\..\contain\lem_fp1.cpp" />
     <ClCompile Include="..\..\..\..\..\..\contain\lem_ucstring.cpp" />
     <ClCompile Include="..\..\..\..\..\..\contain\lem_ufstring.cpp" />

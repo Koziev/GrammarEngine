@@ -117,7 +117,7 @@
     #endif
 
     int GetUnpackedListLength(void) const { return CastSizeToInt( ientry.size() ); }
-    int GetPackedListLength(void) const   { return int1.size() + int2.size(); }
+    int GetPackedListLength(void) const   { return CastSizeToInt(int1.size() + int2.size()); }
   };
 
   class SG_DummyEntryGroup : public SG_EntryGroup

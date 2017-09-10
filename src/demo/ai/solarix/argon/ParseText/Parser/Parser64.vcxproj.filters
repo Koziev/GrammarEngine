@@ -1248,9 +1248,6 @@
     <ClCompile Include="..\..\..\..\..\..\contain\lem_astr.cpp">
       <Filter>lem\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\contain\lem_bitv.cpp">
-      <Filter>lem\container</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\contain\lem_fp1.cpp">
       <Filter>lem\container</Filter>
     </ClCompile>

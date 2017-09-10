@@ -1,0 +1,31 @@
+Русские raw 2-граммы:
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -ngramscache 3000000 -dbcache 5000000 -ngrams -1grams- -2grams -3grams- -correl_any -lemmatization -russian -dir e:\1
+
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -ngramscache 30000000 -dbcache 50000000 -ngrams -1grams -2grams- -3grams- -correl_any -russian -dir h:\texts\ru\Мошков\disk1\adams
+
+-dictdir e:\mvoice\lem\bin-windows\dictionary-mysql.xml -outdir e:\mvoice\lem\tmp -use_disk_cache- -clean_ngrams -ngramscache 100000 -doccache 10000 -ngrams -1grams -2grams -3grams -4grams -5grams -correl_any -lemmatization -russian -dir e:\1
+-dictdir e:\mvoice\lem\bin-windows\dictionary.xml -outdir e:\mvoice\lem\tmp -use_disk_cache- -clean_ngrams -ngramscache 100000 -doccache 10000 -ngrams -1grams -2grams -3grams -4grams -5grams -correl_any -lemmatization -russian -dir e:\1
+
+
+Русские raw 3-граммы:
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp  -doccache 10000000 -ngramscache 30000000 -dbcache 50000000 -ngrams -1grams- -2grams- -3grams -correl_any -lemmatization -russian -dir e:\5
+
+Русские raw 5-граммы:
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp  -doccache 10000000 -ngramscache 30000000 -dbcache 50000000 -ngrams -1grams- -2grams- -3grams- -4grams- -5grams -correl_any -russian -dir e:\1
+
+Частота для русских слов:
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -scheme1 -russian -force_cp utf8 -dir e:\1
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -scheme1 -russian -file e:\1\1.txt
+-dictdir e:\mvoice\lem\bin-windows64 -outdir e:\mvoice\lem\tmp -scheme1 -russian -dir F:\Text\WorldLiterature\1\Content\01\abakoz
+
+
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -ngramscache 30000000 -dbcache 50000000 -ngrams -source_format google_ngrams -1grams- -2grams -3grams- -correl_any -english -dir e:\trash\google
+
+
+-dictdir e:\mvoice\lem\bin-windows -outdir e:\mvoice\lem\tmp -cp 1251 -eol_breaks -doccache 5000000 -ngramscache 10000000 -ngrams -segmentation -use_disk_cache- -1grams -2grams -3grams -4grams -5grams -correl_any -lemmatization -russian -file e:\mvoice\lem\scripts\translation\etalons-jap-rus.txt
+
+
+Токенизация:
+-dictdir e:\mvoice\lem\bin-windows64 -outdir e:\mvoice\lem\tmp -tokenize -russian -dir e:\1
+
+
