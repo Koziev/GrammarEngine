@@ -1,7 +1,7 @@
-#region Samples
+п»ї#region Samples
 /*
 
-Сборка предиката с глаголом в форме 1го лица единственного числа настоящего времени:
+РЎР±РѕСЂРєР° РїСЂРµРґРёРєР°С‚Р° СЃ РіР»Р°РіРѕР»РѕРј РІ С„РѕСЂРјРµ 1РіРѕ Р»РёС†Р° РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ С‡РёСЃР»Р° РЅР°СЃС‚РѕСЏС‰РµРіРѕ РІСЂРµРјРµРЅРё:
 
  I do agree!
  I know the trick;
@@ -15,15 +15,15 @@
  I don't use names.
  
  
-Сборка предиката с глаголом в форме 3го лица единственного числа настоящего времени.
+РЎР±РѕСЂРєР° РїСЂРµРґРёРєР°С‚Р° СЃ РіР»Р°РіРѕР»РѕРј РІ С„РѕСЂРјРµ 3РіРѕ Р»РёС†Р° РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ С‡РёСЃР»Р° РЅР°СЃС‚РѕСЏС‰РµРіРѕ РІСЂРµРјРµРЅРё.
 
 He thinks of other gods.
 He lives in a body.
 
 
-Сборка предиката с глаголом в форме единственного числа прошедшего времени.
+РЎР±РѕСЂРєР° РїСЂРµРґРёРєР°С‚Р° СЃ РіР»Р°РіРѕР»РѕРј РІ С„РѕСЂРјРµ РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ С‡РёСЃР»Р° РїСЂРѕС€РµРґС€РµРіРѕ РІСЂРµРјРµРЅРё.
 
-активный залог
+Р°РєС‚РёРІРЅС‹Р№ Р·Р°Р»РѕРі
 --------------
 
 He died in 1935.
@@ -39,16 +39,16 @@ He advocated navigational improvements on the Sangamon River.
 He partnered with Stephen T. Logan from 1841 until 1844.
 Based on this evidence, Armstrong was acquitted.
 
-пассивный залог
+РїР°СЃСЃРёРІРЅС‹Р№ Р·Р°Р»РѕРі
 ---------------
 
 It was, however, never written.
 
 
 
-Сборка предиката с глаголом в форме множественного числа прошедшего времени.
+РЎР±РѕСЂРєР° РїСЂРµРґРёРєР°С‚Р° СЃ РіР»Р°РіРѕР»РѕРј РІ С„РѕСЂРјРµ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ С‡РёСЃР»Р° РїСЂРѕС€РµРґС€РµРіРѕ РІСЂРµРјРµРЅРё.
 
-активный залог
+Р°РєС‚РёРІРЅС‹Р№ Р·Р°Р»РѕРі
 --------------
 
 We practised discrimination and exclusion.
@@ -62,7 +62,7 @@ Few men volunteered to serve;
 Sutawijaya and his men survived.
 The two men became friends.
 
-пассивный залог
+РїР°СЃСЃРёРІРЅС‹Р№ Р·Р°Р»РѕРі
 ---------------
 
 Twenty-two Thakur men were killed.
@@ -79,7 +79,7 @@ The men were never recaptured.
 
 
 // ===============================================================================
-// восходящая сборка
+// РІРѕСЃС…РѕРґСЏС‰Р°СЏ СЃР±РѕСЂРєР°
 // ===============================================================================
 patterns Predicate_up { bottomup language=English }
 export
@@ -101,7 +101,7 @@ export
 // ----------------------------------------------------------------------------
 
 
-// Затравочное правило.
+// Р—Р°С‚СЂР°РІРѕС‡РЅРѕРµ РїСЂР°РІРёР»Рѕ.
 #region seed_up
 
 patterns PredicateUpHead { language=English }
@@ -290,7 +290,7 @@ pattern PredicateUpHead export { node:root_node TENSE (PERSON) (NUMBER) TRANSITI
 }
 
 
-// --- для вопросительных конструкций ---
+// --- РґР»СЏ РІРѕРїСЂРѕСЃРёС‚РµР»СЊРЅС‹С… РєРѕРЅСЃС‚СЂСѓРєС†РёР№ ---
 
 patterns SecondQuestVerb export { node:root_node TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS }
 
@@ -326,7 +326,7 @@ pattern AuxDoVerb
 
 
 
-// Для вопросительных конструкций с обратным порядком слов
+// Р”Р»СЏ РІРѕРїСЂРѕСЃРёС‚РµР»СЊРЅС‹С… РєРѕРЅСЃС‚СЂСѓРєС†РёР№ СЃ РѕР±СЂР°С‚РЅС‹Рј РїРѕСЂСЏРґРєРѕРј СЃР»РѕРІ
 // Does This Bus Stop At 82nd Street?
 // ^^^^^^^^^^^^^^^^^^
 pattern PredicateUpHead
@@ -448,8 +448,8 @@ pattern Predicate_up
 
 
 
-// Подлежащее справа для обратного порядка слов или для
-// некоторых стилистических оттенков:
+// РџРѕРґР»РµР¶Р°С‰РµРµ СЃРїСЂР°РІР° РґР»СЏ РѕР±СЂР°С‚РЅРѕРіРѕ РїРѕСЂСЏРґРєР° СЃР»РѕРІ РёР»Рё РґР»СЏ
+// РЅРµРєРѕС‚РѕСЂС‹С… СЃС‚РёР»РёСЃС‚РёС‡РµСЃРєРёС… РѕС‚С‚РµРЅРєРѕРІ:
 #region VerbSubject
 
 // How do I make links?
@@ -582,7 +582,7 @@ pattern Predicate_up
 
 #region RightAdv
 
-// Прикрепляем наречную группу справа
+// РџСЂРёРєСЂРµРїР»СЏРµРј РЅР°СЂРµС‡РЅСѓСЋ РіСЂСѓРїРїСѓ СЃРїСЂР°РІР°
 //
 // From that hour they never parted more.
 //                                  ^^^^
@@ -640,7 +640,7 @@ pattern Predicate_up
 : links { v.<ATTRIBUTE>adv }
 
 
-// Рефлексивное местоимение в роли обстоятельства для глагола:
+// Р РµС„Р»РµРєСЃРёРІРЅРѕРµ РјРµСЃС‚РѕРёРјРµРЅРёРµ РІ СЂРѕР»Рё РѕР±СЃС‚РѕСЏС‚РµР»СЊСЃС‚РІР° РґР»СЏ РіР»Р°РіРѕР»Р°:
 // The compiler is itself written in TypeScript.
 //                 ^^^^^^
 pattern Predicate_up
@@ -657,7 +657,7 @@ pattern Predicate_up
 
 #region DirectObj
 
-// Прикрепляем прямое дополнение, если глагол переходный и слот дополнения свободен.
+// РџСЂРёРєСЂРµРїР»СЏРµРј РїСЂСЏРјРѕРµ РґРѕРїРѕР»РЅРµРЅРёРµ, РµСЃР»Рё РіР»Р°РіРѕР» РїРµСЂРµС…РѕРґРЅС‹Р№ Рё СЃР»РѕС‚ РґРѕРїРѕР»РЅРµРЅРёСЏ СЃРІРѕР±РѕРґРµРЅ.
 //
 // I meet their wives.
 //        ^^^^^^^^^^^
@@ -680,7 +680,7 @@ pattern Predicate_up
 
 
 
-// Полный предикат в роли правого прямого дополнения:
+// РџРѕР»РЅС‹Р№ РїСЂРµРґРёРєР°С‚ РІ СЂРѕР»Рё РїСЂР°РІРѕРіРѕ РїСЂСЏРјРѕРіРѕ РґРѕРїРѕР»РЅРµРЅРёСЏ:
 // The table shows which orderings are admitted.
 //                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pattern RightDirectObj
@@ -696,7 +696,7 @@ pattern RightDirectObj
 
 
 
-// Обособленный атрибут прямого дополнения:
+// РћР±РѕСЃРѕР±Р»РµРЅРЅС‹Р№ Р°С‚СЂРёР±СѓС‚ РїСЂСЏРјРѕРіРѕ РґРѕРїРѕР»РЅРµРЅРёСЏ:
 // Read found him unconscious the next morning.
 //                ^^^^^^^^^^^
 // Philosophers call such propositions "analytic."
@@ -711,7 +711,7 @@ pattern Predicate_up
 
 
 
-// Предложно-герундиальный паттерн справа:
+// РџСЂРµРґР»РѕР¶РЅРѕ-РіРµСЂСѓРЅРґРёР°Р»СЊРЅС‹Р№ РїР°С‚С‚РµСЂРЅ СЃРїСЂР°РІР°:
 // I write a chapter every night before falling asleep.
 //                               ^^^^^^^^^^^^^^^^^^^^^
 pattern Predicate_up
@@ -723,7 +723,7 @@ pattern Predicate_up
 // : eng_v_prep_n_score( v, p, p.n2 )
 
 
-// you’ll see how to use WCF to build distributed applications.
+// youвЂ™ll see how to use WCF to build distributed applications.
 //            ^^^^^^^^^^^...
 // TODO ...
 
@@ -734,7 +734,7 @@ pattern Predicate_up
 // TODO ...
 
 
-// Прикрепляем предложную группу справа:
+// РџСЂРёРєСЂРµРїР»СЏРµРј РїСЂРµРґР»РѕР¶РЅСѓСЋ РіСЂСѓРїРїСѓ СЃРїСЂР°РІР°:
 //
 // I talk to them.
 //        ^^^^^^^
@@ -757,7 +757,7 @@ pattern Predicate_up
 
 
 
-// Прикрепляем дательный объект для дитранзитивных глаголов:
+// РџСЂРёРєСЂРµРїР»СЏРµРј РґР°С‚РµР»СЊРЅС‹Р№ РѕР±СЉРµРєС‚ РґР»СЏ РґРёС‚СЂР°РЅР·РёС‚РёРІРЅС‹С… РіР»Р°РіРѕР»РѕРІ:
 // I give you the woman's words;
 //        ^^^
 // I give them all my contacts
@@ -776,7 +776,7 @@ pattern Predicate_up
 : ngrams { eng_v_obj_score( v, obj ) }
 
 
-// Прикрепляем герундиальную группу для глаголов типа to keep
+// РџСЂРёРєСЂРµРїР»СЏРµРј РіРµСЂСѓРЅРґРёР°Р»СЊРЅСѓСЋ РіСЂСѓРїРїСѓ РґР»СЏ РіР»Р°РіРѕР»РѕРІ С‚РёРїР° to keep
 // I keep stalling the car.
 pattern Predicate_up
 {
@@ -789,7 +789,7 @@ pattern Predicate_up
   
   
   
-// Прямое дополнение для страдательного залога глагола TO CALL:  
+// РџСЂСЏРјРѕРµ РґРѕРїРѕР»РЅРµРЅРёРµ РґР»СЏ СЃС‚СЂР°РґР°С‚РµР»СЊРЅРѕРіРѕ Р·Р°Р»РѕРіР° РіР»Р°РіРѕР»Р° TO CALL:  
 #region PassiveVerbWithDirectObj
 wordentry_set PassiveVerbWithDirectObj={ eng_verb:call{}, eng_verb:consider{}, eng_verb:declare{}, eng_verb:name{}, eng_verb:rename{} }
 // The islands were renamed Bioko and Annobon.
@@ -811,7 +811,7 @@ pattern Predicate_up
  
   
 
-// Прикрепляем справа второй смысловой глагол в предложениях с обратным порядком слов:
+// РџСЂРёРєСЂРµРїР»СЏРµРј СЃРїСЂР°РІР° РІС‚РѕСЂРѕР№ СЃРјС‹СЃР»РѕРІРѕР№ РіР»Р°РіРѕР» РІ РїСЂРµРґР»РѕР¶РµРЅРёСЏС… СЃ РѕР±СЂР°С‚РЅС‹Рј РїРѕСЂСЏРґРєРѕРј СЃР»РѕРІ:
 // What then did you go to see?
 //                   ^^
 pattern Predicate_up
@@ -840,8 +840,8 @@ pattern Predicate_up
  v2=BareInfinitive2
 } : links { v.<SECOND_VERB>v2 }
 
-// В некоторых конструкциях свободная переходность присоединенного инфинитива
-// переходит к предикату и может быть заполнена непроективной связью:
+// Р’ РЅРµРєРѕС‚РѕСЂС‹С… РєРѕРЅСЃС‚СЂСѓРєС†РёСЏС… СЃРІРѕР±РѕРґРЅР°СЏ РїРµСЂРµС…РѕРґРЅРѕСЃС‚СЊ РїСЂРёСЃРѕРµРґРёРЅРµРЅРЅРѕРіРѕ РёРЅС„РёРЅРёС‚РёРІР°
+// РїРµСЂРµС…РѕРґРёС‚ Рє РїСЂРµРґРёРєР°С‚Сѓ Рё РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РїРѕР»РЅРµРЅР° РЅРµРїСЂРѕРµРєС‚РёРІРЅРѕР№ СЃРІСЏР·СЊСЋ:
 // what we would meet.
 pattern Predicate_up
 {
@@ -851,7 +851,7 @@ pattern Predicate_up
 
 
 
-// Если глагол имеет незанятый слот для страдательного причастия...
+// Р•СЃР»Рё РіР»Р°РіРѕР» РёРјРµРµС‚ РЅРµР·Р°РЅСЏС‚С‹Р№ СЃР»РѕС‚ РґР»СЏ СЃС‚СЂР°РґР°С‚РµР»СЊРЅРѕРіРѕ РїСЂРёС‡Р°СЃС‚РёСЏ...
 #region RightPP
 
 // Had I packed my toothbrush?
@@ -873,7 +873,7 @@ pattern Predicate_up
 #endregion RightPP
 
 
-// Для связочных глаголов прикрепляем справа рему и взводим флаг присоединения объекта.
+// Р”Р»СЏ СЃРІСЏР·РѕС‡РЅС‹С… РіР»Р°РіРѕР»РѕРІ РїСЂРёРєСЂРµРїР»СЏРµРј СЃРїСЂР°РІР° СЂРµРјСѓ Рё РІР·РІРѕРґРёРј С„Р»Р°Рі РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р°.
 #region RightRhema
 // Edmund finds out and feels betrayed by them both.
 //                      ^^^^^^^^^^^^^^...
@@ -921,7 +921,7 @@ pattern Predicate_up
 
 
 
-// Рема для будущего времени
+// Р РµРјР° РґР»СЏ Р±СѓРґСѓС‰РµРіРѕ РІСЂРµРјРµРЅРё
 // I will be ready
 pattern Predicate_up
 {
@@ -931,7 +931,7 @@ pattern Predicate_up
 
 
 
-// Рема для императива:
+// Р РµРјР° РґР»СЏ РёРјРїРµСЂР°С‚РёРІР°:
 // Be brave!
 pattern Predicate_up
 {
@@ -941,7 +941,7 @@ pattern Predicate_up
 #endregion RightRhema
 
 
-// Правая инфинитивная группа для модальных глаголов:
+// РџСЂР°РІР°СЏ РёРЅС„РёРЅРёС‚РёРІРЅР°СЏ РіСЂСѓРїРїР° РґР»СЏ РјРѕРґР°Р»СЊРЅС‹С… РіР»Р°РіРѕР»РѕРІ:
 //
 // I want to stay longer.
 //        ^^^^^^^^^^^^^^
@@ -957,7 +957,7 @@ pattern Predicate_up
 : ngrams { 2 VerbValency(v) }
 
 
-// Инфинитивная группа для немодальных глаголов:
+// РРЅС„РёРЅРёС‚РёРІРЅР°СЏ РіСЂСѓРїРїР° РґР»СЏ РЅРµРјРѕРґР°Р»СЊРЅС‹С… РіР»Р°РіРѕР»РѕРІ:
 // I shudder to confess them.
 //           ^^^^^^^^^^^^^^^
 pattern Predicate_up
@@ -970,7 +970,7 @@ pattern Predicate_up
 
 
 #region RightGerundPhrase
-// Деепричастный (герундиальный) оборот справа:
+// Р”РµРµРїСЂРёС‡Р°СЃС‚РЅС‹Р№ (РіРµСЂСѓРЅРґРёР°Р»СЊРЅС‹Р№) РѕР±РѕСЂРѕС‚ СЃРїСЂР°РІР°:
 // The heart muscle contracts faster, increasing blood flow through blood vessels.
 //                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pattern Predicate_up
@@ -996,7 +996,7 @@ pattern Predicate_up
 
   
 /*
-// Разрешим прикрепить любое слово или цепочку слов справа к глаголу с большим штрафом.
+// Р Р°Р·СЂРµС€РёРј РїСЂРёРєСЂРµРїРёС‚СЊ Р»СЋР±РѕРµ СЃР»РѕРІРѕ РёР»Рё С†РµРїРѕС‡РєСѓ СЃР»РѕРІ СЃРїСЂР°РІР° Рє РіР»Р°РіРѕР»Сѓ СЃ Р±РѕР»СЊС€РёРј С€С‚СЂР°С„РѕРј.
 pattern Predicate_up
 {
  v=Predicate_up :export { node:root_node TENSE PERSON NUMBER TRANSITIVITY VOICE OBLIG_TRANSITIVITY DITRANSITIVE SUBJ_LINKED GERUND_OBJ ENG_MODALITY OBJ_LINKED OBJ2_LINKED GERUND_LINKED SECONDVERB_LINKED WORD_ORDER }
@@ -1007,7 +1007,7 @@ pattern Predicate_up
 
 
 // ====================================================================
-// нисходящая сборка для присоединения левых актантов и сирконстантов
+// РЅРёСЃС…РѕРґСЏС‰Р°СЏ СЃР±РѕСЂРєР° РґР»СЏ РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ Р»РµРІС‹С… Р°РєС‚Р°РЅС‚РѕРІ Рё СЃРёСЂРєРѕРЅСЃС‚Р°РЅС‚РѕРІ
 // ====================================================================
 patterns Predicate_down { language=English }
 export
@@ -1037,7 +1037,7 @@ pattern Predicate_down
 
 // ---------------------------------------------------------
 
-// Подцепляем подлежащее слева
+// РџРѕРґС†РµРїР»СЏРµРј РїРѕРґР»РµР¶Р°С‰РµРµ СЃР»РµРІР°
 #region LeftSubject
 
 // I firmly believe this;
@@ -1118,7 +1118,7 @@ pattern Predicate_down
 
 
 #region LeftAppeal
-// Обращение слева
+// РћР±СЂР°С‰РµРЅРёРµ СЃР»РµРІР°
 // World, do you know your creator?
 // ^^^^^^
 pattern Predicate_down
@@ -1134,7 +1134,7 @@ pattern Predicate_down
 
 // -------------------------------------------------------------------
 
-// Рема слева от глагола для вопросительных предложений:
+// Р РµРјР° СЃР»РµРІР° РѕС‚ РіР»Р°РіРѕР»Р° РґР»СЏ РІРѕРїСЂРѕСЃРёС‚РµР»СЊРЅС‹С… РїСЂРµРґР»РѕР¶РµРЅРёР№:
 #region LeftRhema
 // Who am I?
 pattern Predicate_down
@@ -1158,7 +1158,7 @@ pattern Predicate_down
 
 
 
-// Подцепляем предложную группу слева:
+// РџРѕРґС†РµРїР»СЏРµРј РїСЂРµРґР»РѕР¶РЅСѓСЋ РіСЂСѓРїРїСѓ СЃР»РµРІР°:
 #region LeftPrepos
 
 // To the tenth section I make no objection.
@@ -1187,7 +1187,7 @@ pattern Predicate_down
 
 
 
-// Вводная группа слева:
+// Р’РІРѕРґРЅР°СЏ РіСЂСѓРїРїР° СЃР»РµРІР°:
 #region LeftIntro
 // At this point, I have a cold.
 // ^^^^^^^^^^^^^^
@@ -1215,7 +1215,7 @@ pattern Predicate_down
 
 
 
-// Прямое дополнение слева, со штрафом:
+// РџСЂСЏРјРѕРµ РґРѕРїРѕР»РЅРµРЅРёРµ СЃР»РµРІР°, СЃРѕ С€С‚СЂР°С„РѕРј:
 // But this remark I make only in passing.
 //     ^^^^^^^^^^^
 pattern Predicate_down
@@ -1237,7 +1237,7 @@ wordform_set QuestWhDirectObj =
  'whom'{ class:eng_pronoun NOUN_FORM:BASIC CASE:PREPOSITIVE } // whom
 }
 
-// Особо обработаем случай, когда слева добавляется прямое дополнение WHAT:
+// РћСЃРѕР±Рѕ РѕР±СЂР°Р±РѕС‚Р°РµРј СЃР»СѓС‡Р°Р№, РєРѕРіРґР° СЃР»РµРІР° РґРѕР±Р°РІР»СЏРµС‚СЃСЏ РїСЂСЏРјРѕРµ РґРѕРїРѕР»РЅРµРЅРёРµ WHAT:
 // what we would meet.
 // ^^^^
 pattern Predicate_down
@@ -1253,7 +1253,7 @@ pattern Predicate_down
 
 
 
-// Подцепляем наречную группу слева:
+// РџРѕРґС†РµРїР»СЏРµРј РЅР°СЂРµС‡РЅСѓСЋ РіСЂСѓРїРїСѓ СЃР»РµРІР°:
 //
 // I publicly accused Arkan.
 //   ^^^^^^^^
@@ -1359,8 +1359,8 @@ pattern Predicate_down
 
 
 
-// Парные союзы обрабатываем по упрощенной схеме, в которой первый союз проглатывается
-// первым сказуемым.
+// РџР°СЂРЅС‹Рµ СЃРѕСЋР·С‹ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј РїРѕ СѓРїСЂРѕС‰РµРЅРЅРѕР№ СЃС…РµРјРµ, РІ РєРѕС‚РѕСЂРѕР№ РїРµСЂРІС‹Р№ СЃРѕСЋР· РїСЂРѕРіР»Р°С‚С‹РІР°РµС‚СЃСЏ
+// РїРµСЂРІС‹Рј СЃРєР°Р·СѓРµРјС‹Рј.
 wordentry_set PairConj1 = { eng_conj:neither{}, eng_conj:either{} }
 // I neither enjoy nor like the attention.
 //   ^^^^^^^ 
@@ -1374,7 +1374,7 @@ pattern Predicate_down
 // ----------------------------------------------------------
 
 /*
-// разрешаем присоединять любую группу слов слева с большим штрафом
+// СЂР°Р·СЂРµС€Р°РµРј РїСЂРёСЃРѕРµРґРёРЅСЏС‚СЊ Р»СЋР±СѓСЋ РіСЂСѓРїРїСѓ СЃР»РѕРІ СЃР»РµРІР° СЃ Р±РѕР»СЊС€РёРј С€С‚СЂР°С„РѕРј
 pattern Predicate_down
 {
  a=UnknownLeftGroup
@@ -1416,8 +1416,8 @@ pattern PredicateConjTail
 
 function int verb_val( tree root )
 {
- // Оштрафуем конфигурацию дерева, когда у корневого глагола Be 
- // есть подлежащее, но нет ремы или обстоятельства
+ // РћС€С‚СЂР°С„СѓРµРј РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РґРµСЂРµРІР°, РєРѕРіРґР° Сѓ РєРѕСЂРЅРµРІРѕРіРѕ РіР»Р°РіРѕР»Р° Be 
+ // РµСЃС‚СЊ РїРѕРґР»РµР¶Р°С‰РµРµ, РЅРѕ РЅРµС‚ СЂРµРјС‹ РёР»Рё РѕР±СЃС‚РѕСЏС‚РµР»СЊСЃС‚РІР°
  if( eq( wordform_class(root), ENG_BEVERB ) )
   then
   {
@@ -1471,10 +1471,10 @@ pattern PredicateGroup
 
 
 // ---------------------------------------------------------------
-// Группа сказуемых. Могут соединяться сказуемые в разном глагольном времени.
-// Также соединяем предикаты со своими подлежащими.
+// Р“СЂСѓРїРїР° СЃРєР°Р·СѓРµРјС‹С…. РњРѕРіСѓС‚ СЃРѕРµРґРёРЅСЏС‚СЊСЃСЏ СЃРєР°Р·СѓРµРјС‹Рµ РІ СЂР°Р·РЅРѕРј РіР»Р°РіРѕР»СЊРЅРѕРј РІСЂРµРјРµРЅРё.
+// РўР°РєР¶Рµ СЃРѕРµРґРёРЅСЏРµРј РїСЂРµРґРёРєР°С‚С‹ СЃРѕ СЃРІРѕРёРјРё РїРѕРґР»РµР¶Р°С‰РёРјРё.
  
-// Прикрепляем второе однородное сказуемое через союз
+// РџСЂРёРєСЂРµРїР»СЏРµРј РІС‚РѕСЂРѕРµ РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ С‡РµСЂРµР· СЃРѕСЋР·
 //
 // I think and dream of my son;  
 //   ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1486,7 +1486,7 @@ pattern PredicateGroup
 {
  v=PredicateGroup0 : export { node:root_node PERSON NUMBER VOICE SUBJ_LINKED }
  conj=Or_And 
- v2=PredicateConjTail{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // прикрепляем однородное сказуемое
+ v2=PredicateConjTail{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // РїСЂРёРєСЂРµРїР»СЏРµРј РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ
 }
 : links { v.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 
@@ -1495,18 +1495,18 @@ pattern PredicateGroup
 {
  v=PredicateGroup0 : export { node:root_node PERSON NUMBER VOICE SUBJ_LINKED }
  conj=Or_And 
- v2=PredicateConjTail{ SUBJ_LINKED:1 ~TENSE:IMPERATIVE [-1]=v:TENSE } // прикрепляем полный предикат
+ v2=PredicateConjTail{ SUBJ_LINKED:1 ~TENSE:IMPERATIVE [-1]=v:TENSE } // РїСЂРёРєСЂРµРїР»СЏРµРј РїРѕР»РЅС‹Р№ РїСЂРµРґРёРєР°С‚
 } : links { v.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 
 
-// В цепочке сказуемых может быть больше двух элементов, и одно из сказуемых прикрепляется
-// не через союз, а через запятую:
+// Р’ С†РµРїРѕС‡РєРµ СЃРєР°Р·СѓРµРјС‹С… РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РґРІСѓС… СЌР»РµРјРµРЅС‚РѕРІ, Рё РѕРґРЅРѕ РёР· СЃРєР°Р·СѓРµРјС‹С… РїСЂРёРєСЂРµРїР»СЏРµС‚СЃСЏ
+// РЅРµ С‡РµСЂРµР· СЃРѕСЋР·, Р° С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ:
 //           
 pattern PredicateGroup
 {
  v=PredicateGroup0 :export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  comma=','
- v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // прикрепляем однородное сказуемое
+ v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // РїСЂРёРєСЂРµРїР»СЏРµРј РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ
 }
 : links { v.<RIGHT_LOGIC_ITEM>comma.<NEXT_COLLOCATION_ITEM>v2 }
 : ngrams { -1 }
@@ -1516,32 +1516,32 @@ pattern PredicateGroup
 {
  v=PredicateGroup0 :export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  comma=','
- v2=PredicateGroup{ SUBJ_LINKED:1 } // прикрепляем полный предикат
+ v2=PredicateGroup{ SUBJ_LINKED:1 } // РїСЂРёРєСЂРµРїР»СЏРµРј РїРѕР»РЅС‹Р№ РїСЂРµРґРёРєР°С‚
 }
 : links { v.<RIGHT_LOGIC_ITEM>comma.<NEXT_COLLOCATION_ITEM>v2 }
 : ngrams { -1 }
 
  
 
-// Парные союзы обрабатываем по упрощенной схеме, в которой первый союз проглатывается
-// первым сказуемым.
+// РџР°СЂРЅС‹Рµ СЃРѕСЋР·С‹ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј РїРѕ СѓРїСЂРѕС‰РµРЅРЅРѕР№ СЃС…РµРјРµ, РІ РєРѕС‚РѕСЂРѕР№ РїРµСЂРІС‹Р№ СЃРѕСЋР· РїСЂРѕРіР»Р°С‚С‹РІР°РµС‚СЃСЏ
+// РїРµСЂРІС‹Рј СЃРєР°Р·СѓРµРјС‹Рј.
 // I neither enjoy nor like the attention.
 //   ^^^^^^^       ^^^
 pattern PredicateGroup
 {
  v=PredicateGroup0 : export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  conj=eng_conj:nor{}
- v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // прикрепляем однородное сказуемое
+ v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // РїСЂРёРєСЂРµРїР»СЏРµРј РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ
 } : links { v.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 
 
 
-// На всякий случай правило с любыми союзами.
+// РќР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№ РїСЂР°РІРёР»Рѕ СЃ Р»СЋР±С‹РјРё СЃРѕСЋР·Р°РјРё.
 pattern PredicateGroup
 {
  v=PredicateGroup0 : export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  conj=eng_conj:*{}
- v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // прикрепляем однородное сказуемое
+ v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // РїСЂРёРєСЂРµРїР»СЏРµРј РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ
 }
 : links { v.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 : ngrams { -2 }
@@ -1552,7 +1552,7 @@ pattern PredicateGroup
  v=PredicateGroup0 : export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  comma=','
  conj=eng_conj:*{}
- v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // прикрепляем однородное сказуемое
+ v2=PredicateGroup{ SUBJ_LINKED:0 [-9]=v:PERSON [-9]=v:NUMBER } // РїСЂРёРєСЂРµРїР»СЏРµРј РѕРґРЅРѕСЂРѕРґРЅРѕРµ СЃРєР°Р·СѓРµРјРѕРµ
 }
 : links { v.<RIGHT_LOGIC_ITEM>comma.<NEXT_COLLOCATION_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 : ngrams { -2 }
@@ -1563,7 +1563,7 @@ pattern PredicateGroup
  v=PredicateGroup0 : export { node:root_node VOICE SUBJ_LINKED PERSON NUMBER }
  comma=','
  conj=eng_conj:*{}
- v2=PredicateGroup{ SUBJ_LINKED:1 } // прикрепляем полный предикат
+ v2=PredicateGroup{ SUBJ_LINKED:1 } // РїСЂРёРєСЂРµРїР»СЏРµРј РїРѕР»РЅС‹Р№ РїСЂРµРґРёРєР°С‚
 }
 : links { v.<RIGHT_LOGIC_ITEM>comma.<NEXT_COLLOCATION_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 : ngrams { -2 }

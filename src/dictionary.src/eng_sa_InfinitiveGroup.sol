@@ -1,5 +1,5 @@
-
-// Либо одиночный глагол, либо глагол с постфиксом (наречной частицей).
+п»ї
+// Р›РёР±Рѕ РѕРґРёРЅРѕС‡РЅС‹Р№ РіР»Р°РіРѕР», Р»РёР±Рѕ РіР»Р°РіРѕР» СЃ РїРѕСЃС‚С„РёРєСЃРѕРј (РЅР°СЂРµС‡РЅРѕР№ С‡Р°СЃС‚РёС†РµР№).
 patterns VerbWithPostfix export { node:root_node VERB_FORM TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS }
 
 // ------------------------------------------------------------------
@@ -44,7 +44,7 @@ pattern BareInfinitive0_head
 
 // ------------------------------------------------------------------
 
-// Восходящая сборка инфинитива
+// Р’РѕСЃС…РѕРґСЏС‰Р°СЏ СЃР±РѕСЂРєР° РёРЅС„РёРЅРёС‚РёРІР°
 patterns BareInfinitive0_up { language=English bottomup }
 export
 {
@@ -63,7 +63,7 @@ pattern BareInfinitive0_up
 }
 
 
-// Прикрепляем наречную группу справа
+// РџСЂРёРєСЂРµРїР»СЏРµРј РЅР°СЂРµС‡РЅСѓСЋ РіСЂСѓРїРїСѓ СЃРїСЂР°РІР°
 // Anyone want to assist here?
 //                       ^^^^
 // I want to stay longer.
@@ -95,7 +95,7 @@ pattern BareInfinitive0_up
 patterns GerundAdvPhrase export { node:root_node }
 
 
-// Предложно-герундиальный паттерн справа:
+// РџСЂРµРґР»РѕР¶РЅРѕ-РіРµСЂСѓРЅРґРёР°Р»СЊРЅС‹Р№ РїР°С‚С‚РµСЂРЅ СЃРїСЂР°РІР°:
 pattern BareInfinitive0_up
 {
  v=BareInfinitive0_up:export { node:root_node TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS OBJ_LINKED OBJ2_LINKED GERUND_LINKED }
@@ -104,7 +104,7 @@ pattern BareInfinitive0_up
 : links { v.<ATTRIBUTE>adv }
 
 
-// Прикрепляем предложную группу справа:
+// РџСЂРёРєСЂРµРїР»СЏРµРј РїСЂРµРґР»РѕР¶РЅСѓСЋ РіСЂСѓРїРїСѓ СЃРїСЂР°РІР°:
 // I don't want to write for the opponents.
 //                       ^^^^^^^^^^^^^^^^^
 // Others don't want to bother with the paperwork.
@@ -122,7 +122,7 @@ pattern BareInfinitive0_up
 }
 
 
-// Прямое дополнение справа:
+// РџСЂСЏРјРѕРµ РґРѕРїРѕР»РЅРµРЅРёРµ СЃРїСЂР°РІР°:
 //
 // I want to forget Goschen.
 //                  ^^^^^^^
@@ -138,7 +138,7 @@ pattern BareInfinitive0_up
 
 
 
-// Прикрепляем дательный объект для дитранзитивных глаголов:
+// РџСЂРёРєСЂРµРїР»СЏРµРј РґР°С‚РµР»СЊРЅС‹Р№ РѕР±СЉРµРєС‚ РґР»СЏ РґРёС‚СЂР°РЅР·РёС‚РёРІРЅС‹С… РіР»Р°РіРѕР»РѕРІ:
 // Cairo and Gutman agree to give him Wilmer.
 //                                ^^^
 // It was developed to give Fairfield a downtown.
@@ -153,7 +153,7 @@ pattern BareInfinitive0_up
 
 
 
-// Прикрепляем герундиальную группу для глаголов с валентностью GERUND_OBJ
+// РџСЂРёРєСЂРµРїР»СЏРµРј РіРµСЂСѓРЅРґРёР°Р»СЊРЅСѓСЋ РіСЂСѓРїРїСѓ РґР»СЏ РіР»Р°РіРѕР»РѕРІ СЃ РІР°Р»РµРЅС‚РЅРѕСЃС‚СЊСЋ GERUND_OBJ
 // This provides power to keep the clock going.
 //                                       ^^^^^
 pattern BareInfinitive0_up
@@ -177,7 +177,7 @@ pattern BareInfinitive0_up
 
 patterns AdjRhema { language=English } export { node:root_node }
 
-// Связочные глаголы присоединяют страдательное причастие или прилагательное справа:  
+// РЎРІСЏР·РѕС‡РЅС‹Рµ РіР»Р°РіРѕР»С‹ РїСЂРёСЃРѕРµРґРёРЅСЏСЋС‚ СЃС‚СЂР°РґР°С‚РµР»СЊРЅРѕРµ РїСЂРёС‡Р°СЃС‚РёРµ РёР»Рё РїСЂРёР»Р°РіР°С‚РµР»СЊРЅРѕРµ СЃРїСЂР°РІР°:  
 // The oil may get refined during the process.
 //             ^^^^^^^^^^^^...
 // You want to be congratulated.
@@ -205,7 +205,7 @@ pattern BareInfinitive0_up
 
   
 
-// Присоединяем второй инфинитив через союз:  
+// РџСЂРёСЃРѕРµРґРёРЅСЏРµРј РІС‚РѕСЂРѕР№ РёРЅС„РёРЅРёС‚РёРІ С‡РµСЂРµР· СЃРѕСЋР·:  
 // Click to view and read.
 //               ^^^^^^^^
 // The plastic is allowed to cool and harden.  
@@ -222,7 +222,7 @@ pattern BareInfinitive0_up
 } : links { v.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>v2 }
 
 
-// Разрешим прикреплять цепочку инфинтивов через запятую со штрафом.
+// Р Р°Р·СЂРµС€РёРј РїСЂРёРєСЂРµРїР»СЏС‚СЊ С†РµРїРѕС‡РєСѓ РёРЅС„РёРЅС‚РёРІРѕРІ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ СЃРѕ С€С‚СЂР°С„РѕРј.
 pattern BareInfinitive0_up
 {
  v=BareInfinitive0_up : export { node:root_node TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS OBJ_LINKED OBJ2_LINKED GERUND_LINKED }
@@ -232,7 +232,7 @@ pattern BareInfinitive0_up
 
 
 
-// Разрешим прикрепить любое слово или группу слов справа к инфинитиву с большим штрафом.
+// Р Р°Р·СЂРµС€РёРј РїСЂРёРєСЂРµРїРёС‚СЊ Р»СЋР±РѕРµ СЃР»РѕРІРѕ РёР»Рё РіСЂСѓРїРїСѓ СЃР»РѕРІ СЃРїСЂР°РІР° Рє РёРЅС„РёРЅРёС‚РёРІСѓ СЃ Р±РѕР»СЊС€РёРј С€С‚СЂР°С„РѕРј.
 pattern BareInfinitive0_up
 {
  v=BareInfinitive0_up : export { node:root_node TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS OBJ_LINKED OBJ2_LINKED GERUND_LINKED }
@@ -263,7 +263,7 @@ pattern BareInfinitive0
 : ngrams { VerbValency(v1) }
 
 
-// Модальный инфинитив может присоединять другой инфинитив справа
+// РњРѕРґР°Р»СЊРЅС‹Р№ РёРЅС„РёРЅРёС‚РёРІ РјРѕР¶РµС‚ РїСЂРёСЃРѕРµРґРёРЅСЏС‚СЊ РґСЂСѓРіРѕР№ РёРЅС„РёРЅРёС‚РёРІ СЃРїСЂР°РІР°
 pattern BareInfinitive0
 {
  v1=BareInfinitive0_up{ [-10]VERB_SLOTS:ModalTo } : export { node:root_node TRANSITIVITY OBLIG_TRANSITIVITY VERB_SLOTS OBJ_LINKED  OBJ2_LINKED GERUND_LINKED }
@@ -275,14 +275,14 @@ pattern BareInfinitive0
 
 patterns BareInfinitive export { node:root_node TRANSITIVITY OBJ_LINKED }
 
-// Инфинитив с обязательной переходностью без прямого дополнения - штрафуем.
+// РРЅС„РёРЅРёС‚РёРІ СЃ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕР№ РїРµСЂРµС…РѕРґРЅРѕСЃС‚СЊСЋ Р±РµР· РїСЂСЏРјРѕРіРѕ РґРѕРїРѕР»РЅРµРЅРёСЏ - С€С‚СЂР°С„СѓРµРј.
 pattern BareInfinitive
 {
  v1=BareInfinitive0{ OBLIG_TRANSITIVITY:1 [-2]OBJ_LINKED:0 } : export { node:root_node TRANSITIVITY OBJ_LINKED }
 }
 : ngrams { VerbValency(v1) }
 
-// Прочие глаголы.
+// РџСЂРѕС‡РёРµ РіР»Р°РіРѕР»С‹.
 pattern BareInfinitive
 {
  v1=BareInfinitive0{ ~OBLIG_TRANSITIVITY:1 } : export { node:root_node TRANSITIVITY OBJ_LINKED }
@@ -291,7 +291,7 @@ pattern BareInfinitive
 
 // -----------------------------------------------------------
 
-// Группа инфинитивов с союзным паттерном
+// Р“СЂСѓРїРїР° РёРЅС„РёРЅРёС‚РёРІРѕРІ СЃ СЃРѕСЋР·РЅС‹Рј РїР°С‚С‚РµСЂРЅРѕРј
 patterns BareInfinitive2 export { node:root_node TRANSITIVITY OBJ_LINKED }
 
 pattern BareInfinitive2
@@ -316,7 +316,7 @@ pattern InfinitiveGroup
 } : links { p.<NEXT_COLLOCATION_ITEM>v }
 
 
-// Отрицательный инфинитив
+// РћС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ РёРЅС„РёРЅРёС‚РёРІ
 // It is inconvenient not to have a telephone in the kitchen.
 //                    ^^^^^^^^^^^^...
 pattern InfinitiveGroup
