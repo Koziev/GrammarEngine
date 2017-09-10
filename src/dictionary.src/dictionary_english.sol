@@ -1,0 +1,6 @@
+﻿/*
+automat pa
+{
+ addDictionaryLanguage( "English" ).
+}
+*/
