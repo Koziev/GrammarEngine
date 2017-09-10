@@ -36,7 +36,6 @@
 
  #include <map>
 
- #include <lem/cyclyc_stack.h>
  #include <lem/queue.h>
  #include <lem/ptr_container.h>
  #include <lem/solarix/automaton.h>
