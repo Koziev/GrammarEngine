@@ -1,4 +1,4 @@
-// CD->26.05.2012
+ï»¿// CD->26.05.2012
 // LC->17.11.2015
 
 automat sg
@@ -13,7 +13,7 @@ automat sg
   CharCasing:FirstCapitalized
  }
 
- link eng_noun:Bill{ ENG_PROPER_NOUN } <â_êëàññ> ThesaurusEntries:HypernymHumanName{}
+ link eng_noun:Bill{ ENG_PROPER_NOUN } <Ð²_ÐºÐ»Ð°ÑÑ> ThesaurusEntries:HypernymHumanName{}
 
  
  entry bill : eng_noun
