@@ -1,5 +1,5 @@
-// для разбора неграмматических конструкций или конструкций с неизвестным нам синтаксисом
-// будем брать цепочки слов в запятых и присоединять их к глаголам с большим штрафом.
+п»ї// РґР»СЏ СЂР°Р·Р±РѕСЂР° РЅРµРіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєРѕРЅСЃС‚СЂСѓРєС†РёР№ РёР»Рё РєРѕРЅСЃС‚СЂСѓРєС†РёР№ СЃ РЅРµРёР·РІРµСЃС‚РЅС‹Рј РЅР°Рј СЃРёРЅС‚Р°РєСЃРёСЃРѕРј
+// Р±СѓРґРµРј Р±СЂР°С‚СЊ С†РµРїРѕС‡РєРё СЃР»РѕРІ РІ Р·Р°РїСЏС‚С‹С… Рё РїСЂРёСЃРѕРµРґРёРЅСЏС‚СЊ РёС… Рє РіР»Р°РіРѕР»Р°Рј СЃ Р±РѕР»СЊС€РёРј С€С‚СЂР°С„РѕРј.
 
 
 // -----------------------------------------------------
@@ -14,9 +14,9 @@ pattern AnyWord
 
 patterns V_Clause export { node:root_node }
  
-// вспомогательные нетерминалы
+// РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РЅРµС‚РµСЂРјРёРЅР°Р»С‹
 
-// Затравки
+// Р—Р°С‚СЂР°РІРєРё
 patterns UnknownGroupHead { language=English bottomup } export { node:root_node }
 
 /*
@@ -53,7 +53,7 @@ pattern UnknownGroupHead
 } : ngrams { -5 }
 
 
-// Предпочитаем цепочки, начинающиеся с запятой.
+// РџСЂРµРґРїРѕС‡РёС‚Р°РµРј С†РµРїРѕС‡РєРё, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ Р·Р°РїСЏС‚РѕР№.
 pattern UnknownGroupHead
 {
  comma=',' : export { node:root_node }
@@ -63,7 +63,7 @@ pattern UnknownGroupHead
 : ngrams { 1 }
 */
 
-// восходящая сборка
+// РІРѕСЃС…РѕРґСЏС‰Р°СЏ СЃР±РѕСЂРєР°
 patterns UnknownGroupUp { language=English bottomup } export { node:root_node }
 
 pattern UnknownGroupUp
@@ -84,13 +84,13 @@ pattern UnknownGroupUp
 pattern UnknownRightGroup
 {
  h=UnknownGroupUp : export { node:root_node }
- t=пунктуатор:,{}
+ t=РїСѓРЅРєС‚СѓР°С‚РѕСЂ:,{}
 } : links { h.<PUNCTUATION>t }
 
 pattern UnknownRightGroup
 {
  h=UnknownGroupUp : export { node:root_node }
- t=пунктуатор:*{}
+ t=РїСѓРЅРєС‚СѓР°С‚РѕСЂ:*{}
 }
 : links { h.<PUNCTUATION>t }
 : ngrams { -5 }
