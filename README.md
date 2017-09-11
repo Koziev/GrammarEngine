@@ -77,11 +77,18 @@ chinese.cmd
 разделе. Запустив ее, Вы можете вводить слова и получать результаты поиска в лексиконе
 словарной базы.
 
+Если вы запускаете утилиту lexicon из папки exe64, то она самостоятельно попытается загрузить
+словарную базу в папке bin-windows64 или bin-linux64, указывать путь к файлу dictionary.xml
+в командной строке в этом случае не нужно.
+
 ## Компиляция утилиты Lexicon под Windows с помощью MS VisualStudio 2015
 
 Проект для сборки лежит в папке src\demo\ai\solarix\lexicon
 
 По поводу использования библиотек Boost - см. пояснения для утилиты Compile выше.
+
+В папке [exe64](https://github.com/Koziev/GrammarEngine/tree/master/src/exe64) лежит готовый исполнимый файл [Lexicon.exe](https://github.com/Koziev/GrammarEngine/blob/master/src/exe64/Lexicon.exe), который я собрал по текущей версии исходников
+под Win64.
 
 ## Компиляция утилиты Lexicon в Ubuntu
 
