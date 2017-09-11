@@ -955,17 +955,17 @@ namespace SolarixGrammarEngineNET
         // -----------------------------
 
 
-        public static System.Collections.ArrayList sol_GenerateWordformsFX(HGREN hEngine, int EntryID, System.Collections.ArrayList CoordID, System.Collections.ArrayList StateID)
+        public static System.Collections.Generic.List<string> sol_GenerateWordformsFX(HGREN hEngine, int EntryID, System.Collections.Generic.List<int> CoordID, System.Collections.Generic.List<int> StateID)
         {
             int npairs = CoordID.Count;
             int[] pairs = new int[npairs * 2];
             for (int i = 0, j = 0; i < npairs; ++i)
             {
-                pairs[j++] = (int)CoordID[i];
-                pairs[j++] = (int)StateID[i];
+                pairs[j++] = CoordID[i];
+                pairs[j++] = StateID[i];
             }
 
-            System.Collections.ArrayList res = new System.Collections.ArrayList();
+            System.Collections.Generic.List<string> res = new System.Collections.Generic.List<string>();
             IntPtr hStr = sol_GenerateWordforms(hEngine, EntryID, npairs, pairs);
             if (hStr != (IntPtr)0)
             {
