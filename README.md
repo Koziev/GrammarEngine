@@ -161,13 +161,13 @@ export LD_LIBRARY_PATH=/usr/local/lib
 eek@ubuntu:~/Solarix/GrammarEngine/src/demo/ai/solarix/syntax$ ./syntax  
 Solarix SYNTAX parser debugger ver. 14.15.11192 Standard Linux 4.10.0-32-generic x86_64  (build date Sep  6 2017)  
 Loading dictionary from ../../../../bin-linux64/dictionary.xml... ok  
-Enter \#help to read online help.  
+Enter #help to read online help.  
 
 : кошка ловит мышей  
 BEGIN  ловит ( кошка, мышей )   END  
 ```
 
-Команда \#tree выведет синтаксическое дерево:
+Команда #tree выведет синтаксическое дерево:
 ```
 : \#tree  
 ловит ( ГЛАГОЛ НАКЛОНЕНИЕ:ИЗЪЯВ ВРЕМЯ:НАСТОЯЩЕЕ ЛИЦО:3 ЧИСЛО:ЕД ~МОДАЛЬНЫЙ ПЕРЕХОДНОСТЬ:ПЕРЕХОДНЫЙ ПАДЕЖ:ВИН ПАДЕЖ:ТВОР ПАДЕЖ:ДАТ ВИД:НЕСОВЕРШ ~ВОЗВРАТНОСТЬ )  
@@ -177,3 +177,20 @@ BEGIN  ловит ( кошка, мышей )   END
 └──кошка ( СУЩЕСТВИТЕЛЬНОЕ ПАДЕЖ:ИМ ЧИСЛО:ЕД РОД:ЖЕН ОДУШ:ОДУШ ПЕРЕЧИСЛИМОСТЬ:ДА ПАДЕЖВАЛ:РОД )                                                                 
 :   
 ```
+
+# C API грамматического словаря
+
+## Компиляция динамической библиотеки
+
+API словаря реализован как динамическая библиотека solarix_grammar_engine.dll на платформе Windows
+или solarix_grammar_engine.so для Linux. 
+
+Для сборки с помощью MS VisualStudio 2015 откройте проект [Grammar_Engine_Pro2005.sln](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/engines/Grammar_Engine_Pro2005.sln)
+в папке [.../src/demo/ai/solarix/engines](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/engines) и
+запустите компиляция. По окончании в папке .../src/lib64 появится файл solarix_grammar_engine.dll.
+
+Для компиляции под Ubuntu запустите скрипт build.sh в той же папке.
+
+## Пример использования C API грамматического словаря
+
+Пример на C++ находится в папке [.../src/demo/ai/solarix/Grammar_Engine/SimpleGREN](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/Grammar_Engine/SimpleGREN).
