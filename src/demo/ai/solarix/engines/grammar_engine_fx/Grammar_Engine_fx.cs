@@ -1,39 +1,40 @@
-// .NET обертка для вызова функций процедурного API грамматического словаря
-// Для более удобной работы в ООП следует использовать сборку gren_fx2 и дополнительные классы в ней.
+// .NET РѕР±РµСЂС‚РєР° РґР»СЏ РІС‹Р·РѕРІР° С„СѓРЅРєС†РёР№ РїСЂРѕС†РµРґСѓСЂРЅРѕРіРѕ API РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ СЃР»РѕРІР°СЂСЏ
+// Р”Р»СЏ Р±РѕР»РµРµ СѓРґРѕР±РЅРѕР№ СЂР°Р±РѕС‚С‹ РІ РћРћРџ СЃР»РµРґСѓРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃР±РѕСЂРєСѓ gren_fx2 Рё РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РєР»Р°СЃСЃС‹ РІ РЅРµР№.
 //
-// Информация по API:
+// РРЅС„РѕСЂРјР°С†РёСЏ РїРѕ API:
 // http://www.solarix.ru/api/ru/list.shtml
 // http://www.solarix.ru/for_developers/api/grammar-engine-api.shtml
 // http://www.solarix.ru/for_developers/api/dotnet_assembly.shtml
 //
 // CHANGELOG:
-// 17.07.2008 - перевод вызовов WinDLL API на stdcall и соответствующий переход здесь на CallingConvention.StdCall
-// 25.07.2008 - добавлены sol_FindClass, sol_FindEnum, sol_FindEnumState, sol_EnumInClass
-// 27.07.2008 - добавлена sol_SeekNGrams
-// 01.08.2008 - все возвращаемые процедурами DLL значения с bool заменены на int
-// 04.04.2008 - изменен набор управляющих констант для API генератора текста
-// 15.11.2008 - добавлена sol_LoadKnowledgeBase, добавлен флаг FG_PEDANTIC_ANALYSIS
-// 15.11.2008 - обертка переделана на работу с полной версией поискового движка
-// 16.11.2008 - добавлены обертки для API поисковика
-// 13.02.2009 - добавлены обертки API SentenceBroker'а
-// 08.04.2009 - из API удалена sol_PreloadCaches
-// 21.06.2009 - переделки в алгоритме и константах синонимизатора
-// 20.07.2009 - переделан API доступа к базе N-грамм
-// 22.12.2009 - из сборки враппера убран инферфейс поискового движка и синонимизатора
-// 02.08.2010 - добавлена sol_SaveDictionary
-// 06.08.2010 - добавлены обертки sol_GetPhraseLanguage, sol_GetPhraseClass и sol_AddWord
-// 19.08.2010 - добавлены обертки sol_LinksInfoFlagsTxt, sol_SetLinkFlags
-// 04.09.2010 - добавлены обертки sol_GetError, sol_ClearError
-// 19.06.2011 - добавлены sol_GetTranslationLog и sol_GetTranslationLogFx для вывода отладочной
-//              трассировки в переводчике.
-// 02.10.2011 - изменения в сигнатуре sol_MorphologyAnalysis и sol_SyntaxAnalysis
-// 22.10.2011 - переделки в API sol_Tokenize -> sol_TokenizeW
-// 13.11.2011 - добавлены обертки sol_GetCoordNameFX и sol_GetCoordStateNameFX
-// 09.01.2012 - изменения в сигнатуре функции sol_Syllabs
-// 07.01.2013 - добавлен флаг SOL_GREN_MODEL для включения вероятностной модели
+// 17.07.2008 - РїРµСЂРµРІРѕРґ РІС‹Р·РѕРІРѕРІ WinDLL API РЅР° stdcall Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ РїРµСЂРµС…РѕРґ Р·РґРµСЃСЊ РЅР° CallingConvention.StdCall
+// 25.07.2008 - РґРѕР±Р°РІР»РµРЅС‹ sol_FindClass, sol_FindEnum, sol_FindEnumState, sol_EnumInClass
+// 27.07.2008 - РґРѕР±Р°РІР»РµРЅР° sol_SeekNGrams
+// 01.08.2008 - РІСЃРµ РІРѕР·РІСЂР°С‰Р°РµРјС‹Рµ РїСЂРѕС†РµРґСѓСЂР°РјРё DLL Р·РЅР°С‡РµРЅРёСЏ СЃ bool Р·Р°РјРµРЅРµРЅС‹ РЅР° int
+// 04.04.2008 - РёР·РјРµРЅРµРЅ РЅР°Р±РѕСЂ СѓРїСЂР°РІР»СЏСЋС‰РёС… РєРѕРЅСЃС‚Р°РЅС‚ РґР»СЏ API РіРµРЅРµСЂР°С‚РѕСЂР° С‚РµРєСЃС‚Р°
+// 15.11.2008 - РґРѕР±Р°РІР»РµРЅР° sol_LoadKnowledgeBase, РґРѕР±Р°РІР»РµРЅ С„Р»Р°Рі FG_PEDANTIC_ANALYSIS
+// 15.11.2008 - РѕР±РµСЂС‚РєР° РїРµСЂРµРґРµР»Р°РЅР° РЅР° СЂР°Р±РѕС‚Сѓ СЃ РїРѕР»РЅРѕР№ РІРµСЂСЃРёРµР№ РїРѕРёСЃРєРѕРІРѕРіРѕ РґРІРёР¶РєР°
+// 16.11.2008 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё РґР»СЏ API РїРѕРёСЃРєРѕРІРёРєР°
+// 13.02.2009 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё API SentenceBroker'Р°
+// 08.04.2009 - РёР· API СѓРґР°Р»РµРЅР° sol_PreloadCaches
+// 21.06.2009 - РїРµСЂРµРґРµР»РєРё РІ Р°Р»РіРѕСЂРёС‚РјРµ Рё РєРѕРЅСЃС‚Р°РЅС‚Р°С… СЃРёРЅРѕРЅРёРјРёР·Р°С‚РѕСЂР°
+// 20.07.2009 - РїРµСЂРµРґРµР»Р°РЅ API РґРѕСЃС‚СѓРїР° Рє Р±Р°Р·Рµ N-РіСЂР°РјРј
+// 22.12.2009 - РёР· СЃР±РѕСЂРєРё РІСЂР°РїРїРµСЂР° СѓР±СЂР°РЅ РёРЅС„РµСЂС„РµР№СЃ РїРѕРёСЃРєРѕРІРѕРіРѕ РґРІРёР¶РєР° Рё СЃРёРЅРѕРЅРёРјРёР·Р°С‚РѕСЂР°
+// 02.08.2010 - РґРѕР±Р°РІР»РµРЅР° sol_SaveDictionary
+// 06.08.2010 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё sol_GetPhraseLanguage, sol_GetPhraseClass Рё sol_AddWord
+// 19.08.2010 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё sol_LinksInfoFlagsTxt, sol_SetLinkFlags
+// 04.09.2010 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё sol_GetError, sol_ClearError
+// 19.06.2011 - РґРѕР±Р°РІР»РµРЅС‹ sol_GetTranslationLog Рё sol_GetTranslationLogFx РґР»СЏ РІС‹РІРѕРґР° РѕС‚Р»Р°РґРѕС‡РЅРѕР№
+//              С‚СЂР°СЃСЃРёСЂРѕРІРєРё РІ РїРµСЂРµРІРѕРґС‡РёРєРµ.
+// 02.10.2011 - РёР·РјРµРЅРµРЅРёСЏ РІ СЃРёРіРЅР°С‚СѓСЂРµ sol_MorphologyAnalysis Рё sol_SyntaxAnalysis
+// 22.10.2011 - РїРµСЂРµРґРµР»РєРё РІ API sol_Tokenize -> sol_TokenizeW
+// 13.11.2011 - РґРѕР±Р°РІР»РµРЅС‹ РѕР±РµСЂС‚РєРё sol_GetCoordNameFX Рё sol_GetCoordStateNameFX
+// 09.01.2012 - РёР·РјРµРЅРµРЅРёСЏ РІ СЃРёРіРЅР°С‚СѓСЂРµ С„СѓРЅРєС†РёРё sol_Syllabs
+// 07.01.2013 - РґРѕР±Р°РІР»РµРЅ С„Р»Р°Рі SOL_GREN_MODEL РґР»СЏ РІРєР»СЋС‡РµРЅРёСЏ РІРµСЂРѕСЏС‚РЅРѕСЃС‚РЅРѕР№ РјРѕРґРµР»Рё
+// 12.09.2017 - РїРѕСЂС‚РёСЂРѕРІР°РЅРёРµ РЅР° .NET Core РїРѕРґ Linux
 //
 // CD->30.01.2008
-// LC->29.01.2017
+// LC->12.09.2017
 // --------------
 
 using System;
@@ -45,11 +46,9 @@ namespace SolarixGrammarEngineNET
 
     public sealed class GrammarEngine
     {
-//#if (DEBUG)
-//  private const string gren_dll = "solarix_grammar_engined.dll";
-//#else
-        private const string gren_dll = "solarix_grammar_engine.dll";
-//#endif
+
+        private const string gren_dll = "libgren.so";
+        //private const string gren_dll = "solarix_grammar_engine.dll";
 
 
         /// <summary>
@@ -60,48 +59,48 @@ namespace SolarixGrammarEngineNET
         public enum MorphologyFlags
         {
             /// <summary>
-            /// Режим анализа по умолчанию.
+            /// Р РµР¶РёРј Р°РЅР°Р»РёР·Р° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.
             /// </summary>
             DEFAULT = 0,
 
             /// <summary>
-            /// Разрешить нечеткий поиск в лексиконе для несловарных токенов
+            /// Р Р°Р·СЂРµС€РёС‚СЊ РЅРµС‡РµС‚РєРёР№ РїРѕРёСЃРє РІ Р»РµРєСЃРёРєРѕРЅРµ РґР»СЏ РЅРµСЃР»РѕРІР°СЂРЅС‹С… С‚РѕРєРµРЅРѕРІ
             /// </summary>
             SOL_GREN_ALLOW_FUZZY = 0x00000002,
 
             /// <summary>
-            /// Разрешать только полный анализ предложения, а при невозможности включить все токены
-            /// в синтаксическое дерево - отказываться от анализа.
+            /// Р Р°Р·СЂРµС€Р°С‚СЊ С‚РѕР»СЊРєРѕ РїРѕР»РЅС‹Р№ Р°РЅР°Р»РёР· РїСЂРµРґР»РѕР¶РµРЅРёСЏ, Р° РїСЂРё РЅРµРІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РІРєР»СЋС‡РёС‚СЊ РІСЃРµ С‚РѕРєРµРЅС‹
+            /// РІ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРµ РґРµСЂРµРІРѕ - РѕС‚РєР°Р·С‹РІР°С‚СЊСЃСЏ РѕС‚ Р°РЅР°Р»РёР·Р°.
             /// </summary>
             SOL_GREN_COMPLETE_ONLY = 0x00000004,
 
             /// <summary>
-            /// Использовать символы с кодом \x1F для определения границ слов.
-            /// Таким образом, прикладной код может выполнять токенизацию своими силами, а
-            /// штатные правила движка полностью отключаются.
+            /// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРёРјРІРѕР»С‹ СЃ РєРѕРґРѕРј \x1F РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РіСЂР°РЅРёС† СЃР»РѕРІ.
+            /// РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РїСЂРёРєР»Р°РґРЅРѕР№ РєРѕРґ РјРѕР¶РµС‚ РІС‹РїРѕР»РЅСЏС‚СЊ С‚РѕРєРµРЅРёР·Р°С†РёСЋ СЃРІРѕРёРјРё СЃРёР»Р°РјРё, Р°
+            /// С€С‚Р°С‚РЅС‹Рµ РїСЂР°РІРёР»Р° РґРІРёР¶РєР° РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РєР»СЋС‡Р°СЋС‚СЃСЏ.
             /// </summary>
             SOL_GREN_PRETOKENIZED = 0x00000008,
 
             /// <summary>
-            /// Выполнять только токенизацию исходного предложения.
+            /// Р’С‹РїРѕР»РЅСЏС‚СЊ С‚РѕР»СЊРєРѕ С‚РѕРєРµРЅРёР·Р°С†РёСЋ РёСЃС…РѕРґРЅРѕРіРѕ РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
             /// </summary>
             SOL_GREN_TOKENIZE_ONLY = 0x00000010,
 
             /// <summary>
-            /// Отладочный флаг: отключать некоторые правила фильтрации вариантом морфоанализа слов
+            /// РћС‚Р»Р°РґРѕС‡РЅС‹Р№ С„Р»Р°Рі: РѕС‚РєР»СЋС‡Р°С‚СЊ РЅРµРєРѕС‚РѕСЂС‹Рµ РїСЂР°РІРёР»Р° С„РёР»СЊС‚СЂР°С†РёРё РІР°СЂРёР°РЅС‚РѕРј РјРѕСЂС„РѕР°РЅР°Р»РёР·Р° СЃР»РѕРІ
             /// </summary>
             SOL_GREN_DISABLE_FILTERS = 0x00000020,
 
             /// <summary>
-            /// Разрешено использовать вероятностную модель морфологии языка для снижения числа перебираемых вариантов связывания.
-            /// Использование этого флага требует подключения модели в файле конфигурации словаря (обычно dictionary.xml) и наличия
-            /// файлов данных для подключенной модели.
+            /// Р Р°Р·СЂРµС€РµРЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РІРµСЂРѕСЏС‚РЅРѕСЃС‚РЅСѓСЋ РјРѕРґРµР»СЊ РјРѕСЂС„РѕР»РѕРіРёРё СЏР·С‹РєР° РґР»СЏ СЃРЅРёР¶РµРЅРёСЏ С‡РёСЃР»Р° РїРµСЂРµР±РёСЂР°РµРјС‹С… РІР°СЂРёР°РЅС‚РѕРІ СЃРІСЏР·С‹РІР°РЅРёСЏ.
+            /// РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЌС‚РѕРіРѕ С„Р»Р°РіР° С‚СЂРµР±СѓРµС‚ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РјРѕРґРµР»Рё РІ С„Р°Р№Р»Рµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё СЃР»РѕРІР°СЂСЏ (РѕР±С‹С‡РЅРѕ dictionary.xml) Рё РЅР°Р»РёС‡РёСЏ
+            /// С„Р°Р№Р»РѕРІ РґР°РЅРЅС‹С… РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРЅРѕР№ РјРѕРґРµР»Рё.
             /// </summary>
             SOL_GREN_MODEL = 0x00000800,
 
             /// <summary>
-            /// Выполнять частеречную разметку в sol_MorphologyAnalysis только с помощью вероятностной модели, а правила парсинга не использовать.
-            /// Благодаря этому разметка выполняется существенно быстрее, хотя количество ошибок увеличивается.
+            /// Р’С‹РїРѕР»РЅСЏС‚СЊ С‡Р°СЃС‚РµСЂРµС‡РЅСѓСЋ СЂР°Р·РјРµС‚РєСѓ РІ sol_MorphologyAnalysis С‚РѕР»СЊРєРѕ СЃ РїРѕРјРѕС‰СЊСЋ РІРµСЂРѕСЏС‚РЅРѕСЃС‚РЅРѕР№ РјРѕРґРµР»Рё, Р° РїСЂР°РІРёР»Р° РїР°СЂСЃРёРЅРіР° РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ.
+            /// Р‘Р»Р°РіРѕРґР°СЂСЏ СЌС‚РѕРјСѓ СЂР°Р·РјРµС‚РєР° РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ СЃСѓС‰РµСЃС‚РІРµРЅРЅРѕ Р±С‹СЃС‚СЂРµРµ, С…РѕС‚СЏ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС€РёР±РѕРє СѓРІРµР»РёС‡РёРІР°РµС‚СЃСЏ.
             /// </summary>
             SOL_GREN_MODEL_ONLY = 0x00002000
         }
@@ -113,9 +112,9 @@ namespace SolarixGrammarEngineNET
             DEFAULT = 0,
 
             /// <summary>
-            /// Сортировать ветки в синтаксическом дереве так, чтобы они при перечислении шли в порядке исходных
-            /// позиций слов-вершин. Флаг решает декоративную задачу, так как из-за технических особенностей процесса парсинга
-            /// ветки могут присоединяться к вершинам в любом порядке.
+            /// РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РІРµС‚РєРё РІ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРј РґРµСЂРµРІРµ С‚Р°Рє, С‡С‚РѕР±С‹ РѕРЅРё РїСЂРё РїРµСЂРµС‡РёСЃР»РµРЅРёРё С€Р»Рё РІ РїРѕСЂСЏРґРєРµ РёСЃС…РѕРґРЅС‹С…
+            /// РїРѕР·РёС†РёР№ СЃР»РѕРІ-РІРµСЂС€РёРЅ. Р¤Р»Р°Рі СЂРµС€Р°РµС‚ РґРµРєРѕСЂР°С‚РёРІРЅСѓСЋ Р·Р°РґР°С‡Сѓ, С‚Р°Рє РєР°Рє РёР·-Р·Р° С‚РµС…РЅРёС‡РµСЃРєРёС… РѕСЃРѕР±РµРЅРЅРѕСЃС‚РµР№ РїСЂРѕС†РµСЃСЃР° РїР°СЂСЃРёРЅРіР°
+            /// РІРµС‚РєРё РјРѕРіСѓС‚ РїСЂРёСЃРѕРµРґРёРЅСЏС‚СЊСЃСЏ Рє РІРµСЂС€РёРЅР°Рј РІ Р»СЋР±РѕРј РїРѕСЂСЏРґРєРµ.
             /// </summary>
             SOL_GREN_REORDER_TREE = 0x00000400,
 
@@ -123,25 +122,25 @@ namespace SolarixGrammarEngineNET
         }
 
         /// <summary>
-        /// Битовые флаги для выбора различных режимой работы движка.
-        /// Указываются при создании экземпляра движка в <see cref="sol_CreateGrammarEngineExW">sol_CreateGrammarEngineExW</see>.
+        /// Р‘РёС‚РѕРІС‹Рµ С„Р»Р°РіРё РґР»СЏ РІС‹Р±РѕСЂР° СЂР°Р·Р»РёС‡РЅС‹С… СЂРµР¶РёРјРѕР№ СЂР°Р±РѕС‚С‹ РґРІРёР¶РєР°.
+        /// РЈРєР°Р·С‹РІР°СЋС‚СЃСЏ РїСЂРё СЃРѕР·РґР°РЅРёРё СЌРєР·РµРјРїР»СЏСЂР° РґРІРёР¶РєР° РІ <see cref="sol_CreateGrammarEngineExW">sol_CreateGrammarEngineExW</see>.
         /// </summary>
         [Flags]
         public enum EngineInstanceFlags
         {
             /// <summary>
-            /// Режим инициализации экземпляра по умолчанию - весь словарь грузится в память сразу.
+            /// Р РµР¶РёРј РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЌРєР·РµРјРїР»СЏСЂР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - РІРµСЃСЊ СЃР»РѕРІР°СЂСЊ РіСЂСѓР·РёС‚СЃСЏ РІ РїР°РјСЏС‚СЊ СЃСЂР°Р·Сѓ.
             /// </summary>
             SOL_GREN_DEFAULT = 0,
 
             /// <summary>
-            /// Флаг указывается при создании экземпляра движка в памяти и меняет
-            /// стандартную тактику загрузки данных: вместо полной загрузки всего словаря
-            /// в память при подключении словаря движок будет подгружать словарные
-            /// статьи с диска по мере необходимости.
+            /// Р¤Р»Р°Рі СѓРєР°Р·С‹РІР°РµС‚СЃСЏ РїСЂРё СЃРѕР·РґР°РЅРёРё СЌРєР·РµРјРїР»СЏСЂР° РґРІРёР¶РєР° РІ РїР°РјСЏС‚Рё Рё РјРµРЅСЏРµС‚
+            /// СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ С‚Р°РєС‚РёРєСѓ Р·Р°РіСЂСѓР·РєРё РґР°РЅРЅС‹С…: РІРјРµСЃС‚Рѕ РїРѕР»РЅРѕР№ Р·Р°РіСЂСѓР·РєРё РІСЃРµРіРѕ СЃР»РѕРІР°СЂСЏ
+            /// РІ РїР°РјСЏС‚СЊ РїСЂРё РїРѕРґРєР»СЋС‡РµРЅРёРё СЃР»РѕРІР°СЂСЏ РґРІРёР¶РѕРє Р±СѓРґРµС‚ РїРѕРґРіСЂСѓР¶Р°С‚СЊ СЃР»РѕРІР°СЂРЅС‹Рµ
+            /// СЃС‚Р°С‚СЊРё СЃ РґРёСЃРєР° РїРѕ РјРµСЂРµ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
             /// 
-            /// Флаг оказывает влияние только при использовании двоичного формата словаря.
-            /// Для SQL словаря информация всегда подгружается по мере необходимости.
+            /// Р¤Р»Р°Рі РѕРєР°Р·С‹РІР°РµС‚ РІР»РёСЏРЅРёРµ С‚РѕР»СЊРєРѕ РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё РґРІРѕРёС‡РЅРѕРіРѕ С„РѕСЂРјР°С‚Р° СЃР»РѕРІР°СЂСЏ.
+            /// Р”Р»СЏ SQL СЃР»РѕРІР°СЂСЏ РёРЅС„РѕСЂРјР°С†РёСЏ РІСЃРµРіРґР° РїРѕРґРіСЂСѓР¶Р°РµС‚СЃСЏ РїРѕ РјРµСЂРµ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё.
             /// 
             /// Dictionary instance control flag.
             /// 
@@ -150,36 +149,39 @@ namespace SolarixGrammarEngineNET
             SOL_GREN_LAZY_LEXICON = 0x00000001
         }
 
+
+        #region low-level API for Windows
+
         /// <summary>
-        /// Создание экземпляра грамматического движка в памяти.
-        /// При непустом аргументе dictConfigPath будет также подключена словарная база.
-        /// Данная функция загружает весь лексикон сразу в память. Если возникающий при этом расход памяти и
-        /// задержка инициализации неприемлемы, следует использовать функцию sol_CreateGrammarEngineExW с
-        /// указанием флага EngineInstanceFlags.SOL_GREN_LAZY_LEXICON.
+        /// РЎРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РґРІРёР¶РєР° РІ РїР°РјСЏС‚Рё.
+        /// РџСЂРё РЅРµРїСѓСЃС‚РѕРј Р°СЂРіСѓРјРµРЅС‚Рµ dictConfigPath Р±СѓРґРµС‚ С‚Р°РєР¶Рµ РїРѕРґРєР»СЋС‡РµРЅР° СЃР»РѕРІР°СЂРЅР°СЏ Р±Р°Р·Р°.
+        /// Р”Р°РЅРЅР°СЏ С„СѓРЅРєС†РёСЏ Р·Р°РіСЂСѓР¶Р°РµС‚ РІРµСЃСЊ Р»РµРєСЃРёРєРѕРЅ СЃСЂР°Р·Сѓ РІ РїР°РјСЏС‚СЊ. Р•СЃР»Рё РІРѕР·РЅРёРєР°СЋС‰РёР№ РїСЂРё СЌС‚РѕРј СЂР°СЃС…РѕРґ РїР°РјСЏС‚Рё Рё
+        /// Р·Р°РґРµСЂР¶РєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РЅРµРїСЂРёРµРјР»РµРјС‹, СЃР»РµРґСѓРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С„СѓРЅРєС†РёСЋ sol_CreateGrammarEngineExW СЃ
+        /// СѓРєР°Р·Р°РЅРёРµРј С„Р»Р°РіР° EngineInstanceFlags.SOL_GREN_LAZY_LEXICON.
         /// 
-        /// Онлайн-документация: http://www.solarix.ru/api/ru/sol_CreateGrammarEngine.shtml
+        /// РћРЅР»Р°Р№РЅ-РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ: http://www.solarix.ru/api/ru/sol_CreateGrammarEngine.shtml
         /// </summary>
-        /// <param name="DictPath">Пустая строка или путь к файлу конфигурации словарной базы (dictionary.xml)</param>
-        /// <returns>Возвращается дескриптор созданного движка или IntPtr.Zero в случе ошибки</returns>
+        /// <param name="DictPath">РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РёР»Рё РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё СЃР»РѕРІР°СЂРЅРѕР№ Р±Р°Р·С‹ (dictionary.xml)</param>
+        /// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕР·РґР°РЅРЅРѕРіРѕ РґРІРёР¶РєР° РёР»Рё IntPtr.Zero РІ СЃР»СѓС‡Рµ РѕС€РёР±РєРё</returns>
         /// <seealso cref="sol_CreateGrammarEngineExW">sol_CreateGrammarEngineExW</seealso>
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern HGREN sol_CreateGrammarEngineW(string dictConfigPath);
 
         /// <summary>
-        /// Создание экземпляра грамматического движка в памяти.
+        /// РЎРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РґРІРёР¶РєР° РІ РїР°РјСЏС‚Рё.
         /// </summary>
-        /// <param name="dictConfigPath">Путь к файлу конфигурации словаря (обычно dictionary.xml)</param>
-        /// <param name="instanceFlags">Флаги для задания режима работы движка</param>
+        /// <param name="dictConfigPath">РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё СЃР»РѕРІР°СЂСЏ (РѕР±С‹С‡РЅРѕ dictionary.xml)</param>
+        /// <param name="instanceFlags">Р¤Р»Р°РіРё РґР»СЏ Р·Р°РґР°РЅРёСЏ СЂРµР¶РёРјР° СЂР°Р±РѕС‚С‹ РґРІРёР¶РєР°</param>
         /// <returns></returns>
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern HGREN sol_CreateGrammarEngineExW(string dictConfigPath, EngineInstanceFlags instanceFlags);
 
         /// <summary>
-        /// Уничтожение экземпляра грамматического движка в памяти, освобождение всех выделенных ресурсов.
-        /// Онлайн-документация: http://www.solarix.ru/api/ru/sol_DeleteGrammarEngine.shtml
+        /// РЈРЅРёС‡С‚РѕР¶РµРЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РґРІРёР¶РєР° РІ РїР°РјСЏС‚Рё, РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РІСЃРµС… РІС‹РґРµР»РµРЅРЅС‹С… СЂРµСЃСѓСЂСЃРѕРІ.
+        /// РћРЅР»Р°Р№РЅ-РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ: http://www.solarix.ru/api/ru/sol_DeleteGrammarEngine.shtml
         /// </summary>
-        /// <param name="hEngine">Дескриптор экземпляра, возвращенный при вызове sol_CreateGrammarEngineW или sol_CreateGrammarEngineExW</param>
-        /// <returns>1 при нормальном уничтожении, 0 при возникновении ошибки (некорректный дескриптор экземпляра)</returns>
+        /// <param name="hEngine">Р”РµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР°, РІРѕР·РІСЂР°С‰РµРЅРЅС‹Р№ РїСЂРё РІС‹Р·РѕРІРµ sol_CreateGrammarEngineW РёР»Рё sol_CreateGrammarEngineExW</param>
+        /// <returns>1 РїСЂРё РЅРѕСЂРјР°Р»СЊРЅРѕРј СѓРЅРёС‡С‚РѕР¶РµРЅРёРё, 0 РїСЂРё РІРѕР·РЅРёРєРЅРѕРІРµРЅРёРё РѕС€РёР±РєРё (РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РґРµСЃРєСЂРёРїС‚РѕСЂ СЌРєР·РµРјРїР»СЏСЂР°)</returns>
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_DeleteGrammarEngine(HGREN hEngine);
 
@@ -191,14 +193,17 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_LoadDictionaryExW(HGREN hEngine, System.String dictPath, EngineInstanceFlags flags);
 
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_LoadDictionary8(HGREN hEngine, byte[] DictionaryPath8);
+
         /// <summary>
-        /// Возвращает компоненты версии скомпилированного движка (через ссылочные аргументы).
+        /// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРјРїРѕРЅРµРЅС‚С‹ РІРµСЂСЃРёРё СЃРєРѕРјРїРёР»РёСЂРѕРІР°РЅРЅРѕРіРѕ РґРІРёР¶РєР° (С‡РµСЂРµР· СЃСЃС‹Р»РѕС‡РЅС‹Рµ Р°СЂРіСѓРјРµРЅС‚С‹).
         /// </summary>
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetVersion(HGREN hEngine, ref int majorNumber, ref int minorNumber, ref int buildNumber);
 
         /// <summary>
-        /// Возвращает номер версии загруженного словаря.
+        /// Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ РІРµСЂСЃРёРё Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ СЃР»РѕРІР°СЂСЏ.
         /// </summary>
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_DictionaryVersion(HGREN hEngine);
@@ -296,6 +301,9 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetEntryName(HGREN hEngine, int EntryID, System.Text.StringBuilder Result);
 
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_GetEntryName8(HGREN hEngine, int EntryID, byte[] ResultUtf8);
+
         // http://www.solarix.ru/api/ru/sol_GetEntryClass.shtml
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetEntryClass(HGREN hEngine, int EntryID);
@@ -312,13 +320,9 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetClassName(HGREN hEngine, int ClassIndex, System.Text.StringBuilder Result);
 
-        public static string sol_GetClassNameFX(IntPtr hEngine, int ClassIndex)
-        {
-            System.Text.StringBuilder b = new System.Text.StringBuilder();
-            b.Capacity = 32;
-            sol_GetClassName(hEngine, ClassIndex, b);
-            return b.ToString();
-        }
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_GetClassName8(HGREN hEngine, int ClassIndex, byte[] buffer);
+
 
         // http://www.solarix.ru/api/ru/sol_GetCoordType.shtml
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
@@ -394,6 +398,10 @@ namespace SolarixGrammarEngineNET
 
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern System.IntPtr sol_ProjectMisspelledWord(HGREN hEngine, string Word, int AllowDynforms, int nmaxmiss);
+
+        [DllImport(gren_dll)]
+        public static extern System.IntPtr sol_ProjectMisspelledWord8(HGREN hEngine, byte[] Word, int AllowDynforms, int nmaxmiss);
+
 
         // http://www.solarix.ru/api/ru/sol_CountProjections.shtml
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
@@ -537,17 +545,6 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_CountNGrams(HGREN hEngine, int Type, int Order, out UInt32 Hi, out UInt32 Lo);
 
-        // This is a simple and helpful wrapper for low-level sol_CountNGrams. It returns the 64 bit count value.
-        public static UInt64 sol_CountNGramsFX(IntPtr hEngine, int Type, int Order)
-        {
-            UInt32 Hi = 0, Lo = 0;
-            if (sol_CountNGrams(hEngine, Type, Order, out Hi, out Lo) == 0)
-                return 0;
-
-            UInt64 res = (((UInt64)Hi) << 32) | Lo;
-            return res;
-        }
-
         // http://www.solarix.ru/api/ru/sol_Seek1Grams.shtml
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_Seek1Grams(IntPtr hEngine, int Type, String word1);
@@ -671,18 +668,6 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern /*wchar_t**/ IntPtr sol_GetPhraseText(IntPtr hEng, int PhraseId);
 
-        public static string sol_GetPhraseTextFX(IntPtr hEngine, int PhraseId)
-        {
-            IntPtr wchar_ptr = sol_GetPhraseText(hEngine, PhraseId);
-
-            if (wchar_ptr == (IntPtr)null)
-                return "";
-
-            string res = Marshal.PtrToStringUni(wchar_ptr);
-            sol_Free(hEngine, wchar_ptr);
-            return res;
-        }
-
         /// <summary>
         /// Get the language ID if it was set for the phrase
         /// <para>http://www.solarix.ru/api/en/sol_GetPhraseLanguage.shtml</para>
@@ -706,44 +691,6 @@ namespace SolarixGrammarEngineNET
 
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern /* wchar_t* */ IntPtr sol_NormalizePhraseW(IntPtr hEng, IntPtr hLinkages);
-
-        public static string NormalizePhraseFX(IntPtr hEngine, IntPtr hLinkages)
-        {
-            IntPtr wchar_ptr = sol_NormalizePhraseW(hEngine, hLinkages);
-
-            if (wchar_ptr == (IntPtr)null)
-                return "";
-
-            string res = Marshal.PtrToStringUni(wchar_ptr);
-            sol_Free(hEngine, wchar_ptr);
-            return res;
-        }
-
-
-
-        public static string sol_LinksInfoTagsTxtFX(IntPtr hEngine, IntPtr /*HLINKSINFO*/ hList, int Index)
-        {
-            IntPtr wchar_ptr = sol_LinksInfoTagsTxt(hEngine, hList, Index);
-
-            if (wchar_ptr == (IntPtr)null)
-                return "";
-
-            string res = Marshal.PtrToStringUni(wchar_ptr);
-            return res;
-        }
-
-
-        public static string sol_LinksInfoFlagsTxtFX(IntPtr hEngine, IntPtr /*HLINKSINFO*/ hList, int Index)
-        {
-            IntPtr wchar_ptr = sol_LinksInfoFlagsTxt(hEngine, hList, Index);
-
-            if (wchar_ptr == (IntPtr)null)
-                return "";
-
-            string res = Marshal.PtrToStringUni(wchar_ptr);
-            return res;
-        }
-
         // http://www.solarix.ru/api/ru/sol_AddWord.shtml
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_AddWord(IntPtr hEng, string Txt);
@@ -777,12 +724,12 @@ namespace SolarixGrammarEngineNET
 
 
         /// <summary>
-        /// Выполнение морфологического разбора для слов в указанном предложении.
-        /// В том числе может выполнять частеречную разметку с использованием вероятностной модели языка, если она
-        /// подключена в словаре.
+        /// Р’С‹РїРѕР»РЅРµРЅРёРµ РјРѕСЂС„РѕР»РѕРіРёС‡РµСЃРєРѕРіРѕ СЂР°Р·Р±РѕСЂР° РґР»СЏ СЃР»РѕРІ РІ СѓРєР°Р·Р°РЅРЅРѕРј РїСЂРµРґР»РѕР¶РµРЅРёРё.
+        /// Р’ С‚РѕРј С‡РёСЃР»Рµ РјРѕР¶РµС‚ РІС‹РїРѕР»РЅСЏС‚СЊ С‡Р°СЃС‚РµСЂРµС‡РЅСѓСЋ СЂР°Р·РјРµС‚РєСѓ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РІРµСЂРѕСЏС‚РЅРѕСЃС‚РЅРѕР№ РјРѕРґРµР»Рё СЏР·С‹РєР°, РµСЃР»Рё РѕРЅР°
+        /// РїРѕРґРєР»СЋС‡РµРЅР° РІ СЃР»РѕРІР°СЂРµ.
         /// http://www.solarix.ru/api/ru/sol_MorphologyAnalysis.shtml
         /// </summary>
-        /// <returns>Возвращается дескриптор структуры с результатами разбора (см. процедуру <see cref="sol_CountRoots">sol_CountRoots</see> и другие)</returns>
+        /// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃС‚СЂСѓРєС‚СѓСЂС‹ СЃ СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё СЂР°Р·Р±РѕСЂР° (СЃРј. РїСЂРѕС†РµРґСѓСЂСѓ <see cref="sol_CountRoots">sol_CountRoots</see> Рё РґСЂСѓРіРёРµ)</returns>
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr /*HGREN_RESPACK*/ sol_MorphologyAnalysis(
                                                                              IntPtr hEngine,
@@ -794,10 +741,10 @@ namespace SolarixGrammarEngineNET
                                                                             );
 
         /// <summary>
-        /// Выполнение синтаксического разбора предложения.
+        /// Р’С‹РїРѕР»РЅРµРЅРёРµ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРіРѕ СЂР°Р·Р±РѕСЂР° РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
         /// http://www.solarix.ru/api/ru/sol_SyntaxAnalysis.shtml
         /// </summary>
-        /// <returns>Возвращается дескриптор структуры с результатами разбора (см. процедуру <see cref="sol_CountRoots">sol_CountRoots</see> и другие)</returns>
+        /// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃС‚СЂСѓРєС‚СѓСЂС‹ СЃ СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё СЂР°Р·Р±РѕСЂР° (СЃРј. РїСЂРѕС†РµРґСѓСЂСѓ <see cref="sol_CountRoots">sol_CountRoots</see> Рё РґСЂСѓРіРёРµ)</returns>
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern System.IntPtr sol_SyntaxAnalysis(
                                                                HGREN hEngine,
@@ -842,21 +789,6 @@ namespace SolarixGrammarEngineNET
                                                                                       string dims
                                                                                      );
 
-        public static string sol_GetFlexionHandlerWordformFX(
-                                                             IntPtr hEngine,
-                                                             IntPtr /*HFLEXIONTABLE*/ hFlex,
-                                                             string dims
-                                                            )
-        {
-            IntPtr wchar_ptr = sol_GetFlexionHandlerWordform(hEngine, hFlex, dims);
-
-            if (wchar_ptr == (IntPtr)null)
-                return "";
-
-            string res = Marshal.PtrToStringUni(wchar_ptr);
-            return res;
-        }
-
 
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_DeleteFlexionHandler(IntPtr hEngine, IntPtr /*HFLEXIONTABLE*/ hFlex);
@@ -879,25 +811,19 @@ namespace SolarixGrammarEngineNET
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetError(IntPtr hEngine, System.Text.StringBuilder buffer, int buffer_len);
 
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_GetError8(IntPtr hEngine, byte[] buffer, int buffer_len);
+
         // http://www.solarix.ru/api/ru/sol_GetErrorLen.shtml
-        [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_GetErrorLen(IntPtr hEngine);
+
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_GetErrorLen8(IntPtr hEngine);
 
         // http://www.solarix.ru/api/ru/sol_ClearError.shtml
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_ClearError(IntPtr hEngine);
-
-        public static string sol_GetErrorFX(IntPtr hEngine)
-        {
-            int len = sol_GetErrorLen(hEngine);
-            if (len == 0)
-                return "";
-
-            System.Text.StringBuilder b = new System.Text.StringBuilder(len + 1);
-            sol_GetError(hEngine, b, len);
-            sol_ClearError(hEngine);
-            return b.ToString();
-        }
 
 
         // http://www.solarix.ru/api/ru/sol_RestoreCasing.shtml
@@ -950,9 +876,24 @@ namespace SolarixGrammarEngineNET
 
         [DllImport(gren_dll, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr sol_CreateTreeNodeW(HGREN hEngine, int id_entry, string word, int n_pair, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] int[] pairs);
+        #endregion
 
 
         // -----------------------------
+
+        public static bool IsLinux
+        {
+         get
+         {
+#if NETSTANDARD || NETCORE // РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РµРЅС‹ РІ РїСЂРѕРµРєС‚Рµ С‡РµСЂРµР· <DefineConstants>...</DefineConstants>
+            // https://github.com/dotnet/corefx/blob/master/src/System.Runtime.InteropServices.RuntimeInformation/ref/System.Runtime.InteropServices.RuntimeInformation.cs
+            return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
+#else
+            int p = (int)Environment.OSVersion.Platform;
+            return (p == 4) || (p == 6) || (p == 128);
+#endif
+         }
+        }
 
 
         public static System.Collections.Generic.List<string> sol_GenerateWordformsFX(HGREN hEngine, int EntryID, System.Collections.Generic.List<int> CoordID, System.Collections.Generic.List<int> StateID)
@@ -988,14 +929,29 @@ namespace SolarixGrammarEngineNET
             return b.ToString();
         }
 
+
+        private static byte[] GetLexemBuffer8()
+        {
+            return new byte[32 * 6];
+        }
+
         /// <summary>
-        /// Получение названия словарной статьи (обычно это нормальная, словарная форма слова) с указанным ID.
+        /// РџРѕР»СѓС‡РµРЅРёРµ РЅР°Р·РІР°РЅРёСЏ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё (РѕР±С‹С‡РЅРѕ СЌС‚Рѕ РЅРѕСЂРјР°Р»СЊРЅР°СЏ, СЃР»РѕРІР°СЂРЅР°СЏ С„РѕСЂРјР° СЃР»РѕРІР°) СЃ СѓРєР°Р·Р°РЅРЅС‹Рј ID.
         /// </summary>
         public static string sol_GetEntryNameFX(IntPtr hEngine, int entryId)
         {
-            System.Text.StringBuilder b = new System.Text.StringBuilder(32); // магическая константа 32 - фактически сейчас слов длиннее 32 символов в словарях нет.
-            sol_GetEntryName(hEngine, entryId, b);
-            return b.ToString();
+            if (IsLinux)
+            {
+                byte[] buf8 = GetLexemBuffer8();
+                sol_GetEntryName8(hEngine, entryId, buf8);
+                return Utf8ToString(buf8);
+            }
+            else
+            {
+                System.Text.StringBuilder b = new System.Text.StringBuilder(32); // РјР°РіРёС‡РµСЃРєР°СЏ РєРѕРЅСЃС‚Р°РЅС‚Р° 32 - С„Р°РєС‚РёС‡РµСЃРєРё СЃРµР№С‡Р°СЃ СЃР»РѕРІ РґР»РёРЅРЅРµРµ 32 СЃРёРјРІРѕР»РѕРІ РІ СЃР»РѕРІР°СЂСЏС… РЅРµС‚.
+                sol_GetEntryName(hEngine, entryId, b);
+                return b.ToString();
+            }
         }
 
 
@@ -1030,7 +986,7 @@ namespace SolarixGrammarEngineNET
         }
 
         /// <summary>
-        /// Получение строки с номером версии грамматического движка в виде "XX.YY.ZZ битность"
+        /// РџРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё СЃ РЅРѕРјРµСЂРѕРј РІРµСЂСЃРёРё РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РґРІРёР¶РєР° РІ РІРёРґРµ "XX.YY.ZZ Р±РёС‚РЅРѕСЃС‚СЊ"
         /// </summary>
         public static string sol_GetVersionFX(IntPtr hEngine)
         {
@@ -1090,10 +1046,10 @@ namespace SolarixGrammarEngineNET
         }
 
         /// <summary>
-        /// Получение очередного предложения от сегментатора текста.
+        /// РџРѕР»СѓС‡РµРЅРёРµ РѕС‡РµСЂРµРґРЅРѕРіРѕ РїСЂРµРґР»РѕР¶РµРЅРёСЏ РѕС‚ СЃРµРіРјРµРЅС‚Р°С‚РѕСЂР° С‚РµРєСЃС‚Р°.
         /// </summary>
-        /// <param name="hBroker">Дескриптор сегментатора текста, созданный, например, с помощью <see cref="sol_CreateSentenceBroker">sol_CreateSentenceBroker</see></param>
-        /// <returns>Предложение, извлеченное из входного потока сегментатора</returns>
+        /// <param name="hBroker">Р”РµСЃРєСЂРёРїС‚РѕСЂ СЃРµРіРјРµРЅС‚Р°С‚РѕСЂР° С‚РµРєСЃС‚Р°, СЃРѕР·РґР°РЅРЅС‹Р№, РЅР°РїСЂРёРјРµСЂ, СЃ РїРѕРјРѕС‰СЊСЋ <see cref="sol_CreateSentenceBroker">sol_CreateSentenceBroker</see></param>
+        /// <returns>РџСЂРµРґР»РѕР¶РµРЅРёРµ, РёР·РІР»РµС‡РµРЅРЅРѕРµ РёР· РІС…РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєР° СЃРµРіРјРµРЅС‚Р°С‚РѕСЂР°</returns>
         public static string sol_GetFetchedSentenceFX(System.IntPtr hBroker)
         {
             int sentence_length = sol_GetFetchedSentenceLen(hBroker);
@@ -1134,6 +1090,172 @@ namespace SolarixGrammarEngineNET
             System.Text.StringBuilder b = new System.Text.StringBuilder(l + 1);
             sol_GetLongStringW(hString, b);
             return b.ToString();
+        }
+
+        // This is a simple and helpful wrapper for low-level sol_CountNGrams. It returns the 64 bit count value.
+        public static UInt64 sol_CountNGramsFX(IntPtr hEngine, int Type, int Order)
+        {
+            UInt32 Hi = 0, Lo = 0;
+            if (sol_CountNGrams(hEngine, Type, Order, out Hi, out Lo) == 0)
+                return 0;
+
+            UInt64 res = (((UInt64)Hi) << 32) | Lo;
+            return res;
+        }
+
+
+        public static string sol_GetPhraseTextFX(IntPtr hEngine, int PhraseId)
+        {
+            IntPtr wchar_ptr = sol_GetPhraseText(hEngine, PhraseId);
+
+            if (wchar_ptr == (IntPtr)null)
+                return "";
+
+            string res = Marshal.PtrToStringUni(wchar_ptr);
+            sol_Free(hEngine, wchar_ptr);
+            return res;
+        }
+
+
+
+        public static string NormalizePhraseFX(IntPtr hEngine, IntPtr hLinkages)
+        {
+            IntPtr wchar_ptr = sol_NormalizePhraseW(hEngine, hLinkages);
+
+            if (wchar_ptr == (IntPtr)null)
+                return "";
+
+            string res = Marshal.PtrToStringUni(wchar_ptr);
+            sol_Free(hEngine, wchar_ptr);
+            return res;
+        }
+
+
+
+        public static string sol_LinksInfoTagsTxtFX(IntPtr hEngine, IntPtr /*HLINKSINFO*/ hList, int Index)
+        {
+            IntPtr wchar_ptr = sol_LinksInfoTagsTxt(hEngine, hList, Index);
+
+            if (wchar_ptr == (IntPtr)null)
+                return "";
+
+            string res = Marshal.PtrToStringUni(wchar_ptr);
+            return res;
+        }
+
+
+        public static string sol_LinksInfoFlagsTxtFX(IntPtr hEngine, IntPtr /*HLINKSINFO*/ hList, int Index)
+        {
+            IntPtr wchar_ptr = sol_LinksInfoFlagsTxt(hEngine, hList, Index);
+
+            if (wchar_ptr == (IntPtr)null)
+                return "";
+
+            string res = Marshal.PtrToStringUni(wchar_ptr);
+            return res;
+        }
+
+
+
+        public static string sol_GetFlexionHandlerWordformFX(
+                                                             IntPtr hEngine,
+                                                             IntPtr /*HFLEXIONTABLE*/ hFlex,
+                                                             string dims
+                                                            )
+        {
+            IntPtr wchar_ptr = sol_GetFlexionHandlerWordform(hEngine, hFlex, dims);
+
+            if (wchar_ptr == (IntPtr)null)
+                return "";
+
+            string res = Marshal.PtrToStringUni(wchar_ptr);
+            return res;
+        }
+
+
+        public static string sol_GetErrorFX(IntPtr hEngine)
+        {
+            if (IsLinux)
+            {
+                int len = sol_GetErrorLen8(hEngine);
+                if (len == 0)
+                    return "";
+
+                byte[] err_utf8 = new byte[len];
+                sol_GetError8(hEngine, err_utf8, len);
+
+                sol_ClearError(hEngine);
+                return System.Text.Encoding.UTF8.GetString(err_utf8);
+            }
+            else
+            {
+                int len = sol_GetErrorLen(hEngine);
+                if (len == 0)
+                    return "";
+
+                System.Text.StringBuilder b = new System.Text.StringBuilder(len + 1);
+                sol_GetError(hEngine, b, len);
+                sol_ClearError(hEngine);
+                return b.ToString();
+            }
+        }
+
+
+
+        public static int sol_LoadDictionaryFX(IntPtr hEngine, string DictionaryPath)
+        {
+            if (IsLinux)
+            {
+                byte[] path8 = System.Text.Encoding.UTF8.GetBytes(DictionaryPath);
+                return sol_LoadDictionary8(hEngine, path8);
+            }
+            else
+            {
+                return sol_LoadDictionaryW(hEngine, DictionaryPath);
+            }
+        }
+
+        public static System.IntPtr sol_ProjectMisspelledWordFX(HGREN hEngine, string Word, int AllowDynforms, int nmaxmiss)
+        {
+            if (IsLinux)
+            {
+                byte[] word8 = System.Text.Encoding.UTF8.GetBytes(Word);
+                return sol_ProjectMisspelledWord8(hEngine, word8, AllowDynforms, nmaxmiss);
+            }
+            else
+            {
+                return sol_ProjectMisspelledWord(hEngine, Word, AllowDynforms, nmaxmiss);
+            }
+        }
+
+        private static string Utf8ToString(byte[] utf8)
+        {
+            for (int i = 0; i < utf8.Length; ++i)
+            {
+                if (utf8[i] == 0)
+                {
+                    return System.Text.Encoding.UTF8.GetString(utf8, 0, i);
+                }
+            }
+
+            throw new Exception();
+        }
+
+        public static string sol_GetClassNameFX(IntPtr hEngine, int ClassIndex)
+        {
+            if (IsLinux)
+            {
+                byte[] buf8 = GetLexemBuffer8();
+                sol_GetClassName8(hEngine, ClassIndex, buf8);
+                return Utf8ToString(buf8);
+            }
+            else
+            {
+                System.Text.StringBuilder b = new System.Text.StringBuilder();
+                b.Capacity = 32;
+                sol_GetClassName(hEngine, ClassIndex, b);
+                return b.ToString();
+            }
         }
 
     }
