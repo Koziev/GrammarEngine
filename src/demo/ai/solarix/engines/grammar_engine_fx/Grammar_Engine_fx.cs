@@ -45,11 +45,11 @@ namespace SolarixGrammarEngineNET
 
     public sealed class GrammarEngine
     {
-#if (DEBUG)
-  private const string gren_dll = "solarix_grammar_engined.dll";
-#else
+//#if (DEBUG)
+//  private const string gren_dll = "solarix_grammar_engined.dll";
+//#else
         private const string gren_dll = "solarix_grammar_engine.dll";
-#endif
+//#endif
 
 
         /// <summary>

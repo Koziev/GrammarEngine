@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGREN_FX", "SimpleGREN_FX.csproj", "{EC8B8F5B-196D-4449-9992-698544E8D7FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EC8B8F5B-196D-4449-9992-698544E8D7FA}.Release|Win32.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
