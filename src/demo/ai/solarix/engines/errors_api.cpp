@@ -1,10 +1,12 @@
 // 27.03.2011 - добавлена critical section для Errors API
+// 14.09.2017 - рефакторинг: избавляемся от следов поискового движка
 
 #include <lem/config.h>
 
-#if defined FAIND_IENGINES || defined DLL_EXPORTS
+#if defined DLL_EXPORTS
 
-#include <lem/solarix/faind_internal.h>
+#include <lem/solarix/solarix_grammar_engine.h>
+#include "GrammarEngineHolder.h"
 
 
 // ******************************************************
@@ -14,7 +16,7 @@
 // http://www.solarix.ru/api/en/sol_GetErrorLen.shtml
 //
 // ******************************************************
-FAIND_API(int) sol_GetErrorLen( HFAIND hEngine )
+GREN_API(int) sol_GetErrorLen( HGREN hEngine )
 {
  if( hEngine==NULL || !HandleEngine(hEngine)->ok )
   return -1;
@@ -36,7 +38,7 @@ FAIND_API(int) sol_GetErrorLen( HFAIND hEngine )
 // http://www.solarix.ru/api/en/sol_GetErrorLen.shtml
 //
 // ******************************************************
-FAIND_API(int) sol_GetErrorLen8( HFAIND hEngine )
+GREN_API(int) sol_GetErrorLen8( HGREN hEngine )
 {
  if( hEngine==NULL || !HandleEngine(hEngine)->ok )
   return -1;
@@ -62,7 +64,7 @@ FAIND_API(int) sol_GetErrorLen8( HFAIND hEngine )
 // http://www.solarix.ru/api/en/sol_GetError.shtml
 //
 // ****************************************************************************
-FAIND_API(int) sol_GetError( HFAIND hEngine, wchar_t *buffer, int buffer_len )
+GREN_API(int) sol_GetError( HGREN hEngine, wchar_t *buffer, int buffer_len )
 {
  if( hEngine==NULL || buffer==NULL || buffer_len<=0 || !HandleEngine(hEngine)->ok )
   return -1;
@@ -91,7 +93,7 @@ FAIND_API(int) sol_GetError( HFAIND hEngine, wchar_t *buffer, int buffer_len )
 // http://www.solarix.ru/api/en/sol_GetError.shtml
 //
 // *************************************************************************
-FAIND_API(int) sol_GetError8( HFAIND hEngine, char *buffer, int buffer_len )
+GREN_API(int) sol_GetError8( HGREN hEngine, char *buffer, int buffer_len )
 {
  if( hEngine==NULL || buffer==NULL || buffer_len<=0 || !HandleEngine(hEngine)->ok )
   return -1;
@@ -120,7 +122,7 @@ FAIND_API(int) sol_GetError8( HFAIND hEngine, char *buffer, int buffer_len )
 // http://www.solarix.ru/api/en/sol_ClearError.shtml
 //
 // *************************************************
-FAIND_API(void) sol_ClearError( HFAIND hEngine )
+GREN_API(void) sol_ClearError( HGREN hEngine )
 {
  if( hEngine==NULL || !HandleEngine(hEngine)->ok )
   return;

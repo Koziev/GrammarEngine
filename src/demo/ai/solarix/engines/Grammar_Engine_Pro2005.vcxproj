@@ -358,35 +358,35 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\icu.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\instances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\system\src\error_code.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="EngineDllMain.cpp" />
     <ClCompile Include="errors_api.cpp" />
+    <ClCompile Include="GrammarEngineHolder.cpp" />
     <ClCompile Include="grammar_engine_api.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_acstring.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_afstring.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_astr.cpp" />
-    <ClCompile Include="..\..\..\..\contain\lem_bitv.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_fp1.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_ucstring.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_ufstring.cpp" />
@@ -470,7 +470,6 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
     <ClCompile Include="..\..\..\..\math\random\randu.cpp" />
     <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />
     <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp" />
-    <ClCompile Include="search_engine.cpp" />
     <ClCompile Include="..\..\..\..\ai\aa\aa_autom.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\BackRefCorrel.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\BasicLexer.cpp" />
@@ -784,6 +783,7 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\include\lem\solarix\solarix_grammar_engine.h" />
+    <ClInclude Include="GrammarEngineHolder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -77,37 +77,37 @@
 // LC->28.03.2016
 // --------------
 
-#if defined DLL_EXPORTS || defined FAIND_IENGINES
- #define FAIND_EXPORTS
+#if defined DLL_EXPORTS
+ #define GREN_EXPORTS
 #else
- #define FAIND_IMPORTS
+ #define GREN_IMPORTS
 #endif
 
 #undef DLL_ENTRY
 
-#if defined FAIND_IMPORTS
+#if defined GREN_IMPORTS
  #if defined LEM_WINDOWS || defined WIN32
-  #define FAIND_API(RetType) extern RetType __stdcall
+  #define GREN_API(RetType) extern RetType __stdcall
   #define SX_STDCALL __stdcall
  #else
 
   #if defined __cplusplus
-  #define FAIND_API(RetType) extern "C" RetType
+  #define GREN_API(RetType) extern "C" RetType
   #else
-  #define FAIND_API(RetType) extern RetType
+  #define GREN_API(RetType) extern RetType
   #endif
 
   #define SX_STDCALL
  #endif
-#elif defined GREN_EXPORTS || defined FAIND_EXPORTS
+#elif defined GREN_EXPORTS
  #if defined LEM_WINDOWS || defined WIN32
-  #define FAIND_API(RetType) __declspec(dllexport) RetType __stdcall
+  #define GREN_API(RetType) __declspec(dllexport) RetType __stdcall
   #define SX_STDCALL __stdcall
  #else
   #if defined __cplusplus
-  #define FAIND_API(RetType) extern "C" RetType __attribute__((visibility("default")))
+  #define GREN_API(RetType) extern "C" RetType __attribute__((visibility("default")))
   #else
-  #define FAIND_API(RetType) extern RetType __attribute__((visibility("default")))
+  #define GREN_API(RetType) extern RetType __attribute__((visibility("default")))
   #endif
   #define SX_STDCALL
  #endif
@@ -115,15 +115,9 @@
  #error
 #endif
 
-#if !defined FAIND_INTERNAL_TYPES
+#if !defined GREN_INTERNAL_TYPES
 
- typedef void* HFAIND;
-
- typedef void* HSOL_INDEXER;
- typedef void* HGRENCMD;
- typedef void* HGRENXML;
- typedef void* HREGEXEX;
- typedef void* HGRENPARAMS;
+ typedef void* HGREN;
 
  typedef void* HGREN_STR;
  typedef void* HGREN_INTARRAY;
@@ -131,16 +125,12 @@
  typedef void* HGREN_RESPACK;
  typedef void* HGREN_LINKAGE;
  typedef const void* HGREN_TREENODE;
- typedef void* HGREN_PHRASOMAT;
- typedef void* HGREN_FGTEMPLATE;
  typedef void* HGREN_SBROKER;
 
  typedef void* HGREN_SPOKEN;
  typedef void* HGREN_LONGSTRING;
 
 #endif // !defined DLL_EXPORTS
-
-#define HGREN HFAIND
 
 typedef void* HFLEXIONS;
 typedef void* HFLEXIONTABLE;
@@ -156,18 +146,18 @@ typedef void* HTRANINFO;
 // Create the instance of grammatical dictionary and connecti it to the database
 // http://www.solarix.ru/api/en/sol_CreateGrammarEngine.shtml
 
-FAIND_API(HGREN) sol_CreateGrammarEngineW( const wchar_t *DictionaryXml );
-FAIND_API(HGREN) sol_CreateGrammarEngineA( const char *DictionaryXml );
-FAIND_API(HGREN) sol_CreateGrammarEngine8( const char *DictionaryXmlUtf8 );
+GREN_API(HGREN) sol_CreateGrammarEngineW( const wchar_t *DictionaryXml );
+GREN_API(HGREN) sol_CreateGrammarEngineA( const char *DictionaryXml );
+GREN_API(HGREN) sol_CreateGrammarEngine8( const char *DictionaryXmlUtf8 );
 #if defined UNICODE || defined _UNICODE 
 #define sol_CreateGrammarEngine sol_CreateGrammarEngineW
 #else
 #define sol_CreateGrammarEngine sol_CreateGrammarEngineA
 #endif
 
-FAIND_API(HGREN) sol_CreateGrammarEngineExW( const wchar_t *DictionaryXml, int Flag );
-FAIND_API(HGREN) sol_CreateGrammarEngineExA( const char *DictionaryXml, int Flag );
-FAIND_API(HGREN) sol_CreateGrammarEngineEx8( const char *DictionaryXmlUtf8, int Flag );
+GREN_API(HGREN) sol_CreateGrammarEngineExW( const wchar_t *DictionaryXml, int Flag );
+GREN_API(HGREN) sol_CreateGrammarEngineExA( const char *DictionaryXml, int Flag );
+GREN_API(HGREN) sol_CreateGrammarEngineEx8( const char *DictionaryXmlUtf8, int Flag );
 #if defined UNICODE || defined _UNICODE
 #define sol_CreateGrammarEngineEx sol_CreateGrammarEngineExW
 #else
@@ -181,16 +171,16 @@ typedef HGREN (SX_STDCALL * sol_CreateGrammarEngineEx8_Fun)( const char *Diction
 
 // Destroy the instance of grammatical dicrionary and free all allocated resources
 // http://www.solarix.ru/api/en/sol_DeleteGrammarEngine.shtml
-FAIND_API(int) sol_DeleteGrammarEngine( HGREN hEngine );
+GREN_API(int) sol_DeleteGrammarEngine( HGREN hEngine );
 
 typedef int (SX_STDCALL * sol_DeleteGrammarEngine_Fun)( HGREN hEngine );
 
 
 // Load the dictionary (morphology and syntax analyzer + thesaurus)
 // http://www.solarix.ru/api/en/sol_LoadDictionary.shtml
-FAIND_API(int) sol_LoadDictionaryA( HGREN hEngine, const char *Filename );
-FAIND_API(int) sol_LoadDictionaryW( HGREN hEngine, const wchar_t *Filename );
-FAIND_API(int) sol_LoadDictionary8( HGREN hEngine, const char *FilenameUtf8 );
+GREN_API(int) sol_LoadDictionaryA( HGREN hEngine, const char *Filename );
+GREN_API(int) sol_LoadDictionaryW( HGREN hEngine, const wchar_t *Filename );
+GREN_API(int) sol_LoadDictionary8( HGREN hEngine, const char *FilenameUtf8 );
 #if defined UNICODE || defined _UNICODE 
 #define sol_LoadDictionary sol_LoadDictionaryW
 #else
@@ -198,9 +188,9 @@ FAIND_API(int) sol_LoadDictionary8( HGREN hEngine, const char *FilenameUtf8 );
 #endif
 
 
-FAIND_API(int) sol_LoadDictionaryExA( HGREN hEngine, const char *Filename, int Flags );
-FAIND_API(int) sol_LoadDictionaryExW( HGREN hEngine, const wchar_t *Filename, int Flags );
-FAIND_API(int) sol_LoadDictionaryEx8( HGREN hEngine, const char *FilenameUtf8, int Flags );
+GREN_API(int) sol_LoadDictionaryExA( HGREN hEngine, const char *Filename, int Flags );
+GREN_API(int) sol_LoadDictionaryExW( HGREN hEngine, const wchar_t *Filename, int Flags );
+GREN_API(int) sol_LoadDictionaryEx8( HGREN hEngine, const char *FilenameUtf8, int Flags );
 #if defined UNICODE || defined _UNICODE 
 #define sol_LoadDictionaryEx sol_LoadDictionaryExW
 #else
@@ -211,7 +201,7 @@ typedef int (SX_STDCALL * sol_LoadDictionaryEx8_Fun)( HGREN hEngine, const char 
 
 
 // http://www.solarix.ru/api/en/sol_UnloadDictionary.shtml
-FAIND_API(void) sol_UnloadDictionary( HGREN hEngine );
+GREN_API(void) sol_UnloadDictionary( HGREN hEngine );
 typedef int (SX_STDCALL * sol_UnloadDictionary_Fun)( HGREN hEngine );
 
 
@@ -220,39 +210,39 @@ typedef int (SX_STDCALL * sol_UnloadDictionary_Fun)( HGREN hEngine );
 // возвращаются соответствующие части номера версии компонента.
 //
 // Возвращает 0 для DEMO, 1 для PRO, 2 для PREMIUM
-FAIND_API(int) sol_GetVersion( HGREN hEngine, int *Major, int *Minor, int *Build );
+GREN_API(int) sol_GetVersion( HGREN hEngine, int *Major, int *Minor, int *Build );
 typedef int (SX_STDCALL * sol_GetVersion_Fun)( HGREN hEngine, int *Major, int *Minor, int *Build );
 
 // Возвращает номер версии загруженного словаря.
 // http://www.solarix.ru/api/en/sol_DictionaryVersion.shtml
-FAIND_API(int) sol_DictionaryVersion( HGREN hEngine );
+GREN_API(int) sol_DictionaryVersion( HGREN hEngine );
 typedef int (SX_STDCALL * sol_DictionaryVersion_Fun)( HGREN hEngine );
 
 
 // Returns the value indicating whether the dictionary has been initialized and loaded
 // http://www.solarix.ru/api/en/sol_IsDictionaryLoaded.shtml
-FAIND_API(int) sol_IsDictionaryLoaded( HGREN hEngine );
+GREN_API(int) sol_IsDictionaryLoaded( HGREN hEngine );
 
 
 // Count the total number of entries in dictionary.
 // Сколько словарных статей в словаре.
 // http://www.solarix.ru/api/ru/sol_CountEntries.shtml
-FAIND_API(int) sol_CountEntries( HGREN hEngine );
+GREN_API(int) sol_CountEntries( HGREN hEngine );
 typedef int (SX_STDCALL * sol_CountEntries_Fun)( HGREN hEngine );
 
 // Count the total number of wordforms in dictionary.
 // Сколько грамматических форм по всем словарным статьям в лексиконе
-FAIND_API(int) sol_CountForms( HGREN hEngine );
+GREN_API(int) sol_CountForms( HGREN hEngine );
 
 // Статистика тезауруса: сколько записей всего.
 // http://www.solarix.ru/api/ru/sol_CountLinks.shtml
-FAIND_API(int) sol_CountLinks( HGREN hEngine );
+GREN_API(int) sol_CountLinks( HGREN hEngine );
 
 // Returns the max lexem length
 // Возвращает максимальную длину лексемы
 // http://www.solarix.ru/api/en/sol_MaxLexemLen.shtml
-FAIND_API(int) sol_MaxLexemLen( HGREN hEngine );
-FAIND_API(int) sol_MaxLexemLen8( HGREN hEngine );
+GREN_API(int) sol_MaxLexemLen( HGREN hEngine );
+GREN_API(int) sol_MaxLexemLen8( HGREN hEngine );
 typedef int (SX_STDCALL * sol_MaxLexemLen8_Fun)( HGREN hEngine );
 
 // *******************************************
@@ -260,12 +250,12 @@ typedef int (SX_STDCALL * sol_MaxLexemLen8_Fun)( HGREN hEngine );
 // Устанавливает язык по умолчанию. Целочисленный код языка
 // можно увидеть в файле _sg_api.h
 // *******************************************
-FAIND_API(int) sol_SetLanguage( HGREN hEngine, int Language );
+GREN_API(int) sol_SetLanguage( HGREN hEngine, int Language );
 
 
 
 // Поиск связей в тезаурусе
-FAIND_API(HGREN_INTARRAY) sol_SeekThesaurus(
+GREN_API(HGREN_INTARRAY) sol_SeekThesaurus(
                                             HGREN hEngine,
                                             int iEntry,
                                             int Synonyms,
@@ -276,54 +266,54 @@ FAIND_API(HGREN_INTARRAY) sol_SeekThesaurus(
                                            );
 
 // http://www.solarix.ru/api/en/sol_Thesaurus.shtml
-FAIND_API(HGREN_INTARRAY) sol_Thesaurus( HGREN hEngine, int EntryID, int LinkType );
+GREN_API(HGREN_INTARRAY) sol_Thesaurus( HGREN hEngine, int EntryID, int LinkType );
 
 // http://www.solarix.ru/api/en/sol_ListLinksTxt.shtml
-FAIND_API(HLINKSINFO) sol_ListLinksTxt( HGREN hEngine, int EntryID1, int LinkType, int Flags );
+GREN_API(HLINKSINFO) sol_ListLinksTxt( HGREN hEngine, int EntryID1, int LinkType, int Flags );
 
 // http://www.solarix.ru/api/en/sol_DeleteLinksInfo.shtml
-FAIND_API(int) sol_DeleteLinksInfo( HGREN hEng, HLINKSINFO hList );
+GREN_API(int) sol_DeleteLinksInfo( HGREN hEng, HLINKSINFO hList );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoCount.shtml
-FAIND_API(int) sol_LinksInfoCount( HGREN hEng, HLINKSINFO hList );
+GREN_API(int) sol_LinksInfoCount( HGREN hEng, HLINKSINFO hList );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoType.shtml
-FAIND_API(int) sol_LinksInfoType( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(int) sol_LinksInfoType( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoID.shtml
-FAIND_API(int) sol_LinksInfoID( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(int) sol_LinksInfoID( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/ru/sol_LinksInfoCode.shtml
-FAIND_API(int) sol_LinksInfoCode( HGREN hEngine, HLINKSINFO hList, int Index );
+GREN_API(int) sol_LinksInfoCode( HGREN hEngine, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoEKey1.shtml
-FAIND_API(int) sol_LinksInfoEKey1( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(int) sol_LinksInfoEKey1( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoEKey2.shtml
-FAIND_API(int) sol_LinksInfoEKey2( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(int) sol_LinksInfoEKey2( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoTagsTxt.shtml
-FAIND_API(const wchar_t*) sol_LinksInfoTagsTxt( HGREN hEng, HLINKSINFO hList, int Index );
-FAIND_API(const char*) sol_LinksInfoTagsTxt8( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(const wchar_t*) sol_LinksInfoTagsTxt( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(const char*) sol_LinksInfoTagsTxt8( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_LinksInfoFlagsTxt.shtml
-FAIND_API(const wchar_t*) sol_LinksInfoFlagsTxt( HGREN hEng, HLINKSINFO hList, int Index );
-FAIND_API(const char*) sol_LinksInfoFlagsTxt8( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(const wchar_t*) sol_LinksInfoFlagsTxt( HGREN hEng, HLINKSINFO hList, int Index );
+GREN_API(const char*) sol_LinksInfoFlagsTxt8( HGREN hEng, HLINKSINFO hList, int Index );
 
 // http://www.solarix.ru/api/en/sol_DeleteLink.shtml
-FAIND_API(int) sol_DeleteLink( HGREN hEng, int LinkID, int LinkType );
+GREN_API(int) sol_DeleteLink( HGREN hEng, int LinkID, int LinkType );
 
 // http://www.solarix.ru/api/en/sol_AddLink.shtml
-FAIND_API(int) sol_AddLink( HGREN hEng, int LinkType, int EntryID1, int LinkCode, int EntryID2, const wchar_t *Tags );
-FAIND_API(int) sol_AddLink8( HGREN hEng, int LinkType, int EntryID1, int LinkCode, int EntryID2, const char *TagsUtf8 );
+GREN_API(int) sol_AddLink( HGREN hEng, int LinkType, int EntryID1, int LinkCode, int EntryID2, const wchar_t *Tags );
+GREN_API(int) sol_AddLink8( HGREN hEng, int LinkType, int EntryID1, int LinkCode, int EntryID2, const char *TagsUtf8 );
 
 // http://www.solarix.ru/api/en/sol_SetLinkTags.shtml
-FAIND_API(int) sol_SetLinkTags( HGREN hEngine, int LinkType, int LinkID, const wchar_t *Tags );
-FAIND_API(int) sol_SetLinkTags8( HGREN hEngine, int LinkType, int LinkID, const char *TagsUtf8 );
+GREN_API(int) sol_SetLinkTags( HGREN hEngine, int LinkType, int LinkID, const wchar_t *Tags );
+GREN_API(int) sol_SetLinkTags8( HGREN hEngine, int LinkType, int LinkID, const char *TagsUtf8 );
 
 // http://www.solarix.ru/api/en/sol_SetLinkFlags.shtml
-FAIND_API(int) sol_SetLinkFlags( HGREN hEngine, int LinkID, const wchar_t *Flags );
-FAIND_API(int) sol_SetLinkFlags8( HGREN hEngine, int LinkID, const char *FlagsUtf8 );
+GREN_API(int) sol_SetLinkFlags( HGREN hEngine, int LinkID, const wchar_t *Flags );
+GREN_API(int) sol_SetLinkFlags8( HGREN hEngine, int LinkID, const char *FlagsUtf8 );
 
 
 // ***************************************************************************
@@ -331,27 +321,27 @@ FAIND_API(int) sol_SetLinkFlags8( HGREN hEngine, int LinkID, const char *FlagsUt
 // Поиск индекса словарной статьи в лексиконе.
 // http://www.solarix.ru/api/en/sol_FindEntry.shtml
 // ***************************************************************************
-FAIND_API(int) sol_FindEntry(
+GREN_API(int) sol_FindEntry(
                              HGREN hEngine,
                              const wchar_t *Word, // Entry name
                              int ClassID,         // Required grammatical class (part of speech) ID
                              int LanguageID       // Language ID (if ambiguous)
                             );
-FAIND_API(int) sol_FindEntry8( HGREN hEngine, const char *Word, int ClassID, int LanguageID );
+GREN_API(int) sol_FindEntry8( HGREN hEngine, const char *Word, int ClassID, int LanguageID );
 typedef int (SX_STDCALL * sol_FindEntry8_Fun)( HGREN hEngine, const char *Word, int ClassID, int LanguageID );
 
 
 // http://www.solarix.ru/api/en/sol_FindClass.shtml
-FAIND_API(int) sol_FindClass( HGREN hEngine, const wchar_t *ClassName );
-FAIND_API(int) sol_FindClass8( HGREN hEngine, const char *ClassNameUtf8 );
+GREN_API(int) sol_FindClass( HGREN hEngine, const wchar_t *ClassName );
+GREN_API(int) sol_FindClass8( HGREN hEngine, const char *ClassNameUtf8 );
 
 // http://www.solarix.ru/api/en/sol_FindEnum.shtml
-FAIND_API(int) sol_FindEnum( HGREN hEngine, const wchar_t *EnumName );
-FAIND_API(int) sol_FindEnum8( HGREN hEngine, const char *EnumNameUtf8 );
+GREN_API(int) sol_FindEnum( HGREN hEngine, const wchar_t *EnumName );
+GREN_API(int) sol_FindEnum8( HGREN hEngine, const char *EnumNameUtf8 );
 
 // http://www.solarix.ru/api/en/sol_FindEnumState.shtml
-FAIND_API(int) sol_FindEnumState( HGREN hEngine, int EnumID, const wchar_t *StateName );
-FAIND_API(int) sol_FindEnumState8( HGREN hEngine, int EnumID, const char *StateNameUtf8 );
+GREN_API(int) sol_FindEnumState( HGREN hEngine, int EnumID, const wchar_t *StateName );
+GREN_API(int) sol_FindEnumState8( HGREN hEngine, int EnumID, const char *StateNameUtf8 );
 
 
 #define sol_FindStrings( hEngine, Word ) sol_FindStringsEx(hEngine,Word,false,false,false,false,false,0)
@@ -359,7 +349,7 @@ FAIND_API(int) sol_FindEnumState8( HGREN hEngine, int EnumID, const char *StateN
 
 // Поиск всех словоформ для указанного слова, с возможным учетом связанных
 // по тезаурусу. Возвращается объект со списком строк.
-FAIND_API(HGREN_STR) sol_FindStringsEx(
+GREN_API(HGREN_STR) sol_FindStringsEx(
                                        HGREN hEngine,
                                        const wchar_t *Word,
                                        int Allow_Dynforms,
@@ -371,13 +361,13 @@ FAIND_API(HGREN_STR) sol_FindStringsEx(
                                       );
 
 
-FAIND_API(int) sol_CountStrings( HGREN_STR hStrings );
-FAIND_API(int) sol_GetStrings( HGREN_STR hStrings, wchar_t **Res );
-FAIND_API(int) sol_GetStringLen( HGREN_STR hStrings, int i );
-FAIND_API(int) sol_GetStringW( HGREN_STR hStrings, int i, wchar_t *Res );
-FAIND_API(int) sol_GetStringA( HGREN_STR hStrings, int i, char *Res );
-FAIND_API(int) sol_GetString8( HGREN_STR hStrings, int i, char *ResUtf8 );
-FAIND_API(int) sol_DeleteStrings( HGREN_STR hStrings );
+GREN_API(int) sol_CountStrings( HGREN_STR hStrings );
+GREN_API(int) sol_GetStrings( HGREN_STR hStrings, wchar_t **Res );
+GREN_API(int) sol_GetStringLen( HGREN_STR hStrings, int i );
+GREN_API(int) sol_GetStringW( HGREN_STR hStrings, int i, wchar_t *Res );
+GREN_API(int) sol_GetStringA( HGREN_STR hStrings, int i, char *Res );
+GREN_API(int) sol_GetString8( HGREN_STR hStrings, int i, char *ResUtf8 );
+GREN_API(int) sol_DeleteStrings( HGREN_STR hStrings );
 
 typedef int (SX_STDCALL * sol_CountStrings_Fun)( HGREN_STR hStrings );
 typedef int (SX_STDCALL * sol_GetStringLen_Fun)( HGREN_STR hStrings, int i );
@@ -389,46 +379,46 @@ typedef int (SX_STDCALL * sol_DeleteStrings_Fun)( HGREN_STR hStrings );
 // "корень", неизменный для всех форм этого слова. В случае невозможности
 // выделить корень, вернет 0. 
 // Только в версии PRO 
-FAIND_API(int) sol_Stemmer( HGREN hEngine, const wchar_t *Word );
+GREN_API(int) sol_Stemmer( HGREN hEngine, const wchar_t *Word );
 
 
 // Возвращает "имя" словарной статьи - обычно это базовая форма,
 // но могут быть особые случаи (например, статьи ЕСТЬ - кушать
 // и ЕСТЬ - иметься). Вернет 0 в случае успеха, -1 ошибка.
 // http://www.solarix.ru/api/en/sol_GetEntryName.shtml
-FAIND_API(int) sol_GetEntryName( HGREN hEngine, int EntryID, wchar_t *Result );
-FAIND_API(int) sol_GetEntryName8( HGREN hEngine, int EntryID, char *Result );
+GREN_API(int) sol_GetEntryName( HGREN hEngine, int EntryID, wchar_t *Result );
+GREN_API(int) sol_GetEntryName8( HGREN hEngine, int EntryID, char *Result );
 typedef int (SX_STDCALL * sol_GetEntryName8_Fun)( HGREN hEngine, int EntryID, char *Result );
 
 
-FAIND_API(int) sol_GetEntryFreq( HGREN hEngine, int EntryID );
+GREN_API(int) sol_GetEntryFreq( HGREN hEngine, int EntryID );
 
 
 // http://www.solarix.ru/api/en/sol_GetEntryCoordState.shtml
-FAIND_API(int) sol_GetEntryCoordState( HGREN hEngine, int EntryID, int CategoryID );
+GREN_API(int) sol_GetEntryCoordState( HGREN hEngine, int EntryID, int CategoryID );
 
-FAIND_API(int) sol_FindEntryCoordPair( HGREN hEngine, int EntryID, int CategoryID, int StateID );
+GREN_API(int) sol_FindEntryCoordPair( HGREN hEngine, int EntryID, int CategoryID, int StateID );
 
 
 // Возвращает индекс грамматического класса, к которому относится словарная статья.
 // Returns the part of speech ID for the word entry
 // http://www.solarix.ru/api/en/sol_GetEntryClass.shtml
-FAIND_API(int) sol_GetEntryClass( HGREN hEngine, int EntryID );
+GREN_API(int) sol_GetEntryClass( HGREN hEngine, int EntryID );
 typedef int (SX_STDCALL * sol_GetEntryClass_Fun)( HGREN hEngine, int EntryID );
 
 
 // Возвращает имя грамматического класса по его индексу
 // Returns the part of speech name
 // http://www.solarix.ru/api/en/sol_GetClassName.shtml
-FAIND_API(int) sol_GetClassName( HGREN hEngine, int ClassID, wchar_t *Result );
-FAIND_API(int) sol_GetClassName8( HGREN hEngine, int ClassID, char *ResultUtf8 );
+GREN_API(int) sol_GetClassName( HGREN hEngine, int ClassID, wchar_t *Result );
+GREN_API(int) sol_GetClassName8( HGREN hEngine, int ClassID, char *ResultUtf8 );
 typedef int ( SX_STDCALL * sol_GetClassName8_Fun)( HGREN hEngine, int ClassID, char *ResultUtf8 );
 
 // Возвращает имя координаты по индексу
 // Returns the grammatical category name
 // http://www.solarix.ru/api/en/sol_GetCoordName.shtml
-FAIND_API(int) sol_GetCoordName( HGREN hEngine, int CoordID, wchar_t *Result );
-FAIND_API(int) sol_GetCoordName8( HGREN hEngine, int CoordID, char *ResultUtf8 );
+GREN_API(int) sol_GetCoordName( HGREN hEngine, int CoordID, wchar_t *Result );
+GREN_API(int) sol_GetCoordName8( HGREN hEngine, int CoordID, char *ResultUtf8 );
 typedef int (SX_STDCALL * sol_GetCoordName8_Fun)( HGREN hEngine, int CoordID, char *ResultUtf8 );
 
 
@@ -439,19 +429,19 @@ typedef int (SX_STDCALL * sol_GetCoordName8_Fun)( HGREN hEngine, int CoordID, ch
 // 2 - измерение (отличает словоформы),
 // 3 - тэг
 // http://www.solarix.ru/api/en/sol_GetCoordType.shtml
-FAIND_API(int) sol_GetCoordType( HGREN hEngine, int CoordID, int ClassID );
+GREN_API(int) sol_GetCoordType( HGREN hEngine, int CoordID, int ClassID );
 typedef int (SX_STDCALL * sol_GetCoordType_Fun)( HGREN hEngine, int CoordID, int ClassID );
 
 
 // Возвращает имя состояния координаты по ее ID
 // http://www.solarix.ru/api/en/sol_GetCoordStateName.shtml
-FAIND_API(int) sol_GetCoordStateName( HGREN hEngine, int CoordID, int StateID, wchar_t *Result );
-FAIND_API(int) sol_GetCoordStateName8( HGREN hEngine, int CoordID, int StateID, char *ResultUtf8 );
+GREN_API(int) sol_GetCoordStateName( HGREN hEngine, int CoordID, int StateID, wchar_t *Result );
+GREN_API(int) sol_GetCoordStateName8( HGREN hEngine, int CoordID, int StateID, char *ResultUtf8 );
 typedef int (SX_STDCALL * sol_GetCoordStateName8_Fun)( HGREN hEngine, int CoordID, int StateID, char *ResultUtf8 );
 
 // Возвращает количество состояний у координаты. Для бистабильных координат вернет 0
 // http://www.solarix.ru/api/en/sol_CountCoordStates.shtml
-FAIND_API(int) sol_CountCoordStates( HGREN hEngine, int CoordID );
+GREN_API(int) sol_CountCoordStates( HGREN hEngine, int CoordID );
 typedef int (SX_STDCALL * sol_CountCoordStates_Fun)( HGREN hEngine, int CoordID );
 
 
@@ -459,12 +449,12 @@ typedef int (SX_STDCALL * sol_CountCoordStates_Fun)( HGREN hEngine, int CoordID 
 //
 // Возвращает род существительного (неприменимо для английского)
 // http://www.solarix.ru/grammar/gender.shtml
-FAIND_API(int) sol_GetNounGender( HGREN hEngine, int EntryIndex );
+GREN_API(int) sol_GetNounGender( HGREN hEngine, int EntryIndex );
 
 // Склонение существительного - возвращает в буфере форму указанной через 
 // EntryIndex словарной статьи с заданным числом Number и в нужном падеже Case.
 // http://www.solarix.ru/for_developers/russian-noun-declension.shtml
-FAIND_API(int) sol_GetNounForm(
+GREN_API(int) sol_GetNounForm(
                                HGREN hEngine,   
                                int EntryIndex,
                                int Number,
@@ -478,7 +468,7 @@ FAIND_API(int) sol_GetNounForm(
 // времени Tense и лице Person.
 // http://www.solarix.ru/for_developers/russian-verb-conjugation.shtml
 // **************************************************************************
-FAIND_API(int) sol_GetVerbForm(
+GREN_API(int) sol_GetVerbForm(
                                HGREN hEngine,  
                                int EntryIndex,
                                int Number,
@@ -495,7 +485,7 @@ FAIND_API(int) sol_GetVerbForm(
 // сравнения Compar_Form.
 // http://www.solarix.ru/for_developers/russian-adjective-declension.shtml
 // *************************************************************************
-FAIND_API(int) sol_GetAdjectiveForm(
+GREN_API(int) sol_GetAdjectiveForm(
                                     HGREN hEngine,
                                     int EntryIndex,
                                     int Number,
@@ -511,7 +501,7 @@ FAIND_API(int) sol_GetAdjectiveForm(
 // Согласование существительного и числительного. Отдельно задается падеж
 // и (опционально) - одушевленность/неодушевленность.
 // ***********************************************************************
-FAIND_API(int) sol_CorrNounNumber(
+GREN_API(int) sol_CorrNounNumber(
                                  HGREN hEngine, 
                                  int EntryIndex,   // id_entry
                                  int Value,        // с каким числом согласуется
@@ -520,7 +510,7 @@ FAIND_API(int) sol_CorrNounNumber(
                                  wchar_t *Result      // буфер для результата
                                  );
 
-FAIND_API(int) sol_CorrVerbNumber(
+GREN_API(int) sol_CorrVerbNumber(
                                  HGREN hEngine, 
                                  int EntryIndex,
                                  int Value,
@@ -529,7 +519,7 @@ FAIND_API(int) sol_CorrVerbNumber(
                                  wchar_t *Result
                                  );
 
-FAIND_API(int) sol_CorrAdjNumber(
+GREN_API(int) sol_CorrAdjNumber(
                                 HGREN hEngine, 
                                 int EntryIndex,
                                 int Value,
@@ -542,7 +532,7 @@ FAIND_API(int) sol_CorrAdjNumber(
 // Поиск словарной статьи и словоформы в ней, для которой лексическое содержимое
 // точно соответствует заданной строке Word. Возвращает индекс статьи EntryIndex,
 // индекс формы Form, и индекс грамматического класса у найденной статьи.
-FAIND_API(int) sol_FindWord(
+GREN_API(int) sol_FindWord(
                             HGREN hEngine, 
                             const wchar_t *Word,
                             int *EntryIndex,
@@ -550,7 +540,7 @@ FAIND_API(int) sol_FindWord(
                             int *Class 
                            );
 
-FAIND_API(int) sol_GenerateWordform(
+GREN_API(int) sol_GenerateWordform(
                                     HGREN hEngine, 
                                     int EntryID,
                                     int npairs,
@@ -559,7 +549,7 @@ FAIND_API(int) sol_GenerateWordform(
                                    );
 
 
-FAIND_API(HGREN_STR) sol_GenerateWordforms(
+GREN_API(HGREN_STR) sol_GenerateWordforms(
                                            HGREN hEngine, 
                                            int EntryID,
                                            int npairs,
@@ -572,7 +562,7 @@ FAIND_API(HGREN_STR) sol_GenerateWordforms(
 // Число, заданное целочисленным аргументом value, преобразуем в
 // текстовое представление (именительный падеж)
 // ****************************************************************
-FAIND_API(int)sol_Value2Text(
+GREN_API(int)sol_Value2Text(
                              HGREN hEngine, 
                              wchar_t *Result,
                              int Value,
@@ -581,7 +571,7 @@ FAIND_API(int)sol_Value2Text(
 
 // Быстрый поиск слова. Возвращается некий числовой код, одинаковый для всех
 // словоформ в рамках одной словарной статьи, либо -1 если поиск не удался.
-FAIND_API(int) sol_SeekWord( HGREN hEngine, const wchar_t *word, int Allow_Dynforms );
+GREN_API(int) sol_SeekWord( HGREN hEngine, const wchar_t *word, int Allow_Dynforms );
 
 
 // Словарная статья приводится к семантически эквивалентному
@@ -591,13 +581,13 @@ FAIND_API(int) sol_SeekWord( HGREN hEngine, const wchar_t *word, int Allow_Dynfo
 // Возвращается индекс словарной статьи (существительное) для использования,
 // например, в sol_GetNounForm, либо -1 если привести к существительному
 // не представляется возможным.
-FAIND_API(int) sol_TranslateToNoun( HGREN hEngine, int EntryIndex );
+GREN_API(int) sol_TranslateToNoun( HGREN hEngine, int EntryIndex );
 
 
 // Приведение словарной статьи к семантически или грамматически связанной
 // неопределенной форме глагола (инфинитиву).
 // http://www.solarix.ru/for_developers/api/lemmatization.shtml
-FAIND_API(int) sol_TranslateToInfinitive( HGREN hEngine, int EntryIndex );
+GREN_API(int) sol_TranslateToInfinitive( HGREN hEngine, int EntryIndex );
 
 
 // Приведение к базовой форме.
@@ -607,52 +597,52 @@ FAIND_API(int) sol_TranslateToInfinitive( HGREN hEngine, int EntryIndex );
 // реализовано какое-то (неопределенно) одно.
 //
 // http://www.solarix.ru/for_developers/api/lemmatization.shtml
-FAIND_API(int) sol_TranslateToBase( HGREN hEngine, wchar_t *Word, int AllowDynforms ); 
+GREN_API(int) sol_TranslateToBase( HGREN hEngine, wchar_t *Word, int AllowDynforms ); 
 
 
 // Возвращает список базовых форм для слова. 
 // http://www.solarix.ru/for_developers/api/lemmatization.shtml
-FAIND_API(HGREN_STR) sol_TranslateToBases( HGREN hEngine, const wchar_t *Word, int AllowDynforms );
+GREN_API(HGREN_STR) sol_TranslateToBases( HGREN hEngine, const wchar_t *Word, int AllowDynforms );
 
 
 // http://www.solarix.ru/api/ru/sol_ProjectWord.shtml
 // Нахождение всех проекций указанного слова и работа с полученным списком.
 // Find all possible mappings of the word to the lexicon and return tha handle of the list. 
-FAIND_API(HGREN_WCOORD) sol_ProjectWord( HGREN hEngine, const wchar_t *Word, int Allow_Dynforms );
-FAIND_API(HGREN_WCOORD) sol_ProjectWord8( HGREN hEngine, const char *WordUtf8, int Allow_Dynforms );
+GREN_API(HGREN_WCOORD) sol_ProjectWord( HGREN hEngine, const wchar_t *Word, int Allow_Dynforms );
+GREN_API(HGREN_WCOORD) sol_ProjectWord8( HGREN hEngine, const char *WordUtf8, int Allow_Dynforms );
 typedef HGREN_WCOORD (SX_STDCALL * sol_ProjectWord8_Fun)( HGREN hEngine, const char *WordUtf8, int Allow_Dynforms );
 
-FAIND_API(HGREN_WCOORD) sol_ProjectMisspelledWord( HGREN hEngine, const wchar_t *Word, int Allow_Dynforms, int nmaxmiss );
+GREN_API(HGREN_WCOORD) sol_ProjectMisspelledWord( HGREN hEngine, const wchar_t *Word, int Allow_Dynforms, int nmaxmiss );
 
 // http://www.solarix.ru/api/ru/sol_CountProjections.shtml
 // Count the number of mappings in the list. 
-FAIND_API(int) sol_CountProjections( HGREN_WCOORD hList );
+GREN_API(int) sol_CountProjections( HGREN_WCOORD hList );
 typedef int (SX_STDCALL * sol_CountProjections_Fun)( HGREN_WCOORD hList );
 
 // http://www.solarix.ru/api/ru/sol_DeleteProjections.shtml
 // Delete the results of sol_ProjectWord
-FAIND_API(void) sol_DeleteProjections( HGREN_WCOORD hList );
+GREN_API(void) sol_DeleteProjections( HGREN_WCOORD hList );
 typedef int (SX_STDCALL * sol_DeleteProjections_Fun)( HGREN_WCOORD hList );
 
 // http://www.solarix.ru/api/ru/sol_GetIEntry.shtml
 // Return the entry id (primary key). The entry properties can be accessed 
 // via id, see sol_GetEntryName for example.
 // Возвращается id (primary key) словарной статьи среди проекций
-FAIND_API(int) sol_GetIEntry( HGREN_WCOORD hList, int Index );
+GREN_API(int) sol_GetIEntry( HGREN_WCOORD hList, int Index );
 typedef int (SX_STDCALL * sol_GetIEntry_Fun)( HGREN_WCOORD hList, int Index );
 
 // http://www.solarix.ru/api/ru/sol_GetProjCoordState.shtml
 // Возвращается состояние грамматического признака CoordID у проекции Index
-FAIND_API(int) sol_GetProjCoordState( HGREN hEngine, HGREN_WCOORD hList, int Index, int CoordID );
+GREN_API(int) sol_GetProjCoordState( HGREN hEngine, HGREN_WCOORD hList, int Index, int CoordID );
 typedef int (SX_STDCALL * sol_GetProjCoordState_Fun)( HGREN hEngine, HGREN_WCOORD hList, int Index, int CoordID );
 
-FAIND_API(int) sol_GetProjCoordCount( HGREN hEngine, HGREN_WCOORD hList, int Index );
+GREN_API(int) sol_GetProjCoordCount( HGREN hEngine, HGREN_WCOORD hList, int Index );
 typedef int (SX_STDCALL * sol_GetProjCoordCount_Fun)( HGREN hEngine, HGREN_WCOORD hList, int Index );
 
-FAIND_API(int) sol_GetProjCoordId( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
+GREN_API(int) sol_GetProjCoordId( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
 typedef int (SX_STDCALL * sol_GetProjCoordId_Fun)( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
 
-FAIND_API(int) sol_GetProjStateId( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
+GREN_API(int) sol_GetProjStateId( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
 typedef int (SX_STDCALL * sol_GetProjStateId_Fun)( HGREN hEngine, HGREN_WCOORD hList, int Index, int TagIndex );
 
 
@@ -668,7 +658,7 @@ typedef int (SX_STDCALL * sol_GetProjStateId_Fun)( HGREN hEngine, HGREN_WCOORD h
 
 // http://www.solarix.ru/api/ru/sol_MorphologyAnalysis.shtml
 // Morphology analysis
-FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis(
+GREN_API(HGREN_RESPACK) sol_MorphologyAnalysis(
                                                 HGREN hEngine,
                                                 const wchar_t *Sentence,
                                                 int Flags,
@@ -677,7 +667,7 @@ FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis(
                                                 int Language
                                                );
 // Morphology analysis
-FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis8(
+GREN_API(HGREN_RESPACK) sol_MorphologyAnalysis8(
                                                  HGREN hEngine,
                                                  const char *SentenceUtf8,
                                                  int Flags,
@@ -686,7 +676,7 @@ FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysis8(
                                                  int Language
                                                 );
 
-FAIND_API(HGREN_RESPACK) sol_MorphologyAnalysisA(
+GREN_API(HGREN_RESPACK) sol_MorphologyAnalysisA(
                                                  HGREN hEngine,
                                                  const char *Sentence,
                                                  int Flags,
@@ -711,7 +701,7 @@ typedef HGREN_RESPACK (SX_STDCALL * sol_MorphologyAnalysis8_Fun)(
 // объект, хранящий альтернативные варианты построения синтаксического графа.
 // Ряд функций работает с этим объектом, позволяя анализировать результаты.
 // **************************************************************************
-FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis(
+GREN_API(HGREN_RESPACK) sol_SyntaxAnalysis(
                                             HGREN hEngine,
                                             const wchar_t *Sentence,
                                             int MorphologicalFlags,
@@ -720,7 +710,7 @@ FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis(
                                             int Language
                                            );
 
-FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis8(
+GREN_API(HGREN_RESPACK) sol_SyntaxAnalysis8(
                                              HGREN hEngine,
                                              const char *SentenceUtf8,
                                              int MorphologicalFlags,
@@ -729,7 +719,7 @@ FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysis8(
                                              int Language
                                             );
 
-FAIND_API(HGREN_RESPACK) sol_SyntaxAnalysisA(
+GREN_API(HGREN_RESPACK) sol_SyntaxAnalysisA(
                                              HGREN hEngine,
                                              const char *Sentence,
                                              int MorphologicalFlags,
@@ -749,129 +739,129 @@ typedef HGREN_RESPACK (SX_STDCALL * sol_SyntaxAnalysis8_Fun)(
 
 
 
-FAIND_API(wchar_t*) sol_NormalizePhraseW( HGREN hEngine, HGREN_RESPACK hLinkages );
-FAIND_API(char*) sol_NormalizePhrase8( HGREN hEngine, HGREN_RESPACK hLinkages );
+GREN_API(wchar_t*) sol_NormalizePhraseW( HGREN hEngine, HGREN_RESPACK hLinkages );
+GREN_API(char*) sol_NormalizePhrase8( HGREN hEngine, HGREN_RESPACK hLinkages );
 
 
 
 // http://www.solarix.ru/api/ru/sol_DeleteResPack.shtml
 // Удаление результатов морфологического или синтаксического анализа 
-FAIND_API(void) sol_DeleteResPack( HGREN_RESPACK hPack );
+GREN_API(void) sol_DeleteResPack( HGREN_RESPACK hPack );
 typedef void (SX_STDCALL * sol_DeleteResPack_Fun)( HGREN_RESPACK hPack );
 
 
 // http://www.solarix.ru/api/ru/sol_CountGrafs.shtml
 // Сколько альтернативных вариантов анализа фразы?  
-FAIND_API(int) sol_CountGrafs( HGREN_RESPACK hPack ); 
+GREN_API(int) sol_CountGrafs( HGREN_RESPACK hPack ); 
 typedef int (SX_STDCALL * sol_CountGrafs_Fun)( HGREN_RESPACK hPack );
 
 // http://www.solarix.ru/api/ru/sol_CountRoots.shtml
 // Сколько деревьев (узлов верхнего уровня) в заданном графе?
-FAIND_API(int) sol_CountRoots( HGREN_RESPACK hPack, int iGraf );
+GREN_API(int) sol_CountRoots( HGREN_RESPACK hPack, int iGraf );
 typedef int (SX_STDCALL * sol_CountRoots_Fun)( HGREN_RESPACK hPack, int iGraf );
 
 // http://www.solarix.ru/api/ru/sol_GetRoot.shtml
 // Получение указателя на заданный узел верхнего уровня 
-FAIND_API(HGREN_TREENODE) sol_GetRoot( HGREN_RESPACK hPack, int iGraf, int iRoot );
+GREN_API(HGREN_TREENODE) sol_GetRoot( HGREN_RESPACK hPack, int iGraf, int iRoot );
 typedef HGREN_TREENODE (SX_STDCALL * sol_GetRoot_Fun)( HGREN_RESPACK hPack, int iGraf, int iRoot );
 
 // http://www.solarix.ru/api/ru/sol_CountLeafs.shtml
 // Количество прикрепленных к данному узлу веток
-FAIND_API(int) sol_CountLeafs( HGREN_TREENODE hNode );
+GREN_API(int) sol_CountLeafs( HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_CountLeafs_Fun)( HGREN_TREENODE hNode );
 
 // http://www.solarix.ru/api/ru/sol_GetLeafLinkType.shtml
 // Тип синтаксической связи между корневым узлом и его потомком, заданным порядковым номером (от 0)
-FAIND_API(int) sol_GetLeafLinkType( HGREN_TREENODE hNode, int iLeaf );
+GREN_API(int) sol_GetLeafLinkType( HGREN_TREENODE hNode, int iLeaf );
 typedef int (SX_STDCALL * sol_GetLeafLinkType_Fun)( HGREN_TREENODE hNode, int iLeaf );
 
 // http://www.solarix.ru/api/ru/sol_GetLeaf.shtml
 // Возвращает указатель на заданную ветку
-FAIND_API(HGREN_TREENODE) sol_GetLeaf( HGREN_TREENODE hNode, int iLeaf );
+GREN_API(HGREN_TREENODE) sol_GetLeaf( HGREN_TREENODE hNode, int iLeaf );
 typedef HGREN_TREENODE (SX_STDCALL * sol_GetLeaf_Fun)( HGREN_TREENODE hNode, int iLeaf );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeIEntry.shtml
 // Возвращает индекс словарной статьи в узле
-FAIND_API(int) sol_GetNodeIEntry( HGREN hEngine, HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodeIEntry( HGREN hEngine, HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_GetNodeIEntry_Fun)( HGREN hEngine, HGREN_TREENODE hNode );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeVerIEntry.shtml
-FAIND_API(int) sol_GetNodeVerIEntry( HGREN hEngine, HGREN_TREENODE hNode, int iver );
+GREN_API(int) sol_GetNodeVerIEntry( HGREN hEngine, HGREN_TREENODE hNode, int iver );
 typedef int (SX_STDCALL * sol_GetNodeVerIEntry_Fun)( HGREN hEngine, HGREN_TREENODE hNode, int iver );
 
 // http://www.solarix.ru/api/ru/sol_GetNodePosition.shtml
 // Position of the first word in the node
-FAIND_API(int) sol_GetNodePosition( HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodePosition( HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_GetNodePosition_Fun)( HGREN_TREENODE hNode );
 
-FAIND_API(int) sol_GetNodeContentsLen( HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodeContentsLen( HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_GetNodeContentsLen_Fun)( HGREN_TREENODE hNode );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeContents.shtml
 // Текстовое содержимое узла
-FAIND_API(void) sol_GetNodeContents( HGREN_TREENODE hNode, wchar_t *Buffer );
-FAIND_API(void) sol_GetNodeContents8( HGREN_TREENODE hNode, char *BufferUtf8 );
+GREN_API(void) sol_GetNodeContents( HGREN_TREENODE hNode, wchar_t *Buffer );
+GREN_API(void) sol_GetNodeContents8( HGREN_TREENODE hNode, char *BufferUtf8 );
 typedef void (SX_STDCALL * sol_GetNodeContents_Fun)( HGREN_TREENODE hNode, wchar_t *Buffer );
 typedef void (SX_STDCALL * sol_GetNodeContents8_Fun)( HGREN_TREENODE hNode, char *BufferUtf8 );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeCoordState.shtml
 // Состояние координаты для узла
-FAIND_API(int) sol_GetNodeCoordState( HGREN_TREENODE hNode, int CoordID );
-FAIND_API(int) sol_GetNodeVerCoordState( HGREN_TREENODE hNode, int iver, int CoordID );
+GREN_API(int) sol_GetNodeCoordState( HGREN_TREENODE hNode, int CoordID );
+GREN_API(int) sol_GetNodeVerCoordState( HGREN_TREENODE hNode, int iver, int CoordID );
 typedef int (SX_STDCALL * sol_GetNodeCoordState_Fun)( HGREN_TREENODE hNode, int CoordID );
 typedef int (SX_STDCALL * sol_GetNodeVerCoordState_Fun)( HGREN_TREENODE hNode, int iver, int CoordID );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeVersionCount.shtml
 // Количество альтернативных версий словоформы, включая основную.
-FAIND_API(int) sol_GetNodeVersionCount( HGREN hEngine, HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodeVersionCount( HGREN hEngine, HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_GetNodeVersionCount_Fun)( HGREN hEngine, HGREN_TREENODE hNode );
 
 // http://www.solarix.ru/api/ru/sol_GetNodeCoordPair.shtml
 // Проверяем наличие координатной пары у узла
-FAIND_API(int) sol_GetNodeCoordPair( HGREN_TREENODE hNode, int CoordID, int StateID );
-FAIND_API(int) sol_GetNodeVerCoordPair( HGREN_TREENODE hNode, int iver, int CoordID, int StateID );
+GREN_API(int) sol_GetNodeCoordPair( HGREN_TREENODE hNode, int CoordID, int StateID );
+GREN_API(int) sol_GetNodeVerCoordPair( HGREN_TREENODE hNode, int iver, int CoordID, int StateID );
 typedef int (SX_STDCALL * sol_GetNodeCoordPair_Fun)( HGREN_TREENODE hNode, int CoordID, int StateID );
 typedef int (SX_STDCALL * sol_GetNodeVerCoordPair_Fun)( HGREN_TREENODE hNode, int iver, int CoordID, int StateID );
 
 // http://www.solarix.ru/api/ru/sol_GetNodePairsCount.shtml
 // Число различных координатных пар у узла
-FAIND_API(int) sol_GetNodePairsCount( HGREN_TREENODE hNode );
-FAIND_API(int) sol_GetNodeVerPairsCount( HGREN_TREENODE hNode, int iver );
+GREN_API(int) sol_GetNodePairsCount( HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodeVerPairsCount( HGREN_TREENODE hNode, int iver );
 typedef int (SX_STDCALL * sol_GetNodePairsCount_Fun)( HGREN_TREENODE hNode );
 typedef int (SX_STDCALL * sol_GetNodeVerPairsCount_Fun)( HGREN_TREENODE hNode, int iver );
 
 // http://www.solarix.ru/api/ru/sol_GetNodePairCoord.shtml
-FAIND_API(int) sol_GetNodePairCoord( HGREN_TREENODE hNode, int ipair );
-FAIND_API(int) sol_GetNodeVerPairCoord( HGREN_TREENODE hNode, int iver, int ipair );
+GREN_API(int) sol_GetNodePairCoord( HGREN_TREENODE hNode, int ipair );
+GREN_API(int) sol_GetNodeVerPairCoord( HGREN_TREENODE hNode, int iver, int ipair );
 typedef int (SX_STDCALL * sol_GetNodePairCoord_Fun)( HGREN_TREENODE hNode, int ipair );
 typedef int (SX_STDCALL * sol_GetNodeVerPairCoord_Fun)( HGREN_TREENODE hNode, int iver, int ipair );
 
 // http://www.solarix.ru/api/ru/sol_GetNodePairState.shtml
-FAIND_API(int) sol_GetNodePairState( HGREN_TREENODE hNode, int ipair );
-FAIND_API(int) sol_GetNodeVerPairState( HGREN_TREENODE hNode, int iver, int ipair );
+GREN_API(int) sol_GetNodePairState( HGREN_TREENODE hNode, int ipair );
+GREN_API(int) sol_GetNodeVerPairState( HGREN_TREENODE hNode, int iver, int ipair );
 typedef int (SX_STDCALL * sol_GetNodePairState_Fun)( HGREN_TREENODE hNode, int ipair );
 typedef int (SX_STDCALL * sol_GetNodeVerPairState_Fun)( HGREN_TREENODE hNode, int iver, int ipair );
 
 
 
 
-FAIND_API(int) sol_RestoreCasing( HGREN hEngine, wchar_t *Word, int EntryIndex );
-FAIND_API(int) sol_RestoreCasing8( HGREN hEngine, char *WordUtf8, int EntryIndex );
+GREN_API(int) sol_RestoreCasing( HGREN hEngine, wchar_t *Word, int EntryIndex );
+GREN_API(int) sol_RestoreCasing8( HGREN hEngine, char *WordUtf8, int EntryIndex );
 typedef int (SX_STDCALL * sol_RestoreCasing8_Fun)( HGREN hEngine, char *WordUtf8, int EntryIndex );
 
 
-FAIND_API(HGREN_SBROKER) sol_CreateSentenceBroker( HGREN hEngine, const wchar_t *Filename, const wchar_t *DefaultCodepage, int LanguageID );
-FAIND_API(HGREN_SBROKER) sol_CreateSentenceBroker8( HGREN hEngine, const char *Filename8, const char *DefaultCodepage8, int LanguageID );
+GREN_API(HGREN_SBROKER) sol_CreateSentenceBroker( HGREN hEngine, const wchar_t *Filename, const wchar_t *DefaultCodepage, int LanguageID );
+GREN_API(HGREN_SBROKER) sol_CreateSentenceBroker8( HGREN hEngine, const char *Filename8, const char *DefaultCodepage8, int LanguageID );
 
-FAIND_API(HGREN_SBROKER) sol_CreateSentenceBrokerMemW( HGREN hEngine, const wchar_t *Text, int LanguageID );
-FAIND_API(HGREN_SBROKER) sol_CreateSentenceBrokerMemA( HGREN hEngine, const char *Text, int LanguageID );
-FAIND_API(HGREN_SBROKER) sol_CreateSentenceBrokerMem8( HGREN hEngine, const char *TextUtf8, int LanguageID );
-FAIND_API(int) sol_FetchSentence( HGREN_SBROKER hBroker );
-FAIND_API(int) sol_GetFetchedSentenceW( HGREN_SBROKER hBroker, wchar_t *Buffer );
-FAIND_API(int) sol_GetFetchedSentenceA( HGREN_SBROKER hBroker, char *Buffer );
-FAIND_API(int) sol_GetFetchedSentence8( HGREN_SBROKER hBroker, char *BufferUtf8 );
-FAIND_API(int) sol_GetFetchedSentenceLen( HGREN_SBROKER hBroker );
-FAIND_API(void) sol_DeleteSentenceBroker( HGREN_SBROKER hBroker );
+GREN_API(HGREN_SBROKER) sol_CreateSentenceBrokerMemW( HGREN hEngine, const wchar_t *Text, int LanguageID );
+GREN_API(HGREN_SBROKER) sol_CreateSentenceBrokerMemA( HGREN hEngine, const char *Text, int LanguageID );
+GREN_API(HGREN_SBROKER) sol_CreateSentenceBrokerMem8( HGREN hEngine, const char *TextUtf8, int LanguageID );
+GREN_API(int) sol_FetchSentence( HGREN_SBROKER hBroker );
+GREN_API(int) sol_GetFetchedSentenceW( HGREN_SBROKER hBroker, wchar_t *Buffer );
+GREN_API(int) sol_GetFetchedSentenceA( HGREN_SBROKER hBroker, char *Buffer );
+GREN_API(int) sol_GetFetchedSentence8( HGREN_SBROKER hBroker, char *BufferUtf8 );
+GREN_API(int) sol_GetFetchedSentenceLen( HGREN_SBROKER hBroker );
+GREN_API(void) sol_DeleteSentenceBroker( HGREN_SBROKER hBroker );
 
 typedef HGREN_SBROKER (SX_STDCALL * sol_CreateSentenceBrokerMem8_Fun)( HGREN hEngine, char *WordUtf8, int EntryIndex );
 typedef int (SX_STDCALL * sol_FetchSentence_Fun)( HGREN_SBROKER hBroker );
@@ -883,9 +873,9 @@ typedef int (SX_STDCALL * sol_DeleteSentenceBroker_Fun)( HGREN_SBROKER hBroker )
 
 // Split the string into words, using the rules for language with given ID
 // http://www.solarix.ru/api/ru/sol_Tokenize.shtml
-FAIND_API(HGREN_STR) sol_TokenizeW( HGREN hEngine, const wchar_t *Sentence, int LanguageID );
-FAIND_API(HGREN_STR) sol_TokenizeA( HGREN hEngine, const char *Sentence, int LanguageID );
-FAIND_API(HGREN_STR) sol_Tokenize8( HGREN hEngine, const char *SentenceUtf8, int LanguageID );
+GREN_API(HGREN_STR) sol_TokenizeW( HGREN hEngine, const wchar_t *Sentence, int LanguageID );
+GREN_API(HGREN_STR) sol_TokenizeA( HGREN hEngine, const char *Sentence, int LanguageID );
+GREN_API(HGREN_STR) sol_Tokenize8( HGREN hEngine, const char *SentenceUtf8, int LanguageID );
 typedef HGREN_STR (SX_STDCALL * sol_Tokenize8_Fun)( HGREN hEngine, const char *SentenceUtf8, int LanguageID );
 
 #if defined UNICODE || defined _UNICODE 
@@ -897,33 +887,33 @@ typedef HGREN_STR (SX_STDCALL * sol_Tokenize8_Fun)( HGREN hEngine, const char *S
 
 // N-grams database lookup
 // http://www.solarix.ru/for_developers/api/ngrams-api.shtml
-FAIND_API(int) sol_Seek1Grams( HGREN hEngine, int type, const wchar_t *word1 );
-FAIND_API(int) sol_Seek2Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2 );
-FAIND_API(int) sol_Seek3Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3 );
-FAIND_API(int) sol_Seek4Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3, const wchar_t *word4 );
-FAIND_API(int) sol_Seek5Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3, const wchar_t *word4, const wchar_t *word5 );
-FAIND_API(int) sol_CountNGrams( HGREN hEngine, int type, int Order, unsigned int *Hi, unsigned int *Lo );
+GREN_API(int) sol_Seek1Grams( HGREN hEngine, int type, const wchar_t *word1 );
+GREN_API(int) sol_Seek2Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2 );
+GREN_API(int) sol_Seek3Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3 );
+GREN_API(int) sol_Seek4Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3, const wchar_t *word4 );
+GREN_API(int) sol_Seek5Grams( HGREN hEngine, int type, const wchar_t *word1, const wchar_t *word2, const wchar_t *word3, const wchar_t *word4, const wchar_t *word5 );
+GREN_API(int) sol_CountNGrams( HGREN hEngine, int type, int Order, unsigned int *Hi, unsigned int *Lo );
 
-FAIND_API(int) sol_Seek1Grams8( HGREN hEngine, int type, const char *word1 );
-FAIND_API(int) sol_Seek2Grams8( HGREN hEngine, int type, const char *word1, const char *word2 );
-FAIND_API(int) sol_Seek3Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3 );
-FAIND_API(int) sol_Seek4Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3, const char *word4 );
-FAIND_API(int) sol_Seek5Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3, const char *word4, const char *word5 );
+GREN_API(int) sol_Seek1Grams8( HGREN hEngine, int type, const char *word1 );
+GREN_API(int) sol_Seek2Grams8( HGREN hEngine, int type, const char *word1, const char *word2 );
+GREN_API(int) sol_Seek3Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3 );
+GREN_API(int) sol_Seek4Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3, const char *word4 );
+GREN_API(int) sol_Seek5Grams8( HGREN hEngine, int type, const char *word1, const char *word2, const char *word3, const char *word4, const char *word5 );
 
 
 
-FAIND_API(int) sol_CountInts( HGREN_INTARRAY h );
-FAIND_API(int) sol_GetInt( HGREN_INTARRAY h, int i );
-FAIND_API(void) sol_DeleteInts( HGREN_INTARRAY h );
+GREN_API(int) sol_CountInts( HGREN_INTARRAY h );
+GREN_API(int) sol_GetInt( HGREN_INTARRAY h, int i );
+GREN_API(void) sol_DeleteInts( HGREN_INTARRAY h );
 
-FAIND_API(int) sol_IsLanguagePhrase( HGREN hEngine, const wchar_t *Phrase, int Language );
-FAIND_API(int) sol_GuessPhraseLanguage( HGREN hEngine, const wchar_t *Phrase );
+GREN_API(int) sol_IsLanguagePhrase( HGREN hEngine, const wchar_t *Phrase, int Language );
+GREN_API(int) sol_GuessPhraseLanguage( HGREN hEngine, const wchar_t *Phrase );
 
-FAIND_API(int) sol_Free( HGREN hEngine, void *Ptr );
+GREN_API(int) sol_Free( HGREN hEngine, void *Ptr );
 
-FAIND_API(int) sol_MatchNGrams( HGREN hEngine, const wchar_t *Text, int * unmatched_2_ngrams, int *n2, int *n3 );
+GREN_API(int) sol_MatchNGrams( HGREN hEngine, const wchar_t *Text, int * unmatched_2_ngrams, int *n2, int *n3 );
 
-FAIND_API(int) sol_Syllabs(
+GREN_API(int) sol_Syllabs(
                            HGREN hEngine,
                            const wchar_t *OrgWord,
                            wchar_t SyllabDelimiter,
@@ -931,7 +921,7 @@ FAIND_API(int) sol_Syllabs(
                            int LanguageID
                           );
 
-FAIND_API(int) sol_Syllabs8(
+GREN_API(int) sol_Syllabs8(
                             HGREN hEngine,
                             const char *OrgWord,
                             char SyllabDelimiter, 
@@ -941,131 +931,131 @@ FAIND_API(int) sol_Syllabs8(
 
 // Find the internal language index by its name (usually English name)
 // Returns -1 if no language is found.
-FAIND_API(int) sol_FindLanguage( HGREN hEngine, const wchar_t *LanguageName );
-FAIND_API(int) sol_FindLanguage8( HGREN hEngine, const char *LanguageNameUtf8 );
+GREN_API(int) sol_FindLanguage( HGREN hEngine, const wchar_t *LanguageName );
+GREN_API(int) sol_FindLanguage8( HGREN hEngine, const char *LanguageNameUtf8 );
 
 // Probe the lexicon for language entries.
 // Returns 1 if language is present in lexicon, 0 if not,
-FAIND_API(int) sol_HasLanguage( HGREN hEngine, int LanguageID );
+GREN_API(int) sol_HasLanguage( HGREN hEngine, int LanguageID );
 
 // Returns the total number of distinct lexems in lexicon
-FAIND_API(int) sol_CountLexems( HGREN hEng );
+GREN_API(int) sol_CountLexems( HGREN hEng );
 
 // Flexion Engine: guess suitable flexion handlers for the word
-FAIND_API(HFLEXIONS) sol_FindFlexionHandlers( HGREN hEngine, const wchar_t *WordBasicForm, int SearchEntries );
+GREN_API(HFLEXIONS) sol_FindFlexionHandlers( HGREN hEngine, const wchar_t *WordBasicForm, int SearchEntries );
 
 // Flexion engine: return the number of matching entries
-FAIND_API(int) sol_CountEntriesInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs );
+GREN_API(int) sol_CountEntriesInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs );
 
 // Flexion engine: return the number of matching paradigmas
-FAIND_API(int) sol_CountParadigmasInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs );
+GREN_API(int) sol_CountParadigmasInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs );
 
 // Flexion engine: return the entry ID
-FAIND_API(int) sol_GetEntryInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs, int Index );
+GREN_API(int) sol_GetEntryInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs, int Index );
 
 // Flexion engine: return the paradigma internal index and human-friendly name
-FAIND_API(int) sol_GetParadigmaInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs, int Index, wchar_t *ParadigmaName );
+GREN_API(int) sol_GetParadigmaInFlexionHandlers( HGREN hEngine, HFLEXIONS hFlexs, int Index, wchar_t *ParadigmaName );
 
-FAIND_API(HFLEXIONTABLE) sol_BuildFlexionHandler(
+GREN_API(HFLEXIONTABLE) sol_BuildFlexionHandler(
                                                  HGREN hEng,
                                                  HFLEXIONS hFlexs,
                                                  const wchar_t *ParadigmaName,
                                                  int EntryIndex
                                                 );
 
-FAIND_API(const wchar_t*) sol_GetFlexionHandlerWordform( HGREN hEngine, HFLEXIONTABLE hFlex, const wchar_t *dims );
+GREN_API(const wchar_t*) sol_GetFlexionHandlerWordform( HGREN hEngine, HFLEXIONTABLE hFlex, const wchar_t *dims );
 
-FAIND_API(int) sol_CountFlexionHandlerWordform( HGREN hEngine, HFLEXIONTABLE hFlex );
-FAIND_API(const wchar_t*) sol_GetFlexionHandlerWordformText( HGREN hEngine, HFLEXIONTABLE hFlex, int FormIndex );
+GREN_API(int) sol_CountFlexionHandlerWordform( HGREN hEngine, HFLEXIONTABLE hFlex );
+GREN_API(const wchar_t*) sol_GetFlexionHandlerWordformText( HGREN hEngine, HFLEXIONTABLE hFlex, int FormIndex );
 
-FAIND_API(int) sol_DeleteFlexionHandlers( HGREN hEng, HFLEXIONS hFlexs );
-FAIND_API(int) sol_DeleteFlexionHandler( HGREN hEng, HFLEXIONTABLE hFlex );
+GREN_API(int) sol_DeleteFlexionHandlers( HGREN hEng, HFLEXIONS hFlexs );
+GREN_API(int) sol_DeleteFlexionHandler( HGREN hEng, HFLEXIONTABLE hFlex );
 
 
 
 // http://www.solarix.ru/api/en/sol_FindPhrase.shtml
-FAIND_API(int) sol_FindPhrase( HGREN hEng, const wchar_t *Phrase, int Flags );
-FAIND_API(int) sol_FindPhrase8( HGREN hEng, const char *Phrase, int Flags );
+GREN_API(int) sol_FindPhrase( HGREN hEng, const wchar_t *Phrase, int Flags );
+GREN_API(int) sol_FindPhrase8( HGREN hEng, const char *Phrase, int Flags );
 
-FAIND_API(wchar_t*) sol_GetPhraseText( HGREN hEngine, int PhraseID );
-FAIND_API(char*) sol_GetPhraseText8( HGREN hEngine, int PhraseID );
+GREN_API(wchar_t*) sol_GetPhraseText( HGREN hEngine, int PhraseID );
+GREN_API(char*) sol_GetPhraseText8( HGREN hEngine, int PhraseID );
 
-FAIND_API(int) sol_GetPhraseLanguage( HGREN hEngine, int PhraseID );
-FAIND_API(int) sol_GetPhraseClass( HGREN hEngine, int PhraseID );
-FAIND_API(int) sol_AddPhrase( HGREN hEngine, const wchar_t *Phrase, int LanguageID, int PartOfSpeechID, int ProcessingFlags );
-FAIND_API(int) sol_AddPhrase8( HGREN hEngine, const char *Phrase, int LanguageID, int PartOfSpeechID, int ProcessingFlags );
-FAIND_API(int) sol_SetPhraseNote( HGREN hEngine, int PhraseID, const wchar_t *Name, const wchar_t *Value );
+GREN_API(int) sol_GetPhraseLanguage( HGREN hEngine, int PhraseID );
+GREN_API(int) sol_GetPhraseClass( HGREN hEngine, int PhraseID );
+GREN_API(int) sol_AddPhrase( HGREN hEngine, const wchar_t *Phrase, int LanguageID, int PartOfSpeechID, int ProcessingFlags );
+GREN_API(int) sol_AddPhrase8( HGREN hEngine, const char *Phrase, int LanguageID, int PartOfSpeechID, int ProcessingFlags );
+GREN_API(int) sol_SetPhraseNote( HGREN hEngine, int PhraseID, const wchar_t *Name, const wchar_t *Value );
 
-FAIND_API(int) sol_ProcessPhraseEntry(
+GREN_API(int) sol_ProcessPhraseEntry(
                                       HGREN hEngine,
                                       int te_id,
                                       const wchar_t *Scenario,
                                       int LanguageID,
                                       wchar_t DelimiterChar
                                      );
-FAIND_API(int) sol_DeletePhrase( HGREN hEngine, int te_id );
+GREN_API(int) sol_DeletePhrase( HGREN hEngine, int te_id );
 
 
 
-FAIND_API(HGREN_INTARRAY) sol_ListEntries( HGREN hEngine, int Flags, int EntryType, const wchar_t *Mask, int LanguageID, int PartOfSpeechID );
-FAIND_API(HGREN_INTARRAY) sol_ListEntries8( HGREN hEngine, int Flags, int EntryType, const char *MaskUtf8, int LanguageID, int PartOfSpeechID );
-FAIND_API(HGREN_STR) sol_ListEntryForms( HGREN hEngine, int EntryKey );
+GREN_API(HGREN_INTARRAY) sol_ListEntries( HGREN hEngine, int Flags, int EntryType, const wchar_t *Mask, int LanguageID, int PartOfSpeechID );
+GREN_API(HGREN_INTARRAY) sol_ListEntries8( HGREN hEngine, int Flags, int EntryType, const char *MaskUtf8, int LanguageID, int PartOfSpeechID );
+GREN_API(HGREN_STR) sol_ListEntryForms( HGREN hEngine, int EntryKey );
 
 
-FAIND_API(int) sol_SaveDictionary( HGREN hEngine, int Flags, const wchar_t *Folder );
+GREN_API(int) sol_SaveDictionary( HGREN hEngine, int Flags, const wchar_t *Folder );
 
-FAIND_API(int) sol_AddWord( HGREN hEng, const wchar_t *Txt );
-FAIND_API(int) sol_AddWord8( HGREN hEng, const char *Txt );
+GREN_API(int) sol_AddWord( HGREN hEng, const wchar_t *Txt );
+GREN_API(int) sol_AddWord8( HGREN hEng, const char *Txt );
 
-FAIND_API(int) sol_ReserveLexiconSpace( HGREN hEngine, int n );
+GREN_API(int) sol_ReserveLexiconSpace( HGREN hEngine, int n );
 
 // Error reporting functions.
-FAIND_API(int) sol_GetErrorLen( HGREN hEngine );
+GREN_API(int) sol_GetErrorLen( HGREN hEngine );
 
-FAIND_API(int) sol_GetErrorLen8( HGREN hEngine );
+GREN_API(int) sol_GetErrorLen8( HGREN hEngine );
 typedef int (SX_STDCALL * sol_GetErrorLen8_Fun)( HGREN hEngine );
 
-FAIND_API(int) sol_GetError( HGREN hEngine, wchar_t *Buffer, int buffer_len );
-FAIND_API(int) sol_GetError8( HGREN hEngine, char *BufferUtf8, int buffer_len );
+GREN_API(int) sol_GetError( HGREN hEngine, wchar_t *Buffer, int buffer_len );
+GREN_API(int) sol_GetError8( HGREN hEngine, char *BufferUtf8, int buffer_len );
 typedef int (SX_STDCALL * sol_GetError8_Fun)( HGREN hEngine, char *BufferUtf8, int buffer_len );
 
-FAIND_API(void) sol_ClearError( HGREN hEngine );
+GREN_API(void) sol_ClearError( HGREN hEngine );
 
-FAIND_API(int) sol_LemmatizeWord( HGREN hEngine, wchar_t *word, int Allow_Dynforms );
+GREN_API(int) sol_LemmatizeWord( HGREN hEngine, wchar_t *word, int Allow_Dynforms );
 
-FAIND_API(HGREN_INTARRAY) sol_ListPartsOfSpeech( HGREN hEngine, int Language );
+GREN_API(HGREN_INTARRAY) sol_ListPartsOfSpeech( HGREN hEngine, int Language );
 
-FAIND_API(int) sol_FindTagW( HGREN hEngine, const wchar_t *TagName );
-FAIND_API(int) sol_FindTagValueW( HGREN hEngine, int TagID, const wchar_t *ValueName );
-
-
-FAIND_API(HGREN_SPOKEN) sol_PronounceW( HGREN hEngine, const wchar_t * Sentence, int LanguageID, int AnalysisFlags, int SynthesisFlags, void * VoiceOptions );
-FAIND_API(int) sol_DeleteSpoken( HGREN_SPOKEN hData );
+GREN_API(int) sol_FindTagW( HGREN hEngine, const wchar_t *TagName );
+GREN_API(int) sol_FindTagValueW( HGREN hEngine, int TagID, const wchar_t *ValueName );
 
 
-FAIND_API(int) sol_CountNodeMarks( HGREN_TREENODE hNode );
-FAIND_API(int) sol_GetNodeMarkNameW( HGREN_TREENODE hNode, int mark_index, wchar_t * name_buffer );
-FAIND_API(HGREN_LONGSTRING) sol_SerializeNodeMark( HGREN hEngine, HGREN_TREENODE hNode, int mark_index, int format );
-FAIND_API(int) sol_GetLongStringLenW( HGREN_LONGSTRING hString );
-FAIND_API(int) sol_GetLongStringW( HGREN_LONGSTRING hString, wchar_t * buffer );
-FAIND_API(int) sol_DeleteLongString( HGREN_LONGSTRING hString );
+GREN_API(HGREN_SPOKEN) sol_PronounceW( HGREN hEngine, const wchar_t * Sentence, int LanguageID, int AnalysisFlags, int SynthesisFlags, void * VoiceOptions );
+GREN_API(int) sol_DeleteSpoken( HGREN_SPOKEN hData );
 
-FAIND_API(const char*) sol_RenderSyntaxTree8( HGREN hEngine, HGREN_RESPACK hSyntaxTree, int RenderOptions );
 
-FAIND_API(void*) sol_OpenCorpusStorage8( HGREN hEngine, const char * filename, int for_writing );
-FAIND_API(int) sol_CloseCorpusStorage( HGREN hEngine, void * file_handle );
-FAIND_API(int) sol_WriteSyntaxTree( HGREN hEngine, void * file_handle, const wchar_t * sentence_utf8,  HGREN_RESPACK respack );
+GREN_API(int) sol_CountNodeMarks( HGREN_TREENODE hNode );
+GREN_API(int) sol_GetNodeMarkNameW( HGREN_TREENODE hNode, int mark_index, wchar_t * name_buffer );
+GREN_API(HGREN_LONGSTRING) sol_SerializeNodeMark( HGREN hEngine, HGREN_TREENODE hNode, int mark_index, int format );
+GREN_API(int) sol_GetLongStringLenW( HGREN_LONGSTRING hString );
+GREN_API(int) sol_GetLongStringW( HGREN_LONGSTRING hString, wchar_t * buffer );
+GREN_API(int) sol_DeleteLongString( HGREN_LONGSTRING hString );
 
-FAIND_API(void*) sol_LoadSyntaxTree( HGREN hEngine, void * file_handle );
-FAIND_API(HGREN_RESPACK) sol_GetTreeHandle( void * ptr );
-FAIND_API(const wchar_t*) sol_GetSentenceW( void * ptr );
-FAIND_API(int) sol_FreeSyntaxTree( void * tree );
-FAIND_API(HGREN_RESPACK) sol_CreateLinkages(HGREN hEngine);
-FAIND_API(HGREN_LINKAGE) sol_CreateLinkage(HGREN hEngine, HGREN_RESPACK hLinkages);
-FAIND_API(int) sol_AddBeginMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
-FAIND_API(int) sol_AddEndMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
-FAIND_API(int) sol_AddNodeToLinkage(HGREN hEngine, HGREN_LINKAGE hLinkage, HGREN_TREENODE hNode);
-FAIND_API(HGREN_TREENODE) sol_CreateTreeNodeW(HGREN hEngine, int id_entry, const wchar_t *word, int n_pair, const int * pairs);
+GREN_API(const char*) sol_RenderSyntaxTree8( HGREN hEngine, HGREN_RESPACK hSyntaxTree, int RenderOptions );
+
+GREN_API(void*) sol_OpenCorpusStorage8( HGREN hEngine, const char * filename, int for_writing );
+GREN_API(int) sol_CloseCorpusStorage( HGREN hEngine, void * file_handle );
+GREN_API(int) sol_WriteSyntaxTree( HGREN hEngine, void * file_handle, const wchar_t * sentence_utf8,  HGREN_RESPACK respack );
+
+GREN_API(void*) sol_LoadSyntaxTree( HGREN hEngine, void * file_handle );
+GREN_API(HGREN_RESPACK) sol_GetTreeHandle( void * ptr );
+GREN_API(const wchar_t*) sol_GetSentenceW( void * ptr );
+GREN_API(int) sol_FreeSyntaxTree( void * tree );
+GREN_API(HGREN_RESPACK) sol_CreateLinkages(HGREN hEngine);
+GREN_API(HGREN_LINKAGE) sol_CreateLinkage(HGREN hEngine, HGREN_RESPACK hLinkages);
+GREN_API(int) sol_AddBeginMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
+GREN_API(int) sol_AddEndMarker(HGREN hEngine, HGREN_LINKAGE hLinkage);
+GREN_API(int) sol_AddNodeToLinkage(HGREN hEngine, HGREN_LINKAGE hLinkage, HGREN_TREENODE hNode);
+GREN_API(HGREN_TREENODE) sol_CreateTreeNodeW(HGREN hEngine, int id_entry, const wchar_t *word, int n_pair, const int * pairs);
 
 
 

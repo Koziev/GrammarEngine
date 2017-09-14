@@ -111,9 +111,6 @@
     <ClCompile Include="..\..\..\..\contain\lem_astr.cpp">
       <Filter>Source Files\lem\Container</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\contain\lem_bitv.cpp">
-      <Filter>Source Files\lem\Container</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\contain\lem_fp1.cpp">
       <Filter>Source Files\lem\Container</Filter>
     </ClCompile>
@@ -362,9 +359,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp">
       <Filter>Source Files\lem\Db</Filter>
-    </ClCompile>
-    <ClCompile Include="search_engine.cpp">
-      <Filter>Source Files\Grammar_Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\ai\aa\aa_autom.cpp">
       <Filter>Source Files\Grammar_Engine\AA</Filter>
@@ -1299,72 +1293,78 @@
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp">
       <Filter>Source Files\Grammar_Engine\LA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\c_regex_traits.cpp">
+    <ClCompile Include="GrammarEngineHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cpp_regex_traits.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cregex.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\fileiter.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\icu.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\instances.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\posix_api.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_debug.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_raw_buffer.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_traits_defaults.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\static_mutex.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\usinstances.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\w32_regex_traits.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wc_regex_traits.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wide_posix_api.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\winstances.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp">
       <Filter>Source Files\boost\regex</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\system\src\error_code.cpp">
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp">
+      <Filter>Source Files\boost\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp">
+      <Filter>Source Files\boost\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
+      <Filter>Source Files\boost\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp">
       <Filter>Source Files\boost\system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\thread.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_dll.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
-      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\include\lem\solarix\solarix_grammar_engine.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammarEngineHolder.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
