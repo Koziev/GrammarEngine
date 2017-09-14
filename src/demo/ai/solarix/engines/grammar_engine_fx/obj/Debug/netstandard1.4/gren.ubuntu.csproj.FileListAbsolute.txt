@@ -1,0 +1,6 @@
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/bin/Debug/netstandard1.4/gren.ubuntu.deps.json
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/obj/Debug/netstandard1.4/gren.ubuntu.AssemblyInfo.cs
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/bin/Debug/netstandard1.4/gren.ubuntu.dll
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/bin/Debug/netstandard1.4/gren.ubuntu.pdb
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/obj/Debug/netstandard1.4/gren.ubuntu.dll
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/engines/grammar_engine_fx/obj/Debug/netstandard1.4/gren.ubuntu.pdb

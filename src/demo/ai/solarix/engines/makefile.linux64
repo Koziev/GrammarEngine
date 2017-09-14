@@ -18,7 +18,7 @@ include makefile.files
 
 clean:
 	rm -f $(OBJDIR)/*
-	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/solarix_grammar_engine.so
+	./del.sh $(EXEDIR)/solarix_grammar_engine.so
 
 install:
 	cp solarix_grammar_engine.so /usr/lib64
