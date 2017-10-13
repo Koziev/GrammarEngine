@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Lemmatizator</ProjectName>
+    <ProjectGuid>{D0BCAF87-73E5-4064-8B92-884D9C6307DD}</ProjectGuid>
+    <RootNamespace>Lemmatizator</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(TMP)\LemmatizatorEngine\Debug\</OutDir>
+    <IntDir>$(TMP)\LemmatizatorEngine\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(TMP)\LemmatizatorEngine\Debug64\</OutDir>
+    <IntDir>$(TMP)\LemmatizatorEngine\Debug64\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(TMP)\LemmatizatorEngine\Release\</OutDir>
+    <IntDir>$(TMP)\LemmatizatorEngine\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(TMP)\LemmatizatorEngine\Release64\</OutDir>
+    <IntDir>$(TMP)\LemmatizatorEngine\Release64\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(LEM_PATH)\include;$(BOOST_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;BOOST_ALL_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\lib\lemmatizatord.dll</OutputFile>
+      <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)lemmatizator.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)\lib\lemmatizatord.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(LEM_PATH)\include;$(BOOST_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;BOOST_ALL_NO_LIB;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\lib64\lemmatizatord.dll</OutputFile>
+      <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)lemmatizator.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)\lib64\lemmatizatord.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(LEM_PATH)\include;$(BOOST_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;BOOST_ALL_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\lib\lemmatizator.dll</OutputFile>
+      <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)\lib\lemmatizator.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(LEM_PATH)\include;$(BOOST_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;BOOST_ALL_NO_LIB;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\lib64\lemmatizator.dll</OutputFile>
+      <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(LEM_PATH)\lib64\lemmatizator.lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
+    <ClCompile Include="lemmatizator.cpp" />
+    <ClCompile Include="..\..\..\..\..\ai\la\lemmatizator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\io\base_lexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_base_stream.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_binary_file.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_fast_file_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_kbd.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_memory_stream.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_std_file_stream.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_text_file.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\io_tty.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\lem_logfile.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\oformatter.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_base_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_char_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_html_decoder.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_icu_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_laguage_filter.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_translit_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_utf8_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_application.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_chec.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_coap.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_conv.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_critical_section.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_dir.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_dll.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_interlocked_value.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_process.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_reflection.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_shell.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_startup.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_thread.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\lem_time.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\win32_registry.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\ui\ui_user_interface.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\system_config\system_config.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\base64.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cast_to_url.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_037.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1006.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1026.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1250.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1251.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1252.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1253.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1254.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1255.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1256.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1257.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_1258.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_424.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_437.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_500.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_737.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_775.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_847.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_850.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_852.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_855.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_856.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_857.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_860.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_861.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_862.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_863.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_864.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_865.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_866.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_869.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_874.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_875.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_1.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_10.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_11.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_13.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_14.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_15.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_16.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_2.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_3.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_4.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_5.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_6.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_7.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_8.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_8859_9.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_code_page.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_recodings.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_sgml.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\cp_unicode_data.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\transliterator.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\ucs4_to_utf8.cpp" />
+    <ClCompile Include="..\..\..\..\..\tools\unicode\utf_converters.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_acstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_afstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_astr.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_ucstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_ufstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\contain\lem_ustr.cpp" />
+    <ClCompile Include="..\..\..\..\..\math\lem_imat.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

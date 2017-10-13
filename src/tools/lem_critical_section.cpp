@@ -123,7 +123,7 @@ void CriticalSection::Leave(void)
  #if defined LEM_WINDOWS
   #if LEM_DEBUGGING==1
   int lock_count = cs.LockCount;
-  #if dined LEM_32
+  #if defined LEM_32
   LEM_CHECKIT_Z( lock_count>=0 );
   #endif
   #endif

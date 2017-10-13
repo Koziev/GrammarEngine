@@ -1,0 +1,412 @@
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.cc.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.C.o:
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) -o $@ $<
+
+OBJS = $(OBJDIR)/lemmatizator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/macheps.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/lem_startup.o $(OBJDIR)/la_lemmatizator.o
+
+all: lemmatizator
+
+lemmatizator: $(OBJS)
+		$(CXX) $(LFLAGS) $(OBJS) -l dl $(LEM_LIBS) -l ncurses -o $(EXEDIR)/lemmatizator.$(EXT)
+
+$(OBJDIR)/lemmatizator.o: $(LEM_PATH)/demo/ai/solarix/engines/lemmatizator/lemmatizator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/demo/ai/solarix/engines/lemmatizator/lemmatizator.cpp -o $(OBJDIR)/lemmatizator.o
+
+$(OBJDIR)/la_lemmatizator.o: $(LEM_PATH)/ai/la/lemmatizator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/lemmatizator.cpp -o $(OBJDIR)/la_lemmatizator.o
+
+$(OBJDIR)/lem_startup.o: $(LEM_PATH)/tools/lem_startup.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_startup.cpp -o $(OBJDIR)/lem_startup.o
+
+$(OBJDIR)/lem_coap.o: $(LEM_PATH)/tools/lem_coap.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_coap.cpp -o $(OBJDIR)/lem_coap.o
+
+$(OBJDIR)/lem_application.o: $(LEM_PATH)/tools/lem_application.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_application.cpp -o $(OBJDIR)/lem_application.o
+
+$(OBJDIR)/lem_dll.o: $(LEM_PATH)/tools/lem_dll.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_dll.cpp -o $(OBJDIR)/lem_dll.o
+
+$(OBJDIR)/lem_opti.o: $(LEM_PATH)/tools/lem_opti.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_opti.cpp -o $(OBJDIR)/lem_opti.o
+
+$(OBJDIR)/lem_chec.o: $(LEM_PATH)/tools/lem_chec.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_chec.cpp -o $(OBJDIR)/lem_chec.o
+
+$(OBJDIR)/lem_conv.o: $(LEM_PATH)/tools/lem_conv.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_conv.cpp -o $(OBJDIR)/lem_conv.o
+
+$(OBJDIR)/lem_dir.o: $(LEM_PATH)/tools/lem_dir.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_dir.cpp -o $(OBJDIR)/lem_dir.o
+
+$(OBJDIR)/lem_time.o: $(LEM_PATH)/tools/lem_time.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_time.cpp -o $(OBJDIR)/lem_time.o
+
+$(OBJDIR)/lem_shell.o: $(LEM_PATH)/tools/lem_shell.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_shell.cpp -o $(OBJDIR)/lem_shell.o
+
+$(OBJDIR)/lem_interlocked_value.o: $(LEM_PATH)/tools/lem_interlocked_value.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_interlocked_value.cpp -o $(OBJDIR)/lem_interlocked_value.o
+
+$(OBJDIR)/ui_user_interface.o: $(LEM_PATH)/tools/ui/ui_user_interface.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/ui/ui_user_interface.cpp -o $(OBJDIR)/ui_user_interface.o
+
+$(OBJDIR)/system_config.o: $(LEM_PATH)/tools/system_config/system_config.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/system_config.cpp -o $(OBJDIR)/system_config.o
+
+$(OBJDIR)/hardware.o: $(LEM_PATH)/tools/system_config/hardware.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/hardware.cpp -o $(OBJDIR)/hardware.o
+
+$(OBJDIR)/cp_437.o: $(LEM_PATH)/tools/unicode/cp_437.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_437.cpp -o $(OBJDIR)/cp_437.o
+
+$(OBJDIR)/cp_8859_1.o: $(LEM_PATH)/tools/unicode/cp_8859_1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_8859_1.cpp -o $(OBJDIR)/cp_8859_1.o
+
+$(OBJDIR)/cast_to_url.o: $(LEM_PATH)/tools/unicode/cast_to_url.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cast_to_url.cpp -o $(OBJDIR)/cast_to_url.o
+
+$(OBJDIR)/cp_847.o: $(LEM_PATH)/tools/unicode/cp_847.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_847.cpp -o $(OBJDIR)/cp_847.o
+
+$(OBJDIR)/cp_866.o: $(LEM_PATH)/tools/unicode/cp_866.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_866.cpp -o $(OBJDIR)/cp_866.o
+
+$(OBJDIR)/cp_1250.o: $(LEM_PATH)/tools/unicode/cp_1250.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1250.cpp -o $(OBJDIR)/cp_1250.o
+
+$(OBJDIR)/cp_1251.o: $(LEM_PATH)/tools/unicode/cp_1251.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1251.cpp -o $(OBJDIR)/cp_1251.o
+
+$(OBJDIR)/cp_1252.o: $(LEM_PATH)/tools/unicode/cp_1252.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_1252.cpp -o $(OBJDIR)/cp_1252.o
+
+$(OBJDIR)/cp_code_page.o: $(LEM_PATH)/tools/unicode/cp_code_page.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_code_page.cpp -o $(OBJDIR)/cp_code_page.o
+
+$(OBJDIR)/cp_recodings.o: $(LEM_PATH)/tools/unicode/cp_recodings.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_recodings.cpp -o $(OBJDIR)/cp_recodings.o
+
+$(OBJDIR)/cp_sgml.o: $(LEM_PATH)/tools/unicode/cp_sgml.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_sgml.cpp -o $(OBJDIR)/cp_sgml.o
+
+$(OBJDIR)/ucs4_to_utf8.o: $(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp -o $(OBJDIR)/ucs4_to_utf8.o
+
+$(OBJDIR)/transliterator.o: $(LEM_PATH)/tools/unicode/transliterator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/transliterator.cpp -o $(OBJDIR)/transliterator.o
+
+$(OBJDIR)/utf_converters.o: $(LEM_PATH)/tools/unicode/utf_converters.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/utf_converters.cpp -o $(OBJDIR)/utf_converters.o
+
+$(OBJDIR)/lem_process.o: $(LEM_PATH)/tools/lem_process.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_process.cpp -o $(OBJDIR)/lem_process.o
+
+$(OBJDIR)/lem_reflection.o: $(LEM_PATH)/tools/lem_reflection.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_reflection.cpp -o $(OBJDIR)/lem_reflection.o
+
+$(OBJDIR)/macheps.o: $(LEM_PATH)/math/macheps.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/macheps.cpp -o $(OBJDIR)/macheps.o
+
+$(OBJDIR)/lem_ustr.o: $(LEM_PATH)/contain/lem_ustr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ustr.cpp -o $(OBJDIR)/lem_ustr.o
+
+$(OBJDIR)/lem_astr.o: $(LEM_PATH)/contain/lem_astr.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_astr.cpp -o $(OBJDIR)/lem_astr.o
+
+$(OBJDIR)/lem_acstring.o: $(LEM_PATH)/contain/lem_acstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_acstring.cpp -o $(OBJDIR)/lem_acstring.o
+
+$(OBJDIR)/lem_ucstring.o: $(LEM_PATH)/contain/lem_ucstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ucstring.cpp -o $(OBJDIR)/lem_ucstring.o
+
+$(OBJDIR)/lem_afstring.o: $(LEM_PATH)/contain/lem_afstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_afstring.cpp -o $(OBJDIR)/lem_afstring.o
+
+$(OBJDIR)/lem_ufstring.o: $(LEM_PATH)/contain/lem_ufstring.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ufstring.cpp -o $(OBJDIR)/lem_ufstring.o
+
+$(OBJDIR)/lem_fp1.o: $(LEM_PATH)/contain/lem_fp1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_fp1.cpp -o $(OBJDIR)/lem_fp1.o
+
+$(OBJDIR)/oformatter.o: $(LEM_PATH)/io/oformatter.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/oformatter.cpp -o $(OBJDIR)/oformatter.o
+
+$(OBJDIR)/xp_parser.o: $(LEM_PATH)/io/xml/xp_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_parser.cpp -o $(OBJDIR)/xp_parser.o
+
+$(OBJDIR)/xp_node.o: $(LEM_PATH)/io/xml/xp_node.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_node.cpp -o $(OBJDIR)/xp_node.o
+
+$(OBJDIR)/xp_iterator.o: $(LEM_PATH)/io/xml/xp_iterator.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/xml/xp_iterator.cpp -o $(OBJDIR)/xp_iterator.o
+
+$(OBJDIR)/io_base_stream.o: $(LEM_PATH)/io/io_base_stream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_base_stream.cpp -o $(OBJDIR)/io_base_stream.o
+
+$(OBJDIR)/io_binary_file.o: $(LEM_PATH)/io/io_binary_file.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_binary_file.cpp -o $(OBJDIR)/io_binary_file.o
+
+$(OBJDIR)/io_memory_stream.o: $(LEM_PATH)/io/io_memory_stream.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_memory_stream.cpp -o $(OBJDIR)/io_memory_stream.o
+
+$(OBJDIR)/io_text_file.o: $(LEM_PATH)/io/io_text_file.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_text_file.cpp -o $(OBJDIR)/io_text_file.o
+
+$(OBJDIR)/io_tty.o: $(LEM_PATH)/io/io_tty.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_tty.cpp -o $(OBJDIR)/io_tty.o
+
+$(OBJDIR)/base_lexer.o: $(LEM_PATH)/io/base_lexer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/base_lexer.cpp -o $(OBJDIR)/base_lexer.o
+
+$(OBJDIR)/io_kbd.o: $(LEM_PATH)/io/io_kbd.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/io_kbd.cpp -o $(OBJDIR)/io_kbd.o
+
+$(OBJDIR)/lem_mime.o: $(LEM_PATH)/io/lem_mime.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/lem_mime.cpp -o $(OBJDIR)/lem_mime.o
+
+$(OBJDIR)/lem_logfile.o: $(LEM_PATH)/io/lem_logfile.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/lem_logfile.cpp -o $(OBJDIR)/lem_logfile.o
+
+$(OBJDIR)/chr_base_reader.o: $(LEM_PATH)/io/char_reader/chr_base_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_base_reader.cpp -o $(OBJDIR)/chr_base_reader.o
+
+$(OBJDIR)/chr_char_reader.o: $(LEM_PATH)/io/char_reader/chr_char_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_char_reader.cpp -o $(OBJDIR)/chr_char_reader.o
+
+$(OBJDIR)/chr_utf16_reader.o: $(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp -o $(OBJDIR)/chr_utf16_reader.o
+
+$(OBJDIR)/chr_utf8_reader.o: $(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp -o $(OBJDIR)/chr_utf8_reader.o
+
+$(OBJDIR)/lem_imat.o: $(LEM_PATH)/math/lem_imat.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/lem_imat.cpp -o $(OBJDIR)/lem_imat.o
+
+$(OBJDIR)/randu.o: $(LEM_PATH)/math/random/randu.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/random/randu.cpp -o $(OBJDIR)/randu.o
+
+$(OBJDIR)/statkep1.o: $(LEM_PATH)/math/stat/statkep1.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/stat/statkep1.cpp -o $(OBJDIR)/statkep1.o
+
+$(OBJDIR)/interpol.o: $(LEM_PATH)/math/approx/interpol.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/approx/interpol.cpp -o $(OBJDIR)/interpol.o
+
+$(OBJDIR)/base_application.o: $(LEM_PATH)/tools/base_application.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/base_application.cpp -o $(OBJDIR)/base_application.o
+
+$(OBJDIR)/cfg_base_parser.o: $(LEM_PATH)/io/cfg_parser/cfg_base_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/cfg_parser/cfg_base_parser.cpp -o $(OBJDIR)/cfg_base_parser.o
+
+$(OBJDIR)/cfg_ini_parser.o: $(LEM_PATH)/io/cfg_parser/cfg_ini_parser.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/io/cfg_parser/cfg_ini_parser.cpp -o $(OBJDIR)/cfg_ini_parser.o
+
+$(OBJDIR)/c_regex_traits.o: $(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp -o $(OBJDIR)/c_regex_traits.o
+
+$(OBJDIR)/cpp_regex_traits.o: $(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp -o $(OBJDIR)/cpp_regex_traits.o
+
+$(OBJDIR)/fileiter.o: $(BOOST_PATH)/libs/regex/src/fileiter.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/fileiter.cpp -o $(OBJDIR)/fileiter.o
+
+$(OBJDIR)/instances.o: $(BOOST_PATH)/libs/regex/src/instances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/instances.cpp -o $(OBJDIR)/instances.o
+
+$(OBJDIR)/icu.o: $(BOOST_PATH)/libs/regex/src/icu.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/icu.cpp -o $(OBJDIR)/icu.o
+
+$(OBJDIR)/static_mutex.o: $(BOOST_PATH)/libs/regex/src/static_mutex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/static_mutex.cpp -o $(OBJDIR)/static_mutex.o
+
+$(OBJDIR)/posix_api.o: $(BOOST_PATH)/libs/regex/src/posix_api.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/posix_api.cpp -o $(OBJDIR)/posix_api.o
+
+$(OBJDIR)/cregex.o: $(BOOST_PATH)/libs/regex/src/cregex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/cregex.cpp -o $(OBJDIR)/cregex.o
+
+$(OBJDIR)/regex.o: $(BOOST_PATH)/libs/regex/src/regex.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex.cpp -o $(OBJDIR)/regex.o
+
+$(OBJDIR)/regex_debug.o: $(BOOST_PATH)/libs/regex/src/regex_debug.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_debug.cpp -o $(OBJDIR)/regex_debug.o
+
+$(OBJDIR)/w32_regex_traits.o: $(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp -o $(OBJDIR)/w32_regex_traits.o
+
+$(OBJDIR)/wc_regex_traits.o: $(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp -o $(OBJDIR)/wc_regex_traits.o
+
+$(OBJDIR)/wide_posix_api.o: $(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp -o $(OBJDIR)/wide_posix_api.o
+
+$(OBJDIR)/winstances.o: $(BOOST_PATH)/libs/regex/src/winstances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/winstances.cpp -o $(OBJDIR)/winstances.o
+
+$(OBJDIR)/usinstances.o: $(BOOST_PATH)/libs/regex/src/usinstances.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/usinstances.cpp -o $(OBJDIR)/usinstances.o
+
+$(OBJDIR)/regex_traits_defaults.o: $(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp -o $(OBJDIR)/regex_traits_defaults.o
+
+$(OBJDIR)/regex_raw_buffer.o: $(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp
+		$(CXX) $(CXXFLAGS) $(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp -o $(OBJDIR)/regex_raw_buffer.o
+
+$(LEM_PATH)/tools/lem_coap.cpp:
+
+$(LEM_PATH)/tools/lem_application.cpp:
+
+$(LEM_PATH)/tools/lem_opti.cpp:
+
+$(LEM_PATH)/tools/lem_chec.cpp:
+
+$(LEM_PATH)/tools/lem_conv.cpp:
+
+$(LEM_PATH)/tools/lem_dir.cpp:
+
+$(LEM_PATH)/tools/lem_time.cpp:
+
+$(LEM_PATH)/tools/lem_shell.cpp:
+
+$(LEM_PATH)/tools/ui/ui_user_interface.cpp:
+
+$(LEM_PATH)/tools/system_config/system_config.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_437.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_847.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_866.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1250.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1251.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_1252.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_8859_1.cpp:
+
+$(LEM_PATH)/tools/unicode/cast_to_url.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_code_page.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_recodings.cpp:
+
+$(LEM_PATH)/tools/unicode/cp_sgml.cpp:
+
+$(LEM_PATH)/tools/unicode/ucs4_to_utf8.cpp:
+
+$(LEM_PATH)/tools/unicode/transliterator.cpp:
+
+$(LEM_PATH)/tools/unicode/utf_converters.cpp:
+
+$(LEM_PATH)/tools/lem_process.cpp:
+
+$(LEM_PATH)/tools/lem_dll.cpp:
+
+$(LEM_PATH)/tools/lem_reflection.cpp:
+
+$(LEM_PATH)/math/macheps.cpp:
+
+$(LEM_PATH)/contain/lem_ustr.cpp:
+
+$(LEM_PATH)/contain/lem_astr.cpp:
+
+$(LEM_PATH)/contain/lem_acstring.cpp:
+
+$(LEM_PATH)/contain/lem_ucstring.cpp:
+
+$(LEM_PATH)/contain/lem_afstring.cpp:
+
+$(LEM_PATH)/contain/lem_ufstring.cpp:
+
+$(LEM_PATH)/contain/lem_fp1.cpp:
+
+$(LEM_PATH)/io/oformatter.cpp:
+
+$(LEM_PATH)/io/io_base_stream.cpp:
+
+$(LEM_PATH)/io/io_binary_file.cpp:
+
+$(LEM_PATH)/io/io_memory_stream.cpp:
+
+$(LEM_PATH)/io/io_text_file.cpp:
+
+$(LEM_PATH)/io/io_tty.cpp:
+
+$(LEM_PATH)/io/base_lexer.cpp:
+
+$(LEM_PATH)/io/io_kbd.cpp:
+
+$(LEM_PATH)/io/lem_mime.cpp:
+
+$(LEM_PATH)/io/lem_logfile.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_base_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_char_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_utf16_reader.cpp:
+
+$(LEM_PATH)/io/char_reader/chr_utf8_reader.cpp:
+
+$(LEM_PATH)/math/lem_imat.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/engines/lemmatizator/lemmatizator.cpp:
+
+$(LEM_PATH)/ai/la/lemmatizator.cpp:
+
+$(LEM_PATH)/math/stat/statkep1.cpp:
+
+$(LEM_PATH)/math/approx/interpol.cpp:
+
+$(LEM_PATH)/tools/base_application.cpp:
+
+$(BOOST_PATH)/libs/regex/src/c_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/cpp_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/fileiter.cpp:
+
+$(BOOST_PATH)/libs/regex/src/instances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/icu.cpp:
+
+$(BOOST_PATH)/libs/regex/src/static_mutex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/posix_api.cpp:
+
+$(BOOST_PATH)/libs/regex/src/cregex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_debug.cpp:
+
+$(BOOST_PATH)/libs/regex/src/w32_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/wc_regex_traits.cpp:
+
+$(BOOST_PATH)/libs/regex/src/wide_posix_api.cpp:
+
+$(BOOST_PATH)/libs/regex/src/winstances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/usinstances.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_traits_defaults.cpp:
+
+$(BOOST_PATH)/libs/regex/src/regex_raw_buffer.cpp:
+
+$(LEM_PATH)/tools/lem_startup.cpp:
+
+$(LEM_PATH)/demo/ai/solarix/engines/lemmatizator/lemmatizator.cpp:
