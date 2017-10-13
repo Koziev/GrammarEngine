@@ -1,0 +1,1 @@
+Char.lo Char.o: Char.cpp ../text/Char.h ../text/text.h ../text/Unicode.h

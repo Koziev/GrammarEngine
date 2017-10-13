@@ -1,0 +1,4 @@
+TokenAttributes.lo TokenAttributes.o: TokenAttributes.cpp TokenAttributes.h \
+ ../text/WordIndex.h ../ixe/include/unordered_map.h ../ixe/platform.h \
+ ../ixe/include/hash.h ../ixe/include/error.h ../ixe/Common/util.h \
+ ../ixe/include/ixe.h ../text/less.h

@@ -1,0 +1,1 @@
+pcre_info.lo pcre_info.o: pcre_info.c config.h pcre_internal.h pcre.h ucp.h

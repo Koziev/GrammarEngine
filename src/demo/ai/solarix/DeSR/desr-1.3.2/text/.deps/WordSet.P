@@ -1,0 +1,3 @@
+WordSet.lo WordSet.o: WordSet.cpp ../text/WordSet.h ../ixe/include/unordered_set.h \
+ ../ixe/platform.h ../ixe/include/hash.h ../text/strings.h ../text/text.h \
+ ../ixe/include/unordered_map.h

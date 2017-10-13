@@ -86,15 +86,6 @@ $(OBJDIR)/ClassifierModel.o: $(LEM_PATH)/ai/la/ClassifierModel.cpp
 $(OBJDIR)/BasicModel.o: $(LEM_PATH)/ai/la/BasicModel.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/BasicModel.cpp -o $(OBJDIR)/BasicModel.o
 
-$(OBJDIR)/TrReplaceMatcherIndexer.o: $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp -o $(OBJDIR)/TrReplaceMatcherIndexer.o
-
-$(OBJDIR)/TrLikeCondictor.o: $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp -o $(OBJDIR)/TrLikeCondictor.o
-       
-$(OBJDIR)/TrLikeMatcher.o: $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp -o $(OBJDIR)/TrLikeMatcher.o
-
 $(OBJDIR)/SyllabCondition.o: $(LEM_PATH)/ai/gg/SyllabCondition.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/SyllabCondition.cpp -o $(OBJDIR)/SyllabCondition.o
 

@@ -1,0 +1,2 @@
+ap.lo ap.o: ap.cpp ap.h ../text/WordIndex.h ../ixe/include/unordered_map.h \
+ ../ixe/platform.h ../ixe/include/hash.h

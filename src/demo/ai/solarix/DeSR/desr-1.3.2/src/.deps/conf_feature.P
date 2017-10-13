@@ -1,0 +1,4 @@
+conf_feature.lo conf_feature.o: conf_feature.cpp conf_feature.h ../ixe/conf/conf.h \
+ ../ixe/platform.h ../text/less.h ../text/strings.h ../text/text.h \
+ ../ixe/include/unordered_map.h ../ixe/include/hash.h TokenPath.h \
+ ../ixe/Common/util.h ../ixe/include/ixe.h

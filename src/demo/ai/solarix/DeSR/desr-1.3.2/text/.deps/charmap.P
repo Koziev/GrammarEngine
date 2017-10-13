@@ -1,0 +1,1 @@
+charmap.lo charmap.o: charmap.cpp charmap.h ../ixe/platform.h

@@ -1,0 +1,2 @@
+mappedFile.o: io/mappedFile.cpp io/mappedFile.h platform.h \
+ include/error.h io/FileHandle.h include/ixe.h

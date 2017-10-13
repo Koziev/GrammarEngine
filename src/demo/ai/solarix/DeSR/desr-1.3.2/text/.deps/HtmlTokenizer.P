@@ -1,0 +1,2 @@
+HtmlTokenizer.lo HtmlTokenizer.o: HtmlTokenizer.cpp ../text/HtmlTokenizer.h \
+ ../text/StringTokenizer.h ../ixe/platform.h

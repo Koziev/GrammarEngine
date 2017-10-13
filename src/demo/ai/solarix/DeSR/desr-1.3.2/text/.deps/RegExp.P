@@ -1,0 +1,3 @@
+RegExp.lo RegExp.o: RegExp.cpp ../text/RegExp.h ../text/text.h ../text/pcre/pcre.h \
+ ../text/strings.h ../ixe/platform.h ../ixe/include/unordered_map.h \
+ ../ixe/include/hash.h

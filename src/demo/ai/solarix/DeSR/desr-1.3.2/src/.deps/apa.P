@@ -1,0 +1,2 @@
+apa.lo apa.o: apa.cpp apa.h ../text/WordIndex.h ../ixe/include/unordered_map.h \
+ ../ixe/platform.h ../ixe/include/hash.h

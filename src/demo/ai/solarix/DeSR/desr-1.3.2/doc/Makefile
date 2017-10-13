@@ -1,0 +1,56 @@
+
+top_builddir = ..
+subdir	= doc
+
+DOXYGEN = /usr/local/bin/doxygen
+
+########################################################################
+# Targets
+########################################################################
+
+all: html/index.html
+
+html/index.html: doxygen.conf
+	@echo "Generating source documentation with doxygen"
+	@$(DOXYGEN) doxygen.conf
+
+upload: html/index.html
+	rsync -a --delete html attardi@web.sourceforge.net:desr.home/htdocs/doc
+
+.PHONY: all
+
+#######################################################################
+# Configuration
+#######################################################################
+
+doxygen.conf: doxygen.conf.in
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+Makefile: Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+########################################################################
+# Rules
+########################################################################
+
+%.eps: %.dia
+	dia -e $@ $<
+
+%.png: %.eps
+	pstoimg -aaliastext -antialias -center 0 -density 40 -depth 1 $<
+
+########################################################################
+# Clean up local files
+########################################################################
+
+clean:
+	@if [ -d html ]; then \
+	  echo "removing html/"; \
+	  $(RM) -fr html; \
+	fi
+
+distclean realclean: clean
+	rm -f *~
+	rm -f Makefile doxygen.conf

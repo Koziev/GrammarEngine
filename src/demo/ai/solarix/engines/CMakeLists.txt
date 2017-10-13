@@ -13,5 +13,5 @@ add_custom_command(TARGET ${PROJECT_NAME}
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_SOURCE_DIR}/lib64)
                    
-file(RENAME ${CMAKE_SOURCE_DIR}/lib64/libgren.so ${CMAKE_SOURCE_DIR}/lib64/solarix_grammar_engine.so)
+#file(RENAME ${CMAKE_SOURCE_DIR}/lib64/libgren.so ${CMAKE_SOURCE_DIR}/lib64/solarix_grammar_engine.so)
               

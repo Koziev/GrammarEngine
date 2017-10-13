@@ -4140,7 +4140,7 @@ SG_DeclensionTable* LexiconStorage_SQLITE::GetParadigma( int id )
  else
   {
    RaiseError(__FILE__,__LINE__);
-   return false;
+   return NULL;
   }
 }
 

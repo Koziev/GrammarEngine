@@ -1,0 +1,4 @@
+LBFGS.lo LBFGS.o: LBFGS.cpp LBFGS.h MaxEnt.h Classifier.h ../ixe/platform.h \
+ Event.h ../ixe/include/Iterator.h ../text/WordIndex.h \
+ ../ixe/include/unordered_map.h ../ixe/include/hash.h ../text/strings.h \
+ ../text/text.h lbfgsAlg.h ../ixe/include/Timer.h

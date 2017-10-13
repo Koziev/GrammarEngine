@@ -1,0 +1,2 @@
+PtbTokenizer.lo PtbTokenizer.o: PtbTokenizer.cpp FlexLexer.h Tokenizer.h Enumerator.h \
+ Serializable.h

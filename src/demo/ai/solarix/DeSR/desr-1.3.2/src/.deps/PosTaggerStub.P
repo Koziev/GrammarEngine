@@ -1,0 +1,4 @@
+PosTaggerStub.lo PosTaggerStub.o: PosTaggerStub.cpp PosTagger.h ../text/WordSet.h \
+ ../ixe/include/unordered_set.h ../ixe/platform.h ../ixe/include/hash.h \
+ ../text/strings.h ../text/text.h ../ixe/include/unordered_map.h \
+ ../text/WordSet.cpp ../ixe/include/error.h

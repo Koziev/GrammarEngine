@@ -1,0 +1,2 @@
+FileHandle.o: io/FileHandle.cpp io/FileHandle.h include/ixe.h platform.h \
+ include/error.h

@@ -1,0 +1,3 @@
+conf_bool.o: conf/conf_bool.cpp conf/conf_bool.h conf/conf.h platform.h \
+ ../text/less.h ../text/strings.h ../text/text.h include/unordered_map.h \
+ include/hash.h

@@ -1,0 +1,2 @@
+XmlReader.lo XmlReader.o: XmlReader.cpp XmlReader.h FlexLexer.h xml.h Encoding.h \
+ ../ixe/platform.h

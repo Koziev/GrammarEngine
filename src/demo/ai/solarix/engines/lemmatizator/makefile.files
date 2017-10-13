@@ -13,7 +13,7 @@
 .c.o:
 	$(CC) $(CFLAGS) -o $@ $<
 
-OBJS = $(OBJDIR)/lemmatizator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/macheps.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/lem_startup.o $(OBJDIR)/la_lemmatizator.o
+OBJS = $(OBJDIR)/lemmatizator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/lem_startup.o $(OBJDIR)/la_lemmatizator.o
 
 all: lemmatizator
 
@@ -115,9 +115,6 @@ $(OBJDIR)/lem_process.o: $(LEM_PATH)/tools/lem_process.cpp
 
 $(OBJDIR)/lem_reflection.o: $(LEM_PATH)/tools/lem_reflection.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_reflection.cpp -o $(OBJDIR)/lem_reflection.o
-
-$(OBJDIR)/macheps.o: $(LEM_PATH)/math/macheps.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/macheps.cpp -o $(OBJDIR)/macheps.o
 
 $(OBJDIR)/lem_ustr.o: $(LEM_PATH)/contain/lem_ustr.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ustr.cpp -o $(OBJDIR)/lem_ustr.o
@@ -316,8 +313,6 @@ $(LEM_PATH)/tools/lem_process.cpp:
 $(LEM_PATH)/tools/lem_dll.cpp:
 
 $(LEM_PATH)/tools/lem_reflection.cpp:
-
-$(LEM_PATH)/math/macheps.cpp:
 
 $(LEM_PATH)/contain/lem_ustr.cpp:
 

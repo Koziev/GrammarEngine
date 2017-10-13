@@ -1,0 +1,3 @@
+MorphExtractor.lo MorphExtractor.o: MorphExtractor.cpp MorphExtractor.h ../text/RegExp.h \
+ ../text/text.h ../text/pcre/pcre.h ../ixe/conf/conf_bool.h \
+ ../ixe/conf/conf.h ../ixe/platform.h ../text/less.h

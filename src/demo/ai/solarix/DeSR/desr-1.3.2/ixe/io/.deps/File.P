@@ -1,0 +1,1 @@
+File.o: io/File.cpp io/File.h platform.h io/pstream.h

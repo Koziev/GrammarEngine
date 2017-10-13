@@ -1,0 +1,11 @@
+ReviseEventStream.lo ReviseEventStream.o: ReviseEventStream.cpp ReviseEventStream.h \
+ ../classifier/Classifier.h ../ixe/platform.h ../classifier/Event.h \
+ ../ixe/include/Iterator.h ../text/WordIndex.h \
+ ../ixe/include/unordered_map.h ../ixe/include/hash.h SentenceReader.h \
+ ../text/RegExp.h ../text/text.h ../text/pcre/pcre.h ../text/XmlReader.h \
+ ../text/FlexLexer.h ../text/xml.h ../text/Encoding.h PosTagger.h \
+ ../text/WordSet.h ../ixe/include/unordered_set.h ../text/strings.h \
+ ../text/WordSet.cpp ../ixe/include/error.h Sentence.h Token.h \
+ ../ixe/Common/util.h ../ixe/include/ixe.h ../text/less.h Language.h \
+ MorphExtractor.h RefCountable.h TokenPath.h Corpus.h TokenAttributes.h \
+ Enumerator.h ../ixe/conf/conf_bool.h ../ixe/conf/conf.h

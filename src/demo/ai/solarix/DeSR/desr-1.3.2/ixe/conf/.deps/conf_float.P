@@ -1,0 +1,3 @@
+conf_float.o: conf/conf_float.cpp conf/conf_float.h platform.h \
+ conf/conf.h ../text/less.h ../text/strings.h ../text/text.h \
+ include/unordered_map.h include/hash.h

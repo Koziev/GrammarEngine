@@ -1,0 +1,1 @@
+OptionStream.o: Common/OptionStream.cpp Common/OptionStream.h platform.h

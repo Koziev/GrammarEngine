@@ -1,0 +1,1 @@
+Encoding.lo Encoding.o: Encoding.cpp Encoding.h ../ixe/platform.h

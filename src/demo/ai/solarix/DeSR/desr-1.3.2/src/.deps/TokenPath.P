@@ -1,0 +1,2 @@
+TokenPath.lo TokenPath.o: TokenPath.cpp ../ixe/conf/conf.h ../ixe/platform.h \
+ ../text/less.h TokenPath.h

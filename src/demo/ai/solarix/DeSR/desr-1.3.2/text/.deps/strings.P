@@ -1,0 +1,2 @@
+strings.lo strings.o: strings.cpp ../text/strings.h ../ixe/platform.h ../text/text.h \
+ ../ixe/include/unordered_map.h ../ixe/include/hash.h

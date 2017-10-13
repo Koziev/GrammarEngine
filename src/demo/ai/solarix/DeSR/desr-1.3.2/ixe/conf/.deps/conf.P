@@ -1,0 +1,3 @@
+conf.o: conf/conf.cpp conf/conf.h platform.h ../text/less.h \
+ include/config.h io/mappedFile.h include/error.h io/FileHandle.h \
+ include/ixe.h Common/util.h conf/conf_bool.h

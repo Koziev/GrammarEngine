@@ -1,0 +1,3 @@
+StreamTokenizer.lo StreamTokenizer.o: StreamTokenizer.cpp StreamTokenizer.h \
+ ../text/WordIndex.h ../ixe/include/unordered_map.h ../ixe/platform.h \
+ ../ixe/include/hash.h

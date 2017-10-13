@@ -1,0 +1,2 @@
+pcre_try_flipped.lo pcre_try_flipped.o: pcre_try_flipped.c config.h pcre_internal.h pcre.h \
+ ucp.h

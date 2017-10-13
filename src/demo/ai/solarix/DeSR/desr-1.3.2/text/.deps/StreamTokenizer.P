@@ -1,0 +1,4 @@
+StreamTokenizer.lo StreamTokenizer.o: StreamTokenizer.cpp ../text/strings.h \
+ ../ixe/platform.h ../text/text.h ../ixe/include/unordered_map.h \
+ ../ixe/include/hash.h ../text/StreamTokenizer.h \
+ ../text/StringTokenizer.h

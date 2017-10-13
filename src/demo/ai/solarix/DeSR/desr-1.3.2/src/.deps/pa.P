@@ -1,0 +1,2 @@
+pa.lo pa.o: pa.cpp pa.h ../text/WordIndex.h ../ixe/include/unordered_map.h \
+ ../ixe/platform.h ../ixe/include/hash.h

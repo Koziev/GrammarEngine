@@ -1,0 +1,1 @@
+Suffixes.lo Suffixes.o: Suffixes.cpp Suffixes.h ../text/less.h ../ixe/platform.h

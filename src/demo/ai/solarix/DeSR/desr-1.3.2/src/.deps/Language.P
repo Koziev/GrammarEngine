@@ -1,0 +1,2 @@
+Language.lo Language.o: Language.cpp Language.h MorphExtractor.h ../text/RegExp.h \
+ ../text/text.h ../text/pcre/pcre.h

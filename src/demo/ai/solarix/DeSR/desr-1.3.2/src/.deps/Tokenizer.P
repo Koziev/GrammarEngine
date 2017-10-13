@@ -1,0 +1,2 @@
+Tokenizer.lo Tokenizer.o: Tokenizer.cpp FlexLexer.h Tokenizer.h Enumerator.h \
+ Serializable.h

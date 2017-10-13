@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v1.1",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v1.1": {
+      "simplegren_fx/1.0.0": {
+        "dependencies": {
+          "gren.ubuntu": "1.0.0"
+        },
+        "runtime": {
+          "SimpleGREN_FX.dll": {}
+        }
+      },
+      "gren.ubuntu/1.0.0": {
+        "runtime": {
+          "gren.ubuntu.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "simplegren_fx/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "gren.ubuntu/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

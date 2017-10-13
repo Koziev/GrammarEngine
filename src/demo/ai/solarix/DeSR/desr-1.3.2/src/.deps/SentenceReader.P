@@ -1,0 +1,10 @@
+SentenceReader.lo SentenceReader.o: SentenceReader.cpp SentenceReader.h ../text/RegExp.h \
+ ../text/text.h ../text/pcre/pcre.h ../text/XmlReader.h \
+ ../text/FlexLexer.h ../text/xml.h ../text/Encoding.h ../ixe/platform.h \
+ PosTagger.h ../text/WordSet.h ../ixe/include/unordered_set.h \
+ ../ixe/include/hash.h ../text/strings.h ../ixe/include/unordered_map.h \
+ ../text/WordSet.cpp ../ixe/include/error.h Sentence.h Token.h \
+ ../ixe/Common/util.h ../ixe/include/ixe.h ../text/less.h Language.h \
+ MorphExtractor.h RefCountable.h TokenPath.h Corpus.h TokenAttributes.h \
+ ../text/WordIndex.h Enumerator.h ../text/Utf8Utils.h ../text/text.h \
+ ../text/Char.h ../text/Unicode.h ../ixe/io/Format.h

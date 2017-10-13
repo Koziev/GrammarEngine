@@ -1,0 +1,3 @@
+conf_int.o: conf/conf_int.cpp conf/conf_int.h platform.h conf/conf.h \
+ ../text/less.h ../text/strings.h ../text/text.h include/unordered_map.h \
+ include/hash.h

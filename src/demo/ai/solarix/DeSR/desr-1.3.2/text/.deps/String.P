@@ -1,0 +1,3 @@
+String.lo String.o: String.cpp String.h Char.h text.h Unicode.h CharBuffer.h \
+ Encoding.h ../ixe/platform.h ../ixe/Common/util.h ../ixe/include/ixe.h \
+ ../text/less.h

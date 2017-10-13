@@ -1,0 +1,10 @@
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/SimpleGREN_FX.deps.json
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/SimpleGREN_FX.runtimeconfig.json
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/SimpleGREN_FX.runtimeconfig.dev.json
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/obj/Debug/netcoreapp1.1/SimpleGREN_FX.AssemblyInfo.cs
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/SimpleGREN_FX.dll
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/SimpleGREN_FX.pdb
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/gren.ubuntu.dll
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/bin/Debug/netcoreapp1.1/gren.ubuntu.pdb
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/obj/Debug/netcoreapp1.1/SimpleGREN_FX.dll
+/home/eek/Solarix/GrammarEngine/src/demo/ai/solarix/Grammar_Engine/SimpleGREN_FX/obj/Debug/netcoreapp1.1/SimpleGREN_FX.pdb

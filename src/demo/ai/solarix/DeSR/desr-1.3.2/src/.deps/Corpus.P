@@ -1,0 +1,10 @@
+Corpus.lo Corpus.o: Corpus.cpp Corpus.h TokenAttributes.h ../text/WordIndex.h \
+ ../ixe/include/unordered_map.h ../ixe/platform.h ../ixe/include/hash.h \
+ ../ixe/include/error.h Language.h MorphExtractor.h ../text/RegExp.h \
+ ../text/text.h ../text/pcre/pcre.h ../text/XmlReader.h \
+ ../text/FlexLexer.h ../text/xml.h ../text/Encoding.h \
+ SplitSentenceReader.h FlexLexer.h Tokenizer.h Enumerator.h \
+ Serializable.h SentenceReader.h PosTagger.h ../text/WordSet.h \
+ ../ixe/include/unordered_set.h ../text/strings.h ../text/WordSet.cpp \
+ Sentence.h Token.h ../ixe/Common/util.h ../ixe/include/ixe.h \
+ ../text/less.h RefCountable.h TokenPath.h ../ixe/io/File.h

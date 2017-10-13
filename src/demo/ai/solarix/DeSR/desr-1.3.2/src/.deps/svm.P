@@ -1,0 +1,1 @@
+svm.lo svm.o: svm.cpp svm.h
