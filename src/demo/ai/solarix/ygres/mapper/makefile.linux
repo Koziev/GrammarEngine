@@ -1,0 +1,20 @@
+SRC        = ../../../../../../..
+OBJDIR     = /tmp/ymap
+LEM_PATH   = ../../../../..
+BOOST_PATH = $(SRC)/boost
+EXEDIR     = .
+
+CXX      = g++
+CXXFLAGS = -I $(BOOST_PATH) -I $(LEM_PATH)/include -D SOL_EXPORT_SQL -D SOL_SAVEBIN -D SOL_SAVEBIN_PA -D LEM_CONSOLE -D LEM_UNICODE_EX -D LEM_UNICODE_CONSOLE -D NDEBUG -D SOL_LOADBIN -D SOL_SAVETXT -D SOL_REPORT -D SOL_CAA -D BOOST_ALL_NO_LIB -D _GLIBCPP_USE_WCHAR_T -D SOLARIX_PRO -c -march=pentium -Wall  -O3 
+LFLAGS = -l dl -l rt -l ncurses -l pthread -l sqlite3 -l boost_regex -l boost_thread
+
+.SUFFIXES: .c .o .cpp .cc .cxx .C
+
+#LEM_LIBS = $(LEM_PATH)/lib/libsqlite3.so
+LEM_LIBS = 
+
+include makefile.files
+
+clean:
+	rm -f $(OBJDIR)/*
+	$(LEM_PATH)/scripts/build/del.sh $(EXEDIR)/decompiler

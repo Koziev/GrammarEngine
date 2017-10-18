@@ -1,0 +1,1069 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-Lite|Win32">
+      <Configuration>Release-Lite</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-Lite|x64">
+      <Configuration>Release-Lite</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Decompiler</ProjectName>
+    <ProjectGuid>{601FBC5B-EFFD-4DAE-9028-ECC26B1F6871}</ProjectGuid>
+    <RootNamespace>ymap</RootNamespace>
+    <Keyword>ManagedCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(TMP)\Ymap\Debug64\</OutDir>
+    <IntDir>$(TMP)\Ymap\Debug64\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(TMP)\Ymap\Debug-Pro64\</OutDir>
+    <IntDir>$(TMP)\Ymap\Debug-Pro64\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|Win32'">
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">
+    <OutDir>$(TMP)\Ymap\Release-Free64\</OutDir>
+    <IntDir>$(TMP)\Ymap\Release-Free64\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(TMP)\Ymap\Release-Pro64\</OutDir>
+    <IntDir>$(TMP)\Ymap\Release-Pro64\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(TMP)\Ymap\Release-Pro64\</OutDir>
+    <IntDir>$(TMP)\Ymap\Release-Pro64\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;BOOST_ALL_NO_LIB;LEM_CONSOLE;SOL_CAA;SOL_REPORT;SOL_LOADBIN;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_MT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;BOOST_ALL_NO_LIB;LEM_CONSOLE;SOL_CAA;SOL_REPORT;SOL_LOADBIN;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_MT;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|Win32'">
+    <Link>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/EHac %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MinSpace</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;LEM_CONSOLE;BOOST_ALL_NO_LIB;SOL_CAA;SOL_REPORT;SOL_LOADBIN;SOL_SAVETXT;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ExceptionHandling />
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <CallingConvention>FastCall</CallingConvention>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\exe64\ymap.exe</OutputFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;LEM_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(LEM_PATH)\exe64\ymap-pro.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LEM_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_EXPORT_SQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\..\..\..\..\..\exe64\decompiler.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+    <Reference Include="System.Data">
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
+    <ClCompile Include="..\ymap.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\base_application.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_application.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_chec.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_coap.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_conv.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_critical_section.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_dir.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_dll.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_event.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_interlocked_value.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_process.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_shell.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_startup.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_thread.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_time.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\win32_registry.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\ui\ui_user_interface.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\System_Config\system_config.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cast_to_url.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_1250.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_1251.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_1252.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_437.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_847.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_866.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_1.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_code_page.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_recodings.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_sgml.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\Unicode\cp_unicode_data.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\transliterator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\ucs4_to_utf8.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\Ucs4ToWideString.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\utf_converters.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\WideString2Ucs4.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\base_lexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_base_stream.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_binary_file.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_fast_file_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_kbd.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_memory_stream.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_text_file.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\io_tty.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\lem_logfile.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\oformatter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\sol_io.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\cfg_parser\cfg_base_parser.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\cfg_parser\cfg_ini_parser.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_base_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_char_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf8_reader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_error.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_group.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_head.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_if.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_parser.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_subst.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_table.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_macro_text.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_operator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_parser_stack.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_parser_variable.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_prep_pars_token.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_print_error.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_readl.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_tokens.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_var_table.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_iterator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_node.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_parser.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_acstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_afstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_astr.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_fp1.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_hist.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ucstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ufstring.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ustr.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\math\lem_imat.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\math\random\randu.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\db\sqlite_helpers.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Alphabet.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Alphabets.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_MySQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\CharOperationEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Gg\gg_autom.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperation.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperations.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CoordEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_Coordinates.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Gg\gg_entry.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Gg\gg_form.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabCondition.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabConditionPoint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabContext.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabContextPoint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabResult.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabResultPoint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRule.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRules.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRulesForLanguage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolClassEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolClasses.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Symbols.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\AuxFormTypes.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\casing_coder.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\CharNode.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryEnumerator_SQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryStorage_MySQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryStorage_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_form.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_main.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_table.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LanguageEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Languages.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LanguageUsage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemeEnumerator_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemeEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_MCollectCref.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ParadigmaFinder.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ParadigmaMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PartOfSpeechEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PartsOfSpeech.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseLinkEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseNoteEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_affix_table.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_and_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_autom.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_autom_sql_generator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_calibrator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_class.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_complex_link.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_coord_context.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_CoordEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_Coordinates.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_doesnot_have_tag_filter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_entry.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_entry_group.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_explicit_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_form.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_language.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_ld_seeker.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_lexem_dictionary.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_link_generator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_MetaEntry.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_net.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Sg\sg_net_link.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_notag_filter.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_only_main_translations_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_or_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_prefix_entry_searcher.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_preparing.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_ref_tag_filter.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_stemmer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_tag_or_null_tagfilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TagsSets.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusLinkFlags.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusStorage_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusStorage_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTag.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTagDefs.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTagDefsEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThTranslator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TransactionGuard_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TransactionGuard_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_SQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_File_ByGroup.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File1.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File2.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File3.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_MySQL.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_SQLite.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorFuzzy_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorGlobbing_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorListing_File.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordLinkEnumerator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BackRefCorrel.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BasicLexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BasicModel.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ClassifierModel.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Add.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Except.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_IfContains.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_IfExported.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Remove.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportNode.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\GrafBuilder.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Argument.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_CachedFacts.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Checker.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_CheckingResult.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Fact.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Facts.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KnowledgeBase.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_autom.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_BackTrace.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_BackTraceItem.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_CropRule.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_fuzzy.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_lex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_phaa.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticCondictor.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticMatcherForLanguage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticResult.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRule.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRuleEnumerator_MCollect.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Preprocessor.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRules.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_processing.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_proj_list.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_project_buffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_RecognitionRule.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_RecognitionRules.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Recognizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_sql_export.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternPointCall.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternResult.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternTrees.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_UnbreakableRule.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\La\la_word_projection.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_WordEntrySet.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\lemmatizator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LemmatizatorStorage_MySQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LemmatizatorStorage_SQLITE.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LexerTextPos.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ModelCodeBook.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ModelTagMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphologyModels.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\MultiwordMerger.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternConstraint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternConstraints.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternDefaultLinkage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportFuncContext_Tree.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportFuncContext_Wordform.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportSection.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternLink.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternLinks.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGram.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGramFunction.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGrams.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternOptionalPoints.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplate.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplates.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PreparedLexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SequenceLabeler.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SlotProperties.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPattern.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternCompilation.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternExport.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternOptions.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternPoint.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatterns.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternTreeNode.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternTreeNodeMatchingResults.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextAnalysisSession.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextRecognitionParameters.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextTokenizationRules.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TF_CaseFilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TF_ClassFilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TokenSplitterRx.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeMatchingExperience.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeMatchingExperienceItem.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerApplicationContext.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerBoundVariables.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerCall.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerMatcher.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPoint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPredicate.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPredicateArg.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerQuantification.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerResult.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorers.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\VariatorLexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\VariatorLexerTokens.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ViolationHandler.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordAssociation.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordEntrySetEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordSetChecker.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordSetEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WrittenTextAnalyzerSession.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WrittenTextLexer.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Pm\pm_autom.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\PM_FunctionLoader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrClosureVars.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrCompilationContext.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrContextInvokation.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Assign.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Break.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_BuiltIn.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Constant.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_CreateWordform.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Declare.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_For.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Group.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_If.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Lambda.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Return.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Var.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_While.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunCall.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunContext.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunction.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunctions.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunUser.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrKnownVars.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrMorphologyTracer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTrace.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceActor.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceFunCall.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceFunGroupStep.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTuple.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrType.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrValue.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Aa\aa_autom.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Tree\res_pack.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Tree\tree_link.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Tree\tree_node.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\TreeDimension.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\TreeMarks.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Tree\variator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Tree\word_form.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\automata_names.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\automaton.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\base_entry.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CompilationContext.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\coord_adr.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\coord_ex.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\coord_pair.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\coord_state.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\coordinate.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\criteria_list.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriteriaInStorage.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\criterion.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriterionEnumerator_SQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriterionEnumeratorInFile.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\DebugSymbols.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\dictionary.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ElapsedTimeConstraint.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\export_sql.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ExternalTokenizer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\form_table.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\gram_class.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\GramCoordUpdator_DB.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\grammar.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\lexem.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\load_options.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\ml_net_node.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\ml_proj_job.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\ml_proj_list.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\ref_name.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SegmentingSentenceTokenizer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\sentence.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceBroker.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceTokenizer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceWord.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\sol_ling.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\some_strings.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SourceFilenameEnumerator.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\some\sql_production.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnection_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnections.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\string_set.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\tokens.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\Some\version.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\ngrams.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsDBMS.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_FireBird.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_MySQL.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_SQLITE.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
+    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\boost.1.60\libs\regex\src\internals.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
