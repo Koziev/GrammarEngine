@@ -189,13 +189,6 @@ $(OBJDIR)/KB_Fact.o: $(LEM_PATH)/ai/la/KB_Fact.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Fact.cpp -o $(OBJDIR)/KB_Fact.o
 
 
-$(OBJDIR)/CollocFilterInnerCondition.o: $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp -o $(OBJDIR)/CollocFilterInnerCondition.o
-
-
-$(OBJDIR)/CollocFilterPoint.o: $(LEM_PATH)/ai/la/CollocFilterPoint.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterPoint.cpp -o $(OBJDIR)/CollocFilterPoint.o
-
 
 $(OBJDIR)/SynPatternExport.o: $(LEM_PATH)/ai/la/SynPatternExport.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternExport.cpp -o $(OBJDIR)/SynPatternExport.o
@@ -231,30 +224,6 @@ $(OBJDIR)/MorphFilterTreeNode.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode.cpp
 
 $(OBJDIR)/MorphFilterResult.o: $(LEM_PATH)/ai/la/MorphFilterResult.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterResult.cpp -o $(OBJDIR)/MorphFilterResult.o
-
-
-$(OBJDIR)/CollocFilterMatchingContext.o: $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp -o $(OBJDIR)/CollocFilterMatchingContext.o
-
-
-$(OBJDIR)/CollocFilter.o: $(LEM_PATH)/ai/la/CollocFilter.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilter.cpp -o $(OBJDIR)/CollocFilter.o
-
-
-$(OBJDIR)/CollocFilterCompilationContext.o: $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp -o $(OBJDIR)/CollocFilterCompilationContext.o
-
-
-$(OBJDIR)/MorphFilterTreeNode2.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp -o $(OBJDIR)/MorphFilterTreeNode2.o
-
-
-$(OBJDIR)/CollocFilterMarkedForms.o: $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp -o $(OBJDIR)/CollocFilterMarkedForms.o
-
-
-$(OBJDIR)/CollocFilterCache.o: $(LEM_PATH)/ai/la/CollocFilterCache.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCache.cpp -o $(OBJDIR)/CollocFilterCache.o
 
 $(OBJDIR)/LemmatizatorStorage_SQLITE.o: $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp -o $(OBJDIR)/LemmatizatorStorage_SQLITE.o
@@ -381,9 +350,6 @@ $(OBJDIR)/PatternMatcherEnumerator.o: $(LEM_PATH)/ai/pm/PatternMatcherEnumerator
 
 $(OBJDIR)/ProcedureEnumerator.o: $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp -o $(OBJDIR)/ProcedureEnumerator.o
-
-$(OBJDIR)/RuleCategoryEnumerator.o: $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp -o $(OBJDIR)/RuleCategoryEnumerator.o
 
 $(OBJDIR)/PM_FunctionLoader.o: $(LEM_PATH)/ai/pm/PM_FunctionLoader.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_FunctionLoader.cpp -o $(OBJDIR)/PM_FunctionLoader.o
@@ -1198,9 +1164,6 @@ $(OBJDIR)/pm_processing.o: $(LEM_PATH)/ai/pm/pm_processing.cpp
 
 $(OBJDIR)/pm_rule.o: $(LEM_PATH)/ai/pm/pm_rule.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rule.cpp -o $(OBJDIR)/pm_rule.o
-
-$(OBJDIR)/pm_rules_in_category.o: $(LEM_PATH)/ai/pm/pm_rules_in_category.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rules_in_category.cpp -o $(OBJDIR)/pm_rules_in_category.o
 
 $(OBJDIR)/pm_rule_element.o: $(LEM_PATH)/ai/pm/pm_rule_element.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/pm_rule_element.cpp -o $(OBJDIR)/pm_rule_element.o

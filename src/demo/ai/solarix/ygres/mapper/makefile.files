@@ -13,12 +13,19 @@
 .c.o:
 	$(CC) $(CFLAGS) -o $@ $<
 
-OBJS = $(OBJDIR)/la_sql_export.o $(OBJDIR)/export_sql.o $(OBJDIR)/TreeScorerBoundVariables.o $(OBJDIR)/TreeScorerResult.o $(OBJDIR)/ExportCoordFunction_Remove.o $(OBJDIR)/TreeScorerMatcher.o $(OBJDIR)/PatternExportFuncContext_Wordform.o $(OBJDIR)/PatternExportFuncContext_Tree.o $(OBJDIR)/TreeScorerQuantification.o $(OBJDIR)/ViolationHandler.o $(OBJDIR)/PatternOptionalPoints.o $(OBJDIR)/PatternExportSection.o $(OBJDIR)/PatternConstraint.o $(OBJDIR)/PatternConstraints.o $(OBJDIR)/ExportCoordFunction.o $(OBJDIR)/ExportCoordFunction_Add.o $(OBJDIR)/ExportCoordFunction_Except.o $(OBJDIR)/ExportCoordFunction_IfContains.o $(OBJDIR)/ExportCoordFunction_IfExported.o $(OBJDIR)/TreeScorerPredicate.o $(OBJDIR)/TreeScorerPredicateArg.o $(OBJDIR)/PatternNGramFunction.o $(OBJDIR)/SequenceLabeler.o $(OBJDIR)/ClassifierModel.o $(OBJDIR)/BasicModel.o $(OBJDIR)/ElapsedTimeConstraint.o $(OBJDIR)/TrLikeCondictor.o $(OBJDIR)/TrLikeMatcher.o $(OBJDIR)/VariatorLexerTokens.o $(OBJDIR)/TrReplaceMatcherIndexer.o $(OBJDIR)/VariatorLexer.o $(OBJDIR)/GrafBuilder.o $(OBJDIR)/NewStartLexer.o $(OBJDIR)/CollocFilterSourceAccessor.o $(OBJDIR)/MixerFilterApplications.o $(OBJDIR)/TF_ClassFilter.o $(OBJDIR)/TF_CaseFilter.o $(OBJDIR)/SynPatternTreeNodeMatchingResults.o $(OBJDIR)/ModelCodeBook.o $(OBJDIR)/ModelTagMatcher.o $(OBJDIR)/TreeScorerApplicationContext.o $(OBJDIR)/BasicLexer.o $(OBJDIR)/WrittenTextLexer.o $(OBJDIR)/WrittenTextAnalyzerSession.o $(OBJDIR)/TextAnalysisSession.o $(OBJDIR)/TextRecognitionParameters.o $(OBJDIR)/TextTokenizationRules.o $(OBJDIR)/PreparedLexer2.o $(OBJDIR)/LexerTextPos.o $(OBJDIR)/PreparedLexer.o $(OBJDIR)/SkipTokenRule.o $(OBJDIR)/SlotProperties.o $(OBJDIR)/SG_MetaEntry.o $(OBJDIR)/TokenSplitterRx.o $(OBJDIR)/PredicateTemplate.o $(OBJDIR)/PredicateTemplates.o $(OBJDIR)/LEMM_Compiler.o $(OBJDIR)/WordAssociation.o $(OBJDIR)/TreeScorers.o $(OBJDIR)/SkipTokenRules.o $(OBJDIR)/MorphologyModels.o $(OBJDIR)/SentenceWord.o $(OBJDIR)/TreeMatchingExperience.o $(OBJDIR)/TreeMatchingExperienceItem.o $(OBJDIR)/SyllabCondition.o $(OBJDIR)/SyllabConditionPoint.o $(OBJDIR)/SyllabContext.o $(OBJDIR)/SyllabContextPoint.o $(OBJDIR)/SyllabResult.o $(OBJDIR)/SyllabResultPoint.o $(OBJDIR)/SyllabRule.o $(OBJDIR)/SyllabRules.o $(OBJDIR)/SyllabRulesForLanguage.o $(OBJDIR)/PatternLinks.o $(OBJDIR)/PatternLink.o $(OBJDIR)/TreeScorerPoint.o $(OBJDIR)/TreeScorer.o $(OBJDIR)/PatternNGrams.o $(OBJDIR)/KB_Checker.o $(OBJDIR)/WordSetChecker.o $(OBJDIR)/PatternNGram.o $(OBJDIR)/KB_Facts.o $(OBJDIR)/KB_Fact.o $(OBJDIR)/CollocFilterInnerCondition.o $(OBJDIR)/CollocFilterPoint.o $(OBJDIR)/SynPatternExport.o $(OBJDIR)/PatternDefaultLinkage.o $(OBJDIR)/ExportNode.o $(OBJDIR)/KB_CheckingResult.o $(OBJDIR)/KnowledgeBase.o $(OBJDIR)/KB_CachedFacts.o $(OBJDIR)/KB_Argument.o $(OBJDIR)/MorphFilterTreeNode.o $(OBJDIR)/MorphFilterResult.o $(OBJDIR)/CollocFilterMatchingContext.o $(OBJDIR)/CollocFilter.o $(OBJDIR)/CollocFilterCompilationContext.o $(OBJDIR)/MorphFilterTreeNode2.o $(OBJDIR)/CollocFilterMarkedForms.o $(OBJDIR)/CollocFilterCache.o $(OBJDIR)/LemmatizatorStorage_SQLITE.o $(OBJDIR)/WordFormEnumerator_SQLite.o $(OBJDIR)/WordEntryEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQLite.o $(OBJDIR)/LexemeEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQL.o $(OBJDIR)/BackRefCorrel.o $(OBJDIR)/WordSetEnumerator.o $(OBJDIR)/ExactWordEntryLocator.o $(OBJDIR)/LexiconStorage.o $(OBJDIR)/ParadigmaMatcher.o $(OBJDIR)/ParadigmaFinder.o $(OBJDIR)/LA_BackTraceItem.o $(OBJDIR)/LA_BackTrace.o $(OBJDIR)/LA_SynPatternResult.o $(OBJDIR)/LA_SynPatternPointCall.o $(OBJDIR)/SourceFilenameEnumerator.o $(OBJDIR)/GG_CharOperation.o $(OBJDIR)/CharOperationEnumerator.o $(OBJDIR)/GG_CharOperations.o $(OBJDIR)/LA_RecognitionRule.o $(OBJDIR)/WordEntrySetEnumerator.o $(OBJDIR)/LA_SynPatternTrees.o $(OBJDIR)/LA_RecognitionRules.o $(OBJDIR)/LA_CropRule.o $(OBJDIR)/LA_PhoneticRule.o $(OBJDIR)/LA_Recognizer.o $(OBJDIR)/LA_PreprocessorRules.o $(OBJDIR)/LA_Preprocessor.o $(OBJDIR)/LA_PhoneticMatcherForLanguage.o $(OBJDIR)/LA_PreprocessorTokRule.o $(OBJDIR)/LA_PreprocessorRule.o $(OBJDIR)/LA_UnbreakableRule.o $(OBJDIR)/LA_PhoneticRuleEnumerator_MCollect.o $(OBJDIR)/LA_PhoneticResult.o $(OBJDIR)/LA_PhoneticCondictor.o $(OBJDIR)/LA_PhoneticMatcher.o $(OBJDIR)/MultiwordMerger.o $(OBJDIR)/PM_ProcedureLoader.o $(OBJDIR)/PM_Rules.o $(OBJDIR)/PatternMatcherEnumerator.o $(OBJDIR)/ProcedureEnumerator.o $(OBJDIR)/RuleCategoryEnumerator.o $(OBJDIR)/PM_FunctionLoader.o $(OBJDIR)/LanguageUsage.o $(OBJDIR)/ThesaurusLinkFlags.o $(OBJDIR)/TrMorphologyTracer.o $(OBJDIR)/TrScopedVarsContext.o $(OBJDIR)/LA_WordEntrySet.o $(OBJDIR)/SynPatternCompilation.o $(OBJDIR)/rec2_transformator.o $(OBJDIR)/R2Pattern.o $(OBJDIR)/R2PatternEnumerator_SQL.o $(OBJDIR)/R2Patterns.o $(OBJDIR)/R2Point.o $(OBJDIR)/R2Point2Pattern.o $(OBJDIR)/R2PointEnumerator_SQL.o $(OBJDIR)/R2Points.o $(OBJDIR)/R2ProductionNode.o $(OBJDIR)/R2TranformEnumerator.o $(OBJDIR)/R2Transform.o $(OBJDIR)/R2Transforms.o $(OBJDIR)/R2Utils.o $(OBJDIR)/R2Word2Point.o $(OBJDIR)/R2WordEnumerator_SQL.o $(OBJDIR)/R2Words.o $(OBJDIR)/Reconstructor2.o $(OBJDIR)/Reconstructor2Storage_MySQL.o $(OBJDIR)/Reconstructor2Storage_SQLITE.o $(OBJDIR)/StorageConnection_SQLITE.o $(OBJDIR)/Charpos2EntryStorage_SQLITE.o $(OBJDIR)/Charpos2EntryEnumerator_SQL.o $(OBJDIR)/WideString2Ucs4.o $(OBJDIR)/Ucs4ToWideString.o $(OBJDIR)/CriteriaInStorage.o $(OBJDIR)/CriterionEnumerator_SQL.o $(OBJDIR)/CriterionEnumeratorInFile.o $(OBJDIR)/Symbols.o $(OBJDIR)/AlphabetStorage_SQLITE.o $(OBJDIR)/AlphabetEnumerator.o $(OBJDIR)/SymbolEnumerator.o $(OBJDIR)/Alphabets.o $(OBJDIR)/Alphabet.o $(OBJDIR)/SymbolClasses.o $(OBJDIR)/SymbolClassEnumerator.o $(OBJDIR)/GG_CoordEnumerator.o $(OBJDIR)/GG_Coordinates.o $(OBJDIR)/LemmatizatorStorage_MySQL.o $(OBJDIR)/lemmatizator.o $(OBJDIR)/NGramsStorage_SQLITE.o $(OBJDIR)/NGramsStorage_MySQL.o $(OBJDIR)/StorageConnections.o  $(OBJDIR)/Languages.o $(OBJDIR)/sqlite_helpers.o $(OBJDIR)/CoordsInFile.o $(OBJDIR)/CoordEnumeratorInFile.o $(OBJDIR)/WordEntries_File.o $(OBJDIR)/WordFormEnumeratorGlobbing_File.o $(OBJDIR)/WordFormEnumeratorFuzzy_File.o $(OBJDIR)/WordFormEnumeratorListing_File.o $(OBJDIR)/WordEntryEnumerator_File.o $(OBJDIR)/WordFormEnumerator_File3.o $(OBJDIR)/WordFormEnumerator_File2.o $(OBJDIR)/WordFormEnumerator_File1.o $(OBJDIR)/WordEntryEnumerator_File_ByGroup.o $(OBJDIR)/SG_Coordinates.o $(OBJDIR)/LanguageEnumerator.o $(OBJDIR)/PartsOfSpeech.o $(OBJDIR)/SG_CoordEnumerator.o $(OBJDIR)/LexemeEnumerator_File.o $(OBJDIR)/PartOfSpeechEnumerator.o $(OBJDIR)/GramCoordUpdator_DB.o $(OBJDIR)/ThesaurusStorage_SQLITE.o $(OBJDIR)/LexiconStorage_SQLITE.o $(OBJDIR)/PhraseNoteEnumerator.o $(OBJDIR)/PhraseLinkEnumerator.o $(OBJDIR)/TagsSets.o $(OBJDIR)/WordLinkEnumerator.o $(OBJDIR)/AuxFormTypes.o $(OBJDIR)/ThesaurusTagDefs.o $(OBJDIR)/TransactionGuard_SQLITE.o $(OBJDIR)/PhraseEnumerator.o $(OBJDIR)/ThesaurusTagDefsEnumerator.o $(OBJDIR)/LS_ResultSet_SQLITE.o $(OBJDIR)/lem_critical_section.o $(OBJDIR)/lem_startup.o $(OBJDIR)/ymap.o $(OBJDIR)/ExternalTokenizer.o $(OBJDIR)/xp_node.o $(OBJDIR)/xp_parser.o $(OBJDIR)/xp_iterator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/macheps.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/aa_autom.o $(OBJDIR)/res_pack.o $(OBJDIR)/tree_link.o $(OBJDIR)/tree_node.o $(OBJDIR)/TreeMarks.o $(OBJDIR)/TreeDimension.o $(OBJDIR)/variator.o $(OBJDIR)/word_form.o $(OBJDIR)/automata_names.o $(OBJDIR)/automaton.o $(OBJDIR)/base_entry.o $(OBJDIR)/coordinate.o $(OBJDIR)/coord_adr.o $(OBJDIR)/coord_ex.o $(OBJDIR)/coord_pair.o $(OBJDIR)/coord_state.o $(OBJDIR)/criteria_list.o $(OBJDIR)/criterion.o $(OBJDIR)/dictionary.o $(OBJDIR)/form_table.o $(OBJDIR)/grammar.o $(OBJDIR)/gram_class.o $(OBJDIR)/lexem.o $(OBJDIR)/ml_net_node.o $(OBJDIR)/ml_proj_job.o $(OBJDIR)/ml_proj_list.o $(OBJDIR)/ref_name.o $(OBJDIR)/sol_ling.o $(OBJDIR)/some_strings.o $(OBJDIR)/string_set.o $(OBJDIR)/text_processor.o $(OBJDIR)/version.o $(OBJDIR)/tokens.o $(OBJDIR)/sql_production.o $(OBJDIR)/dsa_form.o $(OBJDIR)/dsa_main.o $(OBJDIR)/dsa_table.o $(OBJDIR)/sg_notag_filter.o $(OBJDIR)/sg_autom.o $(OBJDIR)/sg_calibrator.o $(OBJDIR)/sg_coord_context.o $(OBJDIR)/sg_entry.o $(OBJDIR)/sg_entry_group.o $(OBJDIR)/sg_form.o $(OBJDIR)/sg_net_link.o $(OBJDIR)/sg_preparing.o $(OBJDIR)/sg_language.o $(OBJDIR)/sg_class.o $(OBJDIR)/sg_lexem_dictionary.o $(OBJDIR)/sg_ld_seeker.o $(OBJDIR)/sg_affix_table.o $(OBJDIR)/sg_autom_sql_generator.o $(OBJDIR)/sg_net.o $(OBJDIR)/sg_link_generator.o $(OBJDIR)/sg_complex_link.o $(OBJDIR)/pm_autom.o $(OBJDIR)/pm_rules_in_category.o $(OBJDIR)/la_autom.o $(OBJDIR)/la_fuzzy.o $(OBJDIR)/la_lex.o $(OBJDIR)/la_phaa.o $(OBJDIR)/la_processing.o $(OBJDIR)/la_project_buffer.o $(OBJDIR)/la_proj_list.o $(OBJDIR)/la_word_projection.o $(OBJDIR)/gg_autom.o $(OBJDIR)/gg_entry.o $(OBJDIR)/gg_form.o $(OBJDIR)/randu.o $(OBJDIR)/ir_macro.o $(OBJDIR)/ir_macro_group.o $(OBJDIR)/ir_macro_head.o $(OBJDIR)/ir_macro_if.o $(OBJDIR)/ir_macro_parser.o $(OBJDIR)/ir_macro_subst.o $(OBJDIR)/ir_macro_table.o $(OBJDIR)/ir_macro_text.o $(OBJDIR)/ir_operator.o $(OBJDIR)/ir_parser_stack.o $(OBJDIR)/ir_parser_variable.o $(OBJDIR)/ir_prep_pars_token.o $(OBJDIR)/ir_print_error.o $(OBJDIR)/ir_readl.o $(OBJDIR)/ir_tokens.o $(OBJDIR)/ir_var_table.o $(OBJDIR)/ygres.o $(OBJDIR)/statkep1.o $(OBJDIR)/interpol.o $(OBJDIR)/base_application.o $(OBJDIR)/cfg_base_parser.o $(OBJDIR)/cfg_ini_parser.o $(OBJDIR)/sg_stemmer.o $(OBJDIR)/load_options.o $(OBJDIR)/hardware.o $(OBJDIR)/ngrams.o $(OBJDIR)/ThesaurusTag.o $(OBJDIR)/CharNode.o $(OBJDIR)/CompilationContext.o $(OBJDIR)/SentenceBroker.o $(OBJDIR)/SentenceTokenizer.o $(OBJDIR)/SegmentingSentenceTokenizer.o $(OBJDIR)/lem_interlocked_value.o $(OBJDIR)/ir_error.o $(OBJDIR)/NGramsDBMS.o $(OBJDIR)/sentence.o $(OBJDIR)/la_mixer_filter.o $(OBJDIR)/SynPattern.o $(OBJDIR)/SynPatternPoint.o $(OBJDIR)/SynPatternTreeNode.o $(OBJDIR)/TrAddLinkResultItem.o $(OBJDIR)/TrArithFun.o $(OBJDIR)/TrClosureVars.o $(OBJDIR)/TrCompilationContext.o $(OBJDIR)/TrCondictor.o $(OBJDIR)/TrContextCondictor.o $(OBJDIR)/TrContextInCondictor.o $(OBJDIR)/TrContextInvokation.o $(OBJDIR)/TrEnvironment.o $(OBJDIR)/TrFun_Assign.o $(OBJDIR)/TrFun_Break.o $(OBJDIR)/TrFun_BuiltIn.o $(OBJDIR)/TrFun_Constant.o $(OBJDIR)/TrFun_CreateWordform.o $(OBJDIR)/TrFun_Declare.o $(OBJDIR)/TrFun_For.o $(OBJDIR)/TrFun_Group.o $(OBJDIR)/TrFun_If.o $(OBJDIR)/TrFun_Lambda.o $(OBJDIR)/TrFun_Procedure.o $(OBJDIR)/TrFun_Return.o $(OBJDIR)/TrFun_Scan.o $(OBJDIR)/TrFun_Var.o $(OBJDIR)/TrFun_While.o $(OBJDIR)/TrFunCall.o $(OBJDIR)/TrFunContext.o $(OBJDIR)/TrFunction.o $(OBJDIR)/TrFunctionResultItem.o $(OBJDIR)/TrFunctions.o $(OBJDIR)/TrFunctionStep.o $(OBJDIR)/TrFunUser.o $(OBJDIR)/TrGramFun.o $(OBJDIR)/TrGroupResultItem.o $(OBJDIR)/TrGroupStep.o $(OBJDIR)/TrIfFunction.o $(OBJDIR)/TrIfResultItem.o $(OBJDIR)/TrIfStep.o $(OBJDIR)/TrIndexResultItem.o $(OBJDIR)/TrIterateStep.o $(OBJDIR)/TrKnownVars.o $(OBJDIR)/TrLambdaFunctionResultItem.o $(OBJDIR)/TrLogicFun.o $(OBJDIR)/TrMapContext.o $(OBJDIR)/TrMapPoint.o $(OBJDIR)/TrMatchFun.o $(OBJDIR)/TrPattern.o $(OBJDIR)/TrPatternFun.o $(OBJDIR)/TrPatternMatcher.o $(OBJDIR)/TrPatternPoint.o $(OBJDIR)/TrPatternTreeNode.o $(OBJDIR)/TrPrefixTreeMatcher.o $(OBJDIR)/TrProcedure.o $(OBJDIR)/TrProcedureDeclaration.o $(OBJDIR)/TrProcedureStep.o $(OBJDIR)/TrProduction.o $(OBJDIR)/TrReplaceMatcher.o $(OBJDIR)/TrReplaceStep.o $(OBJDIR)/TrResult.o $(OBJDIR)/TrResultItem.o $(OBJDIR)/TrResultItemArg.o $(OBJDIR)/TrSubroutineStep.o $(OBJDIR)/TrTrace.o $(OBJDIR)/TrTraceActor.o $(OBJDIR)/TrTraceFunCall.o $(OBJDIR)/TrTraceProcedure.o $(OBJDIR)/TrTraceProcedureStep.o $(OBJDIR)/TrTraceResult.o $(OBJDIR)/TrTraceResultItem.o $(OBJDIR)/TrTransformResultItem.o $(OBJDIR)/TrTreeStep.o $(OBJDIR)/TrTuple.o $(OBJDIR)/TrType.o $(OBJDIR)/TrUserIfFun.o $(OBJDIR)/TrValue.o $(OBJDIR)/TrVariator.o $(OBJDIR)/TrWhen.o $(OBJDIR)/TrWhenItem.o $(OBJDIR)/TrWideContext.o $(OBJDIR)/TrWordformResultItem.o $(OBJDIR)/TrWordResultItem.o $(OBJDIR)/TrYield.o $(OBJDIR)/TrTraceTrRule.o $(OBJDIR)/TrTraceTrCondictor.o $(OBJDIR)/TrTraceFunGroupStep.o $(OBJDIR)/clc_calc_variable.o  $(OBJDIR)/clc_pars_token.o $(OBJDIR)/clc_parser_stack.o $(OBJDIR)/clc_print_error.o $(OBJDIR)/clc_tokens.o $(OBJDIR)/clc_var_table.o $(OBJDIR)/DebugSymbols.o  $(OBJDIR)/sg_ref_tag_filter.o $(OBJDIR)/sg_prefix_entry_searcher.o $(OBJDIR)/tr_transformators.o $(OBJDIR)/rec_transformators.o $(OBJDIR)/casing_coder.o $(OBJDIR)/cp_037.o $(OBJDIR)/cp_1006.o $(OBJDIR)/cp_1026.o $(OBJDIR)/cp_1253.o $(OBJDIR)/cp_1254.o $(OBJDIR)/cp_1255.o $(OBJDIR)/cp_1256.o $(OBJDIR)/cp_1257.o $(OBJDIR)/cp_1258.o $(OBJDIR)/cp_424.o $(OBJDIR)/cp_500.o $(OBJDIR)/cp_737.o $(OBJDIR)/cp_775.o $(OBJDIR)/cp_850.o $(OBJDIR)/cp_852.o $(OBJDIR)/cp_855.o $(OBJDIR)/cp_856.o $(OBJDIR)/cp_857.o $(OBJDIR)/cp_860.o $(OBJDIR)/cp_861.o $(OBJDIR)/cp_862.o $(OBJDIR)/cp_863.o $(OBJDIR)/cp_864.o $(OBJDIR)/cp_865.o $(OBJDIR)/cp_869.o $(OBJDIR)/cp_874.o $(OBJDIR)/cp_875.o $(OBJDIR)/cp_8859_10.o $(OBJDIR)/cp_8859_11.o $(OBJDIR)/cp_8859_13.o $(OBJDIR)/cp_8859_14.o $(OBJDIR)/cp_8859_15.o $(OBJDIR)/cp_8859_16.o $(OBJDIR)/cp_8859_2.o $(OBJDIR)/cp_8859_3.o $(OBJDIR)/cp_8859_4.o $(OBJDIR)/cp_8859_5.o $(OBJDIR)/cp_8859_6.o $(OBJDIR)/cp_8859_7.o $(OBJDIR)/cp_8859_8.o $(OBJDIR)/cp_8859_9.o $(OBJDIR)/cp_unicode_data.o 
+OBJS = $(OBJDIR)/LA_PreprocessorRules.o $(OBJDIR)/PatternNGramTreeScorer.o $(OBJDIR)/la_sql_export.o $(OBJDIR)/export_sql.o $(OBJDIR)/TreeScorerBoundVariables.o $(OBJDIR)/TreeScorerResult.o $(OBJDIR)/ExportCoordFunction_Remove.o $(OBJDIR)/TreeScorerMatcher.o $(OBJDIR)/PatternExportFuncContext_Wordform.o $(OBJDIR)/PatternExportFuncContext_Tree.o $(OBJDIR)/TreeScorerQuantification.o $(OBJDIR)/ViolationHandler.o $(OBJDIR)/PatternOptionalPoints.o $(OBJDIR)/PatternExportSection.o $(OBJDIR)/PatternConstraint.o $(OBJDIR)/PatternConstraints.o $(OBJDIR)/ExportCoordFunction.o $(OBJDIR)/ExportCoordFunction_Add.o $(OBJDIR)/ExportCoordFunction_Except.o $(OBJDIR)/ExportCoordFunction_IfContains.o $(OBJDIR)/ExportCoordFunction_IfExported.o $(OBJDIR)/TreeScorerPredicate.o $(OBJDIR)/TreeScorerPredicateArg.o $(OBJDIR)/PatternNGramFunction.o $(OBJDIR)/SequenceLabeler.o $(OBJDIR)/ClassifierModel.o $(OBJDIR)/BasicModel.o $(OBJDIR)/ElapsedTimeConstraint.o $(OBJDIR)/VariatorLexerTokens.o $(OBJDIR)/VariatorLexer.o $(OBJDIR)/GrafBuilder.o $(OBJDIR)/TF_ClassFilter.o $(OBJDIR)/TF_CaseFilter.o $(OBJDIR)/SynPatternTreeNodeMatchingResults.o $(OBJDIR)/ModelCodeBook.o $(OBJDIR)/ModelTagMatcher.o $(OBJDIR)/TreeScorerApplicationContext.o $(OBJDIR)/BasicLexer.o $(OBJDIR)/WrittenTextLexer.o $(OBJDIR)/WrittenTextAnalyzerSession.o $(OBJDIR)/TextAnalysisSession.o $(OBJDIR)/TextRecognitionParameters.o $(OBJDIR)/TextTokenizationRules.o $(OBJDIR)/LexerTextPos.o $(OBJDIR)/PreparedLexer.o $(OBJDIR)/SlotProperties.o $(OBJDIR)/SG_MetaEntry.o $(OBJDIR)/TokenSplitterRx.o $(OBJDIR)/PredicateTemplate.o $(OBJDIR)/PredicateTemplates.o $(OBJDIR)/LEMM_Compiler.o $(OBJDIR)/WordAssociation.o $(OBJDIR)/TreeScorers.o $(OBJDIR)/MorphologyModels.o $(OBJDIR)/SentenceWord.o $(OBJDIR)/TreeMatchingExperience.o $(OBJDIR)/TreeMatchingExperienceItem.o $(OBJDIR)/SyllabCondition.o $(OBJDIR)/SyllabConditionPoint.o $(OBJDIR)/SyllabContext.o $(OBJDIR)/SyllabContextPoint.o $(OBJDIR)/SyllabResult.o $(OBJDIR)/SyllabResultPoint.o $(OBJDIR)/SyllabRule.o $(OBJDIR)/SyllabRules.o $(OBJDIR)/SyllabRulesForLanguage.o $(OBJDIR)/PatternLinks.o $(OBJDIR)/PatternLink.o $(OBJDIR)/TreeScorerPoint.o $(OBJDIR)/TreeScorer.o $(OBJDIR)/PatternNGrams.o $(OBJDIR)/KB_Checker.o $(OBJDIR)/WordSetChecker.o $(OBJDIR)/PatternNGram.o $(OBJDIR)/KB_Facts.o $(OBJDIR)/KB_Fact.o $(OBJDIR)/SynPatternExport.o $(OBJDIR)/PatternDefaultLinkage.o $(OBJDIR)/ExportNode.o $(OBJDIR)/KB_CheckingResult.o $(OBJDIR)/KnowledgeBase.o $(OBJDIR)/KB_CachedFacts.o $(OBJDIR)/KB_Argument.o $(OBJDIR)/LemmatizatorStorage_SQLITE.o $(OBJDIR)/WordFormEnumerator_SQLite.o $(OBJDIR)/WordEntryEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQLite.o $(OBJDIR)/LexemeEnumerator_SQLite.o $(OBJDIR)/WordEntries_SQL.o $(OBJDIR)/BackRefCorrel.o $(OBJDIR)/WordSetEnumerator.o $(OBJDIR)/ExactWordEntryLocator.o $(OBJDIR)/LexiconStorage.o $(OBJDIR)/ParadigmaMatcher.o $(OBJDIR)/ParadigmaFinder.o $(OBJDIR)/LA_BackTraceItem.o $(OBJDIR)/LA_BackTrace.o $(OBJDIR)/LA_SynPatternResult.o $(OBJDIR)/LA_SynPatternPointCall.o $(OBJDIR)/SourceFilenameEnumerator.o $(OBJDIR)/GG_CharOperation.o $(OBJDIR)/CharOperationEnumerator.o $(OBJDIR)/GG_CharOperations.o $(OBJDIR)/LA_RecognitionRule.o $(OBJDIR)/WordEntrySetEnumerator.o $(OBJDIR)/LA_SynPatternTrees.o $(OBJDIR)/LA_RecognitionRules.o $(OBJDIR)/LA_CropRule.o $(OBJDIR)/LA_PhoneticRule.o $(OBJDIR)/LA_Recognizer.o $(OBJDIR)/LA_Preprocessor.o $(OBJDIR)/LA_PhoneticMatcherForLanguage.o $(OBJDIR)/LA_UnbreakableRule.o $(OBJDIR)/LA_PhoneticRuleEnumerator_MCollect.o $(OBJDIR)/LA_PhoneticResult.o $(OBJDIR)/LA_PhoneticCondictor.o $(OBJDIR)/LA_PhoneticMatcher.o $(OBJDIR)/MultiwordMerger.o $(OBJDIR)/PM_FunctionLoader.o $(OBJDIR)/LanguageUsage.o $(OBJDIR)/ThesaurusLinkFlags.o $(OBJDIR)/TrMorphologyTracer.o $(OBJDIR)/LA_WordEntrySet.o $(OBJDIR)/SynPatternCompilation.o $(OBJDIR)/StorageConnection_SQLITE.o $(OBJDIR)/Charpos2EntryStorage_SQLITE.o $(OBJDIR)/Charpos2EntryEnumerator_SQL.o $(OBJDIR)/WideString2Ucs4.o $(OBJDIR)/Ucs4ToWideString.o $(OBJDIR)/CriteriaInStorage.o $(OBJDIR)/CriterionEnumerator_SQL.o $(OBJDIR)/CriterionEnumeratorInFile.o $(OBJDIR)/Symbols.o $(OBJDIR)/AlphabetStorage_SQLITE.o $(OBJDIR)/AlphabetEnumerator.o $(OBJDIR)/SymbolEnumerator.o $(OBJDIR)/Alphabets.o $(OBJDIR)/Alphabet.o $(OBJDIR)/SymbolClasses.o $(OBJDIR)/SymbolClassEnumerator.o $(OBJDIR)/GG_CoordEnumerator.o $(OBJDIR)/GG_Coordinates.o $(OBJDIR)/LemmatizatorStorage_MySQL.o $(OBJDIR)/lemmatizator.o $(OBJDIR)/NGramsStorage_SQLITE.o $(OBJDIR)/NGramsStorage_MySQL.o $(OBJDIR)/StorageConnections.o  $(OBJDIR)/Languages.o $(OBJDIR)/sqlite_helpers.o $(OBJDIR)/WordEntries_File.o $(OBJDIR)/WordFormEnumeratorGlobbing_File.o $(OBJDIR)/WordFormEnumeratorFuzzy_File.o $(OBJDIR)/WordFormEnumeratorListing_File.o $(OBJDIR)/WordEntryEnumerator_File.o $(OBJDIR)/WordFormEnumerator_File3.o $(OBJDIR)/WordFormEnumerator_File2.o $(OBJDIR)/WordFormEnumerator_File1.o $(OBJDIR)/WordEntryEnumerator_File_ByGroup.o $(OBJDIR)/SG_Coordinates.o $(OBJDIR)/LanguageEnumerator.o $(OBJDIR)/PartsOfSpeech.o $(OBJDIR)/SG_CoordEnumerator.o $(OBJDIR)/LexemeEnumerator_File.o $(OBJDIR)/PartOfSpeechEnumerator.o $(OBJDIR)/GramCoordUpdator_DB.o $(OBJDIR)/ThesaurusStorage_SQLITE.o $(OBJDIR)/LexiconStorage_SQLITE.o $(OBJDIR)/PhraseNoteEnumerator.o $(OBJDIR)/PhraseLinkEnumerator.o $(OBJDIR)/TagsSets.o $(OBJDIR)/WordLinkEnumerator.o $(OBJDIR)/AuxFormTypes.o $(OBJDIR)/ThesaurusTagDefs.o $(OBJDIR)/TransactionGuard_SQLITE.o $(OBJDIR)/PhraseEnumerator.o $(OBJDIR)/ThesaurusTagDefsEnumerator.o $(OBJDIR)/LS_ResultSet_SQLITE.o $(OBJDIR)/lem_critical_section.o $(OBJDIR)/lem_startup.o $(OBJDIR)/ymap.o $(OBJDIR)/ExternalTokenizer.o $(OBJDIR)/xp_node.o $(OBJDIR)/xp_parser.o $(OBJDIR)/xp_iterator.o $(OBJDIR)/lem_dll.o $(OBJDIR)/lem_application.o $(OBJDIR)/lem_coap.o $(OBJDIR)/lem_opti.o $(OBJDIR)/lem_chec.o $(OBJDIR)/lem_conv.o $(OBJDIR)/lem_dir.o $(OBJDIR)/lem_time.o $(OBJDIR)/lem_shell.o $(OBJDIR)/ui_user_interface.o $(OBJDIR)/system_config.o $(OBJDIR)/cp_437.o $(OBJDIR)/cp_8859_1.o  $(OBJDIR)/cast_to_url.o  $(OBJDIR)/cp_847.o $(OBJDIR)/cp_866.o $(OBJDIR)/cp_1250.o $(OBJDIR)/cp_1251.o $(OBJDIR)/cp_1252.o $(OBJDIR)/cp_code_page.o $(OBJDIR)/cp_recodings.o $(OBJDIR)/cp_sgml.o $(OBJDIR)/ucs4_to_utf8.o $(OBJDIR)/transliterator.o $(OBJDIR)/utf_converters.o $(OBJDIR)/lem_process.o $(OBJDIR)/lem_reflection.o $(OBJDIR)/lem_ustr.o $(OBJDIR)/lem_astr.o $(OBJDIR)/lem_acstring.o $(OBJDIR)/lem_ucstring.o $(OBJDIR)/lem_afstring.o $(OBJDIR)/lem_ufstring.o $(OBJDIR)/lem_fp1.o $(OBJDIR)/oformatter.o $(OBJDIR)/io_base_stream.o $(OBJDIR)/io_binary_file.o $(OBJDIR)/io_memory_stream.o $(OBJDIR)/io_text_file.o $(OBJDIR)/io_tty.o $(OBJDIR)/base_lexer.o $(OBJDIR)/io_kbd.o $(OBJDIR)/lem_mime.o $(OBJDIR)/lem_logfile.o $(OBJDIR)/chr_base_reader.o $(OBJDIR)/chr_char_reader.o $(OBJDIR)/chr_utf16_reader.o $(OBJDIR)/chr_utf8_reader.o $(OBJDIR)/lem_imat.o $(OBJDIR)/aa_autom.o $(OBJDIR)/res_pack.o $(OBJDIR)/tree_link.o $(OBJDIR)/tree_node.o $(OBJDIR)/TreeMarks.o $(OBJDIR)/TreeDimension.o $(OBJDIR)/variator.o $(OBJDIR)/word_form.o $(OBJDIR)/automata_names.o $(OBJDIR)/automaton.o $(OBJDIR)/base_entry.o $(OBJDIR)/coordinate.o $(OBJDIR)/coord_adr.o $(OBJDIR)/coord_ex.o $(OBJDIR)/coord_pair.o $(OBJDIR)/coord_state.o $(OBJDIR)/criteria_list.o $(OBJDIR)/criterion.o $(OBJDIR)/dictionary.o $(OBJDIR)/form_table.o $(OBJDIR)/grammar.o $(OBJDIR)/gram_class.o $(OBJDIR)/lexem.o $(OBJDIR)/ml_net_node.o $(OBJDIR)/ml_proj_job.o $(OBJDIR)/ml_proj_list.o $(OBJDIR)/ref_name.o $(OBJDIR)/sol_ling.o $(OBJDIR)/some_strings.o $(OBJDIR)/string_set.o $(OBJDIR)/text_processor.o $(OBJDIR)/version.o $(OBJDIR)/tokens.o $(OBJDIR)/sql_production.o $(OBJDIR)/dsa_form.o $(OBJDIR)/dsa_main.o $(OBJDIR)/dsa_table.o $(OBJDIR)/sg_notag_filter.o $(OBJDIR)/sg_autom.o $(OBJDIR)/sg_calibrator.o $(OBJDIR)/sg_coord_context.o $(OBJDIR)/sg_entry.o $(OBJDIR)/sg_entry_group.o $(OBJDIR)/sg_form.o $(OBJDIR)/sg_net_link.o $(OBJDIR)/sg_preparing.o $(OBJDIR)/sg_language.o $(OBJDIR)/sg_class.o $(OBJDIR)/sg_lexem_dictionary.o $(OBJDIR)/sg_ld_seeker.o $(OBJDIR)/sg_affix_table.o $(OBJDIR)/sg_autom_sql_generator.o $(OBJDIR)/sg_net.o $(OBJDIR)/sg_link_generator.o $(OBJDIR)/sg_complex_link.o $(OBJDIR)/pm_autom.o $(OBJDIR)/la_autom.o $(OBJDIR)/la_fuzzy.o $(OBJDIR)/la_lex.o $(OBJDIR)/la_phaa.o $(OBJDIR)/la_processing.o $(OBJDIR)/la_project_buffer.o $(OBJDIR)/la_proj_list.o $(OBJDIR)/la_word_projection.o $(OBJDIR)/gg_autom.o $(OBJDIR)/gg_entry.o $(OBJDIR)/gg_form.o $(OBJDIR)/randu.o $(OBJDIR)/ir_macro.o $(OBJDIR)/ir_macro_group.o $(OBJDIR)/ir_macro_head.o $(OBJDIR)/ir_macro_if.o $(OBJDIR)/ir_macro_parser.o $(OBJDIR)/ir_macro_subst.o $(OBJDIR)/ir_macro_table.o $(OBJDIR)/ir_macro_text.o $(OBJDIR)/ir_operator.o $(OBJDIR)/ir_parser_stack.o $(OBJDIR)/ir_parser_variable.o $(OBJDIR)/ir_prep_pars_token.o $(OBJDIR)/ir_print_error.o $(OBJDIR)/ir_readl.o $(OBJDIR)/ir_tokens.o $(OBJDIR)/ir_var_table.o $(OBJDIR)/ygres.o $(OBJDIR)/base_application.o $(OBJDIR)/cfg_base_parser.o $(OBJDIR)/cfg_ini_parser.o $(OBJDIR)/sg_stemmer.o $(OBJDIR)/load_options.o $(OBJDIR)/ngrams.o $(OBJDIR)/ThesaurusTag.o $(OBJDIR)/CharNode.o $(OBJDIR)/CompilationContext.o $(OBJDIR)/SentenceBroker.o $(OBJDIR)/SentenceTokenizer.o $(OBJDIR)/SegmentingSentenceTokenizer.o $(OBJDIR)/lem_interlocked_value.o $(OBJDIR)/ir_error.o $(OBJDIR)/NGramsDBMS.o $(OBJDIR)/sentence.o $(OBJDIR)/SynPattern.o $(OBJDIR)/SynPatternPoint.o $(OBJDIR)/SynPatternTreeNode.o $(OBJDIR)/TrClosureVars.o $(OBJDIR)/TrCompilationContext.o $(OBJDIR)/TrContextInvokation.o $(OBJDIR)/TrFun_Assign.o $(OBJDIR)/TrFun_Break.o $(OBJDIR)/TrFun_BuiltIn.o $(OBJDIR)/TrFun_Constant.o $(OBJDIR)/TrFun_CreateWordform.o $(OBJDIR)/TrFun_Declare.o $(OBJDIR)/TrFun_For.o $(OBJDIR)/TrFun_Group.o $(OBJDIR)/TrFun_If.o $(OBJDIR)/TrFun_Lambda.o $(OBJDIR)/TrFun_Return.o $(OBJDIR)/TrFun_Var.o $(OBJDIR)/TrFun_While.o $(OBJDIR)/TrFunCall.o $(OBJDIR)/TrFunContext.o $(OBJDIR)/TrFunction.o $(OBJDIR)/TrFunctions.o $(OBJDIR)/TrFunUser.o $(OBJDIR)/TrKnownVars.o $(OBJDIR)/TrTrace.o $(OBJDIR)/TrTraceActor.o $(OBJDIR)/TrTraceFunCall.o $(OBJDIR)/TrTuple.o $(OBJDIR)/TrType.o $(OBJDIR)/TrValue.o $(OBJDIR)/TrTraceFunGroupStep.o $(OBJDIR)/DebugSymbols.o  $(OBJDIR)/sg_ref_tag_filter.o $(OBJDIR)/sg_prefix_entry_searcher.o $(OBJDIR)/casing_coder.o $(OBJDIR)/cp_037.o $(OBJDIR)/cp_1006.o $(OBJDIR)/cp_1026.o $(OBJDIR)/cp_1253.o $(OBJDIR)/cp_1254.o $(OBJDIR)/cp_1255.o $(OBJDIR)/cp_1256.o $(OBJDIR)/cp_1257.o $(OBJDIR)/cp_1258.o $(OBJDIR)/cp_424.o $(OBJDIR)/cp_500.o $(OBJDIR)/cp_737.o $(OBJDIR)/cp_775.o $(OBJDIR)/cp_850.o $(OBJDIR)/cp_852.o $(OBJDIR)/cp_855.o $(OBJDIR)/cp_856.o $(OBJDIR)/cp_857.o $(OBJDIR)/cp_860.o $(OBJDIR)/cp_861.o $(OBJDIR)/cp_862.o $(OBJDIR)/cp_863.o $(OBJDIR)/cp_864.o $(OBJDIR)/cp_865.o $(OBJDIR)/cp_869.o $(OBJDIR)/cp_874.o $(OBJDIR)/cp_875.o $(OBJDIR)/cp_8859_10.o $(OBJDIR)/cp_8859_11.o $(OBJDIR)/cp_8859_13.o $(OBJDIR)/cp_8859_14.o $(OBJDIR)/cp_8859_15.o $(OBJDIR)/cp_8859_16.o $(OBJDIR)/cp_8859_2.o $(OBJDIR)/cp_8859_3.o $(OBJDIR)/cp_8859_4.o $(OBJDIR)/cp_8859_5.o $(OBJDIR)/cp_8859_6.o $(OBJDIR)/cp_8859_7.o $(OBJDIR)/cp_8859_8.o $(OBJDIR)/cp_8859_9.o $(OBJDIR)/cp_unicode_data.o 
 
 all: decompiler
 
 decompiler: $(OBJS)
 	$(CXX) $(OBJS) $(LFLAGS) $(LEM_LIBS) -o $(EXEDIR)/decompiler
+
+
+$(OBJDIR)/LA_PreprocessorRules.o: $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp -o $(OBJDIR)/LA_PreprocessorRules.o
+
+$(OBJDIR)/PatternNGramTreeScorer.o: $(LEM_PATH)/ai/la/PatternNGramTreeScorer.cpp
+		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PatternNGramTreeScorer.cpp -o $(OBJDIR)/PatternNGramTreeScorer.o
 
 $(OBJDIR)/export_sql.o: $(LEM_PATH)/ai/some/export_sql.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/export_sql.cpp -o $(OBJDIR)/export_sql.o
@@ -98,15 +105,6 @@ $(OBJDIR)/BasicModel.o: $(LEM_PATH)/ai/la/BasicModel.cpp
 $(OBJDIR)/ElapsedTimeConstraint.o: $(LEM_PATH)/ai/some/ElapsedTimeConstraint.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/ElapsedTimeConstraint.cpp -o $(OBJDIR)/ElapsedTimeConstraint.o
 
-$(OBJDIR)/TrReplaceMatcherIndexer.o: $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrReplaceMatcherIndexer.cpp -o $(OBJDIR)/TrReplaceMatcherIndexer.o
-
-$(OBJDIR)/TrLikeCondictor.o: $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeCondictor.cpp -o $(OBJDIR)/TrLikeCondictor.o
-       
-$(OBJDIR)/TrLikeMatcher.o: $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrLikeMatcher.cpp -o $(OBJDIR)/TrLikeMatcher.o
-
 $(OBJDIR)/VariatorLexerTokens.o: $(LEM_PATH)/ai/la/VariatorLexerTokens.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/VariatorLexerTokens.cpp -o $(OBJDIR)/VariatorLexerTokens.o
 
@@ -115,15 +113,6 @@ $(OBJDIR)/VariatorLexer.o: $(LEM_PATH)/ai/la/VariatorLexer.cpp
 
 $(OBJDIR)/GrafBuilder.o: $(LEM_PATH)/ai/la/GrafBuilder.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/GrafBuilder.cpp -o $(OBJDIR)/GrafBuilder.o
-
-$(OBJDIR)/NewStartLexer.o: $(LEM_PATH)/ai/la/NewStartLexer.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/NewStartLexer.cpp -o $(OBJDIR)/NewStartLexer.o
-
-$(OBJDIR)/CollocFilterSourceAccessor.o: $(LEM_PATH)/ai/la/CollocFilterSourceAccessor.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterSourceAccessor.cpp -o $(OBJDIR)/CollocFilterSourceAccessor.o
-
-$(OBJDIR)/MixerFilterApplications.o: $(LEM_PATH)/ai/la/MixerFilterApplications.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MixerFilterApplications.cpp -o $(OBJDIR)/MixerFilterApplications.o
 
 $(OBJDIR)/TF_ClassFilter.o: $(LEM_PATH)/ai/la/TF_ClassFilter.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TF_ClassFilter.cpp -o $(OBJDIR)/TF_ClassFilter.o
@@ -161,17 +150,11 @@ $(OBJDIR)/TextRecognitionParameters.o: $(LEM_PATH)/ai/la/TextRecognitionParamete
 $(OBJDIR)/TextTokenizationRules.o: $(LEM_PATH)/ai/la/TextTokenizationRules.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/TextTokenizationRules.cpp -o $(OBJDIR)/TextTokenizationRules.o
 
-$(OBJDIR)/PreparedLexer2.o: $(LEM_PATH)/ai/la/PreparedLexer2.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PreparedLexer2.cpp -o $(OBJDIR)/PreparedLexer2.o
-
 $(OBJDIR)/LexerTextPos.o: $(LEM_PATH)/ai/la/LexerTextPos.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LexerTextPos.cpp -o $(OBJDIR)/LexerTextPos.o
 
 $(OBJDIR)/PreparedLexer.o: $(LEM_PATH)/ai/la/PreparedLexer.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/PreparedLexer.cpp -o $(OBJDIR)/PreparedLexer.o
-
-$(OBJDIR)/SkipTokenRule.o: $(LEM_PATH)/ai/la/SkipTokenRule.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SkipTokenRule.cpp -o $(OBJDIR)/SkipTokenRule.o
 
 $(OBJDIR)/SlotProperties.o: $(LEM_PATH)/ai/la/SlotProperties.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SlotProperties.cpp -o $(OBJDIR)/SlotProperties.o
@@ -270,12 +253,6 @@ $(OBJDIR)/KB_Facts.o: $(LEM_PATH)/ai/la/KB_Facts.cpp
 $(OBJDIR)/KB_Fact.o: $(LEM_PATH)/ai/la/KB_Fact.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Fact.cpp -o $(OBJDIR)/KB_Fact.o
 
-$(OBJDIR)/CollocFilterInnerCondition.o: $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterInnerCondition.cpp -o $(OBJDIR)/CollocFilterInnerCondition.o
-
-$(OBJDIR)/CollocFilterPoint.o: $(LEM_PATH)/ai/la/CollocFilterPoint.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterPoint.cpp -o $(OBJDIR)/CollocFilterPoint.o
-
 $(OBJDIR)/SynPatternExport.o: $(LEM_PATH)/ai/la/SynPatternExport.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternExport.cpp -o $(OBJDIR)/SynPatternExport.o
 
@@ -296,30 +273,6 @@ $(OBJDIR)/KB_CachedFacts.o: $(LEM_PATH)/ai/la/KB_CachedFacts.cpp
 
 $(OBJDIR)/KB_Argument.o: $(LEM_PATH)/ai/la/KB_Argument.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/KB_Argument.cpp -o $(OBJDIR)/KB_Argument.o
-
-$(OBJDIR)/MorphFilterTreeNode.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterTreeNode.cpp -o $(OBJDIR)/MorphFilterTreeNode.o
-
-$(OBJDIR)/MorphFilterResult.o: $(LEM_PATH)/ai/la/MorphFilterResult.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterResult.cpp -o $(OBJDIR)/MorphFilterResult.o
-
-$(OBJDIR)/CollocFilterMatchingContext.o: $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMatchingContext.cpp -o $(OBJDIR)/CollocFilterMatchingContext.o
-
-$(OBJDIR)/CollocFilter.o: $(LEM_PATH)/ai/la/CollocFilter.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilter.cpp -o $(OBJDIR)/CollocFilter.o
-
-$(OBJDIR)/CollocFilterCompilationContext.o: $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCompilationContext.cpp -o $(OBJDIR)/CollocFilterCompilationContext.o
-
-$(OBJDIR)/MorphFilterTreeNode2.o: $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MorphFilterTreeNode2.cpp -o $(OBJDIR)/MorphFilterTreeNode2.o
-
-$(OBJDIR)/CollocFilterMarkedForms.o: $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterMarkedForms.cpp -o $(OBJDIR)/CollocFilterMarkedForms.o
-
-$(OBJDIR)/CollocFilterCache.o: $(LEM_PATH)/ai/la/CollocFilterCache.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/CollocFilterCache.cpp -o $(OBJDIR)/CollocFilterCache.o
 
 $(OBJDIR)/LemmatizatorStorage_SQLITE.o: $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LemmatizatorStorage_SQLITE.cpp -o $(OBJDIR)/LemmatizatorStorage_SQLITE.o
@@ -402,17 +355,11 @@ $(OBJDIR)/LA_PhoneticRule.o: $(LEM_PATH)/ai/la/LA_PhoneticRule.cpp
 $(OBJDIR)/LA_Recognizer.o: $(LEM_PATH)/ai/la/LA_Recognizer.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_Recognizer.cpp -o $(OBJDIR)/LA_Recognizer.o
 
-$(OBJDIR)/LA_PreprocessorRules.o: $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp -o $(OBJDIR)/LA_PreprocessorRules.o
-
 $(OBJDIR)/LA_Preprocessor.o: $(LEM_PATH)/ai/la/LA_Preprocessor.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_Preprocessor.cpp -o $(OBJDIR)/LA_Preprocessor.o
 
 $(OBJDIR)/LA_PhoneticMatcherForLanguage.o: $(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp -o $(OBJDIR)/LA_PhoneticMatcherForLanguage.o
-
-$(OBJDIR)/LA_PreprocessorTokRule.o: $(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp -o $(OBJDIR)/LA_PreprocessorTokRule.o
 
 $(OBJDIR)/LA_PreprocessorRule.o: $(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp -o $(OBJDIR)/LA_PreprocessorRule.o
@@ -438,23 +385,8 @@ $(OBJDIR)/LA_PhoneticMatcher.o: $(LEM_PATH)/ai/la/LA_PhoneticMatcher.cpp
 $(OBJDIR)/MultiwordMerger.o: $(LEM_PATH)/ai/la/MultiwordMerger.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/MultiwordMerger.cpp -o $(OBJDIR)/MultiwordMerger.o
 
-$(OBJDIR)/PM_ProcedureLoader.o: $(LEM_PATH)/ai/pm/PM_ProcedureLoader.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_ProcedureLoader.cpp -o $(OBJDIR)/PM_ProcedureLoader.o
-
-$(OBJDIR)/PM_Rules.o: $(LEM_PATH)/ai/pm/PM_Rules.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_Rules.cpp -o $(OBJDIR)/PM_Rules.o
-
-$(OBJDIR)/PatternMatcherEnumerator.o: $(LEM_PATH)/ai/pm/PatternMatcherEnumerator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PatternMatcherEnumerator.cpp -o $(OBJDIR)/PatternMatcherEnumerator.o
-
 $(OBJDIR)/ProductionRuleEnumerator.o: $(LEM_PATH)/ai/pm/ProductionRuleEnumerator.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/ProductionRuleEnumerator.cpp -o $(OBJDIR)/ProductionRuleEnumerator.o
-
-$(OBJDIR)/ProcedureEnumerator.o: $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/ProcedureEnumerator.cpp -o $(OBJDIR)/ProcedureEnumerator.o
-
-$(OBJDIR)/RuleCategoryEnumerator.o: $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/RuleCategoryEnumerator.cpp -o $(OBJDIR)/RuleCategoryEnumerator.o
 
 $(OBJDIR)/PM_LenRuleGroup.o: $(LEM_PATH)/ai/pm/PM_LenRuleGroup.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/PM_LenRuleGroup.cpp -o $(OBJDIR)/PM_LenRuleGroup.o
@@ -475,71 +407,11 @@ $(OBJDIR)/ThesaurusLinkFlags.o: $(LEM_PATH)/ai/sg/ThesaurusLinkFlags.cpp
 $(OBJDIR)/TrMorphologyTracer.o: $(LEM_PATH)/ai/pm/TrMorphologyTracer.cpp
 	$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrMorphologyTracer.cpp -o $(OBJDIR)/TrMorphologyTracer.o
 
-$(OBJDIR)/TrScopedVarsContext.o: $(LEM_PATH)/ai/pm/TrScopedVarsContext.cpp
-	$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrScopedVarsContext.cpp -o $(OBJDIR)/TrScopedVarsContext.o
-
 $(OBJDIR)/LA_WordEntrySet.o: $(LEM_PATH)/ai/la/LA_WordEntrySet.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/LA_WordEntrySet.cpp -o $(OBJDIR)/LA_WordEntrySet.o
 
 $(OBJDIR)/SynPatternCompilation.o: $(LEM_PATH)/ai/la/SynPatternCompilation.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/SynPatternCompilation.cpp -o $(OBJDIR)/SynPatternCompilation.o
-
-$(OBJDIR)/rec2_transformator.o: $(LEM_PATH)/ai/pm/reconstructor/rec2_transformator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/reconstructor/rec2_transformator.cpp -o $(OBJDIR)/rec2_transformator.o
-
-$(OBJDIR)/R2Pattern.o: $(LEM_PATH)/ai/reco2/R2Pattern.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Pattern.cpp -o $(OBJDIR)/R2Pattern.o
-
-$(OBJDIR)/R2PatternEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2PatternEnumerator_SQL.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2PatternEnumerator_SQL.cpp -o $(OBJDIR)/R2PatternEnumerator_SQL.o
-
-$(OBJDIR)/R2Patterns.o: $(LEM_PATH)/ai/reco2/R2Patterns.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Patterns.cpp -o $(OBJDIR)/R2Patterns.o
-
-$(OBJDIR)/R2Point.o: $(LEM_PATH)/ai/reco2/R2Point.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Point.cpp -o $(OBJDIR)/R2Point.o
-
-$(OBJDIR)/R2Point2Pattern.o: $(LEM_PATH)/ai/reco2/R2Point2Pattern.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Point2Pattern.cpp -o $(OBJDIR)/R2Point2Pattern.o
-
-$(OBJDIR)/R2PointEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2PointEnumerator_SQL.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2PointEnumerator_SQL.cpp -o $(OBJDIR)/R2PointEnumerator_SQL.o
-
-$(OBJDIR)/R2Points.o: $(LEM_PATH)/ai/reco2/R2Points.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Points.cpp -o $(OBJDIR)/R2Points.o
-
-$(OBJDIR)/R2ProductionNode.o: $(LEM_PATH)/ai/reco2/R2ProductionNode.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2ProductionNode.cpp -o $(OBJDIR)/R2ProductionNode.o
-
-$(OBJDIR)/R2TranformEnumerator.o: $(LEM_PATH)/ai/reco2/R2TranformEnumerator.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2TranformEnumerator.cpp -o $(OBJDIR)/R2TranformEnumerator.o
-
-$(OBJDIR)/R2Transform.o: $(LEM_PATH)/ai/reco2/R2Transform.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Transform.cpp -o $(OBJDIR)/R2Transform.o
-
-$(OBJDIR)/R2Transforms.o: $(LEM_PATH)/ai/reco2/R2Transforms.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Transforms.cpp -o $(OBJDIR)/R2Transforms.o
-
-$(OBJDIR)/R2Utils.o: $(LEM_PATH)/ai/reco2/R2Utils.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Utils.cpp -o $(OBJDIR)/R2Utils.o
-
-$(OBJDIR)/R2Word2Point.o: $(LEM_PATH)/ai/reco2/R2Word2Point.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Word2Point.cpp -o $(OBJDIR)/R2Word2Point.o
-
-$(OBJDIR)/R2WordEnumerator_SQL.o: $(LEM_PATH)/ai/reco2/R2WordEnumerator_SQL.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2WordEnumerator_SQL.cpp -o $(OBJDIR)/R2WordEnumerator_SQL.o
-
-$(OBJDIR)/R2Words.o: $(LEM_PATH)/ai/reco2/R2Words.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/R2Words.cpp -o $(OBJDIR)/R2Words.o
-
-$(OBJDIR)/Reconstructor2.o: $(LEM_PATH)/ai/reco2/Reconstructor2.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2.cpp -o $(OBJDIR)/Reconstructor2.o
-
-$(OBJDIR)/Reconstructor2Storage_MySQL.o: $(LEM_PATH)/ai/reco2/Reconstructor2Storage_MySQL.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2Storage_MySQL.cpp -o $(OBJDIR)/Reconstructor2Storage_MySQL.o
-
-$(OBJDIR)/Reconstructor2Storage_SQLITE.o: $(LEM_PATH)/ai/reco2/Reconstructor2Storage_SQLITE.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/reco2/Reconstructor2Storage_SQLITE.cpp -o $(OBJDIR)/Reconstructor2Storage_SQLITE.o
 
 $(OBJDIR)/StorageConnection_SQLITE.o: $(LEM_PATH)/ai/some/StorageConnection_SQLITE.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/StorageConnection_SQLITE.cpp -o $(OBJDIR)/StorageConnection_SQLITE.o
@@ -611,12 +483,6 @@ $(OBJDIR)/NGramsStorage_MySQL.o: $(LEM_PATH)/ai/ngrams/NGramsStorage_MySQL.cpp
 $(OBJDIR)/StorageConnections.o: $(LEM_PATH)/ai/some/StorageConnections.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/some/StorageConnections.cpp -o $(OBJDIR)/StorageConnections.o
 		
-$(OBJDIR)/CoordsInFile.o: $(LEM_PATH)/ai/gg/CoordsInFile.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/CoordsInFile.cpp -o $(OBJDIR)/CoordsInFile.o
-
-$(OBJDIR)/CoordEnumeratorInFile.o: $(LEM_PATH)/ai/gg/CoordEnumeratorInFile.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/gg/CoordEnumeratorInFile.cpp -o $(OBJDIR)/CoordEnumeratorInFile.o
-
 $(OBJDIR)/WordEntries_File.o: $(LEM_PATH)/ai/sg/WordEntries_File.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/sg/WordEntries_File.cpp -o $(OBJDIR)/WordEntries_File.o
 
@@ -807,9 +673,6 @@ $(OBJDIR)/ui_user_interface.o: $(LEM_PATH)/tools/ui/ui_user_interface.cpp
 $(OBJDIR)/system_config.o: $(LEM_PATH)/tools/system_config/system_config.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/system_config.cpp -o $(OBJDIR)/system_config.o
 
-$(OBJDIR)/hardware.o: $(LEM_PATH)/tools/system_config/hardware.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/system_config/hardware.cpp -o $(OBJDIR)/hardware.o
-
 $(OBJDIR)/cp_437.o: $(LEM_PATH)/tools/unicode/cp_437.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/unicode/cp_437.cpp -o $(OBJDIR)/cp_437.o
 
@@ -857,9 +720,6 @@ $(OBJDIR)/lem_process.o: $(LEM_PATH)/tools/lem_process.cpp
 
 $(OBJDIR)/lem_reflection.o: $(LEM_PATH)/tools/lem_reflection.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/lem_reflection.cpp -o $(OBJDIR)/lem_reflection.o
-
-$(OBJDIR)/macheps.o: $(LEM_PATH)/math/macheps.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/macheps.cpp -o $(OBJDIR)/macheps.o
 
 $(OBJDIR)/lem_ustr.o: $(LEM_PATH)/contain/lem_ustr.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/contain/lem_ustr.cpp -o $(OBJDIR)/lem_ustr.o
@@ -1461,14 +1321,8 @@ $(OBJDIR)/TrFun_If.o: $(LEM_PATH)/ai/pm/TrFun_If.cpp
 $(OBJDIR)/TrFun_Lambda.o: $(LEM_PATH)/ai/pm/TrFun_Lambda.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Lambda.cpp -o $(OBJDIR)/TrFun_Lambda.o
         
-$(OBJDIR)/TrFun_Procedure.o: $(LEM_PATH)/ai/pm/TrFun_Procedure.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Procedure.cpp -o $(OBJDIR)/TrFun_Procedure.o
-        
 $(OBJDIR)/TrFun_Return.o: $(LEM_PATH)/ai/pm/TrFun_Return.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Return.cpp -o $(OBJDIR)/TrFun_Return.o
-        
-$(OBJDIR)/TrFun_Scan.o: $(LEM_PATH)/ai/pm/TrFun_Scan.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Scan.cpp -o $(OBJDIR)/TrFun_Scan.o
         
 $(OBJDIR)/TrFun_Var.o: $(LEM_PATH)/ai/pm/TrFun_Var.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFun_Var.cpp -o $(OBJDIR)/TrFun_Var.o
@@ -1485,23 +1339,11 @@ $(OBJDIR)/TrFunContext.o: $(LEM_PATH)/ai/pm/TrFunContext.cpp
 $(OBJDIR)/TrFunction.o: $(LEM_PATH)/ai/pm/TrFunction.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunction.cpp -o $(OBJDIR)/TrFunction.o
         
-$(OBJDIR)/TrFunctionResultItem.o: $(LEM_PATH)/ai/pm/TrFunctionResultItem.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctionResultItem.cpp -o $(OBJDIR)/TrFunctionResultItem.o
-        
 $(OBJDIR)/TrFunctions.o: $(LEM_PATH)/ai/pm/TrFunctions.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctions.cpp -o $(OBJDIR)/TrFunctions.o
         
-$(OBJDIR)/TrFunctionStep.o: $(LEM_PATH)/ai/pm/TrFunctionStep.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunctionStep.cpp -o $(OBJDIR)/TrFunctionStep.o
-        
 $(OBJDIR)/TrFunUser.o: $(LEM_PATH)/ai/pm/TrFunUser.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrFunUser.cpp -o $(OBJDIR)/TrFunUser.o
-        
-$(OBJDIR)/TrGramFun.o: $(LEM_PATH)/ai/pm/TrGramFun.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGramFun.cpp -o $(OBJDIR)/TrGramFun.o
-        
-$(OBJDIR)/TrGroupResultItem.o: $(LEM_PATH)/ai/pm/TrGroupResultItem.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGroupResultItem.cpp -o $(OBJDIR)/TrGroupResultItem.o
         
 $(OBJDIR)/TrGroupStep.o: $(LEM_PATH)/ai/pm/TrGroupStep.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/pm/TrGroupStep.cpp -o $(OBJDIR)/TrGroupStep.o
@@ -1755,9 +1597,6 @@ $(OBJDIR)/la_proj_list.o: $(LEM_PATH)/ai/la/la_proj_list.cpp
 $(OBJDIR)/la_filter_rule.o: $(LEM_PATH)/ai/la/la_filter_rule.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_filter_rule.cpp -o $(OBJDIR)/la_filter_rule.o
 
-$(OBJDIR)/la_mixer_filter.o: $(LEM_PATH)/ai/la/la_mixer_filter.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_mixer_filter.cpp -o $(OBJDIR)/la_mixer_filter.o
-
 $(OBJDIR)/la_word_projection.o: $(LEM_PATH)/ai/la/la_word_projection.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/la_word_projection.cpp -o $(OBJDIR)/la_word_projection.o
 
@@ -1832,12 +1671,6 @@ $(OBJDIR)/ir_var_table.o: $(LEM_PATH)/io/iridium/ir_var_table.cpp
 
 $(OBJDIR)/ygres.o: $(LEM_PATH)/ai/ygres/ygres.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/ygres/ygres.cpp -o $(OBJDIR)/ygres.o
-
-$(OBJDIR)/statkep1.o: $(LEM_PATH)/math/stat/statkep1.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/stat/statkep1.cpp -o $(OBJDIR)/statkep1.o
-
-$(OBJDIR)/interpol.o: $(LEM_PATH)/math/approx/interpol.cpp
-		$(CXX) $(CXXFLAGS) $(LEM_PATH)/math/approx/interpol.cpp -o $(OBJDIR)/interpol.o
 
 $(OBJDIR)/base_application.o: $(LEM_PATH)/tools/base_application.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/tools/base_application.cpp -o $(OBJDIR)/base_application.o
@@ -3080,8 +2913,6 @@ $(LEM_PATH)/ai/la/LA_PreprocessorRules.cpp:
 $(LEM_PATH)/ai/la/LA_Preprocessor.cpp:
 
 $(LEM_PATH)/ai/la/LA_PhoneticMatcherForLanguage.cpp:
-
-$(LEM_PATH)/ai/la/LA_PreprocessorTokRule.cpp:
 
 $(LEM_PATH)/ai/la/LA_PreprocessorRule.cpp:
 
