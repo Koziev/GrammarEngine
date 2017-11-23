@@ -77,7 +77,7 @@ const SynPatternTreeNode& LA_SynPatternTrees::GetDefaultFilter( int id_language 
   if( pattern_tree[i].first == id_language )
    return *pattern_tree[i].second;
 
- std::pair<SynPatternTreeNode*,lem::UCString> tree(NULL,lem::UCString());
+ std::pair<SynPatternTreeNode*,lem::UCString> tree = std::make_pair<SynPatternTreeNode*, lem::UCString>(NULL,lem::UCString());
 
  const int id = storage->FindSynPatternTree( id_language, L"", SOLID_PATTERN );
  if( id==UNKNOWN )
