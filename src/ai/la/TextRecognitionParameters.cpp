@@ -11,9 +11,9 @@ TextRecognitionParameters::TextRecognitionParameters()
  AllowPrimaryFuzzyWordRecog=false;
  AllowFuzzyRecogMixin=false;
  min_score_bound=-2;
- max_filter_len=5;
+ //max_filter_len=5;
  LookAheadTokens=1;
- ApplyCollocFilters=true;
+ //ApplyCollocFilters=true;
  UseTokenReconstruction=false;
  AllowDynform=false;
  MaxSkipToken=3;

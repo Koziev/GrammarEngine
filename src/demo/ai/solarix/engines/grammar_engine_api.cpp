@@ -2679,12 +2679,6 @@ GREN_API(HGREN_RESPACK) sol_MorphologyAnalysis(
             current_analysis.params.CompleteAnalysisOnly = CompleteAnalysisOnly;
         }
 
-        if ((MorphologicalFlags&SOL_GREN_DISABLE_FILTERS) == SOL_GREN_DISABLE_FILTERS)
-        {
-            current_analysis.params.max_filter_len = 0; // отключаем предварительные фильтры
-            current_analysis.params.ApplyCollocFilters = false;
-        }
-
         if ((MorphologicalFlags&SOL_GREN_TOKENIZE_ONLY) == SOL_GREN_TOKENIZE_ONLY)
         {
             // выполняем только токенизацию.
@@ -2915,12 +2909,6 @@ GREN_API(HGREN_RESPACK) sol_SyntaxAnalysis(
         else
         {
             current_analysis.params.CompleteAnalysisOnly = CompleteAnalysisOnly;
-        }
-
-        if ((MorphologicalFlags&SOL_GREN_DISABLE_FILTERS) == SOL_GREN_DISABLE_FILTERS)
-        {
-            current_analysis.params.max_filter_len = 0; // отключаем предварительные фильтры
-            current_analysis.params.ApplyCollocFilters = false;
         }
 
         current_analysis.params.ReorderTree = ReorderTree;

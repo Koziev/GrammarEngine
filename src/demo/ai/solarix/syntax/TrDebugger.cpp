@@ -76,10 +76,10 @@ void TrDebugger::Enter( TrTraceActor *a )
 
 void TrDebugger::StackOverflow( int stack_depth )
 {
- // зацикливание???
+ // Р·Р°С†РёРєР»РёРІР°РЅРёРµ???
  lem::mout->printf( "\nPossible stack overflow, current_depth=%d!\n", stack_depth );
 
- // Выведем меню для управления дальнейшим исполнением.
+ // Р’С‹РІРµРґРµРј РјРµРЅСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РґР°Р»СЊРЅРµР№С€РёРј РёСЃРїРѕР»РЅРµРЅРёРµРј.
  while(true)
   {
    mout->printf( "%vf6Commands:%vn %vfER%vnun %vfES%vntop %vfEC%vnall_stack\n" );
@@ -173,16 +173,16 @@ void TrDebugger::ExecuteBreakpoints( TrTraceActor *a )
 
    if( p.once && p.on_call_stack_depth==UNKNOWN && p.ifile==UNKNOWN )
     {
-     // Это точка, создаваемая отладчиком перед запуском процесса, срабатывает
-     // на первом же операторе.
+     // Р­С‚Рѕ С‚РѕС‡РєР°, СЃРѕР·РґР°РІР°РµРјР°СЏ РѕС‚Р»Р°РґС‡РёРєРѕРј РїРµСЂРµРґ Р·Р°РїСѓСЃРєРѕРј РїСЂРѕС†РµСЃСЃР°, СЃСЂР°Р±Р°С‚С‹РІР°РµС‚
+     // РЅР° РїРµСЂРІРѕРј Р¶Рµ РѕРїРµСЂР°С‚РѕСЂРµ.
      ExecuteBreakpoint(CastSizeToInt(i), a );
      break;
     }
 
    if( p.step && a->IsStatement() )
     {
-     // Точка срабатывает на любой операторной строке - то есть, на шаге процедуры,
-     // исполнении шага внутри функции { ... }, начале проверки кондиктора трансформанты.
+     // РўРѕС‡РєР° СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РЅР° Р»СЋР±РѕР№ РѕРїРµСЂР°С‚РѕСЂРЅРѕР№ СЃС‚СЂРѕРєРµ - С‚Рѕ РµСЃС‚СЊ, РЅР° С€Р°РіРµ РїСЂРѕС†РµРґСѓСЂС‹,
+     // РёСЃРїРѕР»РЅРµРЅРёРё С€Р°РіР° РІРЅСѓС‚СЂРё С„СѓРЅРєС†РёРё { ... }, РЅР°С‡Р°Р»Рµ РїСЂРѕРІРµСЂРєРё РєРѕРЅРґРёРєС‚РѕСЂР° С‚СЂР°РЅСЃС„РѕСЂРјР°РЅС‚С‹.
      ExecuteBreakpoint(CastSizeToInt(i), a );
     }
 
@@ -208,7 +208,7 @@ void TrDebugger::ExecuteBreakpoints( TrTraceActor *a )
 
 void TrDebugger::ExecuteBreakpoint( int ipoint, TrTraceActor *a )
 {
- // Отобразим контекст точки - фрагмент исходного файла, переменные и т.д.
+ // РћС‚РѕР±СЂР°Р·РёРј РєРѕРЅС‚РµРєСЃС‚ С‚РѕС‡РєРё - С„СЂР°РіРјРµРЅС‚ РёСЃС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р°, РїРµСЂРµРјРµРЅРЅС‹Рµ Рё С‚.Рґ.
  TrBreakpoint &p = *breakpoints[ipoint];
  p.pass_count++;
 
@@ -225,21 +225,21 @@ void TrDebugger::ExecuteBreakpoint( int ipoint, TrTraceActor *a )
       {
        mout->printf( "\n%vf6pass=%vn%d %vf6file=%vn%us\n", p.pass_count, filename.GetFileName().c_str() );
 
-       // Выведем строку в исходном тексте.
+       // Р’С‹РІРµРґРµРј СЃС‚СЂРѕРєСѓ РІ РёСЃС…РѕРґРЅРѕРј С‚РµРєСЃС‚Рµ.
        UTextParser & txt = GetSourceText(filename);
        if( txt.SeekLine(line) )
         {
          mout->printf( "%vf6%78h-%vn\n" );
          mout->printf( "[%vf3%d%vn] ", line );
-         txt.PrintLine(*mout); // Распечатываем строку
+         txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
          mout->printf( "\n%vf6%78h-%vn\n" );
         }
 
-       // В этой строке можно управлять точками прерывания.
+       // Р’ СЌС‚РѕР№ СЃС‚СЂРѕРєРµ РјРѕР¶РЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ С‚РѕС‡РєР°РјРё РїСЂРµСЂС‹РІР°РЅРёСЏ.
        breakpoint_is_available = true;
       }
 
-     // Выведем меню для управления дальнейшим исполнением.
+     // Р’С‹РІРµРґРµРј РјРµРЅСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РґР°Р»СЊРЅРµР№С€РёРј РёСЃРїРѕР»РЅРµРЅРёРµРј.
      while(true)
       {
        mout->printf( "%vf6Commands:%vn %vfER%vnun %vfES%vntep %vfEV%vnariables %vfEC%vnall_stack" );
@@ -272,7 +272,7 @@ void TrDebugger::ExecuteBreakpoint( int ipoint, TrTraceActor *a )
 
        if( cmd=='s' )
         {
-         // Установим точку останова на ближайшем
+         // РЈСЃС‚Р°РЅРѕРІРёРј С‚РѕС‡РєСѓ РѕСЃС‚Р°РЅРѕРІР° РЅР° Р±Р»РёР¶Р°Р№С€РµРј
          TrBreakpoint *p = new TrBreakpoint;
          p->once = true;
          p->step = true; 
@@ -312,7 +312,7 @@ void TrDebugger::BeforePhrase(void)
 {
  applied_colloc_filter.clear();
 
- // Выведем меню: манипуляции с точками останова, режим исполнения.
+ // Р’С‹РІРµРґРµРј РјРµРЅСЋ: РјР°РЅРёРїСѓР»СЏС†РёРё СЃ С‚РѕС‡РєР°РјРё РѕСЃС‚Р°РЅРѕРІР°, СЂРµР¶РёРј РёСЃРїРѕР»РЅРµРЅРёСЏ.
 
  while(true)
   {
@@ -325,7 +325,7 @@ void TrDebugger::BeforePhrase(void)
 
    if( cmd=='s' )
     {
-     // Установим точку останова на первом операторе.
+     // РЈСЃС‚Р°РЅРѕРІРёРј С‚РѕС‡РєСѓ РѕСЃС‚Р°РЅРѕРІР° РЅР° РїРµСЂРІРѕРј РѕРїРµСЂР°С‚РѕСЂРµ.
      TrBreakpoint *p = new TrBreakpoint;
      p->once = true;
      p->step = true; 
@@ -379,13 +379,13 @@ void TrDebugger::ManageBreakpoints(void)
            const lem::Path &f = dict->GetDebugSymbols().GetFileName( p.ifile );
            mout->printf( "#%vfA%d%vn file=%vfE%us%vn line=%vfE%d%vn\n", i, f.GetFileName().c_str(), p.iline );
 
-           // Отобразим строку
+           // РћС‚РѕР±СЂР°Р·РёРј СЃС‚СЂРѕРєСѓ
            UTextParser& txt = GetSourceText(f);
            if( txt.SeekLine(p.iline) )
             {
              mout->printf( "%vf6%78h-%vn\n" );
              mout->printf( "[%d] ", p.iline );
-             txt.PrintLine(*mout); // Распечатываем строку
+             txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
              mout->printf( "\n%vf6%78h-%vn\n" );
             }
           }
@@ -398,7 +398,7 @@ void TrDebugger::ManageBreakpoints(void)
       {
        while(true)
         {
-         // Создание новой точки останова - запрашиваем у пользователя файл и строку.
+         // РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ С‚РѕС‡РєРё РѕСЃС‚Р°РЅРѕРІР° - Р·Р°РїСЂР°С€РёРІР°РµРј Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ С„Р°Р№Р» Рё СЃС‚СЂРѕРєСѓ.
          mout->printf( "Select a source file:\n" );
          lem::Collect<lem::UFString> file_names;
          lem::MCollect<int> file_ids;
@@ -437,7 +437,7 @@ void TrDebugger::ManageBreakpoints(void)
          if( iline==-1 )
           break;
 
-         // Проверим, что такая точка действительно есть в исходниках.
+         // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ С‚Р°РєР°СЏ С‚РѕС‡РєР° РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ РµСЃС‚СЊ РІ РёСЃС…РѕРґРЅРёРєР°С….
          if( dict->GetDebugSymbols().Find(ifile,iline)==UNKNOWN )
           {
            mout->printf( "Sorry, breakpoint can not be set at this location.\n" );
@@ -462,11 +462,11 @@ void TrDebugger::ManageBreakpoints(void)
           {
            mout->printf( "%vf6%78h-%vn\n" );
            mout->printf( "[%d] ", iline );
-           txt.PrintLine(*mout); // Распечатываем строку
+           txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
            mout->printf( "\n%vf6%78h-%vn\n" );
           }
 
-         // Устанавливаем точку в этой позиции. Предварительно удалим имеющуюся точку.
+         // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚РѕС‡РєСѓ РІ СЌС‚РѕР№ РїРѕР·РёС†РёРё. РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ СѓРґР°Р»РёРј РёРјРµСЋС‰СѓСЋСЃСЏ С‚РѕС‡РєСѓ.
          for( lem::Container::size_type i=0; i<breakpoints.size(); ++i )
           {
            const TrBreakpoint &p = *breakpoints[i];
@@ -587,12 +587,12 @@ void TrDebugger::PrintStack( lem::OFormatter &out )
         {
          mout->printf( "%vf6file=%vn%us\n", filename.GetFileName().c_str() );
 
-         // Выведем строку в исходном тексте.
+         // Р’С‹РІРµРґРµРј СЃС‚СЂРѕРєСѓ РІ РёСЃС…РѕРґРЅРѕРј С‚РµРєСЃС‚Рµ.
          UTextParser & txt = GetSourceText(filename);
          if( txt.SeekLine(line) )
           {
            mout->printf( "[%d] ", line );
-           txt.PrintLine(*mout); // Распечатываем строку
+           txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
           }
 
          a->PrintCurrentToken( *dict, *mout );
@@ -611,8 +611,8 @@ void TrDebugger::PrintStack( lem::OFormatter &out )
 
 
 
-// Через меню показываем различные результаты работы токенизатора, в том числе
-// примененные префильтры и детальный граф токенизации.
+// Р§РµСЂРµР· РјРµРЅСЋ РїРѕРєР°Р·С‹РІР°РµРј СЂР°Р·Р»РёС‡РЅС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹ СЂР°Р±РѕС‚С‹ С‚РѕРєРµРЅРёР·Р°С‚РѕСЂР°, РІ С‚РѕРј С‡РёСЃР»Рµ
+// РїСЂРёРјРµРЅРµРЅРЅС‹Рµ РїСЂРµС„РёР»СЊС‚СЂС‹ Рё РґРµС‚Р°Р»СЊРЅС‹Р№ РіСЂР°С„ С‚РѕРєРµРЅРёР·Р°С†РёРё.
 void TrDebugger::ShowLexerPerformance( BasicLexer & lexer )
 {
  while(true)
@@ -662,7 +662,7 @@ void TrDebugger::PrintTokenizationGraph( BasicLexer & lexer, bool detailed )
 
    lem::mout->printf( "PATH #%vf9%d%vn:\n", CastSizeToInt(i) );
 
-   // пройдем по цепочке назад и соберем список токенов в порядке от последнего к первому.
+   // РїСЂРѕР№РґРµРј РїРѕ С†РµРїРѕС‡РєРµ РЅР°Р·Р°Рґ Рё СЃРѕР±РµСЂРµРј СЃРїРёСЃРѕРє С‚РѕРєРµРЅРѕРІ РІ РїРѕСЂСЏРґРєРµ РѕС‚ РїРѕСЃР»РµРґРЅРµРіРѕ Рє РїРµСЂРІРѕРјСѓ.
    lem::MCollect<const LexerTextPos*> chain;
    chain.push_back( token );
    const LexerTextPos * cur_token = token;
@@ -672,7 +672,7 @@ void TrDebugger::PrintTokenizationGraph( BasicLexer & lexer, bool detailed )
      cur_token = cur_token->GetPrev();
     }
 
-   // теперь напечатаем этот список в обратном порядке.
+   // С‚РµРїРµСЂСЊ РЅР°РїРµС‡Р°С‚Р°РµРј СЌС‚РѕС‚ СЃРїРёСЃРѕРє РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ.
    if( detailed )
     {
      int word_index=0;
@@ -937,7 +937,7 @@ void TrDebugger::ShowSynPatternResults( const lem::MCollect<SynPatternResult*> &
 
    lem::mout->printf( "Result #%vfE%d%vn   ngrams=(%vfA%d%vn,%vfC%d%vn):\n", k, result_q.res.GetNGramFreq().positive, result_q.res.GetNGramFreq().negative );
 
-   // Трассировка по исходному тексту.
+   // РўСЂР°СЃСЃРёСЂРѕРІРєР° РїРѕ РёСЃС…РѕРґРЅРѕРјСѓ С‚РµРєСЃС‚Сѓ.
 
    lem::mout->printf( "Source code trace:\n" );
 
@@ -1082,7 +1082,7 @@ void TrDebugger::BeforeSynPatternTreeProve(
                                            const BackTrace * parent_trace
                                           )
 {
- // посмотрим, есть ли точки останова на этой опорной точке.
+ // РїРѕСЃРјРѕС‚СЂРёРј, РµСЃС‚СЊ Р»Рё С‚РѕС‡РєРё РѕСЃС‚Р°РЅРѕРІР° РЅР° СЌС‚РѕР№ РѕРїРѕСЂРЅРѕР№ С‚РѕС‡РєРµ.
  for( lem::Container::size_type i=0; i<breakpoints.size(); ++i )
   {
    TrBreakpoint &p = *breakpoints[i];
@@ -1096,7 +1096,7 @@ void TrDebugger::BeforeSynPatternTreeProve(
  
        if( file==p.ifile && line==p.iline )
         {
-         // Да, покажем положение
+         // Р”Р°, РїРѕРєР°Р¶РµРј РїРѕР»РѕР¶РµРЅРёРµ
 
          lem::Path filename;
          int line=0, column=0;
@@ -1108,21 +1108,21 @@ void TrDebugger::BeforeSynPatternTreeProve(
            lem::mout->printf( "\nBEFORE %vf6pass=%vn%d %vf6file=%vn%us", p.pass_count, filename.GetFileName().c_str() );
            lem::mout->printf( " current_token: pos=%d word=%us\n", current_token->GetWordIndex(), current_token->GetWordform()->GetName()->c_str() );
 
-           // Выведем строку в исходном тексте.
+           // Р’С‹РІРµРґРµРј СЃС‚СЂРѕРєСѓ РІ РёСЃС…РѕРґРЅРѕРј С‚РµРєСЃС‚Рµ.
            UTextParser & txt = GetSourceText(filename);
            if( txt.SeekLine(line) )
             {
              mout->printf( "%vf6%78h-%vn\n" );
              mout->printf( "[%vf3%d%vn] ", line );
-             txt.PrintLine(*mout); // Распечатываем строку
+             txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
              mout->printf( "\n%vf6%78h-%vn\n" );
             }
 
-           // В этой строке можно управлять точками прерывания.
+           // Р’ СЌС‚РѕР№ СЃС‚СЂРѕРєРµ РјРѕР¶РЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ С‚РѕС‡РєР°РјРё РїСЂРµСЂС‹РІР°РЅРёСЏ.
            breakpoint_is_available = true;
           }
 
-         // Выведем меню для управления дальнейшим исполнением.
+         // Р’С‹РІРµРґРµРј РјРµРЅСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РґР°Р»СЊРЅРµР№С€РёРј РёСЃРїРѕР»РЅРµРЅРёРµРј.
          while(true)
           {
            mout->printf( "%vf6Commands:%vn %vfER%vnun %vfEV%vnariables %vfEC%vnall_stack" );
@@ -1181,7 +1181,7 @@ void TrDebugger::SynPatternTreeProved(
                                       const lem::PtrCollect<SynPatternResult> & subresults
                                      )
 {
- // посмотрим, есть ли точки останова на этой опорной точке.
+ // РїРѕСЃРјРѕС‚СЂРёРј, РµСЃС‚СЊ Р»Рё С‚РѕС‡РєРё РѕСЃС‚Р°РЅРѕРІР° РЅР° СЌС‚РѕР№ РѕРїРѕСЂРЅРѕР№ С‚РѕС‡РєРµ.
  for( lem::Container::size_type i=0; i<breakpoints.size(); ++i )
   {
    TrBreakpoint &p = *breakpoints[i];
@@ -1195,7 +1195,7 @@ void TrDebugger::SynPatternTreeProved(
  
        if( file==p.ifile && line==p.iline )
         {
-         // Да, покажем положение и меню с возможностью вывода результатов вызова именованного дерева.
+         // Р”Р°, РїРѕРєР°Р¶РµРј РїРѕР»РѕР¶РµРЅРёРµ Рё РјРµРЅСЋ СЃ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊСЋ РІС‹РІРѕРґР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РІС‹Р·РѕРІР° РёРјРµРЅРѕРІР°РЅРЅРѕРіРѕ РґРµСЂРµРІР°.
 
          lem::Path filename;
          int line=0, column=0;
@@ -1207,24 +1207,24 @@ void TrDebugger::SynPatternTreeProved(
            lem::mout->printf( "\nAFTER %vf6pass=%vn%d %vf6file=%vn%us", p.pass_count, filename.GetFileName().c_str() );
            lem::mout->printf( " current_token: pos=%d word=%us\n", current_token->GetWordIndex(), current_token->GetWordform()->GetName()->c_str() );
 
-           // Выведем строку в исходном тексте.
+           // Р’С‹РІРµРґРµРј СЃС‚СЂРѕРєСѓ РІ РёСЃС…РѕРґРЅРѕРј С‚РµРєСЃС‚Рµ.
            UTextParser & txt = GetSourceText(filename);
            if( txt.SeekLine(line) )
             {
              mout->printf( "%vf6%78h-%vn\n" );
              mout->printf( "[%vf3%d%vn] ", line );
-             txt.PrintLine(*mout); // Распечатываем строку
+             txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
              mout->printf( "\n%vf6%78h-%vn\n" );
             }
 
-           // В этой строке можно управлять точками прерывания.
+           // Р’ СЌС‚РѕР№ СЃС‚СЂРѕРєРµ РјРѕР¶РЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ С‚РѕС‡РєР°РјРё РїСЂРµСЂС‹РІР°РЅРёСЏ.
            breakpoint_is_available = true;
           }
 
          lem::mout->printf( "Term matching count=%d\n", CastSizeToInt(subresults.size()) );
 
 
-         // Выведем меню для управления дальнейшим исполнением.
+         // Р’С‹РІРµРґРµРј РјРµРЅСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РґР°Р»СЊРЅРµР№С€РёРј РёСЃРїРѕР»РЅРµРЅРёРµРј.
          while(true)
           {
            mout->printf( "%vf6Commands:%vn %vfER%vnun %vfEV%vnariables %vfEC%vnall_stack" );
@@ -1300,7 +1300,7 @@ void TrDebugger::BeforeMatchingTheWord(
                                        const LexerTextPos *current_token
                                       )
 {
- // посмотрим, есть ли точки остановка на этой опорной точке.
+ // РїРѕСЃРјРѕС‚СЂРёРј, РµСЃС‚СЊ Р»Рё С‚РѕС‡РєРё РѕСЃС‚Р°РЅРѕРІРєР° РЅР° СЌС‚РѕР№ РѕРїРѕСЂРЅРѕР№ С‚РѕС‡РєРµ.
  for( lem::Container::size_type i=0; i<breakpoints.size(); ++i )
   {
    TrBreakpoint &p = *breakpoints[i];
@@ -1323,21 +1323,21 @@ void TrDebugger::BeforeMatchingTheWord(
           {
            mout->printf( "\n%vf6pass=%vn%d %vf6file=%vn%us\n", p.pass_count, filename.GetFileName().c_str() );
 
-           // Выведем строку в исходном тексте.
+           // Р’С‹РІРµРґРµРј СЃС‚СЂРѕРєСѓ РІ РёСЃС…РѕРґРЅРѕРј С‚РµРєСЃС‚Рµ.
            UTextParser & txt = GetSourceText(filename);
            if( txt.SeekLine(line) )
             {
              mout->printf( "%vf6%78h-%vn\n" );
              mout->printf( "[%vf3%d%vn] ", line );
-             txt.PrintLine(*mout); // Распечатываем строку
+             txt.PrintLine(*mout); // Р Р°СЃРїРµС‡Р°С‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
              mout->printf( "\n%vf6%78h-%vn\n" );
             }
 
-           // В этой строке можно управлять точками прерывания.
+           // Р’ СЌС‚РѕР№ СЃС‚СЂРѕРєРµ РјРѕР¶РЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ С‚РѕС‡РєР°РјРё РїСЂРµСЂС‹РІР°РЅРёСЏ.
            breakpoint_is_available = true;
           }
 
-         // Выведем меню для управления дальнейшим исполнением.
+         // Р’С‹РІРµРґРµРј РјРµРЅСЋ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РґР°Р»СЊРЅРµР№С€РёРј РёСЃРїРѕР»РЅРµРЅРёРµРј.
          while(true)
           {
            mout->printf( "%vf6Commands:%vn %vfER%vnun %vfET%vnoken %vfEC%vnall_stack" );
