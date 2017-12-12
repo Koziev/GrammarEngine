@@ -43,10 +43,10 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
 {
  lem_rub_off(pack);
 
- // Лексер уже должен быть создан и сохранен в lexer.
+ // Р›РµРєСЃРµСЂ СѓР¶Рµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЃРѕР·РґР°РЅ Рё СЃРѕС…СЂР°РЅРµРЅ РІ lexer.
 
  #if defined SOL_DEBUGGING
- // Начинаем разбор графа токенизации.
+ // РќР°С‡РёРЅР°РµРј СЂР°Р·Р±РѕСЂ РіСЂР°С„Р° С‚РѕРєРµРЅРёР·Р°С†РёРё.
  if( trace!=NULL )
   {
    trace->MorphologicalAnalysisStarts(*lexer);
@@ -63,7 +63,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
      #if defined SOL_DEBUGGING
      if( trace!=NULL )
       {
-       // покажем в отладчике результаты применения модели
+       // РїРѕРєР°Р¶РµРј РІ РѕС‚Р»Р°РґС‡РёРєРµ СЂРµР·СѓР»СЊС‚Р°С‚С‹ РїСЂРёРјРµРЅРµРЅРёСЏ РјРѕРґРµР»Рё
        trace->AfterModelApplication(*lexer);
       }
      #endif
@@ -75,7 +75,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
  bool UseDefaultScheme=true;
  if( ApplyPatterns )
   {
-   // Готовим workflow - применяемые последовательно, до успеха, алгоритмы.
+   // Р“РѕС‚РѕРІРёРј workflow - РїСЂРёРјРµРЅСЏРµРјС‹Рµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕ, РґРѕ СѓСЃРїРµС…Р°, Р°Р»РіРѕСЂРёС‚РјС‹.
    enum { UseTopDown, UseIncompleteTopDown };
    lem::MCollect<int> scheduled_algorithms;
 
@@ -101,7 +101,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
 
      if( algorithm==UseTopDown )
       {
-       // Точный нисходящий анализ без каких-либо компромисов.
+       // РўРѕС‡РЅС‹Р№ РЅРёСЃС…РѕРґСЏС‰РёР№ Р°РЅР°Р»РёР· Р±РµР· РєР°РєРёС…-Р»РёР±Рѕ РєРѕРјРїСЂРѕРјРёСЃРѕРІ.
        results = TopDownParsing( ApplyPatterns, DoSyntaxLinks, experience, constraints );
 
        if( results.NotNull() && !results->empty() )
@@ -123,7 +123,7 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
       }
      else if( algorithm==UseIncompleteTopDown )
       {
-       // Неполный анализ, если полный не сработал.
+       // РќРµРїРѕР»РЅС‹Р№ Р°РЅР°Р»РёР·, РµСЃР»Рё РїРѕР»РЅС‹Р№ РЅРµ СЃСЂР°Р±РѕС‚Р°Р».
        lexer->ChangeParams().SkipInnerTokens = false;
        lexer->ChangeParams().SkipOuterToken = true;
        lexer->ChangeParams().CompleteAnalysisOnly = false;
@@ -170,14 +170,14 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
       }
 
      if( constraints.Exceeded(0) )
-      break; // исчерпан лимит времени, отведенный на анализ.
+      break; // РёСЃС‡РµСЂРїР°РЅ Р»РёРјРёС‚ РІСЂРµРјРµРЅРё, РѕС‚РІРµРґРµРЅРЅС‹Р№ РЅР° Р°РЅР°Р»РёР·.
     }
   }
 
  if( UseDefaultScheme )
   {
-   // Правила анализа не заданы или отключены, поэтому просто сгенерируем вариаторы из путей токенизации с применением
-   // всех возможных фильтров.
+   // РџСЂР°РІРёР»Р° Р°РЅР°Р»РёР·Р° РЅРµ Р·Р°РґР°РЅС‹ РёР»Рё РѕС‚РєР»СЋС‡РµРЅС‹, РїРѕСЌС‚РѕРјСѓ РїСЂРѕСЃС‚Рѕ СЃРіРµРЅРµСЂРёСЂСѓРµРј РІР°СЂРёР°С‚РѕСЂС‹ РёР· РїСѓС‚РµР№ С‚РѕРєРµРЅРёР·Р°С†РёРё СЃ РїСЂРёРјРµРЅРµРЅРёРµРј
+   // РІСЃРµС… РІРѕР·РјРѕР¶РЅС‹С… С„РёР»СЊС‚СЂРѕРІ.
    SynPatternTreeNodeMatchingResults empty;
    pack = empty.BuildGrafs( *dict, *lexer, false, params.CompleteAnalysisOnly, constraints, trace );
   }
