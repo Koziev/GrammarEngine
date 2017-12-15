@@ -22,13 +22,13 @@ namespace LemmatizatorTool
    lemma.EnsureCapacity(32);
 
    // http://www.solarix.ru/api/en/sol_GetLemma.shtml
-   LemmatizatorEngine.sol_GetLemmaW( hEngine, "галактическими", lemma, 32 );
+   LemmatizatorEngine.sol_GetLemmaW( hEngine, "РіР°Р»Р°РєС‚РёС‡РµСЃРєРёРјРё", lemma, 32 );
 
    String slemma = lemma.ToString();
    Console.WriteLine( "lemma={0}\n", slemma );
 
    // http://www.solarix.ru/api/en/sol_GetLemmas.shtml
-   IntPtr lemmas = LemmatizatorEngine.sol_GetLemmasW( hEngine, "роем" );
+   IntPtr lemmas = LemmatizatorEngine.sol_GetLemmasW( hEngine, "СЂРѕРµРј" );
    if( lemmas!=(IntPtr)0 )
     {
      // http://www.solarix.ru/api/en/sol_CountLemmas.shtml
