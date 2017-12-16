@@ -54,12 +54,12 @@ void PatternNGramFunction::LoadTxt(
 
     const TrFunction * fun_info = fx.Find( function_name );
 
-    // это вызов функции для проверки дерева, начинающегося с заданного именем маркировки узла
+    // СЌС‚Рѕ РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё РґР»В¤ РїСЂРѕРІРµСЂРєРё РґРµСЂРµРІР°, РЅР°С‡РёРЅР°СЋС‰РµРіРѕСЃВ¤ СЃ Р·Р°РґР°РЅРЅРѕРіРѕ РёРјРµРЅРµРј РјР°СЂРєРёСЂРѕРІРєРё СѓР·Р»Р°
     TrKnownVars known_vars( &fx.global_known_vars );
 
     txtfile.read_it( B_OROUNDPAREN );
 
-    // Может быть перечень нескольких маркировок
+    // С›РѕР¶РµС‚ Р±С‹С‚СЊ РїРµСЂРµС‡РµРЅСЊ РЅРµСЃРєРѕР»СЊРєРёС… РјР°СЂРєРёСЂРѕРІРѕРє
     while(true)
     {
         if(txtfile.probe( B_CROUNDPAREN ))
@@ -79,7 +79,7 @@ void PatternNGramFunction::LoadTxt(
 
         TrType arg_type = fun_info->GetArgType( CastSizeToInt( function_args.size() ) );
 
-        known_vars.RegisterVar( TrTreeType(), arg_name ); // проверямый узел и все его дети как дерево
+        known_vars.RegisterVar( TrTreeType(), arg_name ); // РїСЂРѕРІРµСЂВ¤РјС‹Р№ СѓР·РµР» Рё РІСЃРµ РµРіРѕ РґРµС‚Рё РєР°Рє РґРµСЂРµРІРѕ
         function_args.push_back( arg_name );
         arg_types.push_back( arg_type );
     }
@@ -150,7 +150,7 @@ void PatternNGramFunction::AttachEdges(
 #if defined SOL_CAA
 Solarix::Word_Form* PatternNGramFunction::GetWordform4Tree( const Solarix::Word_Form * src_wf, Dictionary & dict, const SynPatternResult * cur_result ) const
 {
-    // Оставим только подтвержденные версии словоформ
+    // СњСЃС‚Р°РІРёРј С‚РѕР»СЊРєРѕ РїРѕРґС‚РІРµСЂР¶РґРµРЅРЅС‹Рµ РІРµСЂСЃРёРё СЃР»РѕРІРѕС„РѕСЂРј
     Solarix::Word_Form * wf = NULL;
     std::pair<MATCHING_ALTS::const_iterator, MATCHING_ALTS::const_iterator> p = cur_result->matched_alts.equal_range( src_wf );
     for(MATCHING_ALTS::const_iterator it = p.first; it != p.second; ++it)
@@ -201,7 +201,7 @@ Solarix::Tree_Node* PatternNGramFunction::GetTreeByRootName(
     }
     else
     {
-        // сначала пробуем найти токен с пометкой root_node.
+        // СЃРЅР°С‡Р°Р»Р° РїСЂРѕР±СѓРµРј РЅР°Р№С‚Рё С‚РѕРєРµРЅ СЃ РїРѕРјРµС‚РєРѕР№ root_node.
         const Word_Form * root_node0 = mark_data.FindNode( *dict.GetLexAuto().GetRootNodeName() );
         if(root_node0 != NULL)
         {
@@ -209,7 +209,7 @@ Solarix::Tree_Node* PatternNGramFunction::GetTreeByRootName(
         }
         else
         {
-            // В качестве центрального берем первый токен.
+            // В¬ РєР°С‡РµСЃС‚РІРµ С†РµРЅС‚СЂР°Р»СЊРЅРѕРіРѕ Р±РµСЂРµРј РїРµСЂРІС‹Р№ С‚РѕРєРµРЅ.
             const LexerTextPos * token = mark_data.GetBeginToken();
             root_wf = token->GetWordform();
         }
@@ -221,7 +221,7 @@ Solarix::Tree_Node* PatternNGramFunction::GetTreeByRootName(
 
     if(attach_children)
     {
-        // Теперь найдем ребра и присоединим из к корню, а затем продолжим процесс вниз рекурсивно
+        // вЂњРµРїРµСЂСЊ РЅР°Р№РґРµРј СЂРµР±СЂР° Рё РїСЂРёСЃРѕРµРґРёРЅРёРј РёР· Рє РєРѕСЂРЅСЋ, Р° Р·Р°С‚РµРј РїСЂРѕРґРѕР»Р¶РёРј РїСЂРѕС†РµСЃСЃ РІРЅРёР· СЂРµРєСѓСЂСЃРёРІРЅРѕ
         AttachEdges( root_wf, node, dict, PatternSequenceNumber, cur_result );
     }
 

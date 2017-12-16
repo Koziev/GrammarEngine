@@ -37,8 +37,8 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
         }
         else if(txtfile.probe( L"generic" ))
         {
-            // в особых случаях полезно использовать не привязанные к конкретному селектору правила, в этом
-            // случае надо явно указать ключевое слово "generic".
+            // РІ РѕСЃРѕР±С‹С… СЃР»СѓС‡Р°СЏС… РїРѕР»РµР·РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РЅРµ РїСЂРёРІСЏР·Р°РЅРЅС‹Рµ Рє РєРѕРЅРєСЂРµС‚РЅРѕРјСѓ СЃРµР»РµРєС‚РѕСЂСѓ РїСЂР°РІРёР»Р°, РІ СЌС‚РѕРј
+            // СЃР»СѓС‡Р°Рµ РЅР°РґРѕ СЏРІРЅРѕ СѓРєР°Р·Р°С‚СЊ РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ "generic".
             generic = true;
         }
         else if(txtfile.probe( B_OFIGPAREN ))
@@ -47,7 +47,7 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
         }
         else if(id_group == UNKNOWN)
         {
-            // Задано имя группы
+            // Р—Р°РґР°РЅРѕ РёРјСЏ РіСЂСѓРїРїС‹
             lem::Iridium::BethToken t_group = txtfile.read();
 
             if(t_group.GetToken() == B_OFIGPAREN)
@@ -70,8 +70,8 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
     }
 
 
-    // Для каждого правила нужно задать целевой язык, чтобы правильно
-    // распознать словарные статьи в опорных точках.
+    // Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РїСЂР°РІРёР»Р° РЅСѓР¶РЅРѕ Р·Р°РґР°С‚СЊ С†РµР»РµРІРѕР№ СЏР·С‹Рє, С‡С‚РѕР±С‹ РїСЂР°РІРёР»СЊРЅРѕ
+    // СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃР»РѕРІР°СЂРЅС‹Рµ СЃС‚Р°С‚СЊРё РІ РѕРїРѕСЂРЅС‹С… С‚РѕС‡РєР°С….
     if(id_language == UNKNOWN)
     {
         lem::Iridium::Print_Error( txtfile );
@@ -84,7 +84,7 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
 
     lem::Iridium::BSourceState root_pos = txtfile.tellp();
 
-    // Полноценное дерево с произвольной иерархией узлов
+    // С•РѕР»РЅРѕС†РµРЅРЅРѕРµ РґРµСЂРµРІРѕ СЃ РїСЂРѕРёР·РІРѕР»СЊРЅРѕР№ РёРµСЂР°СЂС…РёРµР№ СѓР·Р»РѕРІ
     TreeScorerMarkers markers;
     txtfile.read_it( B_CONTEXT );
     txtfile.read_it( B_OFIGPAREN );
@@ -92,8 +92,8 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
     txtfile.read_it( B_CFIGPAREN );
 
 
-    // хотя бы один узел в дереве должен быть задан однозначно, а не квантором, иначе
-    // перебор деревьев станет очень тяжелым.
+    // С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ СѓР·РµР» РІ РґРµСЂРµРІРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р·Р°РґР°РЅ РѕРґРЅРѕР·РЅР°С‡РЅРѕ, Р° РЅРµ РєРІР°РЅС‚РѕСЂРѕРј, РёРЅР°С‡Рµ
+    // РїРµСЂРµР±РѕСЂ РґРµСЂРµРІСЊРµРІ СЃС‚Р°РЅРµС‚ РѕС‡РµРЅСЊ С‚СЏР¶РµР»С‹Рј.
     if(!generic && (id_group == UNKNOWN && root.FindNonQuantorNode() == NULL))
     {
         lem::Iridium::Print_Error( root_pos, txtfile );
@@ -101,7 +101,7 @@ void TreeScorer::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfil
         throw lem::E_BaseException();
     }
 
-    // теперь читаем вес этого правила.
+    // С‚РµРїРµСЂСЊ С‡РёС‚Р°РµРј РІРµСЃ СЌС‚РѕРіРѕ РїСЂР°РІРёР»Р°.
     txtfile.read_it( B_THEN );
 
     score.LoadTxt( dict, txtfile, markers );
@@ -121,7 +121,7 @@ void TreeScorer::Save( LexiconStorage & storage )
 
     if(IsNamedGroup())
     {
-        // запомним, что в данную группу id_group входит поддерево с корнем id_root
+        // Р·Р°РїРѕРјРЅРёРј, С‡С‚Рѕ РІ РґР°РЅРЅСѓСЋ РіСЂСѓРїРїСѓ id_group РІС…РѕРґРёС‚ РїРѕРґРґРµСЂРµРІРѕ СЃ РєРѕСЂРЅРµРј id_root
         storage.StoreTreeScoreGroupMember( id_group, id_root );
     }
 
@@ -133,7 +133,7 @@ void TreeScorer::Save( LexiconStorage & storage )
             storage.RegisterTreeScorer_Wordentry( root.GetEntryKey(), id_root, score.SerializeExpression(), score.GetExpressionType(), true, id_group );
         else if(root.IsMetaEntry())
         {
-            // получим список статей, которые входят в метастатью.
+            // РїРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє СЃС‚Р°С‚РµР№, РєРѕС‚РѕСЂС‹Рµ РІС…РѕРґСЏС‚ РІ РјРµС‚Р°СЃС‚Р°С‚СЊСЋ.
             lem::MCollect<int> entries;
             storage.GetMetaEntryItems( root.GetMetaEntryKey(), entries );
             for(lem::Container::size_type i = 0; i < entries.size(); ++i)
@@ -168,7 +168,7 @@ void TreeScorer::Save( LexiconStorage & storage )
                     storage.RegisterTreeScorer_Wordentry( anchor_node->GetEntryKey(), id_root, score.SerializeExpression(), score.GetExpressionType(), false, id_group );
                 else if(anchor_node->IsMetaEntry())
                 {
-                    // получим список статей, которые входят в метастатью.
+                    // РїРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє СЃС‚Р°С‚РµР№, РєРѕС‚РѕСЂС‹Рµ РІС…РѕРґСЏС‚ РІ РјРµС‚Р°СЃС‚Р°С‚СЊСЋ.
                     lem::MCollect<int> entries;
                     storage.GetMetaEntryItems( anchor_node->GetMetaEntryKey(), entries );
                     for(lem::Container::size_type i = 0; i < entries.size(); ++i)

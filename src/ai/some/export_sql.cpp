@@ -26,6 +26,11 @@ void Dictionary::Save_SQL(
             , sql_version.Get_Comment().c_str()
            );
 
+ if( sql_version.type==SQL_Production::MsSql )
+  {
+   txt.printf( "SET NOCOUNT ON;\n" );
+  }
+
 
  // —писок таблиц, которые надо удалить перед созданием нового словар€. ѕор€док важен!
  const char* table_names[]={
@@ -485,6 +490,7 @@ void Dictionary::Save_SQL(
                   " is_syllab number not null,"
                   " is_prefix number not null,"
                   " is_affix number not null,"
+                  " is_forced number not null,"
                   " r_condition varchar(100) not null,"
                   " case_sensitive integer not null,"
                   " word varchar(100),"
@@ -667,7 +673,8 @@ void Dictionary::Save_SQL(
                   "CREATE TABLE ts_group(\n"
                   " id number PRIMARY KEY NOT NULL,\n"
                   " name nvarchar(30) NOT NULL,\n"
-                  " allow_unmatched_children number NOT NULL\n"
+                  " allow_unmatched_children number NOT NULL,\n"
+                  " id_language INTEGER NOT NULL"
                   ");\n\n"
      
                   "CREATE TABLE ts_group2root(\n"
@@ -955,6 +962,7 @@ void Dictionary::Save_SQL(
                 " is_syllab integer not null,"
                 " is_prefix integer not null,"
                 " is_affix integer not null,"
+                " is_forced integer not null,"
                 " r_condition varchar(100) not null,"
                 " case_sensitive integer not null,"
                 " word varchar(100),"
@@ -1234,7 +1242,8 @@ void Dictionary::Save_SQL(
                 "CREATE TABLE ts_group(\n"
                 " id integer PRIMARY KEY NOT NULL,\n"
                 " name varchar(30) NOT NULL,\n"
-                " allow_unmatched_children integer NOT NULL\n"
+                " allow_unmatched_children integer NOT NULL,\n"
+                " id_language INTEGER NOT NULL"
                 ");\n\n"
 
                 "CREATE TABLE ts_group2root(\n"
@@ -1515,6 +1524,7 @@ void Dictionary::Save_SQL(
                 " is_syllab integer not null,"
                 " is_prefix integer not null,"
                 " is_affix integer not null,"
+                " is_forced integer not null,"
                 " r_condition varchar(100) not null,"
                 " case_sensitive integer not null,"
                 " word varchar(100),"
@@ -1793,7 +1803,8 @@ void Dictionary::Save_SQL(
                 "CREATE TABLE ts_group(\n"
                 " id integer PRIMARY KEY NOT NULL,\n"
                 " name varchar(30) NOT NULL,\n"
-                " allow_unmatched_children integer NOT NULL\n"
+                " allow_unmatched_children integer NOT NULL,\n"
+                " id_language INTEGER NOT NULL"
                 ");\n\n"
 
                 "CREATE TABLE ts_group2root(\n"
@@ -2102,6 +2113,7 @@ void Dictionary::Save_SQL(
                 " is_syllab integer not null,"
                 " is_prefix integer not null,"
                 " is_affix integer not null,"
+                " is_forced integer not null,"
                 " r_condition varchar(100) not null,"
                 " case_sensitive integer not null,"
                 " word varchar(100),"
@@ -2381,7 +2393,8 @@ void Dictionary::Save_SQL(
                 "CREATE TABLE ts_group(\n"
                 " id integer PRIMARY KEY NOT NULL,\n"
                 " name varchar(30) NOT NULL,\n"
-                " allow_unmatched_children integer NOT NULL\n"
+                " allow_unmatched_children integer NOT NULL,\n"
+                " id_language INTEGER NOT NULL"
                 ");\n\n"
 
                 "CREATE TABLE ts_group2root(\n"
@@ -2702,6 +2715,7 @@ void Dictionary::Save_SQL(
                   " is_syllab integer not null,"
                   " is_prefix integer not null,"
                   " is_affix integer not null,"
+                  " is_forced integer not null,"
                   " r_condition varchar(100) not null,"
                   " case_sensitive integer not null,"
                   " word varchar(100),"
@@ -3008,7 +3022,8 @@ void Dictionary::Save_SQL(
                   "CREATE TABLE ts_group(\n"
                   " id integer PRIMARY KEY NOT NULL,\n"
                   " name varchar(30) NOT NULL,\n"
-                  " allow_unmatched_children integer NOT NULL\n"
+                  " allow_unmatched_children integer NOT NULL,\n"
+                  " id_language INTEGER NOT NULL"
                   ");\n\n"
     
                   "CREATE TABLE ts_group2root(\n"
@@ -3153,6 +3168,7 @@ void Dictionary::Save_SQL(
                 " is_syllab integer not null,"
                 " is_prefix integer not null,"
                 " is_affix integer not null,"
+                " is_forced integer not null,"
                 " r_condition varchar(100) not null,"
                 " case_sensitive integer not null,"
                 " word varchar(100),"
@@ -3567,7 +3583,8 @@ void Dictionary::Save_SQL(
                 "CREATE TABLE ts_group(\n"
                 " id integer PRIMARY KEY NOT NULL,\n"
                 " name varchar(30) NOT NULL,\n"
-                " allow_unmatched_children integer NOT NULL\n"
+                " allow_unmatched_children integer NOT NULL,\n"
+                " id_language INTEGER NOT NULL"
                 ");\n\n"
 
                 "CREATE TABLE ts_group2root(\n"

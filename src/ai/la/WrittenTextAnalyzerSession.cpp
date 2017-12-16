@@ -75,7 +75,7 @@ void WrittenTextAnalysisSession::AnalyzeIt( const lem::UFString & str, bool Appl
 
  if( params.LanguageUnknown() )
   {
-   // ßçûê ïðåäëîæåíèÿ íå çàäàí ÿâíî, îïðåäåëèì åãî íà îñíîâå ñòàòèñòè÷åñêèõ êðèòåðèåâ.
+   // Ð¯Ð·Ñ‹Ðº Ð¿Ñ€ÐµÐ´Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð½Ðµ Ð·Ð°Ð´Ð°Ð½ ÑÐ²Ð½Ð¾, Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»Ð¸Ð¼ ÐµÐ³Ð¾ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… ÐºÑ€Ð¸Ñ‚ÐµÑ€Ð¸ÐµÐ².
    const int id_language = dict->GetLexAuto().GuessLanguage( str );
 
    if( id_language==UNKNOWN )
@@ -113,7 +113,7 @@ void WrittenTextAnalysisSession::Tokenize( const lem::UFString & str )
 
  if( params.LanguageUnknown() )
   {
-   // ßçûê ïðåäëîæåíèÿ íå çàäàí ÿâíî, îïðåäåëèì åãî íà îñíîâå ñòàòèñòè÷åñêèõ êðèòåðèåâ.
+   // Ð¯Ð·Ñ‹Ðº Ð¿Ñ€ÐµÐ´Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð½Ðµ Ð·Ð°Ð´Ð°Ð½ ÑÐ²Ð½Ð¾, Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»Ð¸Ð¼ ÐµÐ³Ð¾ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… ÐºÑ€Ð¸Ñ‚ÐµÑ€Ð¸ÐµÐ².
    const int id_language = dict->GetLexAuto().GuessLanguage( str );
    params.SetLanguageID( id_language );
 

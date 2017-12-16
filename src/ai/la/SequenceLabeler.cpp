@@ -108,9 +108,9 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
 {
  #if defined SOL_CRF_MODEL && defined SOL_CAA
 
- // Для каждого токена мы будем находить наиболее вероятный вариант распознавания.
- // Так как путей в графе токенизации может быть много, то мы пройдем по всем путям,
- // и у одного токена может оказаться несколько достоверных вариантов распознавания.
+ // Р”Р»СЏ РєР°Р¶РґРѕРіРѕ С‚РѕРєРµРЅР° РјС‹ Р±СѓРґРµРј РЅР°С…РѕРґРёС‚СЊ РЅР°РёР±РѕР»РµРµ РІРµСЂРѕСЏС‚РЅС‹Р№ РІР°СЂРёР°РЅС‚ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ.
+ // РўР°Рє РєР°Рє РїСѓС‚РµР№ РІ РіСЂР°С„Рµ С‚РѕРєРµРЅРёР·Р°С†РёРё РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРЅРѕРіРѕ, С‚Рѕ РјС‹ РїСЂРѕР№РґРµРј РїРѕ РІСЃРµРј РїСѓС‚СЏРј,
+ // Рё Сѓ РѕРґРЅРѕРіРѕ С‚РѕРєРµРЅР° РјРѕР¶РµС‚ РѕРєР°Р·Р°С‚СЊСЃСЏ РЅРµСЃРєРѕР»СЊРєРѕ РґРѕСЃС‚РѕРІРµСЂРЅС‹С… РІР°СЂРёР°РЅС‚РѕРІ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ.
  std::multimap< const LexerTextPos*, int > token2selection;
 
  const LexerTextPos * begin = lexer.GetBeginToken();
@@ -127,18 +127,18 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
   {
    const LexerTextPos * leaf = leafs[i];
    nodes.clear();
-   leaf->Collect_Right2Left( begin, nodes ); // собираем все словоформы на этом пути
+   leaf->Collect_Right2Left( begin, nodes ); // СЃРѕР±РёСЂР°РµРј РІСЃРµ СЃР»РѕРІРѕС„РѕСЂРјС‹ РЅР° СЌС‚РѕРј РїСѓС‚Рё
 
-   const int src_token_count=CastSizeToInt(nodes.size())-2; // Сколько исходных токенов, не учитывая пропущенные, вошло в фрагменты в nodes2.
+   const int src_token_count=CastSizeToInt(nodes.size())-2; // РЎРєРѕР»СЊРєРѕ РёСЃС…РѕРґРЅС‹С… С‚РѕРєРµРЅРѕРІ, РЅРµ СѓС‡РёС‚С‹РІР°В¤ РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ, РІРѕС€Р»Рѕ РІ С„СЂР°РіРјРµРЅС‚С‹ РІ nodes2.
 
    nodes2.clear();
-   // словоформы собраны в обратном порядке, развернем его.
+   // СЃР»РѕРІРѕС„РѕСЂРјС‹ СЃРѕР±СЂР°РЅС‹ РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ, СЂР°Р·РІРµСЂРЅРµРј РµРіРѕ.
    for( int j=CastSizeToInt(nodes.size())-1; j>=0; --j )
     {
      nodes2.push_back( nodes[j] );
     }
 
-   // Имеем цепочку токенов в nodes2, идущих в правильном порядке.
+   // РРјРµРµРј С†РµРїРѕС‡РєСѓ С‚РѕРєРµРЅРѕРІ РІ nodes2, РёРґСѓС‰РёС… РІ РїСЂР°РІРёР»СЊРЅРѕРј РїРѕСЂСЏРґРєРµ.
    lem::PtrCollect<ModelTokenFeatures> token_features;
    for( lem::Container::size_type j=0; j<nodes2.size(); ++j )
     {
@@ -156,7 +156,7 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
     }
 
 
-   // ВЫЗЫВАЕМ МОДЕЛЬ ДЛЯ ПОЛУЧЕНИЯ выходных тегов
+   // Р’Р«Р—Р«Р’РђР•Рњ РњРћР”Р•Р›Р¬ Р”Р›РЇ РџРћР›РЈР§Р•РќРРЇ РІС‹С…РѕРґРЅС‹С… С‚РµРіРѕРІ
 
    int N = 0, L = 0, ret = 0, lid = -1;
    crfsuite_instance_t inst;
@@ -186,13 +186,13 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
      }
 
      // -----------------------------
-     // признаки для текущего слова
+     // РїСЂРёР·РЅР°РєРё РґР»СЏ С‚РµРєСѓС‰РµРіРѕ СЃР»РѕРІР°
      // -----------------------------
      PullFeatures1( str_features, token_features, iword, 0, true, EMIT_AA_FEATURE );
 
      const bool rich_context = EMIT_POS_FOR_CONTEXT || EMIT_MORPH_FOR_CONTEXT || EMIT_FORMTAGS_FOR_CONTEXT;
 
-     // и соседние слова
+     // Рё СЃРѕСЃРµРґРЅРёРµ СЃР»РѕРІР°
      if( CONTEXT_SIZE>3 )
       PullFeatures1( str_features, token_features, iword, -4, rich_context, EMIT_AA_FOR_CONTEXT );
 
@@ -248,7 +248,7 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
      #endif
 */
 
-     // конвертируем str_features в набор тегов для текущего слова в цепочке
+     // РєРѕРЅРІРµСЂС‚РёСЂСѓРµРј str_features РІ РЅР°Р±РѕСЂ С‚РµРіРѕРІ РґР»СЏ С‚РµРєСѓС‰РµРіРѕ СЃР»РѕРІР° РІ С†РµРїРѕС‡РєРµ
    
      /* Initialize an item. */
      crfsuite_item_t item;
@@ -303,7 +303,7 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
     LEM_STOPIT;
    }
 
-  // output содержит вектор ID тегов для токенов.
+  // output СЃРѕРґРµСЂР¶РёС‚ РІРµРєС‚РѕСЂ ID С‚РµРіРѕРІ РґР»СЏ С‚РѕРєРµРЅРѕРІ.
   lem::MCollect<int> tag_ids;
 
   for (i = 0;i < inst.num_items;++i)
@@ -406,9 +406,9 @@ void SequenceLabelerModel::Apply( BasicLexer & lexer, Dictionary & dict, const E
  #endif
 */
 
- // Для токенов оставляем только выбранные моделью варианты распознавания
- // ЛИБО
- // переносим подтвержденные моделью варианты наверх
+ // Р”Р»СЏ С‚РѕРєРµРЅРѕРІ РѕСЃС‚Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ РІС‹Р±СЂР°РЅРЅС‹Рµ РјРѕРґРµР»СЊСЋ РІР°СЂРёР°РЅС‚С‹ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ
+ // Р›РР‘Рћ
+ // РїРµСЂРµРЅРѕСЃРёРј РїРѕРґС‚РІРµСЂР¶РґРµРЅРЅС‹Рµ РјРѕРґРµР»СЊСЋ РІР°СЂРёР°РЅС‚С‹ РЅР°РІРµСЂС…
  SelectRecognition( lexer, begin, token2selection, remove_incorrect_alts );
 
 /*

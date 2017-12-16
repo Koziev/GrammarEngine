@@ -184,47 +184,6 @@ int main( int argc, char *argv[] )
 #endif
 {
  lem::LemInit initer;
-
-/*
- // --- DEBUG
- lem::WideStringUcs4 enum4( L"\xD800\xDC00\xD834\xDD1E\xDBFF\xDFFD" );
-
- lem::uint32_t c;
- while( (c=enum4.Fetch())!=0 )
-  {
-   mout->printf( "%X16d\n", c );
-  } 
- // --- DEBUG
-*/
-/*
-PrefixEntrySearcher pes( lem::Path(L"e:\\tmp\\pes.db"), true, 1000 );
-pes.Add( L" Œÿ ¿", 100 ); 
-pes.Add( L" ŒÿÃ¿–", 101 ); 
-pes.Add( L" Œ–Œ¡ ¿", 102 );
-pes.Add( L"\xD800\xDC00\xD834\xDD1E\xDBFF\xDFFD", 103 );
-pes.Commit();
-
-lem::MCollect<int> ies;
-pes.Search( L" Œ", ies );
-for( int i=0; i<ies.size(); ++i )
- mout->printf( "%d\n", ies[i] );
-*/
-/*
-lem::Char_Stream::UTF8_Reader rdr( lem::Path("e:\\mvoice\\lem\\dictionary.src\\debug.sol"), false );
-rdr.Read_Beginning();
-lem::UFString s16;
-rdr.read_line(s16);
-lem::FString s8( lem::to_utf8(s16) );
-s16 = lem::from_utf8(s8);
-
-for( int i=0; i<s16.length(); ++i)
- {
-  lem::mout->printf( "%X16d\n", s16[i] );
- } 
-*/
-
-
-
  boost::posix_time::ptime tm_start = lem::get_time();
 
  try
@@ -1101,7 +1060,7 @@ static void Help( int help_i )
                 "               %vfE0%vn - currently shown page\n"
                 "               %vfE1%vn - all options\n"
                 "               %vfE2%vn - code pages (useful for russian users)\n\n"
-                "For example: %vfFygres -h=1%vn\n\n"
+                "For example: %vfFcompiler -h=1%vn\n\n"
                );
    break;
  }

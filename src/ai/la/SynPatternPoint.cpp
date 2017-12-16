@@ -1,4 +1,4 @@
-// Морфологический анализатор - опорные точки для правил фильтрации и сортировки
+// РњРѕСЂС„РѕР»РѕРіРёС‡РµСЃРєРёР№ Р°РЅР°Р»РёР·Р°С‚РѕСЂ - РѕРїРѕСЂРЅС‹Рµ С‚РѕС‡РєРё РґР»СЏ РїСЂР°РІРёР» С„РёР»СЊС‚СЂР°С†РёРё Рё СЃРѕСЂС‚РёСЂРѕРІРєРё
 //
 // CD->12.06.2009
 // LC->05.11.2015
@@ -255,7 +255,7 @@ bool SynPatternPoint::Equal( const SynPatternPoint &x ) const
 
     if(check_fun.NotNull())
     {
-        // Мы не проверяем идентичность вызова функции. Это приводит к потере производительности.
+        // РњС‹ РЅРµ РїСЂРѕРІРµСЂСЏРµРј РёРґРµРЅС‚РёС‡РЅРѕСЃС‚СЊ РІС‹Р·РѕРІР° С„СѓРЅРєС†РёРё. Р­С‚Рѕ РїСЂРёРІРѕРґРёС‚ Рє РїРѕС‚РµСЂРµ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё.
         return false;
     }
 
@@ -299,7 +299,7 @@ void SynPatternPoint::RegisterRootNodeExport( SynPatternCompilation & compilatio
 {
     if( export_section!=NULL )
     {
-        // Экспорт переменной с именем ROOT_NODE надо отслеживать особо, чтобы потом в директиве :LINKS проверить корневой узел.
+        // Р­РєСЃРїРѕСЂС‚ РїРµСЂРµРјРµРЅРЅРѕР№ СЃ РёРјРµРЅРµРј ROOT_NODE РЅР°РґРѕ РѕС‚СЃР»РµР¶РёРІР°С‚СЊ РѕСЃРѕР±Рѕ, С‡С‚РѕР±С‹ РїРѕС‚РѕРј РІ РґРёСЂРµРєС‚РёРІРµ :LINKS РїСЂРѕРІРµСЂРёС‚СЊ РєРѕСЂРЅРµРІРѕР№ СѓР·РµР».
         if( export_section->HasRootNode() )
         {
             compilation_context.RegisterRootNode( mark_name.mark_name );
@@ -337,20 +337,20 @@ void SynPatternPoint::LoadTxt(
 
     const lem::Iridium::BethToken &t1 = txtfile.read();
 
-    // Это может быть имя класса для точки в формате
+    // Р­С‚Рѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ РёРјСЏ РєР»Р°СЃСЃР° РґР»СЏ С‚РѕС‡РєРё РІ С„РѕСЂРјР°С‚Рµ
     //
-    // класс:статья{}
+    // РєР»Р°СЃСЃ:СЃС‚Р°С‚СЊСЏ{}
     //
-    // Либо словом с однозначной проекцией на лексикон.
+    // Р›РёР±Рѕ СЃР»РѕРІРѕРј СЃ РѕРґРЅРѕР·РЅР°С‡РЅРѕР№ РїСЂРѕРµРєС†РёРµР№ РЅР° Р»РµРєСЃРёРєРѕРЅ.
     //
-    // Либо лексемой в одиночных кавычках
+    // Р›РёР±Рѕ Р»РµРєСЃРµРјРѕР№ РІ РѕРґРёРЅРѕС‡РЅС‹С… РєР°РІС‹С‡РєР°С…
     //
-    // Либо именем другого фильтрующего дерева (из известных в pattern_names)
+    // Р›РёР±Рѕ РёРјРµРЅРµРј РґСЂСѓРіРѕРіРѕ С„РёР»СЊС‚СЂСѓСЋС‰РµРіРѕ РґРµСЂРµРІР° (РёР· РёР·РІРµСЃС‚РЅС‹С… РІ pattern_names)
     //
-    // Либо именем встроенной функции:
+    // Р›РёР±Рѕ РёРјРµРЅРµРј РІСЃС‚СЂРѕРµРЅРЅРѕР№ С„СѓРЅРєС†РёРё:
     //
-    //    @mark(узел,имя)
-    //    @and(узел1,узел2)
+    //    @mark(СѓР·РµР»,РёРјСЏ)
+    //    @and(СѓР·РµР»1,СѓР·РµР»2)
     //         ...
 
 
@@ -359,7 +359,7 @@ void SynPatternPoint::LoadTxt(
 
     if( t1.string()==L'@' )
     {
-        // загружаем вызов встроенной функции
+        // Р·Р°РіСЂСѓР¶Р°РµРј РІС‹Р·РѕРІ РІСЃС‚СЂРѕРµРЅРЅРѕР№ С„СѓРЅРєС†РёРё
 
         lem::Iridium::BethToken tfun = txtfile.read();
         function_name = tfun.string();
@@ -391,12 +391,12 @@ void SynPatternPoint::LoadTxt(
         }
         else if( function_name.eqi(L"regex") || function_name.eqi(L"regex_strict") )
         {
-            // по умолчанию снимаем требования к словарной статье и части речи.
-            // явно задать их можно в идущей следом секции уточнения @regex(....){ ... }
+            // РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃРЅРёРјР°РµРј С‚СЂРµР±РѕРІР°РЅРёСЏ Рє СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРµ Рё С‡Р°СЃС‚Рё СЂРµС‡Рё.
+            // СЏРІРЅРѕ Р·Р°РґР°С‚СЊ РёС… РјРѕР¶РЅРѕ РІ РёРґСѓС‰РµР№ СЃР»РµРґРѕРј СЃРµРєС†РёРё СѓС‚РѕС‡РЅРµРЅРёСЏ @regex(....){ ... }
             ekey=UNKNOWN;
             iclass=ANY_STATE;
 
-            // Строковое представление паттерна
+            // РЎС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РїР°С‚С‚РµСЂРЅР°
             rx_string = txtfile.read().GetFullStr();
 
             if( rx_string.front()==L'"' )
@@ -407,7 +407,7 @@ void SynPatternPoint::LoadTxt(
             const SynPattern * pattern = compilation_context.GetPattern();
             const int id_language = pattern->GetLanguageId();
 
-            // если указан язык для паттерна, то из описания языка возьмем символьные подстановки
+            // РµСЃР»Рё СѓРєР°Р·Р°РЅ СЏР·С‹Рє РґР»СЏ РїР°С‚С‚РµСЂРЅР°, С‚Рѕ РёР· РѕРїРёСЃР°РЅРёСЏ СЏР·С‹РєР° РІРѕР·СЊРјРµРј СЃРёРјРІРѕР»СЊРЅС‹Рµ РїРѕРґСЃС‚Р°РЅРѕРІРєРё
             if( id_language!=UNKNOWN )
             {
                 const SG_Language &lang = dict.GetSynGram().languages()[id_language];
@@ -527,10 +527,10 @@ void SynPatternPoint::LoadTxt(
     }
 
 
-    // Вместо функциональной записи @mark(xxx,yyy) может быть использована yyy=xxx
-    // Но с ограничением: если у xxx есть секция экспорта, то во избежание неправильного сопоставления следует использовать
-    // старую форму @mark.
-    // 06.03.2012 - расширил синтаксический сахар, теперь yyy=xxx:export{...} обрабатывается как @mark(xxx,yyy):export{}
+    // Р’РјРµСЃС‚Рѕ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕР№ Р·Р°РїРёСЃРё @mark(xxx,yyy) РјРѕР¶РµС‚ Р±С‹С‚СЊ РёСЃРїРѕР»СЊР·РѕРІР°РЅР° yyy=xxx
+    // РќРѕ СЃ РѕРіСЂР°РЅРёС‡РµРЅРёРµРј: РµСЃР»Рё Сѓ xxx РµСЃС‚СЊ СЃРµРєС†РёСЏ СЌРєСЃРїРѕСЂС‚Р°, С‚Рѕ РІРѕ РёР·Р±РµР¶Р°РЅРёРµ РЅРµРїСЂР°РІРёР»СЊРЅРѕРіРѕ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ СЃР»РµРґСѓРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+    // СЃС‚Р°СЂСѓСЋ С„РѕСЂРјСѓ @mark.
+    // 06.03.2012 - СЂР°СЃС€РёСЂРёР» СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёР№ СЃР°С…Р°СЂ, С‚РµРїРµСЂСЊ yyy=xxx:export{...} РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ РєР°Рє @mark(xxx,yyy):export{}
     if( !in_quotes(t1.string()) && !in_apostrophes(t1.string()) )
     {
         if( txtfile.probe( B_EQUAL ) )
@@ -573,11 +573,11 @@ void SynPatternPoint::LoadTxt(
 
     if( compilation_context.IsWordEntrySet(class_name) )
     {
-        // Фактически это синтаксический сахар для вызова функции @in_wordentry_set(...)
+        // Р¤Р°РєС‚РёС‡РµСЃРєРё СЌС‚Рѕ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёР№ СЃР°С…Р°СЂ РґР»СЏ РІС‹Р·РѕРІР° С„СѓРЅРєС†РёРё @in_wordentry_set(...)
         function_name = L"in_wordentry_set";
         str_arg = class_name;
 
-        // может идти доп. фильтр по координатам
+        // РјРѕР¶РµС‚ РёРґС‚Рё РґРѕРї. С„РёР»СЊС‚СЂ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
         if( txtfile.probe( B_OFIGPAREN ) )
         {
             LoadPreciser(
@@ -593,7 +593,7 @@ void SynPatternPoint::LoadTxt(
                 );
         }
 
-        // опциональный список ре-экспортируемых координат
+        // РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Р№ СЃРїРёСЃРѕРє СЂРµ-СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹С… РєРѕРѕСЂРґРёРЅР°С‚
         if( ParseExportSection )
             LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
@@ -606,7 +606,7 @@ void SynPatternPoint::LoadTxt(
         function_name = L"in_word_set";
         str_arg = class_name;
 
-        // может идти доп. фильтр по координатам
+        // РјРѕР¶РµС‚ РёРґС‚Рё РґРѕРї. С„РёР»СЊС‚СЂ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
         if( txtfile.probe( B_OFIGPAREN ) )
         {
             LoadPreciser(
@@ -634,7 +634,7 @@ void SynPatternPoint::LoadTxt(
         function_name = L"in_wordform_set";
         str_arg = class_name;
 
-        // может идти доп. фильтр по координатам
+        // РјРѕР¶РµС‚ РёРґС‚Рё РґРѕРї. С„РёР»СЊС‚СЂ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
         if( txtfile.probe( B_OFIGPAREN ) )
         {
             LoadPreciser(
@@ -662,7 +662,7 @@ void SynPatternPoint::LoadTxt(
         function_name = L"in_collocation_set";
         str_arg = class_name;
 
-        // может идти доп. фильтр по координатам
+        // РјРѕР¶РµС‚ РёРґС‚Рё РґРѕРї. С„РёР»СЊС‚СЂ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
         if( txtfile.probe( B_OFIGPAREN ) )
         {
             LoadPreciser(
@@ -687,7 +687,7 @@ void SynPatternPoint::LoadTxt(
 
     if( pattern_declarations.IsPatternName(class_name) )
     {
-        // Будет вызвано именованое дерево.
+        // Р‘СѓРґРµС‚ РІС‹Р·РІР°РЅРѕ РёРјРµРЅРѕРІР°РЅРѕРµ РґРµСЂРµРІРѕ.
         lem::UCString tree_name = class_name;
         id_tree = pattern_declarations.GetPatternID(tree_name);
 
@@ -695,8 +695,8 @@ void SynPatternPoint::LoadTxt(
 
         if( pattern_options.IsTopDown() && compilation_context.GetPointNumber()==0 && compilation_context.GetPatternName().eqi(tree_name) )
         {
-            // первая опорная точка ссылается на свой же паттерн - это приведет к бесконечной
-            // головной рекурсии. Леворекурсивные правила разрешены только для правил восходящего анализа.
+            // РїРµСЂРІР°СЏ РѕРїРѕСЂРЅР°СЏ С‚РѕС‡РєР° СЃСЃС‹Р»Р°РµС‚СЃСЏ РЅР° СЃРІРѕР№ Р¶Рµ РїР°С‚С‚РµСЂРЅ - СЌС‚Рѕ РїСЂРёРІРµРґРµС‚ Рє Р±РµСЃРєРѕРЅРµС‡РЅРѕР№
+            // РіРѕР»РѕРІРЅРѕР№ СЂРµРєСѓСЂСЃРёРё. Р›РµРІРѕСЂРµРєСѓСЂСЃРёРІРЅС‹Рµ РїСЂР°РІРёР»Р° СЂР°Р·СЂРµС€РµРЅС‹ С‚РѕР»СЊРєРѕ РґР»СЏ РїСЂР°РІРёР» РІРѕСЃС…РѕРґСЏС‰РµРіРѕ Р°РЅР°Р»РёР·Р°.
             lem::Iridium::Print_Error(point_begin,txtfile);
             dict.GetIO().merr().printf( "Possibly infinite recursion with pattern [%vfE%us%vn]\n", tree_name.c_str() );
             throw lem::E_BaseException();
@@ -704,7 +704,7 @@ void SynPatternPoint::LoadTxt(
 
         greedy = pattern_options.IsGreedy();
 
-        // Могут быть заданы требования на экспортируемые вызываемым деревом координаты.
+        // РњРѕРіСѓС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅС‹ С‚СЂРµР±РѕРІР°РЅРёСЏ РЅР° СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹Рµ РІС‹Р·С‹РІР°РµРјС‹Рј РґРµСЂРµРІРѕРј РєРѕРѕСЂРґРёРЅР°С‚С‹.
         if( txtfile.probe( B_OFIGPAREN ) )
         {
             int id_class_dummy=UNKNOWN;
@@ -720,7 +720,7 @@ void SynPatternPoint::LoadTxt(
                 set_checkers
                 );
 
-            // Проверим, что проверяемые координаты действительно экспортируются группой паттернов.
+            // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ РїСЂРѕРІРµСЂСЏРµРјС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂСѓСЋС‚СЃСЏ РіСЂСѓРїРїРѕР№ РїР°С‚С‚РµСЂРЅРѕРІ.
             for( lem::Container::size_type k=0; k<coords.size(); ++k )
             {
                 if( !pattern_options.GetExport().ContainsCoord( coords[k].GetPair().GetCoord().GetIndex() ) )
@@ -733,14 +733,14 @@ void SynPatternPoint::LoadTxt(
             }
         }
 
-        // опциональный список ре-экспортируемых координат
+        // РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Р№ СЃРїРёСЃРѕРє СЂРµ-СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹С… РєРѕРѕСЂРґРёРЅР°С‚
         if( ParseExportSection )
         {
             LoadExportTxt( dict, txtfile, pattern_declarations, compilation_context, functions );
 
             if( export_section!=NULL )
             {
-                // Проверим, что экспортируемые координаты экспортируются вызываемым паттерном.
+                // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ СЌРєСЃРїРѕСЂС‚РёСЂСѓСЋС‚СЃСЏ РІС‹Р·С‹РІР°РµРјС‹Рј РїР°С‚С‚РµСЂРЅРѕРј.
                 for( lem::Container::size_type k=0; k<export_section->export_coords.size(); ++k )
                 {
                     if( !pattern_options.GetExport().ContainsCoord( export_section->export_coords[k] ) )
@@ -760,21 +760,21 @@ void SynPatternPoint::LoadTxt(
 
     if( functions.IsFunction(class_name) )
     {
-        // это вызов функции для проверки любых свойств словоформы. при этом доступны следующие локальные
-        // переменные:
+        // СЌС‚Рѕ РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё РґР»СЏ РїСЂРѕРІРµСЂРєРё Р»СЋР±С‹С… СЃРІРѕР№СЃС‚РІ СЃР»РѕРІРѕС„РѕСЂРјС‹. РїСЂРё СЌС‚РѕРј РґРѕСЃС‚СѓРїРЅС‹ СЃР»РµРґСѓСЋС‰РёРµ Р»РѕРєР°Р»СЊРЅС‹Рµ
+        // РїРµСЂРµРјРµРЅРЅС‹Рµ:
         //
-        // _ проверямая словоформа
-        // _0 текущий анализируемый вариатор
-        // _i позиция текущей словоформы
+        // _ РїСЂРѕРІРµСЂСЏРјР°СЏ СЃР»РѕРІРѕС„РѕСЂРјР°
+        // _0 С‚РµРєСѓС‰РёР№ Р°РЅР°Р»РёР·РёСЂСѓРµРјС‹Р№ РІР°СЂРёР°С‚РѕСЂ
+        // _i РїРѕР·РёС†РёСЏ С‚РµРєСѓС‰РµР№ СЃР»РѕРІРѕС„РѕСЂРјС‹
 
         TrKnownVars known_vars( &functions.global_known_vars );
 
-        // Объявленные оператором declare внутри правила переменные-маркировки.
+        // РћР±СЉСЏРІР»РµРЅРЅС‹Рµ РѕРїРµСЂР°С‚РѕСЂРѕРј declare РІРЅСѓС‚СЂРё РїСЂР°РІРёР»Р° РїРµСЂРµРјРµРЅРЅС‹Рµ-РјР°СЂРєРёСЂРѕРІРєРё.
         //for( lem::Container::size_type i=0; i<compilation_context.GetContext().GetVars().size(); ++i )
         //known_vars.RegisterVar( TrTreesType(), compilation_context.GetContext().GetVars()[i] );
 
-        known_vars.RegisterVar( TrTreesType(), L"_" ); // проверямая словоформа
-        known_vars.RegisterVar( TrTreesType(), L"_0" ); // текущий анализируемый вариатор
+        known_vars.RegisterVar( TrTreesType(), L"_" ); // РїСЂРѕРІРµСЂСЏРјР°СЏ СЃР»РѕРІРѕС„РѕСЂРјР°
+        known_vars.RegisterVar( TrTreesType(), L"_0" ); // С‚РµРєСѓС‰РёР№ Р°РЅР°Р»РёР·РёСЂСѓРµРјС‹Р№ РІР°СЂРёР°С‚РѕСЂ
         known_vars.RegisterVar( TrIntType(), L"_i" );
 
         txtfile.seekp( t1 );
@@ -815,7 +815,7 @@ void SynPatternPoint::LoadTxt(
     {
         if( (iclass=dict.GetSynGram().FindClass(class_name))==UNKNOWN )
         {
-            // Выводим сообщение о неверном имени синтаксического класса/неизвестном слове.
+            // Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РЅРµРІРµСЂРЅРѕРј РёРјРµРЅРё СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°/РЅРµРёР·РІРµСЃС‚РЅРѕРј СЃР»РѕРІРµ.
             lem::Iridium::Print_Error(t1,txtfile);
 
             dict.GetIO().merr().printf(
@@ -831,36 +831,36 @@ void SynPatternPoint::LoadTxt(
             lem::Iridium::BSourceState ebeg = txtfile.tellp();
             const UCString mname=sol_read_multyname( dict.GetIO(), txtfile, B_OFIGPAREN );
 
-            // Имеем пару класс:имя_статьи
+            // РРјРµРµРј РїР°СЂСѓ РєР»Р°СЃСЃ:РёРјСЏ_СЃС‚Р°С‚СЊРё
 
-            // Пытаемся найти статью.
+            // РџС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё СЃС‚Р°С‚СЊСЋ.
             if( mname.front()!=sol_get_token(B_ANY) )
             {
-                // Считан НЕ квантор всеобщности, так что это должно
-                // быть имя статьи.
-                // Попытаемся найти статью среди уже загруженных, причем
-                // ищем с критерием принадлежности определенному синтаксическому
-                // классу.
+                // РЎС‡РёС‚Р°РЅ РќР• РєРІР°РЅС‚РѕСЂ РІСЃРµРѕР±С‰РЅРѕСЃС‚Рё, С‚Р°Рє С‡С‚Рѕ СЌС‚Рѕ РґРѕР»Р¶РЅРѕ
+                // Р±С‹С‚СЊ РёРјСЏ СЃС‚Р°С‚СЊРё.
+                // РџРѕРїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё СЃС‚Р°С‚СЊСЋ СЃСЂРµРґРё СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С…, РїСЂРёС‡РµРј
+                // РёС‰РµРј СЃ РєСЂРёС‚РµСЂРёРµРј РїСЂРёРЅР°РґР»РµР¶РЅРѕСЃС‚Рё РѕРїСЂРµРґРµР»РµРЅРЅРѕРјСѓ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРјСѓ
+                // РєР»Р°СЃСЃСѓ.
 
                 const int ientry=dict.GetSynGram().FindEntry(mname,iclass,false);
 
-                // Нашли ?
+                // РќР°С€Р»Рё ?
                 if( ientry==UNKNOWN )
                 {
-                    // Нет! Выводим сообщение об неверном имени словарной статьи.
+                    // РќРµС‚! Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РЅРµРІРµСЂРЅРѕРј РёРјРµРЅРё СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
                     lem::Iridium::Print_Error(ebeg,txtfile);
                     dict.GetIO().merr().printf( "The entry [%vfE%us%vn] is not previously declared in grammar\n", mname.c_str() );
                     throw E_BaseException();
                 }
                 else
                 { 
-                    // Запомним КЛЮЧ словарной статьи.
+                    // Р—Р°РїРѕРјРЅРёРј РљР›Р®Р§ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
                     ekey = ientry;
                     iclass = UNKNOWN;
                 }
             }
 
-            // Далее идут координаты в {}
+            // Р”Р°Р»РµРµ РёРґСѓС‚ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ {}
             LoadPreciser(
                 dict.GetLexAuto(),
                 dict.GetSynGram(),
@@ -875,7 +875,7 @@ void SynPatternPoint::LoadTxt(
         }
         else
         {
-            // Указан только грамматический класс, без статьи.
+            // РЈРєР°Р·Р°РЅ С‚РѕР»СЊРєРѕ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёР№ РєР»Р°СЃСЃ, Р±РµР· СЃС‚Р°С‚СЊРё.
             ekey=UNKNOWN;
 
             if( txtfile.probe( B_OFIGPAREN ) )
@@ -902,7 +902,7 @@ void SynPatternPoint::LoadTxt(
 }
 
 
-// Парсим описание элементов в секции экспорта
+// РџР°СЂСЃРёРј РѕРїРёСЃР°РЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃРµРєС†РёРё СЌРєСЃРїРѕСЂС‚Р°
 void SynPatternPoint::LoadExportTxt(
     Dictionary &dict,
     lem::Iridium::Macro_Parser & txtfile,
@@ -953,15 +953,15 @@ void SynPatternPoint::LoadPreciser(
             break;
         }
 
-        // опциональные доп. атрибуты - штраф за нарушение условий.
+        // РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Рµ РґРѕРї. Р°С‚СЂРёР±СѓС‚С‹ - С€С‚СЂР°С„ Р·Р° РЅР°СЂСѓС€РµРЅРёРµ СѓСЃР»РѕРІРёР№.
         ViolationHandler violation_handler;
         violation_handler.LoadTxt(txtfile);
 
 
-        // Может быть вызов проверяющей императивной функции
+        // РњРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹Р·РѕРІ РїСЂРѕРІРµСЂСЏСЋС‰РµР№ РёРјРїРµСЂР°С‚РёРІРЅРѕР№ С„СѓРЅРєС†РёРё
         lem::Iridium::BethToken correl_fun_name = txtfile.read();
 
-        //if( correl_fun_name.string()==L"НеМестоимениеОтладка" )
+        //if( correl_fun_name.string()==L"РќРµРњРµСЃС‚РѕРёРјРµРЅРёРµРћС‚Р»Р°РґРєР°" )
         //lem::mout->printf( "DEBUG!!!" );
 
         if( functions.IsFunction(correl_fun_name.string()) )
@@ -983,11 +983,11 @@ void SynPatternPoint::LoadPreciser(
             //txtfile.read_it( B_OFIGPAREN );
             //txtfile.seekp(b);
 
-            // Объявленные оператором declare внутри правила переменные-маркировки.
+            // РћР±СЉСЏРІР»РµРЅРЅС‹Рµ РѕРїРµСЂР°С‚РѕСЂРѕРј declare РІРЅСѓС‚СЂРё РїСЂР°РІРёР»Р° РїРµСЂРµРјРµРЅРЅС‹Рµ-РјР°СЂРєРёСЂРѕРІРєРё.
             //for( lem::Container::size_type i=0; i<compilation_context.GetContext().GetVars().size(); ++i )
             // known_vars.RegisterVar( TrTreesType(), compilation_context.GetContext().GetVars()[i] );
 
-            known_vars.RegisterVar( TrTreesType(), L"_" ); // проверямая словоформа
+            known_vars.RegisterVar( TrTreesType(), L"_" ); // РїСЂРѕРІРµСЂСЏРјР°СЏ СЃР»РѕРІРѕС„РѕСЂРјР°
 
             correl_fun = functions.CompileCall( la, txtfile, known_vars );
 
@@ -1001,7 +1001,7 @@ void SynPatternPoint::LoadPreciser(
 
 
 
-        // может быть задание простой проверки на связь в тезаурусе
+        // РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅРёРµ РїСЂРѕСЃС‚РѕР№ РїСЂРѕРІРµСЂРєРё РЅР° СЃРІСЏР·СЊ РІ С‚РµР·Р°СѓСЂСѓСЃРµ
         if( txtfile.pick().GetToken()==B_OTRIPAREN )
         {
             if( ThesaurusCheck_Link!=UNKNOWN )
@@ -1014,7 +1014,7 @@ void SynPatternPoint::LoadPreciser(
             Solarix::Tree_Link link( txtfile, sg );
             ThesaurusCheck_Link = link.GetState();
 
-            // далее идет спецификация словарной статьи.
+            // РґР°Р»РµРµ РёРґРµС‚ СЃРїРµС†РёС„РёРєР°С†РёСЏ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
             lem::Iridium::BethToken class_name = txtfile.read();
             const int iclass=sg.FindClass(class_name.string());
             if( iclass==UNKNOWN )
@@ -1030,13 +1030,13 @@ void SynPatternPoint::LoadPreciser(
             const UCString mname=sol_read_multyname( sg.GetIO(), txtfile, B_OFIGPAREN );
             txtfile.read_it( B_CFIGPAREN );
 
-            // Имеем пару класс:имя_статьи
+            // РРјРµРµРј РїР°СЂСѓ РєР»Р°СЃСЃ:РёРјСЏ_СЃС‚Р°С‚СЊРё
             ThesaurusCheck_Entry=sg.FindEntry(mname,iclass,false);
 
-            // Нашли ?
+            // РќР°С€Р»Рё ?
             if( ThesaurusCheck_Entry==UNKNOWN )
             {
-                // Нет! Выводим сообщение об неверном имени словарной статьи.
+                // РќРµС‚! Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РЅРµРІРµСЂРЅРѕРј РёРјРµРЅРё СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
                 lem::Iridium::Print_Error(ebeg,txtfile);
                 sg.GetIO().merr().printf( "The entry [%us:%vfE%us%vn] is not previously declared in grammar\n", class_name.string().c_str(), mname.c_str() );
                 throw lem::E_BaseException();
@@ -1046,7 +1046,7 @@ void SynPatternPoint::LoadPreciser(
         }
 
 
-        // проверка значения флагов токенизатора
+        // РїСЂРѕРІРµСЂРєР° Р·РЅР°С‡РµРЅРёСЏ С„Р»Р°РіРѕРІ С‚РѕРєРµРЅРёР·Р°С‚РѕСЂР°
         if( txtfile.probe(L"tokenizer_flag") )
         {
             txtfile.read_it( B_COLON );
@@ -1071,16 +1071,16 @@ void SynPatternPoint::LoadPreciser(
         }
 
 
-        // для обычных: координата:состояние
-        // для бистабильных: координата
-        // для согласования с координатами в именованных точках слева =имя_точки:координата
-        // расширенный формат описания согласования с именованными точками =имя_коорд->имя_точки:имя_коорд
-        // Может быть имя множества лексем или статей, или отрицание.
+        // РґР»СЏ РѕР±С‹С‡РЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°:СЃРѕСЃС‚РѕСЏРЅРёРµ
+        // РґР»СЏ Р±РёСЃС‚Р°Р±РёР»СЊРЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°
+        // РґР»СЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё РІ РёРјРµРЅРѕРІР°РЅРЅС‹С… С‚РѕС‡РєР°С… СЃР»РµРІР° =РёРјСЏ_С‚РѕС‡РєРё:РєРѕРѕСЂРґРёРЅР°С‚Р°
+        // СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ С„РѕСЂРјР°С‚ РѕРїРёСЃР°РЅРёСЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ РёРјРµРЅРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё =РёРјСЏ_РєРѕРѕСЂРґ->РёРјСЏ_С‚РѕС‡РєРё:РёРјСЏ_РєРѕРѕСЂРґ
+        // РњРѕР¶РµС‚ Р±С‹С‚СЊ РёРјСЏ РјРЅРѕР¶РµСЃС‚РІР° Р»РµРєСЃРµРј РёР»Рё СЃС‚Р°С‚РµР№, РёР»Рё РѕС‚СЂРёС†Р°РЅРёРµ.
 
         lem::Iridium::BethToken coord_name = txtfile.read();
 
 
-        // Если задано имя факта в базе знаний, то загружаем директиву обращения к БЗ
+        // Р•СЃР»Рё Р·Р°РґР°РЅРѕ РёРјСЏ С„Р°РєС‚Р° РІ Р±Р°Р·Рµ Р·РЅР°РЅРёР№, С‚Рѕ Р·Р°РіСЂСѓР¶Р°РµРј РґРёСЂРµРєС‚РёРІСѓ РѕР±СЂР°С‰РµРЅРёСЏ Рє Р‘Р—
         if( la.GetKnowledgeBase().FindFacts( coord_name.string() )!=UNKNOWN )
         {
             txtfile.seekp( coord_name );
@@ -1175,7 +1175,7 @@ void SynPatternPoint::LoadPreciser(
 
         if( coord_name.GetToken()==B_NEGATIVE )
         {
-            // Оператор отрицания перед определением координаты!
+            // РћРїРµСЂР°С‚РѕСЂ РѕС‚СЂРёС†Р°РЅРёСЏ РїРµСЂРµРґ РѕРїСЂРµРґРµР»РµРЅРёРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹!
             AFFIRM=false;
             coord_name = txtfile.read();
         }
@@ -1241,24 +1241,24 @@ void SynPatternPoint::LoadPreciser(
 
         if( sg.coords()[iglob_coord.GetIndex()].IsBistable() )
         {
-            // Имя состояния не может быть указано.
+            // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅРѕ.
             pair_checker.pair = GramCoordPair(iglob_coord,AFFIRM);
             coords2.push_back(pair_checker);
         }
         else
         {
-            // После двоеточия должно идти имя состояния для координаты.
+            // РџРѕСЃР»Рµ РґРІРѕРµС‚РѕС‡РёСЏ РґРѕР»Р¶РЅРѕ РёРґС‚Рё РёРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РєРѕРѕСЂРґРёРЅР°С‚С‹.
             txtfile.read_it(B_COLON);
 
-            // Имя состояния.
+            // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ.
             BethToken state_name = txtfile.read();
 
-            // Получим индекс состояния для определенной координаты.
+            // РџРѕР»СѓС‡РёРј РёРЅРґРµРєСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹.
             const int istate = sg.coords()[iglob_coord.GetIndex()]
                 .FindState(state_name.string());
             if( istate==UNKNOWN )
             {
-                // Нет такого состояния для этого измерения.
+                // РќРµС‚ С‚Р°РєРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ СЌС‚РѕРіРѕ РёР·РјРµСЂРµРЅРёСЏ.
                 lem::Iridium::Print_Error(state_name,txtfile);
                 sg.GetIO().merr().printf(
                     "State [%vfE%us%vn] is not declared for coordinate [%vfE%us%vn]\n"
@@ -1385,12 +1385,12 @@ void SynPatternPoint::LoadBin( lem::Stream& bin )
 
     if(function_name.eqi( L"regex" ))
     {
-        // с игнорированием регистра
+        // СЃ РёРіРЅРѕСЂРёСЂРѕРІР°РЅРёРµРј СЂРµРіРёСЃС‚СЂР°
         rx = boost::wregex( rx_string.c_str(), boost::regex_constants::icase );
     }
     else if(function_name.eqi( L"regex_strict" ))
     {
-        // с точным учетом регистра
+        // СЃ С‚РѕС‡РЅС‹Рј СѓС‡РµС‚РѕРј СЂРµРіРёСЃС‚СЂР°
         rx = boost::wregex( rx_string.c_str() );
     }
 
@@ -1806,8 +1806,8 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
             {
                 if(function_name.eqi( L"coalesce" ))
                 {
-                    // Делаем ветвление, пусть будет 2 результата - один с входящей точкой, другой без нее.
-                    // Копируем успешные сопоставления, если они есть
+                    // Р”РµР»Р°РµРј РІРµС‚РІР»РµРЅРёРµ, РїСѓСЃС‚СЊ Р±СѓРґРµС‚ 2 СЂРµР·СѓР»СЊС‚Р°С‚Р° - РѕРґРёРЅ СЃ РІС…РѕРґСЏС‰РµР№ С‚РѕС‡РєРѕР№, РґСЂСѓРіРѕР№ Р±РµР· РЅРµРµ.
+                    // РљРѕРїРёСЂСѓРµРј СѓСЃРїРµС€РЅС‹Рµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ
                     for(lem::Container::size_type i = 0; i < subresults.size(); ++i)
                     {
                         if(pattern_constraints != NULL)
@@ -1826,7 +1826,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                         }
                     }
 
-                    // делаем успешное сопоставление нулевой длины
+                    // РґРµР»Р°РµРј СѓСЃРїРµС€РЅРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РЅСѓР»РµРІРѕР№ РґР»РёРЅС‹
                     SynPatternResult *r = new SynPatternResult( parent_trace );
 
                     r->res = SynPatternMatchResult( true, 0, current_token, current_token->GetPrev(), NGramScore( 0 ) );
@@ -1912,7 +1912,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                 LEM_CHECKIT_Z( current_token->GetPrev() != NULL );
 
-                // успешное сопоставление нулевой длины
+                // СѓСЃРїРµС€РЅРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РЅСѓР»РµРІРѕР№ РґР»РёРЅС‹
                 //r->res = SynPatternMatchResult(true,0,current_token,current_token->GetPrev(),NGramScore(0));
                 r->res = SynPatternMatchResult( true, 0, current_token, current_token, NGramScore( 0 ) );
 
@@ -1947,8 +1947,8 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
         }
         else
         {
-            // остальные функции не могут работать за пределами вариатора, поэтому проверяем положение
-            // курсора и сразу возвращаем false, если мы на правой границе.
+            // РѕСЃС‚Р°Р»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё РЅРµ РјРѕРіСѓС‚ СЂР°Р±РѕС‚Р°С‚СЊ Р·Р° РїСЂРµРґРµР»Р°РјРё РІР°СЂРёР°С‚РѕСЂР°, РїРѕСЌС‚РѕРјСѓ РїСЂРѕРІРµСЂСЏРµРј РїРѕР»РѕР¶РµРЅРёРµ
+            // РєСѓСЂСЃРѕСЂР° Рё СЃСЂР°Р·Сѓ РІРѕР·РІСЂР°С‰Р°РµРј false, РµСЃР»Рё РјС‹ РЅР° РїСЂР°РІРѕР№ РіСЂР°РЅРёС†Рµ.
             if(current_token->IsBeyondRight())
             {
 #if defined SOL_DEBUGGING
@@ -2080,7 +2080,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                     const Word_Form *alt = wf.GetVersion( ialt );
                     if(wordentry_sets.FindWordEntrySet( str_arg, alt->GetEntryKey() ))
                     {
-                        // Одна из альтернатив попала под условия.
+                        // РћРґРЅР° РёР· Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РїРѕРїР°Р»Р° РїРѕРґ СѓСЃР»РѕРІРёСЏ.
                         res = false;
                         break;
                     }
@@ -2130,16 +2130,16 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                 const lem::UCString & alt_word = *wf.GetName();
 
-                // это слово может быть началом словосочетания?
+                // СЌС‚Рѕ СЃР»РѕРІРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°С‡Р°Р»РѕРј СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёСЏ?
                 int min_len = 0, max_len = 0;
                 if(wordentry_sets.IsCollocationHeadword( alt_word, min_len, max_len ))
                 {
-                    // да. собираем пробные словосочетаний, с учетом максимальной и минимальной длины и размеров
-                    // оставшегося хвоста предложения.
+                    // РґР°. СЃРѕР±РёСЂР°РµРј РїСЂРѕР±РЅС‹Рµ СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёР№, СЃ СѓС‡РµС‚РѕРј РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ Рё РјРёРЅРёРјР°Р»СЊРЅРѕР№ РґР»РёРЅС‹ Рё СЂР°Р·РјРµСЂРѕРІ
+                    // РѕСЃС‚Р°РІС€РµРіРѕСЃСЏ С…РІРѕСЃС‚Р° РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
 
-                    // запросим цепочку токенов длины до max_len, включая текущий токен.
-                    // Сначала получим несколько конечных токенов. Двигаясь от конечного токена влево до current_token,
-                    // получаем слова для сопоставления со словосочетанием.
+                    // Р·Р°РїСЂРѕСЃРёРј С†РµРїРѕС‡РєСѓ С‚РѕРєРµРЅРѕРІ РґР»РёРЅС‹ РґРѕ max_len, РІРєР»СЋС‡Р°СЏ С‚РµРєСѓС‰РёР№ С‚РѕРєРµРЅ.
+                    // РЎРЅР°С‡Р°Р»Р° РїРѕР»СѓС‡РёРј РЅРµСЃРєРѕР»СЊРєРѕ РєРѕРЅРµС‡РЅС‹С… С‚РѕРєРµРЅРѕРІ. Р”РІРёРіР°СЏСЃСЊ РѕС‚ РєРѕРЅРµС‡РЅРѕРіРѕ С‚РѕРєРµРЅР° РІР»РµРІРѕ РґРѕ current_token,
+                    // РїРѕР»СѓС‡Р°РµРј СЃР»РѕРІР° РґР»СЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ СЃРѕ СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёРµРј.
                     lem::MCollect<const LexerTextPos*> final_tokens;
                     lexer.FetchN( current_token, max_len - 1, final_tokens );
 
@@ -2157,7 +2157,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                     lem::MCollect<const LexerTextPos*> all_collocation_tokens;
                     lem::MCollect<lem::UCString> collocation_words;
 
-                    // Каждый концевик final_tokens анализируем отдельно.
+                    // РљР°Р¶РґС‹Р№ РєРѕРЅС†РµРІРёРє final_tokens Р°РЅР°Р»РёР·РёСЂСѓРµРј РѕС‚РґРµР»СЊРЅРѕ.
                     for(lem::Container::size_type t = 0; t < final_tokens.size(); ++t)
                     {
                         const LexerTextPos * final_token = final_tokens[t];
@@ -2186,15 +2186,15 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                         const int max_len2 = std::min( max_len, tail );
 
-                        // Теперь формируем пробные словосочетания разной длины и проверяем их вхождение в набор.
-                        // уменьшаем длину пробного словосочетания - так что можно просто убирать постепенно правый элемент.
+                        // РўРµРїРµСЂСЊ С„РѕСЂРјРёСЂСѓРµРј РїСЂРѕР±РЅС‹Рµ СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёСЏ СЂР°Р·РЅРѕР№ РґР»РёРЅС‹ Рё РїСЂРѕРІРµСЂСЏРµРј РёС… РІС…РѕР¶РґРµРЅРёРµ РІ РЅР°Р±РѕСЂ.
+                        // СѓРјРµРЅСЊС€Р°РµРј РґР»РёРЅСѓ РїСЂРѕР±РЅРѕРіРѕ СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёСЏ - С‚Р°Рє С‡С‚Рѕ РјРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ СѓР±РёСЂР°С‚СЊ РїРѕСЃС‚РµРїРµРЅРЅРѕ РїСЂР°РІС‹Р№ СЌР»РµРјРµРЅС‚.
                         for(int collocation_len = max_len2; collocation_len >= min_len; --collocation_len)
                         {
                             collocation_words.resize( collocation_len );
 
                             if(wordentry_sets.FindCollocation( str_arg, collocation_words ))
                             {
-                                // Эта комбинация подходит!
+                                // Р­С‚Р° РєРѕРјР±РёРЅР°С†РёСЏ РїРѕРґС…РѕРґРёС‚!
 
                                 res = true;
                                 SynPatternResult *r = new SynPatternResult( parent_trace );
@@ -2234,7 +2234,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                                 }
 
 
-                                // Генерируем связи от головного слова последовательно через все слова.
+                                // Р“РµРЅРµСЂРёСЂСѓРµРј СЃРІСЏР·Рё РѕС‚ РіРѕР»РѕРІРЅРѕРіРѕ СЃР»РѕРІР° РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕ С‡РµСЂРµР· РІСЃРµ СЃР»РѕРІР°.
                                 for(int ci = 0; ci < collocation_len - 1; ++ci)
                                 {
                                     const int iword2 = all_collocation_tokens.size() - 1 - ci;
@@ -2328,7 +2328,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
                     const Word_Form *alt = wf.GetVersion( ialt );
                     if(wordentry_sets.FindWordSet( str_arg, *alt->GetName() ))
                     {
-                        // Одна из альтернатив попала под условия.
+                        // РћРґРЅР° РёР· Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РїРѕРїР°Р»Р° РїРѕРґ СѓСЃР»РѕРІРёСЏ.
                         res = false;
                         break;
                     }
@@ -2449,8 +2449,8 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
             else if(function_name.eqi( L"untill" ))
             {
-                // Сдвигает курсор до тех пор, пока не найдется сопоставляющийся токен. Этот токен не включается в
-                // в результат, то есть курсор помещается на него.
+                // РЎРґРІРёРіР°РµС‚ РєСѓСЂСЃРѕСЂ РґРѕ С‚РµС… РїРѕСЂ, РїРѕРєР° РЅРµ РЅР°Р№РґРµС‚СЃСЏ СЃРѕРїРѕСЃС‚Р°РІР»СЏСЋС‰РёР№СЃСЏ С‚РѕРєРµРЅ. Р­С‚РѕС‚ С‚РѕРєРµРЅ РЅРµ РІРєР»СЋС‡Р°РµС‚СЃСЏ РІ
+                // РІ СЂРµР·СѓР»СЊС‚Р°С‚, С‚Рѕ РµСЃС‚СЊ РєСѓСЂСЃРѕСЂ РїРѕРјРµС‰Р°РµС‚СЃСЏ РЅР° РЅРµРіРѕ.
 
                 bool res = Match_Untill(
                     banned_id_tree,
@@ -2488,7 +2488,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
             }
             else if(function_name.eqi( L"noshift" ))
             {
-                // Эта функция проверяет, что с текущего места идет сопоставляемый фрагмент, но не сдвигает курсор.
+                // Р­С‚Р° С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ СЃ С‚РµРєСѓС‰РµРіРѕ РјРµСЃС‚Р° РёРґРµС‚ СЃРѕРїРѕСЃС‚Р°РІР»СЏРµРјС‹Р№ С„СЂР°РіРјРµРЅС‚, РЅРѕ РЅРµ СЃРґРІРёРіР°РµС‚ РєСѓСЂСЃРѕСЂ.
                 LEM_CHECKIT_Z( args.size() == 1 );
 
                 lem::PtrCollect<SynPatternResult> subresults;
@@ -2515,7 +2515,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                 if(x)
                 {
-                    // делаем успешное сопоставление нулевой длины
+                    // РґРµР»Р°РµРј СѓСЃРїРµС€РЅРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РЅСѓР»РµРІРѕР№ РґР»РёРЅС‹
                     SynPatternResult *r = new SynPatternResult( parent_trace );
 
                     r->res = SynPatternMatchResult( true, 0, current_token, current_token->GetPrev(), NGramScore( 0 ) );
@@ -2554,7 +2554,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
             else if(function_name.eqi( L"probe_left" ))
             {
-                // Эта функция проверяет, что слева (один ***по умолчанию*** токен слева) находится что-то, сопоставляющееся с аргументом.
+                // Р­С‚Р° С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ СЃР»РµРІР° (РѕРґРёРЅ ***РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ*** С‚РѕРєРµРЅ СЃР»РµРІР°) РЅР°С…РѕРґРёС‚СЃСЏ С‡С‚Рѕ-С‚Рѕ, СЃРѕРїРѕСЃС‚Р°РІР»СЏСЋС‰РµРµСЃСЏ СЃ Р°СЂРіСѓРјРµРЅС‚РѕРј.
                 LEM_CHECKIT_Z( args.size() == 1 );
 
                 lem::PtrCollect<SynPatternResult> subresults;
@@ -2586,7 +2586,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                 if(x)
                 {
-                    // делаем успешное сопоставление нулевой длины
+                    // РґРµР»Р°РµРј СѓСЃРїРµС€РЅРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РЅСѓР»РµРІРѕР№ РґР»РёРЅС‹
                     SynPatternResult *r = new SynPatternResult( parent_trace );
 
                     r->res = SynPatternMatchResult( true, 0, current_token, current_token->GetPrev(), NGramScore( 0 ) );
@@ -2695,9 +2695,9 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
             {
                 bool res = true;
 
-                // логика проверки такая.
-                // первая ветка - производитель экспортируемых наружу результатов.
-                // последующие ветки дополнительно фильтруют первую, но ничего наружу не отдают.
+                // Р»РѕРіРёРєР° РїСЂРѕРІРµСЂРєРё С‚Р°РєР°СЏ.
+                // РїРµСЂРІР°СЏ РІРµС‚РєР° - РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹С… РЅР°СЂСѓР¶Сѓ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ.
+                // РїРѕСЃР»РµРґСѓСЋС‰РёРµ РІРµС‚РєРё РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕ С„РёР»СЊС‚СЂСѓСЋС‚ РїРµСЂРІСѓСЋ, РЅРѕ РЅРёС‡РµРіРѕ РЅР°СЂСѓР¶Сѓ РЅРµ РѕС‚РґР°СЋС‚.
 
                 lem::PtrCollect<SynPatternResult> subresults1;
 
@@ -2867,7 +2867,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
 
                 if(x)
                 {
-                    // проверим, что все версии подошли.
+                    // РїСЂРѕРІРµСЂРёРј, С‡С‚Рѕ РІСЃРµ РІРµСЂСЃРёРё РїРѕРґРѕС€Р»Рё.
                     for(int iver = 0; iver < wf.VersionCount(); ++iver)
                     {
                         const Word_Form *alt = wf.GetVersion( iver );
@@ -2924,7 +2924,7 @@ bool SynPatternPoint::Equal_ThrowingExceptions(
     } // if( !function_name.empty() ) ...
     else if(id_tree != UNKNOWN)
     {
-        // Ссылка на именованное решающее дерево.
+        // РЎСЃС‹Р»РєР° РЅР° РёРјРµРЅРѕРІР°РЅРЅРѕРµ СЂРµС€Р°СЋС‰РµРµ РґРµСЂРµРІРѕ.
         return Match_NamedPatterns(
             banned_id_tree,
             pm, sg, experience, constraints, current_token, lexer, parent_trace, x_result,
@@ -3098,16 +3098,16 @@ bool SynPatternPoint::Execute_Mark(
 
             if(export_section != NULL)
             {
-                // маркировка может экспортировать что-то наружу, для этого применяется синтаксис:
-                // @mark( дерево, имя ) : export( координаты )
+                // РјР°СЂРєРёСЂРѕРІРєР° РјРѕР¶РµС‚ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°С‚СЊ С‡С‚Рѕ-С‚Рѕ РЅР°СЂСѓР¶Сѓ, РґР»СЏ СЌС‚РѕРіРѕ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ СЃРёРЅС‚Р°РєСЃРёСЃ:
+                // @mark( РґРµСЂРµРІРѕ, РёРјСЏ ) : export( РєРѕРѕСЂРґРёРЅР°С‚С‹ )
 
                 /*
-                       // состояния всех заданных координат
+                       // СЃРѕСЃС‚РѕСЏРЅРёСЏ РІСЃРµС… Р·Р°РґР°РЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
                        if( !export_section->export_coords.empty() )
                        {
                        if( !subresult_q->named_tree_invoked && !subresults[q]->matched_alts.empty() )
                        {
-                       // маркировка для одиночной словоформы (???)
+                       // РјР°СЂРєРёСЂРѕРІРєР° РґР»СЏ РѕРґРёРЅРѕС‡РЅРѕР№ СЃР»РѕРІРѕС„РѕСЂРјС‹ (???)
                        const int ialt = subresult_q->matched_alts.begin()->second;
                        const Word_Form * wf0 = subresult_q->matched_alts.begin()->first;
                        const Word_Form * alt = wf0->GetVersion(ialt);
@@ -3136,7 +3136,7 @@ bool SynPatternPoint::Execute_Mark(
                 {
                     if(!subresults[q]->matched_alts.empty())
                     {
-                        // маркировка для одиночной словоформы
+                        // РјР°СЂРєРёСЂРѕРІРєР° РґР»СЏ РѕРґРёРЅРѕС‡РЅРѕР№ СЃР»РѕРІРѕС„РѕСЂРјС‹
                         const int ialt = subresult_q->matched_alts.begin()->second;
                         const Word_Form * wf0 = subresult_q->matched_alts.begin()->first;
                         const Word_Form * alt = wf0->GetVersion( ialt );
@@ -3171,16 +3171,16 @@ bool SynPatternPoint::Execute_Mark(
                     }
                 }
 
-                // заданные координатные пары
+                // Р·Р°РґР°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рµ РїР°СЂС‹
                 export_section->ExportPairs_Unconditional( *r );
 
-                // именованные маркировки
+                // РёРјРµРЅРѕРІР°РЅРЅС‹Рµ РјР°СЂРєРёСЂРѕРІРєРё
                 if(!export_section->export_nodes.empty())
                 {
-                    // пробросим наружу также экспортируемые ссылки на словоформы
+                    // РїСЂРѕР±СЂРѕСЃРёРј РЅР°СЂСѓР¶Сѓ С‚Р°РєР¶Рµ СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹Рµ СЃСЃС‹Р»РєРё РЅР° СЃР»РѕРІРѕС„РѕСЂРјС‹
                     if(!subresult_q->named_tree_invoked && !subresult_q->matched_alts.empty())
                     {
-                        // маркировка для одиночной словоформы
+                        // РјР°СЂРєРёСЂРѕРІРєР° РґР»СЏ РѕРґРёРЅРѕС‡РЅРѕР№ СЃР»РѕРІРѕС„РѕСЂРјС‹
                         const int ialt = subresult_q->matched_alts.begin()->second;
                         const Word_Form * wf0 = subresult_q->matched_alts.begin()->first;
                         const Word_Form * alt = wf0->GetVersion( ialt );
@@ -3190,7 +3190,7 @@ bool SynPatternPoint::Execute_Mark(
                     }
                     else
                     {
-                        // Найдем в экспорте subresult нужные нам ссылки и перебросим их наружу
+                        // РќР°Р№РґРµРј РІ СЌРєСЃРїРѕСЂС‚Рµ subresult РЅСѓР¶РЅС‹Рµ РЅР°Рј СЃСЃС‹Р»РєРё Рё РїРµСЂРµР±СЂРѕСЃРёРј РёС… РЅР°СЂСѓР¶Сѓ
                         for(lem::Container::size_type p = 0; p < export_section->export_nodes.size(); ++p)
                         {
                             const lem::UCString & name_to_find = export_section->export_nodes[p].node_name;
@@ -3335,21 +3335,21 @@ bool SynPatternPoint::Match_NamedPatterns(
 
     const bool orig_token_matched = tree_matched;
 
-    // если разрешен пропуск токенов - то выполняем его, вне зависимости от успешности текущего сопоставления.
-    if(current_token0->IsRealWord() && can_skip_outer_tokens) // граничные токены не будем пропускать
+    // РµСЃР»Рё СЂР°Р·СЂРµС€РµРЅ РїСЂРѕРїСѓСЃРє С‚РѕРєРµРЅРѕРІ - С‚Рѕ РІС‹РїРѕР»РЅСЏРµРј РµРіРѕ, РІРЅРµ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СѓСЃРїРµС€РЅРѕСЃС‚Рё С‚РµРєСѓС‰РµРіРѕ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ.
+    if(current_token0->IsRealWord() && can_skip_outer_tokens) // РіСЂР°РЅРёС‡РЅС‹Рµ С‚РѕРєРµРЅС‹ РЅРµ Р±СѓРґРµРј РїСЂРѕРїСѓСЃРєР°С‚СЊ
     {
         lem::MCollect<const LexerTextPos *> current_tokens;
         lem::MCollect<int> skip_scores;
         lem::MCollect<SynPatternResult*> skipped_results;
 
-        lem::PtrCollect<SynPatternResult> gc_skipped_results; // для сборки мусора
+        lem::PtrCollect<SynPatternResult> gc_skipped_results; // РґР»СЏ СЃР±РѕСЂРєРё РјСѓСЃРѕСЂР°
 
         lem::PtrCollect<SynPatternResult> skiprule_results;
 
         const int MAX_ALTS = lexer.GetParams().timeout.max_alt;
 
-        // проход №1 - пропуск по правилам
-        // проход №2 - пропуск любых токенов
+        // РїСЂРѕС…РѕРґ в„–1 - РїСЂРѕРїСѓСЃРє РїРѕ РїСЂР°РІРёР»Р°Рј
+        // РїСЂРѕС…РѕРґ в„–2 - РїСЂРѕРїСѓСЃРє Р»СЋР±С‹С… С‚РѕРєРµРЅРѕРІ
         for(int skip_pass = 0; skip_pass < 2; skip_pass++)
         {
             current_tokens.clear();
@@ -3363,8 +3363,8 @@ bool SynPatternPoint::Match_NamedPatterns(
             {
                 if((can_skip_outer_tokens && lexer.GetParams().CanSkipOuterTokens()) && lexer.GetParams().MaxSkipToken > 0)
                 {
-                    // разрешен пропуск любых токенов.
-                    // мы пропустим от 1 до макс. значения участок от current_token0.
+                    // СЂР°Р·СЂРµС€РµРЅ РїСЂРѕРїСѓСЃРє Р»СЋР±С‹С… С‚РѕРєРµРЅРѕРІ.
+                    // РјС‹ РїСЂРѕРїСѓСЃС‚РёРј РѕС‚ 1 РґРѕ РјР°РєСЃ. Р·РЅР°С‡РµРЅРёСЏ СѓС‡Р°СЃС‚РѕРє РѕС‚ current_token0.
                     const int MAX_SKIP_TOKEN = lexer.GetParams().MaxSkipToken;
 
                     int skip_count = 0;
@@ -3412,7 +3412,7 @@ bool SynPatternPoint::Match_NamedPatterns(
 
             bool tree_matched_with_skip = false;
 
-            // есть набор токенов, с которых следует проверять сопоставляемость...
+            // РµСЃС‚СЊ РЅР°Р±РѕСЂ С‚РѕРєРµРЅРѕРІ, СЃ РєРѕС‚РѕСЂС‹С… СЃР»РµРґСѓРµС‚ РїСЂРѕРІРµСЂСЏС‚СЊ СЃРѕРїРѕСЃС‚Р°РІР»СЏРµРјРѕСЃС‚СЊ...
             for(lem::Container::size_type icur = 0; icur < current_tokens.size(); ++icur)
             {
                 const LexerTextPos * current_token = current_tokens[icur];
@@ -3439,8 +3439,8 @@ bool SynPatternPoint::Match_NamedPatterns(
 
                     if(skip_scores[icur] != 0 || orig_token_matched)
                     {
-                        // добавляем штраф за пропуск токенов.
-                        // если было сопоставление в начальном токене (где находится текущий курсор), то штраф усиливаем.
+                        // РґРѕР±Р°РІР»СЏРµРј С€С‚СЂР°С„ Р·Р° РїСЂРѕРїСѓСЃРє С‚РѕРєРµРЅРѕРІ.
+                        // РµСЃР»Рё Р±С‹Р»Рѕ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РІ РЅР°С‡Р°Р»СЊРЅРѕРј С‚РѕРєРµРЅРµ (РіРґРµ РЅР°С…РѕРґРёС‚СЃСЏ С‚РµРєСѓС‰РёР№ РєСѓСЂСЃРѕСЂ), С‚Рѕ С€С‚СЂР°С„ СѓСЃРёР»РёРІР°РµРј.
                         int score = skip_scores[icur];
                         if(orig_token_matched)
                         {
@@ -3454,11 +3454,11 @@ bool SynPatternPoint::Match_NamedPatterns(
                     {
                         const SynPatternResult & skipped_result = *skipped_results[icur];
 
-                        // скопируем в сопоставленный результат затронутые словоформы из пропущенного фрагмента.
+                        // СЃРєРѕРїРёСЂСѓРµРј РІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°С‚СЂРѕРЅСѓС‚С‹Рµ СЃР»РѕРІРѕС„РѕСЂРјС‹ РёР· РїСЂРѕРїСѓС‰РµРЅРЅРѕРіРѕ С„СЂР°РіРјРµРЅС‚Р°.
                         subresult_q->AppendMatchedAlts( skipped_result );
 
-                        // Могут быть варианты: есть корень с привязанными узлами, корня нет.
-                        // Если есть корень, то добавим еще ребро к основному корню.
+                        // РњРѕРіСѓС‚ Р±С‹С‚СЊ РІР°СЂРёР°РЅС‚С‹: РµСЃС‚СЊ РєРѕСЂРµРЅСЊ СЃ РїСЂРёРІСЏР·Р°РЅРЅС‹РјРё СѓР·Р»Р°РјРё, РєРѕСЂРЅСЏ РЅРµС‚.
+                        // Р•СЃР»Рё РµСЃС‚СЊ РєРѕСЂРµРЅСЊ, С‚Рѕ РґРѕР±Р°РІРёРј РµС‰Рµ СЂРµР±СЂРѕ Рє РѕСЃРЅРѕРІРЅРѕРјСѓ РєРѕСЂРЅСЋ.
 
                         bool linked_by_roots = false;
                         const Word_Form * skipped_root_node = skipped_result.FindExportNode( *pm.GetDict().GetLexAuto().GetRootNodeName() );
@@ -3471,7 +3471,7 @@ bool SynPatternPoint::Match_NamedPatterns(
                                 PatternLinkEdge root2root( matched_root_node, UNKNOWN, skipped_root_node );
                                 subresult_q->AddLinkageEdge( root2root );
 
-                                // Скопируем сюда все связи из пропущенного фрагмента.
+                                // РЎРєРѕРїРёСЂСѓРµРј СЃСЋРґР° РІСЃРµ СЃРІСЏР·Рё РёР· РїСЂРѕРїСѓС‰РµРЅРЅРѕРіРѕ С„СЂР°РіРјРµРЅС‚Р°.
                                 subresult_q->AppendLinks( skipped_result );
                             }
                         }
@@ -3479,8 +3479,8 @@ bool SynPatternPoint::Match_NamedPatterns(
                         /*
                         if( !linked_by_roots )
                         {
-                        // так как невозможно просто связать корень пропущенного фрагмента с корнем сопоставленного участка, то
-                        // придется присоединять группу, созданную из пропущенного фрагмента, к первому токену сопоставленного.
+                        // С‚Р°Рє РєР°Рє РЅРµРІРѕР·РјРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ СЃРІСЏР·Р°С‚СЊ РєРѕСЂРµРЅСЊ РїСЂРѕРїСѓС‰РµРЅРЅРѕРіРѕ С„СЂР°РіРјРµРЅС‚Р° СЃ РєРѕСЂРЅРµРј СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ СѓС‡Р°СЃС‚РєР°, С‚Рѕ
+                        // РїСЂРёРґРµС‚СЃСЏ РїСЂРёСЃРѕРµРґРёРЅСЏС‚СЊ РіСЂСѓРїРїСѓ, СЃРѕР·РґР°РЅРЅСѓСЋ РёР· РїСЂРѕРїСѓС‰РµРЅРЅРѕРіРѕ С„СЂР°РіРјРµРЅС‚Р°, Рє РїРµСЂРІРѕРјСѓ С‚РѕРєРµРЅСѓ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ.
                         const Word_Form * skipped_root_node = skipped_result.res.GetStartToken()->GetWordform();
                         PatternSynLinkedGroup skipped_grp( skipped_result.res.GetStartToken(), skipped_result.res.GetFinalToken(), skipped_root_node );
                         subresult_q->AddLinkageGroup(skipped_grp);
@@ -3493,7 +3493,7 @@ bool SynPatternPoint::Match_NamedPatterns(
                     }
 
 #if defined SOL_DEBUGGING
-                    // Для удобства визуального контроля добавим в трассу инфу об имени вызванного дерева.
+                    // Р”Р»СЏ СѓРґРѕР±СЃС‚РІР° РІРёР·СѓР°Р»СЊРЅРѕРіРѕ РєРѕРЅС‚СЂРѕР»СЏ РґРѕР±Р°РІРёРј РІ С‚СЂР°СЃСЃСѓ РёРЅС„Сѓ РѕР± РёРјРµРЅРё РІС‹Р·РІР°РЅРЅРѕРіРѕ РґРµСЂРµРІР°.
                     const lem::UCString & tree_name0 = named_filters.GetPatternName( id_tree );
                     SynPatternDebugTrace dbg_point( this, current_token->GetWordform(), &tree_name0 );
                     subresult_q->Append( dbg_point );
@@ -3504,17 +3504,17 @@ bool SynPatternPoint::Match_NamedPatterns(
                     tree_matched = tree_matched_with_skip = true;
                 }
 
-                // количество найденных результатов достигло допустимого максимума, дальше не проверяем.
+                // РєРѕР»РёС‡РµСЃС‚РІРѕ РЅР°Р№РґРµРЅРЅС‹С… СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РґРѕСЃС‚РёРіР»Рѕ РґРѕРїСѓСЃС‚РёРјРѕРіРѕ РјР°РєСЃРёРјСѓРјР°, РґР°Р»СЊС€Рµ РЅРµ РїСЂРѕРІРµСЂСЏРµРј.
                 if((results.size()) > MAX_ALTS * 2)
                     break;
             }
 
-            // после успешного обнаружения сопоставления прекращает дальнейший поиск. это означает, что
-            // некоторые решения не будут найдены, так как для них требуется проверить ВСЕ варианты, включая
-            // начальное сопоставление и с пропуском. Но такой подход дает преимущество в скорости.
+            // РїРѕСЃР»Рµ СѓСЃРїРµС€РЅРѕРіРѕ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РїСЂРµРєСЂР°С‰Р°РµС‚ РґР°Р»СЊРЅРµР№С€РёР№ РїРѕРёСЃРє. СЌС‚Рѕ РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ
+            // РЅРµРєРѕС‚РѕСЂС‹Рµ СЂРµС€РµРЅРёСЏ РЅРµ Р±СѓРґСѓС‚ РЅР°Р№РґРµРЅС‹, С‚Р°Рє РєР°Рє РґР»СЏ РЅРёС… С‚СЂРµР±СѓРµС‚СЃСЏ РїСЂРѕРІРµСЂРёС‚СЊ Р’РЎР• РІР°СЂРёР°РЅС‚С‹, РІРєР»СЋС‡Р°СЏ
+            // РЅР°С‡Р°Р»СЊРЅРѕРµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ Рё СЃ РїСЂРѕРїСѓСЃРєРѕРј. РќРѕ С‚Р°РєРѕР№ РїРѕРґС…РѕРґ РґР°РµС‚ РїСЂРµРёРјСѓС‰РµСЃС‚РІРѕ РІ СЃРєРѕСЂРѕСЃС‚Рё.
             if(tree_matched_with_skip)
             {
-                // обновим кэш ????
+                // РѕР±РЅРѕРІРёРј РєСЌС€ ????
                 break;
             }
         }
@@ -3570,7 +3570,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
     /*
          #if LEM_DEBUGGING==1
          lem::UCString tree_name = sg.GetStorage().GetSynPatternTreeName(id_tree);
-         if( tree_name.eqi(L"ГруппаСущ4") && current_token->GetWordIndex()==3 )
+         if( tree_name.eqi(L"Р“СЂСѓРїРїР°РЎСѓС‰4") && current_token->GetWordIndex()==3 )
          {
          for( lem::Container::size_type k=0; k<id_src.size(); ++k )
          {
@@ -3591,7 +3591,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 #if defined SOL_DEBUGGING
     if(trace_log != NULL)
     {
-        // точка останова ДО выполнения проверки.
+        // С‚РѕС‡РєР° РѕСЃС‚Р°РЅРѕРІР° Р”Рћ РІС‹РїРѕР»РЅРµРЅРёСЏ РїСЂРѕРІРµСЂРєРё.
         trace_log->BeforeSynPatternTreeProve( *this, id_src, lexer, current_token, parent_trace );
     }
 #endif
@@ -3684,7 +3684,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
          #endif
          */
 
-        // Для каждого варианта сопоставления дерева выполняем отдельную проверку.
+        // Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РІР°СЂРёР°РЅС‚Р° СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РґРµСЂРµРІР° РІС‹РїРѕР»РЅСЏРµРј РѕС‚РґРµР»СЊРЅСѓСЋ РїСЂРѕРІРµСЂРєСѓ.
 
         for(lem::Container::size_type q = 0; q < subresults.size(); ++q)
         {
@@ -3697,16 +3697,16 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
             bool set_ok = true;
             bool coords_matched = false;
 
-            int check_score = 0; // если нарушение условий наказывается штрафом, а не полным провалом проверки.
+            int check_score = 0; // РµСЃР»Рё РЅР°СЂСѓС€РµРЅРёРµ СѓСЃР»РѕРІРёР№ РЅР°РєР°Р·С‹РІР°РµС‚СЃСЏ С€С‚СЂР°С„РѕРј, Р° РЅРµ РїРѕР»РЅС‹Рј РїСЂРѕРІР°Р»РѕРј РїСЂРѕРІРµСЂРєРё.
 
             if(coords.empty())
             {
-                // проверять координаты, экспортированные вызванным деревом, не требуется.
+                // РїСЂРѕРІРµСЂСЏС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹, СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РІС‹Р·РІР°РЅРЅС‹Рј РґРµСЂРµРІРѕРј, РЅРµ С‚СЂРµР±СѓРµС‚СЃСЏ.
                 coords_matched = true;
             }
             else
             {
-                // если необходима проверка экспортированных из вызванного дерева координат
+                // РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјР° РїСЂРѕРІРµСЂРєР° СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹С… РёР· РІС‹Р·РІР°РЅРЅРѕРіРѕ РґРµСЂРµРІР° РєРѕРѕСЂРґРёРЅР°С‚
                 bool states_matched = true;
                 for(lem::Container::size_type i = 0; i < coords.size(); ++i)
                 {
@@ -3715,14 +3715,14 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 
                     bool state_matched = false;
 
-                    // Ищем состояния этой координаты в экспорте
+                    // РС‰РµРј СЃРѕСЃС‚РѕСЏРЅРёСЏ СЌС‚РѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ СЌРєСЃРїРѕСЂС‚Рµ
                     typedef std::multimap<int, int>::const_iterator IT;
                     std::pair<IT, IT> p = exported_coords.equal_range( id_coord );
                     if(p.first == p.second)
                     {
-                        // не нашли необходимой координаты вообще.
-                        // если требование - бистабильная координата с состоянием 0, то это успех,
-                        // в остальных случаях имеем неуспех.
+                        // РЅРµ РЅР°С€Р»Рё РЅРµРѕР±С…РѕРґРёРјРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРѕРѕР±С‰Рµ.
+                        // РµСЃР»Рё С‚СЂРµР±РѕРІР°РЅРёРµ - Р±РёСЃС‚Р°Р±РёР»СЊРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° СЃ СЃРѕСЃС‚РѕСЏРЅРёРµРј 0, С‚Рѕ СЌС‚Рѕ СѓСЃРїРµС…,
+                        // РІ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃР»СѓС‡Р°СЏС… РёРјРµРµРј РЅРµСѓСЃРїРµС….
                         if(sg.coords()[id_coord].IsBistable())
                         {
                             if(id_state == 0)
@@ -3732,7 +3732,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                         }
                         else
                         {
-                            if(!coords[i].GetPair().GetAffirm()) // требование было чтобы пара отсутствовала.
+                            if(!coords[i].GetPair().GetAffirm()) // С‚СЂРµР±РѕРІР°РЅРёРµ Р±С‹Р»Рѕ С‡С‚РѕР±С‹ РїР°СЂР° РѕС‚СЃСѓС‚СЃС‚РІРѕРІР°Р»Р°.
                                 state_matched = true;
                         }
                     }
@@ -3767,7 +3767,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                     {
                         if(coords[i].GetViolationHandler().HasFalseScore())
                         {
-                            // мягкое нарушение - выписываем штраф.
+                            // РјСЏРіРєРѕРµ РЅР°СЂСѓС€РµРЅРёРµ - РІС‹РїРёСЃС‹РІР°РµРј С€С‚СЂР°С„.
                             check_score += coords[i].GetViolationHandler().GetFalseScore();
                         }
                         else
@@ -3780,7 +3780,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 
                 if(states_matched)
                 {
-                    // все координаты есть в экспорте.
+                    // РІСЃРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РµСЃС‚СЊ РІ СЌРєСЃРїРѕСЂС‚Рµ.
                     coords_matched = true;
                 }
             }
@@ -3788,7 +3788,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 
             if(coords_matched && correl_fun.NotNull())
             {
-                // Вызываем корреляционную функцию для императивных проверок
+                // Р’С‹Р·С‹РІР°РµРј РєРѕСЂСЂРµР»СЏС†РёРѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ РґР»СЏ РёРјРїРµСЂР°С‚РёРІРЅС‹С… РїСЂРѕРІРµСЂРѕРє
 
                 //TrFunContext ctx0( &*pm.functions.static_vars, &env );
 #if LEM_DEBUGGING
@@ -3863,7 +3863,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                             {
                                 if(set_checkers[k].GetViolationHandler().HasFalseScore())
                                 {
-                                    // мягкое нарушение - выписываем штраф.
+                                    // РјСЏРіРєРѕРµ РЅР°СЂСѓС€РµРЅРёРµ - РІС‹РїРёСЃС‹РІР°РµРј С€С‚СЂР°С„.
                                     check_score += set_checkers[k].GetViolationHandler().GetFalseScore();
                                     set_ok = true;
                                 }
@@ -3900,7 +3900,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                             {
                                 if(set_checkers[k].GetViolationHandler().HasFalseScore())
                                 {
-                                    // мягкое нарушение - выписываем штраф.
+                                    // РјСЏРіРєРѕРµ РЅР°СЂСѓС€РµРЅРёРµ - РІС‹РїРёСЃС‹РІР°РµРј С€С‚СЂР°С„.
                                     check_score += set_checkers[k].GetViolationHandler().GetFalseScore();
                                     set_ok = true;
                                 }
@@ -3918,13 +3918,13 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 
                 if(set_ok)
                 {
-                    // проверим согласования с левыми маркировками
+                    // РїСЂРѕРІРµСЂРёРј СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ Р»РµРІС‹РјРё РјР°СЂРєРёСЂРѕРІРєР°РјРё
                     bool back_states_matched = true;
 
-                    // Проверяем согласования с левыми маркированными точками
+                    // РџСЂРѕРІРµСЂСЏРµРј СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ Р»РµРІС‹РјРё РјР°СЂРєРёСЂРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё
                     for(lem::Container::size_type k = 0; k < back_correls.size(); ++k)
                     {
-                        const lem::UCString &mark = back_correls[k].name; // искомая маркировка
+                        const lem::UCString &mark = back_correls[k].name; // РёСЃРєРѕРјР°СЏ РјР°СЂРєРёСЂРѕРІРєР°
                         const BackTraceItem & mark_data = *parent_trace->Get( PatternSequenceNumber, mark );
 
                         if(!mark_data.Check( sg, back_correls[k], exported_coords ))
@@ -3971,14 +3971,14 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                         }
                     }
 
-                    // выполняем обращения к базе знаний
+                    // РІС‹РїРѕР»РЅСЏРµРј РѕР±СЂР°С‰РµРЅРёСЏ Рє Р±Р°Р·Рµ Р·РЅР°РЅРёР№
                     if(back_states_matched)
                     {
                         bool kb_ok = true;
                         if(!kb_checkers.empty())
                         {
-                            // В subresults[q]->exported_nodes именованные ссылки для текущего дерева _.y
-                            // В parent_trace надо искать именованные ссылки вида X.y
+                            // Р’ subresults[q]->exported_nodes РёРјРµРЅРѕРІР°РЅРЅС‹Рµ СЃСЃС‹Р»РєРё РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РґРµСЂРµРІР° _.y
+                            // Р’ parent_trace РЅР°РґРѕ РёСЃРєР°С‚СЊ РёРјРµРЅРѕРІР°РЅРЅС‹Рµ СЃСЃС‹Р»РєРё РІРёРґР° X.y
 
                             KnowledgeBase &kbase = sg.GetDict().GetLexAuto().GetKnowledgeBase();
 
@@ -3997,7 +3997,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
 
                         if(kb_ok && ThesaurusCheck_Link != UNKNOWN)
                         {
-                            // ищем HEAD в результате сопоставления дерева
+                            // РёС‰РµРј HEAD РІ СЂРµР·СѓР»СЊС‚Р°С‚Рµ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ РґРµСЂРµРІР°
                             const Word_Form * headword = NULL;
                             if(subresult_q->res.Length() == 1)
                             {
@@ -4016,7 +4016,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                                 }
                             }
 
-                            // проверяем, что данная статья связана в тезаурусе в указанной статьей заданным типом связи
+                            // РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РґР°РЅРЅР°СЏ СЃС‚Р°С‚СЊСЏ СЃРІСЏР·Р°РЅР° РІ С‚РµР·Р°СѓСЂСѓСЃРµ РІ СѓРєР°Р·Р°РЅРЅРѕР№ СЃС‚Р°С‚СЊРµР№ Р·Р°РґР°РЅРЅС‹Рј С‚РёРїРѕРј СЃРІСЏР·Рё
                             int id_link = sg.Get_Net().Find_Linked_Entry( headword->GetEntryKey(), ThesaurusCheck_Link, ThesaurusCheck_Entry );
                             kb_ok = id_link != UNKNOWN;
                         }
@@ -4061,7 +4061,7 @@ bool SynPatternPoint::Match_NamedPatterns_Strict(
                             }
 
 #if defined SOL_DEBUGGING
-                            // Для удобства визуального контроля добавим в трассу инфу об имени вызванного дерева.
+                            // Р”Р»СЏ СѓРґРѕР±СЃС‚РІР° РІРёР·СѓР°Р»СЊРЅРѕРіРѕ РєРѕРЅС‚СЂРѕР»СЏ РґРѕР±Р°РІРёРј РІ С‚СЂР°СЃСЃСѓ РёРЅС„Сѓ РѕР± РёРјРµРЅРё РІС‹Р·РІР°РЅРЅРѕРіРѕ РґРµСЂРµРІР°.
                             SynPatternDebugTrace dbg_point( this, current_token->GetWordform(), &named_filters.GetPatternName( id_tree ) );
                             subresult_q->Append( dbg_point );
 #endif
@@ -4172,7 +4172,7 @@ bool SynPatternPoint::Match_Untill(
             if(x)
             {
                 any_matched = true;
-                cur_tokens[(list_selector + 1) % 2][k] = NULL; // дальше справа от этого токена не проверяем
+                cur_tokens[(list_selector + 1) % 2][k] = NULL; // РґР°Р»СЊС€Рµ СЃРїСЂР°РІР° РѕС‚ СЌС‚РѕРіРѕ С‚РѕРєРµРЅР° РЅРµ РїСЂРѕРІРµСЂСЏРµРј
 
                 for(lem::Container::size_type q = 0; q < subresults.size(); ++q)
                 {
@@ -4258,7 +4258,7 @@ bool SynPatternPoint::Match_WordformSet(
         bool any_matched = false;
         if(lexer.GetParams().CanSkipInnerTokens())
         {
-            // Разрешен неполный и нечеткий анализ - попробуем пропустить токены в поисках подходящего.
+            // Р Р°Р·СЂРµС€РµРЅ РЅРµРїРѕР»РЅС‹Р№ Рё РЅРµС‡РµС‚РєРёР№ Р°РЅР°Р»РёР· - РїРѕРїСЂРѕР±СѓРµРј РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РѕРєРµРЅС‹ РІ РїРѕРёСЃРєР°С… РїРѕРґС…РѕРґСЏС‰РµРіРѕ.
             int skip_count = 0;
 
             int list_selector = 0;
@@ -4296,13 +4296,13 @@ bool SynPatternPoint::Match_WordformSet(
                     {
                         any_matched = true;
 
-                        // скорректируем новые результаты
+                        // СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РЅРѕРІС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹
                         for(lem::Container::size_type j = n0; j < results.size(); ++j)
                         {
-                            // 1) скорректируем длину сопоставленного участка с учетом пропущенных токенов.
+                            // 1) СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ СѓС‡Р°СЃС‚РєР° СЃ СѓС‡РµС‚РѕРј РїСЂРѕРїСѓС‰РµРЅРЅС‹С… С‚РѕРєРµРЅРѕРІ.
                             const int span_size = t->GetWordIndex() - current_token->GetWordIndex() + 1;
 
-                            // 2) штраф за пропущенные токены.
+                            // 2) С€С‚СЂР°С„ Р·Р° РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹.
                             SynPatternMatchResult new_res(
                                 true,
                                 span_size,
@@ -4312,7 +4312,7 @@ bool SynPatternPoint::Match_WordformSet(
                                 );
                             results[j]->res = new_res;
 
-                            // пропущенные токены будут прикреплены к сопоставленному как умолчальная группа
+                            // РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹ Р±СѓРґСѓС‚ РїСЂРёРєСЂРµРїР»РµРЅС‹ Рє СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРјСѓ РєР°Рє СѓРјРѕР»С‡Р°Р»СЊРЅР°СЏ РіСЂСѓРїРїР°
                             PatternSynLinkedGroup skipped_and_matched( current_token, t, t->GetWordform() );
                             results[j]->AddLinkageGroup( skipped_and_matched );
                         }
@@ -4376,11 +4376,11 @@ bool SynPatternPoint::Match_WordformSet_Strict(
         {
             //     accel_matching = true;
 
-            // Нужна проверка по списку координатных пар?
+            // РќСѓР¶РЅР° РїСЂРѕРІРµСЂРєР° РїРѕ СЃРїРёСЃРєСѓ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ?
             bool alt_ok = true;
             if(!coords.empty())
             {
-                // да, проверяем
+                // РґР°, РїСЂРѕРІРµСЂСЏРµРј
                 bool m1 = true;
 
                 for(lem::Container::size_type j = 0; j < coords.size(); ++j)
@@ -4395,7 +4395,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
                             const int istate = p.GetState();
                             if(istate == 0)
                             {
-                                // Координаты быть не должно, или она должна иметь состояние 0.
+                                // РљРѕРѕСЂРґРёРЅР°С‚С‹ Р±С‹С‚СЊ РЅРµ РґРѕР»Р¶РЅРѕ, РёР»Рё РѕРЅР° РґРѕР»Р¶РЅР° РёРјРµС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ 0.
                                 lem::MCollect<int> bstates = alt->GetStates( p.GetCoord() );
                                 if(!bstates.empty())
                                 {
@@ -4408,7 +4408,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
                             }
                             else
                             {
-                                // Координата должна присутствовать
+                                // РљРѕРѕСЂРґРёРЅР°С‚Р° РґРѕР»Р¶РЅР° РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ
                                 if(alt->GetPairs().FindOnce( p ) == UNKNOWN)
                                 {
                                     m1 = false;
@@ -4442,10 +4442,10 @@ bool SynPatternPoint::Match_WordformSet_Strict(
                 continue;
 
             bool m = true;
-            // согласования с левыми маркированными точками
+            // СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ Р»РµРІС‹РјРё РјР°СЂРєРёСЂРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё
             for(lem::Container::size_type k = 0; k < back_correls.size() && m; ++k)
             {
-                const lem::UCString &mark = back_correls[k].name; // искомая маркировка
+                const lem::UCString &mark = back_correls[k].name; // РёСЃРєРѕРјР°СЏ РјР°СЂРєРёСЂРѕРІРєР°
                 const BackTraceItem & mark_data = *parent_trace->Get( PatternSequenceNumber, mark );
 
                 if(!mark_data.Check( sg, back_correls[k], *alt ))
@@ -4459,7 +4459,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
 
             if(alt_ok)
             {
-                // Одна из альтернатив попала под условия.
+                // РћРґРЅР° РёР· Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РїРѕРїР°Р»Р° РїРѕРґ СѓСЃР»РѕРІРёСЏ.
 
                 SynPatternResult *r = new SynPatternResult( parent_trace );
 
@@ -4472,7 +4472,7 @@ bool SynPatternPoint::Match_WordformSet_Strict(
 
                 if(export_section != NULL)
                 {
-                    // Если нужно экспортировать координаты...
+                    // Р•СЃР»Рё РЅСѓР¶РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹...
                     export_section->ExportCoords_Unconditional( *r, alt );
                     export_section->ExportPairs_Unconditional( *r );
                     export_section->ExportNodes( *r, alt );
@@ -4555,7 +4555,7 @@ bool SynPatternPoint::Match_Wordform(
             if(ekey == pm.GetDict().GetSynGram().I_BEGIN || ekey == pm.GetDict().GetSynGram().I_END)
                 return false;
 
-            // Разрешен неполный и нечеткий анализ - попробуем пропустить токены в поисках подходящего.
+            // Р Р°Р·СЂРµС€РµРЅ РЅРµРїРѕР»РЅС‹Р№ Рё РЅРµС‡РµС‚РєРёР№ Р°РЅР°Р»РёР· - РїРѕРїСЂРѕР±СѓРµРј РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РѕРєРµРЅС‹ РІ РїРѕРёСЃРєР°С… РїРѕРґС…РѕРґСЏС‰РµРіРѕ.
             int skip_count = 0;
 
             int list_selector = 0;
@@ -4593,13 +4593,13 @@ bool SynPatternPoint::Match_Wordform(
                     {
                         any_matched = true;
 
-                        // скорректируем новые результаты
+                        // СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РЅРѕРІС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹
                         for(lem::Container::size_type j = n0; j < results.size(); ++j)
                         {
-                            // 1) скорректируем длину сопоставленного участка с учетом пропущенных токенов.
+                            // 1) СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ СѓС‡Р°СЃС‚РєР° СЃ СѓС‡РµС‚РѕРј РїСЂРѕРїСѓС‰РµРЅРЅС‹С… С‚РѕРєРµРЅРѕРІ.
                             const int span_size = t->GetWordIndex() - current_token->GetWordIndex() + 1;
 
-                            // 2) штраф за пропущенные токены.
+                            // 2) С€С‚СЂР°С„ Р·Р° РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹.
                             SynPatternMatchResult new_res(
                                 true,
                                 span_size,
@@ -4609,7 +4609,7 @@ bool SynPatternPoint::Match_Wordform(
                                 );
                             results[j]->res = new_res;
 
-                            // пропущенные токены будут прикреплены к сопоставленному как умолчальная группа
+                            // РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹ Р±СѓРґСѓС‚ РїСЂРёРєСЂРµРїР»РµРЅС‹ Рє СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРјСѓ РєР°Рє СѓРјРѕР»С‡Р°Р»СЊРЅР°СЏ РіСЂСѓРїРїР°
                             PatternSynLinkedGroup skipped_and_matched( current_token, t, t->GetWordform() );
                             results[j]->AddLinkageGroup( skipped_and_matched );
                         }
@@ -4646,7 +4646,7 @@ bool SynPatternPoint::Match_WordformStrict(
     TrTrace * trace_log
     ) const
 {
-    // Проверяем словоформу на соответствие требованиям опорной точки
+    // РџСЂРѕРІРµСЂСЏРµРј СЃР»РѕРІРѕС„РѕСЂРјСѓ РЅР° СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚СЂРµР±РѕРІР°РЅРёСЏРј РѕРїРѕСЂРЅРѕР№ С‚РѕС‡РєРё
     const Word_Form & wf = *current_token->GetWordform();
 
     bool any_matched = false;
@@ -4658,12 +4658,12 @@ bool SynPatternPoint::Match_WordformStrict(
         const Word_Form * alt = wf.GetVersion( ialt );
         bool m = false;
 
-        int check_score = 0; // для накопления штрафов за мягкие нарушения.
+        int check_score = 0; // РґР»СЏ РЅР°РєРѕРїР»РµРЅРёСЏ С€С‚СЂР°С„РѕРІ Р·Р° РјСЏРіРєРёРµ РЅР°СЂСѓС€РµРЅРёСЏ.
 
         const int is_ekey = alt->GetEntryKey();
 
-        // Может быть либо сравнение буквального значение слова с заданной лексемой, или сравнение
-        // с id словарной статьи, или проверка на часть речи.
+        // РњРѕР¶РµС‚ Р±С‹С‚СЊ Р»РёР±Рѕ СЃСЂР°РІРЅРµРЅРёРµ Р±СѓРєРІР°Р»СЊРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёРµ СЃР»РѕРІР° СЃ Р·Р°РґР°РЅРЅРѕР№ Р»РµРєСЃРµРјРѕР№, РёР»Рё СЃСЂР°РІРЅРµРЅРёРµ
+        // СЃ id СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё, РёР»Рё РїСЂРѕРІРµСЂРєР° РЅР° С‡Р°СЃС‚СЊ СЂРµС‡Рё.
 
         if(!lexeme.empty())
         {
@@ -4671,7 +4671,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
             if(m && iclass != UNKNOWN)
             {
-                // есть дополнительное требование на часть речи у этой версии.
+                // РµСЃС‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ С‚СЂРµР±РѕРІР°РЅРёРµ РЅР° С‡Р°СЃС‚СЊ СЂРµС‡Рё Сѓ СЌС‚РѕР№ РІРµСЂСЃРёРё.
                 if(is_ekey == UNKNOWN)
                     continue;
 
@@ -4682,7 +4682,7 @@ bool SynPatternPoint::Match_WordformStrict(
         }
         else if(ekey != UNKNOWN && ekey != ANY_STATE)
         {
-            // Проверяем на совпадение с заданным id словарной статьи.
+            // РџСЂРѕРІРµСЂСЏРµРј РЅР° СЃРѕРІРїР°РґРµРЅРёРµ СЃ Р·Р°РґР°РЅРЅС‹Рј id СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
             if(is_ekey != ekey)
                 continue;
 
@@ -4690,7 +4690,7 @@ bool SynPatternPoint::Match_WordformStrict(
         }
         else if(iclass != UNKNOWN && iclass != ANY_STATE)
         {
-            // Проверяем только часть речи.
+            // РџСЂРѕРІРµСЂСЏРµРј С‚РѕР»СЊРєРѕ С‡Р°СЃС‚СЊ СЂРµС‡Рё.
             const SG_Entry &e = sg.GetEntry( is_ekey );
 
             if(e.GetClass() != iclass)
@@ -4706,7 +4706,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
         if(m)
         {
-            // Осталось проверить координаты 
+            // РћСЃС‚Р°Р»РѕСЃСЊ РїСЂРѕРІРµСЂРёС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ 
             m = false;
 
             if(coords.empty())
@@ -4729,7 +4729,7 @@ bool SynPatternPoint::Match_WordformStrict(
                             const int istate = p.GetState();
                             if(istate == 0)
                             {
-                                // Координаты быть не должно, или она должна иметь состояние 0.
+                                // РљРѕРѕСЂРґРёРЅР°С‚С‹ Р±С‹С‚СЊ РЅРµ РґРѕР»Р¶РЅРѕ, РёР»Рё РѕРЅР° РґРѕР»Р¶РЅР° РёРјРµС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ 0.
                                 lem::MCollect<int> bstates = alt->GetStates( p.GetCoord() );
                                 if(!bstates.empty())
                                 {
@@ -4749,7 +4749,7 @@ bool SynPatternPoint::Match_WordformStrict(
                             }
                             else
                             {
-                                // Координата должна присутствовать
+                                // РљРѕРѕСЂРґРёРЅР°С‚Р° РґРѕР»Р¶РЅР° РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ
                                 if(alt->GetPairs().FindOnce( p ) == UNKNOWN)
                                 {
                                     if(coords[j].GetViolationHandler().HasFalseScore())
@@ -4800,18 +4800,18 @@ bool SynPatternPoint::Match_WordformStrict(
 
             if(m && ThesaurusCheck_Link != UNKNOWN)
             {
-                // проверяем, что данная статья связана в тезаурусе в указанной статьей заданным типом связи
+                // РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РґР°РЅРЅР°СЏ СЃС‚Р°С‚СЊСЏ СЃРІСЏР·Р°РЅР° РІ С‚РµР·Р°СѓСЂСѓСЃРµ РІ СѓРєР°Р·Р°РЅРЅРѕР№ СЃС‚Р°С‚СЊРµР№ Р·Р°РґР°РЅРЅС‹Рј С‚РёРїРѕРј СЃРІСЏР·Рё
                 int id_link = sg.Get_Net().Find_Linked_Entry( is_ekey, ThesaurusCheck_Link, ThesaurusCheck_Entry );
                 m = id_link != UNKNOWN;
             }
 
             if(m)
             {
-                // согласования с левыми маркированными точками
+                // СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ Р»РµРІС‹РјРё РјР°СЂРєРёСЂРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё
 
                 for(lem::Container::size_type k = 0; k < back_correls.size() && m; ++k)
                 {
-                    const lem::UCString &mark = back_correls[k].name; // искомая маркировка
+                    const lem::UCString &mark = back_correls[k].name; // РёСЃРєРѕРјР°СЏ РјР°СЂРєРёСЂРѕРІРєР°
                     const BackTraceItem & mark_data = *parent_trace->Get( PatternSequenceNumber, mark );
 
                     if(!mark_data.Check( sg, back_correls[k], *alt ))
@@ -4831,7 +4831,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
             if(m && correl_fun.NotNull())
             {
-                // Вызываем корреляционную функцию для императивных проверок
+                // Р’С‹Р·С‹РІР°РµРј РєРѕСЂСЂРµР»СЏС†РёРѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ РґР»СЏ РёРјРїРµСЂР°С‚РёРІРЅС‹С… РїСЂРѕРІРµСЂРѕРє
 
                 //TrFunContext ctx0( &*pm.functions.static_vars, &env );
 #if LEM_DEBUGGING
@@ -4886,7 +4886,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
             if(m && !kb_checkers.empty())
             {
-                // В parent_trace надо искать именованные ссылки вида X.y
+                // Р’ parent_trace РЅР°РґРѕ РёСЃРєР°С‚СЊ РёРјРµРЅРѕРІР°РЅРЅС‹Рµ СЃСЃС‹Р»РєРё РІРёРґР° X.y
 
                 KnowledgeBase &kbase = sg.GetDict().GetLexAuto().GetKnowledgeBase();
 
@@ -4928,7 +4928,7 @@ bool SynPatternPoint::Match_WordformStrict(
 
             if(m)
             {
-                // Альтернатива подходит под условия опорной точки
+                // РђР»СЊС‚РµСЂРЅР°С‚РёРІР° РїРѕРґС…РѕРґРёС‚ РїРѕРґ СѓСЃР»РѕРІРёСЏ РѕРїРѕСЂРЅРѕР№ С‚РѕС‡РєРё
 
                 SynPatternResult *r = new SynPatternResult( parent_trace );
                 r->res = SynPatternMatchResult( true, 1, current_token, current_token, NGramScore( 0 ) );
@@ -4940,13 +4940,13 @@ bool SynPatternPoint::Match_WordformStrict(
 
                 if(export_section != NULL)
                 {
-                    // экспорт состояний заданных координат
+                    // СЌРєСЃРїРѕСЂС‚ СЃРѕСЃС‚РѕСЏРЅРёР№ Р·Р°РґР°РЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
                     export_section->ExportCoords_Unconditional( *r, alt );
 
-                    // Экспорт явно заданных пар
+                    // Р­РєСЃРїРѕСЂС‚ СЏРІРЅРѕ Р·Р°РґР°РЅРЅС‹С… РїР°СЂ
                     export_section->ExportPairs_Unconditional( *r );
 
-                    // Если необходимо экспортировать именованную ссылку на словоформу
+                    // Р•СЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°С‚СЊ РёРјРµРЅРѕРІР°РЅРЅСѓСЋ СЃСЃС‹Р»РєСѓ РЅР° СЃР»РѕРІРѕС„РѕСЂРјСѓ
                     export_section->ExportNodes( *r, alt );
 
                     if(export_section->ContainsFunctions())
@@ -5072,7 +5072,7 @@ bool SynPatternPoint::Match_WordSet_Strict(
      dirty_matching = experience.FindAccelerator( current_token, id_accel );
 
      if( dirty_matching==0 )
-     return false; // точно не подходит.
+     return false; // С‚РѕС‡РЅРѕ РЅРµ РїРѕРґС…РѕРґРёС‚.
      }
      */
 
@@ -5087,7 +5087,7 @@ bool SynPatternPoint::Match_WordSet_Strict(
 
         if(wordentry_sets.FindWordSet( str_arg, *alt->GetName() ))
         {
-            // Одна из альтернатив попала под условия.
+            // РћРґРЅР° РёР· Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РїРѕРїР°Р»Р° РїРѕРґ СѓСЃР»РѕРІРёСЏ.
             //accel_matching = true;
 
             SynPatternResult *r = new SynPatternResult( parent_trace );
@@ -5199,7 +5199,7 @@ bool SynPatternPoint::Match_WordSet(
         bool any_matched = false;
         if(lexer.GetParams().CanSkipInnerTokens())
         {
-            // Разрешен неполный и нечеткий анализ - попробуем пропустить токены в поисках подходящего.
+            // Р Р°Р·СЂРµС€РµРЅ РЅРµРїРѕР»РЅС‹Р№ Рё РЅРµС‡РµС‚РєРёР№ Р°РЅР°Р»РёР· - РїРѕРїСЂРѕР±СѓРµРј РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РѕРєРµРЅС‹ РІ РїРѕРёСЃРєР°С… РїРѕРґС…РѕРґСЏС‰РµРіРѕ.
             int skip_count = 0;
 
             int list_selector = 0;
@@ -5237,13 +5237,13 @@ bool SynPatternPoint::Match_WordSet(
                     {
                         any_matched = true;
 
-                        // скорректируем новые результаты
+                        // СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РЅРѕРІС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹
                         for(lem::Container::size_type j = n0; j < results.size(); ++j)
                         {
-                            // 1) скорректируем длину сопоставленного участка с учетом пропущенных токенов.
+                            // 1) СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ СѓС‡Р°СЃС‚РєР° СЃ СѓС‡РµС‚РѕРј РїСЂРѕРїСѓС‰РµРЅРЅС‹С… С‚РѕРєРµРЅРѕРІ.
                             const int span_size = t->GetWordIndex() - current_token->GetWordIndex() + 1;
 
-                            // 2) штраф за пропущенные токены.
+                            // 2) С€С‚СЂР°С„ Р·Р° РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹.
                             SynPatternMatchResult new_res(
                                 true,
                                 span_size,
@@ -5253,7 +5253,7 @@ bool SynPatternPoint::Match_WordSet(
                                 );
                             results[j]->res = new_res;
 
-                            // пропущенные токены будут прикреплены к сопоставленному как умолчальная группа
+                            // РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹ Р±СѓРґСѓС‚ РїСЂРёРєСЂРµРїР»РµРЅС‹ Рє СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРјСѓ РєР°Рє СѓРјРѕР»С‡Р°Р»СЊРЅР°СЏ РіСЂСѓРїРїР°
                             PatternSynLinkedGroup skipped_and_matched( current_token, t, t->GetWordform() );
                             results[j]->AddLinkageGroup( skipped_and_matched );
                         }
@@ -5299,7 +5299,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
      dirty_matching = experience.FindAccelerator( current_token, id_accel );
 
      if( dirty_matching==0 )
-     return false; // точно не подходит.
+     return false; // С‚РѕС‡РЅРѕ РЅРµ РїРѕРґС…РѕРґРёС‚.
      }
      */
 
@@ -5316,11 +5316,11 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
         {
             //     accel_matching=true;
 
-            // Нужна проверка по списку координатных пар?
+            // РќСѓР¶РЅР° РїСЂРѕРІРµСЂРєР° РїРѕ СЃРїРёСЃРєСѓ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ?
             bool alt_ok = true;
             if(!coords.empty())
             {
-                // да, проверяем
+                // РґР°, РїСЂРѕРІРµСЂСЏРµРј
                 bool m1 = true;
 
                 for(lem::Container::size_type j = 0; j < coords.size(); ++j)
@@ -5335,7 +5335,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
                             const int istate = p.GetState();
                             if(istate == 0)
                             {
-                                // Координаты быть не должно, или она должна иметь состояние 0.
+                                // РљРѕРѕСЂРґРёРЅР°С‚С‹ Р±С‹С‚СЊ РЅРµ РґРѕР»Р¶РЅРѕ, РёР»Рё РѕРЅР° РґРѕР»Р¶РЅР° РёРјРµС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ 0.
                                 lem::MCollect<int> bstates = alt->GetStates( p.GetCoord() );
                                 if(!bstates.empty())
                                 {
@@ -5348,7 +5348,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
                             }
                             else
                             {
-                                // Координата должна присутствовать
+                                // РљРѕРѕСЂРґРёРЅР°С‚Р° РґРѕР»Р¶РЅР° РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ
                                 if(alt->GetPairs().FindOnce( p ) == UNKNOWN)
                                 {
                                     m1 = false;
@@ -5382,10 +5382,10 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
                 continue;
 
             bool m = true;
-            // согласования с левыми маркированными точками
+            // СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ Р»РµРІС‹РјРё РјР°СЂРєРёСЂРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё
             for(lem::Container::size_type k = 0; k < back_correls.size() && m; ++k)
             {
-                const lem::UCString &mark = back_correls[k].name; // искомая маркировка
+                const lem::UCString &mark = back_correls[k].name; // РёСЃРєРѕРјР°СЏ РјР°СЂРєРёСЂРѕРІРєР°
                 const BackTraceItem & mark_data = *parent_trace->Get( PatternSequenceNumber, mark );
 
                 if(!mark_data.Check( sg, back_correls[k], *alt ))
@@ -5400,7 +5400,7 @@ bool SynPatternPoint::Match_WordentrySet_Strict(
 
             if(alt_ok)
             {
-                // Одна из альтернатив попала под условия.
+                // РћРґРЅР° РёР· Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РїРѕРїР°Р»Р° РїРѕРґ СѓСЃР»РѕРІРёСЏ.
 
                 SynPatternResult *r = new SynPatternResult( parent_trace );
 
@@ -5510,7 +5510,7 @@ bool SynPatternPoint::Match_WordentrySet(
         bool any_matched = false;
         if(lexer.GetParams().CanSkipInnerTokens())
         {
-            // Разрешен неполный и нечеткий анализ - попробуем пропустить токены в поисках подходящего.
+            // Р Р°Р·СЂРµС€РµРЅ РЅРµРїРѕР»РЅС‹Р№ Рё РЅРµС‡РµС‚РєРёР№ Р°РЅР°Р»РёР· - РїРѕРїСЂРѕР±СѓРµРј РїСЂРѕРїСѓСЃС‚РёС‚СЊ С‚РѕРєРµРЅС‹ РІ РїРѕРёСЃРєР°С… РїРѕРґС…РѕРґСЏС‰РµРіРѕ.
             int skip_count = 0;
 
             int list_selector = 0;
@@ -5548,13 +5548,13 @@ bool SynPatternPoint::Match_WordentrySet(
                     {
                         any_matched = true;
 
-                        // скорректируем новые результаты
+                        // СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РЅРѕРІС‹Рµ СЂРµР·СѓР»СЊС‚Р°С‚С‹
                         for(lem::Container::size_type j = n0; j < results.size(); ++j)
                         {
-                            // 1) скорректируем длину сопоставленного участка с учетом пропущенных токенов.
+                            // 1) СЃРєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРіРѕ СѓС‡Р°СЃС‚РєР° СЃ СѓС‡РµС‚РѕРј РїСЂРѕРїСѓС‰РµРЅРЅС‹С… С‚РѕРєРµРЅРѕРІ.
                             const int span_size = t->GetWordIndex() - current_token->GetWordIndex() + 1;
 
-                            // 2) штраф за пропущенные токены.
+                            // 2) С€С‚СЂР°С„ Р·Р° РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹.
                             SynPatternMatchResult new_res(
                                 true,
                                 span_size,
@@ -5564,7 +5564,7 @@ bool SynPatternPoint::Match_WordentrySet(
                                 );
                             results[j]->res = new_res;
 
-                            // пропущенные токены будут прикреплены к сопоставленному как умолчальная группа
+                            // РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ С‚РѕРєРµРЅС‹ Р±СѓРґСѓС‚ РїСЂРёРєСЂРµРїР»РµРЅС‹ Рє СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРЅРѕРјСѓ РєР°Рє СѓРјРѕР»С‡Р°Р»СЊРЅР°СЏ РіСЂСѓРїРїР°
                             PatternSynLinkedGroup skipped_and_matched( current_token, t, t->GetWordform() );
                             results[j]->AddLinkageGroup( skipped_and_matched );
                         }
