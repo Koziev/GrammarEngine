@@ -8,10 +8,14 @@
 #include <lem/ptr_container.h>
 #include <lem/RWULock.h>
 #include <lem/solarix/coord_pair.h>
+#include <lem/process.h>
 
 #if defined SOL_CRF_MODEL
 #include <crfsuite.h>
 #endif
+
+// #9 07.01.2018  баг с многопоточным использованием CRFSuite
+
 
 namespace Solarix
 {
@@ -188,6 +192,7 @@ namespace Solarix
  {
   private:
    #if defined SOL_CRF_MODEL
+   lem::Process::CriticalSection crf_critsect; // #9 баг с многопоточным использованием CRFSuite
    crfsuite_model_t *model;
    crfsuite_dictionary_t *attrs, *labels;
    crfsuite_tagger_t *tagger;
@@ -213,6 +218,11 @@ namespace Solarix
                           const std::multimap< const LexerTextPos*, int > & token2selection,
                           bool remove_incorrect_alts
                          ) const;
+
+   void Apply_CRFSuite(BasicLexer & lexer,
+                       Dictionary & dict,
+                       const ElapsedTimeConstraint & constraints,
+                       bool remove_incorrect_alts);
 
   public:
    SequenceLabelerModel();
