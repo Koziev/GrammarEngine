@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataroot>
+ <solarix_version>pro</solarix_version>
+ <dictionary_version>226</dictionary_version>
+ <alphabet>alphabet&#46;bin</alphabet>
+ <morphology>diction&#46;bin</morphology>
+ <lexicon_provider>sqlite</lexicon_provider>
+ <lexicon_db>lexicon&#46;db</lexicon_db>
+ <thesaurus_provider>sqlite</thesaurus_provider>
+ <thesaurus_db>thesaurus&#46;db</thesaurus_db>
+ <seeker>seeker&#46;bin</seeker>
+ <reco2_provider>sqlite</reco2_provider>
+ <reco2_db>reco2.db</reco2_db>
+ <lemmatizer enabled="true" flags="default" absolute="false">lemmatizer&#46;db</lemmatizer>
+ <affixes>affixes&#46;bin</affixes>
+ <prefix_entry_searcher>prefix&#95;entry&#95;searcher&#46;db</prefix_entry_searcher>
+<ngrams absolute="false"></ngrams>
+<segmentation_engines absolute="false"></segmentation_engines>
+<models>
+ <sequence_labeler>.</sequence_labeler>
+ <desr>.</desr>
+</models>
+
+</dataroot>
