@@ -1,5 +1,7 @@
+// #12 26.01.2018 https://github.com/Koziev/GrammarEngine/issues/12
+//
 // CD->03.11.2005
-// LC->06.12.2008
+// LC->26.01.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -41,7 +43,7 @@ MIMEType::MIMEType( const char *MimeStr )
    i++;
   }
 
- if( MimeStr=='\0' )
+ if( MimeStr[i]=='\0' ) // #12 https://github.com/Koziev/GrammarEngine/issues/12
   return;
 
  while( i<l && lem::is_space(MimeStr[i]) )
