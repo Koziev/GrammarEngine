@@ -43,7 +43,7 @@ MIMEType::MIMEType( const char *MimeStr )
    i++;
   }
 
- if( MimeStr[i]=='\0' ) // #12 https://github.com/Koziev/GrammarEngine/issues/12
+ if( MimeStr[i]=='\0' ) // #12
   return;
 
  while( i<l && lem::is_space(MimeStr[i]) )
