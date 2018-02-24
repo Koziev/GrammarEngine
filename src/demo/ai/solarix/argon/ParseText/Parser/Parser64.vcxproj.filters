@@ -1404,6 +1404,9 @@
     <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
       <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkerModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\lem\solarix\_sg_api.h">
@@ -1422,6 +1425,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SentenceEOL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkerModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

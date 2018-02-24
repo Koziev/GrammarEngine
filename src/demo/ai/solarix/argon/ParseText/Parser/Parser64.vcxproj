@@ -632,6 +632,7 @@ copy e:\mvoice\lem\lib64\libdesr.dll $(OutDir)
     <ClCompile Include="..\..\..\..\..\..\tools\unicode\utf_converters.cpp" />
     <ClCompile Include="..\..\..\..\..\..\tools\unicode\WideString2Ucs4.cpp" />
     <ClCompile Include="..\..\..\..\..\..\tools\win32_registry.cpp" />
+    <ClCompile Include="ChunkerModel.cpp" />
     <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
     <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
     <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
@@ -663,6 +664,7 @@ copy e:\mvoice\lem\lib64\libdesr.dll $(OutDir)
     <ClInclude Include="..\..\..\..\..\..\include\lem\httpd.h" />
     <ClInclude Include="..\..\..\..\..\..\include\lem\solarix\solarix_grammar_engine.h" />
     <ClInclude Include="..\..\..\..\..\..\include\lem\solarix\_sg_api.h" />
+    <ClInclude Include="ChunkerModel.h" />
     <ClInclude Include="HttpServer.h" />
     <ClInclude Include="ParserEngineBase.h" />
     <ClInclude Include="SentenceEOL.h" />

@@ -7,6 +7,7 @@
 #include <lem/solarix/WrittenTextAnalysisSession.h>
 #include <lem/solarix/casing_coder.h>
 #include "Lemmatizer2.h"
+#include "ChunkerModel.h"
 
 class ParserEngineBase
 {
@@ -32,19 +33,24 @@ class ParserEngineBase
   int lemmatizer_type;
   lem::UCString language_name;
 
+  // DeSR dependency parser data and properties
   Solarix::Dictionary dict;
   Solarix::Load_Options opt;
   Solarix::ModelCodeBook desr_codebook;
   void * hDESR;
   int language_id;
+
+  // Lemmatizer model
   Lemmatizer2 lemmatizer2;
   Solarix::WrittenTextAnalysisSession * current_analysis;
   Solarix::CasingCoder * casing_coder;
 
+  // Chunker model
+  ChunkerModel chunker_model;
+
   int word_count;
   int sent_count;
 
-  void ShowHelp();
   void DumpMorphTokens( const Solarix::Variator & tagging, bool emit_morph, lem::OFormatter & out_stream );
   void AssembleEdges( const Solarix::Tree_Node & node, std::map<int, std::pair<int,int> > & child_to_parent, std::map<int,lem::UCString> & node2word );
 

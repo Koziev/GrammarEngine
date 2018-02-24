@@ -19,6 +19,7 @@
 <models>
  <sequence_labeler>.</sequence_labeler>
  <desr>.</desr>
+ <chunker>.</chunker>
 </models>
 
 </dataroot>
