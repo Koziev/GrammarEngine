@@ -216,3 +216,11 @@ API словаря реализован как динамическая библ
 ## Пример использования C API грамматического словаря
 
 Пример на C++ находится в папке [.../src/demo/ai/solarix/Grammar_Engine/SimpleGREN](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/Grammar_Engine/SimpleGREN).
+
+## Консольный парсер
+
+Парсер - консольная утилита, которая умеет выполнять токенизацию, лемматизацию, частеречную
+разметку (part-of-speech tagging), синтаксический разбор с построением дерева (dependency parsing)
+и выделение составляющих (chunking). Ее описание вынесено на [отдельную страницу](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/ParseText/Parser).
+
+
