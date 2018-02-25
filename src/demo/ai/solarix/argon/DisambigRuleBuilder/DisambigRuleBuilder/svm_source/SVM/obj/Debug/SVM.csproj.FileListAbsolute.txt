@@ -1,0 +1,6 @@
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Debug\SVM.dll
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Debug\SVM.pdb
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Debug\svm.xml
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Debug\ResolveAssemblyReference.cache
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Debug\SVM.dll
+E:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Debug\SVM.pdb

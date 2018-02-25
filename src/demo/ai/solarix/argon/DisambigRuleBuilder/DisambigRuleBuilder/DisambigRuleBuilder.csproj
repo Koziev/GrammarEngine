@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BA2798BC-3C81-4C65-B6ED-E2D445C1DFFE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DisambigRuleBuilder</RootNamespace>
+    <AssemblyName>DisambigRuleBuilder</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="gren_consts, Version=1.0.5102.18272, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\lib\gren_consts.dll</HintPath>
+    </Reference>
+    <Reference Include="gren_fx, Version=8.10.5101.18069, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\lib\gren_fx.dll</HintPath>
+    </Reference>
+    <Reference Include="lemmatizator_fx, Version=8.10.4852.23677, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\lib\lemmatizator_fx.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdjacentMatrix.cs" />
+    <Compile Include="Builder_Bayes.cs" />
+    <Compile Include="Builder_BayesSuffix.cs" />
+    <Compile Include="Builder_Bayes_2Factor.cs" />
+    <Compile Include="Builder_CRF.cs" />
+    <Compile Include="Builder_HMM.cs" />
+    <Compile Include="Builder_HMM_Suffix.cs" />
+    <Compile Include="Builder_LEMM.cs" />
+    <Compile Include="Builder_Lemmatizer_CRF.cs" />
+    <Compile Include="Builder_Lemmatizer_HMM_Suffix.cs" />
+    <Compile Include="Builder_LEMM_Bayes.cs" />
+    <Compile Include="Builder_LEMM_ByPOSTag.cs" />
+    <Compile Include="Builder_LEMM_MaxEnt.cs" />
+    <Compile Include="Builder_LEMM_MEMM.cs" />
+    <Compile Include="Builder_RuleInference.cs" />
+    <Compile Include="Builder_SVM.cs" />
+    <Compile Include="Builder_Syntax_CRF.cs" />
+    <Compile Include="Builder_Syntax_Neuro.cs" />
+    <Compile Include="CommonClasses.cs" />
+    <Compile Include="DESR_Builder.cs" />
+    <Compile Include="EdgeStat.cs" />
+    <Compile Include="FactAssembler.cs" />
+    <Compile Include="DisambigRuleBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleData.cs" />
+    <Compile Include="SamplesSource.cs" />
+    <Compile Include="StatAssembler.cs" />
+    <Compile Include="String2Vector.cs" />
+    <Compile Include="TokenizerBuilder.cs" />
+    <Compile Include="Trainer_LEMM_MEMM.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\engines\gren_fx2\gren_fx2.csproj">
+      <Project>{0BBE6478-1D13-41A4-8AD0-C6436C428570}</Project>
+      <Name>gren_fx2</Name>
+    </ProjectReference>
+    <ProjectReference Include="SharpEntropy_MaxEntLib\SharpEntropy.csproj">
+      <Project>{BF0BF8B0-1894-4EDF-BF51-F370B063797E}</Project>
+      <Name>SharpEntropy</Name>
+    </ProjectReference>
+    <ProjectReference Include="svm_source\SVM\SVM.csproj">
+      <Project>{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}</Project>
+      <Name>SVM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(LEM_PATH)\lib\solarix_grammar_engine.dll  $(TargetDir)
+copy $(LEM_PATH)\lib\sqlite.dll  $(TargetDir)
+copy $(LEM_PATH)\lib\gren_consts.dll  $(TargetDir)
+
+rem copy $(LEM_PATH)\lib64\solarix_grammar_engine.dll  $(TargetDir)
+rem copy $(LEM_PATH)\lib64\sqlite.dll  $(TargetDir)
+
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,40 @@
+﻿<Dictionary>
+  <Words>
+    <Unrecognized>
+      <Word></Word>
+    </Unrecognized>
+    <Recognized>
+      <Word>Univariate</Word>
+      <Word>Eigenvalues</Word>
+      <Word>Eigenvalue</Word>
+      <Word>Discretization</Word>
+      <Word>Laplacian</Word>
+      <Word>Multiquadric</Word>
+      <Word>Skewness</Word>
+      <Word>Kurtosis</Word>
+      <Word>Discriminant</Word>
+      <Word>Discriminants</Word>
+      <Word>Cutpoint</Word>
+      <Word>Cutpoints</Word>
+      <Word>Precomputed</Word>
+      <Word>Ergodic</Word>
+      <Word>x</Word>
+      <Word>y</Word>
+    </Recognized>
+    <Deprecated>
+      <Term PreferredAlternate=""></Term>
+    </Deprecated>
+    <Compound>
+      <Term CompoundAlternate=""></Term>
+    </Compound>
+    <DiscreteExceptions>
+      <Term>x</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>NIPALS</Acronym>
+      <Acronym>SIMPLS</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

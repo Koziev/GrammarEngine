@@ -1,0 +1,12 @@
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\bin\Release\SVM.dll
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\bin\Release\SVM.pdb
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\bin\Release\svm.xml
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\obj\Release\ResolveAssemblyReference.cache
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\obj\Release\SVM.dll
+e:\polygon\SupportVectorMachine\SVM.NET\src\svm_source\SVM\obj\Release\SVM.pdb
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Release\SVM.dll
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Release\SVM.pdb
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\bin\Release\svm.xml
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Release\ResolveAssemblyReference.cache
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Release\SVM.dll
+e:\MVoice\lem\demo\ai\solarix\argon\DisambigRuleBuilder\DisambigRuleBuilder\svm_source\SVM\obj\Release\SVM.pdb

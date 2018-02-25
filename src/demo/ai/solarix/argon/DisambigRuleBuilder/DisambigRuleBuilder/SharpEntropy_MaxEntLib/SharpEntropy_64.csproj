@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF0BF8B0-1894-4EDF-BF51-F370B063797E}</ProjectGuid>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>SharpEntropy</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SharpEntropy</RootNamespace>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>SharpEntropyDoc.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractDataIndexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BasicContextGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BasicEventReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComparableEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GisModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GisTrainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IContextGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMaximumEntropyModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\BinaryGisModelReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\BinaryGisModelWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\GisModelReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\GisModelWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\IGisModelReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\JavaBinaryGisModelReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\JavaBinaryGisModelWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\PlainTextGisModelReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\PlainTextGisModelWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrainingDataIndexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrainingDataReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrainingEventReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OnePassDataIndexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PatternedPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PlainTextByLineDataReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TrainingEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TwoPassDataIndexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
