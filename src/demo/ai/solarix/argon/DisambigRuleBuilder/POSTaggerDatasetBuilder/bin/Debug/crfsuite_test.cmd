@@ -1,0 +1,1 @@
+CRFsuite.exe tag -r -m sequence_labeler.model %1 > %2

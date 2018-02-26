@@ -1,0 +1,1 @@
+CRFsuite.exe learn -m sequence_labeler.model %1
