@@ -82,6 +82,17 @@ parser -verbose -tagger 0 -parser 0 -lemmatizer 0 -eol -d ../ru/dictionary.xml -
 parser -verbose -tagger 0 -parser 2 -d ../ru/dictionary.xml -i input.txt -o output.xml
 ```
 
+## Тренеры моделей
+
+Парсер использует статистические модели для лемматизации, частеречной разметки и парсинга,
+обучая их на большом корпусе размеченных в ручную текстов. Исходный текст программ, выполняющих
+обучение, также доступен в репозитории:
+
+[part-of-speech tagger model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/POSTaggerDatasetBuilder)  
+[chunker model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/ShallowParserDatasetBuilder)  
+[dependency parsing model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/DisambigRuleBuilder)  
+
+
 
 
 
