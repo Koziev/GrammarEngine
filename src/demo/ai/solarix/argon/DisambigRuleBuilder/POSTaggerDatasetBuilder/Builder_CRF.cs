@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
-
+using CorporaLib;
 
 class Builder_CRF
 {
@@ -30,6 +30,12 @@ class Builder_CRF
     {
         this.MAX_SUFFIX_LEN = max_suffix_len;
         this.CONTEXT_SIZE = context_size;
+    }
+
+    private string tmp_folder = "";
+    public void SetTmpFolder(string tmp_folder)
+    {
+        this.tmp_folder = tmp_folder;
     }
 
     System.IO.StreamWriter crf_file_train, crf_file_test;
@@ -10044,7 +10050,7 @@ class Builder_CRF
 
         if (crf_file_train == null)
         {
-            crf_file_train = new System.IO.StreamWriter("crf_train.txt");
+            crf_file_train = new System.IO.StreamWriter(System.IO.Path.Combine(tmp_folder, "crf_train.txt"));
         }
 
         Sentence2Features(crf_file_train, sample);
@@ -10725,7 +10731,7 @@ class Builder_CRF
         string cmd = null;
 
         Console.WriteLine("Start training CRFSuite...");
-        input_file = string.Format("{0}\\crf_train.txt", System.IO.Directory.GetCurrentDirectory());
+        input_file = System.IO.Path.Combine(tmp_folder, "crf_train.txt");
         cmd = string.Format("{0}\\crfsuite_train.cmd", System.IO.Directory.GetCurrentDirectory());
 
         System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -10764,15 +10770,14 @@ class Builder_CRF
     {
         if (test_samples_file == null)
         {
-            test_samples_file = new System.IO.StreamWriter("test_samples.txt");
+            test_samples_file = new System.IO.StreamWriter(System.IO.Path.Combine(tmp_folder, "test_samples.txt"));
         }
 
         test_samples_file.WriteLine("{0}", sample.GetSentenceStr());
 
-
         if (crf_file_test == null)
         {
-            crf_file_test = new System.IO.StreamWriter("crf_test.txt");
+            crf_file_test = new System.IO.StreamWriter(System.IO.Path.Combine(tmp_folder, "crf_test.txt"));
         }
 
         bool b = Sentence2Features(crf_file_test, sample);
@@ -10816,8 +10821,8 @@ class Builder_CRF
 
         Console.WriteLine("Start testing CRFSuite");
 
-        input_file = string.Format("{0}\\crf_test.txt", System.IO.Directory.GetCurrentDirectory());
-        output_file = string.Format("{0}\\test_result.txt", System.IO.Directory.GetCurrentDirectory());
+        input_file = System.IO.Path.Combine(tmp_folder, "crf_test.txt");
+        output_file = System.IO.Path.Combine(tmp_folder, "test_result.txt");
         cmd = string.Format("{0}\\crfsuite_test.cmd", System.IO.Directory.GetCurrentDirectory());
 
         System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -11060,6 +11065,4 @@ class Builder_CRF
 
         return;
     }
-
 }
-

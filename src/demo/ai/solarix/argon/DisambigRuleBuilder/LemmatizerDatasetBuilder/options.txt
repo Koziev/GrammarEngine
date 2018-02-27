@@ -1,0 +1,6 @@
+
+-dict e:\MVoice\lem\bin-windows64\dictionary.xml -corpus f:\Corpus\CompiledCorpus\ru\x64\*.bin -params LANGUAGE=ru-dict e:\MVoice\lem\bin-windows64\dictionary.xml -corpus f:\Corpus\CompiledCorpus\ru\x64\*.bin -params LANGUAGE=ru
+
+
+-dict e:\MVoice\lem\bin-windows64\dictionary.xml -conllu_corpus "f:\Corpus\Universal Dependencies 1.4\ud-treebanks-v1.4\ud-treebanks-v1.4\UD_Russian-SynTagRus\ru_syntagrus-ud-train.conllu" -nsample 1000 -params LANGUAGE=ru
+

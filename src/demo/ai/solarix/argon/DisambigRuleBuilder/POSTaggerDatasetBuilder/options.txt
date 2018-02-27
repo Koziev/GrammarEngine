@@ -1,0 +1,9 @@
+Корпус Solarix:
+
+-dict e:\MVoice\lem\bin-windows64\dictionary.xml -corpus f:\Corpus\CompiledCorpus\ru\x64\corpus*.bin -nsample 10000 -context_span 4 -suffix_len 3 -params LANGUAGE=ru,EMIT_POS_TAGS=false,EMIT_MORPH_TAGS=false,EMIT_POS_FOR_CONTEXT=false,EMIT_MORPH_FOR_CONTEXT=false,EMIT_FORM_TAGS=true,EMIT_FORMTAGS_FOR_CONTEXT=true,EMIT_SEMANTIC_TAGS=true,LEMMA_SEMATAGS=true -sematags f:\ModelTrainer\lemma_sematags.txt
+
+Корпус ConllU:
+
+-dict e:\MVoice\lem\bin-windows64\dictionary.xml -conllu_corpus "f:\Corpus\Universal Dependencies 1.4\ud-treebanks-v1.4\ud-treebanks-v1.4\UD_Russian-SynTagRus\ru_syntagrus-ud-train.conllu" -nsample 10000 -context_span 4 -suffix_len 3 -params LANGUAGE=ru,EMIT_POS_TAGS=false,EMIT_MORPH_TAGS=false,EMIT_POS_FOR_CONTEXT=false,EMIT_MORPH_FOR_CONTEXT=false,EMIT_FORM_TAGS=true,EMIT_FORMTAGS_FOR_CONTEXT=true,EMIT_SEMANTIC_TAGS=true,LEMMA_SEMATAGS=true -sematags f:\ModelTrainer\lemma_sematags.txt
+
+

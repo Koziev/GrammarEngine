@@ -1,11 +1,10 @@
-﻿// Тренер для чанкера.
+﻿// Тренер для чанкера (см. проект парсера https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/ParseText/Parser).
 // Используется консольный интерфейс CRFSuite.
+// Обучающий датасет формируется из скомпилированного treebank'а.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 class ShallowParserDatasetBuilder
 {

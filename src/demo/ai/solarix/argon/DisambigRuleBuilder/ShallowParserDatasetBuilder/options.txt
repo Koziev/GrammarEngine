@@ -1,0 +1,1 @@
+-corpus f:\Corpus\CompiledCorpus\ru\x64\*.bin -dict e:\MVoice\lem\bin-windows64\dictionary.xml -workdir f:\tmp -window 3 -emit_shingles true -emit_morphtags true

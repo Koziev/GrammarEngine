@@ -8,8 +8,7 @@ using System.Linq;
 
 class Program
 {
-    public static string dictionary_path = @"e:\MVoice\lem\bin-windows\dictionary.xml";
-    // public static string dictionary_path = @"e:\MVoice\lem\bin-windows64\dictionary.xml";
+    public static string dictionary_path = @"e:\MVoice\lem\bin-windows64\dictionary.xml";
 
     public static string MODEL_NAME = "crf_pos_tagger";
     public static string corpus_path;

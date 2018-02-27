@@ -10520,7 +10520,7 @@ UNKNOWNENTRIES
         StoreCodeBook();
 
         // Запускаем обучение модели
-        if (false)
+        if (true)
         {
             Console.WriteLine("Start training DESR...");
             string cmd = string.Format("{0}\\desr_train.cmd", System.IO.Directory.GetCurrentDirectory());

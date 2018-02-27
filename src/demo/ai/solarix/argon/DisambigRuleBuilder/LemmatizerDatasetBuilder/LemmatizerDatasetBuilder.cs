@@ -1,23 +1,20 @@
-﻿// Генерация датасетов и обучение моделей для частеречной разметки.
-// Репозиторий проекта: https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/POSTaggerDatasetBuilder
-// Консольная утилита читает текстовый корпус (поддерживаются разные форматы) с ручной
-// разметкой морфологических признаков и генерирует датасеты для обучения и валидации CRFSuite модели.
-// Обученная модель используется Парсером (https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/ParseText/Parser).
-//
-// Пример запуска:
-// -dict e:\MVoice\lem\bin-windows64\dictionary.xml -conllu_corpus "f:\Corpus\Universal Dependencies 1.4\ud-treebanks-v1.4\ud-treebanks-v1.4\UD_Russian-SynTagRus\ru_syntagrus-ud-train.conllu" -nsample 10000 -context_span 4 -suffix_len 3 -params LANGUAGE=ru,EMIT_POS_TAGS=false,EMIT_MORPH_TAGS=false,EMIT_POS_FOR_CONTEXT=false,EMIT_MORPH_FOR_CONTEXT=false,EMIT_FORM_TAGS=true,EMIT_FORMTAGS_FOR_CONTEXT=true,EMIT_SEMANTIC_TAGS=true,LEMMA_SEMATAGS=true -sematags f:\ModelTrainer\lemma_sematags.txt
+﻿// Утилита для обучения модели лемматизации, работающей поверх POS Tagger.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 using CorporaLib;
 
-class POSTaggerDatasetBuilder
+public class LemmatizerDatasetBuilder
 {
     public static string dictionary_path;
 
     public static List<ICorpusReader> corpora = new List<ICorpusReader>();
     public static string sematags_path = null;
-    public static int NSAMPLE = 0; // Максимальное кол-во предложений, которые будут взяты из корпуса для получения тренировочного набора
+    public static int NSAMPLE = int.MaxValue; // Максимальное кол-во предложений, которые будут взяты из корпуса для получения тренировочного набора
     public static int MIN_SENT_LEN = 0; // Предлождения короче данного значения не будут браться для генерации тренировочного и тестового наборов
     public static int CONTEXT_SPAN = -1;
     public static int SUFFIX_LEN = -1;
@@ -58,11 +55,6 @@ class POSTaggerDatasetBuilder
                     corpora.Add(new ConlluCorpusReader(corpus_path));
                     ++i;
                 }
-                else if (args[i] == "-sematags")
-                {
-                    sematags_path = args[i + 1];
-                    ++i;
-                }
                 else if (args[i] == "-nsample")
                 {
                     NSAMPLE = int.Parse(args[i + 1]);
@@ -84,11 +76,6 @@ class POSTaggerDatasetBuilder
                     CONTEXT_SPAN = int.Parse(args[i + 1]);
                     ++i;
                 }
-                else if (args[i] == "-word_features")
-                {
-                    WORD_FEATURES = args[i + 1];
-                    ++i;
-                }
                 else if (args[i] == "-params")
                 {
                     string[] px = args[i + 1].Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -107,29 +94,23 @@ class POSTaggerDatasetBuilder
         gren = new SolarixGrammarEngineNET.GrammarEngine2();
         gren.Load(dictionary_path, true);
 
-        Build_Morphology_CRF(gren, model_params);
+        Build_LemmByPostags(gren, model_params);
 
         return;
     }
 
 
-    static void Build_Morphology_CRF(SolarixGrammarEngineNET.GrammarEngine2 gren, List<string> model_params)
+    private static void Build_LemmByPostags(SolarixGrammarEngineNET.GrammarEngine2 gren, List<string> model_params)
     {
-        Builder_CRF builder = new Builder_CRF(SUFFIX_LEN, CONTEXT_SPAN);
+        Builder_LEMM_ByPOSTag builder = new Builder_LEMM_ByPOSTag();
 
-        builder.SetModelParams(model_params);
-
+        builder.ChangeModelParams(model_params);
         builder.SetDictionary(gren);
-
         builder.SetTmpFolder(tmp_folder);
-
-        if (!string.IsNullOrEmpty(sematags_path))
-        {
-            builder.LoadSemanticTags(sematags_path);
-        }
+        builder.Init();
 
         int counter = 0;
-        int MAX_COUNT = NSAMPLE;
+        int MAX_COUNT = NSAMPLE==0 ? int.MaxValue : NSAMPLE;
 
         int TEST_SHARE = 10; // каждый такой пример идет на валидацию
 
@@ -142,21 +123,16 @@ class POSTaggerDatasetBuilder
                 Console.WriteLine("{0}: {1}", counter, sample.GetSentenceStr());
 
                 if ((counter % TEST_SHARE) == 0)
-                {
                     builder.ProcessValidationSample(sample);
-                }
                 else
-                {
                     builder.ProcessTrainingSample(sample);
-                }
             }
         }
 
-        builder.FinishLearning();
-        Console.WriteLine("Storing the model files...");
-        builder.FinishTesting();
 
+        builder.FinishLearning();
+        builder.StartTesting();
+        builder.PrintTestResults();
         return;
     }
-
 }
