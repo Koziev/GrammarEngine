@@ -26,6 +26,7 @@
 ## Сборка из исходников
 
 Под MS Windows для компиляции парсера можно использовать [проект для VisualStudio 2015](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/ParseText/Parser/Parser64.sln).
+Предварительно надо скачать и собрать [библиотеки Boost](http://ww.boost.org).
 
 ## Результаты разбора
 

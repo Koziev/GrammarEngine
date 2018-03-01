@@ -5,6 +5,8 @@
 #include <lem/solarix/WordEntry.h>
 #include "ChunkerModel.h"
 
+// 01.03.2018 добавлена критсекция на входе в Apply, так как CRFSuite tagger не многопоточен.
+
 
 ChunkerModel::ChunkerModel() :
     window(-1000000), shingle_len(-1), emit_shingles(false), emit_morphtags(false),
@@ -168,6 +170,9 @@ void ChunkerModel::GetWordFeatures(Solarix::Dictionary & dict,
 
 std::vector<int> ChunkerModel::Apply(Solarix::Dictionary & dict, const lem::MCollect<Solarix::Tree_Node*> & words)
 {
+    // CRFSuite tagger API не работает многопоточно, поэтому критсекция.
+    lem::Process::CritSecLocker cs_locker(&crf_critsect); // #9
+
     int N = 0, L = 0, ret = 0, lid = -1;
     crfsuite_instance_t inst;
 

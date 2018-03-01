@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; ++i)
     {
         if (argv[i][0] == '?' ||
-            (argv[i][0] == '-' || argv[i][0] == '/') && (argv[i][1] == 'h' || argv[i][1] == '?'))
+            (argv[i][0] == '-' || argv[i][0] == '/') && (strcmp(argv[i]+1, "help")==0 || strcmp(argv[i]+1,"h")==0 || argv[i][1] == '?'))
         {
             show_usage = true;
             break;

@@ -1,7 +1,7 @@
 #if defined HTTP_PARSER_SERVICE
 #include <lem/logfile.h>
 #include <lem/conversions.h>
-#include "ParserEngine.h"
+#include "ParserEngineBase.h"
 #include "HttpServer.h"
 
 using namespace lem;

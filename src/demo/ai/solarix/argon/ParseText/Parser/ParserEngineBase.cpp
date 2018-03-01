@@ -1,3 +1,5 @@
+#undef HTTP_PARSER_SERVICE
+
 #include <stdio.h>
 #include <vector>
 #include <string>
@@ -370,7 +372,7 @@ int ParserEngineBase::Run(int argc, char * argv[])
         delete http_server;
         return 0;
 #else
-        lem::mout->printf("Http service is not compiled");
+        throw std::exception("Http service is not available");
 #endif
     }
 

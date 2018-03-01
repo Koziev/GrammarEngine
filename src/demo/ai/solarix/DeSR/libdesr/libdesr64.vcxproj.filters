@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Source Files">
+      <UniqueIdentifier>{c3188a70-c984-41b1-b7de-20758228eba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\Text">
+      <UniqueIdentifier>{dbe729cb-1143-4a14-8b3c-17d43d0fd424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\Text\pcre">
+      <UniqueIdentifier>{6cddf357-ce34-4751-af64-9651d49788b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE">
+      <UniqueIdentifier>{d61a4cf2-e232-470f-9c5d-e26a99cd1d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\conf">
+      <UniqueIdentifier>{1d445ae9-9c41-49f5-a558-bd52870e90cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\include">
+      <UniqueIdentifier>{d87b62cd-269e-4ced-9fac-e91607d2c342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\Common">
+      <UniqueIdentifier>{b1323553-3eab-4873-9f32-9353589654bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\IO">
+      <UniqueIdentifier>{22d34e08-a511-4575-a15d-3e5454680851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\win32">
+      <UniqueIdentifier>{3298015b-613e-4a12-abb2-fc55784a3578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\IXE\lib">
+      <UniqueIdentifier>{e1ff3983-2d98-4b54-bbf0-3e1b995233e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files\Classifier">
+      <UniqueIdentifier>{0e586dc0-8909-4145-8fed-8fcfeb6032cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="libdesr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\ap.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\ApParser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\conf_feature.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Corpus.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\EventStream.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Language.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\MeParser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\MlpParser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\MorphExtractor.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\MultiSvmParser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Parser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\PosTaggerStub.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\PtbTokenizer.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\ReviseEventStream.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Sentence.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\SentenceReader.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\SplitSentenceReader.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\State.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\svm.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\SvmParser.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Token.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\TokenAttributes.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\Tokenizer.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\src\TokenPath.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Char.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\charmap.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Encoding.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\HtmlTokenizer.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\RegExp.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\String.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\strings.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\StringTokenizer.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Suffixes.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Unicode.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Utf8Utils.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\WordSet.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\xml.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\XmlReader.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_chartables.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_compile.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_config.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_dfa_exec.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_exec.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_fullinfo.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_get.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_globals.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_maketables.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_newline.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_ord2utf8.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_refcount.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_study.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_tables.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_ucd.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_valid_utf8.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_version.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_xclass.c">
+      <Filter>Source Files\Source Files\Text\pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf.cpp">
+      <Filter>Source Files\Source Files\IXE\conf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_bool.cpp">
+      <Filter>Source Files\Source Files\IXE\conf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_float.cpp">
+      <Filter>Source Files\Source Files\IXE\conf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_int.cpp">
+      <Filter>Source Files\Source Files\IXE\conf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_string.cpp">
+      <Filter>Source Files\Source Files\IXE\conf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\Common\OptionStream.cpp">
+      <Filter>Source Files\Source Files\IXE\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\Common\util.cpp">
+      <Filter>Source Files\Source Files\IXE\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\io\File.cpp">
+      <Filter>Source Files\Source Files\IXE\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\io\FileHandle.cpp">
+      <Filter>Source Files\Source Files\IXE\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\io\Format.cpp">
+      <Filter>Source Files\Source Files\IXE\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\io\mappedFile.cpp">
+      <Filter>Source Files\Source Files\IXE\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\win32\timecnv.cpp">
+      <Filter>Source Files\Source Files\IXE\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\win32\win_iconv.c">
+      <Filter>Source Files\Source Files\IXE\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\ixe\lib\strtok_r.c">
+      <Filter>Source Files\Source Files\IXE\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\classifier\GIS.cpp">
+      <Filter>Source Files\Source Files\Classifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\classifier\LBFGS.cpp">
+      <Filter>Source Files\Source Files\Classifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\classifier\lbfgsAlg.cpp">
+      <Filter>Source Files\Source Files\Classifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\classifier\MaxEnt.cpp">
+      <Filter>Source Files\Source Files\Classifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\classifier\StreamTokenizer.cpp">
+      <Filter>Source Files\Source Files\Classifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\desr-1.3.2\text\Tanl_StreamTokenizer.cpp">
+      <Filter>Source Files\Source Files\Text</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\char.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\config.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\error.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\hash.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Iterator.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\ixe.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Set.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Timer.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\version.h">
+      <Filter>Source Files\Source Files\IXE\include</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

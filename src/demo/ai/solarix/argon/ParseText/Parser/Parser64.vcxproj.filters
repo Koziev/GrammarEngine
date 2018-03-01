@@ -32,18 +32,6 @@
     <Filter Include="Source Files\Grammar_Engine\Ngrams">
       <UniqueIdentifier>{7eb9eb9a-273c-4071-85cc-c18938e166c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\boost">
-      <UniqueIdentifier>{a485a680-b65c-4439-a59f-65a901176ac7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\boost\regex">
-      <UniqueIdentifier>{f87db439-52a8-4e30-8373-c7f09d0cb919}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\boost\thread">
-      <UniqueIdentifier>{c872c8aa-9f4a-4554-88a5-d43867dfdc0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\boost\system">
-      <UniqueIdentifier>{477695b6-d970-4b09-9a2a-fdf38d14b050}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -90,9 +78,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HttpServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Lemmatizer2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1340,69 +1325,6 @@
     </ClCompile>
     <ClCompile Include="SentenceEOL.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp">
-      <Filter>Source Files\boost\regex</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp">
-      <Filter>Source Files\boost\system</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
-      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
     <ClCompile Include="ChunkerModel.cpp">
       <Filter>Source Files</Filter>

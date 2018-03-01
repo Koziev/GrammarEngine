@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>libdesr</ProjectName>
+    <ProjectGuid>{0E0F23B4-B512-4600-8E63-A9F2668C6D1D}</ProjectGuid>
+    <RootNamespace>libdesr</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(TMP)\DeSR\LibDeSR\Debug\</OutDir>
+    <IntDir>$(TMP)\DeSR\LibDeSR\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(TMP)\DeSR\LibDeSR\Release\</OutDir>
+    <IntDir>$(TMP)\DeSR\LibDeSR\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\boost\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\;E:\MVoice\lem\demo\ai\solarix\DeSR\PCRE\pcre-8.33\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\win32;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\classifier\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBDESR_EXPORTS;SUPPORT_UTF8;SUPPORT_UCP;YY_NO_UNISTD_H;LINK_SIZE=2;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)libdesrd.dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>$(TargetDir)libdesrd.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetDir)libdesrd.lib $(LEM_PATH)\lib
+copy $(TargetDir)libdesrd.dll $(LEM_PATH)\lib
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>e:\boost.1.66\boost;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\;E:\MVoice\lem\demo\ai\solarix\DeSR\PCRE\pcre-8.33\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\win32;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\classifier\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBDESR_EXPORTS;SUPPORT_UTF8;SUPPORT_UCP;YY_NO_UNISTD_H;LINK_SIZE=2;HAVE_CONFIG_H;HAVE_STD_UNORDERED_MAP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)libdesrd.dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>$(TargetDir)libdesrd.lib</ImportLibrary>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetDir)libdesrd.lib $(LEM_PATH)\lib64
+copy $(TargetDir)libdesrd.dll $(LEM_PATH)\lib64
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\boost\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\;E:\MVoice\lem\demo\ai\solarix\DeSR\PCRE\pcre-8.33\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\win32;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\classifier\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBDESR_EXPORTS;SUPPORT_UTF8;SUPPORT_UCP;YY_NO_UNISTD_H;LINK_SIZE=2;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)libdesr.dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetDir)libdesr.lib $(LEM_PATH)\lib
+copy $(TargetDir)libdesr.dll $(LEM_PATH)\lib
+copy $(TargetDir)libdesr.dll $(LEM_PATH)\exe
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\boost\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\;E:\MVoice\lem\demo\ai\solarix\DeSR\PCRE\pcre-8.33\;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\ixe\win32;E:\MVoice\lem\demo\ai\solarix\DeSR\desr-1.3.2\classifier\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBDESR_EXPORTS;SUPPORT_UTF8;SUPPORT_UCP;YY_NO_UNISTD_H;LINK_SIZE=2;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)libdesr.dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetDir)libdesr.lib $(LEM_PATH)\lib64
+copy $(TargetDir)libdesr.dll $(LEM_PATH)\lib64
+copy $(TargetDir)libdesr.dll $(LEM_PATH)\exe64
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\desr-1.3.2\classifier\GIS.cpp" />
+    <ClCompile Include="..\desr-1.3.2\classifier\LBFGS.cpp" />
+    <ClCompile Include="..\desr-1.3.2\classifier\lbfgsAlg.cpp" />
+    <ClCompile Include="..\desr-1.3.2\classifier\MaxEnt.cpp" />
+    <ClCompile Include="..\desr-1.3.2\classifier\StreamTokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\Common\OptionStream.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\Common\util.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_bool.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_float.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_int.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\conf\conf_string.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\io\File.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\io\FileHandle.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\io\Format.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\io\mappedFile.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\lib\strtok_r.c" />
+    <ClCompile Include="..\desr-1.3.2\ixe\win32\timecnv.cpp" />
+    <ClCompile Include="..\desr-1.3.2\ixe\win32\win_iconv.c" />
+    <ClCompile Include="..\desr-1.3.2\src\ap.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\ApParser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\conf_feature.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Corpus.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\EventStream.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Language.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\MeParser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\MlpParser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\MorphExtractor.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\MultiSvmParser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Parser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\PosTaggerStub.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\PtbTokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\ReviseEventStream.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Sentence.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\SentenceReader.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\SplitSentenceReader.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\State.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\svm.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\SvmParser.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Token.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\TokenAttributes.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\Tokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\src\TokenPath.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Char.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\charmap.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Encoding.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\HtmlTokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\RegExp.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Tanl_StreamTokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\String.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\strings.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\StringTokenizer.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Suffixes.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Unicode.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\Utf8Utils.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\WordSet.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\xml.cpp" />
+    <ClCompile Include="..\desr-1.3.2\text\XmlReader.cpp" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_chartables.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_compile.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_config.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_dfa_exec.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_exec.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_fullinfo.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_get.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_globals.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_maketables.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_newline.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_ord2utf8.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_refcount.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_study.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_tables.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_ucd.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_valid_utf8.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_version.c" />
+    <ClCompile Include="..\PCRE\pcre-8.33\pcre_xclass.c" />
+    <ClCompile Include="dllmain.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="libdesr.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\desr-1.3.2\ixe\include\char.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\config.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\error.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\hash.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Iterator.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\ixe.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Set.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\Timer.h" />
+    <ClInclude Include="..\desr-1.3.2\ixe\include\version.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
