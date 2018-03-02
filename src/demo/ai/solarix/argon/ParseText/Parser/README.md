@@ -1,6 +1,6 @@
-# Parser
+# Parser - частеречная разметка, лемматизация и синтаксический разбор
 
-Выполняет базовые задачи для текста на русском (или другом, поддерживаемом словарной базой
+Парсер выполняет базовые задачи для текста на русском (или другом, поддерживаемом словарной базой
 и моделями) языке:
 
 * Частеречная разметка (part-of-speech tagging)  
@@ -25,9 +25,10 @@
 
 ## Сборка из исходников
 
-Под MS Windows для компиляции парсера можно использовать [проект для VisualStudio 2015](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/ParseText/Parser/Parser64.sln).
+Под MS Windows для компиляции парсера можно использовать готовое решение для VisualStudio 2015 - файл Parser64.sln в [каталоге](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/ParseText/Parser/Parser64.sln).
 Предварительно надо скачать и собрать [библиотеки Boost](http://www.boost.org). На момент
-написания инструкции текущей версией Boost была 1.66, для нее процесс выгладит так.  
+написания инструкции текущей версией Boost была 1.66, для нее процесс выглядит примерно так ([здесь](http://www.boost.org/doc/libs/1_52_0/more/getting_started/windows.html) есть
+официальная дока).  
 
 1) Скачиваем и распаковываем архив с исходниками отсюда http://www.boost.org/users/history/version_1_66_0.html.
 
@@ -56,7 +57,7 @@ bjam -j4 --build-type=complete architecture=x86 address-model=64 link=static sta
 
 ## Результаты разбора
 
-Парсер сохраняет результаты разбора в указанном XML файле (опция -o имя_файла) или выводит
+Консольный вариант парсера сохраняет результаты разбора в указанном XML файле (если указана опция -o имя_файла) или выводит
 их прямо в консоль (по умолчанию).
 
 Например, предложение "Совещание происходило на квартире генерала Науменко." в результате
@@ -119,8 +120,6 @@ parser -verbose -tagger 0 -parser 2 -d ../ru/dictionary.xml -i input.txt -o outp
 [chunker model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/ShallowParserDatasetBuilder)  
 [lemmatizer model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/LemmatizerDatasetBuilder)
 [dependency parsing model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/DisambigRuleBuilder)  
-
-
 
 
 

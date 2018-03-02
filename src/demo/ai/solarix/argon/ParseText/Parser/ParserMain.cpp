@@ -1,5 +1,5 @@
 #include <lem/startup.h>
-#include "ParserEngineBase.h"
+#include "ConsoleParser.h"
 
 
 int main(int argc, char *argv[])
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     }
 
 
-    ParserEngineBase parser_engine;
+    ConsoleParser parser_engine;
     try
     {
         parser_engine.Run(argc, argv);
