@@ -155,7 +155,10 @@
       <OutputFile>$(OutDir)pyparser.dll</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) ..\..\..\..\..\..\lib64\pyparser.pyd</Command>
+      <Command>copy $(TargetPath) $(ProjectDir)..\..\..\..\..\..\lib64\pyparser.pyd
+copy $(TargetPath) $(ProjectDir)..\..\..\..\..\..\pyparser\pyparser.pyd
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
