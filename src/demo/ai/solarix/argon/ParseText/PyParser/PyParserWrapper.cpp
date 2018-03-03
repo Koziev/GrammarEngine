@@ -8,7 +8,7 @@
 using namespace boost::python;
 
 
-class PyParser //: public Parser_API
+class PyParser
 {
 private:
     Parser_API * parser;
@@ -25,15 +25,16 @@ public:
         parser = 0;
     }
 
-    void Load(const std::wstring & dictionary_path)
+    void Load(const std::wstring & dictionary_path, int lemmatizer_type, int parser_type)
     {
-        parser = new Parser_API();
+        delete parser;
+        parser = new Parser_API(lemmatizer_type, parser_type);
         parser->Load(dictionary_path.c_str());
     }
 
-    boost::python::list Tag1(const std::wstring & sentence, bool emit_morph)
+    boost::python::list Tag1(const std::wstring & sentence, bool emit_morph, bool allow_fuzzy_recognition)
     {
-        std::unique_ptr<ParsingResults_API> res(parser->TagSentence(sentence.c_str(), emit_morph));
+        std::unique_ptr<ParsingResults_API> res(parser->TagSentence(sentence.c_str(), emit_morph, allow_fuzzy_recognition));
 
         const ParsingResult_Sentence & sent = res->GetSentence();
         boost::python::list res_list;
@@ -52,7 +53,7 @@ public:
                 }
             }
 
-            auto token_info = boost::python::make_tuple( token.word, token.lemma, token.part_of_speech, tags);
+            auto token_info = boost::python::make_tuple(token.word, token.lemma, token.part_of_speech, tags);
 
             res_list.append(token_info);
         }

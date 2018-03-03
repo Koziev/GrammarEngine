@@ -46,6 +46,7 @@ int ConsoleParser::Run(int argc, char * argv[])
 
     bool emit_morph = false;
     bool render_tree = false;
+    bool allow_fuzzy_recognition = false;
 
     // По умолчанию парсер сегментирует входной текст на предложения с использованием
     // набора правил и эвристик. Если же предложения уже выделены и размещаются
@@ -128,7 +129,7 @@ int ConsoleParser::Run(int argc, char * argv[])
                 }
                 else if (strcmp(opt, "fuzzy_wordrecog") == 0)
                 {
-                    allow_primary_fuzzy_word_recog = lem::to_int(argv[++i]) == 1;
+                    allow_fuzzy_recognition = lem::to_int(argv[++i]) == 1;
                 }
                 else if (strcmp(opt, "d") == 0)
                 {
@@ -299,7 +300,7 @@ int ConsoleParser::Run(int argc, char * argv[])
 
                             sentence.trim();
                             int paragraph_id = segmenter->GetFetchedParagraphID();
-                            ParseString(sentence, paragraph_id, emit_morph, render_tree, results);
+                            ParseString(sentence, paragraph_id, emit_morph, allow_fuzzy_recognition, render_tree, results);
                         }
                     }
                     catch (...)

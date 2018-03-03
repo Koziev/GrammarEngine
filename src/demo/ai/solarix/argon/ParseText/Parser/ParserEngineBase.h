@@ -17,7 +17,6 @@ class ParserEngineBase
  protected:
   int beam_size;
   bool verbose;
-  bool allow_primary_fuzzy_word_recog;
 
   int tagger_type;
   int parser_type;
@@ -56,6 +55,7 @@ class ParserEngineBase
   void ParseString( const lem::UFString & sentence,
       int paragraph_id,
       bool emit_morph,
+      bool allow_fuzzy_recognition,
       bool render_tree,
       ParsingResultFormatter & out_stream );
 };

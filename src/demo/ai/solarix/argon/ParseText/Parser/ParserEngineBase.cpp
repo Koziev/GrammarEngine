@@ -46,8 +46,6 @@ ParserEngineBase::ParserEngineBase()
     parser_type = -1; // -1 - none, 0 - DeSR, 1 - top-down Early, 2 - chunker
     lemmatizer_type = -1; // -1 none
 
-    allow_primary_fuzzy_word_recog = false;
-
     word_count = 0;
     sent_count = 0;
 }
@@ -203,7 +201,7 @@ void ParserEngineBase::LoadModels(const lem::Path & dict_path)
 
     current_analysis = new Solarix::WrittenTextAnalysisSession(&dict, NULL);
     current_analysis->params.SetLanguageID(language_id);
-    current_analysis->params.AllowPrimaryFuzzyWordRecog = allow_primary_fuzzy_word_recog;
+    current_analysis->params.AllowPrimaryFuzzyWordRecog = false;
     current_analysis->params.AllowDynform = true;
     current_analysis->params.ApplyModel = true;
 
@@ -224,10 +222,13 @@ void ParserEngineBase::LoadModels(const lem::Path & dict_path)
 void ParserEngineBase::ParseString(const lem::UFString & sentence,
     int paragraph_id,
     bool emit_morph,
+    bool allow_fuzzy_recognition,
     bool render_tree,
     ParsingResultFormatter & out_stream)
 {
     out_stream.StartSentence(sentence, paragraph_id);
+
+    current_analysis->params.AllowPrimaryFuzzyWordRecog = allow_fuzzy_recognition; // тут многопоточность заканчивается.
 
     if (parser_type == -1)
     {

@@ -8,12 +8,12 @@
 class Parser_API : public ParserEngineBase
 {
 public:
-    Parser_API();
-    Parser_API( const Parser_API & );
+    Parser_API(int lemmatizer_type, int parser_type);
+    //Parser_API( const Parser_API & );
     virtual ~Parser_API();
 
-    void Load( const wchar_t * dictionary_path );
-    ParsingResults_API * TagSentence( const wchar_t * sentence, bool emit_morph );
+    void Load(const wchar_t * dictionary_path);
+    ParsingResults_API * TagSentence(const wchar_t * sentence, bool emit_morph, bool allow_fuzzy_recognition);
 };
 
 #endif
