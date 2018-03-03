@@ -1,0 +1,3 @@
+recursive-include module ./pyparser/*.pyd
+include ./pyparser/*.dll
+exclude *.pyc
