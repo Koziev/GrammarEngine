@@ -82,7 +82,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -207,7 +207,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)lexicon.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)lexicon.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -265,8 +265,8 @@
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_SAVETXT;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;SOL_SAVETXT;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -281,7 +281,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)Lexicon.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -401,27 +401,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="LexiconMain.cpp" />
     <ClCompile Include="LexiconShell.cpp" />
     <ClCompile Include="LexiconDebugger.cpp" />

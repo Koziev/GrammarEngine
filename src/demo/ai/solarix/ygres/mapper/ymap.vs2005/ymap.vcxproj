@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -36,18 +36,18 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -60,14 +60,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -173,7 +173,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -266,8 +266,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;LEM_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_EXPORT_SQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LEM_CONSOLE;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_EXPORT_SQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -284,8 +284,8 @@
       <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\..\..\..\..\exe64\decompiler.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(LEM_PATH)\exe64\decompiler.exe</OutputFile>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
@@ -1035,33 +1035,9 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release-Lite|x64'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="E:\boost.1.60\libs\regex\src\internals.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

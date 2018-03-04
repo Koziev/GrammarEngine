@@ -38,12 +38,6 @@
     <Filter Include="Source Files\Lem\Math">
       <UniqueIdentifier>{c1962b9b-eabc-4a3a-8f42-41d9c75372e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\boost">
-      <UniqueIdentifier>{b5ca85f3-c558-40fc-9f73-abbe0c6dc064}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\boost\thread">
-      <UniqueIdentifier>{96563a8b-cad8-4497-adc9-673e1ce4fbb9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -51,9 +45,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
-    </Filter>
-    <Filter Include="Source Files\boost\system">
-      <UniqueIdentifier>{4a477e0f-b8d6-42f5-a1e0-6ac0a88e0ae8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -362,18 +353,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\math\lem_imat.cpp">
       <Filter>Source Files\Lem\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp">
-      <Filter>Source Files\boost\system</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp">
-      <Filter>Source Files\boost\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp">
-      <Filter>Source Files\boost\thread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

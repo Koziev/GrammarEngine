@@ -61,7 +61,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -114,6 +114,7 @@
     <OutDir>$(TMP)\Grammar_Engine\Release-Pro64\</OutDir>
     <IntDir>$(TMP)\Grammar_Engine\Release-Pro64\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>solarix_grammar_engine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-MySQL|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -186,7 +187,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(LEM_PATH)/lib64/solarix_grammar_engined.dll</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile />
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -246,8 +247,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(ProjectDir)..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CONSOLE;DLL_EXPORTS;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_SQLITE_NGRAMS;SOL_GM_ENGLISH;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -264,7 +265,7 @@
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)solarix_grammar_engine.dll</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>gdi32.lib;winspool.lib;comdlg32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>solarix_grammar_engine.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -359,30 +360,8 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\icu.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\instances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\system\src\error_code.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_dll.cpp" />
-    <ClCompile Include="E:\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="EngineDllMain.cpp" />
     <ClCompile Include="errors_api.cpp" />
-    <ClCompile Include="GrammarEngineHolder.cpp" />
     <ClCompile Include="grammar_engine_api.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_acstring.cpp" />
     <ClCompile Include="..\..\..\..\contain\lem_afstring.cpp" />
@@ -470,6 +449,7 @@ copy E:\tmp\Grammar_Engine\Release-Pro64\solarix_grammar_engine.dll  $(LEM_PATH)
     <ClCompile Include="..\..\..\..\math\random\randu.cpp" />
     <ClCompile Include="..\..\..\..\db\mysql_helpers.cpp" />
     <ClCompile Include="..\..\..\..\db\sqlite_helpers.cpp" />
+    <ClCompile Include="GrammarEngineHolder.cpp" />
     <ClCompile Include="..\..\..\..\ai\aa\aa_autom.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\BackRefCorrel.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\BasicLexer.cpp" />

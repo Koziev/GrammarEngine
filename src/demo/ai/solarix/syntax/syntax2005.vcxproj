@@ -214,7 +214,7 @@
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)syntax.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)syntax.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -272,8 +272,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;$(LEM_PATH)\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_DEBUGGING;SOL_REPORT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\include;$(ProjectDir)..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_LOADTXT;SOL_SAVETXT;SOL_CAA;SOL_DEBUGGING;SOL_REPORT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -289,7 +289,7 @@
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)syntax.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -435,26 +435,6 @@ copy $(LEM_PATH)\lib64\sqlited.dll $(OutDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cpp_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\cregex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\c_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\fileiter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\icu.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\instances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_debug.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_raw_buffer.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\regex_traits_defaults.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\static_mutex.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\usinstances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\w32_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wc_regex_traits.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\wide_posix_api.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\regex\src\winstances.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\system\src\error_code.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\thread.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\boost.1.60\libs\thread\src\win32\tss_pe.cpp" />
     <ClCompile Include="..\..\..\..\ai\la\PatternNGramTreeScorer.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTraceFunCall.cpp" />
     <ClCompile Include="..\..\..\..\ai\pm\TrTuple.cpp" />
