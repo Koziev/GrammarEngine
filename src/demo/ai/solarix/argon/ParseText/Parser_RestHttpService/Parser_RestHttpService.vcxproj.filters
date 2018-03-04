@@ -1,0 +1,1401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\lem">
+      <UniqueIdentifier>{51c8cc57-2cee-463a-a33e-d82ef556aa22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\tools">
+      <UniqueIdentifier>{705cfb3a-1152-4340-afff-4b19099e723c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\tools\Unicode">
+      <UniqueIdentifier>{fb485f8c-ff7d-42e1-9565-b97d46ebc1aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\tools\UI">
+      <UniqueIdentifier>{b8b6eed4-8677-449f-9b6d-24027d56f71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\tools\System_Config">
+      <UniqueIdentifier>{7211032c-1418-4073-bb1f-724e9f0fd7d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\container">
+      <UniqueIdentifier>{35da8608-14db-45f9-92f3-4c8c0ab9a4b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\io">
+      <UniqueIdentifier>{cbb4d374-67aa-409c-81d9-92e6d10aa417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\io\Char_Stream">
+      <UniqueIdentifier>{3a1460cf-42b9-428a-87b2-b40d3b2fa5ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\io\Cfg_Parser">
+      <UniqueIdentifier>{b150bcd6-5c83-445e-abba-54b68c7417f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\io\Xml">
+      <UniqueIdentifier>{1059aa57-b133-4d47-9bc0-08b47a49ce1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\math">
+      <UniqueIdentifier>{b7d5e137-a21e-48b7-bb0e-f3b1cea23aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lem\db">
+      <UniqueIdentifier>{d818bf86-69f1-432c-ab63-a22c627f9029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine">
+      <UniqueIdentifier>{5c460e9d-adb0-4794-bb24-33a31012ac0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\AA">
+      <UniqueIdentifier>{0f56ec14-5d3f-4cbb-88db-7c0653d0e3b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\GG">
+      <UniqueIdentifier>{a80e90c7-fb10-4d07-8651-11027ec1b270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\SG">
+      <UniqueIdentifier>{a3216e7e-aa96-4763-8093-ef2815f89e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\PM">
+      <UniqueIdentifier>{f97dfcb5-a202-48a8-a379-39a751bb2607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\Some">
+      <UniqueIdentifier>{422d6b91-2b99-4ab4-b7da-3d18d0b8b2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\Tree">
+      <UniqueIdentifier>{5c9cf062-c86c-47cd-a08b-93513ccc9e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\LA">
+      <UniqueIdentifier>{da652e3d-d3ca-4065-a8eb-22aaf1e4d5e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grammar_Engine\Ngrams">
+      <UniqueIdentifier>{8f2fe433-319d-4fcf-bdff-1279f4f070b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection_manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="header.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mime_types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reply.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request_handler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="server.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser_RestHttpService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connection_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mime_types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="reply.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="request_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="request_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_dll.cpp">
+      <Filter>Source Files\lem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_application.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_chec.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_coap.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_conv.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_critical_section.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_dir.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_interlocked_value.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_process.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_shell.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_startup.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_thread.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\lem_time.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\win32_registry.cpp">
+      <Filter>Source Files\lem\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\base64.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cast_to_url.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_037.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1006.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1026.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1250.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1251.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1252.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1253.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1254.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1255.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1256.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1257.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_1258.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_424.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_437.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_500.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_737.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_775.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_847.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_850.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_852.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_855.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_856.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_857.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_860.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_861.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_862.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_863.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_864.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_865.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_866.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_869.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_874.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_875.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_1.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_10.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_11.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_13.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_14.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_15.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_16.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_2.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_3.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_4.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_5.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_6.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_7.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_8.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_8859_9.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_code_page.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_recodings.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_sgml.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\cp_unicode_data.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\transliterator.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\Ucs4ToWideString.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\ucs4_to_utf8.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\utf_converters.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\unicode\WideString2Ucs4.cpp">
+      <Filter>Source Files\lem\tools\Unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\ui\ui_user_interface.cpp">
+      <Filter>Source Files\lem\tools\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\tools\system_config\system_config.cpp">
+      <Filter>Source Files\lem\tools\System_Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_acstring.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_afstring.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_astr.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_fp1.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ucstring.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ufstring.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\contain\lem_ustr.cpp">
+      <Filter>Source Files\lem\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\base_lexer.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_base_stream.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_binary_file.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_fast_file_reader.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_kbd.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_memory_stream.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_text_file.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\io_tty.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\lem_logfile.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\lem_mime.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\oformatter.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\sol_io.cpp">
+      <Filter>Source Files\lem\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_base_reader.cpp">
+      <Filter>Source Files\lem\io\Char_Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_char_reader.cpp">
+      <Filter>Source Files\lem\io\Char_Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_laguage_filter.cpp">
+      <Filter>Source Files\lem\io\Char_Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp">
+      <Filter>Source Files\lem\io\Char_Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf8_reader.cpp">
+      <Filter>Source Files\lem\io\Char_Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\cfg_parser\cfg_base_parser.cpp">
+      <Filter>Source Files\lem\io\Cfg_Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\cfg_parser\cfg_ini_parser.cpp">
+      <Filter>Source Files\lem\io\Cfg_Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_iterator.cpp">
+      <Filter>Source Files\lem\io\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_node.cpp">
+      <Filter>Source Files\lem\io\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\io\xml\xp_parser.cpp">
+      <Filter>Source Files\lem\io\Xml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\math\lem_imat.cpp">
+      <Filter>Source Files\lem\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\db\sqlite_helpers.cpp">
+      <Filter>Source Files\lem\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\ParserEngineBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\Parser_API.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\ParsingResults_API.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\ChunkerModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\Lemmatizer2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Parser\SentenceEOL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\aa\aa_autom.cpp">
+      <Filter>Source Files\Grammar_Engine\AA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Alphabet.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Alphabets.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\AlphabetStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\CharOperationEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\gg_autom.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperation.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CharOperations.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_CoordEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\GG_Coordinates.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\gg_entry.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\gg_form.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabCondition.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabConditionPoint.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabContext.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabContextPoint.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabResult.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabResultPoint.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRule.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRules.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SyllabRulesForLanguage.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolClassEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolClasses.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\SymbolEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\gg\Symbols.cpp">
+      <Filter>Source Files\Grammar_Engine\GG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\AuxFormTypes.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\casing_coder.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\CharNode.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryEnumerator_SQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Charpos2EntryStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_form.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_main.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\dsa_table.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ExactWordEntryLocator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LanguageEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\Languages.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LanguageUsage.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemeEnumerator_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemeEnumerator_SQLite.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexemEnumerator_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LexiconStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_MCollectCref.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\LS_ResultSet_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ParadigmaFinder.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ParadigmaMatcher.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PartOfSpeechEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PartsOfSpeech.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseLinkEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\PhraseNoteEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_affix_table.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_and_tagfilter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_autom.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_calibrator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_class.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_complex_link.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_CoordEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_Coordinates.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_coord_context.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_doesnot_have_tag_filter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_Entry.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_entry_group.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_explicit_tagfilter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_form.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_language.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_ld_seeker.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_lexem_dictionary.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_link_generator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\SG_MetaEntry.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_net.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_net_link.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_notag_filter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_only_main_translations_tagfilter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_or_tagfilter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_prefix_entry_searcher.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_preparing.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_ref_tag_filter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_stemmer.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\sg_tag_or_null_tagfilter.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TagsSets.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusLinkFlags.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTag.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTagDefs.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThesaurusTagDefsEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\ThTranslator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TransactionGuard_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\TransactionGuard_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_SQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntries_SQLite.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_File_ByGroup.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordEntryEnumerator_SQLite.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorFuzzy_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorGlobbing_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumeratorListing_File.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File1.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File2.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_File3.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordFormEnumerator_SQLite.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\sg\WordLinkEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\SG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\pm_autom.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\PM_FunctionLoader.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrClosureVars.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrCompilationContext.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrContextInvokation.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunCall.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunContext.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunction.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunctions.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFunUser.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Assign.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Break.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_BuiltIn.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Constant.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_CreateWordform.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Declare.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_For.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Group.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_If.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Lambda.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Return.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_Var.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrFun_While.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrKnownVars.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrMorphologyTracer.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTrace.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceActor.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceFunCall.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTraceFunGroupStep.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrTuple.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrType.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\pm\TrValue.cpp">
+      <Filter>Source Files\Grammar_Engine\PM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\automata_names.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\automaton.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\base_entry.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CompilationContext.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\coordinate.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\coord_adr.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\coord_ex.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\coord_pair.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\coord_state.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriteriaInStorage.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\criteria_list.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\criterion.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriterionEnumeratorInFile.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\CriterionEnumerator_SQL.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\DebugSymbols.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\dictionary.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ElapsedTimeConstraint.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ExternalTokenizer.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\form_table.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\GramCoordUpdator_DB.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\grammar.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\gram_class.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\lexem.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\load_options.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ml_net_node.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ml_proj_job.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ml_proj_list.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\print_variator.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\ref_name.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SegmentingSentenceTokenizer.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\sentence.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceBroker.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceTokenizer.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SentenceWord.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\sol_ling.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\some_strings.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\SourceFilenameEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\sql_production.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnections.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnection_FireBird.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnection_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\StorageConnection_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\string_set.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\tokens.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\some\version.cpp">
+      <Filter>Source Files\Grammar_Engine\Some</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\res_pack.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\TreeDimension.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\TreeMarks.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\tree_link.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\tree_node.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\variator.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\tree\word_form.cpp">
+      <Filter>Source Files\Grammar_Engine\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BackRefCorrel.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BasicLexer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\BasicModel.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ClassifierModel.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Add.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Except.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_IfContains.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_IfExported.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportCoordFunction_Remove.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ExportNode.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\GrafBuilder.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Argument.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_CachedFacts.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Checker.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_CheckingResult.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Fact.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KB_Facts.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\KnowledgeBase.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_autom.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_BackTrace.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_BackTraceItem.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_CropRule.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_fuzzy.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_lex.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_phaa.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticCondictor.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticMatcher.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticMatcherForLanguage.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticResult.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRule.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PhoneticRuleEnumerator_MCollect.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Preprocessor.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_PreprocessorRules.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_processing.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_project_buffer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_proj_list.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_RecognitionRule.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_RecognitionRules.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_Recognizer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternPointCall.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternResult.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_SynPatternTrees.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_UnbreakableRule.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LA_WordEntrySet.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\la_word_projection.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\lemmatizator.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LemmatizatorStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LemmatizatorStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\LexerTextPos.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ModelCodeBook.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\ModelTagMatcher.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\MorphologyModels.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\MultiwordMerger.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternConstraint.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternConstraints.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternDefaultLinkage.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportFuncContext_Tree.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportFuncContext_Wordform.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternExportSection.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternLink.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternLinks.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGram.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGramFunction.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGrams.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternNGramTreeScorer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PatternOptionalPoints.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplate.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PredicateTemplates.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\PreparedLexer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SequenceLabeler.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SlotProperties.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPattern.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternCompilation.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternOptions.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternPoint.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatterns.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternTreeNode.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\SynPatternTreeNodeMatchingResults.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextAnalysisSession.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextRecognitionParameters.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TextTokenizationRules.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TF_CaseFilter.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TF_ClassFilter.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TokenSplitterRx.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeMatchingExperience.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeMatchingExperienceItem.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerApplicationContext.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerBoundVariables.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerCall.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerMatcher.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPoint.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPredicate.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerPredicateArg.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorerResult.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\TreeScorers.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\VariatorLexer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\VariatorLexerTokens.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordAssociation.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordEntrySetEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordSetChecker.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WordSetEnumerator.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WrittenTextAnalyzerSession.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\la\WrittenTextLexer.cpp">
+      <Filter>Source Files\Grammar_Engine\LA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\ngrams.cpp">
+      <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsDBMS.cpp">
+      <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_FireBird.cpp">
+      <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_MySQL.cpp">
+      <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\ai\ngrams\NGramsStorage_SQLITE.cpp">
+      <Filter>Source Files\Grammar_Engine\Ngrams</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cqdb64", "..\..\..\CRFSuite
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyParser", "..\PyParser\PyParser.vcxproj", "{76E043C8-120A-4DCC-8748-BA6B6EBF3A0B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parser_RestHttpService", "..\Parser_RestHttpService\Parser_RestHttpService.vcxproj", "{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{76E043C8-120A-4DCC-8748-BA6B6EBF3A0B}.Release|x64.Build.0 = Release|x64
 		{76E043C8-120A-4DCC-8748-BA6B6EBF3A0B}.Release|x86.ActiveCfg = Release|Win32
 		{76E043C8-120A-4DCC-8748-BA6B6EBF3A0B}.Release|x86.Build.0 = Release|Win32
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Debug|x64.ActiveCfg = Debug|x64
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Debug|x64.Build.0 = Debug|x64
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Debug|x86.ActiveCfg = Debug|Win32
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Debug|x86.Build.0 = Debug|Win32
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Release|x64.ActiveCfg = Release|x64
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Release|x64.Build.0 = Release|x64
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Release|x86.ActiveCfg = Release|Win32
+		{F4E86CAC-E0A0-4B00-9D7B-57BC6F2C4305}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
