@@ -213,7 +213,7 @@ copy e:\mvoice\lem\lib\libdesr.dll $(OutDir)
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(ProjectDir)\..\..\..\..\exe64
+      <Command>copy $(TargetPath) $(ProjectDir)\..\..\..\..\..\..\exe64
 copy e:\mvoice\lem\lib64\sqlite.dll $(OutDir)
 copy e:\mvoice\lem\lib64\libdesr.dll $(OutDir)
 </Command>

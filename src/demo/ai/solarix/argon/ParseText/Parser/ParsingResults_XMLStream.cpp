@@ -109,7 +109,7 @@ void ParsingResults_XMLStream::PrintToken(
     lem::UFString sword(EncodeStrXml(word));
     lem::UFString slemma(EncodeStrXml(lemma));
 
-    out_stream.printf("<word%s>%us</word>\n", (known_word ? " is_unknown='true'" : ""), sword.c_str());
+    out_stream.printf("<word%s>%us</word>\n", (known_word ? "" : " is_unknown='true'"), sword.c_str());
     out_stream.printf("<position>%d</position>\n", position);
     out_stream.printf("<lemma>%us</lemma>\n", slemma.c_str());
     out_stream.printf("<part_of_speech>%us</part_of_speech>\n", part_of_speech);
@@ -134,7 +134,7 @@ void ParsingResults_XMLStream::PrintTag(int tag_counter, const wchar_t * tag_nam
         out_stream.printf("|");
     }
 
-    out_stream.printf("%us:%d", tag_name, tag_value);
+    out_stream.printf("%us:%us", tag_name, tag_value);
 }
 
 

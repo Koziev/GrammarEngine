@@ -139,7 +139,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(LEM_PATH)\lib64\lemmatizatord.dll</OutputFile>
+      <OutputFile>$(ProjectDir)..\..\..\..\..\lib64\lemmatizatord.dll</OutputFile>
       <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)lemmatizator.pdb</ProgramDatabaseFile>
@@ -201,7 +201,7 @@
       <DebugInformationFormat />
     </ClCompile>
     <Link>
-      <OutputFile>$(ProjectDir)..\..\..\..\..\..\lib64\lemmatizator.dll</OutputFile>
+      <OutputFile>$(ProjectDir)..\..\..\..\..\lib64\lemmatizator.dll</OutputFile>
       <ModuleDefinitionFile>lemmatizator.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
