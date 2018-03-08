@@ -225,13 +225,18 @@ http://127.0.0.1:10973/tag1?sent=%D0%BA%D0%BE%D1%88%D0%BA%D0%B8%20%D1%81%D0%BF%D
 ## Тренеры моделей
 
 Парсер использует статистические модели для лемматизации, частеречной разметки и парсинга,
-обучая их на большом корпусе размеченных в ручную текстов. Исходный текст программ, выполняющих
+обучая их на большом корпусе размеченных в ручную текстов. Исходный текст программ на C#, выполняющих
 обучение, также доступен в репозитории:
 
 [part-of-speech tagger model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/POSTaggerDatasetBuilder)  
 [chunker model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/ShallowParserDatasetBuilder)  
 [lemmatizer model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/LemmatizerDatasetBuilder)
 [dependency parsing model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/DisambigRuleBuilder)  
+
+Все тренеры используют текстовые корпуса, размеченные вручную, для формирования обучающего
+датасета. В настоящее время поддерживаются корпуса во внутреннем формте Solarix (см. класс [SolarixBinaryCorpusReader](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/CorporaLib/SolarixBinaryCorpusReader.cs)),
+Universal Dependencies (см. класс [UniversalDependenciesCorpusReader](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/CorporaLib/UniversalDependenciesCorpusReader.cs))
+и корпус из [соревнования Диалог](https://github.com/dialogue-evaluation/morphoRuEval-2017) (см. класс [DialogMorphEvalCorpus](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/CorporaLib/DialogMorphEvalCorpus.cs)).
 
 ### Тренировка лемматизатора
 
@@ -241,7 +246,7 @@ http://127.0.0.1:10973/tag1?sent=%D0%BA%D0%BE%D1%88%D0%BA%D0%B8%20%D1%81%D0%BF%D
 set SOLARIX_CORPUS=-corpus E:\Corpus\CompiledCorpus\ru\x64\*.bin
 set CONLLU_CORPUS=-ud_corpus "E:\Corpus\UD_Russian-SynTagRus\*.conllu"
 
-LemmatizerDatasetBuilder.exe -dict .\ru\dictionary.xml %CONLLU_CORPUS% %SOLARIX_CORPUS% -params LANGUAGE=ru
+LemmatizerDatasetBuilder.exe -dict .\ru\dictionary.xml %CONLLU_CORPUS% %SOLARIX_CORPUS% -params LANGUAGE=ru -tmp e:\tmp
 ```
 
 По окончании работы будут созданы файлы lemmatizer.model и lemmatizer.codebook.

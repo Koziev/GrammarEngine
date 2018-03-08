@@ -6,6 +6,48 @@
 
 # Сборка с помощью CMake
 
+## Установка и компиляция зависимостей
+
+Скачиваем, компилируем и устанавливаем liblbfgs:
+```
+cd ~
+wget https://github.com/downloads/chokkan/liblbfgs/liblbfgs-1.10.tar.gz
+tar -xvzf liblbfgs-1.10.tar.gz
+cd liblbfgs-1.10
+./configure
+make
+sudo make install
+```
+
+Скачиваем, компилируем и устанавливаем crfsuite:
+```
+cd ~
+wget https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12.tar.gz
+tar -xvzf crfsuite-0.12.tar.gz
+cd crfsuite-0.12
+./configure
+make
+sudo make install
+```
+
+Может потребоваться установить sqlite3 библиотеку (если возникнет ошибка "Unable to locate the sqlite3 library"):
+```
+sudo apt-get install sqlite3 libsqlite3-dev
+```
+
+Также может потребоваться установить библиотеки Boost C++:
+```
+sudo apt-get install libboost-all-dev
+```
+
+Установка ncurses:
+```
+sudo apt-get install libncurses-dev
+```
+
+
+## Сборка грамматического словаря
+
 1. Создайте папку build в корне исходников, перейдите туда:
 ```
 mkdir build & cd build
