@@ -170,7 +170,53 @@ http://127.0.0.1:10973/tag1?sent=%D0%BA%D0%BE%D1%88%D0%BA%D0%B8%20%D1%81%D0%BF%D
 ```
 
 Метод tag1 выполняет разбор одного предложения, передаваемого как параметр sent. Результат
-разбора будет возвращен в JSON формате.
+разбора будет возвращен в JSON формате:
+
+```
+{
+ "tokens":[
+  {
+   "word": "Толстые",
+   "lemma": "толстый",
+   "part_of_speech": "ПРИЛАГАТЕЛЬНОЕ",
+   "tags": [  ]
+  },
+  {
+   "word": "кошки",
+   "lemma": "кошка",
+   "part_of_speech": "СУЩЕСТВИТЕЛЬНОЕ",
+   "tags": [  ]
+  },
+  {
+   "word": "ловят",
+   "lemma": "ловить",
+   "part_of_speech": "ГЛАГОЛ",
+   "tags": [  ]
+  },
+  {
+   "word": "серых",
+   "lemma": "серый",
+   "part_of_speech": "ПРИЛАГАТЕЛЬНОЕ",
+   "tags": [  ]
+  },
+  {
+   "word": "мышек",
+   "lemma": "мышка",
+   "part_of_speech": "СУЩЕСТВИТЕЛЬНОЕ",
+   "tags": [  ]
+  },
+  {
+   "word": ".",
+   "lemma": ".",
+   "part_of_speech":
+   "ПУНКТУАТОР", "tags": [  ]
+  }
+ ]
+}
+```
+
+В каталоге [HttpRestClient/py](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/ParseText/HttpRestClient/py) лежит
+простой пример вызова веб-сервиса парсинга из кода на Питоне (библиотека requests).
 
 
 ## Тренеры моделей
