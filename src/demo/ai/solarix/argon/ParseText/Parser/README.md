@@ -56,7 +56,7 @@
 bootstrap.bat
 ```
 
-5) Запускаем сборку библиотек буста:
+5) Запускаем сборку Boost:
 ```
 bjam -j4 --build-type=complete architecture=x86 address-model=64 link=static stage
 ```
@@ -66,7 +66,7 @@ bjam -j4 --build-type=complete architecture=x86 address-model=64 link=static sta
 к этому каталогу в свойствах линкера вместо моего значения e:\boost.1.66\stage\lib\.
 
 
-## Сборка под Ubunta
+## Сборка под Ubuntu
 
 Предполагается, что установлены внешние зависимости, указанные на [странице описания грамматического движка](https://github.com/Koziev/GrammarEngine).
 Также необходимо собрать русскую словарную базу.
@@ -78,7 +78,7 @@ bjam -j4 --build-type=complete architecture=x86 address-model=64 link=static sta
 sudo apt-get install libpcre++-dev
 ```
 
-Компилируем библиотеку для синтаксического разбора:
+Далее компилируем библиотеку для синтаксического разбора:
 ```
 cd ~/GrammarEngine/src/demo/ai/solarix/DeSR/libdesr
 ./build.sh
