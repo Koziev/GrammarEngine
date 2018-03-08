@@ -233,6 +233,18 @@ http://127.0.0.1:10973/tag1?sent=%D0%BA%D0%BE%D1%88%D0%BA%D0%B8%20%D1%81%D0%BF%D
 [lemmatizer model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/LemmatizerDatasetBuilder)
 [dependency parsing model trainer](https://github.com/Koziev/GrammarEngine/tree/master/src/demo/ai/solarix/argon/DisambigRuleBuilder/DisambigRuleBuilder)  
 
+### Тренировка лемматизатора
+
+Пример запуска обучения модели лемматизации по корпусам Solarix и Universal Dependencies:
+
+```
+set SOLARIX_CORPUS=-corpus E:\Corpus\CompiledCorpus\ru\x64\*.bin
+set CONLLU_CORPUS=-ud_corpus "E:\Corpus\UD_Russian-SynTagRus\*.conllu"
+
+LemmatizerDatasetBuilder.exe -dict .\ru\dictionary.xml %CONLLU_CORPUS% %SOLARIX_CORPUS% -params LANGUAGE=ru
+```
+
+По окончании работы будут созданы файлы lemmatizer.model и lemmatizer.codebook.
 
 
 

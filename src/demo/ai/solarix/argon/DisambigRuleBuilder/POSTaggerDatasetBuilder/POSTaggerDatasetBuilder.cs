@@ -51,11 +51,18 @@ class POSTaggerDatasetBuilder
                     corpora.Add(new SolarixBinaryCorpusReader(corpus_path));
                     ++i;
                 }
-                else if (args[i] == "-conllu_corpus")
+                else if (args[i] == "-ud_corpus")
                 {
-                    // Путь к корпусу в формате ConllU
+                    // Путь к корпусу в формате Universal Dependencies
                     string corpus_path = args[i + 1];
-                    corpora.Add(new ConlluCorpusReader(corpus_path));
+                    corpora.Add(new UniversalDependenciesCorpusReader(corpus_path));
+                    ++i;
+                }
+                else if (args[i] == "-dme_corpus")
+                {
+                    // Путь к корпусу в формате Dialog MorphEval
+                    string corpus_path = args[i + 1];
+                    corpora.Add(new DialogMorphEvalCorpus(corpus_path));
                     ++i;
                 }
                 else if (args[i] == "-sematags")
