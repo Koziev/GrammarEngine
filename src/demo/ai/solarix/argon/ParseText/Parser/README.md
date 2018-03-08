@@ -31,7 +31,7 @@
 языковых моделей лежат в том же каталоге, что и сама словарная база, хотя это можно
 изменить, задавая относительные пути для элементов под тегом <models> в dictionary.xml.
 
-## Сборка из исходников
+## Сборка из исходников для MS Windows
 
 Под MS Windows для компиляции парсера можно использовать готовое решение для VisualStudio 2015 - файл Parser64.sln в [каталоге](https://github.com/Koziev/GrammarEngine/blob/master/src/demo/ai/solarix/argon/ParseText/Parser/Parser64.sln).
 В этом решении собраны проекты для сборки консольной версии парсера (Parser) и модуля для Питона (PyParser).
@@ -64,6 +64,34 @@ bjam -j4 --build-type=complete architecture=x86 address-model=64 link=static sta
 6) Далее можно скопировать собранные файлы библиотек в новый отдельный каталог, либо
 линковаться с подкаталогом ...\stage\lib. В проекте сборки парсера не забудьте указать путь
 к этому каталогу в свойствах линкера вместо моего значения e:\boost.1.66\stage\lib\.
+
+
+## Сборка под Ubunta
+
+Предполагается, что установлены внешние зависимости, указанные на [странице описания грамматического движка](https://github.com/Koziev/GrammarEngine).
+Также необходимо собрать русскую словарную базу.
+
+Кроме этого, необходимо выполнить следующие действия.
+
+Установить PCRE++:
+```
+sudo apt-get install libpcre++-dev
+```
+
+Компилируем библиотеку для синтаксического разбора:
+```
+cd ~/GrammarEngine/src/demo/ai/solarix/DeSR/libdesr
+./build.sh
+```
+
+Теперь можно скомпилировать сам парсер:
+```
+cd ~/GrammarEngine/src/demo/ai/solarix/argon/ParseText/Parser
+./build.sh
+```
+
+После успешной компиляции можно запустить скрипт [parse.sh](https://github.com/Koziev/GrammarEngine/tree/master/src/scripts/Parser/parse.sh), чтобы убедится в нормальной работе
+парсера.
 
 ## Установка собранного модуля pyparser
 

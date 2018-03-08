@@ -41,7 +41,7 @@ void ParsingResults_API::EndSentence()
 
 void ParsingResults_API::NotImplementedMethod()
 {
-    throw std::exception("not implemented method in ParsingResults_API");
+    throw std::runtime_error("not implemented method in ParsingResults_API");
 }
 
 void ParsingResults_API::StartChunking()

@@ -30,7 +30,7 @@ public:
     virtual void EndTokens();
 
     virtual void StartToken();
-    virtual void ParsingResults_XMLStream::PrintToken(
+    virtual void PrintToken(
         bool known_word,
         const wchar_t * word,
         const wchar_t * lemma,
