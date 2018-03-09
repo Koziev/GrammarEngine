@@ -3,7 +3,7 @@
 //
 // (c) by Koziev Elijah www.wordysoft.com all rights reserved 
 //
-// Manual: http://www.solarix.ru/for_developers/grammar-engine-api.shtml
+// Help: http://www.solarix.ru/for_developers/api/grammar-engine-api.shtml
 //
 // You must not eliminate, delete or supress these copyright strings
 // from the file!

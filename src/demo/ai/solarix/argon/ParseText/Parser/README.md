@@ -14,22 +14,24 @@
 Реализованы следующие варианты парсера:
 
 1) основной проект - консольная утилита (проект Parser)  
-2) биндинг для Питона (проект PyParser, использована boost::python)  
-3) HTTP REST сервис (Parser_RestHttpService, использована boost:asio)  
+2) биндинг для Питона (проект PyParser, использована [boost::python](http://www.boost.org/doc/libs/1_66_0/libs/python/doc/html/index.html)) 
+3) HTTP REST сервис (Parser_RestHttpService, использована [boost:asio](http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html))  
 
 ## Словарная база и языковые модели
 
 Для работы Парсера необходима словарная база и файлы данных моделей, полученных
 применением алгоритмов машинного обучения для больших размеченных корпусов. Готовые
-файлы моделей для русского языка можно взять из [каталога в репозитории](https://github.com/Koziev/GrammarEngine/tree/master/src/bin-windows64).
+файлы моделей для русского языка можно взять из каталога в репозитории для [Windows](https://github.com/Koziev/GrammarEngine/tree/master/src/bin-windows64)
+и [Linux](https://github.com/Koziev/GrammarEngine/tree/master/src/bin-linux64).
 Сборка русской словарной базы из [исходников](https://github.com/Koziev/GrammarEngine/tree/master/src/dictionary.src) описана
 на [главной странице](https://github.com/Koziev/GrammarEngine).
 
 Кроме того, архив с полностью готовыми файлами парсера можно взять на [сайте проекта](http://www.solarix.ru/parser.shtml).
 
-Путь к файлу dictionary.xml словарной базы задается опцией "-d path". По умолчанию файлы
-языковых моделей лежат в том же каталоге, что и сама словарная база, хотя это можно
-изменить, задавая относительные пути для элементов под тегом <models> в dictionary.xml.
+В консольном парсере и REST-сервисе путь к [файлу конфигурации dictionary.xml](http://solarix.ru/for_developers/docs/russian-grammatical-dictionary-configuration.shtml)
+словарной базы задается опцией "-d path". По умолчанию файлы языковых моделей лежат в том же каталоге, что и
+сама словарная база, хотя это можно изменить, задавая относительные пути для элементов
+под тегом <models> в dictionary.xml.
 
 ## Сборка из исходников для MS Windows
 
