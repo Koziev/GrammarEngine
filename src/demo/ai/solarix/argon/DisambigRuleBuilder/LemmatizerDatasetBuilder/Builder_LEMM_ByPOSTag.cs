@@ -100,11 +100,15 @@ class LemmatizationTable
         string wordform_key = cut_front + '|' + wordform_ending;
         string lemma_builder = append_front + '|' + lemma_ending;
 
-
+        //if (POS_tag == 140 && lemma_builder == "|нница")
+        if (POS_tag == 140 && wordform_ending == "ница")
+        {
+            Console.WriteLine("{0}", u_wordform);
+        }
         //if (u_wordform.StartsWith("пре") && u_wordform.Contains("ейш") )
-       //{
+        //{
         //    Console.WriteLine("{0}", u_wordform);
-       // }
+        // }
 
         for (int k = 0; k < 2; ++k)
         {
@@ -373,10 +377,7 @@ class Builder_LEMM_ByPOSTag
                s.Equals("number_", System.StringComparison.InvariantCultureIgnoreCase);
     }
 
-    bool IsNumword(string s)
-    {
-        return char.IsDigit(s[0]);
-    }
+    bool IsNumword(string s) => char.IsDigit(s[0]);
 
     public Builder_LEMM_ByPOSTag()
     {
@@ -412,7 +413,7 @@ class Builder_LEMM_ByPOSTag
         return;
     }
 
-    public SolarixGrammarEngineNET.GrammarEngine2 GetGrammarEngine() { return gren; }
+    public SolarixGrammarEngineNET.GrammarEngine2 GetGrammarEngine() => gren;
 
 
 
@@ -486,6 +487,11 @@ class Builder_LEMM_ByPOSTag
   СУЩЕСТВИТЕЛЬНОЕ ПАДЕЖ:СЧЕТН ЧИСЛО:ЕД РОД:МУЖ
   СУЩЕСТВИТЕЛЬНОЕ ПАДЕЖ:СЧЕТН ЧИСЛО:ЕД РОД:СР
 
+  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:ЖЕН ЧИСЛО:ЕД
+  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:МУЖ ЧИСЛО:ЕД
+  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:СР ЧИСЛО:ЕД
+  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ ЧИСЛО:МН
+
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ИМ ЧИСЛО:ЕД РОД:ЖЕН
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ИМ ЧИСЛО:ЕД РОД:МУЖ
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ИМ ЧИСЛО:ЕД РОД:СР
@@ -517,11 +523,6 @@ class Builder_LEMM_ByPOSTag
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ПРЕДЛ ЧИСЛО:ЕД РОД:МУЖ
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ПРЕДЛ ЧИСЛО:ЕД РОД:СР
   ПРИЛАГАТЕЛЬНОЕ ПАДЕЖ:ПРЕДЛ ЧИСЛО:МН
-
-  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:ЖЕН ЧИСЛО:ЕД
-  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:МУЖ ЧИСЛО:ЕД
-  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ РОД:СР ЧИСЛО:ЕД
-  ПРИЛАГАТЕЛЬНОЕ КРАТКИЙ ЧИСЛО:МН
 
   ПРИЛАГАТЕЛЬНОЕ СТЕПЕНЬ:СРАВН
   ПРИЛАГАТЕЛЬНОЕ СТЕПЕНЬ:СОКРАЩ
@@ -692,6 +693,31 @@ class Builder_LEMM_ByPOSTag
     }
 
 
+    public void ProcessValidationSample(SentenceData sample)
+    {
+        n_test_samples++;
+
+        for (int iword = 1; iword < sample.CountWords() - 1; ++iword)
+        {
+            WordData token = sample.GetWord(iword);
+
+            string wordform = token.GetWord().ToLower();
+            string lemma = gren.GetEntryName(token.GetEntryID());
+            if (IsUnknownLexem(lemma) || IsNumword(lemma))
+                continue;
+
+            CheckData d = new CheckData();
+            d.POS_tag = tags.MatchTags(token, gren);
+            d.wordform = wordform;
+            d.lemma = lemma;
+
+            check_data_list.Add(d);
+        }
+
+
+        return;
+    }
+
     public void FinishLearning()
     {
         table.FinishLearning();
@@ -730,7 +756,7 @@ class Builder_LEMM_ByPOSTag
     {
         int n_error = 0;
 
-        using (System.IO.StreamWriter wrt_err = new System.IO.StreamWriter(System.IO.Path.Combine(tmp_folder, "errors.txt")))
+        using (System.IO.StreamWriter wrt_err = new System.IO.StreamWriter(System.IO.Path.Combine(tmp_folder, "lemmatizer_model_errors.txt")))
         {
             foreach (var d in check_data_list)
             {
@@ -796,32 +822,6 @@ class Builder_LEMM_ByPOSTag
                 }
             }
         }
-
-        return;
-    }
-
-
-    public void ProcessValidationSample(SentenceData sample)
-    {
-        n_test_samples++;
-
-        for (int iword = 1; iword < sample.CountWords() - 1; ++iword)
-        {
-            WordData token = sample.GetWord(iword);
-
-            string wordform = token.GetWord().ToLower();
-            string lemma = gren.GetEntryName(token.GetEntryID());
-            if (IsUnknownLexem(lemma) || IsNumword(lemma))
-                continue;
-
-            CheckData d = new CheckData();
-            d.POS_tag = tags.MatchTags(token, gren);
-            d.wordform = wordform;
-            d.lemma = lemma;
-
-            check_data_list.Add(d);
-        }
-
 
         return;
     }

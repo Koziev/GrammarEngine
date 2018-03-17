@@ -39,6 +39,10 @@
     <Reference Include="gren_fx2">
       <HintPath>..\..\..\..\..\..\lib64\gren_fx2.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Experimental.Collections, Version=1.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Experimental.Collections.1.0.3-alpha\lib\portable-net45+win8+wp8\Microsoft.Experimental.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoLemmaCorpusGenerator.cs" />
     <Compile Include="ConlluCorpusReader.cs" />
     <Compile Include="ConlluItem.cs" />
     <Compile Include="DialogMorphEvalCorpus.cs" />
@@ -60,6 +65,9 @@
     <Compile Include="TagMatcher.cs" />
     <Compile Include="UniversalDependenciesCorpusReader.cs" />
     <Compile Include="WordData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
