@@ -466,9 +466,9 @@ void SG_DeclensionAutomat::Save_SQL( lem::OFormatter &out, lem::OFormatter &alte
    for( lem::Container::size_type i=0; i<p->attrs().size(); ++i )
     {
      if( i>0 )
-      attrs.Add_Dirty( L' ' );
+      attrs += L' ';
 
-     attrs.Add_Dirty( lem::format_str( L"%d:%d", p->attrs()[i].GetCoord().GetIndex(), p->attrs()[i].GetState() ).c_str() );
+     attrs += lem::format_str( L"%d:%d", p->attrs()[i].GetCoord().GetIndex(), p->attrs()[i].GetState() ).c_str();
     }
 
    out.printf( "INSERT INTO paradigma( id, front_name, r_condition, id_class, attrs ) VALUES ( %d, '%us', '%us', %d, '%us' );\n",
@@ -488,9 +488,9 @@ void SG_DeclensionAutomat::Save_SQL( lem::OFormatter &out, lem::OFormatter &alte
      for( lem::Container::size_type i=0; i<f.GetDim().size(); ++i )
       {
        if( i>0 )
-        dims.Add_Dirty( L' ' );
+        dims += L' ';
 
-       dims.Add_Dirty( lem::format_str( L"%d:%d", f.GetDim()[i].GetCoord().GetIndex(), f.GetDim()[i].GetState() ).c_str() );
+       dims += lem::format_str( L"%d:%d", f.GetDim()[i].GetCoord().GetIndex(), f.GetDim()[i].GetState() ).c_str();
       }
 
      lem::UFString generator( sql_version.SqlStr( lem::UFString(f.GetLexemGenerator().c_str()) ) );

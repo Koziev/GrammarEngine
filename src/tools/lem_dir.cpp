@@ -10,49 +10,49 @@
 // from the file!
 //
 // Content:
-// Служебные операции над файлами и файловыми путями. Обертки для системно-
-// специфичных функций. Реализация класса Path.
+// РЎР»СѓР¶РµР±РЅС‹Рµ РѕРїРµСЂР°С†РёРё РЅР°Рґ С„Р°Р№Р»Р°РјРё Рё С„Р°Р№Р»РѕРІС‹РјРё РїСѓС‚СЏРјРё. РћР±РµСЂС‚РєРё РґР»СЏ СЃРёСЃС‚РµРјРЅРѕ-
+// СЃРїРµС†РёС„РёС‡РЅС‹С… С„СѓРЅРєС†РёР№. Р РµР°Р»РёР·Р°С†РёСЏ РєР»Р°СЃСЃР° Path.
 //
-// 28.02.2006 - введена операция очистки каталога (с рекурсивных обходом всех
-//              вложенных) Purge_Folder(). 
+// 28.02.2006 - РІРІРµРґРµРЅР° РѕРїРµСЂР°С†РёСЏ РѕС‡РёСЃС‚РєРё РєР°С‚Р°Р»РѕРіР° (СЃ СЂРµРєСѓСЂСЃРёРІРЅС‹С… РѕР±С…РѕРґРѕРј РІСЃРµС…
+//              РІР»РѕР¶РµРЅРЅС‹С…) Purge_Folder(). 
 //
-// 30.06.2006 - изменена реализация процедуры Purge_Folder, которая рекурсивно
-//              очищает указанный каталог. Прежняя реализация через
-//              SHFileOperationW умела подло зависать при неясных
-//              обстоятельствах.
+// 30.06.2006 - РёР·РјРµРЅРµРЅР° СЂРµР°Р»РёР·Р°С†РёСЏ РїСЂРѕС†РµРґСѓСЂС‹ Purge_Folder, РєРѕС‚РѕСЂР°СЏ СЂРµРєСѓСЂСЃРёРІРЅРѕ
+//              РѕС‡РёС‰Р°РµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ РєР°С‚Р°Р»РѕРі. РџСЂРµР¶РЅСЏСЏ СЂРµР°Р»РёР·Р°С†РёСЏ С‡РµСЂРµР·
+//              SHFileOperationW СѓРјРµР»Р° РїРѕРґР»Рѕ Р·Р°РІРёСЃР°С‚СЊ РїСЂРё РЅРµСЏСЃРЅС‹С…
+//              РѕР±СЃС‚РѕСЏС‚РµР»СЊСЃС‚РІР°С….
 //
-// 27.07.2006 - вместо GetFileAttributesEx() использована GetFileAttributes()
+// 27.07.2006 - РІРјРµСЃС‚Рѕ GetFileAttributesEx() РёСЃРїРѕР»СЊР·РѕРІР°РЅР° GetFileAttributes()
 //
-// 10.01.2007 - реализована CopyFolder
+// 10.01.2007 - СЂРµР°Р»РёР·РѕРІР°РЅР° CopyFolder
 //
-// 16.01.2007 - переписана функция DoRemove: она удаляет подкаталоги рекурсивно.
-// 01.06.2007 - в CdDvdEject включен код для выдвижения лотка CDROM'а под Linux.
-// 09.06.2007 - переработана Path::GetMyDocuments().
-// 17.06.2007 - введен метод ::List, возвращающий список элементов в каталоге.
-// 18.06.2007 - введен метод ::Match для сравнения с маской (shell-паттерн).
-// 03.08.2007 - для Path::FolderSize введен дополнительный аргумент - указатель
-//              на объект-визитер для дополнительной кастомной обработки
-//              файлов и каталогов.
-// 09.08.2007 - введена отдельная функция Crawl для рекурсивной обработки
-//              каталогов в иерархической файловой системе.
-// 16.08.2007 - для лексикографического упорядочивания введены операторы ==, >,
+// 16.01.2007 - РїРµСЂРµРїРёСЃР°РЅР° С„СѓРЅРєС†РёСЏ DoRemove: РѕРЅР° СѓРґР°Р»СЏРµС‚ РїРѕРґРєР°С‚Р°Р»РѕРіРё СЂРµРєСѓСЂСЃРёРІРЅРѕ.
+// 01.06.2007 - РІ CdDvdEject РІРєР»СЋС‡РµРЅ РєРѕРґ РґР»СЏ РІС‹РґРІРёР¶РµРЅРёСЏ Р»РѕС‚РєР° CDROM'Р° РїРѕРґ Linux.
+// 09.06.2007 - РїРµСЂРµСЂР°Р±РѕС‚Р°РЅР° Path::GetMyDocuments().
+// 17.06.2007 - РІРІРµРґРµРЅ РјРµС‚РѕРґ ::List, РІРѕР·РІСЂР°С‰Р°СЋС‰РёР№ СЃРїРёСЃРѕРє СЌР»РµРјРµРЅС‚РѕРІ РІ РєР°С‚Р°Р»РѕРіРµ.
+// 18.06.2007 - РІРІРµРґРµРЅ РјРµС‚РѕРґ ::Match РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ СЃ РјР°СЃРєРѕР№ (shell-РїР°С‚С‚РµСЂРЅ).
+// 03.08.2007 - РґР»СЏ Path::FolderSize РІРІРµРґРµРЅ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ Р°СЂРіСѓРјРµРЅС‚ - СѓРєР°Р·Р°С‚РµР»СЊ
+//              РЅР° РѕР±СЉРµРєС‚-РІРёР·РёС‚РµСЂ РґР»СЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№ РєР°СЃС‚РѕРјРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё
+//              С„Р°Р№Р»РѕРІ Рё РєР°С‚Р°Р»РѕРіРѕРІ.
+// 09.08.2007 - РІРІРµРґРµРЅР° РѕС‚РґРµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ Crawl РґР»СЏ СЂРµРєСѓСЂСЃРёРІРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё
+//              РєР°С‚Р°Р»РѕРіРѕРІ РІ РёРµСЂР°СЂС…РёС‡РµСЃРєРѕР№ С„Р°Р№Р»РѕРІРѕР№ СЃРёСЃС‚РµРјРµ.
+// 16.08.2007 - РґР»СЏ Р»РµРєСЃРёРєРѕРіСЂР°С„РёС‡РµСЃРєРѕРіРѕ СѓРїРѕСЂСЏРґРѕС‡РёРІР°РЅРёСЏ РІРІРµРґРµРЅС‹ РѕРїРµСЂР°С‚РѕСЂС‹ ==, >,
 //              <, != 
-// 06.10.2007 - добавлен метод GetDiskFreeSpace
-// 08.11.2007 - исправлена ошибка CdDvdEject в Unicode сборке
-// 03.03.2008 - добавлен метод GetAbsolutePath()
-// 21.03.2008 - добавлена привязка к wxFileName
-// 21.03.2008 - добавлена процедура swap
-// 21.03.2008 - добавлена конверсия с boost::filesystem::path/wpath при
-//              определенном макросе LEM_USE_BOOST_FILESYSTEM
-// 02.04.2008 - для *nix метод GetCD пробует варианты путей /cdrom, /mnt/cdrom,
+// 06.10.2007 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ GetDiskFreeSpace
+// 08.11.2007 - РёСЃРїСЂР°РІР»РµРЅР° РѕС€РёР±РєР° CdDvdEject РІ Unicode СЃР±РѕСЂРєРµ
+// 03.03.2008 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ GetAbsolutePath()
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РїСЂРёРІСЏР·РєР° Рє wxFileName
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РїСЂРѕС†РµРґСѓСЂР° swap
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РєРѕРЅРІРµСЂСЃРёСЏ СЃ boost::filesystem::path/wpath РїСЂРё
+//              РѕРїСЂРµРґРµР»РµРЅРЅРѕРј РјР°РєСЂРѕСЃРµ LEM_USE_BOOST_FILESYSTEM
+// 02.04.2008 - РґР»СЏ *nix РјРµС‚РѕРґ GetCD РїСЂРѕР±СѓРµС‚ РІР°СЂРёР°РЅС‚С‹ РїСѓС‚РµР№ /cdrom, /mnt/cdrom,
 //              /dev/cdrom
-// 08.10.2009 - изменен алгоритм проверки попадания файла по задаваемой маске
-//              в IDirTraverser и производных классах - теперь проверяется
-//              не полный путь, а только имя файла
+// 08.10.2009 - РёР·РјРµРЅРµРЅ Р°Р»РіРѕСЂРёС‚Рј РїСЂРѕРІРµСЂРєРё РїРѕРїР°РґР°РЅРёСЏ С„Р°Р№Р»Р° РїРѕ Р·Р°РґР°РІР°РµРјРѕР№ РјР°СЃРєРµ
+//              РІ IDirTraverser Рё РїСЂРѕРёР·РІРѕРґРЅС‹С… РєР»Р°СЃСЃР°С… - С‚РµРїРµСЂСЊ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ
+//              РЅРµ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ, Р° С‚РѕР»СЊРєРѕ РёРјСЏ С„Р°Р№Р»Р°
 // -----------------------------------------------------------------------------
 //
 // CD->01.05.1995
-// LC->12.04.2010
+// LC->29.03.2018
 // --------------
 
 #include <lem/config.h>
@@ -76,21 +76,13 @@
 
 #if defined LEM_WINDOWS
 
- #if defined LEM_MFC
-  #include <afxwin.h>
- #else 
-  #include <windows.h>
- #endif
-
+ #include <windows.h>
  #include <winbase.h>
  #include <direct.h>
+
  #include <shellapi.h>
  #include <mmsystem.h>
  #include <shlobj.h>
-
- #if !defined LEM_QT
-  #include <urlmon.h>
- #endif
 
  #include <winioctl.h>
 
@@ -106,10 +98,6 @@
  #endif
 */
 
-#endif
-
-#if defined LEM_QT
- #include <QDir>
 #endif
 
 #if defined LEM_LINUX
@@ -134,11 +122,6 @@
  #include <dirent.h>
 #endif
 
-#if defined LEM_WXWIDGETS
- #include <wx/filename.h>
- #include <wx/utils.h>
-#endif
-
 #if !defined LEM_WINDOWS && !defined LEM_UNIX
  #include <boost/filesystem/operations.hpp>
 #endif
@@ -161,7 +144,7 @@
  #pragma comment(lib,"Setupapi.lib")
 #endif
 
-#undef GetDiskFreeSpace
+//#undef GetDiskFreeSpace
 
 using namespace std;
 using namespace lem;
@@ -183,36 +166,21 @@ using namespace lem::UI;
  const char lem::KBD_DEVICE[]  = "con";
 #endif
 
-static const size_t LEM_BLOCKSIZE = 16384; // Размер блока для копирования файлов.
-                                           // Вероятно, эту константу следует
-                                           // оптимизировать для конкретных ОС.
+static const size_t LEM_BLOCKSIZE = 16384; // Р Р°Р·РјРµСЂ Р±Р»РѕРєР° РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ С„Р°Р№Р»РѕРІ.
+                                           // Р’РµСЂРѕСЏС‚РЅРѕ, СЌС‚Сѓ РєРѕРЅСЃС‚Р°РЅС‚Сѓ СЃР»РµРґСѓРµС‚
+                                           // РѕРїС‚РёРјРёР·РёСЂРѕРІР°С‚СЊ РґР»СЏ РєРѕРЅРєСЂРµС‚РЅС‹С… РћРЎ.
 
-
+/*
 std::vector< std::pair<lem::Path::EventHandler,void*> > lem::Path::cd_event;
 std::vector< std::pair<lem::Path::EventHandler,void*> > lem::Path::filemon_event;
-
-
-#if defined LEM_DOT_NET
-lem::Path::Path( System::String *s )
-{
- uname = to_ustr(s);
-}
-
-
-lem::Path::Path( System::IO::Path *p )
-{
- uname = to_ustr( p->ToString() );
-}
-#endif
-
-
+*/
 
 
 /********************************************************************
- Аналогично предыдущей функции, но определяем размер открытого файла,
- задаваемого дескриптором file. Очевидно, режим открытия файла file
- должен допускать перемещение указателя по нему. После выполнени
- функции указатель будет в том же месте, что и до выполнения.
+ РђРЅР°Р»РѕРіРёС‡РЅРѕ РїСЂРµРґС‹РґСѓС‰РµР№ С„СѓРЅРєС†РёРё, РЅРѕ РѕРїСЂРµРґРµР»СЏРµРј СЂР°Р·РјРµСЂ РѕС‚РєСЂС‹С‚РѕРіРѕ С„Р°Р№Р»Р°,
+ Р·Р°РґР°РІР°РµРјРѕРіРѕ РґРµСЃРєСЂРёРїС‚РѕСЂРѕРј file. РћС‡РµРІРёРґРЅРѕ, СЂРµР¶РёРј РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р° file
+ РґРѕР»Р¶РµРЅ РґРѕРїСѓСЃРєР°С‚СЊ РїРµСЂРµРјРµС‰РµРЅРёРµ СѓРєР°Р·Р°С‚РµР»СЏ РїРѕ РЅРµРјСѓ. РџРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРё
+ С„СѓРЅРєС†РёРё СѓРєР°Р·Р°С‚РµР»СЊ Р±СѓРґРµС‚ РІ С‚РѕРј Р¶Рµ РјРµСЃС‚Рµ, С‡С‚Рѕ Рё РґРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ.
 *********************************************************************/
 size_t lem::get_file_size( FILE *file )
 {
@@ -246,213 +214,13 @@ size_t lem::get_file_size( FILE *file )
  #endif
 }
 
-/*-----------------------------------------------------------------------------------*
-
- lem_file_name_split takes a file's full path name (path) as a string
- in the form
-
-                        X:\DIR\SUBDIR\NAME.EXT
-
- and splits path into its four components. Этими компонентами являются:
- drive name, directory name, file name and file extention. Разделители
- между drive name и directory name зависят от используемой операционной
- системы.
-
- Имя диска может иметь произвольную длину и содержать любые символы. Это
- же относится к расширению файла.
-
- When sol_file_name_split splits path, it treats the punctuation as
- follows:
-
- * drive does not keep the colon attached (C:, A:, etc.)
- * dir keeps the leading and trailing backslashes
-   (\turboc\include\,\source\, etc.)
-
- * ext does not keep the dot preceding the extension (.c, .exe, etc.)
-
- Результат разбивки можно склеить в полный путь применением процедуры
- lem_file_name_merge.
-*-----------------------------------------------------------------------------------*/
-
-/*
-void lem::file_name_split(
-                          const char *path,
-                          FString &drive,
-                          FString &dir,
-                          FString &name,
-                          FString &ext
-                         )
-{
- int cur=0;
- const int pathlen = strlen(path);
- if( lem_find(path,LEM_DRIVE_DELIMITER_CHAR,1) != UNKNOWN )
-  {
-   // Извлекаем имя носителя (drive name). Общий принцип - все символы
-   // до встречи с разделителем диска и пути.
-   while( cur<pathlen )
-    if( path[cur] == LEM_DRIVE_DELIMITER_CHAR )
-     {
-      cur++;
-      break;
-     }
-    else
-     drive += path[cur++];
-
-   if( LEM_IS_DIRECTORY_DELIMITER_CHAR(path[cur]) )
-    dir += path[cur++];
-  }
-
- char *buf = new char[pathlen+1];
-
- FOREVER
-  {
-   // Извлекаем очередной фрагмент пути.
-   int i=0;
-   buf[0]='\0';
-   while( (buf[i++]=path[cur])!='\0' )
-    if(
-       LEM_IS_DIRECTORY_DELIMITER_CHAR(path[cur]) ||
-       path[cur]==LEM_EXTENTION_DELIMITER_CHAR
-      )
-     {
-      buf[i-1]='\0';
-      break;
-     }
-    else
-     cur++;
-
-   if( LEM_IS_DIRECTORY_DELIMITER_CHAR(path[cur]) )
-    {
-     // Это имя очередного каталога.
-     dir += buf;
-     dir += path[cur++];
-     continue;
-    }
-
-   if( path[cur]=='\0' )
-    {
-     if( buf[0]!='\0' )
-      name = buf;
-     break;
-    }
-
-   if( path[cur]==LEM_EXTENTION_DELIMITER_CHAR )
-    {
-     // Либо прочитали имя файла, а точка отделяет расширение, либо
-     // точка является специальным именем каталога.
-     if(
-        strrchr( LEM_PATH_BAD_CHARS, path[cur+1] )==NULL &&
-         (
-          path[cur+1]=='\0' ||
-          isalnum(path[cur+1])
-         )
-       )
-      {
-       name = buf;
-       // Читаем расширение.
-       cur++;
-
-       while( path[cur] )
-        ext += path[cur++];
-
-       break;
-      }
-     else
-      {
-       while( path[cur++]==LEM_EXTENTION_DELIMITER_CHAR )
-        dir += LEM_EXTENTION_DELIMITER_CHAR;
-
-       dir += LEM_DIRECTORY_DELIMITER_CHAR;
-       continue;
-      }
-    }
-  }
-
- delete[] buf;
- return;
-}
-*/
-
-/*---------------------------------------------------------------------*
-
-Name            FileNameMerge - makes new file name
-
-Description     FileNameMerge makes a file name from its components. The
-                new file's full path name is
-
-                        X:\DIR\SUBDIR\NAME.EXT
-
-                where
-
-                        X is given by drive
-                        \DIR\SUBDIR\ is given by dir
-                        NAME.EXT is given by name and ext
-
-                If the drive, dir, name, or ext parameters are null or empty,
-                they are not inserted in the path string.  Otherwise, if
-                the drive doesn't end a colon, one is inserted in the path.
-                If the dir doesn't end in a slash, one is inserted in the
-                path.  If the ext doesn't start with a dot, one is inserted
-                in the path.
-
-                The maximum sizes for the path string is given by the
-                constant MAXPATH (defined in dir.h), which includes space
-                for the null-terminator.
-
-                fnsplit and fnmerge are invertible; if you split a given path
-                with fnsplit, then merge the resultant components with fnmerge,
-                you end up with path.
-
-Return value    None
-*---------------------------------------------------------------------*/
-/*
-const FString lem::file_name_merge(
-                                   const FString &driveP,
-                                   const FString &dirP,
-                                   const FString &nameP,
-                                   const FString &extP
-                                  )
-{
- FString res = driveP;
- if(
-    res.length() &&
-    res.last_char()!=LEM_DIRECTORY_DELIMITER_CHAR
-   )
-  {
-   res += LEM_DRIVE_DELIMITER_CHAR;
-
-   if( dirP[0]!=LEM_DIRECTORY_DELIMITER_CHAR )
-    res += LEM_DIRECTORY_DELIMITER_CHAR;
-  }
-
- res += dirP;
- if(
-    res.length() &&
-    dirP.length() &&
-    res.last_char()!=LEM_DIRECTORY_DELIMITER_CHAR
-   )
-  res += LEM_DIRECTORY_DELIMITER_CHAR;
-
- res += nameP;
-
- if( extP.length() )
-  {
-   res += LEM_EXTENTION_DELIMITER_CHAR;
-   res += extP;
-  }
-
- return res;
-}
-*/
-
-
 
 
 /****************************************************************
- Функция проверяет, открыт ли поток как БИНАРНЫЙ (буква "b" в
- определении режима для sol_fopen). Функция использует
- нестандартизованные сведения о структуре FILE, поэтому дл
- других компиляторов её нужно настраивать дополнительно.
+ Р¤СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚, РѕС‚РєСЂС‹С‚ Р»Рё РїРѕС‚РѕРє РєР°Рє Р‘РРќРђР РќР«Р™ (Р±СѓРєРІР° "b" РІ
+ РѕРїСЂРµРґРµР»РµРЅРёРё СЂРµР¶РёРјР° РґР»СЏ sol_fopen). Р¤СѓРЅРєС†РёСЏ РёСЃРїРѕР»СЊР·СѓРµС‚
+ РЅРµСЃС‚Р°РЅРґР°СЂС‚РёР·РѕРІР°РЅРЅС‹Рµ СЃРІРµРґРµРЅРёСЏ Рѕ СЃС‚СЂСѓРєС‚СѓСЂРµ FILE, РїРѕСЌС‚РѕРјСѓ РґР»
+ РґСЂСѓРіРёС… РєРѕРјРїРёР»СЏС‚РѕСЂРѕРІ РµС‘ РЅСѓР¶РЅРѕ РЅР°СЃС‚СЂР°РёРІР°С‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕ.
 *****************************************************************/
 bool lem::is_binary_file( FILE *File )
 {
@@ -474,8 +242,8 @@ bool lem::is_binary_file( FILE *File )
 
 
 /**************************************************************************
- Все содержимое файла src направляется в файл dst.
- ПАРАМЕТРЫ:
+ Р’СЃРµ СЃРѕРґРµСЂР¶РёРјРѕРµ С„Р°Р№Р»Р° src РЅР°РїСЂР°РІР»СЏРµС‚СЃСЏ РІ С„Р°Р№Р» dst.
+ РџРђР РђРњР•РўР Р«:
            src - input stream,
            dst - output stream,
            size - number of bytes to copy. If 0, get src file size.
@@ -487,10 +255,10 @@ void lem::copy_file( lem::Stream &src, lem::Stream &dst, size_t size )
  if( !Size )
   return;
 
- // Поскольку исходный файл может иметь весьма
- // приличный размер, копировать будем кусочками.
- const size_t nblock = Size/LEM_BLOCKSIZE;        // Число полных блоков.
- const size_t tail = Size - nblock*LEM_BLOCKSIZE; // Остаток.
+ // РџРѕСЃРєРѕР»СЊРєСѓ РёСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р» РјРѕР¶РµС‚ РёРјРµС‚СЊ РІРµСЃСЊРјР°
+ // РїСЂРёР»РёС‡РЅС‹Р№ СЂР°Р·РјРµСЂ, РєРѕРїРёСЂРѕРІР°С‚СЊ Р±СѓРґРµРј РєСѓСЃРѕС‡РєР°РјРё.
+ const size_t nblock = Size/LEM_BLOCKSIZE;        // Р§РёСЃР»Рѕ РїРѕР»РЅС‹С… Р±Р»РѕРєРѕРІ.
+ const size_t tail = Size - nblock*LEM_BLOCKSIZE; // РћСЃС‚Р°С‚РѕРє.
 
  lem::uint8_t *block = new lem::uint8_t[LEM_BLOCKSIZE];
 
@@ -506,30 +274,7 @@ void lem::copy_file( lem::Stream &src, lem::Stream &dst, size_t size )
 }
 
 
-/*************************************************************************
- Сбрасываем все дисковые буферы (стандартные языка C и наши надстройки),
- так как происходит аварийная остановка программы, и содержимое файлов
- должно в максимальной степени описывать ситуацию к моменту сбоя.
-**************************************************************************/
 /*
-void do_flushall(void)
-{
- #if defined LEM_UNIX
-  // I don't know what is equivalent to flushall under Linux/GNUC
-  fflush( stdout );
-  fflush( stderr );
- #elif defined LEM_GNUC
-  fflush( stdout );
-  fflush( stderr );
- #else
-  flushall();
- #endif
-
- return;
-}
-*/
-
-
 long lem::get_file_time( FILE *file )
 {
  if( file==NULL )
@@ -556,10 +301,10 @@ long lem::get_file_time( FILE *file )
   #error Define [lem_get_file_time] function for taget OS!
  #endif
 }
+*/
 
 
-
-// имя каталога для размещения временных файлов.
+// РёРјСЏ РєР°С‚Р°Р»РѕРіР° РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ.
 static const char* get_tmp_dir(void)
 {
  const char* dir=NULL;
@@ -601,7 +346,7 @@ static const lem::FString get_tmp_name( const char *ext )
 {
  static int fn_counter=1973;
 
- // Получим имя каталога для размещения временных файлов.
+ // РџРѕР»СѓС‡РёРј РёРјСЏ РєР°С‚Р°Р»РѕРіР° РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ.
 
  #if defined LEM_QT
  QString s = QDir::toNativeSeparators(QDir::tempPath());
@@ -632,7 +377,7 @@ static const lem::FString get_tmp_name( const char *ext )
    if( !dir.empty() )
     strcat( n, slash );
 
-   // Попробуем найти уникальное имя.
+   // РџРѕРїСЂРѕР±СѓРµРј РЅР°Р№С‚Рё СѓРЅРёРєР°Р»СЊРЅРѕРµ РёРјСЏ.
    if( ext )
     {
      #if defined LEM_WINDOWS
@@ -643,7 +388,7 @@ static const lem::FString get_tmp_name( const char *ext )
     }
    else
     {
-     // Расширение не указано.
+     // Р Р°СЃС€РёСЂРµРЅРёРµ РЅРµ СѓРєР°Р·Р°РЅРѕ.
      #if defined LEM_WINDOWS
      _snprintf( b, lem::Path::MaxLen, "%d%s", fn_counter, infix );
      #else
@@ -658,10 +403,10 @@ static const lem::FString get_tmp_name( const char *ext )
    if( !lem::Path::DoesExist(n) )
     break;
 
-   // Пробуем другое имя.
+   // РџСЂРѕР±СѓРµРј РґСЂСѓРіРѕРµ РёРјСЏ.
   }
 
- // Нашли имя.
+ // РќР°С€Р»Рё РёРјСЏ.
  const FString res = n;
 
  delete[] b;
@@ -674,10 +419,10 @@ static const lem::FString get_tmp_name( const char *ext )
 
 /**************************************************************
  Delete a file if possible.  Don't complain if it's not there.
- Удаление файла с заданным именем filename. Используетс
- стандартный UNIX-вызов. В случае успеха возвращается true,
- при неудаче false. Функция не действует в отношении открытого
- файла!
+ РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»Р° СЃ Р·Р°РґР°РЅРЅС‹Рј РёРјРµРЅРµРј filename. РСЃРїРѕР»СЊР·СѓРµС‚СЃ
+ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ UNIX-РІС‹Р·РѕРІ. Р’ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС…Р° РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ true,
+ РїСЂРё РЅРµСѓРґР°С‡Рµ false. Р¤СѓРЅРєС†РёСЏ РЅРµ РґРµР№СЃС‚РІСѓРµС‚ РІ РѕС‚РЅРѕС€РµРЅРёРё РѕС‚РєСЂС‹С‚РѕРіРѕ
+ С„Р°Р№Р»Р°!
 ***************************************************************/
 /*
 bool lem::do_remove( const char *filename )
@@ -688,7 +433,7 @@ bool lem::do_remove( const char *filename )
    return res==0; // 0 is OK...
   }
 
- // Провал операции.
+ // РџСЂРѕРІР°Р» РѕРїРµСЂР°С†РёРё.
  return false;
 }
 */
@@ -703,13 +448,13 @@ bool lem::do_remove( const char *filename )
 
                         X:\DIR\SUBDIR\NAME.EXT
 
- and splits path into its four components. Этими компонентами являются:
- drive name, directory name, file name and file extention. Разделители
- между drive name и directory name зависят от используемой операционной
- системы, поэтому используются константы из файла <sol_sys.h>.
+ and splits path into its four components. Р­С‚РёРјРё РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё СЏРІР»СЏСЋС‚СЃСЏ:
+ drive name, directory name, file name and file extention. Р Р°Р·РґРµР»РёС‚РµР»Рё
+ РјРµР¶РґСѓ drive name Рё directory name Р·Р°РІРёСЃСЏС‚ РѕС‚ РёСЃРїРѕР»СЊР·СѓРµРјРѕР№ РѕРїРµСЂР°С†РёРѕРЅРЅРѕР№
+ СЃРёСЃС‚РµРјС‹, РїРѕСЌС‚РѕРјСѓ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РєРѕРЅСЃС‚Р°РЅС‚С‹ РёР· С„Р°Р№Р»Р° <sol_sys.h>.
 
- Имя диска может иметь произвольную длину и содержать любые символы. Это
- же относится к расширению файла.
+ РРјСЏ РґРёСЃРєР° РјРѕР¶РµС‚ РёРјРµС‚СЊ РїСЂРѕРёР·РІРѕР»СЊРЅСѓСЋ РґР»РёРЅСѓ Рё СЃРѕРґРµСЂР¶Р°С‚СЊ Р»СЋР±С‹Рµ СЃРёРјРІРѕР»С‹. Р­С‚Рѕ
+ Р¶Рµ РѕС‚РЅРѕСЃРёС‚СЃСЏ Рє СЂР°СЃС€РёСЂРµРЅРёСЋ С„Р°Р№Р»Р°.
 
  When sol_file_name_split splits path, it treats the punctuation as
  follows:
@@ -720,7 +465,7 @@ bool lem::do_remove( const char *filename )
 
  * ext does not keep the dot preceding the extension (.c, .exe, etc.)
 
- Результат разбивки можно склеить в полный путь применением процедуры
+ Р РµР·СѓР»СЊС‚Р°С‚ СЂР°Р·Р±РёРІРєРё РјРѕР¶РЅРѕ СЃРєР»РµРёС‚СЊ РІ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ РїСЂРёРјРµРЅРµРЅРёРµРј РїСЂРѕС†РµРґСѓСЂС‹
  sol_file_name_merge.
 *-----------------------------------------------------------------------------------*/
 /*
@@ -736,8 +481,8 @@ void lem::file_name_split(
  const int pathlen = lem_strlen(path);
  if( lem_find(path,LEM_DRIVE_DELIMITER_CHAR,1) != UNKNOWN )
   {
-   // Извлекаем имя носителя (drive name). Общий принцип - все символы
-   // до встречи с разделителем диска и пути.
+   // РР·РІР»РµРєР°РµРј РёРјСЏ РЅРѕСЃРёС‚РµР»СЏ (drive name). РћР±С‰РёР№ РїСЂРёРЅС†РёРї - РІСЃРµ СЃРёРјРІРѕР»С‹
+   // РґРѕ РІСЃС‚СЂРµС‡Рё СЃ СЂР°Р·РґРµР»РёС‚РµР»РµРј РґРёСЃРєР° Рё РїСѓС‚Рё.
    while( cur<pathlen )
     if( path[cur] == LEM_DRIVE_DELIMITER_CHAR )
      {
@@ -755,7 +500,7 @@ void lem::file_name_split(
 
  FOREVER
   {
-   // Извлекаем очередной фрагмент пути.
+   // РР·РІР»РµРєР°РµРј РѕС‡РµСЂРµРґРЅРѕР№ С„СЂР°РіРјРµРЅС‚ РїСѓС‚Рё.
    int i=0;
    buf[0]=0;
    while( (buf[i++]=path[cur])!=0 )
@@ -772,7 +517,7 @@ void lem::file_name_split(
 
    if( SOL_IS_DIRECTORY_DELIMITER_CHAR(path[cur]) )
     {
-     // Это имя очередного каталога.
+     // Р­С‚Рѕ РёРјСЏ РѕС‡РµСЂРµРґРЅРѕРіРѕ РєР°С‚Р°Р»РѕРіР°.
      dir += buf;
      dir += path[cur++];
      continue;
@@ -787,15 +532,15 @@ void lem::file_name_split(
 
    if( path[cur]==SOL_EXTENTION_DELIMITER_CHAR )
     {
-     // Либо прочитали имя файла, а точка отделяет расширение, либо
-     // точка является специальным именем каталога.
+     // Р›РёР±Рѕ РїСЂРѕС‡РёС‚Р°Р»Рё РёРјСЏ С„Р°Р№Р»Р°, Р° С‚РѕС‡РєР° РѕС‚РґРµР»СЏРµС‚ СЂР°СЃС€РёСЂРµРЅРёРµ, Р»РёР±Рѕ
+     // С‚РѕС‡РєР° СЏРІР»СЏРµС‚СЃСЏ СЃРїРµС†РёР°Р»СЊРЅС‹Рј РёРјРµРЅРµРј РєР°С‚Р°Р»РѕРіР°.
      if( path[cur+1]==0 || is_correct_path_uchar(path[cur+1]) )
       {
-       // В именах файлов может быть несколько точек - нам
-       // нужна последняя.
+       // Р’ РёРјРµРЅР°С… С„Р°Р№Р»РѕРІ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ С‚РѕС‡РµРє - РЅР°Рј
+       // РЅСѓР¶РЅР° РїРѕСЃР»РµРґРЅСЏСЏ.
  
        name = buf;
-       // Читаем расширение.
+       // Р§РёС‚Р°РµРј СЂР°СЃС€РёСЂРµРЅРёРµ.
        cur++;
 
        while( path[cur] )
@@ -821,9 +566,9 @@ void lem::file_name_split(
 
 
 /****************************************************************************
- Создаёт полный путь к файлу на основе четырёх компонент, полученных
- предыдущим применением процедуры sol_file_name_split. На форматы
- строк распространяются правила, приведённые в описании sol_file_name_split.
+ РЎРѕР·РґР°С‘С‚ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РЅР° РѕСЃРЅРѕРІРµ С‡РµС‚С‹СЂС‘С… РєРѕРјРїРѕРЅРµРЅС‚, РїРѕР»СѓС‡РµРЅРЅС‹С…
+ РїСЂРµРґС‹РґСѓС‰РёРј РїСЂРёРјРµРЅРµРЅРёРµРј РїСЂРѕС†РµРґСѓСЂС‹ sol_file_name_split. РќР° С„РѕСЂРјР°С‚С‹
+ СЃС‚СЂРѕРє СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏСЋС‚СЃСЏ РїСЂР°РІРёР»Р°, РїСЂРёРІРµРґС‘РЅРЅС‹Рµ РІ РѕРїРёСЃР°РЅРёРё sol_file_name_split.
 *****************************************************************************/
 
 /*
@@ -853,7 +598,7 @@ const UFString lem::file_name_merge(
 
 
 /************************************************************
- Интерфейс к стандартной ANSI-функции открытия потока.
+ РРЅС‚РµСЂС„РµР№СЃ Рє СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ ANSI-С„СѓРЅРєС†РёРё РѕС‚РєСЂС‹С‚РёСЏ РїРѕС‚РѕРєР°.
 *************************************************************/
 FILE *lem::fopen( const wchar_t *filename, const char *mode )
 {
@@ -876,19 +621,19 @@ FILE *lem::fopen( const wchar_t *filename, const char *mode )
 }
 
 /*************************************************************************
- Процедура возвращает очередное имя временного файла. Для создани
- ANSII-кодированного имени вызываем стандартную процедуру tmpnam.
- Шаблон, который используется для построения имени временного файла,
- серьёзно зависит от компилятора. Можно указать расширение создаваемого
- файла через ext (либо указать NULL для автоматического выбора). Это
- расширение не должно содержать точку-разделитель.
+ РџСЂРѕС†РµРґСѓСЂР° РІРѕР·РІСЂР°С‰Р°РµС‚ РѕС‡РµСЂРµРґРЅРѕРµ РёРјСЏ РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°. Р”Р»СЏ СЃРѕР·РґР°РЅРё
+ ANSII-РєРѕРґРёСЂРѕРІР°РЅРЅРѕРіРѕ РёРјРµРЅРё РІС‹Р·С‹РІР°РµРј СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ РїСЂРѕС†РµРґСѓСЂСѓ tmpnam.
+ РЁР°Р±Р»РѕРЅ, РєРѕС‚РѕСЂС‹Р№ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ РёРјРµРЅРё РІСЂРµРјРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°,
+ СЃРµСЂСЊС‘Р·РЅРѕ Р·Р°РІРёСЃРёС‚ РѕС‚ РєРѕРјРїРёР»СЏС‚РѕСЂР°. РњРѕР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ СЂР°СЃС€РёСЂРµРЅРёРµ СЃРѕР·РґР°РІР°РµРјРѕРіРѕ
+ С„Р°Р№Р»Р° С‡РµСЂРµР· ext (Р»РёР±Рѕ СѓРєР°Р·Р°С‚СЊ NULL РґР»СЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РІС‹Р±РѕСЂР°). Р­С‚Рѕ
+ СЂР°СЃС€РёСЂРµРЅРёРµ РЅРµ РґРѕР»Р¶РЅРѕ СЃРѕРґРµСЂР¶Р°С‚СЊ С‚РѕС‡РєСѓ-СЂР°Р·РґРµР»РёС‚РµР»СЊ.
 **************************************************************************/
 /*
 static const UFString lem_get_tmp_uname( const wchar_t *ext )
 {
  static int fn_counter=666;
 
- // Получим имя каталога для размещения временных файлов.
+ // РџРѕР»СѓС‡РёРј РёРјСЏ РєР°С‚Р°Р»РѕРіР° РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ.
  char* dir = get_tmp_dir();
  char* Ext = lem_unicode_to_ascii(ext);
 
@@ -905,7 +650,7 @@ static const UFString lem_get_tmp_uname( const wchar_t *ext )
    if( dir!=NULL )
     strcat( n, "\\" );
 
-   // Попробуем найти уникальное имя.
+   // РџРѕРїСЂРѕР±СѓРµРј РЅР°Р№С‚Рё СѓРЅРёРєР°Р»СЊРЅРѕРµ РёРјСЏ.
    sprintf( b, "%d.%s", fn_counter, Ext );
    strcat( n, b );
 
@@ -914,10 +659,10 @@ static const UFString lem_get_tmp_uname( const wchar_t *ext )
    if( !does_exist(n) )
     break;
 
-   // Пробуем другое имя.
+   // РџСЂРѕР±СѓРµРј РґСЂСѓРіРѕРµ РёРјСЏ.
   }
 
- // Нашли имя.
+ // РќР°С€Р»Рё РёРјСЏ.
  const UFString res = lem_ascii_to_unicode( n );
 
  delete[] n;
@@ -932,8 +677,9 @@ static const UFString lem_get_tmp_uname( const wchar_t *ext )
 
 
 /******************************************************************
- Возвращаем системное время последней модификации указанного файла.
+ Р’РѕР·РІСЂР°С‰Р°РµРј СЃРёСЃС‚РµРјРЅРѕРµ РІСЂРµРјСЏ РїРѕСЃР»РµРґРЅРµР№ РјРѕРґРёС„РёРєР°С†РёРё СѓРєР°Р·Р°РЅРЅРѕРіРѕ С„Р°Р№Р»Р°.
 *******************************************************************/
+/*
 long lem::get_file_change_time( const wchar_t *filename )
 {
  if( !(filename) )
@@ -965,10 +711,12 @@ long lem::get_file_change_time( const wchar_t *filename )
 
  return res;
 }
+*/
 
 /*****************************************************************
- К файлу с именем f1 присоединяем (в конце) содержимое файла f2.
+ Рљ С„Р°Р№Р»Сѓ СЃ РёРјРµРЅРµРј f1 РїСЂРёСЃРѕРµРґРёРЅСЏРµРј (РІ РєРѕРЅС†Рµ) СЃРѕРґРµСЂР¶РёРјРѕРµ С„Р°Р№Р»Р° f2.
 ******************************************************************/
+/*
 static void concatenate_files( const wchar_t *f1, const wchar_t *f2 )
 {
  FILE *file1 = fopen( f1, "ab" );
@@ -977,14 +725,14 @@ static void concatenate_files( const wchar_t *f1, const wchar_t *f2 )
  LEM_CHECKIT_Z( file1!=NULL );
  LEM_CHECKIT_Z( file2!=NULL );
 
- // Перемещаемся в конец принимающего файла.
+ // РџРµСЂРµРјРµС‰Р°РµРјСЃСЏ РІ РєРѕРЅРµС† РїСЂРёРЅРёРјР°СЋС‰РµРіРѕ С„Р°Р№Р»Р°.
  fseek( file1, 0, SEEK_END );
 
- // Размер добавки.
+ // Р Р°Р·РјРµСЂ РґРѕР±Р°РІРєРё.
  const long Size = get_file_size(file2);
 
- const long nblock = Size/LEM_BLOCKSIZE;        // Число полных блоков.
- const long tail = Size - nblock*LEM_BLOCKSIZE; // Остаток.
+ const long nblock = Size/LEM_BLOCKSIZE;        // Р§РёСЃР»Рѕ РїРѕР»РЅС‹С… Р±Р»РѕРєРѕРІ.
+ const long tail = Size - nblock*LEM_BLOCKSIZE; // РћСЃС‚Р°С‚РѕРє.
 
  char *block = new char[LEM_BLOCKSIZE];
 
@@ -1002,6 +750,7 @@ static void concatenate_files( const wchar_t *f1, const wchar_t *f2 )
 
  return;
 }
+*/
 
 /****************************************************************************
    Filter out illegal chars.  This is virtually identical for the Amiga,
@@ -1027,10 +776,10 @@ bool lem::is_correct_path_uchar( wchar_t ch )
 
 /**************************************************************
  Delete a file if possible.  Don't complain if it's not there.
- Удаление файла с заданным именем filename. Используетс
- стандартный UNIX-вызов. В случае успеха возвращается true,
- при неудаче false. Функция не действует в отношении открытого
- файла!
+ РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»Р° СЃ Р·Р°РґР°РЅРЅС‹Рј РёРјРµРЅРµРј filename. РСЃРїРѕР»СЊР·СѓРµС‚СЃ
+ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ UNIX-РІС‹Р·РѕРІ. Р’ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС…Р° РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ true,
+ РїСЂРё РЅРµСѓРґР°С‡Рµ false. Р¤СѓРЅРєС†РёСЏ РЅРµ РґРµР№СЃС‚РІСѓРµС‚ РІ РѕС‚РЅРѕС€РµРЅРёРё РѕС‚РєСЂС‹С‚РѕРіРѕ
+ С„Р°Р№Р»Р°!
 ***************************************************************/
 /*
 bool lem::do_remove( const wchar_t *filename )
@@ -1045,7 +794,7 @@ bool lem::do_remove( const wchar_t *filename )
 //   return wunlink( filename ) == 0;
 
    #else
-   // Получаем ANSI-кодированное имя файла...
+   // РџРѕР»СѓС‡Р°РµРј ANSI-РєРѕРґРёСЂРѕРІР°РЅРЅРѕРµ РёРјСЏ С„Р°Р№Р»Р°...
    const int len = lem_strlen(filename);
    char *ascii_filename = new char[len+1];
    lem_unicode_to_ascii( ascii_filename, filename );
@@ -1055,37 +804,10 @@ bool lem::do_remove( const wchar_t *filename )
    #endif
   }
 
- // Провал операции.
+ // РџСЂРѕРІР°Р» РѕРїРµСЂР°С†РёРё.
  return false;
 }
 */
-
-
-
-#if defined LEM_WXWIDGETS
-lem::Path::Path( const wxFileName &x )
- #if defined UNICODE
- : uname( x.GetFullPath() )
- #else 
- : name( x.GetFullPath() )
- #endif
-{}
-#endif
-
-
-
-#if defined LEM_WXWIDGETS
-void Path::operator=( const wxFileName &x )
-{
- #if defined UNICODE
- name.clear();
- uname = x.GetFullPath();
- #else 
- uname.clear();
- name = x.GetFullPath();
- #endif
-}
-#endif
 
 
 
@@ -1186,7 +908,7 @@ bool lem::Path::IsPathDelimiter( wchar_t ch )
 
 const UFString lem::Path::GetFileNameWithoutExtension( const UFString &path )
 {
- // Ищем положение крайней точки справа.
+ // РС‰РµРј РїРѕР»РѕР¶РµРЅРёРµ РєСЂР°Р№РЅРµР№ С‚РѕС‡РєРё СЃРїСЂР°РІР°.
  UFString res = path;
 
  if( path.empty() )
@@ -1194,13 +916,13 @@ const UFString lem::Path::GetFileNameWithoutExtension( const UFString &path )
 
  int len = path.length();
 
- // Ищем символ-разделитель расширения - с правого конца.
+ // РС‰РµРј СЃРёРјРІРѕР»-СЂР°Р·РґРµР»РёС‚РµР»СЊ СЂР°СЃС€РёСЂРµРЅРёСЏ - СЃ РїСЂР°РІРѕРіРѕ РєРѕРЅС†Р°.
  for( int i=len-1; i>=0; i-- )
   {
    if( lem::Path::IsExtDelimiter( path[i] ) )
     {
-     // Найдено начало расширения
-     res.ShrinkTo(i);
+     // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
+     res.truncate_to(i);
      break;
     }
    else if( lem::Path::IsDriveDelimiter(path[i]) || lem::Path::IsPathDelimiter(path[i]) )
@@ -1236,7 +958,7 @@ FString Path::GetAscii(void) const
 
 
 // ******************************************************************
-// Удаление файла или каталога (рекурсивно с подкаталогами и файлами)
+// РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»Р° РёР»Рё РєР°С‚Р°Р»РѕРіР° (СЂРµРєСѓСЂСЃРёРІРЅРѕ СЃ РїРѕРґРєР°С‚Р°Р»РѕРіР°РјРё Рё С„Р°Р№Р»Р°РјРё)
 // ******************************************************************
 bool lem::Path::DoRemove(void) const
 {
@@ -1245,7 +967,7 @@ bool lem::Path::DoRemove(void) const
 
  if( IsFolder() )
   {
-   // Удаляем каталог
+   // РЈРґР°Р»СЏРµРј РєР°С‚Р°Р»РѕРі
    #if defined LEM_WINDOWS
    if( lem::System_Config::SupportUnicodeFilenames() )
     {
@@ -1256,7 +978,7 @@ bool lem::Path::DoRemove(void) const
      UFString s = GetUnicode();
      wchar_t *buf = new wchar_t[ s.length()+2 ];
      lem_strcpy( buf, s.c_str() );
-     buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+     buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
      op.pFrom = buf;
      op.pTo = NULL;
      op.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
@@ -1275,7 +997,7 @@ bool lem::Path::DoRemove(void) const
      FString s = GetAscii();
      char *buf = new char[ s.length()+2 ];
      lem_strcpy( buf, s.c_str() );
-     buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+     buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
      op.pFrom = buf;
      op.pTo = NULL;
      op.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
@@ -1288,10 +1010,10 @@ bool lem::Path::DoRemove(void) const
 
    #elif defined LEM_UNIX
 
-   // Удаляем сначала содержимое каталога, а затем и сам каталог.
+   // РЈРґР°Р»СЏРµРј СЃРЅР°С‡Р°Р»Р° СЃРѕРґРµСЂР¶РёРјРѕРµ РєР°С‚Р°Р»РѕРіР°, Р° Р·Р°С‚РµРј Рё СЃР°Рј РєР°С‚Р°Р»РѕРі.
    PurgeFolder();
 
-   // Удаляем каталог 
+   // РЈРґР°Р»СЏРµРј РєР°С‚Р°Р»РѕРі 
    if( lem::System_Config::SupportUnicodeFilenames() )
     return rmdir( lem::to_utf8(GetUnicode()).c_str() )==0;
    else
@@ -1299,7 +1021,7 @@ bool lem::Path::DoRemove(void) const
 
    #else
 
-    // Перебираем все файлы в каталоге
+    // РџРµСЂРµР±РёСЂР°РµРј РІСЃРµ С„Р°Р№Р»С‹ РІ РєР°С‚Р°Р»РѕРіРµ
     boost::filesystem::directory_iterator end_itr; // default construction yields past-the-end
     boost::filesystem::path p1( GetAscii().c_str(), boost::filesystem::native );
 
@@ -1313,7 +1035,7 @@ bool lem::Path::DoRemove(void) const
 
       if( is_directory( l ) )
        {
-        // Погружаемся на 1 уровень вниз по дереву каталогов
+        // РџРѕРіСЂСѓР¶Р°РµРјСЃСЏ РЅР° 1 СѓСЂРѕРІРµРЅСЊ РІРЅРёР· РїРѕ РґРµСЂРµРІСѓ РєР°С‚Р°Р»РѕРіРѕРІ
         lem::Path deeper( l.string() );
         deeper.DoRemove();
         continue;
@@ -1334,7 +1056,7 @@ bool lem::Path::DoRemove(void) const
   }
  else
   {
-   // Удаляем единственный файл
+   // РЈРґР°Р»СЏРµРј РµРґРёРЅСЃС‚РІРµРЅРЅС‹Р№ С„Р°Р№Р»
    if( lem::System_Config::SupportUnicodeFilenames() )
     {
      #if defined LEM_UNIX
@@ -1364,7 +1086,7 @@ void lem::Path::CopyFile( const lem::Path& src, const lem::Path& dst )
 {
  #if defined LEM_WINDOWS
 
- // Используем быструю функцию WinAPI для Win2000/XP/2003
+ // РСЃРїРѕР»СЊР·СѓРµРј Р±С‹СЃС‚СЂСѓСЋ С„СѓРЅРєС†РёСЋ WinAPI РґР»СЏ Win2000/XP/2003
  BOOL ret;
  if( lem::System_Config::SupportUnicodeFilenames() )
   ret = ::CopyFileW( src.GetUnicode().c_str(), dst.GetUnicode().c_str(), false );
@@ -1396,10 +1118,10 @@ void lem::Path::CopyFile( const lem::Path& src, const lem::Path& dst )
 
 
 /******************************************************************
- Создаем файл, имя которого будет dst, и содержимое этого
- файла будет копией файла с именем src. Копирование содержимого
- выполняется кусками-квантами фиксированного размера, а не байтами.
- Это ускоряет операцию.
+ РЎРѕР·РґР°РµРј С„Р°Р№Р», РёРјСЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ dst, Рё СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ
+ С„Р°Р№Р»Р° Р±СѓРґРµС‚ РєРѕРїРёРµР№ С„Р°Р№Р»Р° СЃ РёРјРµРЅРµРј src. РљРѕРїРёСЂРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ
+ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РєСѓСЃРєР°РјРё-РєРІР°РЅС‚Р°РјРё С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР°, Р° РЅРµ Р±Р°Р№С‚Р°РјРё.
+ Р­С‚Рѕ СѓСЃРєРѕСЂСЏРµС‚ РѕРїРµСЂР°С†РёСЋ.
 *******************************************************************/
 void lem::Path::CopyFile( const wchar_t *src, const wchar_t *dst )
 {
@@ -1413,9 +1135,9 @@ void lem::Path::CopyFile( const wchar_t *src, const wchar_t *dst )
  CopyFile(psrc,pdst);
 
  /*
- // Размер кванта копирования: файл копируется порциями такого
- // размера, дабы не затребовать слишком много ресурсов RAM дл
- // крупных файлов.
+ // Р Р°Р·РјРµСЂ РєРІР°РЅС‚Р° РєРѕРїРёСЂРѕРІР°РЅРёСЏ: С„Р°Р№Р» РєРѕРїРёСЂСѓРµС‚СЃСЏ РїРѕСЂС†РёСЏРјРё С‚Р°РєРѕРіРѕ
+ // СЂР°Р·РјРµСЂР°, РґР°Р±С‹ РЅРµ Р·Р°С‚СЂРµР±РѕРІР°С‚СЊ СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ СЂРµСЃСѓСЂСЃРѕРІ RAM РґР»
+ // РєСЂСѓРїРЅС‹С… С„Р°Р№Р»РѕРІ.
  const int block_size=LEM_BLOCKSIZE;
 
  FILE *from = fopen( src, "rb" );
@@ -1459,9 +1181,9 @@ void lem::Path::CopyFile( const char *src, const char *dst )
  CopyFile(psrc,pdst);
 
  /*
- // Размер кванта копирования: файл копируется порциями такого
- // размера, дабы не затребовать слишком много ресурсов RAM для
- // крупных файлов.
+ // Р Р°Р·РјРµСЂ РєРІР°РЅС‚Р° РєРѕРїРёСЂРѕРІР°РЅРёСЏ: С„Р°Р№Р» РєРѕРїРёСЂСѓРµС‚СЃСЏ РїРѕСЂС†РёСЏРјРё С‚Р°РєРѕРіРѕ
+ // СЂР°Р·РјРµСЂР°, РґР°Р±С‹ РЅРµ Р·Р°С‚СЂРµР±РѕРІР°С‚СЊ СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ СЂРµСЃСѓСЂСЃРѕРІ RAM РґР»СЏ
+ // РєСЂСѓРїРЅС‹С… С„Р°Р№Р»РѕРІ.
  const int block_size=LEM_BLOCKSIZE;
 
  FILE *from = ::fopen( src, "rb" );
@@ -1507,14 +1229,14 @@ void lem::Path::CopyFolder( const lem::Path& src, const lem::Path& dst )
    s += L"\\*.*";
    wchar_t *buf = new wchar_t[ s.length()+2 ];
    lem_strcpy( buf, s.c_str() );
-   buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
    op.pFrom = buf;
 
    s = dst.GetUnicode();
 //   s += L"\\*.*";
    wchar_t *buf2 = new wchar_t[ s.length()+2 ];
    lem_strcpy( buf2, s.c_str() );
-   buf2[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf2[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
    op.pTo = buf2;
    op.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
    op.lpszProgressTitle = NULL;
@@ -1535,13 +1257,13 @@ void lem::Path::CopyFolder( const lem::Path& src, const lem::Path& dst )
    s += "\\*.*";
    char *buf = new char[ s.length()+2 ];
    strcpy( buf, s.c_str() );
-   buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
    op.pFrom = buf;
 
    s = dst.GetAscii();
    char *buf2 = new char[ s.length()+2 ];
    strcpy( buf2, s.c_str() );
-   buf2[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf2[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
    op.pTo = buf2;
 
    op.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
@@ -1590,18 +1312,19 @@ const lem::Path lem::Path::GetTmpFolder(void)
 
 
 // ***************************************************************
-// Процедура возвращает путь к стандартному каталогу с документами
-// пользователя для текущей платформы.
+// РџСЂРѕС†РµРґСѓСЂР° РІРѕР·РІСЂР°С‰Р°РµС‚ РїСѓС‚СЊ Рє СЃС‚Р°РЅРґР°СЂС‚РЅРѕРјСѓ РєР°С‚Р°Р»РѕРіСѓ СЃ РґРѕРєСѓРјРµРЅС‚Р°РјРё
+// РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РґР»СЏ С‚РµРєСѓС‰РµР№ РїР»Р°С‚С„РѕСЂРјС‹.
 // ***************************************************************
+/*
 const lem::Path lem::Path::GetMyDocuments(void)
 {
  lem::Path home( lem::System_Config::GetHomeDir() );
 
  #if defined LEM_WINDOWS
 
- // Пробуем использовать системную Shell-процедуру для
- // получения пути к каталогу 'Мои документы'.
- // NB: для Win NT 4.0 вызываемая процедура отсутствует в экспорте 
+ // РџСЂРѕР±СѓРµРј РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРёСЃС‚РµРјРЅСѓСЋ Shell-РїСЂРѕС†РµРґСѓСЂСѓ РґР»СЏ
+ // РїРѕР»СѓС‡РµРЅРёСЏ РїСѓС‚Рё Рє РєР°С‚Р°Р»РѕРіСѓ 'РњРѕРё РґРѕРєСѓРјРµРЅС‚С‹'.
+ // NB: РґР»СЏ Win NT 4.0 РІС‹Р·С‹РІР°РµРјР°СЏ РїСЂРѕС†РµРґСѓСЂР° РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ СЌРєСЃРїРѕСЂС‚Рµ 
  lem::Process::Dll shell32_dll;
  if( shell32_dll.Load( lem::Path("shell32.dll") ) )
   {
@@ -1643,6 +1366,7 @@ const lem::Path lem::Path::GetMyDocuments(void)
 
  UFString my_docs( L"\x041C\x043e\x0438 \x0434\x043e\x043a\x0443\x043C\x0435\x043D\x0442\x044B" );
 
+
  if( lem::System_Config::IsWin9x() )
   {
    const char *windir = getenv("windir");
@@ -1663,22 +1387,23 @@ const lem::Path lem::Path::GetMyDocuments(void)
     }
   }
 
- // Пробуем для русской локализации
+
+ // РџСЂРѕР±СѓРµРј РґР»СЏ СЂСѓСЃСЃРєРѕР№ Р»РѕРєР°Р»РёР·Р°С†РёРё
  lem::Path rus(home);
  rus.ConcateLeaf( lem::Path(my_docs) );
 
  if( rus.DoesExist() )
   return rus;
 
- // Пробуем английскую.
+ // РџСЂРѕР±СѓРµРј Р°РЅРіР»РёР№СЃРєСѓСЋ.
  lem::Path eng(home);
  eng.ConcateLeaf(L"My documents");
  if( eng.DoesExist () )
   return eng;
 
- // Для WinNT мы оказываемся здесь, так как для этой OS специальная папка 'Мои документы'
- // не предусмотрена. Есть в личном каталоге папка 'Личное', но лучше вернем путь к
- // всему домашнему каталогу. 
+ // Р”Р»СЏ WinNT РјС‹ РѕРєР°Р·С‹РІР°РµРјСЃСЏ Р·РґРµСЃСЊ, С‚Р°Рє РєР°Рє РґР»СЏ СЌС‚РѕР№ OS СЃРїРµС†РёР°Р»СЊРЅР°СЏ РїР°РїРєР° 'РњРѕРё РґРѕРєСѓРјРµРЅС‚С‹'
+ // РЅРµ РїСЂРµРґСѓСЃРјРѕС‚СЂРµРЅР°. Р•СЃС‚СЊ РІ Р»РёС‡РЅРѕРј РєР°С‚Р°Р»РѕРіРµ РїР°РїРєР° 'Р›РёС‡РЅРѕРµ', РЅРѕ Р»СѓС‡С€Рµ РІРµСЂРЅРµРј РїСѓС‚СЊ Рє
+ // РІСЃРµРјСѓ РґРѕРјР°С€РЅРµРјСѓ РєР°С‚Р°Р»РѕРіСѓ. 
  if( home.DoesExist() )
   return home;
 
@@ -1701,7 +1426,7 @@ const lem::Path lem::Path::GetMyDocuments(void)
 
  #endif
 }
-
+*/
 
 
 bool lem::Path::DoesExist(void) const
@@ -1866,171 +1591,8 @@ bool lem::Path::IsFolder(void) const
 
 
 
-#if defined LEM_WINDOWS
-
-// IOCTL control code
-#define IOCTL_STORAGE_QUERY_PROPERTY   CTL_CODE(IOCTL_STORAGE_BASE, 0x0500, METHOD_BUFFERED, FILE_ANY_ACCESS)
-
-namespace {
-
-#if defined _MSC_VER && _MSC_VER<1300
-
-//// The following structures all can find at MSDN.
-// enumeration type specifies the various types of storage buses
-typedef enum _STORAGE_BUS_TYPE {
-    BusTypeUnknown = 0x00,
-    BusTypeScsi,
-    BusTypeAtapi,
-    BusTypeAta,
-    BusType1394,
-    BusTypeSsa,
-    BusTypeFibre,
-    BusTypeUsb,
-    BusTypeRAID,
-    BusTypeMaxReserved = 0x7F
-} STORAGE_BUS_TYPE, *PSTORAGE_BUS_TYPE;
-#endif
-
-#if defined LEM_MSC
-// retrieve the storage device descriptor data for a device. 
-typedef struct _STORAGE_DEVICE_DESCRIPTOR {
-  ULONG  Version;
-  ULONG  Size;
-  UCHAR  DeviceType;
-  UCHAR  DeviceTypeModifier;
-  BOOLEAN  RemovableMedia;
-  BOOLEAN  CommandQueueing;
-  ULONG  VendorIdOffset;
-  ULONG  ProductIdOffset;
-  ULONG  ProductRevisionOffset;
-  ULONG  SerialNumberOffset;
-  STORAGE_BUS_TYPE  BusType;
-  ULONG  RawPropertiesLength;
-  UCHAR  RawDeviceProperties[1];
-
-} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
-
-// retrieve the properties of a storage device or adapter. 
-typedef enum _STORAGE_QUERY_TYPE {
-  PropertyStandardQuery = 0,
-  PropertyExistsQuery,
-  PropertyMaskQuery,
-  PropertyQueryMaxDefined
-
-} STORAGE_QUERY_TYPE, *PSTORAGE_QUERY_TYPE;
-
-// retrieve the properties of a storage device or adapter. 
-typedef enum _STORAGE_PROPERTY_ID {
-  StorageDeviceProperty = 0,
-  StorageAdapterProperty,
-  StorageDeviceIdProperty
-
-} STORAGE_PROPERTY_ID, *PSTORAGE_PROPERTY_ID;
-
-// retrieve the properties of a storage device or adapter. 
-typedef struct _STORAGE_PROPERTY_QUERY {
-  STORAGE_PROPERTY_ID  PropertyId;
-  STORAGE_QUERY_TYPE  QueryType;
-  UCHAR  AdditionalParameters[1];
-
-} STORAGE_PROPERTY_QUERY, *PSTORAGE_PROPERTY_QUERY;
-#endif
-
-}
 
 /*
-#if defined LEM_MSC 
-static BOOL GetDisksProperty( HANDLE hDevice, PSTORAGE_DEVICE_DESCRIPTOR pDevDesc )
-{
-	STORAGE_PROPERTY_QUERY	Query;	// input param for query
-	DWORD dwOutBytes;				// IOCTL output length
-	BOOL bResult;					// IOCTL return val
-
-	// specify the query type
-	Query.PropertyId = StorageDeviceProperty;
-	Query.QueryType = PropertyStandardQuery;
-
-	// Query using IOCTL_STORAGE_QUERY_PROPERTY 
-	bResult = ::DeviceIoControl(hDevice,			// device handle
-			IOCTL_STORAGE_QUERY_PROPERTY,			// info of device property
-			&Query, sizeof(STORAGE_PROPERTY_QUERY),	// input data buffer
-			pDevDesc, pDevDesc->Size,				// output data buffer
-			&dwOutBytes,							// out's length
-			(LPOVERLAPPED)NULL);					
-
-	return bResult;
-}
-#endif
-*/
-
-// **********************************************************
-// Заполняет список именами подключенных USB дисков
-// **********************************************************
-static void GetUsbDrives( std::vector< lem::Path > & list )
-{
- #if defined LEM_MSC
-/*
- const int bufferSize = 256;
-
- char szBuf[lem::Path::MaxLen+10];
- HANDLE hDevice;
- PSTORAGE_DEVICE_DESCRIPTOR pDevDesc;
-
- char drive[4] = "A:\\";
-// TCHAR volume[bufferSize];
-
- DWORD mask = ::GetLogicalDrives();
-
- if( mask )
-  {
-   for( int i=0; i<26; i++ )
-    {
-     if( mask & 1)
-      {
-       drive[0] = 'A' + i;
-
-       UINT dtype=::GetDriveTypeA(drive); 
-       if( dtype==DRIVE_FIXED )
-        {
-         sprintf(szBuf, "\\\\?\\%c:", drive[0] );
-         hDevice = CreateFileA(szBuf, GENERIC_READ ,
-							FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, NULL);
-
-         if( hDevice != INVALID_HANDLE_VALUE )
-          {
-           pDevDesc = (PSTORAGE_DEVICE_DESCRIPTOR)new BYTE[sizeof(STORAGE_DEVICE_DESCRIPTOR) + 512 - 1];
-
-           pDevDesc->Size = sizeof(STORAGE_DEVICE_DESCRIPTOR) + 512 - 1;
-
-           if(GetDisksProperty(hDevice, pDevDesc))
-            {
-             if(pDevDesc->BusType == BusTypeUsb)
-              {
-//               szMoveDiskName[k] = chFirstDriveFromMask(temp);
-//               szMoveDiskName[0]=k;
-//               k++;
-               list.push_back( lem::Path(drive) );
-              }
-            }
-
-           delete pDevDesc;
-           CloseHandle(hDevice);
-          }
-        }
-      }
-
-     mask >>= 1;
-    }
-  }
-*/
- #endif
-
- return;
-}
-#endif
-
-
-
 void lem::Path::GetMyComputer(
                               std::vector<lem::Path> &list,
                               bool allow_floppies,
@@ -2089,239 +1651,15 @@ void lem::Path::GetMyComputer(
   #error
  #endif
 }
+*/
 
-
-// ******************************************************
-// Список путей (обычно 1) на CD-drives
-// ******************************************************
-void lem::Path::GetCD( std::vector<lem::Path> &list )
-{
- #if defined LEM_WINDOWS
-
-  char buffer[256];
-  *buffer=0;
- 
-  DWORD n = GetLogicalDriveStringsA( sizeof(buffer), buffer );
-  LEM_CHECKIT_Z(n!=0);
-
-  char *s = buffer;
-  while( *s )
-   {
-    FString drive = s;
-    if( drive.empty() ) 
-     break;
-
-    if( GetDriveTypeA( drive.c_str() ) == DRIVE_CDROM )
-     list.push_back( lem::Path( drive ) ); 
-
-    s += (drive.length()+1);
-   }
-
- #else
-  
-  // разные варианты *Nix по-разному дают доступ к CD Drive.
-
-  if( lem::Path::DoesExist("/cdrom/") )
-   list.push_back( lem::Path( "/cdrom/" ) );
-  else if( lem::Path::DoesExist("/mnt/cdrom/") )
-   list.push_back( lem::Path( "/mnt/cdrom/" ) );
-  else if( lem::Path::DoesExist("/dev/cdrom/") )
-   list.push_back( lem::Path( "/dev/cdrom/" ) );
-
-//  list.push_back( lem::Path( CD_DEVICE ) );
-
- #endif
-}
-
-
-bool lem::Path::IsCD( char letter )
-{
- #if defined LEM_WINDOWS
- char drv[3];
- drv[0]=letter;
- drv[1]=':';
- drv[2]=0;
-
- return GetDriveTypeA( drv ) == DRIVE_CDROM;
- #else
- return false;
- #endif
-}
-
-
-// *****************************************
-// Выдвигаем лоток привода
-// *****************************************
-bool lem::Path::CdDvdEject( char ch_drv )
-{
- #if defined LEM_QT
-  return false;
- #elif defined LEM_WINDOWS
- if( ch_drv==0 )
-  {
-   std::vector<lem::Path> cd;
-   GetCD(cd);
- 
-   if( cd.size()==1 )
-    ch_drv = cd.front().GetAscii().front();
-   else
-    {
-     bool res=true;
-     for( lem::Container::size_type i=0; i<cd.size(); i++ )
-      {
-       const char c = cd[i].GetAscii().front();
-       bool res2 = CdDvdEject( c );
-       res = res && res2;
-      }
-
-     return res;
-    }
-  }
-
- ch_drv = lem::to_upper(ch_drv);
-
- if( !lem::is_latin(ch_drv) )
-  return false;
-
- TCHAR sz_drv[3] = { 0, TCHAR(':'), 0 };
- sz_drv[0] = ch_drv;
- MCI_OPEN_PARMS st_mcio;
- st_mcio.lpstrDeviceType  = (LPCTSTR)MCI_DEVTYPE_CD_AUDIO;
- st_mcio.lpstrElementName = (LPCTSTR)sz_drv;
- st_mcio.wDeviceID        = 0;
-
- if( 
-    mciSendCommand(
-                   0
-                   ,MCI_OPEN
-                   ,MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT | MCI_OPEN_SHAREABLE | MCI_WAIT
-                   ,(DWORD)&st_mcio
-                  )) 
-  return FALSE;
-
- MCI_STATUS_PARMS st_stat;
- st_stat.dwItem   = MCI_STATUS_MEDIA_PRESENT;
- st_stat.dwReturn = 0;
- mciSendCommand( st_mcio.wDeviceID, MCI_STATUS, MCI_STATUS_ITEM | MCI_WAIT,(DWORD)&st_stat );
- DWORD rs;
- if(!st_stat.dwReturn) 
-  {
-   DWORD t_delay = GetTickCount();
-   rs = mciSendCommand( st_mcio.wDeviceID, MCI_SET, MCI_SET_DOOR_CLOSED | MCI_WAIT, 0 );
-   if( !rs && (GetTickCount() - t_delay) < 1500 )
-    {
-     rs = mciSendCommand( st_mcio.wDeviceID, MCI_SET, MCI_SET_DOOR_OPEN | MCI_WAIT, 0 );
-    }
-  } 
- else 
-  {
-   rs = mciSendCommand( st_mcio.wDeviceID, MCI_SET, MCI_SET_DOOR_OPEN | MCI_WAIT, 0 );
-  }
-
- mciSendCommand(st_mcio.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
- return !rs; 
- #elif defined LEM_LINUX || defined LEM_BSD
-
- int cdrom = open( CD_DEVICE, O_RDONLY | O_NONBLOCK );
- if( cdrom<0 )
-  {
-   if( lem::LogFile::IsOpen() )
-    lem::LogFile::logfile->printf( "Error in lem::Path::CdDvdEject: can not open cdrom device '%s'\n", CD_DEVICE );
-
-   return false;
-  }
-
- #if defined LEM_LINUX
- const int res = ioctl( cdrom, CDROMEJECT, 0 );
- #elif defined LEM_DARWIN
- const int res=-1;
- #else
- const int res = ioctl( cdrom, CDIOCEJECT, 0 );
- #endif
-
- if( res < 0 )
-  {
-   if( lem::LogFile::IsOpen() )
-    lem::LogFile::logfile->printf( "Error in lem::Path::CdDvdEject: ioctl returned error code %d\n", res );
-
-   close(cdrom);
-   return false;
-  } 
- 
- close(cdrom);
- return true;
-
- #else
- return false;
- #endif
-}
-
-
-
-bool lem::Path::CdDvdClose( char ch_drv )
-{
- #if defined LEM_QT
-  return false;
- #elif defined LEM_WINDOWS
- if( ch_drv==0 )
-  {
-   std::vector<lem::Path> cd;
-   GetCD(cd);
- 
-   if( cd.size()==1 )
-    ch_drv = cd.front().GetAscii().front();
-   else
-    return false;
-  }
-
- // Local variables
- char drivePath[] = { ch_drv, ':', '\0' };
- MCI_OPEN_PARMSA openParams;
-
- // Code
- ZeroMemory(&openParams, sizeof(openParams));
- openParams.lpstrDeviceType = (const char*)MCI_DEVTYPE_CD_AUDIO;
- openParams.lpstrElementName = drivePath;
- if( mciSendCommandA(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT | MCI_OPEN_SHAREABLE, (unsigned long)&openParams) == 0 )
-  {
-   mciSendCommand(openParams.wDeviceID, MCI_SET, /*MCI_SET_DOOR_OPEN :*/ MCI_SET_DOOR_CLOSED, 0 );
-   mciSendCommand(openParams.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
-  }
-
- #elif defined LEM_LINUX
-
- int cdrom = open( CD_DEVICE, O_RDONLY | O_NONBLOCK );
- if( cdrom<0 )
-  {
-   if( lem::LogFile::IsOpen() )
-    lem::LogFile::logfile->printf( "Error in lem::Path::CdDvdClose: can not open cdrom device '%s'\n", CD_DEVICE );
-
-   return false;
-  }
-
- const int res = ioctl( cdrom, CDROMCLOSETRAY, 0 );
- if( res < 0 )
-  {
-   if( lem::LogFile::IsOpen() )
-    lem::LogFile::logfile->printf( "Error in lem::Path::CdDvdClose: ioctl returned error code %d\n", res );
-
-   close(cdrom);
-   return false;
-  } 
- 
- close(cdrom);
-
- #endif
-
- return true;
-}
 
 
 
 // ****************************************************************
-// Если каталога не существует, создаем его.
-// Если subfolders=true, то также будут созданы все родительские
-// каталоги.
+// Р•СЃР»Рё РєР°С‚Р°Р»РѕРіР° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, СЃРѕР·РґР°РµРј РµРіРѕ.
+// Р•СЃР»Рё subfolders=true, С‚Рѕ С‚Р°РєР¶Рµ Р±СѓРґСѓС‚ СЃРѕР·РґР°РЅС‹ РІСЃРµ СЂРѕРґРёС‚РµР»СЊСЃРєРёРµ
+// РєР°С‚Р°Р»РѕРіРё.
 // ****************************************************************
 void lem::Path::CreateFolder( bool create_subfolders ) const
 {
@@ -2536,13 +1874,13 @@ lem::Path& lem::Path::ConcateLeaf( const std::wstring &Filename )
 
 const UFString lem::Path::RemoveLeaf( const UFString &path )
 {
- // Удаляет последний элемент и возвращает результат. В итоге если
- // path - путь к файлу, то вернется имя каталога.
+ // РЈРґР°Р»СЏРµС‚ РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚. Р’ РёС‚РѕРіРµ РµСЃР»Рё
+ // path - РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ, С‚Рѕ РІРµСЂРЅРµС‚СЃСЏ РёРјСЏ РєР°С‚Р°Р»РѕРіР°.
  const int l=path.length();
  int i_break=UNKNOWN;
 
- // Движение начинаем с предпоследнего символа, так как путь к каталогу
- // вполне может оканчиваться на '\'
+ // Р”РІРёР¶РµРЅРёРµ РЅР°С‡РёРЅР°РµРј СЃ РїСЂРµРґРїРѕСЃР»РµРґРЅРµРіРѕ СЃРёРјРІРѕР»Р°, С‚Р°Рє РєР°Рє РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ
+ // РІРїРѕР»РЅРµ РјРѕР¶РµС‚ РѕРєР°РЅС‡РёРІР°С‚СЊСЃСЏ РЅР° '\'
  for( int i=l-2; i>=0; i-- )
   if( IsPathDelimiter(path[i]) || IsDriveDelimiter(path[i]) )
    {
@@ -2552,7 +1890,7 @@ const UFString lem::Path::RemoveLeaf( const UFString &path )
 
  UFString res(path);
  if( i_break!=UNKNOWN )
-  res.ShrinkTo(i_break);
+  res.truncate_to(i_break);
 
  return res;
 }
@@ -2563,7 +1901,7 @@ void lem::Path::ToUpper(void)
  if( !uname.empty() )
   uname.to_upper(); 
  else
-  name.to_upper(); 
+  name = lem::to_upper(name); 
 }
 
 
@@ -2572,53 +1910,15 @@ void lem::Path::ToLower(void)
  if( !uname.empty() )
   uname.to_lower(); 
  else
-  name.to_lower(); 
+  name = to_lower(name); 
 }
 
-// ********************************************
-// Если CD находится в приводе - вернет true.
-// ********************************************
-bool lem::Path::IsDiskMounted(void) const
-{
- #if defined LEM_WINDOWS
- DWORD sn, dummy;
 
- if( uname.empty() )
-  return GetVolumeInformationA( name.c_str(), NULL, 0, &sn, &dummy, &dummy, NULL, 0 )!=0;
- else
-  return GetVolumeInformationW( uname.c_str(), NULL, 0, &sn, &dummy, &dummy, NULL, 0 )!=0;
- #else
-  return true;
- #endif
-}
-
-// **********************************
-// Возвращает серийный номер тома
-// **********************************
-lem::uint32_t lem::Path::GetDiskSerialNumber(void) const
-{
- #if defined LEM_WINDOWS
- DWORD sn, dummy;
-
- BOOL ok;
- if( uname.empty() )
-  ok=GetVolumeInformationA( name.c_str(), NULL, 0, &sn, &dummy, &dummy, NULL, 0 )!=0;
- else
-  ok=GetVolumeInformationW( uname.c_str(), NULL, 0, &sn, &dummy, &dummy, NULL, 0 )!=0;
-
- if( ok ) 
-  return sn;
- else
-  return 0;  
- #else
- return 0;
- #endif
-}
 
 
 // *************************************************************
-// Выполняется очистка каталога от находящихся в нем файлов и
-// вложенных каталогов (рекурсивно).
+// Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ РѕС‡РёСЃС‚РєР° РєР°С‚Р°Р»РѕРіР° РѕС‚ РЅР°С…РѕРґСЏС‰РёС…СЃСЏ РІ РЅРµРј С„Р°Р№Р»РѕРІ Рё
+// РІР»РѕР¶РµРЅРЅС‹С… РєР°С‚Р°Р»РѕРіРѕРІ (СЂРµРєСѓСЂСЃРёРІРЅРѕ).
 // *************************************************************
 void lem::Path::PurgeFolder(void) const
 {
@@ -2634,7 +1934,7 @@ void lem::Path::PurgeFolder(void) const
    s += L"\\*.*";
    wchar_t *buf = new wchar_t[ s.length()+2 ];
    lem_strcpy( buf, s.c_str() );
-   buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
  
    op.pFrom = buf;
    op.pTo = NULL;
@@ -2655,7 +1955,7 @@ void lem::Path::PurgeFolder(void) const
    s += "\\*.*";
    char *buf = new char[ s.length()+2 ];
    strcpy( buf, s.c_str() );
-   buf[ s.length()+1 ] = 0; // Функция SHFileOper требует двойного '\0' в конце строки
+   buf[ s.length()+1 ] = 0; // Р¤СѓРЅРєС†РёСЏ SHFileOper С‚СЂРµР±СѓРµС‚ РґРІРѕР№РЅРѕРіРѕ '\0' РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
  
    op.pFrom = buf;
    op.pTo = NULL;
@@ -2681,7 +1981,7 @@ void lem::Path::PurgeFolder(void) const
 }
 
 #if !defined LEM_UNIX && !defined LEM_WINDOWS
-// Портабельная операция очистки каталога - на основе Boost.Filesystem
+// РџРѕСЂС‚Р°Р±РµР»СЊРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РѕС‡РёСЃС‚РєРё РєР°С‚Р°Р»РѕРіР° - РЅР° РѕСЃРЅРѕРІРµ Boost.Filesystem
 void lem::Path::PurgeFolderPortable(void) const
 {
  boost::filesystem::directory_iterator end_itr; // default construction yields past-the-end
@@ -2695,7 +1995,7 @@ void lem::Path::PurgeFolderPortable(void) const
   {
    if( boost::filesystem::is_directory( *itr ) )
     {
-     // Погружаемся на 1 уровень вниз по дереву каталогов
+     // РџРѕРіСЂСѓР¶Р°РµРјСЃСЏ РЅР° 1 СѓСЂРѕРІРµРЅСЊ РІРЅРёР· РїРѕ РґРµСЂРµРІСѓ РєР°С‚Р°Р»РѕРіРѕРІ
      lem::Path Deeper( itr->string().c_str() );
      Deeper.PurgeFolder();
      Deeper.DoRemove();
@@ -2766,7 +2066,7 @@ void lem::Path::PurgeFolderPosix(void) const
        )
       continue;
 
-     // Рекурсивно удаляем этот каталог
+     // Р РµРєСѓСЂСЃРёРІРЅРѕ СѓРґР°Р»СЏРµРј СЌС‚РѕС‚ РєР°С‚Р°Р»РѕРі
      lem::Path foldername;
      if( lem::System_Config::SupportUnicodeFilenames() )
       foldername = lem::Path( lem::from_utf8(entry_name) );
@@ -2777,7 +2077,7 @@ void lem::Path::PurgeFolderPosix(void) const
     }
    else if( (statbuf.st_mode&S_IFREG)==S_IFREG ) 
     {
-     // Удаление найденного файла.
+     // РЈРґР°Р»РµРЅРёРµ РЅР°Р№РґРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°.
      int ret = ::remove( entry_name.c_str() );
      LEM_CHECKIT_Z(ret==0);
     } 
@@ -2819,9 +2119,9 @@ void lem::Path::RemoveLastLeaf(void)
  else
   {
    if( IsUnicode() )
-    uname.ShrinkTo(i);
+    uname.truncate_to(i);
    else
-    name.ShrinkTo(i);
+    name.truncate_to(i);
   }
 
  return;
@@ -2853,9 +2153,9 @@ UFString lem::Path::GetFileName(void) const
 
 UFString lem::Path::GetLastLeaf(void) const
 {
- // Хотя эта функция и сведена к GetFileName(), но чтобы обеспечить 
- // ясность кода лучше ввести формально отдельную функцию получения последнего
- // фрагмента в пути.
+ // РҐРѕС‚СЏ СЌС‚Р° С„СѓРЅРєС†РёСЏ Рё СЃРІРµРґРµРЅР° Рє GetFileName(), РЅРѕ С‡С‚РѕР±С‹ РѕР±РµСЃРїРµС‡РёС‚СЊ 
+ // СЏСЃРЅРѕСЃС‚СЊ РєРѕРґР° Р»СѓС‡С€Рµ РІРІРµСЃС‚Рё С„РѕСЂРјР°Р»СЊРЅРѕ РѕС‚РґРµР»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ РїРѕР»СѓС‡РµРЅРёСЏ РїРѕСЃР»РµРґРЅРµРіРѕ
+ // С„СЂР°РіРјРµРЅС‚Р° РІ РїСѓС‚Рё.
  return GetFileName();
 }
 
@@ -2883,9 +2183,10 @@ void lem::Path::Win_2_Lin( UFString &p )
 #endif
 
 
-// Вернет true, если путь указывает на LPTx, то есть на принтер. Это
-// помогает отловить в Windows ситуацию deadlock'а при попытке работать
-// с таким файлом.
+// Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° LPTx, С‚Рѕ РµСЃС‚СЊ РЅР° РїСЂРёРЅС‚РµСЂ. Р­С‚Рѕ
+// РїРѕРјРѕРіР°РµС‚ РѕС‚Р»РѕРІРёС‚СЊ РІ Windows СЃРёС‚СѓР°С†РёСЋ deadlock'Р° РїСЂРё РїРѕРїС‹С‚РєРµ СЂР°Р±РѕС‚Р°С‚СЊ
+// СЃ С‚Р°РєРёРј С„Р°Р№Р»РѕРј.
+/*
 bool lem::Path::IsLPT(void) const
 {
  const int al = name.length();
@@ -2908,7 +2209,7 @@ bool lem::Path::IsLPT(void) const
 
  return false;
 }
-
+*/
 
 
 void lem::Path::SaveBin( Stream &bin ) const
@@ -2922,6 +2223,7 @@ void lem::Path::LoadBin( Stream &bin )
  name.LoadBin(bin);
  uname.LoadBin(bin);
 }
+
 
 
 #if !defined LEM_WINDOWS && !defined LEM_UNIX
@@ -2948,7 +2250,7 @@ static lem::uint64_t CrawlPortable(
     {
      if( boost::filesystem::is_directory( *itr ) && recurse )
       {
-       // Погружаемся на 1 уровень вниз по дереву каталогов
+       // РџРѕРіСЂСѓР¶Р°РµРјСЃСЏ РЅР° 1 СѓСЂРѕРІРµРЅСЊ РІРЅРёР· РїРѕ РґРµСЂРµРІСѓ РєР°С‚Р°Р»РѕРіРѕРІ
        boost::filesystem::path deeper( itr->string() );
 
        if( traverser )
@@ -2958,7 +2260,7 @@ static lem::uint64_t CrawlPortable(
        continue;
       }
 
-     // Для получения информации о файле открываем его. 
+     // Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ С„Р°Р№Р»Рµ РѕС‚РєСЂС‹РІР°РµРј РµРіРѕ. 
      if( !itr->string().empty() )
       {
        if( traverser )
@@ -3285,15 +2587,6 @@ static lem::uint64_t CrawlWin( const wchar_t *path, int plen, bool recurse, IDir
 
        if( traverser )
         {
-/*
-         traverser->File(
-                         Buffer,
-                         fs,
-                         boost::date_time::time_from_ftime<boost::posix_time::ptime>( find_data.ftCreationTime ),
-                         boost::date_time::time_from_ftime<boost::posix_time::ptime>( find_data.ftLastWriteTime )
-                        );
-
-*/
          traverser->File( path, plen-3, &find_data );
         } 
 
@@ -3344,8 +2637,8 @@ static lem::uint64_t CrawlWin( const FString &root, bool recurse, IDirTraverser 
                         
  return CrawlWin( buffer.c_str(), buffer.length(), recurse, traverser );
 }
-
 #endif
+
 
 
 #if defined LEM_UNIX
@@ -3368,7 +2661,6 @@ static lem::uint64_t CrawlPosix( const char *folder_name, bool recurse, IDirTrav
  FString entry_name;
  entry_name.reserve( lem::Path::MaxLen );
 
- /* Loop through directory entries. */
  while(true)
   {
    if( traverser && !traverser->Continue() )
@@ -3385,7 +2677,6 @@ static lem::uint64_t CrawlPosix( const char *folder_name, bool recurse, IDirTrav
     entry_name += lem::Path::GetPathDelimiter();
    entry_name += entry->d_name;          
 
-   /* Get entry's information. */
    if( stat( entry_name.c_str(), &statbuf ) == -1 )
     continue;
 
@@ -3405,7 +2696,7 @@ static lem::uint64_t CrawlPosix( const char *folder_name, bool recurse, IDirTrav
     }
    else if( (statbuf.st_mode&S_IFREG)==S_IFREG ) 
     {
-     // Обработка найденного файла.
+     // РћР±СЂР°Р±РѕС‚РєР° РЅР°Р№РґРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°.
      if( traverser )
       traverser->File( entry_name.c_str(), entry->d_name );
 
@@ -3421,14 +2712,15 @@ static lem::uint64_t CrawlPosix( const char *folder_name, bool recurse, IDirTrav
 
 
 // ******************************************************
-// Возвращает размер файлов в каталоге (и в подкаталогах,
-// если recurse=true).
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ С„Р°Р№Р»РѕРІ РІ РєР°С‚Р°Р»РѕРіРµ (Рё РІ РїРѕРґРєР°С‚Р°Р»РѕРіР°С…,
+// РµСЃР»Рё recurse=true).
 // ******************************************************
+/*
 lem::uint64_t lem::Path::FolderSize( bool recurse ) const
 {
  return Crawl( recurse, (IDirTraverser*)NULL );
 }
-
+*/
 
 
 lem::uint64_t lem::Path::Crawl( bool recurse, lem::IDirTraverser *traverser ) const
@@ -3470,19 +2762,17 @@ void lem::Path::AddExtension( const char *ext )
  if( !name.empty() )
   {
    if( *ext!=GetExtDelimiter() )
-    name.Add_Dirty( static_cast<char>(GetExtDelimiter()) );
+    name += static_cast<char>(GetExtDelimiter());
 
-   name.Add_Dirty( ext );
-   name.calc_hash();
+   name += ext;
   }
 
  if( !uname.empty() )
   {
    if( *ext!=GetExtDelimiter() )
-    uname.Add_Dirty( GetExtDelimiter() );
+    uname += GetExtDelimiter();
 
    uname += ext;
-   uname.calc_hash();
   }
 
  return;
@@ -3514,8 +2804,8 @@ void lem::Path::AppendPathDelimiter(void)
 }
 
 // ***************************************
-// Возвращает размер файла.
-// Для несуществующего файла возвращает 0.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°.
+// Р”Р»СЏ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ С„Р°Р№Р»Р° РІРѕР·РІСЂР°С‰Р°РµС‚ 0.
 // ***************************************
 size_t lem::Path::FileSize(void) const
 {
@@ -3534,10 +2824,10 @@ size_t lem::Path::FileSize(void) const
 
 
 // ************************************************************************
-// Возвращает список элементов (файлов и подкаталогов) в данном каталоге.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЌР»РµРјРµРЅС‚РѕРІ (С„Р°Р№Р»РѕРІ Рё РїРѕРґРєР°С‚Р°Р»РѕРіРѕРІ) РІ РґР°РЅРЅРѕРј РєР°С‚Р°Р»РѕРіРµ.
 //
-// N.B. использовать более подходящий контейнер PtrCollect нельзя из-за
-// кросс-зависимостей в хидерах.
+// N.B. РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р±РѕР»РµРµ РїРѕРґС…РѕРґСЏС‰РёР№ РєРѕРЅС‚РµР№РЅРµСЂ PtrCollect РЅРµР»СЊР·СЏ РёР·-Р·Р°
+// РєСЂРѕСЃСЃ-Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№ РІ С…РёРґРµСЂР°С….
 // ************************************************************************
 void lem::Path::List( std::vector< std::pair< lem::Path, bool /*is_file*/ > > &list ) const
 {
@@ -3700,9 +2990,9 @@ void lem::Path::List( std::vector< std::pair< lem::Path, bool /*is_file*/ > > &l
     }
    else if( (statbuf.st_mode&S_IFREG)==S_IFREG ) 
     {
-     // Обработка найденного файла.
-     // Структура find_data содержит такие данные, как время создания
-     // и модификации файла.
+     // РћР±СЂР°Р±РѕС‚РєР° РЅР°Р№РґРµРЅРЅРѕРіРѕ С„Р°Р№Р»Р°.
+     // РЎС‚СЂСѓРєС‚СѓСЂР° find_data СЃРѕРґРµСЂР¶РёС‚ С‚Р°РєРёРµ РґР°РЅРЅС‹Рµ, РєР°Рє РІСЂРµРјСЏ СЃРѕР·РґР°РЅРёСЏ
+     // Рё РјРѕРґРёС„РёРєР°С†РёРё С„Р°Р№Р»Р°.
      is_file = true; 
     }
 
@@ -3740,7 +3030,7 @@ void lem::Path::List( std::vector< std::pair< lem::Path, bool /*is_file*/ > > &l
 
 
 // ************************************************************************
-// Проверка синтаксиса файлового пути. Возвращает признак успеха проверки.
+// РџСЂРѕРІРµСЂРєР° СЃРёРЅС‚Р°РєСЃРёСЃР° С„Р°Р№Р»РѕРІРѕРіРѕ РїСѓС‚Рё. Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСЂРёР·РЅР°Рє СѓСЃРїРµС…Р° РїСЂРѕРІРµСЂРєРё.
 // ************************************************************************
 bool lem::Path::Check(void) const
 {
@@ -3770,13 +3060,13 @@ bool lem::Path::Check(void) const
 
 
 // ************************************************************************
-// Вернет true для путей в локальной файловой системе (local file system)
-// или в локальной сети: в формате UNC для Windows \\имя_хоста\имя_ресурса,
-// long UNCW: \\?\путь или \\?\имя_хоста\имя_ресурса).
+// Р’РµСЂРЅРµС‚ true РґР»СЏ РїСѓС‚РµР№ РІ Р»РѕРєР°Р»СЊРЅРѕР№ С„Р°Р№Р»РѕРІРѕР№ СЃРёСЃС‚РµРјРµ (local file system)
+// РёР»Рё РІ Р»РѕРєР°Р»СЊРЅРѕР№ СЃРµС‚Рё: РІ С„РѕСЂРјР°С‚Рµ UNC РґР»СЏ Windows \\РёРјСЏ_С…РѕСЃС‚Р°\РёРјСЏ_СЂРµСЃСѓСЂСЃР°,
+// long UNCW: \\?\РїСѓС‚СЊ РёР»Рё \\?\РёРјСЏ_С…РѕСЃС‚Р°\РёРјСЏ_СЂРµСЃСѓСЂСЃР°).
 // ************************************************************************
 bool lem::Path::IsLocal(void) const
 {
- // Синтаксис проверять не будем, просто посмотрим на первые символы
+ // РЎРёРЅС‚Р°РєСЃРёСЃ РїСЂРѕРІРµСЂСЏС‚СЊ РЅРµ Р±СѓРґРµРј, РїСЂРѕСЃС‚Рѕ РїРѕСЃРјРѕС‚СЂРёРј РЅР° РїРµСЂРІС‹Рµ СЃРёРјРІРѕР»С‹
  if( !uname.empty() )
   {
    const wchar_t c = uname.front();
@@ -3784,9 +3074,9 @@ bool lem::Path::IsLocal(void) const
     return true;
 
    if( lem::is_ualpha(c) && uname.length()>1 && uname[1]==L':' )
-    return true; // вариант 'C:'
+    return true; // РІР°СЂРёР°РЅС‚ 'C:'
 
-   // Проверим, что это не URL'ы типа ftp:// или http://
+   // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ СЌС‚Рѕ РЅРµ URL'С‹ С‚РёРїР° ftp:// РёР»Рё http://
    return !IsFtp() && !IsHttp();
   }
  else if( !name.empty() )
@@ -3796,9 +3086,9 @@ bool lem::Path::IsLocal(void) const
     return true;
 
    if( lem::is_alpha(c) && name.length()>1 && name[1]==':' )
-    return true; // вариант 'C:'
+    return true; // РІР°СЂРёР°РЅС‚ 'C:'
 
-   // Проверим, что это не URL'ы типа ftp:// или http://
+   // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ СЌС‚Рѕ РЅРµ URL'С‹ С‚РёРїР° ftp:// РёР»Рё http://
    return !IsFtp() && !IsHttp();
   }
 
@@ -3807,7 +3097,7 @@ bool lem::Path::IsLocal(void) const
 
 
 // *************************************************
-// Вернет true, если путь указывает на FTP-сервер
+// Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° FTP-СЃРµСЂРІРµСЂ
 // *************************************************
 bool lem::Path::IsFtp(void) const
 {
@@ -3825,7 +3115,7 @@ bool lem::Path::IsFtp(void) const
 
 
 // *************************************************
-// Вернет true, если путь указывает на HTTP-сервер
+// Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° HTTP-СЃРµСЂРІРµСЂ
 // *************************************************
 bool lem::Path::IsHttp(void) const
 {
@@ -3843,7 +3133,7 @@ bool lem::Path::IsHttp(void) const
 
 
 // ******************************************************************
-// Подходит ли файловый путь под указанную маску (с символами * и ?)
+// РџРѕРґС…РѕРґРёС‚ Р»Рё С„Р°Р№Р»РѕРІС‹Р№ РїСѓС‚СЊ РїРѕРґ СѓРєР°Р·Р°РЅРЅСѓСЋ РјР°СЃРєСѓ (СЃ СЃРёРјРІРѕР»Р°РјРё * Рё ?)
 // ******************************************************************
 bool lem::Path::Match( const wchar_t *mask ) const
 {
@@ -3876,14 +3166,14 @@ bool lem::Path::Match( const lem::UFString & mask ) const
 
 
 // ************************************
-// Является ли хранимая строка URLом
+// РЇРІР»СЏРµС‚СЃСЏ Р»Рё С…СЂР°РЅРёРјР°СЏ СЃС‚СЂРѕРєР° URLРѕРј
 // ************************************
 bool lem::Path::IsUrl(void) const
 {
  return IsFtp() || IsHttp();
 }
 
-
+/*
 void lem::Path::MonitorCD( lem::Path::EventHandler handler, void *data )
 {
  for( lem::Container::size_type i=0; i<cd_event.size(); i++ )
@@ -3907,10 +3197,10 @@ void lem::Path::RemoveCDEventHandler( lem::Path::EventHandler handler )
 }
 
 // *******************************************************************
-// Зафиксировано событие с приводом CDROM - уведомляем прикладной код.
-// Этот метод вызывается внешним кодом, реализация которого зависит
-// от используемого фреймворка. Для оконных Windows программ обычно
-// используется перехват стандартного сообщения WM_DEVICECHANGE.
+// Р—Р°С„РёРєСЃРёСЂРѕРІР°РЅРѕ СЃРѕР±С‹С‚РёРµ СЃ РїСЂРёРІРѕРґРѕРј CDROM - СѓРІРµРґРѕРјР»СЏРµРј РїСЂРёРєР»Р°РґРЅРѕР№ РєРѕРґ.
+// Р­С‚РѕС‚ РјРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РІРЅРµС€РЅРёРј РєРѕРґРѕРј, СЂРµР°Р»РёР·Р°С†РёСЏ РєРѕС‚РѕСЂРѕРіРѕ Р·Р°РІРёСЃРёС‚
+// РѕС‚ РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ С„СЂРµР№РјРІРѕСЂРєР°. Р”Р»СЏ РѕРєРѕРЅРЅС‹С… Windows РїСЂРѕРіСЂР°РјРј РѕР±С‹С‡РЅРѕ
+// РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїРµСЂРµС…РІР°С‚ СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ WM_DEVICECHANGE.
 // *******************************************************************
 void lem::Path::OnCDEvent( int Message )
 {
@@ -3943,12 +3233,13 @@ void lem::Path::RemovePathEventsHandler( lem::Path::EventHandler handler )
 
  return;
 }
-
+*/
 
 // ************************************************************
-// Для MS Windows: возвращается имя диска (если таковое есть).
-// В остальных случаях - возвращается пустая строка.
+// Р”Р»СЏ MS Windows: РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РёРјСЏ РґРёСЃРєР° (РµСЃР»Рё С‚Р°РєРѕРІРѕРµ РµСЃС‚СЊ).
+// Р’ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃР»СѓС‡Р°СЏС… - РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°.
 // ************************************************************
+/*
 lem::UFString lem::Path::GetDiskName(void) const
 {
  #if defined LEM_WINDOWS
@@ -3992,11 +3283,11 @@ lem::UFString lem::Path::GetDiskName(void) const
  return UFString();
  #endif
 }
+*/
 
-
-// Маска, соответстуующая любому файлу для текущей платформы
-// *.* для Dos/Win
-// *   для Unix
+// РњР°СЃРєР°, СЃРѕРѕС‚РІРµС‚СЃС‚СѓСѓСЋС‰Р°СЏ Р»СЋР±РѕРјСѓ С„Р°Р№Р»Сѓ РґР»СЏ С‚РµРєСѓС‰РµР№ РїР»Р°С‚С„РѕСЂРјС‹
+// *.* РґР»СЏ Dos/Win
+// *   РґР»СЏ Unix
 lem::UFString lem::Path::AllFilesMask(void)
 {
  #if defined LEM_DOS || defined LEM_WINDOWS
@@ -4063,7 +3354,7 @@ bool lem::Path::operator!=( const Path &x ) const
  #endif
 }
 
-
+/*
 bool lem::Path::operator>( const Path &x ) const
 {
  if( !uname.empty() && !x.uname.empty() )
@@ -4085,7 +3376,7 @@ bool lem::Path::operator<( const Path &x ) const
 
  return GetUnicode()<x.GetUnicode();
 }
-
+*/
 
 
 namespace lem
@@ -4172,11 +3463,11 @@ void lem::Path::ListFiles( const wchar_t *mask, std::vector< lem::Path > &list, 
 
 
 // ********************************************************
-// Есть ли в каталоге хоть один файл или вложенная папка?
+// Р•СЃС‚СЊ Р»Рё РІ РєР°С‚Р°Р»РѕРіРµ С…РѕС‚СЊ РѕРґРёРЅ С„Р°Р№Р» РёР»Рё РІР»РѕР¶РµРЅРЅР°СЏ РїР°РїРєР°?
 // ********************************************************
 bool lem::Path::IsFolderEmpty(void) const
 {
-// return PathIsDirectoryEmpty( GetUnicode().c_str() ); ??? если вложенные пустые каталоги
+// return PathIsDirectoryEmpty( GetUnicode().c_str() ); ??? РµСЃР»Рё РІР»РѕР¶РµРЅРЅС‹Рµ РїСѓСЃС‚С‹Рµ РєР°С‚Р°Р»РѕРіРё
 
  lem::__DummyScanner c;
  Crawl( false, &c );
@@ -4185,9 +3476,10 @@ bool lem::Path::IsFolderEmpty(void) const
 
 
 // **********************************************************************
-// Возвращает размер свободного места на диске, если таковая информация
-// может быть получена.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ СЃРІРѕР±РѕРґРЅРѕРіРѕ РјРµСЃС‚Р° РЅР° РґРёСЃРєРµ, РµСЃР»Рё С‚Р°РєРѕРІР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ
+// РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕР»СѓС‡РµРЅР°.
 // **********************************************************************
+/*
 lem::int64_t lem::Path::GetDiskFreeSpace(void) const
 {
  #if defined LEM_WINDOWS
@@ -4253,11 +3545,12 @@ lem::int64_t lem::Path::GetDiskFreeSpace(void) const
   return 0;
  #endif
 }
-
+*/
 
 // ********************************************
-// Возвращает набор атрибутов для папки/файла
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅР°Р±РѕСЂ Р°С‚СЂРёР±СѓС‚РѕРІ РґР»СЏ РїР°РїРєРё/С„Р°Р№Р»Р°
 // ********************************************
+/*
 lem::PathAttr lem::Path::GetAttr(void) const
 {
  lem::PathAttr attr;
@@ -4335,7 +3628,7 @@ lem::PathAttr lem::Path::GetAttr(void) const
  return attr;
  #endif
 }
-
+*/
 
 lem::Path Path::GetAbsolutePath(void) const
 {
@@ -4358,10 +3651,10 @@ lem::Path Path::GetAbsolutePath(void) const
 
  if( !uname.empty() )
   {
-   // Путь начинается с '/'?
+   // РџСѓС‚СЊ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ '/'?
    if( uname.front()!=GetPathDelimiter() )
     {
-     // Нет - скорее всего относительный путь.
+     // РќРµС‚ - СЃРєРѕСЂРµРµ РІСЃРµРіРѕ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ.
      char buf[ lem::Path::MaxLen+1 ];
      *buf=0;
      lem::Path full_path( getcwd( buf, lem::Path::MaxLen ) );
@@ -4373,7 +3666,7 @@ lem::Path Path::GetAbsolutePath(void) const
   {
    if( name.front()!=GetPathDelimiter() )
     {
-     // Нет - скорее всего относительный путь.
+     // РќРµС‚ - СЃРєРѕСЂРµРµ РІСЃРµРіРѕ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ.
      char buf[ lem::Path::MaxLen+1 ];
      *buf=0;
      lem::Path full_path( getcwd( buf, lem::Path::MaxLen ) );
@@ -4412,8 +3705,8 @@ lem::Path::operator wxFileName(void) const
 
 void lem::swap( lem::Path &x, lem::Path &y )
 {
- lem::swap( x.name, y.name );
- lem::swap( x.uname, y.uname );
+ std::swap( x.name, y.name );
+ std::swap( x.uname, y.uname );
  return;
 }
 
@@ -4448,7 +3741,7 @@ void lem::Path::ChangeExtension( const wchar_t *new_ext )
    for( int i=len-1; i>=0; i-- )
     if( lem::Path::IsExtDelimiter(uname[i]) )
      {
-      // Найдено начало расширения
+      // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
       i++;
       uname.reduce(i);
       uname += lem::Path::GetExtDelimiter();
@@ -4475,7 +3768,7 @@ void lem::Path::ChangeExtension( const wchar_t *new_ext )
    for( int i=len-1; i>=0; i-- )
     if( lem::Path::IsExtDelimiter(name[i]) )
      {
-      // Найдено начало расширения
+      // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
       i++;
       name.reduce(i);
       name += (char)lem::Path::GetExtDelimiter();
@@ -4501,9 +3794,9 @@ void lem::Path::ChangeExtension( const wchar_t *new_ext )
 
 
 // ********************************************************
-// Возвращает расширение в имени файла filename (без точки)
-// Расширение возвращается через ext, переполнения
-// не проверяются.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°СЃС€РёСЂРµРЅРёРµ РІ РёРјРµРЅРё С„Р°Р№Р»Р° filename (Р±РµР· С‚РѕС‡РєРё)
+// Р Р°СЃС€РёСЂРµРЅРёРµ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ С‡РµСЂРµР· ext, РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ
+// РЅРµ РїСЂРѕРІРµСЂСЏСЋС‚СЃСЏ.
 // ********************************************************
 static void get_ext( const char *filename, char *ext )
 {
@@ -4554,7 +3847,7 @@ const wstring lem::Path::GetExtension( const wstring &filename )
  for( int i=len-1; i>=0; i-- )
   if( filename[i]==lem::Path::GetExtDelimiter() )
    {
-    // Найдено начало расширения
+    // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
     i++;
     while( i<len )
      ext += filename[i++];
@@ -4579,9 +3872,9 @@ const UFString lem::Path::GetExtension( const UFString &path )
 
  const int len = path.length();
 
- // Ищем символ-разделитель расширения - с правого конца.
- // Так как для платформы Windows расширение в большинстве случаев имеет
- // длину 3 символа, то можем сразу попробовать найти.
+ // РС‰РµРј СЃРёРјРІРѕР»-СЂР°Р·РґРµР»РёС‚РµР»СЊ СЂР°СЃС€РёСЂРµРЅРёСЏ - СЃ РїСЂР°РІРѕРіРѕ РєРѕРЅС†Р°.
+ // РўР°Рє РєР°Рє РґР»СЏ РїР»Р°С‚С„РѕСЂРјС‹ Windows СЂР°СЃС€РёСЂРµРЅРёРµ РІ Р±РѕР»СЊС€РёРЅСЃС‚РІРµ СЃР»СѓС‡Р°РµРІ РёРјРµРµС‚
+ // РґР»РёРЅСѓ 3 СЃРёРјРІРѕР»Р°, С‚Рѕ РјРѕР¶РµРј СЃСЂР°Р·Сѓ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ РЅР°Р№С‚Рё.
  if( len>4 )
   {
    if(
@@ -4594,12 +3887,12 @@ const UFString lem::Path::GetExtension( const UFString &path )
     }    
   }
 
- // Общий случай - для расширений другой длины
+ // РћР±С‰РёР№ СЃР»СѓС‡Р°Р№ - РґР»СЏ СЂР°СЃС€РёСЂРµРЅРёР№ РґСЂСѓРіРѕР№ РґР»РёРЅС‹
  for( int i=len-1; i>=0; i-- )
   {
    if( lem::Path::IsExtDelimiter( path[i] ) )
     {
-     // Найдено начало расширения
+     // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
      i++;
      while( i<path.length() )
       ext += path[i++];
@@ -4629,7 +3922,7 @@ const lem::UFString lem::Path::GetExtension( const wchar_t *filename )
  for( int i=len-1; i>=0; i-- )
   if( filename[i]==lem::Path::GetExtDelimiter() )
    {
-    // Найдено начало расширения
+    // РќР°Р№РґРµРЅРѕ РЅР°С‡Р°Р»Рѕ СЂР°СЃС€РёСЂРµРЅРёСЏ
     i++;
     while( i<len )
      ext += filename[i++];
@@ -4646,7 +3939,7 @@ const lem::UFString lem::Path::GetExtension( const wchar_t *filename )
 
 
 // *******************************************************
-// Вернет true если файл с заданным именем существует.
+// Р’РµСЂРЅРµС‚ true РµСЃР»Рё С„Р°Р№Р» СЃ Р·Р°РґР°РЅРЅС‹Рј РёРјРµРЅРµРј СЃСѓС‰РµСЃС‚РІСѓРµС‚.
 // *******************************************************
 bool lem::Path::DoesExist( const char *filename )
 {
@@ -4678,9 +3971,9 @@ bool lem::Path::DoesExist( const char *filename )
 
  #else
 
- // Глупый, но универсальный способ - пытаемся открыть файл на чтение, и если
- // это удалось, то значит файл существует. Обращаю внимание, что если у процесса
- // нет прав на открытие файла, то результат будет неверен.
+ // Р“Р»СѓРїС‹Р№, РЅРѕ СѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ СЃРїРѕСЃРѕР± - РїС‹С‚Р°РµРјСЃСЏ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РЅР° С‡С‚РµРЅРёРµ, Рё РµСЃР»Рё
+ // СЌС‚Рѕ СѓРґР°Р»РѕСЃСЊ, С‚Рѕ Р·РЅР°С‡РёС‚ С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚. РћР±СЂР°С‰Р°СЋ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ РµСЃР»Рё Сѓ РїСЂРѕС†РµСЃСЃР°
+ // РЅРµС‚ РїСЂР°РІ РЅР° РѕС‚РєСЂС‹С‚РёРµ С„Р°Р№Р»Р°, С‚Рѕ СЂРµР·СѓР»СЊС‚Р°С‚ Р±СѓРґРµС‚ РЅРµРІРµСЂРµРЅ.
  FILE *f = ::fopen( filename, "rb" );
  lem_fclose(f);
  return f!=NULL;
@@ -4690,12 +3983,12 @@ bool lem::Path::DoesExist( const char *filename )
 
 
 /*************************************************************************
- Does given file exist? Обращаю внимание, что используется специальная
- функция access(...), если возможно. Но эта функция отсутствует в ANSI C
- стандарте. Для UNIX использована функция stat - тот же эффект, что и
- access для MSDOS. Реализованный стандартный способ - через открытие
- файла на чтение - имеет побочные эффекты. Например, если операционна
- система не сможет открыть ещё один файл, или если файл is locked.
+ Does given file exist? РћР±СЂР°С‰Р°СЋ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЃРїРµС†РёР°Р»СЊРЅР°СЏ
+ С„СѓРЅРєС†РёСЏ access(...), РµСЃР»Рё РІРѕР·РјРѕР¶РЅРѕ. РќРѕ СЌС‚Р° С„СѓРЅРєС†РёСЏ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ ANSI C
+ СЃС‚Р°РЅРґР°СЂС‚Рµ. Р”Р»СЏ UNIX РёСЃРїРѕР»СЊР·РѕРІР°РЅР° С„СѓРЅРєС†РёСЏ stat - С‚РѕС‚ Р¶Рµ СЌС„С„РµРєС‚, С‡С‚Рѕ Рё
+ access РґР»СЏ MSDOS. Р РµР°Р»РёР·РѕРІР°РЅРЅС‹Р№ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ СЃРїРѕСЃРѕР± - С‡РµСЂРµР· РѕС‚РєСЂС‹С‚РёРµ
+ С„Р°Р№Р»Р° РЅР° С‡С‚РµРЅРёРµ - РёРјРµРµС‚ РїРѕР±РѕС‡РЅС‹Рµ СЌС„С„РµРєС‚С‹. РќР°РїСЂРёРјРµСЂ, РµСЃР»Рё РѕРїРµСЂР°С†РёРѕРЅРЅР°
+ СЃРёСЃС‚РµРјР° РЅРµ СЃРјРѕР¶РµС‚ РѕС‚РєСЂС‹С‚СЊ РµС‰С‘ РѕРґРёРЅ С„Р°Р№Р», РёР»Рё РµСЃР»Рё С„Р°Р№Р» is locked.
 **************************************************************************/
 bool lem::Path::DoesExist( const wchar_t *filename )
 {
@@ -4766,8 +4059,8 @@ bool lem::Path::RenameFile( const char *srcFile, const char *destFile )
 
 
 /*********************************************************************
- Файл с именем oldname переименовывается как newname. Данная
- процедура может переместить файл в другой каталог!
+ Р¤Р°Р№Р» СЃ РёРјРµРЅРµРј oldname РїРµСЂРµРёРјРµРЅРѕРІС‹РІР°РµС‚СЃСЏ РєР°Рє newname. Р”Р°РЅРЅР°СЏ
+ РїСЂРѕС†РµРґСѓСЂР° РјРѕР¶РµС‚ РїРµСЂРµРјРµСЃС‚РёС‚СЊ С„Р°Р№Р» РІ РґСЂСѓРіРѕР№ РєР°С‚Р°Р»РѕРі!
 **********************************************************************/
 bool lem::Path::RenameFile( const wchar_t *oldname, const wchar_t *newname )
 {
@@ -4791,17 +4084,17 @@ bool lem::Path::RenameFile( const wchar_t *oldname, const wchar_t *newname )
   delete[] old_ascii_name;
  #endif
 
- return res==0; // 0 is OK, как и обычно в зеркальном мире...
+ return res==0; // 0 is OK, РєР°Рє Рё РѕР±С‹С‡РЅРѕ РІ Р·РµСЂРєР°Р»СЊРЅРѕРј РјРёСЂРµ...
 }
 
 
 
 /************************************************************************
- Определение размера файла, заданного именем. Неэффективная операция, так
- как приходится открывать файл, перемещать указатель в конец, закрывать
- файл. Возвращается размер файла, причем если файл не существует,
- то возвращаем 0. Если попытаться определить размер открытого в данный
- момент файла, то результат будет неопределённым (скорее всего 0).
+ РћРїСЂРµРґРµР»РµРЅРёРµ СЂР°Р·РјРµСЂР° С„Р°Р№Р»Р°, Р·Р°РґР°РЅРЅРѕРіРѕ РёРјРµРЅРµРј. РќРµСЌС„С„РµРєС‚РёРІРЅР°СЏ РѕРїРµСЂР°С†РёСЏ, С‚Р°Рє
+ РєР°Рє РїСЂРёС…РѕРґРёС‚СЃСЏ РѕС‚РєСЂС‹РІР°С‚СЊ С„Р°Р№Р», РїРµСЂРµРјРµС‰Р°С‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РІ РєРѕРЅРµС†, Р·Р°РєСЂС‹РІР°С‚СЊ
+ С„Р°Р№Р». Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°, РїСЂРёС‡РµРј РµСЃР»Рё С„Р°Р№Р» РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚,
+ С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј 0. Р•СЃР»Рё РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РѕРїСЂРµРґРµР»РёС‚СЊ СЂР°Р·РјРµСЂ РѕС‚РєСЂС‹С‚РѕРіРѕ РІ РґР°РЅРЅС‹Р№
+ РјРѕРјРµРЅС‚ С„Р°Р№Р»Р°, С‚Рѕ СЂРµР·СѓР»СЊС‚Р°С‚ Р±СѓРґРµС‚ РЅРµРѕРїСЂРµРґРµР»С‘РЅРЅС‹Рј (СЃРєРѕСЂРµРµ РІСЃРµРіРѕ 0).
 *************************************************************************/
 size_t lem::Path::FileSize( const char *name )
 {
@@ -4826,7 +4119,7 @@ size_t lem::Path::FileSize( const char *name )
 
  #else
 
-  // Универсальный подход, достаточно тяжелый.
+  // РЈРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РїРѕРґС…РѕРґ, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ С‚СЏР¶РµР»С‹Р№.
   FILE *file = ::fopen( name, "rb" );
 
   if(!file)

@@ -1,102 +1,7 @@
+#include <memory>
 #include <lem/unicode.h>
 
 using namespace lem;
-
-
-/******************************************************************************
-RFC 2640                  FTP Internalization                  July 1999
-
-   The following routine checks if a byte sequence is valid UTF-8. This
-   is done by checking for the proper tagging of the first and following
-   bytes to make sure they conform to the UTF-8 format. It then checks
-   to assure that the data part of the UTF-8 sequence conforms to the
-   proper range allowed by the encoding. Note: This routine will not
-   detect characters that have not been assigned and therefore do not
-   exist.
-*******************************************************************************/
-bool lem::utf8_valid( const lem::FString &buf )
-{
- if( buf.empty() )
-  return true;
-
- return lem::utf8_valid( (const unsigned char*)buf.c_str(), buf.length() );
-}
-
-bool lem::utf8_valid( const std::string &buf )
-{
- if( buf.empty() )
-  return true;
-
- return lem::utf8_valid( (const unsigned char*)buf.c_str(), buf.length() );
-}
-
-bool lem::utf8_valid( const char *buf )
-{
- if( !buf ) return true;
-
- return lem::utf8_valid( (const unsigned char*)buf, lem_strlen(buf) );
-}
-
-
-bool lem::utf8_valid( const unsigned char *buf, unsigned int len )
-{
- if( buf==NULL || !len )
-  return true;
-
- const unsigned char *endbuf = buf + len;
- unsigned char byte2mask=0x00, c;
- int trailing = 0;  // trailing (continuation) bytes to follow
-
- while (buf != endbuf)
- {
-   c = *buf++;
-   if (trailing)
-    if ((c&0xC0) == 0x80)  // Does trailing byte follow UTF-8 format?
-    {if (byte2mask)        // Need to check 2nd byte for proper range?
-      if (c&byte2mask)     // Are appropriate bits set?
-       byte2mask=0x00;
-      else
-       return false;
-     trailing--; }
-    else
-     return false;
-   else
-    if ((c&0x80) == 0x00)  continue;      // valid 1 byte UTF-8
-    else if ((c&0xE0) == 0xC0)            // valid 2 byte UTF-8
-          if (c&0x1E)                     // Is UTF-8 byte in
-                                          // proper range?
-           trailing =1;
-          else
-           return false;
-    else if ((c&0xF0) == 0xE0)           // valid 3 byte UTF-8
-          {if (!(c&0x0F))                // Is UTF-8 byte in
-                                         // proper range?
-            byte2mask=0x20;              // If not set mask
-                                         // to check next byte
-            trailing = 2;}
-    else if ((c&0xF8) == 0xF0)           // valid 4 byte UTF-8
-          {if (!(c&0x07))                // Is UTF-8 byte in
-                                         // proper range?
-            byte2mask=0x30;              // If not set mask
-                                         // to check next byte
-            trailing = 3;}
-    else if ((c&0xFC) == 0xF8)           // valid 5 byte UTF-8
-          {if (!(c&0x03))                // Is UTF-8 byte in
-                                         // proper range?
-            byte2mask=0x38;              // If not set mask
-                                         // to check next byte
-            trailing = 4;}
-    else if ((c&0xFE) == 0xFC)           // valid 6 byte UTF-8
-          {if (!(c&0x01))                // Is UTF-8 byte in
-                                         // proper range?
-            byte2mask=0x3C;              // If not set mask
-                                         // to check next byte
-            trailing = 5;}
-    else  return false;
- }
-
- return trailing == 0;
-}
 
 
 
@@ -310,8 +215,15 @@ lem::UFString lem::from_utf8( const lem::FString &src )
  #elif LEM_WCHAR_T==2 && defined LEM_WINDOWS
 
  const int ucslen = MultiByteToWideChar( CP_UTF8, 0, src.c_str(), sl+1, NULL, 0 );
- dest.reserve( ucslen ); 
- const int rc = MultiByteToWideChar( CP_UTF8, 0, src.c_str(), sl+1, dest.ptr(), ucslen+1 );
+
+ //dest.reserve( ucslen ); 
+ //const int rc = MultiByteToWideChar( CP_UTF8, 0, src.c_str(), sl+1, dest.ptr(), ucslen+1 );
+
+ wchar_t* dest_chars = new wchar_t[ucslen];
+ std::unique_ptr<wchar_t[]> g(dest_chars);
+ const int rc = MultiByteToWideChar( CP_UTF8, 0, src.c_str(), sl+1, dest_chars, ucslen+1 );
+ dest = dest_chars;
+
  LEM_CHECKIT_Z( rc==ucslen );
 
  #elif LEM_WCHAR_T==2
@@ -390,7 +302,6 @@ lem::UFString lem::from_utf8( const lem::FString &src )
 
  #endif
 
- dest.calc_hash();
  return dest; 
 }
 
@@ -406,15 +317,28 @@ lem::FString lem::to_utf8( const lem::UFString &src )
  #if LEM_WCHAR_T==4
 
   const int l6 = sl*6;
-  dest.reserve(l6);
-  const int utf8len = lem::ucs4_to_utf8( (const lem::uint32_t*)src.c_str(), sl, (unsigned char*)dest.ptr() );
-  dest.ptr()[ utf8len ] = 0;
+  //dest.reserve(l6);
+
+  char * dest_chars = new char[l6];
+  std::unique_ptr<char[]> p(dest_chars);
+
+  const int utf8len = lem::ucs4_to_utf8( (const lem::uint32_t*)src.c_str(), sl, (unsigned char*)dest_chars );
+  //dest.ptr()[ utf8len ] = 0;
+  dest_chars[utf8len] = 0;
+  dest = dest_chars;
 
  #elif LEM_WCHAR_T==2 && defined LEM_WINDOWS
 
   const int len8 = WideCharToMultiByte( CP_UTF8, 0, src.c_str(), sl+1, NULL, 0, 0, NULL );
-  dest.reserve(len8);
-  const int rc = WideCharToMultiByte( CP_UTF8, 0, src.c_str(), sl+1, dest.ptr(), len8, 0, NULL );
+
+  //dest.reserve(len8);
+  //const int rc = WideCharToMultiByte( CP_UTF8, 0, src.c_str(), sl+1, dest.ptr(), len8, 0, NULL );
+
+  char * dest_chars = new char[len8];
+  std::unique_ptr<char[]> p(dest_chars);
+  const int rc = WideCharToMultiByte( CP_UTF8, 0, src.c_str(), sl+1, dest_chars, len8, 0, NULL );
+  dest = dest_chars;
+
   LEM_CHECKIT_Z( rc==len8 );
 
  #elif LEM_WCHAR_T==2
@@ -467,7 +391,6 @@ lem::FString lem::to_utf8( const lem::UFString &src )
 
  #endif
 
- dest.calc_hash();
  return dest;
 }
 

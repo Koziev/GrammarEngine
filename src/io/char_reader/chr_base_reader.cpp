@@ -453,10 +453,8 @@ bool WideStream::read_line( UFString &buffer )
    if( c==L'\n' || c==L'\r' || c==WEOF )
     break;
 
-   buffer.Add_Dirty(c); 
+   buffer += c; 
   }
-
- buffer.calc_hash();
 
  return !buffer.empty();
 }
@@ -472,10 +470,9 @@ void WideStream::read_text( UFString &buffer )
    const wchar_t c = wget();
    if( c==WEOF )
     break;
-   buffer.Add_Dirty(c); 
+   buffer += c; 
   }
 
- buffer.calc_hash();
  return;
 }
 

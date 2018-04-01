@@ -275,7 +275,7 @@
    };
 
 
-
+/*
    class Translit_Reader : public WideStream
    {
     private:
@@ -290,7 +290,7 @@
      virtual void wput( wchar_t u );
 
      virtual void Write_Beginning() {}
-     virtual bool Read_Beginning( bool /*excp*/=false ) { return true; }
+     virtual bool Read_Beginning( bool excp=false ) { return true; }
      virtual int Bits_Per_Char() const { return 16; }
 
      virtual int get();
@@ -298,7 +298,7 @@
 
      virtual const char* GetFormat() const;
    };
-
+*/
 
 
    class Char_Reader_Lang : public Char_Reader

@@ -75,68 +75,68 @@ using namespace Solarix;
 
 struct XML_ExportParameters
 {
- int max_entry_count;
+    int max_entry_count;
 
- XML_ExportParameters()
- {
-  max_entry_count = lem::int_max;
- }
+    XML_ExportParameters()
+    {
+        max_entry_count = lem::int_max;
+    }
 
- void Parse( const char * str )
- {
-  lem::MCollect<lem::CString> tokens;
-  lem::parse( lem::FString(str), tokens, false );
+    void Parse(const char * str)
+    {
+        lem::MCollect<lem::CString> tokens;
+        lem::parse(lem::FString(str), tokens, false);
 
-  for( lem::Container::size_type i=0; i<tokens.size(); ++i )
-   {
-    const lem::CString &token = tokens[i];
+        for (lem::Container::size_type i = 0; i < tokens.size(); ++i)
+        {
+            const lem::CString &token = tokens[i];
 
-    if( lem::is_int(tokens[i].c_str()) )
-     {
-      max_entry_count = lem::to_int(tokens[i]);
-     }
-    else
-     {
-      lem::UFString msg = format_str( L"Invalid option %s in xml export options string", to_unicode(token).c_str() );
-      throw lem::E_BaseException(msg);
-     }
-   }
-  
-  return;
- }
+            if (lem::is_int(tokens[i].c_str()))
+            {
+                max_entry_count = lem::to_int(tokens[i]);
+            }
+            else
+            {
+                lem::UFString msg = format_str(L"Invalid option %s in xml export options string", to_unicode(token).c_str());
+                throw lem::E_BaseException(msg);
+            }
+        }
+
+        return;
+    }
 };
 
 class Ymap : public Base_Application
 {
- public:
-  lem::zbool dump; // различная статобработка содержимого словаря
-  lem::zbool decompile; // экспорт в формат для утилиты ygres
+public:
+    lem::zbool dump; // различная статобработка содержимого словаря
+    lem::zbool decompile; // экспорт в формат для утилиты ygres
 
-  lem::zbool export_xml; // экспорт в XML формат для утилиты import
-  XML_ExportParameters xml_params;
+    lem::zbool export_xml; // экспорт в XML формат для утилиты import
+    XML_ExportParameters xml_params;
 
-  lem::zbool export_sql; // экспортировать в SQL
-  SQL_Production sql_version; // параметры версии сервера СУБД для экспорта
- 
- public:
-  Ymap(void) : Base_Application(), sql_version("") {}
+    lem::zbool export_sql; // экспортировать в SQL
+    SQL_Production sql_version; // параметры версии сервера СУБД для экспорта
 
-  void PrintBanner( OFormatter &txt, bool versbose=false );
-  void Print_Heap( OFormatter &txt );
-  void Echo( OFormatter &txt );
-  void Help(void);
-  void Go( const lem::Path &dict, const lem::Path &outdir );
+public:
+    Ymap(void) : Base_Application(), sql_version("") {}
+
+    void PrintBanner(OFormatter &txt, bool versbose = false);
+    void Print_Heap(OFormatter &txt);
+    void Echo(OFormatter &txt);
+    void Help(void);
+    void Go(const lem::Path &dict, const lem::Path &outdir);
 };
 
 
 
 
-void Ymap::PrintBanner( OFormatter &txt, bool verbose )
+void Ymap::PrintBanner(OFormatter &txt, bool verbose)
 {
- txt.printf( "%vfEDecompiler%vn version %vfF%s%vn\n", sol_get_version().c_str() );
- Print_Project_Info(txt);
- txt.eol();
- return;
+    txt.printf("%vfEDecompiler%vn version %vfF%s%vn\n", sol_get_version().c_str());
+    Print_Project_Info(txt);
+    txt.eol();
+    return;
 }
 
 
@@ -145,369 +145,370 @@ void Ymap::PrintBanner( OFormatter &txt, bool verbose )
 // ************************************
 void Ymap::Help(void)
 {
- mout->printf(
-              "\nSome default values for options are listed in %vfAdecompiler.ini%vn file.\n"
-              "For example, the messaging language is defined by variable %vfElang%vn in section %vfEui%vn.\n\n"
-              "SOLARIS dictionary decompiler: it loads dictionary from binary file\n"
-              "%vfFdiction.bin%vn and creates map file %vfFdiction.map%vn, containing a lot of internal\n"
-              "information as well as disassembled entries, classes, rules and other\n"
-              "structures.\n\n"
-              "Usage: %vfEdecompiler%vn %vf8[%vndictionary_filename%vf8]%vn %vf8[%vn-outdir=XXX%vf8]%vn %vf8[%vn-decompile%vf8]%vn\n\n"
-             ); 
+    mout->printf(
+        "\nSome default values for options are listed in %vfAdecompiler.ini%vn file.\n"
+        "For example, the messaging language is defined by variable %vfElang%vn in section %vfEui%vn.\n\n"
+        "SOLARIS dictionary decompiler: it loads dictionary from binary file\n"
+        "%vfFdiction.bin%vn and creates map file %vfFdiction.map%vn, containing a lot of internal\n"
+        "information as well as disassembled entries, classes, rules and other\n"
+        "structures.\n\n"
+        "Usage: %vfEdecompiler%vn %vf8[%vndictionary_filename%vf8]%vn %vf8[%vn-outdir=XXX%vf8]%vn %vf8[%vn-decompile%vf8]%vn\n\n"
+    );
 
- exit(1);
+    exit(1);
 }
 
 // **********************************************************
 // Печать отметки о времени создания в генерируемых файлах.
 // **********************************************************
-void Ymap::Print_Heap( OFormatter &txt )
+void Ymap::Print_Heap(OFormatter &txt)
 {
- Echo(txt);
- PrintBanner(txt);
- txt.printf( "Created %us\n", timestamp().c_str() );
- return;
+    Echo(txt);
+    PrintBanner(txt);
+    txt.printf("Created %us\n", timestamp().c_str());
+    return;
 }
 
 
-void Ymap::Echo( OFormatter &txt )
+void Ymap::Echo(OFormatter &txt)
 {
- mout->printf( "\nWriting %vfA%us%vn...", txt.GetStream()->GetName().GetUnicode().c_str() );
- mout->flush(); 
- return;
+    mout->printf("\nWriting %vfA%us%vn...", txt.GetStream()->GetName().GetUnicode().c_str());
+    mout->flush();
+    return;
 }
 
 
 
-void Ymap::Go( const lem::Path &dict, const lem::Path &outdir )
+void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
 {
- std::auto_ptr<OFormatter> nul_tty( new OFormatter( lem::Path(NULL_DEVICE) ) ); // пустой поток (устройство NUL:)
+    std::unique_ptr<OFormatter> nul_tty(new OFormatter(lem::Path(NULL_DEVICE))); // пустой поток (устройство NUL:)
 
- lem::Path jpath(outdir);
- jpath.ConcateLeaf(lem::Path("journal"));
- lem::LogFile::Open( jpath ); // файл журнала в указанном каталоге outdir
+    lem::Path jpath(outdir);
+    jpath.ConcateLeaf(lem::Path("journal"));
+    lem::LogFile::Open(jpath); // файл журнала в указанном каталоге outdir
 
- PrintBanner( *lem::LogFile::logfile, true );
- lem::System_Config::PrintInfo( *lem::LogFile::logfile );
+    PrintBanner(*lem::LogFile::logfile, true);
+    lem::System_Config::PrintInfo(*lem::LogFile::logfile);
 
- // Загружаем модули словаря
- std::auto_ptr<Solarix::Dictionary> sol_id( new Solarix::Dictionary( &*nul_tty, merr ) );
+    // Загружаем модули словаря
+    std::unique_ptr<Solarix::Dictionary> sol_id(new Solarix::Dictionary(&*nul_tty, merr));
 
- mout->printf( "Loading dictionary %vfF%us%vn...", dict.GetUnicode().c_str() );
- mout->flush();
+    mout->printf("Loading dictionary %vfF%us%vn...", dict.GetUnicode().c_str());
+    mout->flush();
 
- Load_Options opt;
+    Load_Options opt;
 
- opt.load_semnet = true;
- opt.ngrams = true;
+    opt.load_semnet = true;
+    opt.ngrams = true;
 
- bool ok=false;
+    bool ok = false;
 
- try
-  {
-   ok = sol_id->LoadModules( dict, opt );
-  }
- catch(...)
-  {
-   ok = false;
-  }
-
- if( !ok )
-  {
-   mout->printf( "\n\nERROR!\nIncompatible dictionary version\n" );
-   lem::Process::Exit();
-  }
-
- mout->printf( "%vfE%F$3d%vn entries %vfAOK%vn\n", sol_id->GetSynGram().GetnEntry() );
- CheckMemory();
-
- if( export_sql )
-  {
-   // Выгружаем основные модули словаря в SQL формат.
-
-   sql_version.outdir = outdir;
-
-   lem::Path exp( outdir );
-   exp.ConcateLeaf( L"dictionary.sql" );
-
-   lem::Path exp2( outdir );
-   exp2.ConcateLeaf( L"dictionary-alters.sql" );
-
-   if( sql_version.IsAscii() )
+    try
     {
-     lem::OFormatter exp_file(exp);
-     lem::OFormatter alters_file(exp2);
-     sol_id->Save_SQL( exp_file, alters_file, sql_version );
+        ok = sol_id->LoadModules(dict, opt);
     }
-   else
+    catch (...)
     {
-     // UTF8
-     lem::OUFormatter exp_file(exp,sql_version.WriteBOM());
-     lem::OUFormatter alters_file(exp2,sql_version.WriteBOM());
-     sol_id->Save_SQL( exp_file, alters_file, sql_version );
+        ok = false;
     }
 
-
-   // В отдельный файл - правила морфологического и синтаксического анализа
-   lem::Path exp_rules( outdir );
-   exp_rules.ConcateLeaf( L"rules.sql" );
-
-   lem::Path exp2_rules( outdir );
-   exp2_rules.ConcateLeaf( L"rules-alters.sql" );
-
-   if( sql_version.IsAscii() )
+    if (!ok)
     {
-     lem::OFormatter exp_file(exp_rules);
-     lem::OFormatter alters_file(exp2_rules);
-     sol_id->SaveRules_SQL( exp_file, alters_file, sql_version );
-    }
-   else
-    {
-     // UTF8
-     lem::OUFormatter exp_file(exp_rules,sql_version.WriteBOM());
-     lem::OUFormatter alters_file(exp2_rules,sql_version.WriteBOM());
-     sol_id->SaveRules_SQL( exp_file, alters_file, sql_version );
+        mout->printf("\n\nERROR!\nIncompatible dictionary version\n");
+        lem::Process::Exit();
     }
 
-   if( sql_version.lemmatizator )
+    mout->printf("%vfE%F$3d%vn entries %vfAOK%vn\n", sol_id->GetSynGram().GetnEntry());
+    CheckMemory();
+
+    if (export_sql)
     {
-     // В отдельный файл выгружаем таблицы лемматизатора.
-     lem::Path exp( outdir );
-     exp.ConcateLeaf( L"lemmatizator.sql" );
+        // Выгружаем основные модули словаря в SQL формат.
 
-     lem::Path exp2( outdir );
-     exp2.ConcateLeaf( L"lemmatizator-alters.sql" );
+        sql_version.outdir = outdir;
 
-     if( sql_version.IsAscii() )
-      {
-       lem::OFormatter exp_file(exp);
-       lem::OFormatter alters_file(exp2);
-       sol_id->GetSynGram().SaveLemmatizatorSQL( exp_file, alters_file, sql_version );
-      }
-     else
-      {
-       // UTF8
-       lem::OUFormatter exp_file(exp,sql_version.WriteBOM());
-       lem::OUFormatter alters_file(exp,sql_version.WriteBOM());
-       sol_id->GetSynGram().SaveLemmatizatorSQL( exp_file, alters_file, sql_version );
-      }
-    }
+        lem::Path exp(outdir);
+        exp.ConcateLeaf(L"dictionary.sql");
 
+        lem::Path exp2(outdir);
+        exp2.ConcateLeaf(L"dictionary-alters.sql");
 
-   // скрипт для PREFIX ENTRY SEARCHER
-   lem::Path exp_pes( outdir );
-   exp_pes.ConcateLeaf( L"prefix_entry_searcher.sql" );
-
-   lem::Ptr<PrefixEntrySearcher> pes( sol_id->GetPrefixEntrySearcher() );
-   if( pes.NotNull() )
-    pes->Save_SQL( exp_pes, sql_version );
-  }
-
-
-
- mout->printf( "Decompiling and analyzing the dictionary..." ); mout->flush();
-
- if( export_xml )
-  {
-   lem::Path p(outdir);
-   p.ConcateLeaf( lem::Path("lexicon.xml") );
-   OUFormatter xml( p, false );
-   Echo(xml); 
-   lem::Path p2(outdir);
-   p2.ConcateLeaf( lem::Path("lexicon.xsd") );
-   OFormatter xsd(p2);
-   sol_id->GetSynGram().Dump_XML( xml, xsd, xml_params.max_entry_count );
-   OK; 
-
-   // Чтобы не получился один XML файл гигантского размера, неудобный для
-   // обработки утилитой xml2sol, разобъем список статей на блоки.
-   const int nentry = CastSizeToInt(sol_id->GetSynGram().GetEntries().CountEntries(ANY_STATE,ANY_STATE));
-   const int blocksize = 1000;
-   const int nblock = (nentry/blocksize) + ( (nentry%blocksize)==0 ? 0 : 1 );
-
-   lem::Path pe(outdir);
-   pe.ConcateLeaf(L"export");
-   lem::OUFormatter export_list(pe);
-
-   lem::Ptr<WordEntryEnumerator> wenum( sol_id->GetSynGram().GetEntries().ListEntries() );
- 
-   int ientry=0;
-   for( int iblock=0; iblock<nblock && ientry<nentry; iblock++ )
-    {
-     lem::UFString filename( lem::format_str(L"export_%d.xml",iblock) );
-     export_list.printf( "%us\n", filename.c_str() );
-     
-     lem::Path p(outdir);
-     p.ConcateLeaf(lem::Path(filename));
-     lem::OUFormatter xml(p,false);
-     xml.printf( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<dataroot>\n" );
-
-     for( int i=0; i<blocksize && wenum->Fetch(); i++, ientry++ )
-      {
-       try
+        if (sql_version.IsAscii())
         {
-         const Solarix::SG_Entry &e = wenum->GetItem();
+            lem::OFormatter exp_file(exp);
+            lem::OFormatter alters_file(exp2);
+            sol_id->Save_SQL(exp_file, alters_file, sql_version);
+        }
+        else
+        {
+            // UTF8
+            lem::OUFormatter exp_file(exp, sql_version.WriteBOM());
+            lem::OUFormatter alters_file(exp2, sql_version.WriteBOM());
+            sol_id->Save_SQL(exp_file, alters_file, sql_version);
+        }
 
-         if( !e.GetName().empty() )
-          {
-           e.SaveXML(xml,sol_id->GetSynGram());
-           xml.eol();
-          }
-        }
-       catch( const lem::E_BaseException &e )
-        {
-         lem::mout->printf( "Error occured when exporting entry #%d: %us\n", ientry, e.what() );
-         lem::Process::Exit(1); 
-        }
-       catch( const std::exception &e )
-        {
-         lem::mout->printf( "Error occured when exporting entry #%d: %s\n", ientry, e.what() );
-         lem::Process::Exit(1); 
-        }
-       catch(...)
-        {
-         lem::mout->printf( "Error occured when exporting entry #%d\n", ientry );
-         lem::Process::Exit(1); 
-        }
-      } 
 
-     xml.printf( "</dataroot>\n" );
-     lem::mout->dot();
+        // В отдельный файл - правила морфологического и синтаксического анализа
+        lem::Path exp_rules(outdir);
+        exp_rules.ConcateLeaf(L"rules.sql");
+
+        lem::Path exp2_rules(outdir);
+        exp2_rules.ConcateLeaf(L"rules-alters.sql");
+
+        if (sql_version.IsAscii())
+        {
+            lem::OFormatter exp_file(exp_rules);
+            lem::OFormatter alters_file(exp2_rules);
+            sol_id->SaveRules_SQL(exp_file, alters_file, sql_version);
+        }
+        else
+        {
+            // UTF8
+            lem::OUFormatter exp_file(exp_rules, sql_version.WriteBOM());
+            lem::OUFormatter alters_file(exp2_rules, sql_version.WriteBOM());
+            sol_id->SaveRules_SQL(exp_file, alters_file, sql_version);
+        }
+
+        if (sql_version.lemmatizator)
+        {
+            // В отдельный файл выгружаем таблицы лемматизатора.
+            lem::Path exp(outdir);
+            exp.ConcateLeaf(L"lemmatizator.sql");
+
+            lem::Path exp2(outdir);
+            exp2.ConcateLeaf(L"lemmatizator-alters.sql");
+
+            if (sql_version.IsAscii())
+            {
+                lem::OFormatter exp_file(exp);
+                lem::OFormatter alters_file(exp2);
+                sol_id->GetSynGram().SaveLemmatizatorSQL(exp_file, alters_file, sql_version);
+            }
+            else
+            {
+                // UTF8
+                lem::OUFormatter exp_file(exp, sql_version.WriteBOM());
+                lem::OUFormatter alters_file(exp, sql_version.WriteBOM());
+                sol_id->GetSynGram().SaveLemmatizatorSQL(exp_file, alters_file, sql_version);
+            }
+        }
+
+
+        // скрипт для PREFIX ENTRY SEARCHER
+        lem::Path exp_pes(outdir);
+        exp_pes.ConcateLeaf(L"prefix_entry_searcher.sql");
+
+        lem::Ptr<PrefixEntrySearcher> pes(sol_id->GetPrefixEntrySearcher());
+        if (pes.NotNull())
+            pes->Save_SQL(exp_pes, sql_version);
     }
-  }
 
- // Text file for dictionary map
- if( dump )
-  {
-   lem::Path p(outdir);
-   p.ConcateLeaf( lem::Path("alphabet.map") );
-   OUFormatter map( p );
-   Print_Heap(map);
-   sol_id->MapAlphabet( map );
-   OK;
-  }
 
- if( dump )
-  {
-   lem::Path p(outdir);
-   p.ConcateLeaf( lem::Path("lexicon.map") );
-   OUFormatter map( p );
-   Print_Heap(map);
-   sol_id->MapLexicon( map );
-   OK;
-  }
 
- if( decompile )
-  {
-   lem::Path p(outdir);
-   p.ConcateLeaf( lem::Path("lexicon.sol") );
-   OUFormatter txt( p );
-   txt.printf( "/*\n" );
-   Print_Heap(txt);
-   txt.printf( "*/\n\n" );
-   sol_id->GetSynGram().SaveTxt( txt );
-   OK;
-  }
+    mout->printf("Decompiling and analyzing the dictionary..."); mout->flush();
 
- if( dump )
-  {
-   lem::Path p(outdir);
-   p.ConcateLeaf( lem::Path("grammar.map") );
-   OUFormatter map( p );
-   Print_Heap(map);
-   sol_id->MapTransformer( map );
-   OK;
-  }
+    if (export_xml)
+    {
+        lem::Path p(outdir);
+        p.ConcateLeaf(lem::Path("lexicon.xml"));
+        OUFormatter xml(p, false);
+        Echo(xml);
+        lem::Path p2(outdir);
+        p2.ConcateLeaf(lem::Path("lexicon.xsd"));
+        OFormatter xsd(p2);
+        sol_id->GetSynGram().Dump_XML(xml, xsd, xml_params.max_entry_count);
+        OK;
 
- mout->printf( "\n%vfAAll done.%vn\n" );
- return;
+        // Чтобы не получился один XML файл гигантского размера, неудобный для
+        // обработки утилитой xml2sol, разобъем список статей на блоки.
+        const int nentry = CastSizeToInt(sol_id->GetSynGram().GetEntries().CountEntries(ANY_STATE, ANY_STATE));
+        const int blocksize = 1000;
+        const int nblock = (nentry / blocksize) + ((nentry%blocksize) == 0 ? 0 : 1);
+
+        lem::Path pe(outdir);
+        pe.ConcateLeaf(L"export");
+        lem::OUFormatter export_list(pe);
+
+        lem::Ptr<WordEntryEnumerator> wenum(sol_id->GetSynGram().GetEntries().ListEntries());
+
+        int ientry = 0;
+        for (int iblock = 0; iblock < nblock && ientry < nentry; iblock++)
+        {
+            lem::UFString filename(lem::format_str(L"export_%d.xml", iblock));
+            export_list.printf("%us\n", filename.c_str());
+
+            lem::Path p(outdir);
+            p.ConcateLeaf(lem::Path(filename));
+            lem::OUFormatter xml(p, false);
+            xml.printf("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<dataroot>\n");
+
+            for (int i = 0; i < blocksize && wenum->Fetch(); i++, ientry++)
+            {
+                try
+                {
+                    const Solarix::SG_Entry &e = wenum->GetItem();
+
+                    if (!e.GetName().empty())
+                    {
+                        e.SaveXML(xml, sol_id->GetSynGram());
+                        xml.eol();
+                    }
+                }
+                catch (const lem::E_BaseException &e)
+                {
+                    lem::mout->printf("Error occured when exporting entry #%d: %us\n", ientry, e.what());
+                    lem::Process::Exit(1);
+                }
+                catch (const std::exception &e)
+                {
+                    lem::mout->printf("Error occured when exporting entry #%d: %s\n", ientry, e.what());
+                    lem::Process::Exit(1);
+                }
+                catch (...)
+                {
+                    lem::mout->printf("Error occured when exporting entry #%d\n", ientry);
+                    lem::Process::Exit(1);
+                }
+            }
+
+            xml.printf("</dataroot>\n");
+            lem::mout->dot();
+        }
+    }
+
+    // Text file for dictionary map
+    if (dump)
+    {
+        lem::Path p(outdir);
+        p.ConcateLeaf(lem::Path("alphabet.map"));
+        OUFormatter map(p);
+        Print_Heap(map);
+        sol_id->MapAlphabet(map);
+        OK;
+    }
+
+    if (dump)
+    {
+        lem::Path p(outdir);
+        p.ConcateLeaf(lem::Path("lexicon.map"));
+        OUFormatter map(p);
+        Print_Heap(map);
+        sol_id->MapLexicon(map);
+        OK;
+    }
+
+    if (decompile)
+    {
+        lem::Path p(outdir);
+        p.ConcateLeaf(lem::Path("lexicon.sol"));
+        OUFormatter txt(p);
+        txt.printf("/*\n");
+        Print_Heap(txt);
+        txt.printf("*/\n\n");
+        sol_id->GetSynGram().SaveTxt(txt);
+        OK;
+    }
+
+    if (dump)
+    {
+        lem::Path p(outdir);
+        p.ConcateLeaf(lem::Path("grammar.map"));
+        OUFormatter map(p);
+        Print_Heap(map);
+        sol_id->MapTransformer(map);
+        OK;
+    }
+
+    mout->printf("\n%vfAAll done.%vn\n");
+    return;
 }
 
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
- lem::LemInit initer;
- Ymap app;
+    lem::LemInit initer;
+    Ymap app;
 
- app.Read_Ini( lem::Path("ymap.ini") );
+    app.Read_Ini(lem::Path("ymap.ini"));
 
- app.PrintBanner(*mout);
+    app.PrintBanner(*mout);
 
- if(
-    argc==2 && (
-                !strcmp(argv[1]+1,"help") ||
-                !strcmp(argv[1]+1,"?") ||
-                !strcmp(argv[1]+1,"h") ||
-                !strcmp(argv[1]+1,"-version")
-               )
-   )
-  app.Help();
+    if (
+        argc == 2 && (
+            !strcmp(argv[1] + 1, "help") ||
+            !strcmp(argv[1] + 1, "?") ||
+            !strcmp(argv[1] + 1, "h") ||
+            !strcmp(argv[1] + 1, "-version")
+            )
+        )
+        app.Help();
 
- // По умолчанию файл словаря ищем в текущем каталоге
- lem::Path dict("dictionary.xml");
+    // По умолчанию файл словаря ищем в текущем каталоге
+    lem::Path dict("dictionary.xml");
 
- // А результаты декомпиляции сохраняем в текущем каталоге
- lem::Path outdir;
+    // А результаты декомпиляции сохраняем в текущем каталоге
+    lem::Path outdir;
 
- app.dump = true;
+    app.dump = true;
 
- try
-  {
-   for( int i=1; i<argc; i++ )
+    try
     {
-     if( argv[i][0]=='-' || argv[i][0]=='/' )
-      {
-       if( memcmp( argv[i]+1, "outdir=", 7 )==0 )
+        for (int i = 1; i < argc; i++)
         {
-         FString s(argv[i]+8);
-         s.strip_apostrophes();
-         outdir = lem::Path( s );
+            if (argv[i][0] == '-' || argv[i][0] == '/')
+            {
+                if (memcmp(argv[i] + 1, "outdir=", 7) == 0)
+                {
+                    FString s(argv[i] + 8);
+                    s.strip_apostrophes();
+                    outdir = lem::Path(s);
+                }
+                else if (lem_eq(argv[i], "-decompile"))
+                {
+                    app.dump = false;
+                    app.decompile = true;
+                }
+                else if (lem_eq(argv[i], "-dump"))
+                {
+                    app.dump = true;
+                }
+                else if (lem_eq(argv[i], "-export") || lem_eq(argv[i], "-xml"))
+                {
+                    app.dump = false;
+                    app.decompile = false;
+                    app.export_xml = true;
+                    app.xml_params.Parse(argv[i + 1]);
+                    i++;
+                }
+                else if (lem_eq(argv[i], "-sql"))
+                {
+                    app.dump = false;
+                    app.decompile = false;
+                    app.export_xml = false;
+                    app.export_sql = true;
+                    app.sql_version = SQL_Production(argv[i + 1]);
+                    i++;
+                }
+            }
+            else
+            {
+                dict = lem::Path(argv[i]);
+            }
         }
-       else if( lem_eq( argv[i], "-decompile" ) )
-        {
-         app.dump      = false;
-         app.decompile = true;
-        } 
-       else if( lem_eq( argv[i], "-dump" ) )
-        {
-         app.dump = true;
-        }
-       else if( lem_eq( argv[i], "-export" ) || lem_eq( argv[i], "-xml" ) )
-        {
-         app.dump     = false;
-         app.decompile = false;
-         app.export_xml = true;
-         app.xml_params.Parse( argv[i+1] );
-         i++;
-        }
-       else if( lem_eq( argv[i], "-sql" ) )
-        {
-         app.dump             = false;
-         app.decompile        = false;
-         app.export_xml        = false;
-         app.export_sql       = true;
-         app.sql_version = SQL_Production( argv[i+1] );
-         i++; 
-        }
-      }
-     else
-      {
-       dict = lem::Path(argv[i]);
-      }
     }
-  }
- LEM_CATCH;
+    LEM_CATCH;
 
- if( !dict.DoesExist() )
-  {
-   dict = lem::Shell::AskFilename( true, L"Enter dictionary filename (dictionary.xml): " );
-  }
+    if (!dict.DoesExist())
+    {
+        merr->printf("Dictionary configuration file not found.");
+        return 1;
+    }
 
- try
-  {
-   app.Go(dict,outdir);
-  }
- LEM_CATCH;
+    try
+    {
+        app.Go(dict, outdir);
+    }
+    LEM_CATCH;
 
- return 0;
+    return 0;
 }

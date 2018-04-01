@@ -2,12 +2,12 @@
 #define LEM_SYSTEM_CONFIG__H
 #pragma once
 
- // 07-04-2007 Добавлена функция GetHostOs()
+ // 07-04-2007 Р”РѕР±Р°РІР»РµРЅР° С„СѓРЅРєС†РёСЏ GetHostOs()
  // 21.04.2007 - PrintInfo() added.
- // 27.04.2007 - возвращаемые процедурами GetHomeDir() и GetAppdataDir() пути имеют тип lem::Path
- // 22.04.2008 - добавлены IsFilesystemUtf8() и GetFilesystemCP()
- // 23.05.2008 - добавлена IsWin2k()
- // 30.09.2009 - добавлена IsVistaOrNewer() для работы с Server 2008 и WIndows 7
+ // 27.04.2007 - РІРѕР·РІСЂР°С‰Р°РµРјС‹Рµ РїСЂРѕС†РµРґСѓСЂР°РјРё GetHomeDir() Рё GetAppdataDir() РїСѓС‚Рё РёРјРµСЋС‚ С‚РёРї lem::Path
+ // 22.04.2008 - РґРѕР±Р°РІР»РµРЅС‹ IsFilesystemUtf8() Рё GetFilesystemCP()
+ // 23.05.2008 - РґРѕР±Р°РІР»РµРЅР° IsWin2k()
+ // 30.09.2009 - РґРѕР±Р°РІР»РµРЅР° IsVistaOrNewer() РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Server 2008 Рё WIndows 7
 
  #include <lem/config.h>
  #include <lem/path.h>
@@ -20,78 +20,80 @@
 
   namespace System_Config
   {
-   // Возвращает имя домашнего каталога для текущего юзера.
-   extern const lem::Path GetHomeDir(void);
+   // Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРјСЏ РґРѕРјР°С€РЅРµРіРѕ РєР°С‚Р°Р»РѕРіР° РґР»СЏ С‚РµРєСѓС‰РµРіРѕ СЋР·РµСЂР°.
+   //extern const lem::Path GetHomeDir(void);
 
-   extern const lem::Path GetAppdataDir(void);
+   //extern const lem::Path GetAppdataDir(void);
 
-     // На какой платформе исполняется программа
+     // РќР° РєР°РєРѕР№ РїР»Р°С‚С„РѕСЂРјРµ РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРѕРіСЂР°РјРјР°
    extern const std::string GetHostOs( bool detailed=true );
 
-   // 64-битная ОС (программа может быть 32-битной).
+   // 64-Р±РёС‚РЅР°СЏ РћРЎ (РїСЂРѕРіСЂР°РјРјР° РјРѕР¶РµС‚ Р±С‹С‚СЊ 32-Р±РёС‚РЅРѕР№).
    extern bool IsOS64(void);
 
-   // Поддерживает ли платформа Unicode строки в вызовах API
+   // РџРѕРґРґРµСЂР¶РёРІР°РµС‚ Р»Рё РїР»Р°С‚С„РѕСЂРјР° Unicode СЃС‚СЂРѕРєРё РІ РІС‹Р·РѕРІР°С… API
    extern bool SupportUnicodeAPI(void);
 
-   // Поддерживает ли текущая платформа нормальную работу _wfopen и
-   // других функций для UNICODE-имен файлов
+   // РџРѕРґРґРµСЂР¶РёРІР°РµС‚ Р»Рё С‚РµРєСѓС‰Р°СЏ РїР»Р°С‚С„РѕСЂРјР° РЅРѕСЂРјР°Р»СЊРЅСѓСЋ СЂР°Р±РѕС‚Сѓ _wfopen Рё
+   // РґСЂСѓРіРёС… С„СѓРЅРєС†РёР№ РґР»СЏ UNICODE-РёРјРµРЅ С„Р°Р№Р»РѕРІ
    extern bool SupportUnicodeFilenames(void);
 
-   // Можно ли в текстовой консоли использовать нормальный вывод 
-   // UNICODE текста
+   // РњРѕР¶РЅРѕ Р»Рё РІ С‚РµРєСЃС‚РѕРІРѕР№ РєРѕРЅСЃРѕР»Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РЅРѕСЂРјР°Р»СЊРЅС‹Р№ РІС‹РІРѕРґ 
+   // UNICODE С‚РµРєСЃС‚Р°
    extern bool SupportUnicodeConsole(void);
 
-   // Поддерживает ли текущая платформа UNICODE для GUI
+   // РџРѕРґРґРµСЂР¶РёРІР°РµС‚ Р»Рё С‚РµРєСѓС‰Р°СЏ РїР»Р°С‚С„РѕСЂРјР° UNICODE РґР»СЏ GUI
    extern bool SupportUnicodeGui(void);
 
    // Filename are case sensitive (false for Windows, true for Unix by default).
    extern bool FilenamesCaseSensitive(void);
 
-   // Имя рабочей станции (хост в локальной сети)
+   // РРјСЏ СЂР°Р±РѕС‡РµР№ СЃС‚Р°РЅС†РёРё (С…РѕСЃС‚ РІ Р»РѕРєР°Р»СЊРЅРѕР№ СЃРµС‚Рё)
    extern const std::string GetHostName(void);
 
-   // Символы окончания строки
-   // \r\n для Windows
-   // \n для Linux
+   // РЎРёРјРІРѕР»С‹ РѕРєРѕРЅС‡Р°РЅРёСЏ СЃС‚СЂРѕРєРё
+   // \r\n РґР»СЏ Windows
+   // \n РґР»СЏ Linux
    //
-   // Если escaped=true, то возвращаемая строка будет иметь символы слеш
+   // Р•СЃР»Рё escaped=true, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРјР°СЏ СЃС‚СЂРѕРєР° Р±СѓРґРµС‚ РёРјРµС‚СЊ СЃРёРјРІРѕР»С‹ СЃР»РµС€
    extern const std::string GetLineTerminator( bool escaped );
 
-   // Возвращает размер выравнивания для скомпилированной программы
-   // (в байтах).
+   // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РґР»СЏ СЃРєРѕРјРїРёР»РёСЂРѕРІР°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјС‹
+   // (РІ Р±Р°Р№С‚Р°С…).
    extern int GetAlignmentSize(void);
 
-   // Возвращает имя пользователя (логин) для текущей сессии
+   // Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (Р»РѕРіРёРЅ) РґР»СЏ С‚РµРєСѓС‰РµР№ СЃРµСЃСЃРёРё
    extern const std::string GetUserLogin(void);
 
-   extern bool IsWin9x(void);
-   extern bool IsNT4(void);
+   //extern bool IsWin9x(void);
+   //extern bool IsNT4(void);
    extern bool IsWin2k(void);
    extern bool IsUnix(void);
    extern bool IsLinux(void);
    extern bool IsFreeBSD(void);
-   extern bool IsTabletPC(void);
-   extern bool IsMediaCenter(void);
+   //extern bool IsTabletPC(void);
+   //extern bool IsMediaCenter(void);
    extern bool IsVista(void);
    extern bool IsVistaOrNewer(void);
 
+/*
    extern bool IsNetfx10Installed(void);
    extern bool IsNetfx11Installed(void);
    extern int GetNetfx10SPLevel(void);
    extern int GetNetfx11SPLevel(void);
 
-   // Возвращает строковое описание установленной версии .NETа
+   // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ РѕРїРёСЃР°РЅРёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕР№ РІРµСЂСЃРёРё .NETР°
    extern const std::string GetNetfxInfo(void);
+*/
 
    // ******************************
-   // Возвращает тип адресации
+   // Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРї Р°РґСЂРµСЃР°С†РёРё
    // ******************************
    typedef enum {
                  ADDRESSING_UNKNOWN=-1,
-                 ADDRESSING_16_16,     // Старая large memory model СЕГМЕНТ:СМЕЩЕНИЕ
-                 ADDRESSING_32,        // 32 бит
-                 ADDRESSING_64         // 64 бит
+                 ADDRESSING_16_16,     // РЎС‚Р°СЂР°СЏ large memory model РЎР•Р“РњР•РќРў:РЎРњР•Р©Р•РќРР•
+                 ADDRESSING_32,        // 32 Р±РёС‚
+                 ADDRESSING_64         // 64 Р±РёС‚
                 } AddressingType;
 
 
@@ -105,9 +107,9 @@
    extern bool IsCmdLineOption( char ch );
 
 
-   extern bool IsServiceRunning( const char *DaemonName );
-   extern void ShowIndexingServiceControlDialog(void);
-   extern bool IsIndexingServiceRunning(void);
+   //extern bool IsServiceRunning( const char *DaemonName );
+   //extern void ShowIndexingServiceControlDialog(void);
+   //extern bool IsIndexingServiceRunning(void);
 
    extern bool IsFilesystemUtf8( const lem::Path *path=NULL );
    extern const lem::CodeConverter* GetFilesystemCP( const lem::Path *path=NULL );

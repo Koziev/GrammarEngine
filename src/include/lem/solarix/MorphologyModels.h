@@ -1,6 +1,7 @@
 #if !defined MorphologyModels__H
 #define MorphologyModels__H
 
+#include <set>
 #include <lem/noncopyable.h>
 #include <lem/path.h>
 #include <lem/ucstring.h>

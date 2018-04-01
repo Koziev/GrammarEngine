@@ -391,11 +391,9 @@ const lem::UFString Sentence::string( wchar_t delimiter ) const
  UFString res;
  for( Container::size_type i=0; i<size(); i++ )
   {
-   if( i ) res.Add_Dirty( delimiter );
-   res.Add_Dirty( GetWord(i).c_str() );
+   if( i ) res += delimiter;
+   res += GetWord(i).c_str();
   }
-
- res.calc_hash();
 
  return res;  
 }

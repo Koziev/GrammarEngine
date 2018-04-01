@@ -291,9 +291,6 @@
     <ClCompile Include="..\..\..\..\tools\Unicode\cp_unicode_data.cpp">
       <Filter>Source Files\lem\Tools\Unicode</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\tools\unicode\transliterator.cpp">
-      <Filter>Source Files\lem\Tools\Unicode</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\tools\unicode\ucs4_to_utf8.cpp">
       <Filter>Source Files\lem\Tools\Unicode</Filter>
     </ClCompile>

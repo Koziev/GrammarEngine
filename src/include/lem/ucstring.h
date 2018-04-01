@@ -9,25 +9,27 @@
 //
 // Content:
 //
-// 08.03.2006 - в класс введен enum с константой npos (для совместимости 
-//              с std::basic_string)
+// 08.03.2006 - РІ РєР»Р°СЃСЃ РІРІРµРґРµРЅ enum СЃ РєРѕРЅСЃС‚Р°РЅС‚РѕР№ npos (РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё 
+//              СЃ std::basic_string)
 //
-// 19.06.2006 - реализован метод GetHash16(), который достаточно быстро вычисляет
-//              неплохой 16-битный хэш с более-менее равномерным распределением. 
+// 19.06.2006 - СЂРµР°Р»РёР·РѕРІР°РЅ РјРµС‚РѕРґ GetHash16(), РєРѕС‚РѕСЂС‹Р№ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ Р±С‹СЃС‚СЂРѕ РІС‹С‡РёСЃР»СЏРµС‚
+//              РЅРµРїР»РѕС…РѕР№ 16-Р±РёС‚РЅС‹Р№ С…СЌС€ СЃ Р±РѕР»РµРµ-РјРµРЅРµРµ СЂР°РІРЅРѕРјРµСЂРЅС‹Рј СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµРј. 
 //
-// 13.08.2006 - классы UCString и CString переделаны в обычные, без
-//              использования template'ов.
+// 13.08.2006 - РєР»Р°СЃСЃС‹ UCString Рё CString РїРµСЂРµРґРµР»Р°РЅС‹ РІ РѕР±С‹С‡РЅС‹Рµ, Р±РµР·
+//              РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ template'РѕРІ.
 //
-// 30.11.2006 - конструктор из wchar_t* сделан explicit
-// 07.08.2008 - добавлен метод eqi для безрегистрового сравнения строк
-// 08.02.2009 - добавлен метод eq_begi для безрегистрового сравнения начальных
-//              частей строк
-// 16.01.2011 - добавлен метод Add_Dirty для быстрого добавления одного
-//              символа без обновления хеш-кода. 
+// 30.11.2006 - РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РёР· wchar_t* СЃРґРµР»Р°РЅ explicit
+// 07.08.2008 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ eqi РґР»СЏ Р±РµР·СЂРµРіРёСЃС‚СЂРѕРІРѕРіРѕ СЃСЂР°РІРЅРµРЅРёСЏ СЃС‚СЂРѕРє
+// 08.02.2009 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ eq_begi РґР»СЏ Р±РµР·СЂРµРіРёСЃС‚СЂРѕРІРѕРіРѕ СЃСЂР°РІРЅРµРЅРёСЏ РЅР°С‡Р°Р»СЊРЅС‹С…
+//              С‡Р°СЃС‚РµР№ СЃС‚СЂРѕРє
+// 16.01.2011 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ Add_Dirty РґР»СЏ Р±С‹СЃС‚СЂРѕРіРѕ РґРѕР±Р°РІР»РµРЅРёСЏ РѕРґРЅРѕРіРѕ
+//              СЃРёРјРІРѕР»Р° Р±РµР· РѕР±РЅРѕРІР»РµРЅРёСЏ С…РµС€-РєРѕРґР°. 
+//
+// 26.03.2018 - СЂРµС„Р°РєС‚РѕСЂРёРЅРі Рё С‡РёСЃС‚РєР° РєРѕРґР°
 // -----------------------------------------------------------------------------
 //
 // CD->01.10.1995
-// LC->16.01.2011
+// LC->26.03.2018
 // --------------
 
  #include <lem/config.h>
@@ -48,36 +50,31 @@
 
    typedef int size_type;
 
-   // Доступная для внешнего кода константа - максимальная вместимость
-   // объектов класса (без терминирующего нуля).
+   // Р”РѕСЃС‚СѓРїРЅР°СЏ РґР»СЏ РІРЅРµС€РЅРµРіРѕ РєРѕРґР° РєРѕРЅСЃС‚Р°РЅС‚Р° - РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІРјРµСЃС‚РёРјРѕСЃС‚СЊ
+   // РѕР±СЉРµРєС‚РѕРІ РєР»Р°СЃСЃР° (Р±РµР· С‚РµСЂРјРёРЅРёСЂСѓСЋС‰РµРіРѕ РЅСѓР»СЏ).
    enum { max_len=LEM_CSTRING_LEN };
 
-   enum { npos=-1 }; // для совместимости с std::base_string
+   enum { npos=-1 }; // РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ std::base_string
 
-   static wchar_t static_zero; // Для возврата ссылок в операторе [] при переходе
-                            // границы строки.
+   static wchar_t static_zero; // Р”Р»СЏ РІРѕР·РІСЂР°С‚Р° СЃСЃС‹Р»РѕРє РІ РѕРїРµСЂР°С‚РѕСЂРµ [] РїСЂРё РїРµСЂРµС…РѕРґРµ
+                            // РіСЂР°РЅРёС†С‹ СЃС‚СЂРѕРєРё.
 
    static const UCString& Get_Empty(void);
 
   protected:
-   wchar_t str[LEM_CSTRING_LEN+1];     // Символы строки включая терминатор ('\0')
-   hash_type hash; // Для ускорения операций сравнения - хэшкод строки.
-   unsigned char len;  // Длина строки (одного байта должно хватать), для более длинных строк лучше
-                        // использовать BaseFString<...> или base_string<...>
+   wchar_t str[LEM_CSTRING_LEN+1];     // РЎРёРјРІРѕР»С‹ СЃС‚СЂРѕРєРё РІРєР»СЋС‡Р°СЏ С‚РµСЂРјРёРЅР°С‚РѕСЂ ('\0')
+   hash_type hash; // Р”Р»СЏ СѓСЃРєРѕСЂРµРЅРёСЏ РѕРїРµСЂР°С†РёР№ СЃСЂР°РІРЅРµРЅРёСЏ - С…СЌС€РєРѕРґ СЃС‚СЂРѕРєРё.
+   unsigned char len;  // Р”Р»РёРЅР° СЃС‚СЂРѕРєРё (РѕРґРЅРѕРіРѕ Р±Р°Р№С‚Р° РґРѕР»Р¶РЅРѕ С…РІР°С‚Р°С‚СЊ), РґР»СЏ Р±РѕР»РµРµ РґР»РёРЅРЅС‹С… СЃС‚СЂРѕРє Р»СѓС‡С€Рµ
+                        // РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ BaseFString<...> РёР»Рё base_string<...>
 
   public:
    // ****************************************************************************
-   // Конструктор по умолчанию создает строку с нулевой длиной.
-   // Используем соглашение о вычислении хеш-кода - см. процедуру
+   // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃРѕР·РґР°РµС‚ СЃС‚СЂРѕРєСѓ СЃ РЅСѓР»РµРІРѕР№ РґР»РёРЅРѕР№.
+   // РСЃРїРѕР»СЊР·СѓРµРј СЃРѕРіР»Р°С€РµРЅРёРµ Рѕ РІС‹С‡РёСЃР»РµРЅРёРё С…РµС€-РєРѕРґР° - СЃРј. РїСЂРѕС†РµРґСѓСЂСѓ
    // lem_calc_string_hash.
    // ****************************************************************************
    UCString(void) { *str=hash=len=0; }
 
-   // ***********************************************************************************
-   // в отличие от std::base_string, мы определяем два отдельных конструктора для
-   // создания объекта из ASCII и unicode-строк. Поэтому UCString, которая хранит UNICODE
-   // строку, можно создать прямо из ASCII-строки.
-   // ***********************************************************************************
    explicit UCString( const char* s );
    UCString( const wchar_t* s );
    UCString( const UCString& s );
@@ -103,11 +100,11 @@
    // ***************************************
    void calc_hash(void);
 
-   // Стандартный 8-битовый хэш-код
+   // РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ 8-Р±РёС‚РѕРІС‹Р№ С…СЌС€-РєРѕРґ
    inline hash_type GetHash(void) const { return hash; }
 //   inline hash_type h(void) const { return hash; }
 
-   // расширенный 16-битовый хэш-код
+   // СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ 16-Р±РёС‚РѕРІС‹Р№ С…СЌС€-РєРѕРґ
    inline int GetHash16(void) const
    { return 0x0000ffff & ( ( (hash&0x000000ff) ^ (back()<<(len/2+2))) * front() ); }
 
@@ -147,14 +144,6 @@
    void insert( int pos, wchar_t ch );
    void remove( int pos, int nch=1 );
 
-   // For compat. with lem::Collect, lem:MCollect
-   inline void ShrinkTo( int nChar ) { reduce(nChar); }
-   inline void Insert( int pos, wchar_t ch ) { insert(pos,ch); }
-   inline void Remove( int pos ) { remove(pos); }
-
-   // Removes last char
-   inline void Remove_back(void) { str[len-1]=0; calc_hash(); }
-
    UCString& operator+=( const UCString &s );
    UCString& operator+=( const char *s );
    UCString& operator+=( const wchar_t *s );
@@ -168,48 +157,35 @@
    bool operator==( wchar_t ch           ) const;
 
    bool operator!=( const UCString &s2     ) const;
-   bool operator!=( const char *s2    ) const;
    bool operator!=( const wchar_t *s2 ) const;
    bool operator!=( wchar_t ch           ) const;
 
    bool operator>( const UCString &s2     ) const;
-   bool operator>( const char *s2    ) const;
    bool operator>( const wchar_t *s2 ) const;
    bool operator>( wchar_t ch           ) const;
 
    bool operator>=( const UCString &s2     ) const;
-   bool operator>=( const char *s2    ) const;
    bool operator>=( const wchar_t *s2 ) const;
    bool operator>=( wchar_t ch           ) const;
 
    bool operator<( const UCString &s2      ) const;
-   bool operator<( const char *s2     ) const;
    bool operator<( const wchar_t *s2  ) const;
    bool operator<( wchar_t ch ) const;
 
    bool operator<=( const UCString &s2     ) const;
-   bool operator<=( const char *s2    ) const;
    bool operator<=( const wchar_t *s2 ) const;
    bool operator<=( wchar_t ch           ) const;
 
    bool eqi( const UCString &x ) const;
-
-   // ****************************************************
-   // Addind the chars or string.
-   // For compat. with lem::Collect, lem:MCollect
-   // ****************************************************
-   inline void Add( wchar_t ch ) { operator+=(ch); }
 
    int count( wchar_t ch ) const;
    bool find( wchar_t to_find ) const;
 
    int search( wchar_t ch, int nentry=1 ) const;
    int search( const UCString &f, int nentry=1 ) const;
-   int search( const char *to_find, int nentry=1 ) const;
    int search( const wchar_t *to_find, int nentry=1 ) const;
 
    bool eq_beg( const UCString &to_find ) const;
-   bool eq_beg( const char* to_find    ) const;
    bool eq_beg( const wchar_t* to_find ) const;
    bool eq_begi( const UCString &x ) const;
 
@@ -223,7 +199,6 @@
 
    UCString& to_upper(void);
    UCString& to_lower(void);
-
    UCString& to_Aa(void);
 
    UCString& strip( wchar_t Bound );
@@ -233,27 +208,20 @@
    UCString& dress( wchar_t Bound );
    UCString& dress_quotes(void);
    UCString& dress_apostrophes(void);
-   UCString& dress_spaces(void);
-
-   UCString& cut_final_dot(void);
-   UCString& cut_final_commas(void);
 
    UCString& trim(void);
    UCString& trim_left(void);
    UCString& trim_right(void);
 
-   UCString& add_sp(void);
-   UCString& add_nl(void);
+   //UCString& add_sp(void);
+   //UCString& add_nl(void);
    UCString& add_spaces( int n );
    UCString& expand_to( int n );
-
-   UCString& remove_trailing_frac_zeroes(void);
 
    int to_int(void) const;
    bool to_bool(void) const;
 
    const UCString operator+( const UCString& s2 ) const;
-   const UCString operator+( const char *s2 ) const;
    const UCString operator+( const wchar_t *s2 ) const;
    const UCString operator+( wchar_t ch ) const;
 
@@ -265,16 +233,11 @@
 
 
 
- // ***********************************************************************************
- // в отличие от std::base_string, мы определяем два отдельных конструктора для
- // создания объекта из ASCII и unicode-строк. Поэтому UCString, которая хранит UNICODE
- // строку, можно создать прямо из ASCII-строки.
- // ***********************************************************************************
  inline UCString::UCString( const char* s )
  {
   if( s )
    {
-    // Обязательно проверяем, вместится ли исходная строка.
+    // РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏРµРј, РІРјРµСЃС‚РёС‚СЃСЏ Р»Рё РёСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР°.
     LEM_CHECKIT_Z( strlen(s) <= LEM_CSTRING_LEN );
     lem_strncpy( str, s, LEM_CSTRING_LEN );
     str[LEM_CSTRING_LEN]=0;
@@ -285,11 +248,12 @@
   return;
  }
 
+
  inline UCString::UCString( const wchar_t* s )
  {
   if( s )
    {
-    // Обязательно проверяем, вместится ли исходная строка.
+    // РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏРµРј, РІРјРµСЃС‚РёС‚СЃСЏ Р»Рё РёСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР°.
     LEM_CHECKIT_Z( wcslen(s) <= LEM_CSTRING_LEN );
     wcsncpy( str, s, LEM_CSTRING_LEN+1 );
     str[LEM_CSTRING_LEN]=0;
@@ -305,15 +269,6 @@
  {
   len  = s.len;
   hash = s.hash;
-
-//    for( int i=len; i>=0; i-- )
-//     str[i] = s.str[i];
-
-//    const wchar_t *e = str+len, *s2=s.str;
-//    wchar_t *p=str;
-//    while( p!=e )
-//     *p++ = *s++;
-
   wcscpy( str, s.str );
   return;
  }
@@ -354,6 +309,7 @@
  }
 
 
+
  inline UCString& UCString::operator=( const char* s )
  {
   if( s )
@@ -368,6 +324,7 @@
 
   return *this;
  }
+
 
  inline UCString& UCString::operator=( const wchar_t* s )
  {
@@ -396,8 +353,8 @@
  // ****************************************************************
 
  /******************************************************************
-  Переписывание символа в указанной позиции. Если позиция задана на
-  пределами текущей хранимой строки, то ничего не происходит.
+  РџРµСЂРµРїРёСЃС‹РІР°РЅРёРµ СЃРёРјРІРѕР»Р° РІ СѓРєР°Р·Р°РЅРЅРѕР№ РїРѕР·РёС†РёРё. Р•СЃР»Рё РїРѕР·РёС†РёСЏ Р·Р°РґР°РЅР° РЅР°
+  РїСЂРµРґРµР»Р°РјРё С‚РµРєСѓС‰РµР№ С…СЂР°РЅРёРјРѕР№ СЃС‚СЂРѕРєРё, С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РїСЂРѕРёСЃС…РѕРґРёС‚.
  *******************************************************************/
  inline void UCString::set( int i, wchar_t ch )
  {
@@ -411,18 +368,18 @@
  }
 
  /************************************************************************
-  Оператор доступа к элементам строки - символам. При попытке извлечени
-  элемента ЗА пределами строки возвращаем ноль. Прерывания программы
-  такая ситуация делать не должна.
+  РћРїРµСЂР°С‚РѕСЂ РґРѕСЃС‚СѓРїР° Рє СЌР»РµРјРµРЅС‚Р°Рј СЃС‚СЂРѕРєРё - СЃРёРјРІРѕР»Р°Рј. РџСЂРё РїРѕРїС‹С‚РєРµ РёР·РІР»РµС‡РµРЅРё
+  СЌР»РµРјРµРЅС‚Р° Р—Рђ РїСЂРµРґРµР»Р°РјРё СЃС‚СЂРѕРєРё РІРѕР·РІСЂР°С‰Р°РµРј РЅРѕР»СЊ. РџСЂРµСЂС‹РІР°РЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹
+  С‚Р°РєР°СЏ СЃРёС‚СѓР°С†РёСЏ РґРµР»Р°С‚СЊ РЅРµ РґРѕР»Р¶РЅР°.
  ************************************************************************/
  inline wchar_t UCString::operator[]( int i ) const
  { return (i<0 || i>len) ? 0 : str[i]; }
 
  /*****************************************************************
-   Возвращает символ, содержащийся в позиции, отсчитываемой
-   от конца строки. То есть last_char(0) вернет последний
-   символ перед '\0'. При выходе за пределы существующей строки
-   возвращаем '\0'.
+   Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРёРјРІРѕР», СЃРѕРґРµСЂР¶Р°С‰РёР№СЃСЏ РІ РїРѕР·РёС†РёРё, РѕС‚СЃС‡РёС‚С‹РІР°РµРјРѕР№
+   РѕС‚ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё. РўРѕ РµСЃС‚СЊ last_char(0) РІРµСЂРЅРµС‚ РїРѕСЃР»РµРґРЅРёР№
+   СЃРёРјРІРѕР» РїРµСЂРµРґ '\0'. РџСЂРё РІС‹С…РѕРґРµ Р·Р° РїСЂРµРґРµР»С‹ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ СЃС‚СЂРѕРєРё
+   РІРѕР·РІСЂР°С‰Р°РµРј '\0'.
  *****************************************************************/
  inline wchar_t UCString::last_char( int i ) const
  {
@@ -433,7 +390,7 @@
 
 
  // ********************************************
- // Вычисление значения хэш-кода и длины строки
+ // Р’С‹С‡РёСЃР»РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ С…СЌС€-РєРѕРґР° Рё РґР»РёРЅС‹ СЃС‚СЂРѕРєРё
  // ********************************************
  inline void UCString::calc_hash(void)
  {
@@ -458,29 +415,10 @@
   return res;
  }
 
- inline const UCString UCString::operator+( const char *s2 ) const
- {
-  UCString res(*this);
-  lem_strncat( res.ptr(), s2, LEM_CSTRING_LEN );
-  res.ptr()[LEM_CSTRING_LEN]=0;
-  res.calc_hash();
-  return res;
- }
-
  inline const UCString UCString::operator+( const wchar_t *s2 ) const
  {
   UCString res(*this);
   wcsncat( res.ptr(), s2, LEM_CSTRING_LEN );
-  res.ptr()[LEM_CSTRING_LEN]=0;
-  res.calc_hash();
-  return res;
- }
-
-
- inline const UCString operator+( const char *s1, const UCString &s2 )
- {
-  UCString res(s1);
-  wcsncat( res.ptr(), s2.c_str(), LEM_CSTRING_LEN );
   res.ptr()[LEM_CSTRING_LEN]=0;
   res.calc_hash();
   return res;
@@ -528,6 +466,8 @@
   return *this;
  }
 
+
+
  inline UCString& UCString::operator+=( const char *s )
  {
   int l=len, sl=lem_strlen(s);
@@ -537,6 +477,8 @@
   calc_hash();
   return *this;
  }
+
+
 
  inline UCString& UCString::operator+=( const wchar_t *s )
  {
@@ -586,26 +528,8 @@
     return false;
 
   return true;
-
-//  return hash==s2.hash && len==s2.len && !wcscmp( str, s2.str );
-
-/*
-  const wchar_t *p2=s2.str, *e1=str+len;
-  for( const wchar_t *p=str; p!=e1; p++, p2++ )
-   if( *p!=*p2 )
-    return false;
-*/
-
-/*
-  const wchar_t *p2=s2.str;
-  const wchar_t *p=str;
-  for( int i=len-1; i>=0; i-- )
-   if( *p++!=*p2++ )
-    return false;
-*/
-
-//  return true;
  }
+
 
  inline bool UCString::operator==( const char *s2 ) const
  { return lem_eq( str, s2 ); }
@@ -615,9 +539,6 @@
 
  inline bool UCString::operator==( wchar_t ch ) const
  { return *str==ch && str[1]=='\0'; }
-
- inline bool operator==( const char *s1, const UCString& s2 )
- { return lem_eq( s2.c_str(), s1 ); }
 
  inline bool operator==( const wchar_t *s1, const UCString& s2 )
  { return lem_eq( s2.c_str(), s1 ); }
@@ -630,12 +551,6 @@
 
  inline bool UCString::operator!=( const UCString &s2 ) const
  {
-/*
-  return hash!=s2.hash ||
-          len!=s2.len ||
-          lem_neq_nn( str, s2.str );
-*/
-
   if( hash!=s2.hash || len!=s2.len )
    return true;
 
@@ -646,17 +561,11 @@
   return false;
  }
 
- inline bool UCString::operator!=( const char *s2 ) const
- { return lem_neq( str, s2 ); }
-
  inline bool UCString::operator!=( const wchar_t *s2 ) const
  { return lem_neq( str, s2 ); }
 
  inline bool UCString::operator!=( wchar_t ch ) const
  { return str[0]!=ch || str[1]!='\0'; }
-
- inline bool operator!=( const char *s1, const UCString& s2 )
- { return lem_neq( s2.c_str(), s1 ); }
 
  inline bool operator!=( const wchar_t *s1, const UCString& s2 )
  { return lem_neq( s2.c_str(), s1 ); }
@@ -671,9 +580,6 @@
   return /*len<s2.len ||*/ wcscmp( str, s2.c_str() )>0;
  }
 
- inline bool UCString::operator>( const char *s2 ) const
- { return lem_gt( str, s2 ); }
-
  inline bool UCString::operator>( const wchar_t *s2 ) const
  { return lem_gt( str, s2 ); }
 
@@ -682,9 +588,6 @@
   wchar_t s2[2]={ ch, '\0' };
   return lem_gt( str, s2 );
  }
-
- inline bool operator>( const char *s1, const UCString& s2 )
- { return lem_gt( s2.c_str(), s1 ); }
 
  inline bool operator>( const wchar_t *s1, const UCString& s2 )
  { return lem_gt( s2.c_str(), s1 ); }
@@ -702,9 +605,6 @@
   return /*len<s2.len ||*/ wcscmp( str, s2.c_str() )>=0;
  }
 
- inline bool UCString::operator>=( const char *s2 ) const
- { return lem_ge( str, s2 ); }
-
  inline bool UCString::operator>=( const wchar_t *s2 ) const
  { return lem_ge( str, s2 ); }
 
@@ -713,9 +613,6 @@
   wchar_t s2[2]={ ch, '\0' };
   return lem_ge( str, s2 );
  }
-
- inline bool operator>=( const char *s1, const UCString& s2 )
- { return lem_ge( s2.c_str(), s1 ); }
 
  inline bool operator>=( const wchar_t *s1, const UCString& s2 )
  { return lem_ge( s2.c_str(), s1 ); }
@@ -733,9 +630,6 @@
   return /*len>s2.len ||*/ wcscmp( str, s2.c_str() )<0;
  }
 
- inline bool UCString::operator<( const char *s2 ) const
- { return lem_lt( str, s2 ); }
-
  inline bool UCString::operator<( const wchar_t *s2 ) const
  { return lem_lt( str, s2 ); }
 
@@ -748,8 +642,8 @@
  inline bool operator<( const wchar_t *s1, const UCString& s2 )
  { return lem_lt( s2.c_str(), s1 ); }
 
- inline bool operator<( const char *s1, const UCString& s2 )
- { return lem_lt( s2.c_str(), s1 ); }
+ //inline bool operator<( const char *s1, const UCString& s2 )
+ //{ return lem_lt( s2.c_str(), s1 ); }
 
  inline bool operator<( wchar_t ch, const UCString& s )
  {
@@ -764,9 +658,6 @@
   return /*len>s2.len ||*/ wcscmp( str, s2.c_str() )<=0;
  }
 
- inline bool UCString::operator<=( const char *s2 ) const
- { return lem_le( str, s2 ); }
-
  inline bool UCString::operator<=( const wchar_t *s2 ) const
  { return lem_le( str, s2 ); }
 
@@ -775,9 +666,6 @@
   wchar_t s2[2]={ ch, '\0' };
   return lem_le( str, s2 );
  }
-
- inline bool operator<=( const char *s1, const UCString& s2 )
- { return lem_le( s2.c_str(), s1 ); }
 
  inline bool operator<=( const wchar_t *s1, const UCString& s2 )
  { return lem_le( s2.c_str(), s1 ); }
@@ -792,31 +680,28 @@
 
 
  /***********************************************************************
-  Определяет число появлений символа ch в строке s. Функция может
-  использоваться для определения самого факта появления символа в строке
-  так как отсутствие таковых дает нулевой результат (то есть 'false'!).
+  РћРїСЂРµРґРµР»СЏРµС‚ С‡РёСЃР»Рѕ РїРѕСЏРІР»РµРЅРёР№ СЃРёРјРІРѕР»Р° ch РІ СЃС‚СЂРѕРєРµ s. Р¤СѓРЅРєС†РёСЏ РјРѕР¶РµС‚
+  РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ СЃР°РјРѕРіРѕ С„Р°РєС‚Р° РїРѕСЏРІР»РµРЅРёСЏ СЃРёРјРІРѕР»Р° РІ СЃС‚СЂРѕРєРµ
+  С‚Р°Рє РєР°Рє РѕС‚СЃСѓС‚СЃС‚РІРёРµ С‚Р°РєРѕРІС‹С… РґР°РµС‚ РЅСѓР»РµРІРѕР№ СЂРµР·СѓР»СЊС‚Р°С‚ (С‚Рѕ РµСЃС‚СЊ 'false'!).
  ************************************************************************/
  inline int UCString::count( wchar_t ch ) const
  { return lem_nentry( str, ch ); }
 
  /****************************************************************************
-   Находит n-ое (по умолчанию первое) вхождение символа ch в строку-аргумент s.
-   Если символ не найден, или число его вхождений менее nentry, то
-   возвращается -1.
+   РќР°С…РѕРґРёС‚ n-РѕРµ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРµСЂРІРѕРµ) РІС…РѕР¶РґРµРЅРёРµ СЃРёРјРІРѕР»Р° ch РІ СЃС‚СЂРѕРєСѓ-Р°СЂРіСѓРјРµРЅС‚ s.
+   Р•СЃР»Рё СЃРёРјРІРѕР» РЅРµ РЅР°Р№РґРµРЅ, РёР»Рё С‡РёСЃР»Рѕ РµРіРѕ РІС…РѕР¶РґРµРЅРёР№ РјРµРЅРµРµ nentry, С‚Рѕ
+   РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ -1.
  ****************************************************************************/
  inline int UCString::search( wchar_t ch, int nentry ) const
  { return lem_find( str, ch, nentry ); }
 
  /****************************************************************************
-  Определяет положение nentry-го вхождения подстроки [f] в строку [s].
-  Возвращает индекс первого совпавшего символа. Если подстрока не
-  обнаружена, или число ее появлений в строке менее nentry, то возвращаем -1.
+  РћРїСЂРµРґРµР»СЏРµС‚ РїРѕР»РѕР¶РµРЅРёРµ nentry-РіРѕ РІС…РѕР¶РґРµРЅРёСЏ РїРѕРґСЃС‚СЂРѕРєРё [f] РІ СЃС‚СЂРѕРєСѓ [s].
+  Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ СЃРѕРІРїР°РІС€РµРіРѕ СЃРёРјРІРѕР»Р°. Р•СЃР»Рё РїРѕРґСЃС‚СЂРѕРєР° РЅРµ
+  РѕР±РЅР°СЂСѓР¶РµРЅР°, РёР»Рё С‡РёСЃР»Рѕ РµРµ РїРѕСЏРІР»РµРЅРёР№ РІ СЃС‚СЂРѕРєРµ РјРµРЅРµРµ nentry, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј -1.
  ****************************************************************************/
  inline int UCString::search( const UCString &f, int nentry ) const
  { return lem_find( str, f.c_str(), nentry ); }
-
- inline int UCString::search( const char* f, int nentry ) const
- { return lem_find( str, f, nentry ); }
 
  inline int UCString::search( const wchar_t* f, int nentry ) const
  { return lem_find( str, f, nentry ); }
@@ -833,7 +718,6 @@
  extern const UCString dressup( const UCString &s, wchar_t Bound );
  extern const UCString dress_quotes( const UCString &s );
  extern const UCString dress_apostrophes( const UCString &s );
- extern const UCString dress_spaces( const UCString &s );
  extern const UCString subst(
                              const UCString &s,
                              const UCString &mask,
@@ -845,7 +729,6 @@
 
  extern const UCString to_lower( const UCString &s );
  extern const UCString to_upper( const UCString &s );
- extern const UCString cut_final_commas( const UCString &s );
  extern const UCString to_Aa( const UCString &s );
 
 
@@ -868,12 +751,12 @@
 
 
  // ***********************************************************
- // Преобразование всех символов строки к верхнему регистру.
+ // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ СЃС‚СЂРѕРєРё Рє РІРµСЂС…РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ.
  // ***********************************************************
  inline UCString& UCString::to_upper(void)
  {
   lem::to_upper(str);
-  // Содержимое строки изменилось - пересчитываем хэш-код.
+  // РЎРѕРґРµСЂР¶РёРјРѕРµ СЃС‚СЂРѕРєРё РёР·РјРµРЅРёР»РѕСЃСЊ - РїРµСЂРµСЃС‡РёС‚С‹РІР°РµРј С…СЌС€-РєРѕРґ.
   calc_hash();
 
   return *this;
@@ -881,7 +764,7 @@
 
 
  // ***********************************************************
- // Преобразование всех символов строки к нижнему регистру.
+ // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ СЃС‚СЂРѕРєРё Рє РЅРёР¶РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ.
  // ***********************************************************
  inline UCString& UCString::to_lower(void)
  {
@@ -905,10 +788,10 @@
 
 
  // ************************************************************
- // Строка text содержит подстроку x, причем x должна быть
- // с самого начала строки text.
+ // РЎС‚СЂРѕРєР° text СЃРѕРґРµСЂР¶РёС‚ РїРѕРґСЃС‚СЂРѕРєСѓ x, РїСЂРёС‡РµРј x РґРѕР»Р¶РЅР° Р±С‹С‚СЊ
+ // СЃ СЃР°РјРѕРіРѕ РЅР°С‡Р°Р»Р° СЃС‚СЂРѕРєРё text.
  //
- // Например:
+ // РќР°РїСЂРёРјРµСЂ:
  //
  //       text =     ABCDEFG
  //       x    =     ABC
@@ -939,23 +822,6 @@
   return lem::lem_eqi( str, x.str );
  }
 
-
-
- inline bool UCString::eq_beg( const char *x ) const
- {
-  const int lx = lem_strlen(x);
-  if( lx>len )
-   return false;
-
-  if( lx==len )
-   return operator==(x);
-
-  for( int i=0; i<lx; i++ )
-   if( x[i]!=static_cast<char>(str[i]) )
-    return false;
-
-  return true;
- }
 
  inline bool UCString::eq_beg( const wchar_t *x ) const
  {

@@ -311,12 +311,12 @@ void PrefixEntrySearcher::Save_SQL( const lem::Path &filename, const SQL_Product
      const int keyi = *k;
      if( key0==-1 )
       {
-       str_ies.Add_Dirty( lem::to_str(keyi).c_str() );
+       str_ies += lem::to_str(keyi).c_str();
       }
      else
       {
-       str_ies.Add_Dirty( ' ' );
-       str_ies.Add_Dirty( lem::to_str(keyi-key0).c_str() );
+       str_ies += ' ';
+       str_ies += lem::to_str(keyi-key0).c_str();
       }
 
      key0 = keyi;

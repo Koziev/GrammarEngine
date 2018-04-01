@@ -8,22 +8,20 @@ wchar_t LexiconStorage::CollocationDelimiter = L'\x1F';
 wchar_t LexiconStorage::WORD_SET_DELIMITER = L'\x1F';
 
 
-// Слова из списка words объединяем в одну строку таким образом, чтобы их можно было сохранить в БД, и
-// потом снова разбить на слова.
+// РЎР»РѕРІР° РёР· СЃРїРёСЃРєР° words РѕР±СЉРµРґРёРЅСЏРµРј РІ РѕРґРЅСѓ СЃС‚СЂРѕРєСѓ С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј, С‡С‚РѕР±С‹ РёС… РјРѕР¶РЅРѕ Р±С‹Р»Рѕ СЃРѕС…СЂР°РЅРёС‚СЊ РІ Р‘Р”, Рё
+// РїРѕС‚РѕРј СЃРЅРѕРІР° СЂР°Р·Р±РёС‚СЊ РЅР° СЃР»РѕРІР°.
 void LexiconStorage::MergeCollocationWords( const lem::MCollect<lem::UCString> &words, lem::UFString &collocation )
 {
  LEM_CHECKIT_Z( !words.empty() );
 
  collocation.clear();
- collocation.Add_Dirty( words.front().c_str() );
+ collocation += words.front().c_str();
 
  for( lem::Container::size_type i=1; i<words.size(); ++i )
   {
-   collocation.Add_Dirty( CollocationDelimiter );
-   collocation.Add_Dirty( words[i].c_str() );
+   collocation += CollocationDelimiter;
+   collocation += words[i].c_str();
   }
-
- collocation.calc_hash();
 
  LEM_CHECKIT_Z( !collocation.empty() );
 
@@ -64,14 +62,13 @@ void LexiconStorage::SerializeCoords( const Solarix::CP_Array & sorted_coords, l
 {
  for( lem::Container::size_type i=0; i<sorted_coords.size(); ++i )
   {
-   str_coords.Add_Dirty( ' ' );
-   str_coords.Add_Dirty( lem::to_str( sorted_coords[i].GetCoord().GetIndex() ).c_str() );
-   str_coords.Add_Dirty( ':' );
-   str_coords.Add_Dirty( lem::to_str( sorted_coords[i].GetState() ).c_str() );
+   str_coords += ' ';
+   str_coords += lem::to_str( sorted_coords[i].GetCoord().GetIndex() ).c_str();
+   str_coords += ':';
+   str_coords += lem::to_str( sorted_coords[i].GetState() ).c_str();
   }
 
- str_coords.Add_Dirty( ' ' );
- str_coords.calc_hash();
+ str_coords += ' ';
 
  return;
 }

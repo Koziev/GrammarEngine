@@ -510,7 +510,6 @@ copy $(LEM_PATH)\lib64\sqlited.dll $(OutDir)
     <ClCompile Include="..\..\..\..\tools\Unicode\cp_recodings.cpp" />
     <ClCompile Include="..\..\..\..\tools\Unicode\cp_sgml.cpp" />
     <ClCompile Include="..\..\..\..\tools\Unicode\cp_unicode_data.cpp" />
-    <ClCompile Include="..\..\..\..\tools\unicode\transliterator.cpp" />
     <ClCompile Include="..\..\..\..\tools\unicode\ucs4_to_utf8.cpp" />
     <ClCompile Include="..\..\..\..\tools\unicode\Ucs4ToWideString.cpp" />
     <ClCompile Include="..\..\..\..\tools\unicode\utf_converters.cpp" />

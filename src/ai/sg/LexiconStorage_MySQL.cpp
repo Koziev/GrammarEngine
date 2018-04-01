@@ -148,7 +148,7 @@ LS_ResultSet* LexiconStorage_MySQL::ListByQuery( const lem::FString &Select )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -241,7 +241,7 @@ int LexiconStorage_MySQL::GetAuxForm( int ekey, int iform, int aux_type, lem::UF
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -403,7 +403,7 @@ int LexiconStorage_MySQL::GetAuxEntryData( int ekey, int aux_type, lem::UFString
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -521,7 +521,7 @@ int LexiconStorage_MySQL::FindPhrase( const lem::UFString &text, bool ignore_cas
    lem::Process::CritSecLocker guard(&c->cs);
    #endif
 
-   std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+   std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
    int ok = mysql_query( c->mysql, Select.c_str() );
    if( ok==0 )
@@ -554,7 +554,7 @@ int LexiconStorage_MySQL::FindPhrase( const lem::UFString &text, bool ignore_cas
    lem::Process::CritSecLocker guard(&c->cs);
    #endif
 
-   std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+   std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
    int ok = mysql_query( c->mysql, Select.c_str() );
    if( ok==0 )
@@ -621,7 +621,7 @@ bool LexiconStorage_MySQL::GetPhrase( int id_phrase, SG_Phrase &phrase )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -752,7 +752,7 @@ bool LexiconStorage_MySQL::GetPhraseNote( int id, SG_PhraseNote &note )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -794,7 +794,7 @@ int LexiconStorage_MySQL::GetPhraseNote( int id_entry, int note_type, SG_PhraseN
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -842,7 +842,7 @@ int LexiconStorage_MySQL::FindPhraseNote( const lem::UFString &text, int type, i
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -896,7 +896,7 @@ int LexiconStorage_MySQL::GetCplxLeft( const lem::UCString &headword, CplxLeft &
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -1082,7 +1082,7 @@ int LexiconStorage_MySQL::FindPartOfSpeech( const lem::UCString &name )
    lem::Process::CritSecLocker guard(&c->cs);
    #endif
 
-   std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+   std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
    int ok = mysql_query( c->mysql, Select.c_str() );
    if( ok==0 )
@@ -1289,7 +1289,7 @@ bool LexiconStorage_MySQL::GetPartOfSpeech( int id, SG_Class &cls )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -1392,7 +1392,7 @@ bool LexiconStorage_MySQL::GetCoord( int id, GramCoord &coord )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1499,7 +1499,7 @@ int LexiconStorage_MySQL::FindCoord( const lem::UCString &name )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -1669,7 +1669,7 @@ void LexiconStorage_MySQL::LoadAllLanguages(void)
    lem::Process::CritSecLocker guard(&c->cs);
    #endif
 
-   std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+   std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
    int ok = mysql_query( c->mysql, Select.c_str() );
    if( ok==0 )
@@ -1729,7 +1729,7 @@ int LexiconStorage_MySQL::QueryInt( const lem::FString & sql )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, sql.c_str() );
  if( ok==0 )
@@ -1805,7 +1805,7 @@ bool LexiconStorage_MySQL::GetLanguage( int id, SG_Language &lang )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -2026,7 +2026,7 @@ int LexiconStorage_MySQL::FindCriterion( const lem::UCString & name )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  return lem::mysql_select_int( c->mysql, lem::to_utf8(mem.string()).c_str() );
 }
@@ -2050,7 +2050,7 @@ Criterion* LexiconStorage_MySQL::GetCriterion( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2125,7 +2125,7 @@ LA_CropRule* LexiconStorage_MySQL::GetPreprocessorCropRule( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2282,7 +2282,7 @@ LA_RecognitionRule* LexiconStorage_MySQL::GetRecognitionRule( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2429,7 +2429,7 @@ LA_PhoneticRule* LexiconStorage_MySQL::GetPhoneticRule( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2546,7 +2546,7 @@ WordEntrySetItem* LexiconStorage_MySQL::GetWordEntrySet( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2634,7 +2634,7 @@ LA_UnbreakableRule* LexiconStorage_MySQL::GetUnbreakableRule( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2809,7 +2809,7 @@ std::pair<SynPatternTreeNode*,lem::UCString> LexiconStorage_MySQL::GetSynPattern
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -2862,7 +2862,7 @@ void LexiconStorage_MySQL::Execute( const lem::FString & sql )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> tx(cnx->GetTx());
+ std::unique_ptr<TransactionGuard> tx(cnx->GetTx());
  cnx->Execute(sql);
  return;
 }
@@ -2881,7 +2881,7 @@ int LexiconStorage_MySQL::ExecuteAndReturnId( const lem::FString & sql )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> tx(cnx->GetTx());
+ std::unique_ptr<TransactionGuard> tx(cnx->GetTx());
 
  cnx->Execute(sql);
  const int id = cnx->GetLastId();
@@ -2916,7 +2916,7 @@ TrFunctions* LexiconStorage_MySQL::GetFunctions( const wchar_t *Marker )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -3053,7 +3053,7 @@ bool LexiconStorage_MySQL::GetSourceFilename( int id_filename, lem::Path &filepa
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  bool ret_success=false;
 
@@ -3094,7 +3094,7 @@ bool LexiconStorage_MySQL::GetSourceLocation( int id_location, int &id_file, int
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  bool ret_success=false;
 
@@ -3263,7 +3263,7 @@ SG_DeclensionTable* LexiconStorage_MySQL::GetParadigma( int id )
 
  SG_DeclensionTable *p = NULL;
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, sql1.c_str() );
  if( ok==0 )
@@ -3555,7 +3555,7 @@ WordSetItem* LexiconStorage_MySQL::GetWordSet( int id )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )

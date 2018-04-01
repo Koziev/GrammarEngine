@@ -447,9 +447,9 @@ std::pair<bool/*processed*/,bool/*error*/> ThesaurusNotesProcessor::ProcessPhras
            word.to_upper();
 
            if( !txt.empty() )
-            txt.Add_Dirty(segmentation_delimiter);
+            txt += segmentation_delimiter;
 
-           txt.Add_Dirty( word.c_str() );  
+           txt += word.c_str();
           }  
 
          // Запоминаем результат токенизации в TNOTES
@@ -512,11 +512,10 @@ std::pair<bool/*processed*/,bool/*error*/> ThesaurusNotesProcessor::ProcessPhras
            const lem::uint8_t byte = mem.get_Block()[q];
            int hi4 = (byte>>4) & 0x0f;
            int lo4 = byte & 0x0f;
-           txt.Add_Dirty( lem::get_unumerique(hi4) );
-           txt.Add_Dirty( lem::get_unumerique(lo4) );
+           txt += lem::get_unumerique(hi4);
+           txt += lem::get_unumerique(lo4);
           }
 
-         txt.calc_hash();
          sg.GetStorage().AddPhraseNote( te_id, tn_type, txt );
          processed=true;
          syntax_ok=true; 

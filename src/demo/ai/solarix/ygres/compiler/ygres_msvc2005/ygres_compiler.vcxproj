@@ -134,7 +134,7 @@
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;SOL_LOADTXT;SOLARIX_PRO;SOL_LOADBIN;SOL_SAVETXT;SOL_COMPILER;SOL_SAVEBIN;BOOST_ALL_NO_LIB;SOL_NO_NGRAMS;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;SOL_LOADTXT;SOLARIX_PRO;SOL_LOADBIN;SOL_SAVETXT;SOL_COMPILER;SOL_SAVEBIN;SOL_NO_NGRAMS;BOOST_THREAD_BUILD_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -271,7 +271,6 @@
     <ClCompile Include="..\..\..\..\..\..\io\io_tty.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\lem_logfile.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\oformatter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\tools\unicode\transliterator.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_error.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Io\Iridium\Ir_macro.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Io\Iridium\Ir_macro_group.cpp" />
@@ -293,7 +292,6 @@
     <ClCompile Include="..\..\..\..\..\..\io\cfg_parser\cfg_ini_parser.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_base_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_char_reader.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_translit_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf8_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\io\xml\xp_iterator.cpp" />

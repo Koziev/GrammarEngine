@@ -13,34 +13,30 @@
 // from the file!
 //
 // Content:
-// Служебные операции над файлами и файловыми путями. Так как к огромному
-// сожалению BOOST-библиотека Filesystem не поддерживает операции с UNICODE
-// именами файлов (по соображениям платформонезависимости), приходится
-// строить и использовать свою параллельную реализацию аналогичных классов.
+// РЎР»СѓР¶РµР±РЅС‹Рµ РѕРїРµСЂР°С†РёРё РЅР°Рґ С„Р°Р№Р»Р°РјРё Рё С„Р°Р№Р»РѕРІС‹РјРё РїСѓС‚СЏРјРё. РўР°Рє РєР°Рє Рє РѕРіСЂРѕРјРЅРѕРјСѓ
+// СЃРѕР¶Р°Р»РµРЅРёСЋ BOOST-Р±РёР±Р»РёРѕС‚РµРєР° Filesystem РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РѕРїРµСЂР°С†РёРё СЃ UNICODE
+// РёРјРµРЅР°РјРё С„Р°Р№Р»РѕРІ (РїРѕ СЃРѕРѕР±СЂР°Р¶РµРЅРёСЏРј РїР»Р°С‚С„РѕСЂРјРѕРЅРµР·Р°РІРёСЃРёРјРѕСЃС‚Рё), РїСЂРёС…РѕРґРёС‚СЃСЏ
+// СЃС‚СЂРѕРёС‚СЊ Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРІРѕСЋ РїР°СЂР°Р»Р»РµР»СЊРЅСѓСЋ СЂРµР°Р»РёР·Р°С†РёСЋ Р°РЅР°Р»РѕРіРёС‡РЅС‹С… РєР»Р°СЃСЃРѕРІ.
 //
-// 24.02.2006 - часть static-функций класса Path переделана в обычные
-//              функции-члены. Также - ряд файловых операций реализована
-//              через WinAPI функции (для эффективности).
+// 24.02.2006 - С‡Р°СЃС‚СЊ static-С„СѓРЅРєС†РёР№ РєР»Р°СЃСЃР° Path РїРµСЂРµРґРµР»Р°РЅР° РІ РѕР±С‹С‡РЅС‹Рµ
+//              С„СѓРЅРєС†РёРё-С‡Р»РµРЅС‹. РўР°РєР¶Рµ - СЂСЏРґ С„Р°Р№Р»РѕРІС‹С… РѕРїРµСЂР°С†РёР№ СЂРµР°Р»РёР·РѕРІР°РЅР°
+//              С‡РµСЂРµР· WinAPI С„СѓРЅРєС†РёРё (РґР»СЏ СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё).
 //
-// 04.09.2007 - новый метод IsFolderEmpty() определяет наличие в каталоге файлов
-//              или подкаталогов.
+// 04.09.2007 - РЅРѕРІС‹Р№ РјРµС‚РѕРґ IsFolderEmpty() РѕРїСЂРµРґРµР»СЏРµС‚ РЅР°Р»РёС‡РёРµ РІ РєР°С‚Р°Р»РѕРіРµ С„Р°Р№Р»РѕРІ
+//              РёР»Рё РїРѕРґРєР°С‚Р°Р»РѕРіРѕРІ.
 //
-// 06.10.2007 - добавлен метод GetDiskFreeSpace
-// 15.11.2007 - добавлен метод GetAttr 
-// 21.03.2008 - добавлена привязка к wxFileName
-// 21.03.2008 - добавлена процедура swap
-// 21.03.2008 - добавлена конверсия с boost::filesystem::path/wpath
+// 06.10.2007 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ GetDiskFreeSpace
+// 15.11.2007 - РґРѕР±Р°РІР»РµРЅ РјРµС‚РѕРґ GetAttr 
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РїСЂРёРІСЏР·РєР° Рє wxFileName
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РїСЂРѕС†РµРґСѓСЂР° swap
+// 21.03.2008 - РґРѕР±Р°РІР»РµРЅР° РєРѕРЅРІРµСЂСЃРёСЏ СЃ boost::filesystem::path/wpath
 // -----------------------------------------------------------------------------
 //
 // CD->01.05.1995
-// LC->06.01.2010
+// LC->30.03.2018
 // --------------
 
 #include <lem/config.h>
-
-#if defined LEM_MFC
- #include <afxwin.h>
-#endif
 
 #if defined LEM_BSD
  #include <sys/param.h>
@@ -57,11 +53,7 @@
 #include <cstdio>
 #include <vector>
 #include <lem/fstring.h>
-#include <lem/zeroed.h>
-
-#if defined LEM_WXWIDGETS
- #include <wx/filename.h>
-#endif 
+//#include <lem/zeroed.h>
 
 #if defined LEM_USE_BOOST_FILESYSTEM
  #include <boost/filesystem/path.hpp>
@@ -77,68 +69,16 @@
   #define uch wchar_t
 
   // *********************************************
-  // Имена виртуальных потоков ввода-вывода.
+  // РРјРµРЅР° РІРёСЂС‚СѓР°Р»СЊРЅС‹С… РїРѕС‚РѕРєРѕРІ РІРІРѕРґР°-РІС‹РІРѕРґР°.
   // *********************************************
-  extern const char NULL_DEVICE[]; // Нуль-драйвер
-  extern const char TTY_DEVICE[];  // Терминал
-  extern const char ERR_DEVICE[];  // Сообщения об ошибках
-  extern const char PRN_DEVICE[];  // Принтер
-  extern const char KBD_DEVICE[];  // Клавиатура
-  extern const char CD_DEVICE[];   // Компакт-диск
-
-  // Частично объявления выдраны из хидера <system.h> из проекта HPACK.
-  // Привожу заголовок этого файла с выходными данными.
-  /****************************************************************************
-  *                                                                           *
-  *       HPACK Multi-System Archiver                                         *
-  *       ===========================                                         *
-  *                                                                           *
-  *      System-Specific Information Header                                   *
-  *       SYSTEM.H  Updated 22/09/92                                          *
-  *                                                                           *
-  * This program is protected by copyright and as such any use or copying of  *
-  *  this code for your own purposes directly or indirectly is highly uncool  *
-  *       and if you do so there will be....trubble.                          *
-  *     And remember: We know where your kids go to school.                   *
-  *                                                                           *
-  *  Copyright 1989 - 1992  Peter C.Gutmann.  All rights reserved             *
-  *                                                                           *
-  ****************************************************************************/
+  extern const char NULL_DEVICE[]; // РќСѓР»СЊ-РґСЂР°Р№РІРµСЂ
+  extern const char TTY_DEVICE[];  // РўРµСЂРјРёРЅР°Р»
+  extern const char ERR_DEVICE[];  // РЎРѕРѕР±С‰РµРЅРёСЏ РѕР± РѕС€РёР±РєР°С…
+  extern const char PRN_DEVICE[];  // РџСЂРёРЅС‚РµСЂ
+  extern const char KBD_DEVICE[];  // РљР»Р°РІРёР°С‚СѓСЂР°
+  extern const char CD_DEVICE[];   // РљРѕРјРїР°РєС‚-РґРёСЃРє
 
   extern size_t get_file_size( FILE *file );
-
-/*
-  extern void file_name_split(
-                              const char *pathP,
-                              FString &driveP,
-                              FString &dirP,
-                              FString &nameP,
-                              FString &extP
-                             );
-
-  extern void file_name_split(
-                              const uch *pathP,
-                              UFString &driveP,
-                              UFString &dirP,
-                              UFString &nameP,
-                              UFString &extP
-                             );
-
-  extern const FString file_name_merge(
-                                       const FString &driveP,
-                                       const FString &dirP,
-                                       const FString &nameP,
-                                       const FString &extP
-                                      );
-
-  extern const UFString file_name_merge(
-                                        const UFString &drive,
-                                        const UFString &dir,
-                                        const UFString &name,
-                                        const UFString &ext
-                                       );
-*/
-
 
   extern bool is_binary_file( FILE *File );
 
@@ -146,13 +86,13 @@
 
   extern FILE *fopen( const uch *filename, const char *mode );
 
-  extern long get_file_time( FILE *file );
-  extern long get_file_change_time( const uch *filename );
+  //extern long get_file_time( FILE *file );
+  //extern long get_file_change_time( const uch *filename );
 
   //extern bool is_correct_path_uchar( uch ch );
 
-  extern void concatenate_files( const uch *f1, const uch *f2 );
-  extern void concatenate_files( const char *f1, const char *f2 );
+  //extern void concatenate_files( const uch *f1, const uch *f2 );
+  //extern void concatenate_files( const char *f1, const char *f2 );
 
 
   // ********************************************************
@@ -160,6 +100,7 @@
   // call of fclose(NULL) causes "Segmentation Fault". Use
   // do_fclose instead of direct invokaton of fclose.
   // ********************************************************
+/*
   inline void do_fclose( FILE *file )
   {
    #if defined LEM_GNUC
@@ -169,6 +110,7 @@
     fclose(file);
    #endif
   }
+*/
 
  /****************************************************************************
  *                                                                           *
@@ -206,7 +148,7 @@
   /* Whether spaces are legal in filenames */
   #define LEM_PATH_SPACE_OK  true
 
-  // Неприемлимые символы в файловых путях.
+  // РќРµРїСЂРёРµРјР»РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ С„Р°Р№Р»РѕРІС‹С… РїСѓС‚СЏС….
   #define LEM_PATH_BAD_CHARS   ":"
   #define SOL_PATH_BAD_CHARS   ":"
 
@@ -255,7 +197,7 @@
   /* Whether spaces are legal in filenames */
   #define LEM_PATH_SPACE_OK false
 
-  // Неприемлимые символы в файловых путях.
+  // РќРµРїСЂРёРµРјР»РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ С„Р°Р№Р»РѕРІС‹С… РїСѓС‚СЏС….
   #define LEM_PATH_BAD_CHARS  " \"*+,/:;<=>?[\\]|"
 
   // Current directory name
@@ -310,7 +252,7 @@
    /* Whether spaces are legal in filenames */
    #define LEM_PATH_SPACE_OK true
 
-   // Неприемлимые символы в файловых путях.
+   // РќРµРїСЂРёРµРјР»РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ С„Р°Р№Р»РѕРІС‹С… РїСѓС‚СЏС….
    #define LEM_PATH_BAD_CHARS  " \"*+,:;<=>?[\\]|"
 
    // Current directory name
@@ -330,6 +272,7 @@
  #undef uch
 
   class Stream;
+
 
   struct IDirTraverser
   {
@@ -356,6 +299,8 @@
   };
   #endif
 
+
+/*
   struct PathAttr
   {
    lem::zbool hidden;
@@ -363,17 +308,18 @@
    lem::zbool system;
    lem::zbool temp;
   };
+*/
 
   // *********************************************************************************
-  // Класс - аналог Path в .NET, инкапсулирует операции с именами файлов (точнее -
-  // с путями файловой системы). Также предоставляет значительное количество 
-  // расширенных возможностей по работе с каталогами, файлами и т.д.
+  // РљР»Р°СЃСЃ - Р°РЅР°Р»РѕРі Path РІ .NET, РёРЅРєР°РїСЃСѓР»РёСЂСѓРµС‚ РѕРїРµСЂР°С†РёРё СЃ РёРјРµРЅР°РјРё С„Р°Р№Р»РѕРІ (С‚РѕС‡РЅРµРµ -
+  // СЃ РїСѓС‚СЏРјРё С„Р°Р№Р»РѕРІРѕР№ СЃРёСЃС‚РµРјС‹). РўР°РєР¶Рµ РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ Р·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ 
+  // СЂР°СЃС€РёСЂРµРЅРЅС‹С… РІРѕР·РјРѕР¶РЅРѕСЃС‚РµР№ РїРѕ СЂР°Р±РѕС‚Рµ СЃ РєР°С‚Р°Р»РѕРіР°РјРё, С„Р°Р№Р»Р°РјРё Рё С‚.Рґ.
   // *********************************************************************************
   class Path
   {
    private:
-    UFString uname; // если имя задано в UNICODE
-    FString name;   // имя в ASCII, возможно - в системной кодовой странице
+    UFString uname; // РµСЃР»Рё РёРјСЏ Р·Р°РґР°РЅРѕ РІ UNICODE
+    FString name;   // РёРјСЏ РІ ASCII, РІРѕР·РјРѕР¶РЅРѕ - РІ СЃРёСЃС‚РµРјРЅРѕР№ РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†Рµ
 
     #if defined LEM_UNIX
     void PurgeFolderPosix(void) const;
@@ -394,11 +340,11 @@
      #error 
      #endif
 
-     typedef void(*EventHandler)( int message, void* data );
+     //typedef void(*EventHandler)( int message, void* data );
 
    private:
-    static std::vector< std::pair<EventHandler,void*> > cd_event; // для уведомлений о событиях привода CDROM
-    static std::vector< std::pair<EventHandler,void*> > filemon_event; // для уведомлений о событиях в файловой системе
+    //static std::vector< std::pair<EventHandler,void*> > cd_event; // РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёР№ Рѕ СЃРѕР±С‹С‚РёСЏС… РїСЂРёРІРѕРґР° CDROM
+    //static std::vector< std::pair<EventHandler,void*> > filemon_event; // РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёР№ Рѕ СЃРѕР±С‹С‚РёСЏС… РІ С„Р°Р№Р»РѕРІРѕР№ СЃРёСЃС‚РµРјРµ
 
    public:
     Path(void) {}
@@ -416,29 +362,7 @@
     Path( const char *Name, const wchar_t *UName )
      : uname(UName), name(Name) {}
 
-    #if defined LEM_DOT_NET
-    explicit Path( System::String *s );
-    explicit Path( System::IO::Path *p );
-    #endif
-
-    #if defined LEM_VCL 
-//    explicit Path( const AnsiString& Name ) : name(Name.c_str()) {}
-
-    #if defined LEM_CODEGEAR
-//    explicit Path( const WideString& UName ) : uname( UName.operator wchar_t*() ) {}
-    #else
-//    explicit Path( const WideString& UName ) : uname( (const wchar_t*)UName) {}
-    #endif
-
-    #endif
-
-    #if defined LEM_WXWIDGETS
-    explicit Path( const wxFileName &x );
-    void operator=( const wxFileName &x );
-    explicit Path( const wxString &x );
-    void operator=( const wxString &x );
-    #endif
-  
+/* 
     #if defined LEM_USE_BOOST_FILESYSTEM
      explicit Path( const boost::filesystem::path &p );
      void operator=( const boost::filesystem::path &p );
@@ -447,6 +371,7 @@
      void operator=( const boost::filesystem::wpath &p );
      #endif
     #endif
+*/
 
     inline void operator=( const Path &x )
     {
@@ -456,36 +381,33 @@
 
     bool operator==( const Path &x ) const;
     bool operator!=( const Path &x ) const;
-    bool operator>( const Path &x ) const;
-    bool operator<( const Path &x ) const;
+    //bool operator>( const Path &x ) const;
+    //bool operator<( const Path &x ) const;
 
-    // Сериализация в виртуальный поток.
+    // РЎРµСЂРёР°Р»РёР·Р°С†РёСЏ РІ РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РїРѕС‚РѕРє.
     void SaveBin( lem::Stream &bin ) const;
     void LoadBin( lem::Stream &bin );
 
-    // Вернет true, если путь представлен только в ASCII, а UNICODE не задан
+    // Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅ С‚РѕР»СЊРєРѕ РІ ASCII, Р° UNICODE РЅРµ Р·Р°РґР°РЅ
     inline bool IsAscii(void) const { return uname.empty() && !name.empty(); }
 
-    // Вернет true, если путь задан в UNICODE
+    // Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ Р·Р°РґР°РЅ РІ UNICODE
     inline bool IsUnicode(void) const { return !uname.empty(); }
 
     UFString GetUnicode(void) const;
     FString  GetAscii(void) const;
 
-    #if defined LEM_WXWIDGETS
-    operator wxFileName(void) const;
-    #endif
-
+/*
     #if defined LEM_USE_BOOST_FILESYSTEM
     operator boost::filesystem::path(void) const;
     #ifndef BOOST_FILESYSTEM_NARROW_ONLY
     operator boost::filesystem::wpath(void) const;
     #endif
     #endif
-   
+*/   
     // Path string is empty
     bool empty(void) const { return uname.empty() && name.empty(); }
-    int length(void) const { return uname.empty() ? name.length() : uname.length(); }
+    size_t length(void) const { return uname.empty() ? name.length() : uname.length(); }
 
     // Make the strings empty
     inline void clear(void) { uname.clear(); name.clear(); }
@@ -508,80 +430,82 @@
 
     void ChangeExtension( const wchar_t *new_ext ); 
 
-    // Для целевой платформы символ - разделитель расширения файла?
+    // Р”Р»СЏ С†РµР»РµРІРѕР№ РїР»Р°С‚С„РѕСЂРјС‹ СЃРёРјРІРѕР» - СЂР°Р·РґРµР»РёС‚РµР»СЊ СЂР°СЃС€РёСЂРµРЅРёСЏ С„Р°Р№Р»Р°?
     static bool IsExtDelimiter( wchar_t ch );
 
-    // Для целевой платформы символ отделяет букву диска (DOS/Win)?
+    // Р”Р»СЏ С†РµР»РµРІРѕР№ РїР»Р°С‚С„РѕСЂРјС‹ СЃРёРјРІРѕР» РѕС‚РґРµР»СЏРµС‚ Р±СѓРєРІСѓ РґРёСЃРєР° (DOS/Win)?
     static bool IsDriveDelimiter( wchar_t ch );
 
-    // Для целевой платформы символ - разделитель элемента пути?
+    // Р”Р»СЏ С†РµР»РµРІРѕР№ РїР»Р°С‚С„РѕСЂРјС‹ СЃРёРјРІРѕР» - СЂР°Р·РґРµР»РёС‚РµР»СЊ СЌР»РµРјРµРЅС‚Р° РїСѓС‚Рё?
     static bool IsPathDelimiter( wchar_t ch );
 
-    // Для целевой платформы - символ для разделения имен каталогов (файлов)
+    // Р”Р»СЏ С†РµР»РµРІРѕР№ РїР»Р°С‚С„РѕСЂРјС‹ - СЃРёРјРІРѕР» РґР»СЏ СЂР°Р·РґРµР»РµРЅРёСЏ РёРјРµРЅ РєР°С‚Р°Р»РѕРіРѕРІ (С„Р°Р№Р»РѕРІ)
     static wchar_t GetPathDelimiter(void);
 
-    // Для целевой платформы - символ для отделения расширения
+    // Р”Р»СЏ С†РµР»РµРІРѕР№ РїР»Р°С‚С„РѕСЂРјС‹ - СЃРёРјРІРѕР» РґР»СЏ РѕС‚РґРµР»РµРЅРёСЏ СЂР°СЃС€РёСЂРµРЅРёСЏ
     static wchar_t GetExtDelimiter(void);
 
     // Get temporary file name (with extension given)
     static const lem::Path GetTmpFilename( const char *ext=NULL );
 
-    // ВОзвращает путь к каталогу для временных файлов
+    // Р’РћР·РІСЂР°С‰Р°РµС‚ РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РґР»СЏ РІСЂРµРјРµРЅРЅС‹С… С„Р°Р№Р»РѕРІ
     static const lem::Path GetTmpFolder(void);
 
     // Path to 'My Documents' folder
-    static const lem::Path GetMyDocuments(void);
+    //static const lem::Path GetMyDocuments(void);
 
     // List of all host's disks (root directory for Linux)
+/*
     static void GetMyComputer(
                               std::vector<lem::Path> &list,
                               bool allow_floppies=false,
                               bool allow_attached=false  
                              );
+*/
 
     // List of CD/DVD disks ("E:\")
-    static void GetCD( std::vector<lem::Path> &list );
+    //static void GetCD( std::vector<lem::Path> &list );
 
-    // Буква соответствует приводу CD?
-    static bool IsCD( char letter );
+    // Р‘СѓРєРІР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїСЂРёРІРѕРґСѓ CD?
+    //static bool IsCD( char letter );
 
-    // Возвращает метку тома (только для MS Windows)
-    lem::UFString GetDiskName(void) const;
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РјРµС‚РєСѓ С‚РѕРјР° (С‚РѕР»СЊРєРѕ РґР»СЏ MS Windows)
+    //lem::UFString GetDiskName(void) const;
 
     // **********************************
-    // Возвращает серийный номер тома
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРµСЂРёР№РЅС‹Р№ РЅРѕРјРµСЂ С‚РѕРјР°
     // **********************************
-    lem::uint32_t GetDiskSerialNumber(void) const;
+    //lem::uint32_t GetDiskSerialNumber(void) const;
 
-    // Выдвигаем лоток привода. Если ch_drv!=0, то работаем
-    // с указанным через букву приводом.
-    static bool CdDvdEject( char ch_drv=0 );
-    static bool CdDvdClose( char ch_drv=0 );
+    // Р’С‹РґРІРёРіР°РµРј Р»РѕС‚РѕРє РїСЂРёРІРѕРґР°. Р•СЃР»Рё ch_drv!=0, С‚Рѕ СЂР°Р±РѕС‚Р°РµРј
+    // СЃ СѓРєР°Р·Р°РЅРЅС‹Рј С‡РµСЂРµР· Р±СѓРєРІСѓ РїСЂРёРІРѕРґРѕРј.
+    //static bool CdDvdEject( char ch_drv=0 );
+    //static bool CdDvdClose( char ch_drv=0 );
 
-    // Если CD находится в приводе - вернет true.
-    bool IsDiskMounted(void) const;
+    // Р•СЃР»Рё CD РЅР°С…РѕРґРёС‚СЃСЏ РІ РїСЂРёРІРѕРґРµ - РІРµСЂРЅРµС‚ true.
+    //bool IsDiskMounted(void) const;
 
     lem::Path& ConcateLeaf( const lem::Path &Filename );
     lem::Path& ConcateLeaf( const wchar_t *Filename );
     lem::Path& ConcateLeaf( const lem::UFString &Filename );
     lem::Path& ConcateLeaf( const std::wstring &Filename );
 
-    // Приведение имени файла к верхнему (или нижнему) регистру
+    // РџСЂРёРІРµРґРµРЅРёРµ РёРјРµРЅРё С„Р°Р№Р»Р° Рє РІРµСЂС…РЅРµРјСѓ (РёР»Рё РЅРёР¶РЅРµРјСѓ) СЂРµРіРёСЃС‚СЂСѓ
     void ToUpper(void);
     void ToLower(void);
 
-    // Выполняется очистка каталога от находящихся в нем файлов и
-    // вложенных каталогов (рекурсивно).
+    // Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ РѕС‡РёСЃС‚РєР° РєР°С‚Р°Р»РѕРіР° РѕС‚ РЅР°С…РѕРґСЏС‰РёС…СЃСЏ РІ РЅРµРј С„Р°Р№Р»РѕРІ Рё
+    // РІР»РѕР¶РµРЅРЅС‹С… РєР°С‚Р°Р»РѕРіРѕРІ (СЂРµРєСѓСЂСЃРёРІРЅРѕ).
     void PurgeFolder(void) const;
 
-    // Из пути удаляется последний элемент. Например, из полного пути к файлу
-    // получается имя каталога, в котором файл размещен.
+    // РР· РїСѓС‚Рё СѓРґР°Р»СЏРµС‚СЃСЏ РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚. РќР°РїСЂРёРјРµСЂ, РёР· РїРѕР»РЅРѕРіРѕ РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ
+    // РїРѕР»СѓС‡Р°РµС‚СЃСЏ РёРјСЏ РєР°С‚Р°Р»РѕРіР°, РІ РєРѕС‚РѕСЂРѕРј С„Р°Р№Р» СЂР°Р·РјРµС‰РµРЅ.
     void RemoveLastLeaf(void);
 
-    // Оставляет имя файла, убирая путь к нему.
+    // РћСЃС‚Р°РІР»СЏРµС‚ РёРјСЏ С„Р°Р№Р»Р°, СѓР±РёСЂР°СЏ РїСѓС‚СЊ Рє РЅРµРјСѓ.
     UFString GetFileName(void) const;
 
-    // Имя файла или имя последней папки в пути
+    // РРјСЏ С„Р°Р№Р»Р° РёР»Рё РёРјСЏ РїРѕСЃР»РµРґРЅРµР№ РїР°РїРєРё РІ РїСѓС‚Рё
     UFString GetLastLeaf(void) const;
 
     #if defined LEM_UNIX
@@ -589,24 +513,26 @@
     static void Win_2_Lin( UFString &p );
     #endif
 
-    // Если это путь к LPTx. 
-    bool IsLPT(void) const;
+    // Р•СЃР»Рё СЌС‚Рѕ РїСѓС‚СЊ Рє LPTx. 
+    //bool IsLPT(void) const;
 
-    // Возвращает размер файлов в каталоге (и в подкаталогах,
-    // если recurse=true). Опционально можно задать объект-визитер для
-    // дополнительной обработки каталогов и файлов.
-    lem::uint64_t FolderSize( bool recurse ) const;
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ С„Р°Р№Р»РѕРІ РІ РєР°С‚Р°Р»РѕРіРµ (Рё РІ РїРѕРґРєР°С‚Р°Р»РѕРіР°С…,
+    // РµСЃР»Рё recurse=true). РћРїС†РёРѕРЅР°Р»СЊРЅРѕ РјРѕР¶РЅРѕ Р·Р°РґР°С‚СЊ РѕР±СЉРµРєС‚-РІРёР·РёС‚РµСЂ РґР»СЏ
+    // РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё РєР°С‚Р°Р»РѕРіРѕРІ Рё С„Р°Р№Р»РѕРІ.
+    //lem::uint64_t FolderSize( bool recurse ) const;
 
-    // Рекурсивный обход подкаталогов. Возвращается размер
-    // обработанных файлов. Также можно указать visitor для
-    // обработки файлов в каталогах.
+
+    // Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РѕР±С…РѕРґ РїРѕРґРєР°С‚Р°Р»РѕРіРѕРІ. Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЂР°Р·РјРµСЂ
+    // РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹С… С„Р°Р№Р»РѕРІ. РўР°РєР¶Рµ РјРѕР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ visitor РґР»СЏ
+    // РѕР±СЂР°Р±РѕС‚РєРё С„Р°Р№Р»РѕРІ РІ РєР°С‚Р°Р»РѕРіР°С….
     lem::uint64_t Crawl( bool recurse, IDirTraverser *traverser ) const;
 
     #if defined LEM_WINDOWS
     lem::uint64_t Crawl( bool recurse, IDirTraverser2 *traverser ) const; 
     #endif
 
-    // Путь корректен, то есть файл или каталог существует?
+
+    // РџСѓС‚СЊ РєРѕСЂСЂРµРєС‚РµРЅ, С‚Рѕ РµСЃС‚СЊ С„Р°Р№Р» РёР»Рё РєР°С‚Р°Р»РѕРі СЃСѓС‰РµСЃС‚РІСѓРµС‚?
     bool DoesExist(void) const;
     static bool DoesExist( const lem::UFString &p );
     static bool DoesExist( const lem::FString &p );
@@ -614,88 +540,90 @@
     static bool DoesExist( const char* name );
 
 
-    // Путь указывает на реально существующий каталог?
+    // РџСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° СЂРµР°Р»СЊРЅРѕ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєР°С‚Р°Р»РѕРі?
     bool IsFolder(void) const;
 
-    // Удаляем файл или каталог вместе с содержимым
+    // РЈРґР°Р»СЏРµРј С„Р°Р№Р» РёР»Рё РєР°С‚Р°Р»РѕРі РІРјРµСЃС‚Рµ СЃ СЃРѕРґРµСЂР¶РёРјС‹Рј
     bool DoRemove(void) const;
 
-    // Если каталога не существует, создаем его.
-    // Если subfolders=true, то также будут созданы все родительские
-    // каталоги.
+    // Р•СЃР»Рё РєР°С‚Р°Р»РѕРіР° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, СЃРѕР·РґР°РµРј РµРіРѕ.
+    // Р•СЃР»Рё subfolders=true, С‚Рѕ С‚Р°РєР¶Рµ Р±СѓРґСѓС‚ СЃРѕР·РґР°РЅС‹ РІСЃРµ СЂРѕРґРёС‚РµР»СЊСЃРєРёРµ
+    // РєР°С‚Р°Р»РѕРіРё.
     void CreateFolder( bool subfolders=false ) const;
 
-    // Копирование содержимого файла src в dst.
+    // РљРѕРїРёСЂРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р° src РІ dst.
     static void CopyFile( const lem::Path& src, const lem::Path& dst );
     static void CopyFile( const char *src, const char *dst );
     static void CopyFile( const wchar_t *src, const wchar_t *dst );
 
-    // Копирование содержимого каталога в указанное место
+    // РљРѕРїРёСЂРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РєР°С‚Р°Р»РѕРіР° РІ СѓРєР°Р·Р°РЅРЅРѕРµ РјРµСЃС‚Рѕ
     static void CopyFolder( const lem::Path& src, const lem::Path& dst );
 
     static bool RenameFile( const wchar_t *oldname, const wchar_t *newname );
     static bool RenameFile( const char *oldname, const char *newname );
 
-    // Возвращает размер файла
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
     size_t FileSize(void) const;
     static size_t FileSize( const char *name );
     static size_t FileSize( const wchar_t *name );
 
-    // Возвращает список элементов (файлов и подкаталогов)
-    // в данном каталоге.
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЌР»РµРјРµРЅС‚РѕРІ (С„Р°Р№Р»РѕРІ Рё РїРѕРґРєР°С‚Р°Р»РѕРіРѕРІ)
+    // РІ РґР°РЅРЅРѕРј РєР°С‚Р°Р»РѕРіРµ.
     void List( std::vector< std::pair< lem::Path, bool /*is_file*/ > > &list ) const;
 
-    // Заполняет список файлов полными путями.
+    // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє С„Р°Р№Р»РѕРІ РїРѕР»РЅС‹РјРё РїСѓС‚СЏРјРё.
     void ListFiles( std::vector< lem::Path > &list, bool recursive ) const;
     void ListFiles( const wchar_t *mask, std::vector< lem::Path > &list, bool recursive ) const;
 
-    // Заполняет список именами подключенных USB дисков
+    // Р—Р°РїРѕР»РЅСЏРµС‚ СЃРїРёСЃРѕРє РёРјРµРЅР°РјРё РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… USB РґРёСЃРєРѕРІ
     //static void UsbDrives( std::vector< lem::Path >& list );
 
-    // Есть ли в каталоге хоть один файл или вложенная папка?
+    // Р•СЃС‚СЊ Р»Рё РІ РєР°С‚Р°Р»РѕРіРµ С…РѕС‚СЊ РѕРґРёРЅ С„Р°Р№Р» РёР»Рё РІР»РѕР¶РµРЅРЅР°СЏ РїР°РїРєР°?
     bool IsFolderEmpty(void) const;
 
-    // Проверка синтаксиса файлового пути. Возвращает признак успеха проверки.
+    // РџСЂРѕРІРµСЂРєР° СЃРёРЅС‚Р°РєСЃРёСЃР° С„Р°Р№Р»РѕРІРѕРіРѕ РїСѓС‚Рё. Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСЂРёР·РЅР°Рє СѓСЃРїРµС…Р° РїСЂРѕРІРµСЂРєРё.
     bool Check(void) const;
 
-    // Вернет true для путей в локальной файловой системе (local file system)
-    // или в локальной сети: в формате UNC для Windows \\имя_хоста\имя_ресурса,
-    // long UNCW: \\?\путь или \\?\имя_хоста\имя_ресурса).
+    // Р’РµСЂРЅРµС‚ true РґР»СЏ РїСѓС‚РµР№ РІ Р»РѕРєР°Р»СЊРЅРѕР№ С„Р°Р№Р»РѕРІРѕР№ СЃРёСЃС‚РµРјРµ (local file system)
+    // РёР»Рё РІ Р»РѕРєР°Р»СЊРЅРѕР№ СЃРµС‚Рё: РІ С„РѕСЂРјР°С‚Рµ UNC РґР»СЏ Windows \\РёРјСЏ_С…РѕСЃС‚Р°\РёРјСЏ_СЂРµСЃСѓСЂСЃР°,
+    // long UNCW: \\?\РїСѓС‚СЊ РёР»Рё \\?\РёРјСЏ_С…РѕСЃС‚Р°\РёРјСЏ_СЂРµСЃСѓСЂСЃР°).
     bool IsLocal(void) const;
 
-    // Вернет true, если путь указывает на FTP-сервер
+    // Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° FTP-СЃРµСЂРІРµСЂ
     bool IsFtp(void) const;
 
-    // Вернет true, если путь указывает на HTTP-сервер
+    // Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РїСѓС‚СЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° HTTP-СЃРµСЂРІРµСЂ
     bool IsHttp(void) const;
 
-    // Является ли хранимая строка URLом
+    // РЇРІР»СЏРµС‚СЃСЏ Р»Рё С…СЂР°РЅРёРјР°СЏ СЃС‚СЂРѕРєР° URLРѕРј
     bool IsUrl(void) const;
   
-    // Подходит ли файловый путь под указанную маску (с символами * и ?)
+    // РџРѕРґС…РѕРґРёС‚ Р»Рё С„Р°Р№Р»РѕРІС‹Р№ РїСѓС‚СЊ РїРѕРґ СѓРєР°Р·Р°РЅРЅСѓСЋ РјР°СЃРєСѓ (СЃ СЃРёРјРІРѕР»Р°РјРё * Рё ?)
     bool Match( const wchar_t *mask ) const;
     bool Match( const lem::UFString & mask ) const;
 
+/*
     static void MonitorCD( lem::Path::EventHandler handler, void *data );
     static void RemoveCDEventHandler( lem::Path::EventHandler handler ); 
     static void OnCDEvent( int Message );
 
     static void MonitorPath( lem::Path::EventHandler handler, void *data );
     static void RemovePathEventsHandler( lem::Path::EventHandler handler );
+*/
 
-    // Маска, соответстуующая любому файлу для текущей платформы
-    // *.* для Dos/Win
-    // *   для Unix
+    // РњР°СЃРєР°, СЃРѕРѕС‚РІРµС‚СЃС‚СѓСѓСЋС‰Р°СЏ Р»СЋР±РѕРјСѓ С„Р°Р№Р»Сѓ РґР»СЏ С‚РµРєСѓС‰РµР№ РїР»Р°С‚С„РѕСЂРјС‹
+    // *.* РґР»СЏ Dos/Win
+    // *   РґР»СЏ Unix
     static lem::UFString AllFilesMask(void);
 
-    // Возвращает размер (байты) свободного места на диске (C:\), если
-    // такая информация доступна для платформы, иначе 0.
-    lem::int64_t GetDiskFreeSpace(void) const;
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ СЂР°Р·РјРµСЂ (Р±Р°Р№С‚С‹) СЃРІРѕР±РѕРґРЅРѕРіРѕ РјРµСЃС‚Р° РЅР° РґРёСЃРєРµ (C:\), РµСЃР»Рё
+    // С‚Р°РєР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґРѕСЃС‚СѓРїРЅР° РґР»СЏ РїР»Р°С‚С„РѕСЂРјС‹, РёРЅР°С‡Рµ 0.
+    //lem::int64_t GetDiskFreeSpace(void) const;
 
-    // Возвращает набор атрибутов для папки/файла
-    lem::PathAttr GetAttr(void) const;
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅР°Р±РѕСЂ Р°С‚СЂРёР±СѓС‚РѕРІ РґР»СЏ РїР°РїРєРё/С„Р°Р№Р»Р°
+    //lem::PathAttr GetAttr(void) const;
 
-    // Раскрывает относительные части типа . и ..
+    // Р Р°СЃРєСЂС‹РІР°РµС‚ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Рµ С‡Р°СЃС‚Рё С‚РёРїР° . Рё ..
     lem::Path GetAbsolutePath(void) const;
 
     friend void swap( lem::Path &x, lem::Path &y );

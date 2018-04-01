@@ -56,72 +56,73 @@ using namespace Solarix;
    breaker - код токена, прерывающего считывание.
 ***********************************************************************/
 const UCString Solarix::sol_read_multyname(
-                                           const Sol_IO &io,
-                                           Macro_Parser& txtfile,
-                                           int breaker
-                                          )
+    const Sol_IO &io,
+    Macro_Parser& txtfile,
+    int breaker
+)
 {
- UCString mname; // Накопитель мультилексемы
+    UCString mname; // Накопитель мультилексемы
 
- BethToken part;
- FOREVER
-  {
-   if( txtfile.eof() )
+    BethToken part;
+    FOREVER
     {
-     lem::Iridium::Print_Error(txtfile);
-     io.merr().printf("End of file has been reached before multilexem name completely read\n");
-     throw E_ParserError();
-    }
-
-   // очередная лексема в мультилексеме
-   part=txtfile.read();
-
-   if( lem_strlen(part.GetFullStr()) >= lem::UCString::max_len )
-    {
-     lem::Iridium::Print_Error(txtfile);
-     io.merr().printf("Lexem [%us] is too long\n", part.GetFullStr() );
-     throw E_ParserError();
-    }
-
-   // Учитываем, что специальные символы (токены) тоже могут быть
-   // именами статей.
-   if( !mname.empty() && part.GetToken()==breaker )
-    break;
-
-   if( !mname.empty() && !lem::is_udelim(part.string()) && !lem::is_udelim(mname.back()) )
-    {
-     if( mname.length()+1 >= lem::UCString::max_len )
+     if (txtfile.eof())
       {
        lem::Iridium::Print_Error(txtfile);
-       io.merr().printf("Lexem [%us] is too long\n", mname.c_str() );
+       io.merr().printf("End of file has been reached before multilexem name completely read\n");
        throw E_ParserError();
       }
-     
-     mname += L' ';
+
+    // очередная лексема в мультилексеме
+    part = txtfile.read();
+
+    if (lem_strlen(part.GetFullStr()) >= lem::UCString::max_len)
+     {
+      lem::Iridium::Print_Error(txtfile);
+      io.merr().printf("Lexem [%us] is too long\n", part.GetFullStr());
+      throw E_ParserError();
+     }
+
+    // Учитываем, что специальные символы (токены) тоже могут быть
+    // именами статей.
+    if (!mname.empty() && part.GetToken() == breaker)
+     break;
+
+    if (!mname.empty() && !lem::is_udelim(part.string()) && !lem::is_udelim(mname.back()))
+     {
+      if (mname.length() + 1 >= lem::UCString::max_len)
+       {
+        lem::Iridium::Print_Error(txtfile);
+        io.merr().printf("Lexem [%us] is too long\n", mname.c_str());
+        throw E_ParserError();
+       }
+
+      mname += L' ';
+     }
+
+    UCString as(strip_quotes(part.string()));
+
+    if (mname.length() + as.length() >= lem::UCString::max_len)
+     {
+      lem::Iridium::Print_Error(txtfile);
+      io.merr().printf("Lexem [%us %us] is too long\n", mname.c_str(), as.c_str());
+      throw E_ParserError();
+     }
+
+    mname += as;
+
+    if (breaker == ANY_STATE)
+     break;
     }
 
-   UCString as( strip_quotes( part.string() ) );
+        if (mname.back() == L' ')
+        {
+            // Недопустимая ситуация - каким-то образом на конце строки появился пробел.
+            //mname.ShrinkTo( mname.length() );
+            mname = mname.strip(L' ');
+        }
 
-   if( mname.length()+as.length() >= lem::UCString::max_len )
-    {
-     lem::Iridium::Print_Error(txtfile);
-     io.merr().printf("Lexem [%us %us] is too long\n", mname.c_str(), as.c_str() );
-     throw E_ParserError();
-    }
-
-   mname += as;
-
-   if( breaker==ANY_STATE )
-    break;
-  }
-
- if( mname.back()==L' ' )
-  {
-   // Недопустимая ситуация - каким-то образом на конце строки появился пробел.
-   mname.ShrinkTo( mname.length() );
-  }
-
- return mname;
+    return mname;
 }
 #endif
 
@@ -136,38 +137,38 @@ const UCString Solarix::sol_read_multyname(
   было совпадения с ключевыми словами, зарезервированными в Системе.
 *****************************************************************************/
 void Solarix::sol_check_s_name(
-                               const Dictionary &dict,
-                               Macro_Parser& txtfile,
-                               const BethToken& s,
-                               bool strict
-                              )
+    const Dictionary &dict,
+    Macro_Parser& txtfile,
+    const BethToken& s,
+    bool strict
+)
 {
- if(
-    !is_name(s.c_str()) ||
-    (strict && sol_is_token(s.string().c_str()))
-   )
-  {
-   lem::Iridium::Print_Error(s,txtfile);
-   dict.GetIO().merr().printf("Lexem can not be a name\n");
-   throw E_ParserError();
-  }
+    if (
+        !is_name(s.c_str()) ||
+        (strict && sol_is_token(s.string().c_str()))
+        )
+    {
+        lem::Iridium::Print_Error(s, txtfile);
+        dict.GetIO().merr().printf("Lexem can not be a name\n");
+        throw E_ParserError();
+    }
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT
 void Solarix::sol_check_coord_name(
-                                   const Dictionary &dict,
-                                   Macro_Parser& txtfile,
-                                   const BethToken& s
-                                  )
+    const Dictionary &dict,
+    Macro_Parser& txtfile,
+    const BethToken& s
+)
 {
- if( s.GetToken()==B_NET || s.GetToken()==B_RULE )
-  return;
+    if (s.GetToken() == B_NET || s.GetToken() == B_RULE)
+        return;
 
- sol_check_s_name(dict,txtfile,s,true);
- return;
+    sol_check_s_name(dict, txtfile, s, true);
+    return;
 }
 #endif
 
@@ -188,111 +189,111 @@ void Solarix::sol_check_coord_name(
 *******************************************************************************/
 
 int Solarix::sol_load_omonym(
-                             Macro_Parser &txtfile,
-                             SynGram &gram,
-                             bool do_check
-                            )
+    Macro_Parser &txtfile,
+    SynGram &gram,
+    bool do_check
+)
 {
- int entry_key=UNKNOWN;
+    int entry_key = UNKNOWN;
 
- const BethToken class_name = txtfile.read();
- int iclass=gram.FindClass(class_name.string());
- if( iclass == UNKNOWN )
-   {
-    lem::Iridium::Print_Error( class_name, txtfile );
-    gram.GetIO().merr().printf(
-                               "The class [%us] is not previously declared in grammar\n"
-                               , class_name.c_str()
-                              );
-    throw E_ParserError();
-   }
-
- txtfile.read_it( B_COLON );
- UCString entry_name = sol_read_multyname(gram.GetIO(),txtfile,B_OFIGPAREN);
- entry_name.to_upper();
-
- // Загрузим список дополнительных координатных пар
- Solarix::CP_Array coords;
- coords.LoadTxt( txtfile, gram );
- LEM_CHECKIT_Z( coords.size()<2 );
-
- int ientry = coords.empty() ? gram.FindEntry(entry_name,iclass,false) : gram.FindEntryOmonym(entry_name,iclass,coords.front());
- if( ientry == UNKNOWN )
-  {
-   if( do_check )
+    const BethToken class_name = txtfile.read();
+    int iclass = gram.FindClass(class_name.string());
+    if (iclass == UNKNOWN)
     {
-     lem::Iridium::Print_Error( class_name, txtfile );
-     gram.GetIO().merr().printf(
-                                "The entry [%us] is not previously declared in grammar\n"
-                                , entry_name.c_str()
-                               );
-     throw E_ParserError();
+        lem::Iridium::Print_Error(class_name, txtfile);
+        gram.GetIO().merr().printf(
+            "The class [%us] is not previously declared in grammar\n"
+            , class_name.c_str()
+        );
+        throw E_ParserError();
     }
 
-   entry_key=UNKNOWN;
-  }
- else
-  {
-   entry_key = gram.GetEntry(ientry).GetKey();
-  } 
+    txtfile.read_it(B_COLON);
+    UCString entry_name = sol_read_multyname(gram.GetIO(), txtfile, B_OFIGPAREN);
+    entry_name.to_upper();
 
- return entry_key;
+    // Загрузим список дополнительных координатных пар
+    Solarix::CP_Array coords;
+    coords.LoadTxt(txtfile, gram);
+    LEM_CHECKIT_Z(coords.size() < 2);
+
+    int ientry = coords.empty() ? gram.FindEntry(entry_name, iclass, false) : gram.FindEntryOmonym(entry_name, iclass, coords.front());
+    if (ientry == UNKNOWN)
+    {
+        if (do_check)
+        {
+            lem::Iridium::Print_Error(class_name, txtfile);
+            gram.GetIO().merr().printf(
+                "The entry [%us] is not previously declared in grammar\n"
+                , entry_name.c_str()
+            );
+            throw E_ParserError();
+        }
+
+        entry_key = UNKNOWN;
+    }
+    else
+    {
+        entry_key = gram.GetEntry(ientry).GetKey();
+    }
+
+    return entry_key;
 }
 
 
 
 int Solarix::sol_load_class_entry(
-                                  Macro_Parser &txtfile,
-                                  SynGram &gram,
-                                  bool do_search,
-                                  bool do_check
-                                 )
+    Macro_Parser &txtfile,
+    SynGram &gram,
+    bool do_search,
+    bool do_check
+)
 {
- int entry_key=UNKNOWN;
+    int entry_key = UNKNOWN;
 
- const BethToken class_name = txtfile.read();
- int iclass=UNKNOWN;
- if( do_search )
-  if( (iclass=gram.FindClass(class_name.string())) == UNKNOWN )
-   {
-    lem::Iridium::Print_Error( class_name, txtfile );
-    gram.GetIO().merr().printf(
-                               "The class [%us] is not previously declared in grammar\n"
-                               , class_name.c_str()
-                              );
-    throw E_ParserError();
-   }
+    const BethToken class_name = txtfile.read();
+    int iclass = UNKNOWN;
+    if (do_search)
+        if ((iclass = gram.FindClass(class_name.string())) == UNKNOWN)
+        {
+            lem::Iridium::Print_Error(class_name, txtfile);
+            gram.GetIO().merr().printf(
+                "The class [%us] is not previously declared in grammar\n"
+                , class_name.c_str()
+            );
+            throw E_ParserError();
+        }
 
- txtfile.read_it( B_COLON );
- UCString entry_name = sol_read_multyname(gram.GetIO(),txtfile,B_OFIGPAREN);
+    txtfile.read_it(B_COLON);
+    UCString entry_name = sol_read_multyname(gram.GetIO(), txtfile, B_OFIGPAREN);
 
- entry_name.to_upper();
+    entry_name.to_upper();
 
- if( do_search )
-  {
-   int ientry=UNKNOWN;
-
-   ientry=gram.FindEntry(entry_name,iclass,false);
-
-   if( ientry == UNKNOWN )
+    if (do_search)
     {
-     if( do_check )
-      {
-       lem::Iridium::Print_Error( class_name, txtfile );
-       gram.GetIO().merr().printf(
-                                  "The entry [%us] is not previously declared in grammar\n"
-                                  , entry_name.c_str()
-                                 );
-       throw E_ParserError();
-      }
+        int ientry = UNKNOWN;
 
-     entry_key=UNKNOWN;
+        ientry = gram.FindEntry(entry_name, iclass, false);
+
+        if (ientry == UNKNOWN)
+        {
+            if (do_check)
+            {
+                lem::Iridium::Print_Error(class_name, txtfile);
+                gram.GetIO().merr().printf(
+                    "The entry [%us] is not previously declared in grammar\n"
+                    , entry_name.c_str()
+                );
+                throw E_ParserError();
+            }
+
+            entry_key = UNKNOWN;
+        }
+        else
+            entry_key = gram.GetEntry(ientry).GetKey();
     }
-   else
-    entry_key = gram.GetEntry(ientry).GetKey();
-  }
 
- return entry_key;
+    return entry_key;
 }
 #endif
 
@@ -300,44 +301,44 @@ int Solarix::sol_load_class_entry(
  Печать информации о статье "КЛАСС:ИМЯ_СТАТЬИ"
 ***********************************************************/
 void Solarix::sol_print_class_entry(
-                                    OFormatter &txtfile,
-                                    SynGram &gram,
-                                    int entry_key
-                                   )
+    OFormatter &txtfile,
+    SynGram &gram,
+    int entry_key
+)
 {
-/*
-{ for( int i=0; i<gram.entries().size(); i++ )
-  {
-   int k = gram.entries().at(i)->GetKey();
-   int ii = gram.FindEntryIndexByKey(k); 
-   int k2 = gram.entries().at(ii)->GetKey();
-   if( k!=k2 )
-	mout.printf( "error\n" );
+    /*
+    { for( int i=0; i<gram.entries().size(); i++ )
+      {
+       int k = gram.entries().at(i)->GetKey();
+       int ii = gram.FindEntryIndexByKey(k);
+       int k2 = gram.entries().at(ii)->GetKey();
+       if( k!=k2 )
+        mout.printf( "error\n" );
 
-   const SG_Entry &e = gram.GetEntryByKey(k);
-   if( e.GetKey()!=k )
-    mout.printf( "error\n" );
+       const SG_Entry &e = gram.GetEntryByKey(k);
+       if( e.GetKey()!=k )
+        mout.printf( "error\n" );
 
-   if( k==entry_key )
-	    mout.printf( "i=%d\n", i );
-  }
+       if( k==entry_key )
+            mout.printf( "i=%d\n", i );
+      }
 
-int ii3 = gram.FindEntryIndexByKey(entry_key);
-const SG_Entry &e2 = *gram.entries()[ii3];
-*/
+    int ii3 = gram.FindEntryIndexByKey(entry_key);
+    const SG_Entry &e2 = *gram.entries()[ii3];
+    */
 
- const SG_Entry &e = gram.GetEntry(entry_key);
- const int iclass = e.GetClass();
+    const SG_Entry &e = gram.GetEntry(entry_key);
+    const int iclass = e.GetClass();
 
- const UCString& class_name = iclass==UNKNOWN_STATE ?
-                                                      UCString(SOL_UNKNOWN_ENTRY_NAME)
-                                                      :
-                                                      gram.classes()[iclass].GetName();
+    const UCString& class_name = iclass == UNKNOWN_STATE ?
+        UCString(SOL_UNKNOWN_ENTRY_NAME)
+        :
+        gram.classes()[iclass].GetName();
 
- txtfile.printf( "%us%us", class_name.c_str(), sol_get_token(B_COLON).c_str() );
- txtfile.printf( "%us", e.GetName().c_str() );
+    txtfile.printf("%us%us", class_name.c_str(), sol_get_token(B_COLON).c_str());
+    txtfile.printf("%us", e.GetName().c_str());
 
- return;
+    return;
 }
 
 
@@ -348,15 +349,15 @@ const SG_Entry &e2 = *gram.entries()[ii3];
 // Текущая версия процедуры никак не обслуживает многократное употребление
 // пары с одной и той же координатой в списках.
 // *************************************************************************
-bool Solarix::sol_do_them_match( const CPE_Array &A, const CPE_Array &B )
+bool Solarix::sol_do_them_match(const CPE_Array &A, const CPE_Array &B)
 {
- for( Container::size_type ia=0; ia<A.size(); ia++ )
-  {
-   const int b = B.FindOnce( A[ia].GetCoord() );
-   if( b!=UNKNOWN && B[b].GetState()!=A[ia].GetState() )
-    return false;
-  }
+    for (Container::size_type ia = 0; ia < A.size(); ia++)
+    {
+        const int b = B.FindOnce(A[ia].GetCoord());
+        if (b != UNKNOWN && B[b].GetState() != A[ia].GetState())
+            return false;
+    }
 
- return true;
+    return true;
 }
 

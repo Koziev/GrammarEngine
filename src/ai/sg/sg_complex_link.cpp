@@ -104,17 +104,15 @@ void SG_ComplexLink::LoadPoint( Macro_Parser &txtfile, SynGram &gram, lem::UFStr
     break;
    
    if( !entry.empty() )
-    entry.Add_Dirty(L' ');
+    entry += L' ';
 
    UFString ts( t.GetFullStr() );
    ts.strip(L'"');
-   entry.Add_Dirty( ts );
+   entry += ts;
 
    if( !figparen )
     break;
   }
-
- entry.calc_hash();
 
  if( entry.front()==L'@' )
   {

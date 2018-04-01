@@ -3376,7 +3376,7 @@ GREN_API(int) sol_CountRoots(HGREN_RESPACK hPack, int iGraf)
     catch (...)
     {
         return -1;
-}
+    }
 }
 
 
@@ -3995,7 +3995,7 @@ GREN_API(HGREN_INTARRAY) sol_SeekThesaurus(
         }
 
         return list;
-        }
+    }
     CATCH_API(hEngine)
 
         delete list;
@@ -4003,7 +4003,7 @@ GREN_API(HGREN_INTARRAY) sol_SeekThesaurus(
 #endif
 
     return NULL;
-    }
+}
 
 
 GREN_API(HGREN_INTARRAY) sol_Thesaurus(
@@ -4670,7 +4670,7 @@ GREN_API(HGREN_STR) sol_TokenizeW(HGREN hEngine, const wchar_t *Sentence, int La
         return NULL;
 
 #if defined SOL_CAA && !defined SOL_NO_AA
-    std::auto_ptr<GREN_Strings> list(new GREN_Strings);
+    std::unique_ptr<GREN_Strings> list(new GREN_Strings);
 
     DEMO_SINGLE_THREAD(hEngine)
 
@@ -6841,7 +6841,7 @@ GREN_API(HGREN_SPOKEN) sol_PronounceW(HGREN hEngine, const wchar_t * Sentence, i
     CATCH_API(hEngine);
 
     return NULL;
-    }
+}
 
 
 GREN_API(int) sol_DeleteSpoken(HGREN_SPOKEN hData)

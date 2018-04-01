@@ -53,10 +53,6 @@
 #include <lem/unicode.h>
 #include <lem/lexers.h>
 
-#if defined(LEM_OFMT_MICROSOL) 
- #include <lem/micro_solaris.h>
-#endif
- 
 #include <lem/conversions.h>
 
 
@@ -67,10 +63,6 @@
 
 using namespace std;
 using namespace lem;
-
-#if defined(LEM_OFMT_MICROSOL) 
-using namespace lem::Micro_Solaris;
-#endif 
 
 static wchar_t _allowed_lexem_punctuators[] = L" ~`&-_+'\".";
 
@@ -3966,8 +3958,6 @@ void lem::recode_string( FString &str, int icp_src, int icp_dst )
 {
  for( int i=0; i<str.size(); i++ )
   str.set( i, lem::recode_char( str[i], icp_src, icp_dst ) );
-
- str.calc_hash();
 }
 
 
@@ -4128,7 +4118,9 @@ FString lem::to_utf8( const wchar_t *ustr )
   if( res>0 )
    {
     utf8[res] = 0;
-    return FString(utf8,true);
+    FString res(utf8);
+    delete[] utf8;
+    return res;
    }
   else
    {
@@ -4310,23 +4302,23 @@ const lem::UFString lem::to_c_literal( const lem::UFString &str )
     {
      switch(c)
      {
-      case L'\a':  res.Add_Dirty( L"\\a" );  break;
-      case L'\f':  res.Add_Dirty( L"\\f" );  break;
-      case L'\t':  res.Add_Dirty( L"\\t" );  break;
-      case L'\n':  res.Add_Dirty( L"\\n" );  break;
-      case L'\r':  res.Add_Dirty( L"\\r" );  break;
-      case L'\b':  res.Add_Dirty( L"\\b" );  break;
+      case L'\a':  res += L"\\a";  break;
+      case L'\f':  res += L"\\f";  break;
+      case L'\t':  res += L"\\t";  break;
+      case L'\n':  res += L"\\n";  break;
+      case L'\r':  res += L"\\r";  break;
+      case L'\b':  res += L"\\b";  break;
 
       default: 
        if( ((unsigned)c)<16 )
         {  
-         res.Add_Dirty( L"\\x000" );
-         res.Add_Dirty( lem::int_to_ustr( int(c), 16 ).c_str() );
+         res += L"\\x000";
+         res += lem::int_to_ustr( int(c), 16 ).c_str();
         }  
        else
         { 
-         res.Add_Dirty( L"\\x00" );
-         res.Add_Dirty( lem::int_to_ustr( int(c), 16 ).c_str() );
+         res += L"\\x00";
+         res += lem::int_to_ustr( int(c), 16 ).c_str();
         } 
        break;
      }
@@ -4334,13 +4326,12 @@ const lem::UFString lem::to_c_literal( const lem::UFString &str )
    else
     {
      if( c==L'\\' || c==L'\'' || c==L'"' )
-      res.Add_Dirty( L'\\' );
+      res += L'\\';
 
-     res.Add_Dirty(str[i]);
+     res += str[i];
     }
   }
 
- res.calc_hash();
  return res;
 }
 
@@ -4357,23 +4348,23 @@ const lem::FString lem::to_c_literal( const lem::FString &str )
     {
      switch(c)
      {
-      case '\a':  res.Add_Dirty( "\\a" );  break;
-      case '\f':  res.Add_Dirty( "\\f" );  break;
-      case '\t':  res.Add_Dirty( "\\t" );  break;
-      case '\n':  res.Add_Dirty( "\\n" );  break;
-      case '\r':  res.Add_Dirty( "\\r" );  break;
-      case '\b':  res.Add_Dirty( "\\b" );  break;
+      case '\a':  res += "\\a";  break;
+      case '\f':  res += "\\f";  break;
+      case '\t':  res += "\\t";  break;
+      case '\n':  res += "\\n";  break;
+      case '\r':  res += "\\r";  break;
+      case '\b':  res += "\\b";  break;
 
       default: 
        if( c<16 )
         {
-         res.Add_Dirty( "\\x0" );
-         res.Add_Dirty( lem::int_to_str( int(0x00ff&c), 16 ).c_str() );
+         res += "\\x0";
+         res += lem::int_to_str( int(0x00ff&c), 16 ).c_str();
         }
        else
         {       
-         res.Add_Dirty( "\\x" );
-         res.Add_Dirty( lem::int_to_str( int(0x00ff&c), 16 ).c_str() );
+         res += "\\x";
+         res += lem::int_to_str( int(0x00ff&c), 16 ).c_str();
         }   
        break;
      }
@@ -4381,13 +4372,12 @@ const lem::FString lem::to_c_literal( const lem::FString &str )
    else
     {
      if( c=='\\' || c=='\'' || c=='"' )
-      res.Add_Dirty( '\\' );
+      res += '\\';
 
-     res.Add_Dirty(c);
+     res += c;
     }
   }
 
- res.calc_hash();
  return res;
 }
 
@@ -4408,13 +4398,13 @@ const UFString lem::from_c_literal( const UFString &str )
    {
     switch( str[i++] )
     { 
-     case L'a':  res.Add_Dirty( L'\a' );  break;
-     case L'f':  res.Add_Dirty( L'\f' );  break;
-     case L't':  res.Add_Dirty( L'\t' );  break;
-     case L'n':  res.Add_Dirty( L'\n' );  break;
-     case L'r':  res.Add_Dirty( L'\r' );  break;
-     case L'b':  res.Add_Dirty( L'\b' );  break;
-     case L'\\': res.Add_Dirty( L'\\' );  break;
+     case L'a':  res += L'\a';  break;
+     case L'f':  res += L'\f';  break;
+     case L't':  res += L'\t';  break;
+     case L'n':  res += L'\n';  break;
+     case L'r':  res += L'\r';  break;
+     case L'b':  res += L'\b';  break;
+     case L'\\': res += L'\\';  break;
      
      case L'x':
       {
@@ -4426,18 +4416,17 @@ const UFString lem::from_c_literal( const UFString &str )
        lem::uint16_t h=0; 
        bool rc = lem::to_int( hx, &h, 16 );
        LEM_CHECKIT_Z(rc);
-       res.Add_Dirty( (wchar_t)h );
+       res += (wchar_t)h;
        break;
       }
        
-     default:    res.Add_Dirty( str[i] ); break;
+     default:    res += str[i]; break;
     }
    }
   else
-   res.Add_Dirty( c );
+   res += c;
  }
 
- res.calc_hash();
  return res;
 }
 
@@ -4457,13 +4446,13 @@ const FString lem::from_c_literal( const FString &str )
    {
     switch( str[i++] )
     { 
-     case 'a':  res.Add_Dirty( '\a' );   break;
-     case 'f':  res.Add_Dirty( '\f' );   break;
-     case 't':  res.Add_Dirty( '\t' );   break;
-     case 'n':  res.Add_Dirty( '\n' );   break;
-     case 'r':  res.Add_Dirty( '\r' );   break;
-     case 'b':  res.Add_Dirty( '\b' );   break;
-     case '\\': res.Add_Dirty( '\\' );   break;
+     case 'a':  res += '\a';   break;
+     case 'f':  res += '\f';   break;
+     case 't':  res += '\t';   break;
+     case 'n':  res += '\n';   break;
+     case 'r':  res += '\r';   break;
+     case 'b':  res += '\b';   break;
+     case '\\': res += '\\';   break;
      
      case 'x':
       {
@@ -4474,18 +4463,17 @@ const FString lem::from_c_literal( const FString &str )
         
        int h=0; 
        lem::to_int( hx, &h, 16 );
-       res.Add_Dirty( (char)h );
+       res += (char)h;
        break;
       }
      
-     default:   res.Add_Dirty( str[i] ); break;
+     default:   res += str[i]; break;
     }
    }
   else
-   res.Add_Dirty( c );
+   res += c;
  }
 
- res.calc_hash();
  return res;
 }
 
@@ -4549,6 +4537,7 @@ static char* UrlDecode( const char *source, char *dest )
  return ret;
 }	
 
+/*
 const UFString lem::decode_from_url( const lem::FString &str )
 {
  char *buf = new char[ str.length()*2+1 ];
@@ -4561,7 +4550,7 @@ const UFString lem::decode_from_url( const lem::FString &str )
 
  return u;
 }
-
+*/
 
 const std::wstring lem::to_wstr( wchar_t uc )
 {

@@ -786,9 +786,9 @@ void AlphabetStorage_SQLITE::FindSymbol(
    for( lem::Container::size_type i=0; i<AlphabetID.size(); ++i )
     {
      if( i>0 )
-      in.Add_Dirty( "," );
+      in += ",";
 
-     in.Add_Dirty( lem::to_str(AlphabetID[i]).c_str() );
+     in += lem::to_str(AlphabetID[i]).c_str();
     }
 
    in += ")";

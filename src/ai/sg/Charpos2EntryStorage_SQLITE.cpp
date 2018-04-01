@@ -82,12 +82,12 @@ void Charpos2EntryStorage_SQLITE::Store( lem::uint32_t c, int pos, const std::se
    const int keyi = *k;
    if( key0==-1 )
     {
-     str_ies.Add_Dirty( lem::to_str(keyi).c_str() );
+     str_ies += lem::to_str(keyi).c_str();
     }
    else
     {
-     str_ies.Add_Dirty( ' ' );
-     str_ies.Add_Dirty( lem::to_str(keyi-key0).c_str() );
+     str_ies += ' ';
+     str_ies += lem::to_str(keyi-key0).c_str();
     }
 
    key0 = keyi;

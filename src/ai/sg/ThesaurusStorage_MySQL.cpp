@@ -95,7 +95,7 @@ bool ThesaurusStorage_MySQL::GetTagSet( int id, lem::UFString &tags )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -131,7 +131,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::List_TagSets(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -216,7 +216,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListTagDefs(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -250,7 +250,7 @@ void ThesaurusStorage_MySQL::GetTagName( int id_tag, lem::UCString &name )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -294,7 +294,7 @@ int ThesaurusStorage_MySQL::GetTagId( const lem::UCString &tag_name )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int id = lem::mysql_select_int(c->mysql,Select.c_str());
  return id;
@@ -312,7 +312,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::List_TagValues( int id_tag )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -402,7 +402,7 @@ int ThesaurusStorage_MySQL::CountWordLinks( int optional_link_type )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  if( optional_link_type==UNKNOWN || optional_link_type==ANY_STATE )
   {
@@ -425,7 +425,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -459,7 +459,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks( int ekey1 )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -492,7 +492,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks( int ekey1, int link_type )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -545,7 +545,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks( int ekey1, const lem::MColl
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -581,7 +581,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks2( int ekey2 )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -614,7 +614,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks2( int ekey2, int link_type )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -659,7 +659,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListWordLinks2( int ekey2, const lem::MCol
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
@@ -698,7 +698,7 @@ int ThesaurusStorage_MySQL::FindWordLink( int ekey1, int ekey2, int type )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  return lem::mysql_select_int( c->mysql, Select.c_str() );
 }
@@ -719,7 +719,7 @@ bool ThesaurusStorage_MySQL::GetWordLink( int id, WordLink &info )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -813,7 +813,7 @@ int /*id_tag_set*/ ThesaurusStorage_MySQL::GetWordLinkTags(
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -935,7 +935,7 @@ int ThesaurusStorage_MySQL::CountPhraseLinks( int optional_link_type )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  if( optional_link_type==UNKNOWN || optional_link_type==ANY_STATE )
   {
@@ -958,7 +958,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListPhraseLinks(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -990,7 +990,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListPhraseLinks( int id_phrase1 )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -1023,7 +1023,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListPhraseLinks( int id_phrase1, int link_
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -1077,7 +1077,7 @@ LS_ResultSet* ThesaurusStorage_MySQL::ListPhraseLinks( int id_phrase1, const lem
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )
   {
@@ -1115,7 +1115,7 @@ int ThesaurusStorage_MySQL::FindPhraseLink( int id_phrase1, int id_phrase2, int 
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  return lem::mysql_select_int( c->mysql, Select.c_str() );
 }
@@ -1134,7 +1134,7 @@ bool ThesaurusStorage_MySQL::GetPhraseLink( int id, PhraseLink &info )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1232,7 +1232,7 @@ int /*id_tag_set*/ ThesaurusStorage_MySQL::GetPhraseLinkTags(
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1369,7 +1369,7 @@ void ThesaurusStorage_MySQL::GetPhraseFlags( int id_phrase, lem::PtrCollect<SG_L
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )

@@ -86,12 +86,12 @@ static lem::CString null_if_minus8( int x )
     const lem::uint8_t byte = (lem::uint8_t)bytes[i];
     if( byte<0x10 )
      {
-      str.Add_Dirty( '0' );
-      str.Add_Dirty( lem::int_to_str( (unsigned)byte, 16 ).c_str() );
+      str += '0';
+      str += lem::int_to_str( (unsigned)byte, 16 ).c_str();
      }
     else
      {
-      str.Add_Dirty( lem::int_to_str( (unsigned)byte, 16 ).c_str() );
+      str += lem::int_to_str( (unsigned)byte, 16 ).c_str();
      }
    }
 
@@ -1137,7 +1137,7 @@ void LexiconStorage_SQLITE::CreateTables_Phrases(void)
    Execute(create_twords);
 
 
-   // Таблица со служебной информацией для комплексных связей с многословной левой частью
+   // РўР°Р±Р»РёС†Р° СЃРѕ СЃР»СѓР¶РµР±РЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРµР№ РґР»СЏ РєРѕРјРїР»РµРєСЃРЅС‹С… СЃРІСЏР·РµР№ СЃ РјРЅРѕРіРѕСЃР»РѕРІРЅРѕР№ Р»РµРІРѕР№ С‡Р°СЃС‚СЊСЋ
    const char create_cplx[] = "CREATE TABLE cplx_left( "
                               " cl_id integer PRIMARY KEY NOT NULL,"
                               " cl_headword varchar(32) NOT NULL,"
@@ -1199,7 +1199,7 @@ int LexiconStorage_SQLITE::FindPhrase( const lem::UFString &text, bool ignore_ca
  
  if( ignore_case )
   {
-   // поиск без учета регистра
+   // РїРѕРёСЃРє Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°
 
    MemFormatter ms;
    ms.printf( "SELECT te_id FROM sg_tentry WHERE te_utxt='%us'", to_upper(u).c_str() );
@@ -1257,7 +1257,7 @@ LS_ResultSet* LexiconStorage_SQLITE::ListPhrasesWithPrefix( const lem::UFString 
  
  if( ignore_case )
   {
-   // поиск без учета регистра
+   // РїРѕРёСЃРє Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°
    MemFormatter ms;
    ms.printf( "SELECT te_id FROM sg_tentry WHERE te_utxt LIKE '%us%%'", to_upper(u).c_str() );
    FString Select=lem::to_utf8(ms.string());
@@ -1265,7 +1265,7 @@ LS_ResultSet* LexiconStorage_SQLITE::ListPhrasesWithPrefix( const lem::UFString 
   }
  else
   {
-   // с учетом регистра
+   // СЃ СѓС‡РµС‚РѕРј СЂРµРіРёСЃС‚СЂР°
    MemFormatter ms;
    ms.printf( "SELECT te_id FROM sg_tentry WHERE te_text LIKE '%us%%'", u.c_str() );
    FString Select=to_utf8(ms.string());
@@ -1340,7 +1340,7 @@ void LexiconStorage_SQLITE::DeletePhrase( int id )
 
  lem::MemFormatter ms;
 
- // удалим ссылающиеся на sg_tentry записи
+ // СѓРґР°Р»РёРј СЃСЃС‹Р»Р°СЋС‰РёРµСЃСЏ РЅР° sg_tentry Р·Р°РїРёСЃРё
 
  ms.printf( "DELETE FROM tnotes WHERE tn_te_id=%d", id );
  lem::FString s(lem::to_utf8(ms.string()));
@@ -1546,13 +1546,13 @@ int LexiconStorage_SQLITE::StoreCplxLeft( const lem::UCString &headword, int min
 
  FString uutf8(lem::to_utf8( w16 ) );
 
- // Если запись для такого слова уже есть - например при слиянии двух тезаурусов...
+ // Р•СЃР»Рё Р·Р°РїРёСЃСЊ РґР»СЏ С‚Р°РєРѕРіРѕ СЃР»РѕРІР° СѓР¶Рµ РµСЃС‚СЊ - РЅР°РїСЂРёРјРµСЂ РїСЂРё СЃР»РёСЏРЅРёРё РґРІСѓС… С‚РµР·Р°СѓСЂСѓСЃРѕРІ...
  CplxLeft old_info;
  int cl_id = GetCplxLeft( headword, old_info );
 
  if( cl_id!=UNKNOWN )
   {
-   // ... тогда обновим ее
+   // ... С‚РѕРіРґР° РѕР±РЅРѕРІРёРј РµРµ
    const int minlen2 = std::min( minlen, old_info.minlen );
    const int maxlen2 = std::max( maxlen, old_info.maxlen );
 
@@ -1562,14 +1562,14 @@ int LexiconStorage_SQLITE::StoreCplxLeft( const lem::UCString &headword, int min
   }
  else
   {
-   // либо вносим новую запись
+   // Р»РёР±Рѕ РІРЅРѕСЃРёРј РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ
    lem::MemFormatter mem;
    mem.printf( "INSERT INTO cplx_left( cl_headword, cl_minlen, cl_maxlen )"
         " VALUES ( '%us', %d, %d )", w16.c_str(), minlen, maxlen );
    cl_id = ExecuteAndReturnId(mem.string());
   }
 
- // Возвращаем ID измененной или добавленной записи.
+ // Р’РѕР·РІСЂР°С‰Р°РµРј ID РёР·РјРµРЅРµРЅРЅРѕР№ РёР»Рё РґРѕР±Р°РІР»РµРЅРЅРѕР№ Р·Р°РїРёСЃРё.
  return cl_id;
 }
 
@@ -1679,7 +1679,7 @@ namespace
 
 int LexiconStorage_SQLITE::FindPartOfSpeech( const lem::UCString &name )
 {
- // если в проверяемом имени есть символы ', "" или пробел - сразу возвращает false.
+ // РµСЃР»Рё РІ РїСЂРѕРІРµСЂСЏРµРјРѕРј РёРјРµРЅРё РµСЃС‚СЊ СЃРёРјРІРѕР»С‹ ', "" РёР»Рё РїСЂРѕР±РµР» - СЃСЂР°Р·Сѓ РІРѕР·РІСЂР°С‰Р°РµС‚ false.
  for( int i=0; i<name.length(); ++i )
   if( char_one_of( name[i], L'"', L'\'', L' ' ) )
    return UNKNOWN;
@@ -2027,7 +2027,7 @@ bool LexiconStorage_SQLITE::GetCoord( int id, GramCoord &coord )
             {
              GramCoordState s(state_name,weight);
 
-             // это главное состояние в группе 
+             // СЌС‚Рѕ РіР»Р°РІРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РІ РіСЂСѓРїРїРµ 
              if( coord.GetTotalStates()!=id_state )
               {
                MemFormatter mem;
@@ -2039,7 +2039,7 @@ bool LexiconStorage_SQLITE::GetCoord( int id, GramCoord &coord )
             }
            else
             {
-             // надо найти в описании координаты родительскую группу состояний
+             // РЅР°РґРѕ РЅР°Р№С‚Рё РІ РѕРїРёСЃР°РЅРёРё РєРѕРѕСЂРґРёРЅР°С‚С‹ СЂРѕРґРёС‚РµР»СЊСЃРєСѓСЋ РіСЂСѓРїРїСѓ СЃРѕСЃС‚РѕСЏРЅРёР№
              const int igroup = coord.GetSubgroup(id_parent); 
              GramCoordState &parent = coord.GetTopState(igroup);
              parent.Add(state_name);
@@ -2326,7 +2326,7 @@ bool LexiconStorage_SQLITE::GetLanguage( int id, SG_Language &lang )
      lang.id = id;
      lang.name = lem::sqlite_column_ucstring(stmt,0);
 
-     // запрос составлен так, чтобы сначала был извлечен основной алфавит
+     // Р·Р°РїСЂРѕСЃ СЃРѕСЃС‚Р°РІР»РµРЅ С‚Р°Рє, С‡С‚РѕР±С‹ СЃРЅР°С‡Р°Р»Р° Р±С‹Р» РёР·РІР»РµС‡РµРЅ РѕСЃРЅРѕРІРЅРѕР№ Р°Р»С„Р°РІРёС‚
      lem::FString Select2( lem::format_str("SELECT id_alphabet FROM lang_alphabet WHERE id_language=%d ORDER BY ordering", id ) );
      sqlite3_stmt *stmt2=NULL;
      const char *dummy2=NULL;
@@ -2455,8 +2455,8 @@ void LexiconStorage_SQLITE::StoreLanguageInternals( const SG_Language &lang )
   {
    const int id_alphabet = lang.alphabet[i];
    
-   // при вставке списка алфавитов сохраняем порядок, в котором они были заявлены в описании языка.
-   // это позволит точно знать основной алфавит.
+   // РїСЂРё РІСЃС‚Р°РІРєРµ СЃРїРёСЃРєР° Р°Р»С„Р°РІРёС‚РѕРІ СЃРѕС…СЂР°РЅСЏРµРј РїРѕСЂСЏРґРѕРє, РІ РєРѕС‚РѕСЂРѕРј РѕРЅРё Р±С‹Р»Рё Р·Р°СЏРІР»РµРЅС‹ РІ РѕРїРёСЃР°РЅРёРё СЏР·С‹РєР°.
+   // СЌС‚Рѕ РїРѕР·РІРѕР»РёС‚ С‚РѕС‡РЅРѕ Р·РЅР°С‚СЊ РѕСЃРЅРѕРІРЅРѕР№ Р°Р»С„Р°РІРёС‚.
    ms.printf( "INSERT INTO lang_alphabet( id_language, id_alphabet, ordering ) VALUES ( %d, %d, %d )" 
     , id, id_alphabet, CastSizeToInt(i) );
 
@@ -2806,11 +2806,11 @@ void LexiconStorage_SQLITE::StoreRecognitionRule( LA_RecognitionRule *rule )
  for( lem::Container::size_type i=0; i<rule->GetCoords().size(); ++i )
   {
    if( i>0 )
-    coords.Add_Dirty(L' ');
+    coords += L' ';
 
-   coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetCoord().GetIndex() ).c_str() );
-   coords.Add_Dirty( L':' );
-   coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetState() ).c_str() );
+   coords += to_ustr( rule->GetCoords()[i].GetCoord().GetIndex() ).c_str();
+   coords += L':';
+   coords += to_ustr( rule->GetCoords()[i].GetState() ).c_str();
   }
 
  lem::UFString word;
@@ -3040,9 +3040,9 @@ void LexiconStorage_SQLITE::StoreWordEntrySet( WordEntrySetItem &wes )
  for( std::set<int>::const_iterator it=wes.ies.begin(); it!=wes.ies.end(); ++it )
   {
    if( !s.empty() )
-    s.Add_Dirty(L' ');
+    s += L' ';
 
-   s.Add_Dirty( lem::to_ustr(*it).c_str() );
+   s += lem::to_ustr(*it).c_str();
   } 
 
  lem::MemFormatter q;
@@ -3160,7 +3160,7 @@ void LexiconStorage_SQLITE::StoreLanguageUsage( int id_language, bool is_input, 
 
  lem::MemFormatter q;
 
- // Сначала удалим упоминания этого языка для входного или выходного набора, чтобы не получилось дублирования
+ // РЎРЅР°С‡Р°Р»Р° СѓРґР°Р»РёРј СѓРїРѕРјРёРЅР°РЅРёСЏ СЌС‚РѕРіРѕ СЏР·С‹РєР° РґР»СЏ РІС…РѕРґРЅРѕРіРѕ РёР»Рё РІС‹С…РѕРґРЅРѕРіРѕ РЅР°Р±РѕСЂР°, С‡С‚РѕР±С‹ РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ РґСѓР±Р»РёСЂРѕРІР°РЅРёСЏ
  q.printf( "DELETE FROM lang_usage WHERE id_language=%d AND is_input=%d AND is_output=%d",
    id_language, is_input ? 1 : 0, is_output ? 1 : 0 );
 
@@ -3717,7 +3717,7 @@ TrFunctions* LexiconStorage_SQLITE::GetFunctions( const wchar_t *Marker )
    lem::FString hex;
    while( sqlite3_step( stmt ) == SQLITE_ROW )
     {
-     hex.Add_Dirty( lem::sqlite_column_fstring(stmt,0) );
+     hex += lem::sqlite_column_fstring(stmt,0);
     }
 
    sqlite3_finalize(stmt);
@@ -3735,7 +3735,7 @@ TrFunctions* LexiconStorage_SQLITE::GetFunctions( const wchar_t *Marker )
     }
    else
     {
-     // Сохраненных функций пока нет
+     // РЎРѕС…СЂР°РЅРµРЅРЅС‹С… С„СѓРЅРєС†РёР№ РїРѕРєР° РЅРµС‚
      return new TrFunctions();
     }
   }
@@ -4003,9 +4003,9 @@ int LexiconStorage_SQLITE::StoreParadigma( const SG_DeclensionTable &p )
  for( lem::Container::size_type i=0; i<p.attrs().size(); ++i )
   {
    if( i>0 )
-    attrs.Add_Dirty( L' ' );
+    attrs += L' ';
 
-   attrs.Add_Dirty( lem::format_str( L"%d:%d", p.attrs()[i].GetCoord().GetIndex(), p.attrs()[i].GetState() ).c_str() );
+   attrs += lem::format_str( L"%d:%d", p.attrs()[i].GetCoord().GetIndex(), p.attrs()[i].GetState() ).c_str();
   }
 
  lem::MemFormatter mem;
@@ -4032,9 +4032,9 @@ int LexiconStorage_SQLITE::StoreParadigma( const SG_DeclensionTable &p )
    for( lem::Container::size_type i=0; i<f.GetDim().size(); ++i )
     {
      if( i>0 )
-      dims.Add_Dirty( L' ' );
+      dims += L' ';
 
-     dims.Add_Dirty( lem::format_str( L"%d:%d", f.GetDim()[i].GetCoord().GetIndex(), f.GetDim()[i].GetState() ).c_str() );
+     dims += lem::format_str( L"%d:%d", f.GetDim()[i].GetCoord().GetIndex(), f.GetDim()[i].GetState() ).c_str();
     }
 
    lem::UFString generator( f.GetLexemGenerator().c_str() );
@@ -4157,7 +4157,7 @@ if( lem::is_uspace(ending.back()) )
   throw E_BaseException(mem.string());
  }
 
- // такое окончание уже есть?
+ // С‚Р°РєРѕРµ РѕРєРѕРЅС‡Р°РЅРёРµ СѓР¶Рµ РµСЃС‚СЊ?
  lem::MemFormatter q;
  q.printf( "SELECT id FROM endings WHERE ending='%us' AND id_language=%d", s.c_str(), id_language );
  int id = SelectInt(q.string());
@@ -4252,8 +4252,8 @@ void LexiconStorage_SQLITE::SetWordformFrequency( int id_entry, int iform, int f
  LEM_CHECKIT_Z( id_entry!=UNKNOWN );
  LEM_CHECKIT_Z( iform!=UNKNOWN );
 
- // чтобы не допустить дубля и нарушения ограничения уникальности, проверим, нет ли
- // записи для этой словоформы.
+ // С‡С‚РѕР±С‹ РЅРµ РґРѕРїСѓСЃС‚РёС‚СЊ РґСѓР±Р»СЏ Рё РЅР°СЂСѓС€РµРЅРёСЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ СѓРЅРёРєР°Р»СЊРЅРѕСЃС‚Рё, РїСЂРѕРІРµСЂРёРј, РЅРµС‚ Р»Рё
+ // Р·Р°РїРёСЃРё РґР»СЏ СЌС‚РѕР№ СЃР»РѕРІРѕС„РѕСЂРјС‹.
  
  lem::MemFormatter q;
  q.printf( "SELECT id FROM wordform_frequency WHERE id_entry=%d AND iform=%d", id_entry, iform );
@@ -4380,11 +4380,11 @@ void LexiconStorage_SQLITE::StoreWordSet( WordSetItem &wes )
  for( std::set<lem::UCString>::const_iterator it=wes.words.begin(); it!=wes.words.end(); ++it )
   {
    if( !s.empty() )
-    s.Add_Dirty(WORD_SET_DELIMITER);
+    s += WORD_SET_DELIMITER;
 
    UFString word( it->c_str() );
    sqlite_escape(word);
-   s.Add_Dirty( word.c_str() );
+   s += word.c_str();
   }
 
  lem::MemFormatter q;
@@ -4534,7 +4534,7 @@ void LexiconStorage_SQLITE::AddCollocationToSet( int id_set, const lem::MCollect
   id_set, str.c_str(), n_word, headword.c_str() );
  Execute(mem.string());
 
- // обновим поисковую информацию.
+ // РѕР±РЅРѕРІРёРј РїРѕРёСЃРєРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.
  int id_headword=-1;
  int min_len=-1, max_len=-1;
  mem.printf( "SELECT id, min_len, max_len FROM collocation_headword WHERE headword='%us'", headword.c_str() );
@@ -6449,11 +6449,11 @@ int LexiconStorage_SQLITE::StorePredicateTemplate( const lem::UFString & src, co
  lem::UFString escaped_params;
  for( lem::Container::size_type i=0; i<params.size(); ++i )
   if( escaped_params.empty() )
-   escaped_params.Add_Dirty( params[i].c_str() );
+   escaped_params += params[i].c_str();
   else
    {
-    escaped_params.Add_Dirty( L',' );
-    escaped_params.Add_Dirty( params[i].c_str() );
+    escaped_params += L',';
+    escaped_params += params[i].c_str();
    }
 
  lem::sqlite_escape(escaped_params);

@@ -151,6 +151,7 @@ static bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszVal
 // *****************************************************************
 // Возвращается имя домашнего каталога для юзера в текущей сессии.
 // *****************************************************************
+/*
 const lem::Path lem::System_Config::GetHomeDir(void)
 {
  #if defined LEM_QT
@@ -163,7 +164,7 @@ const lem::Path lem::System_Config::GetHomeDir(void)
 
  wchar_t wpath[ lem::Path::MaxLen+1 ];
  memset( wpath, 0, sizeof(wpath) );
- if( SHGetSpecialFolderPathW(NULL,wpath,0x0005 /*CSIDL_PERSONAL*/,FALSE)==TRUE )
+ if( SHGetSpecialFolderPathW(NULL,wpath,0x0005,FALSE)==TRUE )
   {
    if( wpath[0]!=0 )
     {
@@ -232,12 +233,15 @@ const lem::Path lem::System_Config::GetHomeDir(void)
 
  #endif
 }
+*/
+
 
 // **********************************************************
 // Возвращается путь к каталогу "...\юзер\Application Data\" 
 // или его аналогу для текущей платформы, для сохранения
 // данных программы.
 // **********************************************************
+/*
 const lem::Path lem::System_Config::GetAppdataDir(void)
 {
  #if defined LEM_WINDOWS || defined LEM_DOS
@@ -246,9 +250,9 @@ const lem::Path lem::System_Config::GetAppdataDir(void)
  memset( wpath, 0, sizeof(wpath) );
 
  #if defined LEM_QT
- if( SHGetFolderPathW( NULL, 0x001a/*CSIDL_COMMON_APPDATA*/, (HANDLE)-1, 0 /*SHGFP_TYPE_CURRENT*/, wpath )==S_OK )
+ if( SHGetFolderPathW( NULL, 0x001a, (HANDLE)-1, 0, wpath )==S_OK )
  #else
- if( SHGetSpecialFolderPathW(NULL,wpath,0x001a/*CSIDL_COMMON_APPDATA*/,FALSE)==TRUE )
+ if( SHGetSpecialFolderPathW(NULL,wpath,0x001a,FALSE)==TRUE )
  #endif
   {
    if( wpath[0]!=0 )
@@ -323,7 +327,7 @@ const lem::Path lem::System_Config::GetAppdataDir(void)
 
  #endif
 }
-
+*/
 
  
 bool lem::System_Config::SupportUnicodeGui(void)
@@ -332,8 +336,8 @@ bool lem::System_Config::SupportUnicodeGui(void)
   return false;
  #elif defined LEM_WINDOWS 
   // Для Win9x - есть проблемы.
-  if( IsWin9x() )
-   return false;
+  //if( IsWin9x() )
+  // return false;
 
   return true;
  #else
@@ -369,8 +373,8 @@ bool lem::System_Config::SupportUnicodeFilenames(void)
   return false;
  #elif defined LEM_WINDOWS
   // Для Win9x - есть проблемы.
-  if( IsWin9x() )
-   return false;
+  //if( IsWin9x() )
+  // return false;
 
   return true;
  #else
@@ -391,8 +395,8 @@ bool lem::System_Config::SupportUnicodeConsole(void)
   return false;
  #elif defined LEM_WINDOWS
   // Для Win9x - есть проблемы.
-  if( IsWin9x() )
-   return false;
+  //if( IsWin9x() )
+  // return false;
 
   // Линейка WinNT нормально поддерживает UNICODE
   return true;
@@ -402,7 +406,7 @@ bool lem::System_Config::SupportUnicodeConsole(void)
 }
 
 
-
+/*
 bool lem::System_Config::IsWin9x(void)
 {
  #if defined LEM_WINDOWS
@@ -450,9 +454,9 @@ bool lem::System_Config::IsWin9x(void)
  
  return false;
 }
+*/
 
-
-
+/*
 bool lem::System_Config::IsNT4(void)
 {
  #if defined LEM_WINDOWS
@@ -501,8 +505,10 @@ bool lem::System_Config::IsNT4(void)
  return false; 
  #endif
 }
+*/
 
 
+/*
 bool lem::System_Config::IsWin2k(void)
 {
  #if defined LEM_WINDOWS
@@ -539,8 +545,10 @@ bool lem::System_Config::IsWin2k(void)
  return false; 
  #endif
 }
+*/
 
 
+/*
 bool lem::System_Config::IsTabletPC(void)
 {
  #if defined LEM_WINDOWS
@@ -559,11 +567,12 @@ bool lem::System_Config::IsMediaCenter(void)
  return false;
  #endif
 }
-
+*/
 
 // ********************************************************
 // ВОзвращает описание версии установленного .NET Framework
 // ********************************************************
+/*
 const std::string lem::System_Config::GetNetfxInfo(void)
 {
  #if defined LEM_WINDOWS
@@ -598,7 +607,7 @@ const std::string lem::System_Config::GetNetfxInfo(void)
   return "";
  #endif
 }
-
+*/
 
 
 // ********************************************************
@@ -682,11 +691,12 @@ const std::string lem::System_Config::GetHostOs( bool detailed )
 
  std::string ret;
 
+ /*
  if( IsTabletPC() )
   {
    ret = "Windows Tablet PC";
    return ret;
-  }
+  }*/
 
  BOOL bOsVersionInfoEx;
  OSVERSIONINFOEXA osvi;
@@ -744,8 +754,8 @@ const std::string lem::System_Config::GetHostOs( bool detailed )
          { 
           ret = "MS Windows XP ";
  
-          if( IsMediaCenter() )
-           ret += "Media Center Edition "; 
+          //if( IsMediaCenter() )
+          // ret += "Media Center Edition "; 
          }
         else if( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
          ret = "MS Windows 2000 ";
@@ -917,6 +927,7 @@ const std::string lem::System_Config::GetHostOs( bool detailed )
     ret = std::string(os);
   }
 
+  /*
   #if defined LEM_DOT_NET
    std::string fx = GetNetfxInfo();
    if( !fx.empty() )
@@ -925,7 +936,7 @@ const std::string lem::System_Config::GetHostOs( bool detailed )
      ret += fx;
     }
   #endif
-
+*/
   return ret;
 
  #elif defined LEM_LINUX
@@ -1169,6 +1180,7 @@ Inputs:			NONE
 Results:		true if the .NET Framework 1.0 is installed
 				false otherwise
 ******************************************************************/
+ /*
 bool lem::System_Config::IsNetfx10Installed(void)
 {
  #if defined LEM_WINDOWS
@@ -1185,7 +1197,7 @@ bool lem::System_Config::IsNetfx10Installed(void)
  return false; 
  #endif
 }
-
+*/
 
 /******************************************************************
 Function Name:	IsNetfx11Installed
@@ -1197,6 +1209,7 @@ Inputs:			NONE
 Results:		true if the .NET Framework 1.1 is installed
 				false otherwise
 ******************************************************************/
+ /*
 bool lem::System_Config::IsNetfx11Installed(void)
 {
  #if defined LEM_WINDOWS
@@ -1214,6 +1227,7 @@ bool lem::System_Config::IsNetfx11Installed(void)
  return false;
  #endif
 }
+*/
 
 
 /******************************************************************
@@ -1225,6 +1239,7 @@ Description:	Uses the detection method recommended at
 Inputs:			NONE
 Results:		integer representing SP level for .NET Framework 1.0
 ******************************************************************/
+ /*
 int lem::System_Config::GetNetfx10SPLevel(void)
 {
  #if defined LEM_WINDOWS
@@ -1272,6 +1287,7 @@ int lem::System_Config::GetNetfx10SPLevel(void)
  return -1;
  #endif
 }
+*/
 
 
 /******************************************************************
@@ -1283,6 +1299,7 @@ Description:	Uses the detection method recommended at
 Inputs:			NONE
 Results:		integer representing SP level for .NET Framework 1.1
 ******************************************************************/
+/*
 int lem::System_Config::GetNetfx11SPLevel(void)
 {
  #if defined LEM_WINDOWS
@@ -1301,7 +1318,7 @@ int lem::System_Config::GetNetfx11SPLevel(void)
  return -1;
  #endif
 }
-
+*/
 
 // *******************************************************
 // Возвращает имя пользователя (логин) для текущей сессии
@@ -1344,13 +1361,13 @@ const std::string lem::System_Config::GetUserLogin(void)
 void lem::System_Config::PrintInfo( lem::OFormatter &dst )
 {
  dst.printf(
-            "Session info:\n user=%s\n app_dir=%us\n home_dir=%us\n tmp_dir=%us\n"
+            "Session info:\n user=%s\n tmp_dir=%us\n"
             " unicode console=%b\n"
             " unicode filenames=%b\n"
             " unicode GUI=%b\n"
             , GetUserLogin().c_str()
-            , lem::System_Config::GetAppdataDir().GetUnicode().c_str()
-            , lem::System_Config::GetHomeDir().GetUnicode().c_str()
+            //, lem::System_Config::GetAppdataDir().GetUnicode().c_str()
+            //, lem::System_Config::GetHomeDir().GetUnicode().c_str()
             , lem::Path::GetTmpFolder().GetUnicode().c_str()
             , lem::System_Config::SupportUnicodeConsole()
             , lem::System_Config::SupportUnicodeFilenames()
@@ -1415,7 +1432,7 @@ bool lem::System_Config::IsCmdLineOption( char ch )
 bool lem::System_Config::SupportUnicodeAPI(void)
 {
  #if defined LEM_WINDOWS
- return !IsWin9x();
+ return true; //!IsWin9x();
  #else
  return false;
  #endif

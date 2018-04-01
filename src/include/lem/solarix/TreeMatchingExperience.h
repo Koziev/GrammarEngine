@@ -1,6 +1,7 @@
 #if !defined TreeMatchingExperience__H
  #define TreeMatchingExperience__H
 
+ #include <set>
  #include <lem/ucstring.h>
  #include <lem/ptr_container.h>
  #include <lem/solarix/SynPatternResult.h>

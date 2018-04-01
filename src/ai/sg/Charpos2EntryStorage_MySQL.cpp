@@ -84,7 +84,7 @@ void Charpos2EntryStorage_MySQL::Get( lem::uint32_t c, int pos, std::set<int> &i
  lem::Process::CritSecLocker guard(&cx->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( cx->mysql, sql.c_str() );
  if( rc==0 )
@@ -168,7 +168,7 @@ void Charpos2EntryStorage_MySQL::GetIntersected(
  lem::Process::CritSecLocker guard(&cx->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( cx->mysql, sql.c_str() );
  if( rc==0 )
@@ -246,7 +246,7 @@ Charpos2EntryEnumerator* Charpos2EntryStorage_MySQL::Enumerate(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )

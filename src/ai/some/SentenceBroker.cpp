@@ -305,12 +305,12 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
     }
    else if( c==L' ' )
     {
-     line.Add_Dirty(c);
+     line += c;
      continue;
     }
    else if( IsEndOfSentenceMarker(c) )
     {
-     line.Add_Dirty(c);
+     line += c;
      break;
     }
 
@@ -335,13 +335,12 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
          if( tokenizer->IsMatched(substr) )
           {
            // Да!
-           line.Add_Dirty( substr.c_str() );
+           line += substr.c_str();
            c = c2;
 
            // Считанный токен является разделителем предложений (типа ...)
            if( sent_delims.find(substr)!=UNKNOWN )
             {
-             line.calc_hash();
              line.trim();
 
              if( !line.empty() && (n_quote%2)==0 )
@@ -373,14 +372,13 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
          if( tokenizer->IsMatched(substr1) && IsTokenDelimiter(substr.back()) )
           {
            // Да!
-           line.Add_Dirty( substr1.c_str() );
+           line += substr1.c_str();
 
            // Считанный токен является разделителем предложений (типа ...)
            if( sent_delims.find(substr1)!=UNKNOWN )
             {
              if( (n_quote%2)==0 )
               {
-               line.calc_hash();
                line.trim();
 
                if( !line.empty() )
@@ -417,7 +415,7 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
 
                  if( !continuation_found )
                   {
-                   line.Add_Dirty( c2 );
+                   line += c2;
                    return true;
                   }
                 }
@@ -505,13 +503,13 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
        if( c2==L'"' )
         {
          n_quote++;
-         line.Add_Dirty( c );
-         line.Add_Dirty( c2 );
+         line += c;
+         line += c2;
 
          const wchar_t c4 = GetChar();
          if( sent_delims1.find(c4)!=UNKNOWN )
           {
-           line.Add_Dirty( c4 );
+           line += c4;
            count++;
            return true;
           }
@@ -531,7 +529,7 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
              break;
             }
 
-           tmp_chars.Add_Dirty(c5);
+           tmp_chars += c5;
            if( !lem::is_uspace(c5) )
             {
              // найден не-пробельный символ.
@@ -559,8 +557,8 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
        else
         {
          // нет - продолжим считывание символов предложения.
-         line.Add_Dirty( c );
-         line.Add_Dirty( c2 );
+         line += c;
+         line += c2;
         }
       }
      else
@@ -614,13 +612,13 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
            else if( lem::is_uspace(c2) )
             {
              // Дойдем до первого не-пробельного символа.
-             line.Add_Dirty( c );
+             line += c;
     
              add_char=false;
              while( c!=WEOF )
               {
                c = GetChar();
-               line.Add_Dirty( c );
+               line += c;
                if( IsEndOfSentenceMarker(c) )
                 break;
 
@@ -644,12 +642,12 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
            c2 = PeekChar();
            if( c2==c0 )
             {
-             line.Add_Dirty( c );
+             line += c;
              add_char=false;
              while( c!=WEOF && c==c0 )
               {
                c = GetChar();
-               line.Add_Dirty( c );
+               line += c;
                c = PeekChar();
               } 
             }    
@@ -660,12 +658,12 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
            c2 = PeekChar();
            if( c2==L'?' || c2==L'!' ) // То есть токены типа !!! и !?
             {
-             line.Add_Dirty( c );
+             line += c;
              add_char=false;
              while( c!=WEOF && (c==L'!' || c==L'?') )
               {
                c = GetChar();
-               line.Add_Dirty( c );
+               line += c;
                c = PeekChar();
               } 
             }
@@ -684,23 +682,23 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
         }
     
        if( add_char )
-        line.Add_Dirty( c );
+        line += c;
       }
     }
    else if( line.length()>max_sentence_length && (lem::is_uspace(c) || c==L',' || c==L'-' || c==L';' || c==L':' ) )
     {
      // Слишком длинные предложения обрываем на безопасных символах.
      line_ready=true;
-     line.Add_Dirty( c );
+     line += c;
     }
    else if( c==L'\r' || c==L'\n' || c==L'\t' || c==L'\b' )
     {
      // некоторые управляющие символы заменяем пробелами
-     line.Add_Dirty( L' ' );
+     line += L' ';
     }
    else
     {
-     line.Add_Dirty( c );
+     line += c;
    
      if( c==L'"' )
       n_quote++;
@@ -730,7 +728,6 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
        cur_paragraph_id++;
       }
 
-     line.calc_hash();
      line.trim();
 
      if( !line.empty() )
@@ -746,7 +743,6 @@ bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
    cur_paragraph_id++;
   }
 
- line.calc_hash();
  line.trim();
 
  if( !line.empty() )
@@ -776,7 +772,7 @@ bool SentenceBroker::ReadCharsUntilClosingParen( lem::UFString & line )
 
    if( lem::is_uspace(c) )
     {
-     line.Add_Dirty(L' ');
+     line += L' ';
 
      if( line.length()>=max_sentence_length )
       break;
@@ -795,13 +791,13 @@ bool SentenceBroker::ReadCharsUntilClosingParen( lem::UFString & line )
       }
      else if( unbreakable==L'(' )
       {
-       line.Add_Dirty( unbreakable.front() );
+       line += unbreakable.front();
        n_paren++;
        last_is_sentence_terminator=false;
       }
      else
       {
-       line.Add_Dirty( unbreakable.c_str() );
+       line += unbreakable.c_str();
        last_is_sentence_terminator = sent_delims.find(unbreakable)!=UNKNOWN;
       }
 
@@ -809,8 +805,6 @@ bool SentenceBroker::ReadCharsUntilClosingParen( lem::UFString & line )
       break;
     }
   }
-
- line.calc_hash();
 
  return last_is_sentence_terminator;
 }
@@ -840,7 +834,7 @@ lem::UCString SentenceBroker::PickNextToken(void)
    if( c==WEOF )
     break;
 
-   buffer.Add_Dirty(c);
+   buffer += c;
    if( !lem::is_uspace(c) )
     {
      res = c;
@@ -855,7 +849,7 @@ lem::UCString SentenceBroker::PickNextToken(void)
    if( c==WEOF )
     break;
    
-   buffer.Add_Dirty(c);
+   buffer += c;
 
    if( tokenizer->IsTokenDelimiter(c) )
     break;

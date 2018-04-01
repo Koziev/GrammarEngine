@@ -579,7 +579,7 @@ lem::FString NGramsStorage_SQLITE::AppendBulkInsert(
  lem::FString str;
 
  if( counter>0 )
-  str.Add_Dirty( " UNION ALL " );
+  str += " UNION ALL ";
 
  str += lem::format_str(
                        " SELECT %d,%d,%d" ,
@@ -606,7 +606,7 @@ lem::FString NGramsStorage_SQLITE::AppendBulkInsert(
  lem::FString str;
 
  if( counter>0 )
-  str.Add_Dirty( " UNION ALL " );
+  str += " UNION ALL ";
 
  str += lem::format_str( " SELECT %d,%d,%d,%d", id, id_word1, id_word2, w );
 
@@ -627,7 +627,7 @@ lem::FString NGramsStorage_SQLITE::AppendBulkInsert(
  lem::FString str;
 
  if( counter>0 )
-  str.Add_Dirty( " UNION ALL " );
+  str += " UNION ALL ";
 
  str += lem::format_str(
                        " SELECT %d,%d,%d,%d,%d",
@@ -651,7 +651,7 @@ lem::FString NGramsStorage_SQLITE::AppendBulkInsert(
  lem::FString str;
 
  if( counter>0 )
-  str.Add_Dirty( " UNION ALL " );
+  str += " UNION ALL ";
 
  str += lem::format_str(
                        " SELECT %d,%d,%d,%d,%d,%d",
@@ -677,7 +677,7 @@ lem::FString NGramsStorage_SQLITE::AppendBulkInsert(
  lem::FString str;
 
  if( counter>0 )
-  str.Add_Dirty( " UNION ALL " );
+  str += " UNION ALL ";
 
  str += lem::format_str(
                        " SELECT %d,%d,%d,%d,%d,%d,%d",

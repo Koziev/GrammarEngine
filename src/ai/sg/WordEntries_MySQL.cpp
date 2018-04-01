@@ -48,7 +48,7 @@ int WordEntries_MySQL::GetMaxMultilexemLen_Impl(void)
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int len = lem::mysql_select_int( c->mysql, "SELECT Coalesce(max(n_lexem),0) FROM multilexem" );
 
@@ -86,7 +86,7 @@ int WordEntries_MySQL::CountEntries( int id_class, int id_language )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  return lem::mysql_select_int( c->mysql, Select.c_str() );
 }
@@ -110,7 +110,7 @@ int WordEntries_MySQL::CountForms( int id_language )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  lem::FString Select( lem::to_utf8(mem.string()) );
  return lem::mysql_select_int( c->mysql, Select.c_str() );
@@ -155,7 +155,7 @@ bool WordEntries_MySQL::IsMultilexemHead_Impl( const lem::UCString &word, MultiL
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -195,7 +195,7 @@ bool WordEntries_MySQL::IsMultilexemForm_Impl( const Solarix::Lexem &lex )
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -233,7 +233,7 @@ WordEntryEnumerator* WordEntries_MySQL::ListEntries(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -274,7 +274,7 @@ WordEntryEnumerator* WordEntries_MySQL::ListEntries( const lem::triple<wchar_t,w
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -316,7 +316,7 @@ WordEntryEnumerator* WordEntries_MySQL::ListEntries( const lem::UCString &name, 
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -359,7 +359,7 @@ int WordEntries_MySQL::FindEntry_Impl( const lem::UCString &word_name, int id_cl
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -407,7 +407,7 @@ Word_Coord WordEntries_MySQL::FindWordForm( const lem::UCString& name )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -458,7 +458,7 @@ WordFormEnumerator* WordEntries_MySQL::ListWordForms( const lem::UCString &form,
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -519,7 +519,7 @@ WordFormEnumerator* WordEntries_MySQL::ListWordForms( const lem::MCollect<lem::U
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -568,7 +568,7 @@ WordFormEnumerator* WordEntries_MySQL::ListWordForms_Globbing( const lem::UFStri
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -612,7 +612,7 @@ int WordEntries_MySQL::FindEntryOmonym( const Lexem& lname, int id_class, const 
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -677,7 +677,7 @@ int WordEntries_MySQL::FindEntryOmonym(
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -748,7 +748,7 @@ int WordEntries_MySQL::FindEntryOmonym(
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -822,7 +822,7 @@ LexemeEnumerator* WordEntries_MySQL::ListLexemes(void)
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1168,7 +1168,7 @@ void WordEntries_MySQL::GetUEntries_Impl(void)
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1209,7 +1209,7 @@ int WordEntries_MySQL::GetPredefinedEntryKey_Impl( int index )
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1252,7 +1252,7 @@ int WordEntries_MySQL::FindQuantorEntry_Impl( int id_class )
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int rc = mysql_query( c->mysql, Select.c_str() );
  if( rc==0 )
@@ -1296,7 +1296,7 @@ SG_Entry* WordEntries_MySQL::LoadEntryFromDb_Impl( int ekey )
  lem::Process::CritSecLocker guard2(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  SG_Entry *e = NULL;
 

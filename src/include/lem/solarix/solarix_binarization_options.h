@@ -1,12 +1,13 @@
 // File SOLARIX_BINARIZATION_OPTIONS.H
 //
 // CD->10.07.2005
-// LC->02.05.2010
+// LC->30.03.2018
 
 #ifndef SOL_BIN_OPTIONS__H
 #define SOL_BIN_OPTIONS__H
 #pragma once
 
+#include <set>
 #include <lem/ptr_container.h>
 #include <lem/regex.h> 
 

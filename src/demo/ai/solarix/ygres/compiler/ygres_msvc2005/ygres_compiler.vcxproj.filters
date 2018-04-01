@@ -117,9 +117,6 @@
     <ClCompile Include="..\..\..\..\..\..\io\oformatter.cpp">
       <Filter>Source Files\lem\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\tools\unicode\transliterator.cpp">
-      <Filter>Source Files\lem\IO</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\io\iridium\ir_error.cpp">
       <Filter>Source Files\lem\IO\Iridium</Filter>
     </ClCompile>
@@ -181,9 +178,6 @@
       <Filter>Source Files\lem\IO\Char_Reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_char_reader.cpp">
-      <Filter>Source Files\lem\IO\Char_Reader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_translit_reader.cpp">
       <Filter>Source Files\lem\IO\Char_Reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp">

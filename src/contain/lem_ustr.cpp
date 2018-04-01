@@ -8,19 +8,19 @@
 //
 // Content:
 // LEM C++ library  http://www.solarix.ru
-// Вспомогательные операции над C-строками. Используются для классов UString
-// и UFString, или автономно. Частично перекрывают стандартные C-функции
-// работы со строками для новых 2-х байтовых символов wchar_t.
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РѕРїРµСЂР°С†РёРё РЅР°Рґ C-СЃС‚СЂРѕРєР°РјРё. РСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РґР»СЏ РєР»Р°СЃСЃРѕРІ UString
+// Рё UFString, РёР»Рё Р°РІС‚РѕРЅРѕРјРЅРѕ. Р§Р°СЃС‚РёС‡РЅРѕ РїРµСЂРµРєСЂС‹РІР°СЋС‚ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ C-С„СѓРЅРєС†РёРё
+// СЂР°Р±РѕС‚С‹ СЃРѕ СЃС‚СЂРѕРєР°РјРё РґР»СЏ РЅРѕРІС‹С… 2-С… Р±Р°Р№С‚РѕРІС‹С… СЃРёРјРІРѕР»РѕРІ wchar_t.
 //
-// 02.06.2004 - перенос всех функций из глобального namespace'а в 'lem'
+// 02.06.2004 - РїРµСЂРµРЅРѕСЃ РІСЃРµС… С„СѓРЅРєС†РёР№ РёР· РіР»РѕР±Р°Р»СЊРЅРѕРіРѕ namespace'Р° РІ 'lem'
 //
-// 18.03.2006 - исправлена ошибка в процедурах лексикографического
-//              упорядочивания строк lt(...) и gt(...), из-за которых
-//              неправильно работали стандартные контейнеры set и map
+// 18.03.2006 - РёСЃРїСЂР°РІР»РµРЅР° РѕС€РёР±РєР° РІ РїСЂРѕС†РµРґСѓСЂР°С… Р»РµРєСЃРёРєРѕРіСЂР°С„РёС‡РµСЃРєРѕРіРѕ
+//              СѓРїРѕСЂСЏРґРѕС‡РёРІР°РЅРёСЏ СЃС‚СЂРѕРє lt(...) Рё gt(...), РёР·-Р·Р° РєРѕС‚РѕСЂС‹С…
+//              РЅРµРїСЂР°РІРёР»СЊРЅРѕ СЂР°Р±РѕС‚Р°Р»Рё СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РєРѕРЅС‚РµР№РЅРµСЂС‹ set Рё map
 //
-// 23.05.2006 - процедура trim() убирает не только пробелы, но и символы \t
+// 23.05.2006 - РїСЂРѕС†РµРґСѓСЂР° trim() СѓР±РёСЂР°РµС‚ РЅРµ С‚РѕР»СЊРєРѕ РїСЂРѕР±РµР»С‹, РЅРѕ Рё СЃРёРјРІРѕР»С‹ \t
 //
-// 27.01.2007 - добавлена lem_findi - поиск без учета регистра
+// 27.01.2007 - РґРѕР±Р°РІР»РµРЅР° lem_findi - РїРѕРёСЃРє Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°
 //
 // 02.05.2007 - PRECONDITIONS checks have been added to some functions.
 //
@@ -50,316 +50,320 @@ using namespace boost;
 using namespace lem;
 
 /***************************************************************************
- Операция получения хеш-кода строки символов. Используется как классом
- CString, так и классом FString (см. LEM_FSTR.H) для инициализаций своего
- поля хеш-кода у каждого объекта. Используется умолчание, что для нулевой
- строки хеш-код будет нулем (!!!). Данная реализация хэш-функции для строк
- оптимизирована по эффективности для словоформ русского языка, но, по всей
- видимости, так же эффективна и для других алфавитов.
+ РћРїРµСЂР°С†РёСЏ РїРѕР»СѓС‡РµРЅРёСЏ С…РµС€-РєРѕРґР° СЃС‚СЂРѕРєРё СЃРёРјРІРѕР»РѕРІ. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РєР°Рє РєР»Р°СЃСЃРѕРј
+ CString, С‚Р°Рє Рё РєР»Р°СЃСЃРѕРј FString (СЃРј. LEM_FSTR.H) РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёР№ СЃРІРѕРµРіРѕ
+ РїРѕР»СЏ С…РµС€-РєРѕРґР° Сѓ РєР°Р¶РґРѕРіРѕ РѕР±СЉРµРєС‚Р°. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СѓРјРѕР»С‡Р°РЅРёРµ, С‡С‚Рѕ РґР»СЏ РЅСѓР»РµРІРѕР№
+ СЃС‚СЂРѕРєРё С…РµС€-РєРѕРґ Р±СѓРґРµС‚ РЅСѓР»РµРј (!!!). Р”Р°РЅРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ С…СЌС€-С„СѓРЅРєС†РёРё РґР»СЏ СЃС‚СЂРѕРє
+ РѕРїС‚РёРјРёР·РёСЂРѕРІР°РЅР° РїРѕ СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё РґР»СЏ СЃР»РѕРІРѕС„РѕСЂРј СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°, РЅРѕ, РїРѕ РІСЃРµР№
+ РІРёРґРёРјРѕСЃС‚Рё, С‚Р°Рє Р¶Рµ СЌС„С„РµРєС‚РёРІРЅР° Рё РґР»СЏ РґСЂСѓРіРёС… Р°Р»С„Р°РІРёС‚РѕРІ.
 ***************************************************************************/
-lem::uint8_t lem::lem_calc_string_hash( const wchar_t *buffer )
+lem::uint8_t lem::lem_calc_string_hash(const wchar_t *buffer)
 {
- if( !buffer )
-  return 0;
+    if (!buffer)
+        return 0;
 
- int i=0;
- uint8_t hash=0;
+    int i = 0;
+    uint8_t hash = 0;
 
- while( buffer[i] )
-  hash += buffer[i++];
+    while (buffer[i])
+        hash += buffer[i++];
 
- return hash;
+    return hash;
 }
 
-lem::uint8_t lem::lem_calc_string_hash_len( const wchar_t *buffer, int *len )
+lem::uint8_t lem::lem_calc_string_hash_len(const wchar_t *buffer, int *len)
 {
- if( !buffer )
-  return 0;
+    if (!buffer)
+        return 0;
 
- int i=0;
- uint8_t hash=0;
- *len=0;
+    int i = 0;
+    uint8_t hash = 0;
+    *len = 0;
 
- while( buffer[i] )
-  {
-   hash += buffer[i++];
-  }
+    while (buffer[i])
+    {
+        hash += buffer[i++];
+    }
 
- *len = i;
+    *len = i;
 
- return hash;
+    return hash;
 }
 
 // ***********************************************************************
-// В отличие от предыдущей функции вычисляет одновременно хэш-код и длину
-// строки=-аргумента, возвращая их в двух байтах uint16_t-результата.
-// Обращаю внимание, что длина строки не должна превышать 255 символов!
+// Р’ РѕС‚Р»РёС‡РёРµ РѕС‚ РїСЂРµРґС‹РґСѓС‰РµР№ С„СѓРЅРєС†РёРё РІС‹С‡РёСЃР»СЏРµС‚ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ С…СЌС€-РєРѕРґ Рё РґР»РёРЅСѓ
+// СЃС‚СЂРѕРєРё=-Р°СЂРіСѓРјРµРЅС‚Р°, РІРѕР·РІСЂР°С‰Р°СЏ РёС… РІ РґРІСѓС… Р±Р°Р№С‚Р°С… uint16_t-СЂРµР·СѓР»СЊС‚Р°С‚Р°.
+// РћР±СЂР°С‰Р°СЋ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ РґР»РёРЅР° СЃС‚СЂРѕРєРё РЅРµ РґРѕР»Р¶РЅР° РїСЂРµРІС‹С€Р°С‚СЊ 255 СЃРёРјРІРѕР»РѕРІ!
 // ***********************************************************************
-lem::uint16_t lem::lem_calc_string_hash_len( const wchar_t *buffer )
+lem::uint16_t lem::lem_calc_string_hash_len(const wchar_t *buffer)
 {
- if( !buffer )
-  return 0x0000;
+    if (!buffer)
+        return 0x0000;
 
- // Просто просуммируем все символы строки.
- uint8_t i=0;
- uint8_t res=0;
+    // РџСЂРѕСЃС‚Рѕ РїСЂРѕСЃСѓРјРјРёСЂСѓРµРј РІСЃРµ СЃРёРјРІРѕР»С‹ СЃС‚СЂРѕРєРё.
+    uint8_t i = 0;
+    uint8_t res = 0;
 
- while( buffer[i] )
-  res+=buffer[i++];
+    while (buffer[i])
+        res += buffer[i++];
 
- return ((uint16_t(i)<<8) & 0xff00u) |
-         ( 0x00ffu & uint16_t(res) ) |
-         ( 0x00ffu & (uint16_t(res)>>8) );
+    return ((uint16_t(i) << 8) & 0xff00u) |
+        (0x00ffu & uint16_t(res)) |
+        (0x00ffu & (uint16_t(res) >> 8));
 }
 
 
 
 /*********************************************************************
- Определяет длину строки с учетом конечного SOL_NULL_CHAR. Для пустых
- строк возвращает 1, для строки с нулевым указателем - 0.
- Таким образом, возвращается размер блока памяти, потребного
- для хранения строки s.
+ РћРїСЂРµРґРµР»СЏРµС‚ РґР»РёРЅСѓ СЃС‚СЂРѕРєРё СЃ СѓС‡РµС‚РѕРј РєРѕРЅРµС‡РЅРѕРіРѕ SOL_NULL_CHAR. Р”Р»СЏ РїСѓСЃС‚С‹С…
+ СЃС‚СЂРѕРє РІРѕР·РІСЂР°С‰Р°РµС‚ 1, РґР»СЏ СЃС‚СЂРѕРєРё СЃ РЅСѓР»РµРІС‹Рј СѓРєР°Р·Р°С‚РµР»РµРј - 0.
+ РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЂР°Р·РјРµСЂ Р±Р»РѕРєР° РїР°РјСЏС‚Рё, РїРѕС‚СЂРµР±РЅРѕРіРѕ
+ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃС‚СЂРѕРєРё s.
 **********************************************************************/
-int lem::lem_fullstrlen( const wchar_t *s )
+int lem::lem_fullstrlen(const wchar_t *s)
 {
- if( !s )
-  return 0;
+    if (!s)
+        return 0;
 
- int i=0;
- while( s[i++] );
- return i;
+    int i = 0;
+    while (s[i++]);
+    return i;
 }
 
 /*****************************************************
-  Сравнение двух строк. Регистр букв роли не играет.
+  РЎСЂР°РІРЅРµРЅРёРµ РґРІСѓС… СЃС‚СЂРѕРє. Р РµРіРёСЃС‚СЂ Р±СѓРєРІ СЂРѕР»Рё РЅРµ РёРіСЂР°РµС‚.
 ******************************************************/
-bool lem::lem_eqi( const wchar_t* s1, const wchar_t* s2 )
+bool lem::lem_eqi(const wchar_t* s1, const wchar_t* s2)
 {
- if( !s1 )
-  return !s2 || !*s2;
+    if (!s1)
+        return !s2 || !*s2;
 
- while( *s1 && *s2 && to_ulower(*s1)==to_ulower(*s2) ) { s1++; s2++; }
- return *s1==*s2;
+    while (*s1 && *s2 && to_ulower(*s1) == to_ulower(*s2)) { s1++; s2++; }
+    return *s1 == *s2;
 }
 
-int lem::lem__strcmp( const char *a, const wchar_t *b )
+int lem::lem__strcmp(const char *a, const wchar_t *b)
 {
- if( !a )
-  return (!b || !*b) ? 0 : 1;
+    if (!a)
+        return (!b || !*b) ? 0 : 1;
 
- while( *a && *b && *b==SOL_INT_TO_CHAR(*a) )
-  { a++; b++; }
+    while (*a && *b && *b == SOL_INT_TO_CHAR(*a))
+    {
+        a++; b++;
+    }
 
- return SOL_INT_TO_CHAR(*a)==*b ? 0 : 1;
+    return SOL_INT_TO_CHAR(*a) == *b ? 0 : 1;
 }
 
-int lem::lem__strcmp( const wchar_t *a, const char *b )
+int lem::lem__strcmp(const wchar_t *a, const char *b)
 {
- if( !a )
-  return (!b || !*b) ? 0 : 1;
+    if (!a)
+        return (!b || !*b) ? 0 : 1;
 
- while( *a && *b && *a==SOL_INT_TO_CHAR(*b) )
-  { a++; b++; }
+    while (*a && *b && *a == SOL_INT_TO_CHAR(*b))
+    {
+        a++; b++;
+    }
 
- return SOL_INT_TO_CHAR(*b)==*a ? 0 : 1;
+    return SOL_INT_TO_CHAR(*b) == *a ? 0 : 1;
 
 }
 
-int lem::lem_nentry( const wchar_t *s, wchar_t ch )
+int lem::lem_nentry(const wchar_t *s, wchar_t ch)
 {
- const int l=lem_strlen(s);
- int n=0;
- for( int i=0; i<l; i++ )
-  if( s[i]==ch )
-   n++;
+    const int l = lem_strlen(s);
+    int n = 0;
+    for (int i = 0; i < l; i++)
+        if (s[i] == ch)
+            n++;
 
- return n;
+    return n;
 }
 
 /***********************************************************
- Находит n-ое (по умолчанию первое) вхождение символа ch
- в строку-аргумент s. Если символ не найден, или число его
- вхождений менее nentry, то возвращается -1.
+ РќР°С…РѕРґРёС‚ n-РѕРµ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРµСЂРІРѕРµ) РІС…РѕР¶РґРµРЅРёРµ СЃРёРјРІРѕР»Р° ch
+ РІ СЃС‚СЂРѕРєСѓ-Р°СЂРіСѓРјРµРЅС‚ s. Р•СЃР»Рё СЃРёРјРІРѕР» РЅРµ РЅР°Р№РґРµРЅ, РёР»Рё С‡РёСЃР»Рѕ РµРіРѕ
+ РІС…РѕР¶РґРµРЅРёР№ РјРµРЅРµРµ nentry, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ -1.
 ***********************************************************/
-int lem::lem_find( const wchar_t *s, wchar_t ch, int nentry )
+int lem::lem_find(const wchar_t *s, wchar_t ch, int nentry)
 {
- const int l=lem_strlen(s);
- int n=1;
- for( int i=0; i<l; i++ )
-  if( s[i]==ch )
-   {
-    if( n==nentry )
-     return i;
-    else
-     n++;
-   }
+    const int l = lem_strlen(s);
+    int n = 1;
+    for (int i = 0; i < l; i++)
+        if (s[i] == ch)
+        {
+            if (n == nentry)
+                return i;
+            else
+                n++;
+        }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 /***************************************************************************
- Определяет положение nentry-го вхождения подстроки [f] в строку [s].
- Возвращает индекс первого совпавшего символа. Если подстрока не
- обнаружена, или число ее появлений в строке менее nentry, то возвращаем -1.
+ РћРїСЂРµРґРµР»СЏРµС‚ РїРѕР»РѕР¶РµРЅРёРµ nentry-РіРѕ РІС…РѕР¶РґРµРЅРёСЏ РїРѕРґСЃС‚СЂРѕРєРё [f] РІ СЃС‚СЂРѕРєСѓ [s].
+ Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ СЃРѕРІРїР°РІС€РµРіРѕ СЃРёРјРІРѕР»Р°. Р•СЃР»Рё РїРѕРґСЃС‚СЂРѕРєР° РЅРµ
+ РѕР±РЅР°СЂСѓР¶РµРЅР°, РёР»Рё С‡РёСЃР»Рѕ РµРµ РїРѕСЏРІР»РµРЅРёР№ РІ СЃС‚СЂРѕРєРµ РјРµРЅРµРµ nentry, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј -1.
 ****************************************************************************/
-int lem::lem_find( const wchar_t *s, const char *f, int nentry )
+int lem::lem_find(const wchar_t *s, const char *f, int nentry)
 {
- const int l1=lem_strlen(s);
- const int l2=lem_strlen(f);
+    const int l1 = lem_strlen(s);
+    const int l2 = lem_strlen(f);
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- int n=1;
- char f0=f[0];
+    int n = 1;
+    char f0 = f[0];
 
- for( int i=0; i<l1; i++ )
-  if( s[i]==SOL_INT_TO_CHAR(f0) )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==SOL_INT_TO_CHAR(f[j]) );
+    for (int i = 0; i < l1; i++)
+        if (s[i] == SOL_INT_TO_CHAR(f0))
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == SOL_INT_TO_CHAR(f[j]));
 
-    if( eq )
-     {
-      if(n==nentry)
-       return i;
-      else
-       n++;
-     }
-   }
+            if (eq)
+            {
+                if (n == nentry)
+                    return i;
+                else
+                    n++;
+            }
+        }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
-int lem::lem_find( const wchar_t *s, const wchar_t *f, int nentry )
+int lem::lem_find(const wchar_t *s, const wchar_t *f, int nentry)
 {
- const int l1=lem_strlen(s);
- const int l2=lem_strlen(f);
+    const int l1 = lem_strlen(s);
+    const int l2 = lem_strlen(f);
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- if( nentry==1 )
-  {
-   const wchar_t *where = wcsstr( s, f );
-   return where==NULL ? UNKNOWN : int(where-s);
-  }
+    if (nentry == 1)
+    {
+        const wchar_t *where = wcsstr(s, f);
+        return where == NULL ? UNKNOWN : int(where - s);
+    }
 
- int n=1;
- wchar_t f0=f[0];
+    int n = 1;
+    wchar_t f0 = f[0];
 
- for( int i=0; i<l1; i++ )
-  if( s[i]==f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==f[j] );
+    for (int i = 0; i < l1; i++)
+        if (s[i] == f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == f[j]);
 
-    if( eq )
-     {
-      if(n==nentry)
-       return i;
-      else
-       n++;
-     }
-   }
+            if (eq)
+            {
+                if (n == nentry)
+                    return i;
+                else
+                    n++;
+            }
+        }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
-int lem::lem_findi( const wchar_t *s, const wchar_t *f, int nentry )
+int lem::lem_findi(const wchar_t *s, const wchar_t *f, int nentry)
 {
- const int l1=lem_strlen(s);
- const int l2=lem_strlen(f);
+    const int l1 = lem_strlen(s);
+    const int l2 = lem_strlen(f);
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- int n=1;
- wchar_t f0=lem::to_uupper(f[0]);
+    int n = 1;
+    wchar_t f0 = lem::to_uupper(f[0]);
 
- for( int i=0; i<l1; i++ )
-  if( to_uupper(s[i])==f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( to_uupper(s[ii])==to_uupper(f[j]) );
+    for (int i = 0; i < l1; i++)
+        if (to_uupper(s[i]) == f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (to_uupper(s[ii]) == to_uupper(f[j]));
 
-    if( eq )
-     {
-      if(n==nentry)
-       return i;
-      else
-       n++;
-     }
-   }
+            if (eq)
+            {
+                if (n == nentry)
+                    return i;
+                else
+                    n++;
+            }
+        }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
-int lem::lem_find( const char *s, const wchar_t *f, int nentry )
+int lem::lem_find(const char *s, const wchar_t *f, int nentry)
 {
- const int l1=lem_strlen(s);
- const int l2=lem_strlen(f);
+    const int l1 = lem_strlen(s);
+    const int l2 = lem_strlen(f);
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- int n=1;
- wchar_t f0=f[0];
+    int n = 1;
+    wchar_t f0 = f[0];
 
- for( int i=0; i<l1; i++ )
-  if( s[i]==(char)f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==(char)f[j] );
+    for (int i = 0; i < l1; i++)
+        if (s[i] == (char)f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == (char)f[j]);
 
-    if( eq )
-     {
-      if(n==nentry)
-       return i;
-      else
-       n++;
-     }
-   }
+            if (eq)
+            {
+                if (n == nentry)
+                    return i;
+                else
+                    n++;
+            }
+        }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
 /*********************************************************************
- Процедура проверяет, обрамляют ли строку двойные апострофы ["] и
- удаляет их, сдвигая строку влево (длина уменьшается на 2). Допустимо
- указывать str=NULL, тогда операция не выполняется.
+ РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕРІРµСЂСЏРµС‚, РѕР±СЂР°РјР»СЏСЋС‚ Р»Рё СЃС‚СЂРѕРєСѓ РґРІРѕР№РЅС‹Рµ Р°РїРѕСЃС‚СЂРѕС„С‹ ["] Рё
+ СѓРґР°Р»СЏРµС‚ РёС…, СЃРґРІРёРіР°СЏ СЃС‚СЂРѕРєСѓ РІР»РµРІРѕ (РґР»РёРЅР° СѓРјРµРЅСЊС€Р°РµС‚СЃСЏ РЅР° 2). Р”РѕРїСѓСЃС‚РёРјРѕ
+ СѓРєР°Р·С‹РІР°С‚СЊ str=NULL, С‚РѕРіРґР° РѕРїРµСЂР°С†РёСЏ РЅРµ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ.
 *********************************************************************/
-void lem::lem_strip_apostrophes( wchar_t *str )
+void lem::lem_strip_apostrophes(wchar_t *str)
 {
- if( !(str) )
-  return;
+    if (!(str))
+        return;
 
- const int l = lem_strlen(str);
- if( l<2 )
-  return; // Строка слишком коротка и явно не может содержать апострофы!
+    const int l = lem_strlen(str);
+    if (l < 2)
+        return; // РЎС‚СЂРѕРєР° СЃР»РёС€РєРѕРј РєРѕСЂРѕС‚РєР° Рё СЏРІРЅРѕ РЅРµ РјРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ Р°РїРѕСЃС‚СЂРѕС„С‹!
 
- if( *str==L'\'' && str[l-1]==L'\'' )
-  {
-   // Перемещаем содержимое строки на 1 позицию влево.
-   memcpy( str, str+1, sizeof(*str)*(l-2) );
+    if (*str == L'\'' && str[l - 1] == L'\'')
+    {
+        // РџРµСЂРµРјРµС‰Р°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ СЃС‚СЂРѕРєРё РЅР° 1 РїРѕР·РёС†РёСЋ РІР»РµРІРѕ.
+        memcpy(str, str + 1, sizeof(*str)*(l - 2));
 
-   // Вписываем терминатор.
-   str[l-2]=0;
-  }
+        // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+        str[l - 2] = 0;
+    }
 
- return;
+    return;
 }
 
 
@@ -376,41 +380,41 @@ void lem::lem_strip_apostrophes( wchar_t *str )
               src including terminator '\0'. If does not, consequences
               are unknown (possibly crash).
 ***************************************************************************/
-void lem::lem_strcpy( wchar_t *dst, const wchar_t *src )
+void lem::lem_strcpy(wchar_t *dst, const wchar_t *src)
 {
- if( !!(src) )
-  #if defined LEM_BORLAND
-  wcscpy( dst, src );
-  #else
-  while( (*(dst++) = *(src++)) );
-  #endif
+    if (!!(src))
+#if defined LEM_BORLAND
+        wcscpy(dst, src);
+#else
+        while ((*(dst++) = *(src++)));
+#endif
 
- return;
+    return;
 }
 
-void lem::lem_strcpy_nn( wchar_t *dst, const wchar_t *src )
+void lem::lem_strcpy_nn(wchar_t *dst, const wchar_t *src)
 {
- #if defined LEM_BORLAND
- wcscpy( dst, src );
- #else
- while( (*(dst++) = *(src++)) );
- #endif
+#if defined LEM_BORLAND
+    wcscpy(dst, src);
+#else
+    while ((*(dst++) = *(src++)));
+#endif
 }
 
-void lem::lem_strcpy( wchar_t *dst, const char *src )
+void lem::lem_strcpy(wchar_t *dst, const char *src)
 {
- if( !!(src) )
-  while( (*(dst++) = SOL_INT_TO_CHAR(*(src++))) );
+    if (!!(src))
+        while ((*(dst++) = SOL_INT_TO_CHAR(*(src++))));
 
- return;
+    return;
 }
 
-void lem::lem_strcpy( char *dst, const wchar_t *src )
+void lem::lem_strcpy(char *dst, const wchar_t *src)
 {
- if( !!(src) )
-  while( (*(dst++) = char(*(src++))) );
+    if (!!(src))
+        while ((*(dst++) = char(*(src++))));
 
- return;
+    return;
 }
 
 /***************************************************************************
@@ -434,83 +438,83 @@ void lem::lem_strcpy( char *dst, const wchar_t *src )
               buffer remains unchanged. This is quite different to standard
               strncpy function!
               2) Information action is computed.
-              3) Если копирование обрывается по исчерпанию заданного
-                 параметра n, то в приемный буфер будет принудительно
-                 вписан нулевой символ-терминатор.
-              4) Если n меньше или равен нулю, то ни один симол не будет
-                 скопирован, и только нулевой символ-терминатор будет
-                 впечатан в dest.
+              3) Р•СЃР»Рё РєРѕРїРёСЂРѕРІР°РЅРёРµ РѕР±СЂС‹РІР°РµС‚СЃСЏ РїРѕ РёСЃС‡РµСЂРїР°РЅРёСЋ Р·Р°РґР°РЅРЅРѕРіРѕ
+                 РїР°СЂР°РјРµС‚СЂР° n, С‚Рѕ РІ РїСЂРёРµРјРЅС‹Р№ Р±СѓС„РµСЂ Р±СѓРґРµС‚ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ
+                 РІРїРёСЃР°РЅ РЅСѓР»РµРІРѕР№ СЃРёРјРІРѕР»-С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+              4) Р•СЃР»Рё n РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРµРЅ РЅСѓР»СЋ, С‚Рѕ РЅРё РѕРґРёРЅ СЃРёРјРѕР» РЅРµ Р±СѓРґРµС‚
+                 СЃРєРѕРїРёСЂРѕРІР°РЅ, Рё С‚РѕР»СЊРєРѕ РЅСѓР»РµРІРѕР№ СЃРёРјРІРѕР»-С‚РµСЂРјРёРЅР°С‚РѕСЂ Р±СѓРґРµС‚
+                 РІРїРµС‡Р°С‚Р°РЅ РІ dest.
 **************************************************************************/
-void lem::lem_strncpy( wchar_t *dest, const wchar_t *src, int n )
+void lem::lem_strncpy(wchar_t *dest, const wchar_t *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
- 
- if( !!(src) )
-  {
-   int N=n;
-   while( N-->0 && (*(dest++) = *(src++)) );
+    LEM_CHECKIT_Z(n >= 0);
 
-   if( N<=0 )
+    if (!!(src))
     {
-     if( n>=0 )
-      dest[N]=0; // Вписываем терминатор.
-     else
-      *dest=0;
-    }
-  }
+        int N = n;
+        while (N-- > 0 && (*(dest++) = *(src++)));
 
- return;
+        if (N <= 0)
+        {
+            if (n >= 0)
+                dest[N] = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+            else
+                *dest = 0;
+        }
+    }
+
+    return;
 }
 
 
-void lem::lem_strncpy( wchar_t *dest, const char *src, int n )
+void lem::lem_strncpy(wchar_t *dest, const char *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
+    LEM_CHECKIT_Z(n >= 0);
 
- if( !!(src) )
-  {
-   int N=n;
-   while( (N-->0) && ( *(dest++) = SOL_INT_TO_CHAR(*(src++)) ) );
-
-   if( N<=0 )
+    if (!!(src))
     {
-     if( n>=0 )
-      dest[N]=0; // Вписываем терминатор.
-     else
-      *dest=0;
-    }
-  }
+        int N = n;
+        while ((N-- > 0) && (*(dest++) = SOL_INT_TO_CHAR(*(src++))));
 
- return;
+        if (N <= 0)
+        {
+            if (n >= 0)
+                dest[N] = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+            else
+                *dest = 0;
+        }
+    }
+
+    return;
 }
 
 
-void lem::lem_strncpy( char *dest, const wchar_t *src, int n )
+void lem::lem_strncpy(char *dest, const wchar_t *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
+    LEM_CHECKIT_Z(n >= 0);
 
- if( !!(src) )
-  {
-   int N=n;
-   while( (N-->0) && (*(dest++) = (char)*(src++))!=0 );
-
-   if( N<=0 )
+    if (!!(src))
     {
-     if( n>=0 )
-      dest[N]=0; // Вписываем терминатор.
-     else
-      *dest=0;
-    }
-  }
+        int N = n;
+        while ((N-- > 0) && (*(dest++) = (char)*(src++)) != 0);
 
- return;
+        if (N <= 0)
+        {
+            if (n >= 0)
+                dest[N] = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+            else
+                *dest = 0;
+        }
+    }
+
+    return;
 }
 
 
 
 
 /*************************************************************************
- Возвращаем 0 если строки лексически совпадают, иначе 1.
+ Р’РѕР·РІСЂР°С‰Р°РµРј 0 РµСЃР»Рё СЃС‚СЂРѕРєРё Р»РµРєСЃРёС‡РµСЃРєРё СЃРѕРІРїР°РґР°СЋС‚, РёРЅР°С‡Рµ 1.
 *************************************************************************/
 /*
 int lem::lem_strcmp( const wchar_t *a, const wchar_t *b )
@@ -561,193 +565,193 @@ int lem::lem_strcmp( const char *a, const wchar_t *b )
 
 
 /***********************************************************************
- Отыскиваем символ ch в строке s, заканчивающейся нулевым символом, и
- возвращаем либо NULL (не найден), либо указатель на найденную позицию.
+ РћС‚С‹СЃРєРёРІР°РµРј СЃРёРјРІРѕР» ch РІ СЃС‚СЂРѕРєРµ s, Р·Р°РєР°РЅС‡РёРІР°СЋС‰РµР№СЃСЏ РЅСѓР»РµРІС‹Рј СЃРёРјРІРѕР»РѕРј, Рё
+ РІРѕР·РІСЂР°С‰Р°РµРј Р»РёР±Рѕ NULL (РЅРµ РЅР°Р№РґРµРЅ), Р»РёР±Рѕ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°Р№РґРµРЅРЅСѓСЋ РїРѕР·РёС†РёСЋ.
 
- Если указатель s равен NULL, то процедура вернёт NULL вне зависимости
- от ch.
+ Р•СЃР»Рё СѓРєР°Р·Р°С‚РµР»СЊ s СЂР°РІРµРЅ NULL, С‚Рѕ РїСЂРѕС†РµРґСѓСЂР° РІРµСЂРЅС‘С‚ NULL РІРЅРµ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё
+ РѕС‚ ch.
 ************************************************************************/
-const wchar_t* lem::lem_strrchr( const wchar_t *s, wchar_t ch )
+const wchar_t* lem::lem_strrchr(const wchar_t *s, wchar_t ch)
 {
- if( s )
-  {
-   int i=0;
-   while( s[i] )
-    if( s[i++]==ch )
-     return s+i-1;
-  }
+    if (s)
+    {
+        int i = 0;
+        while (s[i])
+            if (s[i++] == ch)
+                return s + i - 1;
+    }
 
- return NULL;
+    return NULL;
 }
 
 /*************************************************************************
- Символы строки src, терминированной нулём, добавляются в хвост строки dst.
- При этом нулевой терминатор dst переносится. Внимание! Проверки на
- переполнение буфера dst не предпринимаются!
+ РЎРёРјРІРѕР»С‹ СЃС‚СЂРѕРєРё src, С‚РµСЂРјРёРЅРёСЂРѕРІР°РЅРЅРѕР№ РЅСѓР»С‘Рј, РґРѕР±Р°РІР»СЏСЋС‚СЃСЏ РІ С…РІРѕСЃС‚ СЃС‚СЂРѕРєРё dst.
+ РџСЂРё СЌС‚РѕРј РЅСѓР»РµРІРѕР№ С‚РµСЂРјРёРЅР°С‚РѕСЂ dst РїРµСЂРµРЅРѕСЃРёС‚СЃСЏ. Р’РЅРёРјР°РЅРёРµ! РџСЂРѕРІРµСЂРєРё РЅР°
+ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ Р±СѓС„РµСЂР° dst РЅРµ РїСЂРµРґРїСЂРёРЅРёРјР°СЋС‚СЃСЏ!
 
- Если указатель на приемный буфер dst равен NULL, то процедура ничего не
- будет делать. Также допустимо указывать src=NULL.
+ Р•СЃР»Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїСЂРёРµРјРЅС‹Р№ Р±СѓС„РµСЂ dst СЂР°РІРµРЅ NULL, С‚Рѕ РїСЂРѕС†РµРґСѓСЂР° РЅРёС‡РµРіРѕ РЅРµ
+ Р±СѓРґРµС‚ РґРµР»Р°С‚СЊ. РўР°РєР¶Рµ РґРѕРїСѓСЃС‚РёРјРѕ СѓРєР°Р·С‹РІР°С‚СЊ src=NULL.
 **************************************************************************/
-void lem::lem_strcat( wchar_t *dst, const wchar_t *src )
+void lem::lem_strcat(wchar_t *dst, const wchar_t *src)
 {
- if( src && dst )
-  {
-   #if defined LEM_BORLAND
-   wcscat( dst, src );
-   #else
-   dst += lem_strlen_nn(dst);
-   int i=0;
-   while( (dst[i]=src[i]) )
-    i++;
-   #endif
-  }
+    if (src && dst)
+    {
+#if defined LEM_BORLAND
+        wcscat(dst, src);
+#else
+        dst += lem_strlen_nn(dst);
+        int i = 0;
+        while ((dst[i] = src[i]))
+            i++;
+#endif
+    }
 
- return;
+    return;
 }
 
-void lem::lem_strcat( wchar_t *dst, const char *src )
+void lem::lem_strcat(wchar_t *dst, const char *src)
 {
- if( src && dst )
-  {
-   dst += lem_strlen_nn(dst);
-   int i=0;
-   while( (dst[i]=SOL_INT_TO_CHAR(src[i])) )
-    i++;
-  }
+    if (src && dst)
+    {
+        dst += lem_strlen_nn(dst);
+        int i = 0;
+        while ((dst[i] = SOL_INT_TO_CHAR(src[i])))
+            i++;
+    }
 
- return;
+    return;
 }
 
-void lem::lem_strcat( char *dst, const wchar_t *src )
+void lem::lem_strcat(char *dst, const wchar_t *src)
 {
- if( src && dst )
-  {
-   dst += lem_strlen_nn(dst);
-   int i=0;
-   while( (dst[i]=(char)src[i]) )
-    i++;
-  }
+    if (src && dst)
+    {
+        dst += lem_strlen_nn(dst);
+        int i = 0;
+        while ((dst[i] = (char)src[i]))
+            i++;
+    }
 
- return;
+    return;
 }
 
 
 
 
 /*****************************************************************
- К строке в dst присоединяем содержимое строки src (но не более
- n символов из src), и терминируем результат.
- Допустимо указывать dst и/или src равными NULL, процедура тогда
- просто ничего не выполнит.
+ Рљ СЃС‚СЂРѕРєРµ РІ dst РїСЂРёСЃРѕРµРґРёРЅСЏРµРј СЃРѕРґРµСЂР¶РёРјРѕРµ СЃС‚СЂРѕРєРё src (РЅРѕ РЅРµ Р±РѕР»РµРµ
+ n СЃРёРјРІРѕР»РѕРІ РёР· src), Рё С‚РµСЂРјРёРЅРёСЂСѓРµРј СЂРµР·СѓР»СЊС‚Р°С‚.
+ Р”РѕРїСѓСЃС‚РёРјРѕ СѓРєР°Р·С‹РІР°С‚СЊ dst Рё/РёР»Рё src СЂР°РІРЅС‹РјРё NULL, РїСЂРѕС†РµРґСѓСЂР° С‚РѕРіРґР°
+ РїСЂРѕСЃС‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РІС‹РїРѕР»РЅРёС‚.
 
- Если n равен или меньше, чем нуль, то ни один символ из src не
- будет перенесен.
+ Р•СЃР»Рё n СЂР°РІРµРЅ РёР»Рё РјРµРЅСЊС€Рµ, С‡РµРј РЅСѓР»СЊ, С‚Рѕ РЅРё РѕРґРёРЅ СЃРёРјРІРѕР» РёР· src РЅРµ
+ Р±СѓРґРµС‚ РїРµСЂРµРЅРµСЃРµРЅ.
 
- При любых обстоятельствах строка dst окажется терминированной
- нулевым символом.
+ РџСЂРё Р»СЋР±С‹С… РѕР±СЃС‚РѕСЏС‚РµР»СЊСЃС‚РІР°С… СЃС‚СЂРѕРєР° dst РѕРєР°Р¶РµС‚СЃСЏ С‚РµСЂРјРёРЅРёСЂРѕРІР°РЅРЅРѕР№
+ РЅСѓР»РµРІС‹Рј СЃРёРјРІРѕР»РѕРј.
 ******************************************************************/
-void lem::lem_strncat( wchar_t *dst, const wchar_t *src, int n )
+void lem::lem_strncat(wchar_t *dst, const wchar_t *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
+    LEM_CHECKIT_Z(n >= 0);
 
- if( !!(src) )
-  {
-   dst += lem_strlen(dst);
-   int src_len = std::min( lem_strlen_nn(src), n );
-   if( src_len<0 )
-    src_len=0;
+    if (!!(src))
+    {
+        dst += lem_strlen(dst);
+        int src_len = std::min(lem_strlen_nn(src), n);
+        if (src_len < 0)
+            src_len = 0;
 
-   while( src_len-->0 && (*(dst++) = *(src++)) );
+        while (src_len-- > 0 && (*(dst++) = *(src++)));
 
-   *dst=0; // Вписываем терминатор.
-  }
+        *dst = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+    }
 
- return;
+    return;
 }
 
-void lem::lem_strncat( wchar_t *dst, const char *src, int n )
+void lem::lem_strncat(wchar_t *dst, const char *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
+    LEM_CHECKIT_Z(n >= 0);
 
- if( !!(src) )
-  {
-   dst += lem_strlen(dst);
-   int src_len = std::min( lem_strlen_nn(src), n );
-   if( src_len<0 )
-    src_len=0;
+    if (!!(src))
+    {
+        dst += lem_strlen(dst);
+        int src_len = std::min(lem_strlen_nn(src), n);
+        if (src_len < 0)
+            src_len = 0;
 
-   while( src_len-->0 && (*(dst++) = SOL_INT_TO_CHAR(*(src++))) );
+        while (src_len-- > 0 && (*(dst++) = SOL_INT_TO_CHAR(*(src++))));
 
-   *dst=0; // Вписываем терминатор.
-  }
+        *dst = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+    }
 
- return;
+    return;
 }
 
-void lem::lem_strncat( char *dst, const wchar_t *src, int n )
+void lem::lem_strncat(char *dst, const wchar_t *src, int n)
 {
- LEM_CHECKIT_Z(n>=0);
+    LEM_CHECKIT_Z(n >= 0);
 
- if( src )
-  {
-   dst += lem_strlen(dst);
-   int src_len = std::min( lem_strlen(src), n );
-   if( src_len<0 )
-    src_len=0;
+    if (src)
+    {
+        dst += lem_strlen(dst);
+        int src_len = std::min(lem_strlen(src), n);
+        if (src_len < 0)
+            src_len = 0;
 
-   while( src_len-->0 && (*(dst++) = (char)*(src++)) );
+        while (src_len-- > 0 && (*(dst++) = (char)*(src++)));
 
-   *dst=0; // Вписываем терминатор.
-  }
+        *dst = 0; // Р’РїРёСЃС‹РІР°РµРј С‚РµСЂРјРёРЅР°С‚РѕСЂ.
+    }
 
- return;
+    return;
 }
 
 
 /*******************************************************************
- Вычисляем длину строки s - до нулевого символа (терминатора). Если
- s=NULL, то возвращается 0.
+ Р’С‹С‡РёСЃР»СЏРµРј РґР»РёРЅСѓ СЃС‚СЂРѕРєРё s - РґРѕ РЅСѓР»РµРІРѕРіРѕ СЃРёРјРІРѕР»Р° (С‚РµСЂРјРёРЅР°С‚РѕСЂР°). Р•СЃР»Рё
+ s=NULL, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ 0.
 ********************************************************************/
-int lem::lem_strlen( const wchar_t *s )
+int lem::lem_strlen(const wchar_t *s)
 {
- if( !(s) )
-  return 0;
+    if (!(s))
+        return 0;
 
- int ires=0;
- while( s[ires++] );
- return ires-1;
+    int ires = 0;
+    while (s[ires++]);
+    return ires - 1;
 }
 
 // ****************************************
-// Нет проверки на s==NULL.
+// РќРµС‚ РїСЂРѕРІРµСЂРєРё РЅР° s==NULL.
 // ****************************************
-int lem::lem_strlen_nn( const wchar_t *s )
+int lem::lem_strlen_nn(const wchar_t *s)
 {
- int ires=0;
- while( s[ires++] );
- return ires-1;
+    int ires = 0;
+    while (s[ires++]);
+    return ires - 1;
 }
 
 
 /******************************************************************
- Сколько первых символов у строк a и b совпадают?
+ РЎРєРѕР»СЊРєРѕ РїРµСЂРІС‹С… СЃРёРјРІРѕР»РѕРІ Сѓ СЃС‚СЂРѕРє a Рё b СЃРѕРІРїР°РґР°СЋС‚?
 *******************************************************************/
-int lem::lem_str_match_len( const wchar_t *a, const wchar_t *b )
+int lem::lem_str_match_len(const wchar_t *a, const wchar_t *b)
 {
- if( !(a) || !(b) )
-  return 0;
+    if (!(a) || !(b))
+        return 0;
 
- int i=0;
- while( a[i] && b[i] && a[i]==b[i] )
-  i++;
+    int i = 0;
+    while (a[i] && b[i] && a[i] == b[i])
+        i++;
 
- return i;
+    return i;
 }
 
 // ************************************************************************
-// Вернем true, если s1 длиннее s2, или если при равной длине один из
-// символов слева в s1 больше (по числовому коду) соответствующего
-// символа в s2.
+// Р’РµСЂРЅРµРј true, РµСЃР»Рё s1 РґР»РёРЅРЅРµРµ s2, РёР»Рё РµСЃР»Рё РїСЂРё СЂР°РІРЅРѕР№ РґР»РёРЅРµ РѕРґРёРЅ РёР·
+// СЃРёРјРІРѕР»РѕРІ СЃР»РµРІР° РІ s1 Р±РѕР»СЊС€Рµ (РїРѕ С‡РёСЃР»РѕРІРѕРјСѓ РєРѕРґСѓ) СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ
+// СЃРёРјРІРѕР»Р° РІ s2.
 //
 //   "abc" > "ab"   -> true
 //   "bcd" > "abc"  -> true
@@ -755,605 +759,606 @@ int lem::lem_str_match_len( const wchar_t *a, const wchar_t *b )
 // ************************************************************************
 
 
-bool lem::lem_gt( const wchar_t *s1, const wchar_t *s2 )
+bool lem::lem_gt(const wchar_t *s1, const wchar_t *s2)
 {
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s1))
+        return false;
 
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s2))
+        return true;
 
- int i=0;
- while( s1[i]!='\0' )
-  {
-   if( uint16_t(s1[i]) < uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i] != '\0')
+    {
+        if (uint16_t(s1[i]) < uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint16_t(s1[i]) > uint16_t(s2[i]) )
+        if (uint16_t(s1[i]) > uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint16_t(s1[i]) > uint16_t(s2[i]);
+}
+
+bool lem::lem_gt(const char *s1, const wchar_t *s2)
+{
+    if (lem_is_empty(s1))
+        return false;
+
+    if (lem_is_empty(s2))
+        return true;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint8_t(s1[i]) < uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint8_t(s1[i]) > uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint8_t(s1[i]) > uint8_t(s2[i]);
+}
+
+bool lem::lem_gt(const wchar_t *s1, const char *s2)
+{
+    if (lem_is_empty(s1))
+        return false;
+
+    if (lem_is_empty(s2))
+        return true;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) < uint8_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint16_t(s1[i]) > uint8_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint16_t(s1[i]) > uint8_t(s2[i]);
+}
+
+
+
+bool lem::lem_ge(const wchar_t *s1, const wchar_t *s2)
+{
+    if (lem_is_empty(s2))
+        return true;
+
+    if (lem_is_empty(s1))
+        return false;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) < uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint16_t(s1[i]) > uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint16_t(s1[i])>uint16_t(s2[i]);
 }
 
-bool lem::lem_gt( const char *s1, const wchar_t *s2 )
+bool lem::lem_ge(const char *s1, const wchar_t *s2)
 {
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s2))
+        return true;
 
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s1))
+        return false;
 
- int i=0;
- while( s1[i] )
-  {
-   if( uint8_t(s1[i]) < uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint8_t(s1[i]) < uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint8_t(s1[i]) > uint16_t(s2[i]) )
+        if (uint8_t(s1[i]) > uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint8_t(s1[i])>uint8_t(s2[i]);
 }
 
-bool lem::lem_gt( const wchar_t *s1, const char *s2 )
+bool lem::lem_ge(const wchar_t *s1, const char *s2)
 {
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s2))
+        return true;
 
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s1))
+        return false;
 
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) < uint8_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) < uint8_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint16_t(s1[i]) > uint8_t(s2[i]) )
+        if (uint16_t(s1[i]) > uint8_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint16_t(s1[i])>uint8_t(s2[i]);
 }
 
 
-
-bool lem::lem_ge( const wchar_t *s1, const wchar_t *s2 )
+bool lem::lem_lt(const wchar_t *s1, const wchar_t *s2)
 {
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s2))
+        return false;
 
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s1))
+        return true;
 
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) < uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) > uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint16_t(s1[i]) > uint16_t(s2[i]) )
+        if (uint16_t(s1[i]) < uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint16_t(s1[i]) < uint16_t(s2[i]);
+}
+
+
+bool lem::lem_lt(const char *s1, const wchar_t *s2)
+{
+    if (lem_is_empty(s2))
+        return false;
+
+    if (lem_is_empty(s1))
+        return true;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint8_t(s1[i]) > uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint8_t(s1[i]) < uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint8_t(s1[i]) < uint16_t(s2[i]);
+}
+
+
+bool lem::lem_lt(const wchar_t *s1, const char *s2)
+{
+    if (lem_is_empty(s2))
+        return false;
+
+    if (lem_is_empty(s1))
+        return true;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) > uint8_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint16_t(s1[i]) < uint8_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
+    // РЎС‚СЂРѕРєРё РёРјРµСЋС‚ РѕРґРёРЅР°РєРѕРІСѓСЋ РґР»РёРЅСѓ, Р»РёР±Рѕ s1 Р·Р°РєРѕРЅС‡РёР»Р°СЃСЊ СЂР°РЅСЊС€Рµ
+    return uint16_t(s1[i]) < uint8_t(s2[i]);
+}
+
+bool lem::lem_le(const wchar_t *s1, const wchar_t *s2)
+{
+    if (lem_is_empty(s1))
+        return true;
+
+    if (lem_is_empty(s2))
+        return false;
+
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) > uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
+
+        if (uint16_t(s1[i]) < uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- return true;
 }
 
-bool lem::lem_ge( const char *s1, const wchar_t *s2 )
+bool lem::lem_le(const char *s1, const wchar_t *s2)
 {
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s1))
+        return true;
 
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s2))
+        return false;
 
- int i=0;
- while( s1[i] )
-  {
-   if( uint8_t(s1[i]) < uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint8_t(s1[i]) > uint16_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint8_t(s1[i]) > uint16_t(s2[i]) )
+        if (uint8_t(s1[i]) < uint16_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- return true;
 }
 
-bool lem::lem_ge( const wchar_t *s1, const char *s2 )
+bool lem::lem_le(const wchar_t *s1, const char *s2)
 {
- if( lem_is_empty(s2) )
-  return true;
+    if (lem_is_empty(s1))
+        return true;
 
- if( lem_is_empty(s1) )
-  return false;
+    if (lem_is_empty(s2))
+        return false;
 
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) < uint8_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
+    int i = 0;
+    while (s1[i])
+    {
+        if (uint16_t(s1[i]) > uint8_t(s2[i]))
+            return false; // РљРѕРґ СЃРёРјРІРѕР»Р° РІ s1 РѕРєР°Р·Р°Р»СЃСЏ РјРµРЅСЊС€Рµ, С‡РµРј РІ s2.
 
-   if( uint16_t(s1[i]) > uint8_t(s2[i]) )
+        if (uint16_t(s1[i]) < uint8_t(s2[i]))
+            return true;
+
+        i++;
+    }
+
     return true;
-
-   i++;
-  }
-
- return true;
-}
-
-
-bool lem::lem_lt( const wchar_t *s1, const wchar_t *s2 )
-{
- if( lem_is_empty(s2) )
-  return false;
-
- if( lem_is_empty(s1) )
-  return true;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) > uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint16_t(s1[i]) < uint16_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint16_t(s1[i])<uint16_t(s2[i]);
-}
-
-
-bool lem::lem_lt( const char *s1, const wchar_t *s2 )
-{
- if( lem_is_empty(s2) )
-  return false;
-
- if( lem_is_empty(s1) )
-  return true;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint8_t(s1[i]) > uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint8_t(s1[i]) < uint16_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint8_t(s1[i])<uint16_t(s2[i]);
-}
-
-
-bool lem::lem_lt( const wchar_t *s1, const char *s2 )
-{
- if( lem_is_empty(s2) )
-  return false;
-
- if( lem_is_empty(s1) )
-  return true;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) > uint8_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint16_t(s1[i]) < uint8_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- // Строки имеют одинаковую длину, либо s1 закончилась раньше
- return uint16_t(s1[i])<uint8_t(s2[i]);
-}
-
-bool lem::lem_le( const wchar_t *s1, const wchar_t *s2 )
-{
- if( lem_is_empty(s1) )
-  return true;
-
- if( lem_is_empty(s2) )
-  return false;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) > uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint16_t(s1[i]) < uint16_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- return true;
-}
-
-bool lem::lem_le( const char *s1, const wchar_t *s2 )
-{
- if( lem_is_empty(s1) )
-  return true;
-
- if( lem_is_empty(s2) )
-  return false;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint8_t(s1[i]) > uint16_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint8_t(s1[i]) < uint16_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- return true;
-}
-
-bool lem::lem_le( const wchar_t *s1, const char *s2 )
-{
- if( lem_is_empty(s1) )
-  return true;
-
- if( lem_is_empty(s2) )
-  return false;
-
- int i=0;
- while( s1[i] )
-  {
-   if( uint16_t(s1[i]) > uint8_t(s2[i]) )
-    return false; // Код символа в s1 оказался меньше, чем в s2.
-
-   if( uint16_t(s1[i]) < uint8_t(s2[i]) )
-    return true;
-
-   i++;
-  }
-
- return true;
 }
 
 
 
 
-int lem::lem_find_from( const char *s, const wchar_t *f,  int start_pos )
+int lem::lem_find_from(const char *s, const wchar_t *f, int start_pos)
 {
- LEM_CHECKIT_Z(start_pos>=0);
+    LEM_CHECKIT_Z(start_pos >= 0);
 
- if( lem_is_empty(s) )
-  return lem_is_empty(f) ? 0 : UNKNOWN;
+    if (lem_is_empty(s))
+        return lem_is_empty(f) ? 0 : UNKNOWN;
 
- int l1=lem_strlen(s);
- int l2=lem_strlen(f);
- wchar_t f0=f[0];
+    int l1 = lem_strlen(s);
+    int l2 = lem_strlen(f);
+    wchar_t f0 = f[0];
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- for( int i=start_pos; i<l1; i++ )
-  if( s[i]==f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==f[j] );
+    for (int i = start_pos; i < l1; i++)
+        if (s[i] == f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == f[j]);
 
-    if( eq )
-     return i;
-   }
+            if (eq)
+                return i;
+        }
 
- return -1;
+    return -1;
 }
 
-int lem::lem_find_from( const wchar_t *s,  const wchar_t *f, int start_pos )
+int lem::lem_find_from(const wchar_t *s, const wchar_t *f, int start_pos)
 {
- LEM_CHECKIT_Z(start_pos>=0);
+    LEM_CHECKIT_Z(start_pos >= 0);
 
- if( lem_is_empty(s) )
-  return lem_is_empty(f) ? 0 : UNKNOWN;
+    if (lem_is_empty(s))
+        return lem_is_empty(f) ? 0 : UNKNOWN;
 
- int l1=lem_strlen(s);
- int l2=lem_strlen(f);
- wchar_t f0=f[0];
+    int l1 = lem_strlen(s);
+    int l2 = lem_strlen(f);
+    wchar_t f0 = f[0];
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- for( int i=start_pos; i<l1; i++ )
-  if( s[i]==f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==f[j] );
+    for (int i = start_pos; i < l1; i++)
+        if (s[i] == f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == f[j]);
 
-    if( eq )
-     return i;
-   }
+            if (eq)
+                return i;
+        }
 
- return -1;
+    return -1;
 }
 
-int lem::lem_find_from( const wchar_t *s,  const char *f, int start_pos )
+int lem::lem_find_from(const wchar_t *s, const char *f, int start_pos)
 {
- LEM_CHECKIT_Z(start_pos>=0);
+    LEM_CHECKIT_Z(start_pos >= 0);
 
- if( lem_is_empty(s) )
-  return lem_is_empty(f) ? 0 : UNKNOWN;
+    if (lem_is_empty(s))
+        return lem_is_empty(f) ? 0 : UNKNOWN;
 
- int l1=lem_strlen(s);
- int l2=lem_strlen(f);
- char f0=f[0];
+    int l1 = lem_strlen(s);
+    int l2 = lem_strlen(f);
+    char f0 = f[0];
 
- if( !l1 || !l2 )
-  return UNKNOWN;
+    if (!l1 || !l2)
+        return UNKNOWN;
 
- for( int i=start_pos; i<l1; i++ )
-  if( s[i]==f0 )
-   {
-    bool eq=true;
-    int ii=i+1,j=1;
-    for( ; eq && f[j] && j<l2; j++, ii++ )
-     eq=( s[ii]==f[j] );
+    for (int i = start_pos; i < l1; i++)
+        if (s[i] == f0)
+        {
+            bool eq = true;
+            int ii = i + 1, j = 1;
+            for (; eq && f[j] && j < l2; j++, ii++)
+                eq = (s[ii] == f[j]);
 
-    if( eq )
-     return i;
-   }
+            if (eq)
+                return i;
+        }
 
- return -1;
+    return -1;
 }
 
 // *******************************************
-// Убираем все лидирующие пробельные символы.
+// РЈР±РёСЂР°РµРј РІСЃРµ Р»РёРґРёСЂСѓСЋС‰РёРµ РїСЂРѕР±РµР»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹.
 // *******************************************
-void lem::lem_strip_leading_spaces( wchar_t *str )
+void lem::lem_strip_leading_spaces(wchar_t *str)
 {
- // Сканируем строку и считаем начальные пробелы.
- int n=0, i=0;
- while( (str[i]) && ( str[i]==L' ' || str[i]==L'\t' ) )
-  {
-   i++;
-   n++;
-  }
+    // РЎРєР°РЅРёСЂСѓРµРј СЃС‚СЂРѕРєСѓ Рё СЃС‡РёС‚Р°РµРј РЅР°С‡Р°Р»СЊРЅС‹Рµ РїСЂРѕР±РµР»С‹.
+    int n = 0, i = 0;
+    while ((str[i]) && (str[i] == L' ' || str[i] == L'\t'))
+    {
+        i++;
+        n++;
+    }
 
- // перемещаем строку на n символов к началу.
- if( n )
-  {
-   int ito=0, ifrom=n;
+    // РїРµСЂРµРјРµС‰Р°РµРј СЃС‚СЂРѕРєСѓ РЅР° n СЃРёРјРІРѕР»РѕРІ Рє РЅР°С‡Р°Р»Сѓ.
+    if (n)
+    {
+        int ito = 0, ifrom = n;
 
-   do
-    str[ito++] = str[ifrom];
-   while( (str[ifrom++]) );
-  }
+        do
+            str[ito++] = str[ifrom];
+        while ((str[ifrom++]));
+    }
 
- return;
+    return;
 }
 
 // *******************************************
-// Убираем все конечные пробельные символы.
+// РЈР±РёСЂР°РµРј РІСЃРµ РєРѕРЅРµС‡РЅС‹Рµ РїСЂРѕР±РµР»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹.
 // *******************************************
-void lem::lem_strip_final_spaces( wchar_t *str )
+void lem::lem_strip_final_spaces(wchar_t *str)
 {
- int i=lem_strlen(str)-1;
+    int i = lem_strlen(str) - 1;
 
- while( i>=0 )
-  if( str[i]!=L' ' && str[i]!=L'\t' )
-   break;
-  else
-   str[i--]='\0';
+    while (i >= 0)
+        if (str[i] == L' ' || str[i] == L'\t' || str[i] == L'\r' || str[i] == L'\n')
+            str[i--] = '\0';
+        else
+            break;
 
- return;
+    return;
 }
 
 // ****************************************
-// Сохранение строки в упакованном виде.
+// РЎРѕС…СЂР°РЅРµРЅРёРµ СЃС‚СЂРѕРєРё РІ СѓРїР°РєРѕРІР°РЅРЅРѕРј РІРёРґРµ.
 // ****************************************
 
 namespace
 {
- // Флаги упаковки (применяется один из них).
- typedef enum {
-               NOTPACKED=0x00,      // неупакованная строка
-               ASCII_CHARS=0x40,    // все символы - однобайтовые ASCII
-               UNICODE_PACKED=0x80  // Хранится первый символ и однобайтовые
-                                    // разницы кодов для ост альных
-              } Pack_Flag;
+    // Р¤Р»Р°РіРё СѓРїР°РєРѕРІРєРё (РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РѕРґРёРЅ РёР· РЅРёС…).
+    typedef enum {
+        NOTPACKED = 0x00,      // РЅРµСѓРїР°РєРѕРІР°РЅРЅР°СЏ СЃС‚СЂРѕРєР°
+        ASCII_CHARS = 0x40,    // РІСЃРµ СЃРёРјРІРѕР»С‹ - РѕРґРЅРѕР±Р°Р№С‚РѕРІС‹Рµ ASCII
+        UNICODE_PACKED = 0x80  // РҐСЂР°РЅРёС‚СЃСЏ РїРµСЂРІС‹Р№ СЃРёРјРІРѕР» Рё РѕРґРЅРѕР±Р°Р№С‚РѕРІС‹Рµ
+                             // СЂР°Р·РЅРёС†С‹ РєРѕРґРѕРІ РґР»СЏ РѕСЃС‚ Р°Р»СЊРЅС‹С…
+    } Pack_Flag;
 }
 
-void lem::Save_Packed( const UCString &s, lem::Stream &bin )
+void lem::Save_Packed(const UCString &s, lem::Stream &bin)
 {
- BOOST_STATIC_ASSERT( UCString::max_len < 64 );
- uint8_t pack_flags = NOTPACKED;
+    BOOST_STATIC_ASSERT(UCString::max_len < 64);
+    uint8_t pack_flags = NOTPACKED;
 
- if( s.empty() )
-  {
-   bin.write( &pack_flags, 1 );
-  }
- else
-  {
-   bool all_ascii=true;
-   bool use_based_unicode=true;
-
-   wchar_t base = s.front();
-
-   for( UCString::const_iterator i=s.begin(); i!=s.end(); i++ )
+    if (s.empty())
     {
-     if( 0xff00 & static_cast<uint16_t>(*i) )
-      // Нашли не-ASCII символ
-      all_ascii=false;
+        bin.write(&pack_flags, 1);
+    }
+    else
+    {
+        bool all_ascii = true;
+        bool use_based_unicode = true;
 
-     int16_t dc = lem::Math::iabs( (*i) - base );
+        wchar_t base = s.front();
 
-     if( 0xff00 & static_cast<uint16_t>(dc) )
-      // Смещение от базового символа больше 255
-      use_based_unicode=false;
+        for (UCString::const_iterator i = s.begin(); i != s.end(); i++)
+        {
+            if (0xff00 & static_cast<uint16_t>(*i))
+                // РќР°С€Р»Рё РЅРµ-ASCII СЃРёРјРІРѕР»
+                all_ascii = false;
 
-     if( !all_ascii && !use_based_unicode )
-      // Дальше проверять нет смысла.
-      break;
+            int16_t dc = lem::Math::iabs((*i) - base);
+
+            if (0xff00 & static_cast<uint16_t>(dc))
+                // РЎРјРµС‰РµРЅРёРµ РѕС‚ Р±Р°Р·РѕРІРѕРіРѕ СЃРёРјРІРѕР»Р° Р±РѕР»СЊС€Рµ 255
+                use_based_unicode = false;
+
+            if (!all_ascii && !use_based_unicode)
+                // Р”Р°Р»СЊС€Рµ РїСЂРѕРІРµСЂСЏС‚СЊ РЅРµС‚ СЃРјС‹СЃР»Р°.
+                break;
+        }
+
+        if (all_ascii)
+        {
+            pack_flags = ASCII_CHARS | static_cast<uint8_t>(s.length());
+            bin.write(&pack_flags, 1);
+
+            for (UCString::const_iterator i = s.begin(); i != s.end(); i++)
+            {
+                uint8_t ch = static_cast<uint8_t>(*i);
+                bin.write(&ch, 1);
+            }
+        }
+        else if (use_based_unicode)
+        {
+            pack_flags = UNICODE_PACKED | static_cast<uint8_t>(s.length());
+            bin.write(&pack_flags, 1);
+
+            int16_t base16 = static_cast<int16_t>(base);
+            bin.write(&base16, sizeof(base16));
+
+            for (UCString::const_iterator i = s.begin() + 1; i != s.end(); i++)
+            {
+                uint8_t dc = static_cast<uint8_t>((*i) - base);
+                bin.write(&dc, 1);
+            }
+        }
+        else
+        {
+            pack_flags = NOTPACKED | static_cast<uint8_t>(s.length());
+            bin.write(&pack_flags, 1);
+            bin.write(s.begin(), s.length() * sizeof(wchar_t));
+        }
     }
 
-   if( all_ascii )
-    {
-     pack_flags = ASCII_CHARS | static_cast<uint8_t>( s.length() );
-     bin.write( &pack_flags, 1 );
-
-     for( UCString::const_iterator i=s.begin(); i!=s.end(); i++ )
-      {
-       uint8_t ch = static_cast<uint8_t>(*i);
-       bin.write( &ch, 1 );
-      }
-    }
-   else if( use_based_unicode )
-    {
-     pack_flags = UNICODE_PACKED | static_cast<uint8_t>( s.length() );
-     bin.write( &pack_flags, 1 );
-
-     int16_t base16 = static_cast<int16_t>(base);
-     bin.write( &base16, sizeof(base16) );
-
-     for( UCString::const_iterator i=s.begin()+1; i!=s.end(); i++ )
-      {
-       uint8_t dc = static_cast<uint8_t>( (*i) - base );
-       bin.write( &dc, 1 );
-      }
-    }
-   else
-    {
-     pack_flags = NOTPACKED | static_cast<uint8_t>( s.length() );
-     bin.write( &pack_flags, 1 );
-     bin.write( s.begin(), s.length()*sizeof(wchar_t) );
-    }
-  }
-
- return;
+    return;
 }
 
 
 
-void lem::Load_Packed( UCString *s, lem::Stream &bin )
+void lem::Load_Packed(UCString *s, lem::Stream &bin)
 {
- BOOST_STATIC_ASSERT( UCString::max_len < 64 );
+    BOOST_STATIC_ASSERT(UCString::max_len < 64);
 
- uint8_t f=0;
- bin.read( &f, 1 );
+    uint8_t f = 0;
+    bin.read(&f, 1);
 
- uint8_t l = 0x3fu & f;
- uint8_t pack_flags = 0xc0u & f;
+    uint8_t l = 0x3fu & f;
+    uint8_t pack_flags = 0xc0u & f;
 
- switch( pack_flags )
- {
-  case NOTPACKED:
-   bin.read( s->ptr(), l*sizeof(wchar_t) );
-   break;
-
-  case ASCII_CHARS:
-  {	   
-   for( int i=0; i<l; i++ )
+    switch (pack_flags)
     {
-     uint8_t c;
-     bin.read( &c, 1 );
-     s->ptr()[i]=c;
+    case NOTPACKED:
+        bin.read(s->ptr(), l * sizeof(wchar_t));
+        break;
+
+    case ASCII_CHARS:
+    {
+        for (int i = 0; i < l; i++)
+        {
+            uint8_t c;
+            bin.read(&c, 1);
+            s->ptr()[i] = c;
+        }
+        break;
     }
-   break;
-  }
 
-  case UNICODE_PACKED:
-   {
-    int16_t base;
-    bin.read( &base, sizeof(base) );
-    s->ptr()[0] = static_cast<wchar_t>(base);
+    case UNICODE_PACKED:
+    {
+        int16_t base;
+        bin.read(&base, sizeof(base));
+        s->ptr()[0] = static_cast<wchar_t>(base);
 
-    for( int i=1; i<l; i++ )
-     {
-      int8_t dc;
-      bin.read( &dc, 1 );
-      
-      s->ptr()[i] = static_cast<wchar_t>( base + static_cast<int16_t>(dc) );
-     }
+        for (int i = 1; i < l; i++)
+        {
+            int8_t dc;
+            bin.read(&dc, 1);
 
-    break;
-   }
- }
+            s->ptr()[i] = static_cast<wchar_t>(base + static_cast<int16_t>(dc));
+        }
 
- s->ptr()[l]=0;
- s->calc_hash();
- return;
+        break;
+    }
+    }
+
+    s->ptr()[l] = 0;
+    s->calc_hash();
+    return;
 }
 
 
 // ******************************************************************
-// Из строки str удаляются все символы, присутствующие в строке chs.
+// РР· СЃС‚СЂРѕРєРё str СѓРґР°Р»СЏСЋС‚СЃСЏ РІСЃРµ СЃРёРјРІРѕР»С‹, РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‰РёРµ РІ СЃС‚СЂРѕРєРµ chs.
 // ******************************************************************
-void lem::lem_remove_chars( wchar_t *str, const wchar_t *chs )
+void lem::lem_remove_chars(wchar_t *str, const wchar_t *chs)
 {
- if( !(str) || !(chs) )
-  return;
+    if (!(str) || !(chs))
+        return;
 
- int i_dst=0, i_src=0;
- while( str[i_src] )
-  {
-   if( lem_find( chs, str[i_src] )!=UNKNOWN )
-    i_src++; // Символ присутствует - пропускаем
-   else
-    str[i_dst++] = str[i_src++];
-  }
+    int i_dst = 0, i_src = 0;
+    while (str[i_src])
+    {
+        if (lem_find(chs, str[i_src]) != UNKNOWN)
+            i_src++; // РЎРёРјРІРѕР» РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ - РїСЂРѕРїСѓСЃРєР°РµРј
+        else
+            str[i_dst++] = str[i_src++];
+    }
 
- str[i_dst] = '\0';
+    str[i_dst] = '\0';
 
- return;
+    return;
 }
 
 
-void lem::lem_remove_char( wchar_t *str, wchar_t chs )
+void lem::lem_remove_char(wchar_t *str, wchar_t chs)
 {
- if( !(str) || !chs )
-  return;
+    if (!(str) || !chs)
+        return;
 
- int i_dst=0, i_src=0;
- while( str[i_src] )
-  {
-   if( str[i_src]==chs )
-    i_src++; // Символ присутствует - пропускаем
-   else
-    str[i_dst++] = str[i_src++];
-  }
+    int i_dst = 0, i_src = 0;
+    while (str[i_src])
+    {
+        if (str[i_src] == chs)
+            i_src++; // РЎРёРјРІРѕР» РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ - РїСЂРѕРїСѓСЃРєР°РµРј
+        else
+            str[i_dst++] = str[i_src++];
+    }
 
- str[i_dst] = '\0';
+    str[i_dst] = '\0';
 
- return;
+    return;
 }
 
 
+/*
 const UFString lem::encode_chars_to_html( const UFString &str )
 {
  UFString res;
@@ -1377,36 +1382,37 @@ const UFString lem::encode_chars_to_html( const UFString &str )
    else if( ch == 0x00bb )
     res += L"&laquo;";
    else
-    res += ch;   
+    res += ch;
   }
 
  return res;
 }
+*/
 
-const UFString lem::encode_chars_to_xml( const UFString &str )
+const UFString lem::encode_chars_to_xml(const UFString &str)
 {
- UFString res;
- char nnnn[10];
- for( UFString::const_iterator i=str.begin(); i!=str.end(); i++ )
-  {
-   if( is_lat(*i) || is_udigit(*i) )
-    res += *i;
-   else
-    { 
-     uint16_to_str( *i, nnnn, 10 );
+    UFString res;
+    char nnnn[10];
+    for (UFString::const_iterator i = str.begin(); i != str.end(); i++)
+    {
+        if (is_lat(*i) || is_udigit(*i))
+            res += *i;
+        else
+        {
+            uint16_to_str(*i, nnnn, 10);
 
-     res += L"&#";
-     res += nnnn;
-     res += L';';
+            res += L"&#";
+            res += nnnn;
+            res += L';';
+        }
     }
-  }
 
- return res;
+    return res;
 }
 
-
-// Строка из кодировки SGML (с представлением некоторых символов через
-// последовательности &entity;) преобразуется к обычному виду.
+/*
+// РЎС‚СЂРѕРєР° РёР· РєРѕРґРёСЂРѕРІРєРё SGML (СЃ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµРј РЅРµРєРѕС‚РѕСЂС‹С… СЃРёРјРІРѕР»РѕРІ С‡РµСЂРµР·
+// РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё &entity;) РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ Рє РѕР±С‹С‡РЅРѕРјСѓ РІРёРґСѓ.
 const UFString lem::encode_html_to_chars( const UFString &str )
 {
  UFString res;
@@ -1414,7 +1420,7 @@ const UFString lem::encode_html_to_chars( const UFString &str )
   {
    if( *i == L'&' )
     {
-     // Читаем имя SGML entity - до символа ;
+     // Р§РёС‚Р°РµРј РёРјСЏ SGML entity - РґРѕ СЃРёРјРІРѕР»Р° ;
      FString entity;
      i++;
 
@@ -1426,8 +1432,8 @@ const UFString lem::encode_html_to_chars( const UFString &str )
         }
 
        entity += static_cast<char>(*i);
-      } 
-     
+      }
+
      res += CodeConverter::Sgml_2_Char( entity.c_str() );
     }
    else
@@ -1436,28 +1442,29 @@ const UFString lem::encode_html_to_chars( const UFString &str )
 
  return res;
 }
+*/
 
-
-const UFString lem::encode_str_to_sql( const UFString &str )
+const UFString lem::encode_str_to_sql(const UFString &str)
 {
- UFString res;
+    UFString res;
 
- for( UFString::const_iterator i=str.begin(); i!=str.end(); i++ )
-  {
-   wchar_t ch = *i;
+    for (UFString::const_iterator i = str.begin(); i != str.end(); i++)
+    {
+        wchar_t ch = *i;
 
-   if( ch == L'\'' )
-    res += L"''";
-   else if( ch == L'&' )
-    res += L"& ";
-   else
-    res += ch;   
-  }
+        if (ch == L'\'')
+            res += L"''";
+        else if (ch == L'&')
+            res += L"& ";
+        else
+            res += ch;
+    }
 
- return res;
+    return res;
 }
 
 
+/*
 UFString lem::wildcards_to_regex( const UFString &str, bool supress_front_asterix )
 {
  UFString res;
@@ -1468,13 +1475,6 @@ UFString lem::wildcards_to_regex( const UFString &str, bool supress_front_asteri
 
  if( str.length()==1 )
   return res;
-
-/*
- if( str.back()==L'*' || str.back()==L'?' )
-  {
-   END--;
-  }
-*/
 
  for( UFString::const_iterator i=str.begin(); i!=END; i++ )
   {
@@ -1504,16 +1504,18 @@ UFString lem::wildcards_to_regex( const UFString &str, bool supress_front_asteri
 
  return res;
 }
+*/
 
 
 
-
-bool lem::lem_eq_begin( const wchar_t *a1, const wchar_t *a2 )
+bool lem::lem_eq_begin(const wchar_t *a1, const wchar_t *a2)
 {
- while( *a1 && *a2 && *a1==*a2 )
-  { a1++; a2++; }
+    while (*a1 && *a2 && *a1 == *a2)
+    {
+        a1++; a2++;
+    }
 
- return !*a1 || !*a2;
+    return !*a1 || !*a2;
 }
 
 
@@ -1525,131 +1527,135 @@ void lem::split( const UFString &s, Collect<UFString> &list, wchar_t delim )
  for( int i=0; i<l; )
   {
    UFString ss;
-   
+
    while( s[i]!=delim && s[i]!=0 )
-    ss.AddDirty(s[i++]);  
+    ss.AddDirty(s[i++]);
 
    ss.calc_hash();
    list.push_back(ss);
 
-   i++;   
+   i++;
   }
 
- return;  
+ return;
 }
 */
 
 
 // *****************************************************
-// Срисовано с соответствующего участка кода в wxWindows
+// РЎСЂРёСЃРѕРІР°РЅРѕ СЃ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ СѓС‡Р°СЃС‚РєР° РєРѕРґР° РІ wxWindows
 // *****************************************************
-FString lem::format_str( const char *fmt, ... )
+FString lem::format_str(const char *fmt, ...)
 {
- if( fmt==NULL )
-  return FString();
+    if (fmt == NULL)
+        return FString();
 
- va_list argptr;
- va_start(argptr,fmt);
+    va_list argptr;
+    va_start(argptr, fmt);
 
- #if LEM_DEBUGGING==1
- // По историческим причинам класс OFormatter использует спецификатор %us для вывода широких
- // строк и %uc для широких символов. Для sprintf это недопустимые спецификаторы, приводящие
- // к неправильному выводу.
- if( strstr( fmt, "%us" )!=NULL || strstr( fmt, "%uc" )!=NULL )
-  {
-   LEM_STOPIT;
-  }
- #endif
-
- int size = 1024;
-
- char *buf=NULL;
- while(true)
-  {
-   buf = (char*)malloc( sizeof(char)*(size+1) );
-   if( !buf )
+#if LEM_DEBUGGING==1
+    // РџРѕ РёСЃС‚РѕСЂРёС‡РµСЃРєРёРј РїСЂРёС‡РёРЅР°Рј РєР»Р°СЃСЃ OFormatter РёСЃРїРѕР»СЊР·СѓРµС‚ СЃРїРµС†РёС„РёРєР°С‚РѕСЂ %us РґР»СЏ РІС‹РІРѕРґР° С€РёСЂРѕРєРёС…
+    // СЃС‚СЂРѕРє Рё %uc РґР»СЏ С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ. Р”Р»СЏ sprintf СЌС‚Рѕ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРїРµС†РёС„РёРєР°С‚РѕСЂС‹, РїСЂРёРІРѕРґСЏС‰РёРµ
+    // Рє РЅРµРїСЂР°РІРёР»СЊРЅРѕРјСѓ РІС‹РІРѕРґСѓ.
+    if (strstr(fmt, "%us") != NULL || strstr(fmt, "%uc") != NULL)
     {
-     // out of memory
-     va_end(argptr);
-     return FString();
+        LEM_STOPIT;
+    }
+#endif
+
+    int size = 1024;
+
+    char *buf = NULL;
+    while (true)
+    {
+        buf = (char*)malloc(sizeof(char)*(size + 1));
+        if (!buf)
+        {
+            // out of memory
+            va_end(argptr);
+            return FString();
+        }
+
+#if defined LEM_WINDOWS
+        int len = _vsnprintf(buf, size, fmt, argptr);
+#else
+        int len = vsnprintf(buf, size, fmt, argptr);
+        //   int len = strlen(buf);
+#endif
+
+
+// some implementations of vsnprintf() don't NUL terminate the string
+// if there is not enough space for it so always do it manually
+        buf[size] = '\0';
+
+        if ((len >= 0) && (len <= size))
+            break;
+
+        // still not enough, double it again
+        size *= 2;
+        free(buf);
     }
 
-   #if defined LEM_WINDOWS
-   int len = _vsnprintf( buf, size, fmt, argptr );
-   #else
-   int len = vsnprintf( buf, size, fmt, argptr ); 
-//   int len = strlen(buf);
-   #endif
+    va_end(argptr);
 
-
-   // some implementations of vsnprintf() don't NUL terminate the string
-   // if there is not enough space for it so always do it manually
-   buf[size] = '\0';
-
-   if( (len>=0) && (len<=size) )
-    break;
-
-   // still not enough, double it again
-   size *= 2;
-   free(buf);
-  }
-
- va_end(argptr);
-
- return FString(buf,true);
+    FString res(buf);
+    free(buf);
+    return res;
 }
 
 
-UFString lem::format_str( const wchar_t *fmt, ... )
+UFString lem::format_str(const wchar_t *fmt, ...)
 {
- if( fmt==NULL )
-  return UFString();
+    if (fmt == NULL)
+        return UFString();
 
- va_list argptr;
- va_start(argptr, fmt);
+    va_list argptr;
+    va_start(argptr, fmt);
 
- #if LEM_DEBUGGING==1
- // По историческим причинам класс OFormatter использует спецификатор %us для вывода широких
- // строк и %uc для широких символов. Для sprintf это недопустимые спецификаторы, приводящие
- // к неправильному выводу.
- if( wcsstr( fmt, L"%us" )!=NULL || wcsstr( fmt, L"%uc" )!=NULL )
-  {
-   LEM_STOPIT;
-  }
- #endif
-
- int size = 1024;
- 
- wchar_t *buf=NULL;
- while(true)
-  {
-   buf = (wchar_t*)malloc( sizeof(wchar_t)*(size+1) );
-   if( !buf )
+#if LEM_DEBUGGING==1
+    // РџРѕ РёСЃС‚РѕСЂРёС‡РµСЃРєРёРј РїСЂРёС‡РёРЅР°Рј РєР»Р°СЃСЃ OFormatter РёСЃРїРѕР»СЊР·СѓРµС‚ СЃРїРµС†РёС„РёРєР°С‚РѕСЂ %us РґР»СЏ РІС‹РІРѕРґР° С€РёСЂРѕРєРёС…
+    // СЃС‚СЂРѕРє Рё %uc РґР»СЏ С€РёСЂРѕРєРёС… СЃРёРјРІРѕР»РѕРІ. Р”Р»СЏ sprintf СЌС‚Рѕ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРїРµС†РёС„РёРєР°С‚РѕСЂС‹, РїСЂРёРІРѕРґСЏС‰РёРµ
+    // Рє РЅРµРїСЂР°РІРёР»СЊРЅРѕРјСѓ РІС‹РІРѕРґСѓ.
+    if (wcsstr(fmt, L"%us") != NULL || wcsstr(fmt, L"%uc") != NULL)
     {
-     // out of memory
-     va_end(argptr);
-     return UFString();
+        LEM_STOPIT;
+    }
+#endif
+
+    int size = 1024;
+
+    wchar_t *buf = NULL;
+    while (true)
+    {
+        buf = (wchar_t*)malloc(sizeof(wchar_t)*(size + 1));
+        if (!buf)
+        {
+            // out of memory
+            va_end(argptr);
+            return UFString();
+        }
+
+#if defined LEM_WINDOWS
+        int len = _vsnwprintf(buf, size, fmt, argptr);
+#else
+        int len = vswprintf(buf, size, fmt, argptr);
+#endif
+
+        // some implementations of vsnprintf() don't NUL terminate the string
+        // if there is not enough space for it so always do it manually
+        buf[size] = L'\0';
+
+        if ((len >= 0) && (len <= size))
+            break;
+
+        // still not enough, double it again
+        size *= 2;
+        free(buf);
     }
 
-   #if defined LEM_WINDOWS
-   int len = _vsnwprintf( buf, size, fmt, argptr ); 
-   #else
-   int len = vswprintf( buf, size, fmt, argptr ); 
-   #endif
+    va_end(argptr);
 
-   // some implementations of vsnprintf() don't NUL terminate the string
-   // if there is not enough space for it so always do it manually
-   buf[size] = L'\0';
-
-   if( (len>=0) && (len<=size) )
-    break;
-
-   // still not enough, double it again
-   size *= 2;
-   free(buf); 
-  }
-
- va_end(argptr);
-
- return UFString(buf,true);
+    UFString res(buf);
+    free(buf);
+    return res;
 }

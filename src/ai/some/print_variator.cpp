@@ -371,7 +371,7 @@ namespace
  {
   lines.push_back(s);
   h++;
-  w = lem::_max( w, s.length() );
+  w = lem::_max( w, (int)s.length() );
   return;
  }
 

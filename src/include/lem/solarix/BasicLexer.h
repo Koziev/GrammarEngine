@@ -1,6 +1,7 @@
 #if !defined BasicLexer__H
  #define BasicLexer__H
 
+#include <set>
 #include <lem/containers.h>
 #include <lem/ptr_container.h>
 #include <lem/solarix/TextRecognitionParameters.h>

@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->14.11.1995
-// LC->07.02.2013
+// LC->31.03.2018
 // --------------
 
 #if !defined SOL_NO_AA
@@ -22,6 +22,9 @@
 
 #include <lem/solarix/sg_autom.h>
 #include <lem/solarix/variator.h>
+
+#undef min
+#undef max
 
 using namespace std;
 using namespace lem;
@@ -310,7 +313,7 @@ void Variator::Print(
   {
    const lem::Collect<UFString> &block = * vstr[itree];
 
-   int max_right=0;
+   size_t max_right=0;
    for( lem::Container::size_type i=0; i<block.size(); i++ )
     max_right = std::max( max_right, block[i].length() );
 

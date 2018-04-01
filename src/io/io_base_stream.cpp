@@ -18,7 +18,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->02.03.1996
-// LC->28.02.2009
+// LC->30.03.2018
 // --------------
 
 #include <lem/path.h>
@@ -257,12 +257,15 @@ void Stream::wait_ready(void) const
 // Файл должен быть текстовым, иначе первый же встретившийся нулевой
 // символ приведет к завершению строки и часть данных будет потеряна.
 // *******************************************************************
+/*
 FString* lem::load_whole_file( const lem::Path& filename )
 {
  BinaryFile bin( filename, true, false );
  return load_whole_file(bin);
 }
+*/
 
+/*
 FString* lem::load_whole_file( BinaryFile &bin )
 {
  BinaryFile::pos_type fs = bin.fsize();
@@ -270,10 +273,11 @@ FString* lem::load_whole_file( BinaryFile &bin )
  char *text = (char*)malloc( fs+1 );
  bin.read( text, fs );
  text[fs]=0;
-
- return new FString( text, true );
+ FString * res = new FString( text );
+ free(text);
+ return res;
 }
-
+*/
 
 bool Stream::GetTimes(
                           boost::posix_time::ptime &creat,

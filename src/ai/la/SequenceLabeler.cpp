@@ -145,7 +145,7 @@ void SequenceLabelerModel::Apply_CRFSuite(BasicLexer & lexer,
         nodes.clear();
         leaf->Collect_Right2Left(begin, nodes); // собираем все словоформы на этом пути
 
-        const int src_token_count = CastSizeToInt(nodes.size()) - 2; // Сколько исходных токенов, не учитыва¤ пропущенные, вошло в фрагменты в nodes2.
+        const int src_token_count = CastSizeToInt(nodes.size()) - 2; // Сколько исходных токенов, не учитывая пропущенные, вошло в фрагменты в nodes2.
 
         nodes2.clear();
         // словоформы собраны в обратном порядке, развернем его.

@@ -39,12 +39,12 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
   for( lem::Container::size_type i=0; i<t->GetParams().size(); ++i )
    if( i>0 )
     {
-     params.Add_Dirty( L"," );
-     params.Add_Dirty( t->GetParams()[i].c_str() );
+     params += L",";
+     params += t->GetParams()[i].c_str();
     }
    else
     {
-     params.Add_Dirty( t->GetParams()[i].c_str() );
+     params += t->GetParams()[i].c_str();
     }
 
   out.printf( "INSERT INTO predicate_template( src, params ) VALUES ( '%us', '%us' );\n", src.c_str(), params.c_str() );
@@ -92,9 +92,9 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
    for( std::set<int>::const_iterator it=wes.ies.begin(); it!=wes.ies.end(); ++it )
     {
      if( !s.empty() )
-      s.Add_Dirty(L' ');
+      s += L' ';
 
-     s.Add_Dirty( lem::to_ustr(*it).c_str() );
+     s += lem::to_ustr(*it).c_str();
     } 
 
    out.printf( "INSERT INTO word_entry_set( id, name, ies ) VALUES ( %d, '%us', '%us' );\n",
@@ -113,9 +113,9 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
    for( std::set<lem::UCString>::const_iterator it=wes.words.begin(); it!=wes.words.end(); ++it )
     {
      if( !s.empty() )
-      s.Add_Dirty(LexiconStorage::WORD_SET_DELIMITER);
+      s += LexiconStorage::WORD_SET_DELIMITER;
 
-     s.Add_Dirty( sql_version.SqlStr(*it) );
+     s += sql_version.SqlStr(*it);
     } 
 
    out.printf( "INSERT INTO word_set( id, name, words, case_sensitive ) VALUES ( %d, '%us', '%us', %d );\n",
@@ -125,7 +125,7 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
  out.eol();
 
 
- // именованные наборы словосочетаний
+ // РёРјРµРЅРѕРІР°РЅРЅС‹Рµ РЅР°Р±РѕСЂС‹ СЃР»РѕРІРѕСЃРѕС‡РµС‚Р°РЅРёР№
  lem::Ptr<LS_ResultSet> rs_collocation_sets( storage->ListCollocationSets() );
  while( rs_collocation_sets->Fetch() )
   {
@@ -251,11 +251,11 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
    for( lem::Container::size_type i=0; i<rule->GetCoords().size(); ++i )
     {
      if( i>0 )
-      coords.Add_Dirty(L' ');
+      coords += L' ';
 
-     coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetCoord().GetIndex() ).c_str() );
-     coords.Add_Dirty( L':' );
-     coords.Add_Dirty( to_ustr( rule->GetCoords()[i].GetState() ).c_str() );
+     coords += to_ustr( rule->GetCoords()[i].GetCoord().GetIndex() ).c_str();
+     coords += L':';
+     coords += to_ustr( rule->GetCoords()[i].GetState() ).c_str();
     }
 
    out.printf( "INSERT INTO recog_rule( id, name, case_sensitive, id_language, is_syllab, is_regex, is_prefix, is_affix, is_forced,"
@@ -357,7 +357,7 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
 
 
  // ------------------
- // база знаний
+ // Р±Р°Р·Р° Р·РЅР°РЅРёР№
  // ------------------
  
  lem::Ptr<LS_ResultSet> rs_kb1 = storage->ListFactGroups();
@@ -561,7 +561,7 @@ void LexicalAutomat::SaveRules_SQL( OFormatter &out, OFormatter &alters, const S
  rs_kb3.Delete();
  out.printf( "\n\n" );
 
- // ---- Выгружаем tree scorers
+ // ---- Р’С‹РіСЂСѓР¶Р°РµРј tree scorers
 
  lem::Ptr<LS_ResultSet> ts_head_lemma( GetStorage().ListTreeScorerLemmas() );
  while( ts_head_lemma->Fetch() )

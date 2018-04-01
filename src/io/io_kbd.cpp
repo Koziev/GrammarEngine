@@ -345,10 +345,8 @@ const FString KbdStream::read_fstring(void)
      if( rc==0 || n!=1 || c=='\r' )
       break;
 
-     buffer.Add_Dirty(c);
+     buffer += c;
     }
-
-   buffer.calc_hash();
 
    SetConsoleMode( hKbd, OldMode );
 
@@ -430,8 +428,7 @@ const FString KbdStream::read_fstring(void)
       }
 
      default:
-      buffer.insert(pos,(char)ch);
-//      mout.put_direct(ch);
+      buffer.insert_char(pos,(char)ch);
       mout->flush();
       pos++;
       break;
@@ -577,10 +574,8 @@ const UFString IKbdFormatter::ask_ufstring(
      if( rc==0 || n!=1 || c=='\r' )
       break;
 
-     buffer.Add_Dirty(c);
+     buffer += c;
     }
-
-   buffer.calc_hash();
 
    SetConsoleMode( hKbd, OldMode );
 

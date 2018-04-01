@@ -16,7 +16,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->16.05.2006
-// LC->15.10.2009
+// LC->30.03.2018
 // --------------
 
 #include <lem/fstring.h>
@@ -38,7 +38,7 @@ using namespace lem;
  * and can be found at http://www.ietf.org/rfc/rfc2279.txt, or any other RFC
  * database.
  */ 
-
+/*
 const FString lem::encode_to_url( const UFString &str )
 {
  FString res;
@@ -86,11 +86,12 @@ const FString lem::encode_to_url( const UFString &str )
  res.calc_hash();
  return res;
 }
+*/
 
 // **************************************************************************
 // Кодирование символов в адресе: не-ASCII символы представляются в виде %HH
 // **************************************************************************
-
+/*
 const lem::FString lem::encode_to_url( const lem::FString &str )
 {
  // кодируем некоторые символы через %-escape
@@ -123,7 +124,7 @@ const lem::FString lem::encode_to_url( const lem::FString &str )
  res.calc_hash();
  return res;
 }
-
+*/
 
 
 /*

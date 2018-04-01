@@ -953,8 +953,8 @@
   // ********************************************************************** 
   extern void copy_file( lem::Stream &dst, lem::Stream &src, size_t size=0 );
 
-  extern FString* load_whole_file( const lem::Path& filename );
-  extern FString* load_whole_file( lem::BinaryFile &bin );
+  //extern FString* load_whole_file( const lem::Path& filename );
+  //extern FString* load_whole_file( lem::BinaryFile &bin );
 
   // Так как реализация под Linux не позволяет непосредственно
   // сравнивать fpos_t с 0, то лучше использовать данную 

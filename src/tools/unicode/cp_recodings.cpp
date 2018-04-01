@@ -180,14 +180,15 @@ using namespace lem;
   if( !str )
    return UFString();
 
-  wchar_t *unicode = UFString::Alloc( lem_strlen(str)+1 );
+  wchar_t *unicode = new wchar_t[ lem_strlen(str)+1 ];
+  std::unique_ptr<wchar_t[]> g(unicode);
 
   if( cp )
    cp->to_unicode( str, unicode );
   else
    lem::UI::get_UI().GetSessionCp().to_unicode( str, unicode );
 
-  return UFString(unicode,true);
+  return UFString(unicode);
  }
 
 
@@ -216,14 +217,15 @@ using namespace lem;
    return UFString();
 
   const int l = str.length();
-  wchar_t *unicode = UFString::Alloc(l+1);
+  wchar_t *unicode = new wchar_t[l+1];
+  std::unique_ptr<wchar_t[]> g(unicode);
 
   if( cp )
    cp->to_unicode( str.c_str(), unicode );
   else
    lem::UI::get_UI().GetSessionCp().to_unicode( str.c_str(), unicode );
 
-  return UFString(unicode,true);
+  return UFString(unicode);
  }
 
 
@@ -247,11 +249,11 @@ using namespace lem;
   const CodeConverter *cp = _cp ? _cp : &lem::UI::get_UI().GetSessionCp();
 
   const int l = str.length();
-  char *ascii = FString::Alloc( cp->EstimateAsciiLen(l+1) );
-
+  char *ascii = new char[ cp->EstimateAsciiLen(l+1) ];
   cp->to_ascii( str.c_str(), ascii );
- 
-  return FString(ascii,true);
+  FString res(ascii);
+  delete[] ascii;
+  return res;
  }
 
 
@@ -336,9 +338,11 @@ lem::UFString lem::to_unicode( const char *aStr )
   return lem::UFString();
 
  const int l = lem_strlen(aStr);
- wchar_t *uStr = UFString::Alloc(l+1);
+ wchar_t *uStr = new wchar_t[l+1];
+ std::unique_ptr<wchar_t[]> g(uStr);
+
  lem::UI::get_UI().GetSessionCp().to_unicode( aStr, uStr );
- return UFString(uStr,true);
+ return UFString(uStr);
 }
 
 
@@ -349,9 +353,11 @@ lem::FString lem::to_ascii( const wchar_t *uStr )
   return lem::FString();
 
  const int l = lem_strlen(uStr);
- char *aStr = FString::Alloc( lem::UI::get_UI().GetSessionCp().EstimateAsciiLen(l+1) );
+ char *aStr = new char[ lem::UI::get_UI().GetSessionCp().EstimateAsciiLen(l+1) ];
  lem::UI::get_UI().GetSessionCp().to_ascii( uStr, aStr );
- return FString(aStr,true);
+ FString res(aStr);
+ delete[] aStr;
+ return res;
 }
 
 

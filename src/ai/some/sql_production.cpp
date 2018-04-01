@@ -15,7 +15,7 @@ SQL_Production::SQL_Production( const FString &Version )
  norules=false;
  top_freq=UNKNOWN;
 
- version.to_lower();
+ version = to_lower(version);
  version.strip_apostrophes();
  version.trim();
 
@@ -117,7 +117,7 @@ SQL_Production::SQL_Production( const FString &Version )
      i++;
      while( i<tokens.size() )
       {
-       if( tokens[i].eq_beg( L"0x" ) )
+       if( tokens[i].eq_beg( "0x" ) )
         {
          int u=0;
          lem::to_int( tokens[i].c_str()+2, &u, 16 );
@@ -356,10 +356,8 @@ lem::UFString SQL_Production::ClearInvalidChars( const lem::UFString & str ) con
     {
      char ac = ((SBCodeConverter&)lem::UI::get_UI().GetSessionCp()).to_ascii( str[k] );
      if( ac!=0 )
-      res.Add_Dirty( str[k] );
+      res += str[k];
     }
-
-   res.calc_hash();
   }
  else
   res = str;

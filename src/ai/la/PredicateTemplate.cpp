@@ -57,8 +57,8 @@ void PredicateTemplate::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser &
  {
   lem::Iridium::BethToken t = txtfile.read();
 
-  src.Add_Dirty( L' ' );
-  src.Add_Dirty( t.string().c_str() );
+  src += L' ';
+  src += t.string().c_str();
 
   if( t==B_OROUNDPAREN )
    open_paren++;

@@ -794,8 +794,6 @@ void Solarix::MakeEachLexemAa( lem::UFString &s )
     s.set( i+1, lem::to_uupper(s[i+1]) );
   }
 
- s.calc_hash();
-
  return;
 }
 

@@ -58,10 +58,11 @@
 //
 // 01.10.2011 - добавлены опции -rebuild_lemmatizer и -rebuild_pes для
 //              генерации только лемматизатора и таблиц префиксного поиска.
+// 28.03.2018 - рефакторинг кода
 // -----------------------------------------------------------------------------
 //
 // CD->05.10.1995
-// LC->10.08.2014
+// LC->28.03.2018
 // --------------
 
 #include <lem/ustreams.h>
@@ -203,7 +204,7 @@ int main( int argc, char *argv[] )
    return 1;
   }
 
- std::auto_ptr<Compiler> C( Create_Compiler() );
+ std::unique_ptr<Compiler> C( Create_Compiler() );
 
  #if defined SOL_LOADBIN
  if( recompile_syntax )
@@ -699,7 +700,6 @@ void Compile_Project( Compiler *C )
    if( !ok )
     {
      lem::Shell::Error( lem::format_str( "There was an error while compiling the file %s", in_names[i].c_str()) );
-     lem::Shell::ErrorBeep();
      lem::Process::Exit(1);
     }
   }
@@ -732,7 +732,6 @@ void Compile_Project( Compiler *C )
  if( !ok )
   {
    lem::Shell::Error( L"There was an error while compiling the dictionary" );
-   lem::Shell::ErrorBeep();
    lem::Process::Exit(1);
   }
 

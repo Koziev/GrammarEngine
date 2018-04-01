@@ -2,42 +2,15 @@
 #define LEM_UNICODE__H
 #pragma once
 
-// -----------------------------------------------------------------------------
-// File UNICODE.H
-//
-// (c) Elijah Koziev
-//     Solarix Intellectronix project - http://www.solarix.ru
-//
-// Content:
-//
-// LEM C++ toolkit
-//
-// Common base class for all text encodings converters. A CodeConverter
-// translates Unicode characters into byte sequences and vice versa. 
-//
-// Перекодирование символов (отдельных символов и разнообразных строк)
-// между форматами ASCII (кодировки Win,Dos,Unix) и UNICODE.
-// -----------------------------------------------------------------------------
-//
-// CD->29.09.1997
-// LC->04.11.2011
-// --------------
-
  #include <lem/config.h>
-
- #if defined LEM_MFC
-  #include <afxwin.h>
- #endif
 
  #include <ctype.h> // for isalpha.h 
  #include <map>
 
  #include <lem/integer.h>
- //#include <boost/utility.hpp>
-
+ 
  #include <lem/cstring.h>
  #include <lem/fstring.h>
- //#include <lem/quantors.h>
  #include <lem/containers.h>
  #include <lem/noncopyable.h>
 
@@ -45,8 +18,7 @@
  #include <lem/RWULock.h>
  #endif
 
-
- #undef assert
+ //#undef assert
 
  namespace lem
  {
@@ -722,10 +694,10 @@
 
 
   // Является ли строка корректной в UTF-8?
-  extern bool utf8_valid( const lem::FString &buf );
-  extern bool utf8_valid( const std::string &buf );
-  extern bool utf8_valid( const char *buf );
-  extern bool utf8_valid( const unsigned char *buf, unsigned int len );
+  //extern bool utf8_valid( const lem::FString &buf );
+  //extern bool utf8_valid( const std::string &buf );
+  //extern bool utf8_valid( const char *buf );
+  //extern bool utf8_valid( const unsigned char *buf, unsigned int len );
 
   // Возвращает строку, закодированную в UTF8
   extern lem::FString to_utf8( const wchar_t *ustr );
@@ -818,94 +790,6 @@
                               const CodeConverter &from,
                               const CodeConverter &to
                              );
-
-  class Transliterator
-  {
-   protected:
-    lem::UFString name;
-
-    lem::UCString queue; // очередь символов на возврат (для преобразований
-                                  // в группу кириллических символов) 
-
-    struct XLat
-    {
-     int max_len;
-     std::vector< std::pair<CString /*tail*/, UCString /*result*/> > alt; // альтернативы кодирования
-
-     XLat(void) { max_len=0; }
-
-     XLat( const XLat &x ) : max_len(x.max_len), alt(x.alt) {}
-
-     void operator=( const XLat &x )
-     {
-      max_len = x.max_len;
-      alt = x.alt;
-     }
-
-     void Add( const char *Tail, const wchar_t *Res );
-
-     int Find( const CString &Tail ) const;
-    };
-
-    typedef std::map< char /*first char*/, XLat > TABLE; // латиница->кириллица
-    TABLE table;
-    typedef TABLE::iterator ITER;
-    typedef TABLE::const_iterator CITER;
-
-    typedef std::map< wchar_t /*кириллица*/, lem::CString /*латиница*/ > TABLE2; // кириллица->латиница
-    TABLE2 table2;
-    typedef TABLE2::iterator ITER2;
-    typedef TABLE2::const_iterator CITER2;
-    
-
-   protected:
-    void Add( const char *org, const wchar_t *res );
-
-    void LoadTxt( const lem::Path &filename );
-
-   public:
-    Transliterator(void);
-    Transliterator( const lem::Path &filename ); // таблица транслита загружается из файла
-    LEM_GNUC_VIRTUAL ~Transliterator(void) {}
-
-    void SaveBin( lem::Stream &bin ) const;
-    void LoadBin( lem::Stream &bin );
-
-    inline const UFString& GetName(void) const { return name; }
-
-    wchar_t NextChar( Stream &txt );
-
-    // Заданный символ кодируется латиницей, либо возвращается NULL - кодирование
-    // невозможно.
-    virtual const char* ToLatin( wchar_t c ) const;
-
-    // Преобразование строки в транслит.
-    virtual void ToLatin( const wchar_t *src, FString &res ) const;
-
-    // Удаление созданных общих экземпляров
-    static void DeleteInstances(void);
-  };
-
-  class Translit_Gost_16876_71 : public Transliterator
-  { 
-   public:
-    Translit_Gost_16876_71(void);
-
-    static const Translit_Gost_16876_71* GetInstance(void);
-  };
-
-
-  class Translit_EngPhonetics : public Transliterator
-  { 
-   private:
-    void Add( const char *org, const wchar_t *res );
-
-   public:
-    Translit_EngPhonetics(void);
-
-    static const Translit_EngPhonetics* GetInstance(void);
-  };
-
  } // end of namespace 'lem'
 
 #endif

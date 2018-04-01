@@ -517,11 +517,11 @@
 
   // Кодирование символов в адресе: не-ASCII символы представляются в виде %HH
   // UCS-2 переводится в utf-8.
-  extern const FString encode_to_url( const UFString &str );
+  //extern const FString encode_to_url( const UFString &str );
 
   // Кодирование символов в URL
-  extern const FString encode_to_url( const lem::FString &str );
-  extern const UFString decode_from_url( const lem::FString &str );
+  //extern const FString encode_to_url( const lem::FString &str );
+  //extern const UFString decode_from_url( const lem::FString &str );
 
   extern const lem::UFString to_c_literal( const lem::UFString &str );
   extern const lem::FString to_c_literal( const lem::FString &str );

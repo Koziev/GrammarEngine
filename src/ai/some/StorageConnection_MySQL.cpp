@@ -269,7 +269,7 @@ LS_ResultSet* StorageConnection_MySQL::Select( const lem::FString &sql )
  cnx->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(GetReadTx());
 
  int ok = mysql_query( cnx->mysql, sql.c_str() );
  if( ok==0 )

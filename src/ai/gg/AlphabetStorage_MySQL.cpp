@@ -45,7 +45,7 @@ void AlphabetStorage_MySQL::Execute( const lem::FString & sql )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> tx(cnx->GetTx());
+ std::unique_ptr<TransactionGuard> tx(cnx->GetTx());
  cnx->Execute(sql);
  return;
 }
@@ -63,7 +63,7 @@ int AlphabetStorage_MySQL::ExecuteAndReturnId( const lem::FString & sql )
  lem::Process::CritSecLocker guard(&c->cs);
  #endif
 
- std::auto_ptr<TransactionGuard> tx(cnx->GetTx());
+ std::unique_ptr<TransactionGuard> tx(cnx->GetTx());
 
  cnx->Execute(sql);
  const int id = cnx->GetLastId();
@@ -759,7 +759,7 @@ LS_ResultSet* AlphabetStorage_MySQL::ListByQuery( const lem::FString &Select )
  c->cs.Enter();
  #endif
 
- std::auto_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
+ std::unique_ptr<TransactionGuard> read_tx(cnx->GetReadTx());
 
  int ok = mysql_query( c->mysql, Select.c_str() );
  if( ok==0 )

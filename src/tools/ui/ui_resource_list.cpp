@@ -154,7 +154,7 @@ void Resource_List::LoadTxt( WideStream &txt )
          break; 
         }
 
-       filename.Add_Dirty(u);
+       filename += u;
       }
 
      txt.skip_white();
@@ -170,12 +170,10 @@ void Resource_List::LoadTxt( WideStream &txt )
          break; 
         }
 
-       language.Add_Dirty(u);
+       language += u;
       }
 
-     language.calc_hash();
-     filename.calc_hash();
-     
+    
      // Recursively load the file
      if( load_all_languages || language == cur_lang || language==english )
       {
@@ -302,10 +300,8 @@ void Resource_List::LoadTxt( WideStream &txt )
         u = u2;          
       }
 
-     string.Add_Dirty(u);
+     string += u;
     }
-
-   string.calc_hash();
 
    if( !nnn.empty() && !string.empty() )
     {

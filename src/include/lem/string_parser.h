@@ -307,8 +307,8 @@
     {
      // Собираем строку 'контекста' ошибки
      int i_from = std::max( 0, i_cur-err_context_span );
-     int i_to = std::min( txt.length(), i_cur+lem::lem_strlen(token)+err_context_span );
-     STR context( txt.begin()+i_from, txt.begin()+i_to-1 );
+     int i_to = std::min( (int)txt.length(), i_cur+lem::lem_strlen(token)+err_context_span );
+     STR context( txt.substr( i_from, i_to-i_from+1 ) ); //txt.begin()+i_from, txt.begin()+i_to-1 );
 
      throw ECheckFault(
                        to_wstr("Missing token ")+to_wstr(token)+

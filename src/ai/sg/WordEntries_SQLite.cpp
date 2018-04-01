@@ -224,7 +224,7 @@ Word_Coord WordEntries_SQLite::FindWordForm( const lem::UCString& name )
 
  Word_Coord ret(UNKNOWN,UNKNOWN);
 
- std::auto_ptr<LS_ResultSet> rs( cnx->Select(Select) );
+ std::unique_ptr<LS_ResultSet> rs( cnx->Select(Select) );
 
  if( rs->Fetch() )
   {
@@ -421,7 +421,7 @@ int WordEntries_SQLite::FindEntryOmonym(
 
  int ekey=UNKNOWN;
 
- std::auto_ptr<LS_ResultSet> rs( cnx->Select(Select) );
+ std::unique_ptr<LS_ResultSet> rs( cnx->Select(Select) );
 
  while( rs->Fetch() )
   {
@@ -743,7 +743,7 @@ int WordEntries_SQLite::RegisterCoordPairsInDatabase(
 
 void WordEntries_SQLite::GetUEntries_Impl(void)
 {
- std::auto_ptr<LS_ResultSet> rs( cnx->Select("SELECT id FROM unknown_entries") );
+ std::unique_ptr<LS_ResultSet> rs( cnx->Select("SELECT id FROM unknown_entries") );
 
  while( rs->Fetch() )
   {
@@ -792,7 +792,7 @@ SG_Entry* WordEntries_SQLite::LoadEntryFromDb_Impl( int ekey )
 
  SG_Entry *e = NULL;
 
- std::auto_ptr<LS_ResultSet> rs1( cnx->Select(Select1) );
+ std::unique_ptr<LS_ResultSet> rs1( cnx->Select(Select1) );
 
  if( rs1->Fetch() )
   {
@@ -807,7 +807,7 @@ SG_Entry* WordEntries_SQLite::LoadEntryFromDb_Impl( int ekey )
 
    mem.printf( "SELECT icoord, istate FROM sg_entry_coord WHERE id_entry=%d", ekey );
    lem::FString Select2( lem::to_utf8(mem.string()) );
-   std::auto_ptr<LS_ResultSet> rs2( cnx->Select(Select2) );
+   std::unique_ptr<LS_ResultSet> rs2( cnx->Select(Select2) );
 
    while( rs2->Fetch() )
     {
@@ -826,7 +826,7 @@ SG_Entry* WordEntries_SQLite::LoadEntryFromDb_Impl( int ekey )
                " ORDER BY F.iform", ekey );
 
    lem::FString Select3( lem::to_utf8(mem.string()) );
-   std::auto_ptr<LS_ResultSet> rs3( cnx->Select(Select3) );
+   std::unique_ptr<LS_ResultSet> rs3( cnx->Select(Select3) );
 
    while( rs3->Fetch() )
     {
@@ -859,7 +859,7 @@ SG_Entry* WordEntries_SQLite::LoadEntryFromDb_Impl( int ekey )
        mem.printf( "SELECT icoord, istate FROM sg_form_coord WHERE id_entry=%d AND iform=%d",
         ekey, iform );
        lem::FString Select4( lem::to_utf8(mem.string()) );
-       std::auto_ptr<LS_ResultSet> rs4( cnx->Select(Select4) );
+       std::unique_ptr<LS_ResultSet> rs4( cnx->Select(Select4) );
 
        while( rs4->Fetch() )
         {

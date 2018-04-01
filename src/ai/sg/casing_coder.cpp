@@ -196,14 +196,14 @@ void CasingCoder::AddLower( const CasingCoder::XLAT *xlat, lem::uint32_t src_ch,
     {
      lem::Ucs4ToUCString x;
      x.Add(res_ch);
-     res.Add_Dirty( x.ToString().c_str() );
+     res += x.ToString().c_str();
      return;
     }
   }
 
  lem::Ucs4ToUCString x;
  x.Add(src_ch);
- res.Add_Dirty( x.ToString().c_str() );
+ res += x.ToString().c_str();
 
  return;
 }
@@ -218,14 +218,14 @@ void CasingCoder::AddUpper( const CasingCoder::XLAT *xlat, lem::uint32_t src_ch,
     {
      Ucs4ToUCString x;
      x.Add(res_ch);
-     res.Add_Dirty( x.ToString().c_str() );
+     res += x.ToString().c_str();
      return;
     }
   }
 
  Ucs4ToUCString x;
  x.Add(src_ch);
- res.Add_Dirty( x.ToString().c_str() );
+ res += x.ToString().c_str();
 
  return;
 }

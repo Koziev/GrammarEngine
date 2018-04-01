@@ -162,14 +162,13 @@ bool UTF16_MemWriter::Read_Beginning( bool /*excp*/ )
 void UTF16_MemWriter::wput( wchar_t u )
 {
  // Добавляем по-быстрому, без пересчета хэш-кода.
- res->Add_Dirty(u);
+ res->operator+=(u);
 }
 
 
 UFString* UTF16_MemWriter::Pick_String(void)
 {
  UFString *ret = res;
- ret->calc_hash_only();
  res = new UFString;
  res->reserve(16384);
 

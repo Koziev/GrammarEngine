@@ -5,20 +5,21 @@
 //
 // Content:
 //
-// 08.03.2006 - в класс введен enum с константой npos (для совместимости 
-//              с std::basic_string)
+// 08.03.2006 - РІ РєР»Р°СЃСЃ РІРІРµРґРµРЅ enum СЃ РєРѕРЅСЃС‚Р°РЅС‚РѕР№ npos (РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё 
+//              СЃ std::basic_string)
 //
-// 19.06.2006 - реализован метод GetHash16(), который достаточно быстро вычисляет
-//              неплохой 16-битный хэш с более-менее равномерным распределением. 
+// 19.06.2006 - СЂРµР°Р»РёР·РѕРІР°РЅ РјРµС‚РѕРґ GetHash16(), РєРѕС‚РѕСЂС‹Р№ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ Р±С‹СЃС‚СЂРѕ РІС‹С‡РёСЃР»СЏРµС‚
+//              РЅРµРїР»РѕС…РѕР№ 16-Р±РёС‚РЅС‹Р№ С…СЌС€ СЃ Р±РѕР»РµРµ-РјРµРЅРµРµ СЂР°РІРЅРѕРјРµСЂРЅС‹Рј СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµРј. 
 //
-// 13.08.2006 - классы UCString и CString переделаны в обычные, без
-//              использования template'ов.
+// 13.08.2006 - РєР»Р°СЃСЃС‹ UCString Рё CString РїРµСЂРµРґРµР»Р°РЅС‹ РІ РѕР±С‹С‡РЅС‹Рµ, Р±РµР·
+//              РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ template'РѕРІ.
 //
-// 01.12.2006 - конструктор CString( const wchar_t* ) сделан explicit
+// 01.12.2006 - РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ CString( const wchar_t* ) СЃРґРµР»Р°РЅ explicit
+// 26.03.2018 - СЂРµС„Р°РєС‚РёСЂРёРЅРі Рё С‡РёСЃС‚РєР° РєРѕРґР°
 // -----------------------------------------------------------------------------
 //
 // CD->01.10.1995
-// LC->14.09.2010
+// LC->26.03.2018
 // --------------
 
 #ifndef LEM_ACSTRING__H
@@ -50,44 +51,44 @@
 
    typedef int size_type;
 
-   // Доступная для внешнего кода константа - максимальная вместимость
-   // объектов класса (без терминирующего нуля).
+   // Р”РѕСЃС‚СѓРїРЅР°СЏ РґР»СЏ РІРЅРµС€РЅРµРіРѕ РєРѕРґР° РєРѕРЅСЃС‚Р°РЅС‚Р° - РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІРјРµСЃС‚РёРјРѕСЃС‚СЊ
+   // РѕР±СЉРµРєС‚РѕРІ РєР»Р°СЃСЃР° (Р±РµР· С‚РµСЂРјРёРЅРёСЂСѓСЋС‰РµРіРѕ РЅСѓР»СЏ).
    enum { max_len=LEM_CSTRING_LEN };
 
-   enum { npos=-1 }; // для совместимости с std::base_string
+   enum { npos=-1 }; // РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ std::base_string
 
-   static char static_zero; // Для возврата ссылок в операторе [] при переходе
-                            // границы строки.
+   static char static_zero; // Р”Р»СЏ РІРѕР·РІСЂР°С‚Р° СЃСЃС‹Р»РѕРє РІ РѕРїРµСЂР°С‚РѕСЂРµ [] РїСЂРё РїРµСЂРµС…РѕРґРµ
+                            // РіСЂР°РЅРёС†С‹ СЃС‚СЂРѕРєРё.
 
    static const CString& Get_Empty(void);
 
   protected:
-   char str[LEM_CSTRING_LEN+1];     // Символы строки включая терминатор ('\0')
-   hash_type hash; // Для ускорения операций сравнения - хэшкод строки.
-   unsigned char len;  // Длина строки (одного байта должно хватать), для более длинных строк лучше
-                        // использовать BaseFString<...> или base_string<...>
+   char str[LEM_CSTRING_LEN+1];     // РЎРёРјРІРѕР»С‹ СЃС‚СЂРѕРєРё РІРєР»СЋС‡Р°СЏ С‚РµСЂРјРёРЅР°С‚РѕСЂ ('\0')
+   hash_type hash; // Р”Р»СЏ СѓСЃРєРѕСЂРµРЅРёСЏ РѕРїРµСЂР°С†РёР№ СЃСЂР°РІРЅРµРЅРёСЏ - С…СЌС€РєРѕРґ СЃС‚СЂРѕРєРё.
+   unsigned char len;  // Р”Р»РёРЅР° СЃС‚СЂРѕРєРё (РѕРґРЅРѕРіРѕ Р±Р°Р№С‚Р° РґРѕР»Р¶РЅРѕ С…РІР°С‚Р°С‚СЊ), РґР»СЏ Р±РѕР»РµРµ РґР»РёРЅРЅС‹С… СЃС‚СЂРѕРє Р»СѓС‡С€Рµ
+                        // РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ BaseFString<...> РёР»Рё base_string<...>
 
   public:
    // ****************************************************************************
-   // Конструктор по умолчанию создает строку с нулевой длиной.
-   // Используем соглашение о вычислении хеш-кода - см. процедуру
+   // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃРѕР·РґР°РµС‚ СЃС‚СЂРѕРєСѓ СЃ РЅСѓР»РµРІРѕР№ РґР»РёРЅРѕР№.
+   // РСЃРїРѕР»СЊР·СѓРµРј СЃРѕРіР»Р°С€РµРЅРёРµ Рѕ РІС‹С‡РёСЃР»РµРЅРёРё С…РµС€-РєРѕРґР° - СЃРј. РїСЂРѕС†РµРґСѓСЂСѓ
    // lem_calc_string_hash.
    // ****************************************************************************
    CString(void) { *str=hash=len=0; }
 
    // ***********************************************************************************
-   // в отличие от std::base_string, мы определяем два отдельных конструктора для
-   // создания объекта из ASCII и unicode-строк. Поэтому UCString, которая хранит UNICODE
-   // строку, можно создать прямо из ASCII-строки.
+   // РІ РѕС‚Р»РёС‡РёРµ РѕС‚ std::base_string, РјС‹ РѕРїСЂРµРґРµР»СЏРµРј РґРІР° РѕС‚РґРµР»СЊРЅС‹С… РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° РґР»СЏ
+   // СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚Р° РёР· ASCII Рё unicode-СЃС‚СЂРѕРє. РџРѕСЌС‚РѕРјСѓ UCString, РєРѕС‚РѕСЂР°СЏ С…СЂР°РЅРёС‚ UNICODE
+   // СЃС‚СЂРѕРєСѓ, РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ РїСЂСЏРјРѕ РёР· ASCII-СЃС‚СЂРѕРєРё.
    // ***********************************************************************************
    CString( const char* s );
-   explicit CString( const wchar_t* s );
+   //explicit CString( const wchar_t* s );
    CString( const CString& s );
    explicit CString( char c );
-   CString( int nTime, char c );
+   //CString( int nTime, char c );
 
    CString& operator=( const char* );
-   CString& operator=( const wchar_t* );
+   //CString& operator=( const wchar_t* );
    CString& operator=( const CString& s );
    CString& operator=( char ch );
 
@@ -143,57 +144,57 @@
    void remove( int pos, int nch=1 );
 
    // For compat. with lem::Collect, lem:MCollect
-   inline void ShrinkTo( int nChar ) { reduce(nChar); }
-   inline void Insert( int pos, char ch ) { insert(pos,ch); }
-   inline void Remove( int pos ) { remove(pos); }
+   //inline void ShrinkTo( int nChar ) { reduce(nChar); }
+   //inline void Insert( int pos, char ch ) { insert(pos,ch); }
+   //inline void Remove( int pos ) { remove(pos); }
 
    // Removes last char
-   inline void Remove_back(void) { str[len-1]=0; calc_hash(); }
+   //inline void Remove_back(void) { str[len-1]=0; calc_hash(); }
 
    CString& operator+=( const CString &s     );
    CString& operator+=( const char *s    );
-   CString& operator+=( const wchar_t *s );
+   //CString& operator+=( const wchar_t *s );
    CString& operator+=( char ch          );
 
    bool operator==( const CString &s2     ) const;
    bool operator==( const char *s2    ) const;
-   bool operator==( const wchar_t *s2 ) const;
+   //bool operator==( const wchar_t *s2 ) const;
    bool operator==( char ch           ) const;
 
    bool operator!=( const CString &s2     ) const;
    bool operator!=( const char *s2    ) const;
-   bool operator!=( const wchar_t *s2 ) const;
+   //bool operator!=( const wchar_t *s2 ) const;
    bool operator!=( char ch           ) const;
 
    bool operator>( const CString &s2     ) const;
    bool operator>( const char *s2    ) const;
-   bool operator>( const wchar_t *s2 ) const;
-   bool operator>( char ch           ) const;
+   //bool operator>( const wchar_t *s2 ) const;
+   //bool operator>( char ch           ) const;
 
    bool operator>=( const CString &s2     ) const;
    bool operator>=( const char *s2    ) const;
-   bool operator>=( const wchar_t *s2 ) const;
-   bool operator>=( char ch           ) const;
+   //bool operator>=( const wchar_t *s2 ) const;
+   //bool operator>=( char ch           ) const;
 
    bool operator<( const CString &s2      ) const;
    bool operator<( const char *s2     ) const;
-   bool operator<( const wchar_t *s2  ) const;
-   bool operator<( char ch ) const;
+   //bool operator<( const wchar_t *s2  ) const;
+   //bool operator<( char ch ) const;
 
    bool operator<=( const CString &s2     ) const;
    bool operator<=( const char *s2    ) const;
-   bool operator<=( const wchar_t *s2 ) const;
-   bool operator<=( char ch           ) const;
+   //bool operator<=( const wchar_t *s2 ) const;
+   //bool operator<=( char ch           ) const;
 
    // ****************************************************
    // Addind the chars or string.
    // For compat. with lem::Collect, lem:MCollect
    // ****************************************************
-   inline void Add( char ch ) { operator+=(ch); }
-   inline CString& operator<<( char ch )          { return operator+=(ch); }
-   inline CString& operator<<( const char* s )    { return operator+=(s); }
-   inline CString& operator<<( const wchar_t* s ) { return operator+=(s); }
-   inline CString& operator<<( const CString& s )     { return operator+=(s); }
+   //inline void Add( char ch ) { operator+=(ch); }
+   //inline CString& operator<<( char ch )          { return operator+=(ch); }
+   //inline CString& operator<<( const char* s )    { return operator+=(s); }
+   //inline CString& operator<<( const wchar_t* s ) { return operator+=(s); }
+   //inline CString& operator<<( const CString& s )     { return operator+=(s); }
 
    int count( char ch ) const;
    bool find( char to_find ) const;
@@ -201,19 +202,19 @@
    int search( char ch, int nentry=1 ) const;
    int search( const CString &f, int nentry=1 ) const;
    int search( const char *to_find, int nentry=1 ) const;
-   int search( const wchar_t *to_find, int nentry=1 ) const;
+   //int search( const wchar_t *to_find, int nentry=1 ) const;
 
    bool eq_beg( const CString &to_find     ) const;
    bool eq_beg( const char* to_find    ) const;
-   bool eq_beg( const wchar_t* to_find ) const;
+   //bool eq_beg( const wchar_t* to_find ) const;
 
-   CString& subst( const CString &mask, const CString &text, int nentry=1 );
-   CString& subst_all( char mask, char ch );
+   //CString& subst( const CString &mask, const CString &text, int nentry=1 );
+   //CString& subst_all( char mask, char ch );
 
-   CString& to_upper(void);
+   //CString& to_upper(void);
    CString& to_lower(void);
 
-   CString& to_Aa(void);
+   //CString& to_Aa(void);
 
    CString& strip( char Bound );
    CString& strip_quotes(void);
@@ -222,21 +223,15 @@
    CString& dress( char Bound );
    CString& dress_quotes(void);
    CString& dress_apostrophes(void);
-   CString& dress_spaces(void);
-
-   CString& cut_final_dot(void);
-   CString& cut_final_commas(void);
 
    CString& trim(void);
    CString& trim_left(void);
    CString& trim_right(void);
 
-   CString& add_sp(void);
-   CString& add_nl(void);
+   //CString& add_sp(void);
+   //CString& add_nl(void);
    CString& add_spaces( int n );
    CString& expand_to( int n );
-
-   CString& remove_trailing_frac_zeroes(void);
 
    int to_int(void) const;
    bool to_bool(void) const;
@@ -250,28 +245,23 @@
 
    const CString operator+( const CString& s2     ) const;
    const CString operator+( const char *s2    ) const;
-   const CString operator+( const wchar_t *s2 ) const;
-   const CString operator+( char ch           ) const;
+   //const CString operator+( const wchar_t *s2 ) const;
+   //const CString operator+( char ch           ) const;
 
    inline const_iterator begin(void) const { return str; }
    inline const_iterator end(void)   const { return str+len; }
 
 
-   friend const CString operator+( char ch, const CString& s );
+   //friend const CString operator+( char ch, const CString& s );
  };
 
  // ****************************************************************
 
-   // ***********************************************************************************
-   // в отличие от std::base_string, мы определяем два отдельных конструктора для
-   // создания объекта из ASCII и unicode-строк. Поэтому UCString, которая хранит UNICODE
-   // строку, можно создать прямо из ASCII-строки.
-   // ***********************************************************************************
    inline CString::CString( const char* s )
    {
     if( s )
      {
-      // Обязательно проверяем, вместится ли исходная строка.
+      // РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏРµРј, РІРјРµСЃС‚РёС‚СЃСЏ Р»Рё РёСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР°.
       LEM_CHECKIT_Z( strlen(s) <= LEM_CSTRING_LEN );
       strncpy( str, s, LEM_CSTRING_LEN );
       str[LEM_CSTRING_LEN]=0;
@@ -283,11 +273,12 @@
     return;
    }
 
+/*
    inline CString::CString( const wchar_t* s )
    {
     if( s )
      {
-      // Обязательно проверяем, вместится ли исходная строка.
+      // РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏРµРј, РІРјРµСЃС‚РёС‚СЃСЏ Р»Рё РёСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР°.
       LEM_CHECKIT_Z( wcslen(s) <= LEM_CSTRING_LEN );
       lem_strncpy( str, s, LEM_CSTRING_LEN );
       str[LEM_CSTRING_LEN]=0;
@@ -298,6 +289,7 @@
 
     return;
    }
+*/
 
    inline CString::CString( const CString& s  )
    {
@@ -320,7 +312,7 @@
     return;
    }
 
-
+/*
    inline CString::CString( int nTime, char c )
    {
     LEM_CHECKIT_Z( nTime<=LEM_CSTRING_LEN && nTime>=0 );
@@ -331,7 +323,7 @@
     calc_hash();
     return;
    }
-
+*/
 
  inline CString& CString::operator=( const CString& s )
  {
@@ -361,7 +353,7 @@
   return *this;
  }
 
-
+/*
  inline CString& CString::operator=( const wchar_t* s )
  {
   if( s )
@@ -377,7 +369,7 @@
 
   return *this;
  }
-
+*/
 
 
  inline CString& CString::operator=( char ch )
@@ -391,8 +383,8 @@
  // ****************************************************************
 
  /******************************************************************
-  Переписывание символа в указанной позиции. Если позиция задана на
-  пределами текущей хранимой строки, то ничего не происходит.
+  РџРµСЂРµРїРёСЃС‹РІР°РЅРёРµ СЃРёРјРІРѕР»Р° РІ СѓРєР°Р·Р°РЅРЅРѕР№ РїРѕР·РёС†РёРё. Р•СЃР»Рё РїРѕР·РёС†РёСЏ Р·Р°РґР°РЅР° РЅР°
+  РїСЂРµРґРµР»Р°РјРё С‚РµРєСѓС‰РµР№ С…СЂР°РЅРёРјРѕР№ СЃС‚СЂРѕРєРё, С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РїСЂРѕРёСЃС…РѕРґРёС‚.
  *******************************************************************/
 
  inline void CString::set( int i, char ch )
@@ -407,19 +399,19 @@
  }
 
  /************************************************************************
-  Оператор доступа к элементам строки - символам. При попытке извлечени
-  элемента ЗА пределами строки возвращаем ноль. Прерывания программы
-  такая ситуация делать не должна.
+  РћРїРµСЂР°С‚РѕСЂ РґРѕСЃС‚СѓРїР° Рє СЌР»РµРјРµРЅС‚Р°Рј СЃС‚СЂРѕРєРё - СЃРёРјРІРѕР»Р°Рј. РџСЂРё РїРѕРїС‹С‚РєРµ РёР·РІР»РµС‡РµРЅРё
+  СЌР»РµРјРµРЅС‚Р° Р—Рђ РїСЂРµРґРµР»Р°РјРё СЃС‚СЂРѕРєРё РІРѕР·РІСЂР°С‰Р°РµРј РЅРѕР»СЊ. РџСЂРµСЂС‹РІР°РЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹
+  С‚Р°РєР°СЏ СЃРёС‚СѓР°С†РёСЏ РґРµР»Р°С‚СЊ РЅРµ РґРѕР»Р¶РЅР°.
  ************************************************************************/
 
  inline char CString::operator[]( int i ) const
  { return (i<0 || i>len) ? 0 : str[i]; }
 
  /*****************************************************************
-   Возвращает символ, содержащийся в позиции, отсчитываемой
-   от конца строки. То есть last_char(0) вернет последний
-   символ перед '\0'. При выходе за пределы существующей строки
-   возвращаем '\0'.
+   Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРёРјРІРѕР», СЃРѕРґРµСЂР¶Р°С‰РёР№СЃСЏ РІ РїРѕР·РёС†РёРё, РѕС‚СЃС‡РёС‚С‹РІР°РµРјРѕР№
+   РѕС‚ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё. РўРѕ РµСЃС‚СЊ last_char(0) РІРµСЂРЅРµС‚ РїРѕСЃР»РµРґРЅРёР№
+   СЃРёРјРІРѕР» РїРµСЂРµРґ '\0'. РџСЂРё РІС‹С…РѕРґРµ Р·Р° РїСЂРµРґРµР»С‹ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ СЃС‚СЂРѕРєРё
+   РІРѕР·РІСЂР°С‰Р°РµРј '\0'.
  *****************************************************************/
 
  inline char CString::last_char( int i ) const
@@ -471,7 +463,7 @@
   return res;
  }
 
-
+/*
  inline const CString CString::operator+( const wchar_t *s2 ) const
  {
   CString res(*this);
@@ -480,7 +472,7 @@
   res.calc_hash();
   return res;
  }
-
+*/
 
  inline const CString operator+( const char *s1, const CString &s2 )
  {
@@ -492,6 +484,7 @@
  }
 
 
+/*
  inline const CString operator+( const wchar_t *s1, const CString &s2 )
  {
   CString res(s1);
@@ -500,8 +493,9 @@
   res.calc_hash();
   return res;
  }
+*/
 
-
+ /*
  inline const CString operator+( char ch, const CString& s )
  {
   CString res(ch);
@@ -509,8 +503,9 @@
   res.calc_hash();
   return res;
  }
+ */
 
-
+ /*
  inline const CString CString::operator+( char ch ) const
  {
   CString res(*this);
@@ -522,7 +517,7 @@
   res.calc_hash();
   return res;
  }
-
+ */
 
  // ****************************************************************
 
@@ -548,7 +543,7 @@
   return *this;
  }
 
-
+ /*
  inline CString& CString::operator+=( const wchar_t *s )
  {
   int l=len, sl=lem_strlen(s);
@@ -558,7 +553,7 @@
   calc_hash();
   return *this;
  }
-
+*/
 
  inline CString& CString::operator+=( char ch )
  {
@@ -592,9 +587,10 @@
  { return lem_eq( str, s2 ); }
 
 
+/*
  inline bool CString::operator==( const wchar_t *s2 ) const
  { return lem_eq( str, s2 ); }
-
+*/
 
  inline bool CString::operator==( char ch ) const
  { return *str==ch && str[1]=='\0'; }
@@ -603,9 +599,10 @@
  { return lem_eq( s2.c_str(), s1 ); }
 
 
+/*
  inline bool operator==( const wchar_t *s1, const CString& s2 )
  { return lem_eq( s2.c_str(), s1 ); }
-
+*/
 
  inline bool operator==( char ch, const CString& s )
  { return s.front()==ch && s[1]=='\0'; }
@@ -637,8 +634,8 @@
  { return lem_neq( str, s2 ); }
 
 
- inline bool CString::operator!=( const wchar_t *s2 ) const
- { return lem_neq( str, s2 ); }
+ //inline bool CString::operator!=( const wchar_t *s2 ) const
+ //{ return lem_neq( str, s2 ); }
 
 
  inline bool CString::operator!=( char ch ) const
@@ -649,8 +646,8 @@
  { return lem_neq( s2.c_str(), s1 ); }
 
 
- inline bool operator!=( const wchar_t *s1, const CString& s2 )
- { return lem_neq( s2.c_str(), s1 ); }
+// inline bool operator!=( const wchar_t *s1, const CString& s2 )
+// { return lem_neq( s2.c_str(), s1 ); }
 
 
  inline bool operator!=( char ch, const CString& s )
@@ -667,29 +664,32 @@
  { return lem_gt( str, s2 ); }
 
 
- inline bool CString::operator>( const wchar_t *s2 ) const
- { return lem_gt( str, s2 ); }
+// inline bool CString::operator>( const wchar_t *s2 ) const
+// { return lem_gt( str, s2 ); }
 
-
+ /*
  inline bool CString::operator>( char ch ) const
  {
   char s2[2]={ ch, '\0' };
   return lem_gt( str, s2 );
  }
+ */
 
  inline bool operator>( const char *s1, const CString& s2 )
  { return lem_gt( s2.c_str(), s1 ); }
 
 
- inline bool operator>( const wchar_t *s1, const CString& s2 )
- { return lem_gt( s2.c_str(), s1 ); }
+// inline bool operator>( const wchar_t *s1, const CString& s2 )
+// { return lem_gt( s2.c_str(), s1 ); }
 
 
+ /*
  inline bool operator>( char ch, const CString& s )
  {
   char s2[2]={ ch, '\0' };
   return lem_gt( s2, s.c_str() );
  }
+ */
 
  // ****************************************************************
 
@@ -702,30 +702,31 @@
  { return lem_ge( str, s2 ); }
 
 
- inline bool CString::operator>=( const wchar_t *s2 ) const
- { return lem_ge( str, s2 ); }
+// inline bool CString::operator>=( const wchar_t *s2 ) const
+// { return lem_ge( str, s2 ); }
 
-
+ /*
  inline bool CString::operator>=( char ch ) const
  {
   char s2[2]={ ch, '\0' };
   return lem_ge( str, s2 );
  }
+ */
 
  inline bool operator>=( const char *s1, const CString& s2 )
  { return lem_ge( s2.c_str(), s1 ); }
 
 
- inline bool operator>=( const wchar_t *s1, const CString& s2 )
- { return lem_ge( s2.c_str(), s1 ); }
+// inline bool operator>=( const wchar_t *s1, const CString& s2 )
+// { return lem_ge( s2.c_str(), s1 ); }
 
-
+ /*
  inline bool operator>=( const char ch, const CString& s )
  {
   char s2[2]={ ch, '\0' };
   return lem_ge( s2, s.c_str() );
  }
-
+ */
  // ****************************************************************
 
 
@@ -737,30 +738,31 @@
  { return lem_lt( str, s2 ); }
 
 
- inline bool CString::operator<( const wchar_t *s2 ) const
- { return lem_lt( str, s2 ); }
+// inline bool CString::operator<( const wchar_t *s2 ) const
+// { return lem_lt( str, s2 ); }
 
-
+ /*
  inline bool CString::operator<( char ch ) const
  {
   char s2[2]={ ch, '\0' };
   return lem_lt( str, s2 );
  }
+ */
 
- inline bool operator<( const wchar_t *s1, const CString& s2 )
- { return lem_lt( s2.c_str(), s1 ); }
+// inline bool operator<( const wchar_t *s1, const CString& s2 )
+// { return lem_lt( s2.c_str(), s1 ); }
 
 
  inline bool operator<( const char *s1, const CString& s2 )
  { return lem_lt( s2.c_str(), s1 ); }
 
-
+ /*
  inline bool operator<( char ch, const CString& s )
  {
   char s2[2]={ ch, '\0' };
   return lem_lt( s2, s.c_str() );
  }
-
+ */
  // ****************************************************************
 
 
@@ -772,55 +774,56 @@
  { return lem_le( str, s2 ); }
 
 
- inline bool CString::operator<=( const wchar_t *s2 ) const
- { return lem_le( str, s2 ); }
+// inline bool CString::operator<=( const wchar_t *s2 ) const
+// { return lem_le( str, s2 ); }
 
-
+ /*
  inline bool CString::operator<=( char ch ) const
  {
   char s2[2]={ ch, '\0' };
   return lem_le( str, s2 );
  }
+ */
 
  inline bool operator<=( const char *s1, const CString& s2 )
  { return lem_le( s2.c_str(), s1 ); }
 
 
- inline bool operator<=( const wchar_t *s1, const CString& s2 )
- { return lem_le( s2.c_str(), s1 ); }
+// inline bool operator<=( const wchar_t *s1, const CString& s2 )
+// { return lem_le( s2.c_str(), s1 ); }
 
-
+ /*
  inline bool operator<=( char ch, const CString& s )
  {
   char s2[2]={ ch, '\0' };
   return lem_le( s2, s.c_str() );
  }
-
+ */
  // ****************************************************************
 
 
  /***********************************************************************
-  Определяет число появлений символа ch в строке s. Функция может
-  использоваться для определения самого факта появления символа в строке
-  так как отсутствие таковых дает нулевой результат (то есть 'false'!).
+  РћРїСЂРµРґРµР»СЏРµС‚ С‡РёСЃР»Рѕ РїРѕСЏРІР»РµРЅРёР№ СЃРёРјРІРѕР»Р° ch РІ СЃС‚СЂРѕРєРµ s. Р¤СѓРЅРєС†РёСЏ РјРѕР¶РµС‚
+  РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ СЃР°РјРѕРіРѕ С„Р°РєС‚Р° РїРѕСЏРІР»РµРЅРёСЏ СЃРёРјРІРѕР»Р° РІ СЃС‚СЂРѕРєРµ
+  С‚Р°Рє РєР°Рє РѕС‚СЃСѓС‚СЃС‚РІРёРµ С‚Р°РєРѕРІС‹С… РґР°РµС‚ РЅСѓР»РµРІРѕР№ СЂРµР·СѓР»СЊС‚Р°С‚ (С‚Рѕ РµСЃС‚СЊ 'false'!).
  ************************************************************************/
 
  inline int CString::count( char ch ) const
  { return lem_nentry( str, ch ); }
 
  /****************************************************************************
-   Находит n-ое (по умолчанию первое) вхождение символа ch в строку-аргумент s.
-   Если символ не найден, или число его вхождений менее nentry, то
-   возвращается -1.
+   РќР°С…РѕРґРёС‚ n-РѕРµ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРµСЂРІРѕРµ) РІС…РѕР¶РґРµРЅРёРµ СЃРёРјРІРѕР»Р° ch РІ СЃС‚СЂРѕРєСѓ-Р°СЂРіСѓРјРµРЅС‚ s.
+   Р•СЃР»Рё СЃРёРјРІРѕР» РЅРµ РЅР°Р№РґРµРЅ, РёР»Рё С‡РёСЃР»Рѕ РµРіРѕ РІС…РѕР¶РґРµРЅРёР№ РјРµРЅРµРµ nentry, С‚Рѕ
+   РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ -1.
  ****************************************************************************/
 
  inline int CString::search( char ch, int nentry ) const
  { return lem_find( str, ch, nentry ); }
 
  /****************************************************************************
-  Определяет положение nentry-го вхождения подстроки [f] в строку [s].
-  Возвращает индекс первого совпавшего символа. Если подстрока не
-  обнаружена, или число ее появлений в строке менее nentry, то возвращаем -1.
+  РћРїСЂРµРґРµР»СЏРµС‚ РїРѕР»РѕР¶РµРЅРёРµ nentry-РіРѕ РІС…РѕР¶РґРµРЅРёСЏ РїРѕРґСЃС‚СЂРѕРєРё [f] РІ СЃС‚СЂРѕРєСѓ [s].
+  Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ СЃРѕРІРїР°РІС€РµРіРѕ СЃРёРјРІРѕР»Р°. Р•СЃР»Рё РїРѕРґСЃС‚СЂРѕРєР° РЅРµ
+  РѕР±РЅР°СЂСѓР¶РµРЅР°, РёР»Рё С‡РёСЃР»Рѕ РµРµ РїРѕСЏРІР»РµРЅРёР№ РІ СЃС‚СЂРѕРєРµ РјРµРЅРµРµ nentry, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј -1.
  ****************************************************************************/
 
  inline int CString::search( const CString &f, int nentry ) const
@@ -831,8 +834,8 @@
  { return lem_find( str, f, nentry ); }
 
 
- inline int CString::search( const wchar_t* f, int nentry ) const
- { return lem_find( str, f, nentry ); }
+// inline int CString::search( const wchar_t* f, int nentry ) const
+// { return lem_find( str, f, nentry ); }
 
 
 
@@ -853,19 +856,20 @@
  extern const CString dressup( const CString &s, char Bound );
  extern const CString dress_quotes( const CString &s );
  extern const CString dress_apostrophes( const CString &s );
- extern const CString dress_spaces( const CString &s );
+ //extern const CString dress_spaces( const CString &s );
 
+ /*
  extern const CString subst(
                         const CString &s,
                         const CString &mask,
                         const CString &text,
-                        int nentry /*-1*/
-                       );
+                        int nentry
+                       );*/
 
  extern const CString to_lower( const CString &s );
- extern const CString to_upper( const CString &s );
- extern const CString cut_final_commas( const CString &s );
- extern const CString to_Aa( const CString &s );
+ //extern const CString to_upper( const CString &s );
+ //extern const CString cut_final_commas( const CString &s );
+ //extern const CString to_Aa( const CString &s );
 
  // *****************************************************************************
  // returns the maximum length of beginning <s1> matching <s2>
@@ -886,9 +890,9 @@
  extern const CString mid( const CString& s, int i0, int nch );
 
  // ***********************************************************
- // Преобразование всех символов строки к верхнему регистру.
+ // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ СЃС‚СЂРѕРєРё Рє РІРµСЂС…РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ.
  // ***********************************************************
-
+/*
  inline CString& CString::to_upper(void)
  {
 //  #if defined LEM_MSC
@@ -899,15 +903,18 @@
 
   lem::to_upper(str);
 
-  // Содержимое строки изменилось - пересчитываем хэш-код.
+  // РЎРѕРґРµСЂР¶РёРјРѕРµ СЃС‚СЂРѕРєРё РёР·РјРµРЅРёР»РѕСЃСЊ - РїРµСЂРµСЃС‡РёС‚С‹РІР°РµРј С…СЌС€-РєРѕРґ.
   calc_hash();
 
   return *this;
  }
+*/
+
 
  // ***********************************************************
- // Преобразование всех символов строки к нижнему регистру.
+ // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ СЃС‚СЂРѕРєРё Рє РЅРёР¶РЅРµРјСѓ СЂРµРіРёСЃС‚СЂСѓ.
  // ***********************************************************
+
  inline CString& CString::to_lower(void)
  {
   lem::to_lower(str);
@@ -918,10 +925,10 @@
 
 
  // ************************************************************
- // Строка text содержит подстроку x, причем x должна быть
- // с самого начала строки text.
+ // РЎС‚СЂРѕРєР° text СЃРѕРґРµСЂР¶РёС‚ РїРѕРґСЃС‚СЂРѕРєСѓ x, РїСЂРёС‡РµРј x РґРѕР»Р¶РЅР° Р±С‹С‚СЊ
+ // СЃ СЃР°РјРѕРіРѕ РЅР°С‡Р°Р»Р° СЃС‚СЂРѕРєРё text.
  //
- // Например:
+ // РќР°РїСЂРёРјРµСЂ:
  //
  //       text =     ABCDEFG
  //       x    =     ABC
@@ -962,7 +969,7 @@
   return true;
  }
 
-
+/*
  inline bool CString::eq_beg( const wchar_t *x ) const
  {
   const int lx = lem_strlen(x);
@@ -978,6 +985,7 @@
 
   return true;
  }
+ */
 
  inline bool CString::find( char x ) const
  {
@@ -989,6 +997,7 @@
  }
 
 
+ /*
  inline CString& CString::subst_all( char mask, char ch )
  {
   for( int i=0; i<len; i++ )
@@ -998,6 +1007,7 @@
   calc_hash();
   return *this;
  }
+ */
 
   inline bool in_apostrophes( const CString &s )
   { return s.front()=='\'' && s.back()=='\''; }
