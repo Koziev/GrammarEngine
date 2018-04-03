@@ -1,24 +1,21 @@
 // -----------------------------------------------------------------------------
 // File BASE_ENTRY.CPP
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Content:
 // SOLARIX Grammar engine
-// Класс Base_Entry - базовый класс для внутреннего представления словарной
-// статьи Грамматики.
+// РљР»Р°СЃСЃ Base_Entry - Р±Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃР»РѕРІР°СЂРЅРѕР№
+// СЃС‚Р°С‚СЊРё Р“СЂР°РјРјР°С‚РёРєРё.
 //
-// 21.11.2006 - рефакторинг имен методов.
+// 21.11.2006 - СЂРµС„Р°РєС‚РѕСЂРёРЅРі РёРјРµРЅ РјРµС‚РѕРґРѕРІ.
 // -----------------------------------------------------------------------------
 //
 // CD->10.08.1996
-// LC->20.11.2010
+// LC->02.04.2018
 // --------------
 
 #include <lem/macro_parser.h>
@@ -36,255 +33,259 @@ using namespace Solarix;
 using namespace lem::Iridium;
 
 
-Base_Entry::Base_Entry(void):Form_Table()
+Base_Entry::Base_Entry() :Form_Table()
 {
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 Base_Entry::Base_Entry(
-                       Macro_Parser& txtfile,
-                       Grammar& gram,
-                       bool IsRealized
-                      ):Form_Table()
+    Macro_Parser& txtfile,
+    Grammar& gram,
+    bool IsRealized
+) : Form_Table()
 {
- LoadTxt(txtfile,gram,IsRealized);
- return;
+    LoadTxt(txtfile, gram, IsRealized);
+    return;
 }
 #endif
 
-Base_Entry::Base_Entry( Stream& bin ):Form_Table()
+Base_Entry::Base_Entry(Stream& bin) :Form_Table()
 {
- LoadBin(bin);
+    LoadBin(bin);
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /*************************************************************************
- Производные классы могут перегрузить данный метод, чтобы отлавливать
- появление в теле описания статьи специфических полей. Входной параметр
- t дает первый токен поля. Если этот токен действительно является началом
- специфической секции данных, то возвращается true, иначе false.
+ РџСЂРѕРёР·РІРѕРґРЅС‹Рµ РєР»Р°СЃСЃС‹ РјРѕРіСѓС‚ РїРµСЂРµРіСЂСѓР·РёС‚СЊ РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ, С‡С‚РѕР±С‹ РѕС‚Р»Р°РІР»РёРІР°С‚СЊ
+ РїРѕСЏРІР»РµРЅРёРµ РІ С‚РµР»Рµ РѕРїРёСЃР°РЅРёСЏ СЃС‚Р°С‚СЊРё СЃРїРµС†РёС„РёС‡РµСЃРєРёС… РїРѕР»РµР№. Р’С…РѕРґРЅРѕР№ РїР°СЂР°РјРµС‚СЂ
+ t РґР°РµС‚ РїРµСЂРІС‹Р№ С‚РѕРєРµРЅ РїРѕР»СЏ. Р•СЃР»Рё СЌС‚РѕС‚ С‚РѕРєРµРЅ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ СЏРІР»СЏРµС‚СЃСЏ РЅР°С‡Р°Р»РѕРј
+ СЃРїРµС†РёС„РёС‡РµСЃРєРѕР№ СЃРµРєС†РёРё РґР°РЅРЅС‹С…, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ true, РёРЅР°С‡Рµ false.
 **************************************************************************/
 bool Base_Entry::ProcessSection(
-                                 Macro_Parser &txtfile,
-                                 Grammar &gram,
-                                 const BethToken &t
-                                )
+    Macro_Parser &txtfile,
+    Grammar &gram,
+    const BethToken &t
+)
 {
- return Form_Table::ProcessSection(txtfile,gram,t);
+    return Form_Table::ProcessSection(txtfile, gram, t);
 }
 #endif
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /**********************************************************
- Загрузка тела описания статьи из текстового файла Словаря.
- Само тело состоит из нескольких факультативных частей.
+ Р—Р°РіСЂСѓР·РєР° С‚РµР»Р° РѕРїРёСЃР°РЅРёСЏ СЃС‚Р°С‚СЊРё РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РЎР»РѕРІР°СЂСЏ.
+ РЎР°РјРѕ С‚РµР»Рѕ СЃРѕСЃС‚РѕРёС‚ РёР· РЅРµСЃРєРѕР»СЊРєРёС… С„Р°РєСѓР»СЊС‚Р°С‚РёРІРЅС‹С… С‡Р°СЃС‚РµР№.
 ***********************************************************/
 void Base_Entry::LoadBody(
-                           Macro_Parser &txtfile,
-                           Grammar& gram
-                          )
+    Macro_Parser &txtfile,
+    Grammar& gram
+)
 {
- if( is_realized )
-  {
-   // Если теперь встретится '{', то значит имеем расширенное
-   // описание словарной статьи.
+    if (is_realized)
+    {
+        // Р•СЃР»Рё С‚РµРїРµСЂСЊ РІСЃС‚СЂРµС‚РёС‚СЃСЏ '{', С‚Рѕ Р·РЅР°С‡РёС‚ РёРјРµРµРј СЂР°СЃС€РёСЂРµРЅРЅРѕРµ
+        // РѕРїРёСЃР°РЅРёРµ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
 
-   const BSourceState prefig = txtfile.tellp();
-   const BethToken isfig = txtfile.read();
+        const BSourceState prefig = txtfile.tellp();
+        const BethToken isfig = txtfile.read();
 
-   #if LEM_DEBUGGING==1
-   int nf = CountForms();
-   #endif
+#if LEM_DEBUGGING==1
+        int nf = CountForms();
+#endif
 
-   if( isfig.GetToken()!=B_OFIGPAREN )
-    txtfile.seekp(prefig);
-   else
-    LoadTxtEx( txtfile, gram );
+        if (isfig.GetToken() != B_OFIGPAREN)
+            txtfile.seekp(prefig);
+        else
+            LoadTxtEx(txtfile, gram);
 
-   if( CountForms()==0 )
-    BeforeFirstForm(gram);    
+        if (CountForms() == 0)
+            BeforeFirstForm(gram);
 
-   CheckAttr( txtfile, gram );
-  }
+        CheckAttr(txtfile, gram);
+    }
 
- #if defined SOL_DETAILED
- if( gram.GetDict().GetDebugLevel_ir()>=3 )
-  {
-   // Эхо-сообщение: закончили трансляцию статьи.
-   gram.GetIO().mecho().printf( "Ok\n" );
-  }
- #endif
+#if defined SOL_DETAILED
+    if (gram.GetDict().GetDebugLevel_ir() >= 3)
+    {
+        // Р­С…Рѕ-СЃРѕРѕР±С‰РµРЅРёРµ: Р·Р°РєРѕРЅС‡РёР»Рё С‚СЂР°РЅСЃР»СЏС†РёСЋ СЃС‚Р°С‚СЊРё.
+        gram.GetIO().mecho().printf("Ok\n");
+    }
+#endif
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /********************************************************************
- Читаем из текстового файла секции расширенного описания статьи.
- Под расширенным описанием подразумевается список координат-атрибутов,
- формы, грамматическая сеть и специфические для производных классов
- поля.
+ Р§РёС‚Р°РµРј РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° СЃРµРєС†РёРё СЂР°СЃС€РёСЂРµРЅРЅРѕРіРѕ РѕРїРёСЃР°РЅРёСЏ СЃС‚Р°С‚СЊРё.
+ РџРѕРґ СЂР°СЃС€РёСЂРµРЅРЅС‹Рј РѕРїРёСЃР°РЅРёРµРј РїРѕРґСЂР°Р·СѓРјРµРІР°РµС‚СЃСЏ СЃРїРёСЃРѕРє РєРѕРѕСЂРґРёРЅР°С‚-Р°С‚СЂРёР±СѓС‚РѕРІ,
+ С„РѕСЂРјС‹, РіСЂР°РјРјР°С‚РёС‡РµСЃРєР°СЏ СЃРµС‚СЊ Рё СЃРїРµС†РёС„РёС‡РµСЃРєРёРµ РґР»СЏ РїСЂРѕРёР·РІРѕРґРЅС‹С… РєР»Р°СЃСЃРѕРІ
+ РїРѕР»СЏ.
 *********************************************************************/
 void Base_Entry::LoadTxtEx(
-                            Macro_Parser& txtfile,
-                            Grammar& gram
-                           )
+    Macro_Parser& txtfile,
+    Grammar& gram
+)
 {
- // *** Считываем описание статьи ***
- bool looping=true;
- BethToken token;
- CP_Array common;
+    // *** РЎС‡РёС‚С‹РІР°РµРј РѕРїРёСЃР°РЅРёРµ СЃС‚Р°С‚СЊРё ***
+    bool looping = true;
+    BethToken token;
+    CP_Array common;
 
- while( looping )
-  {
-   if( txtfile.eof() )
+    while (looping)
     {
-     Print_Error(txtfile);
-     gram.GetIO().merr().printf( "End of file has been reached before entry body completely loaded\n" );
-     throw E_ParserError();
-    }
+        if (txtfile.eof())
+        {
+            Print_Error(txtfile);
+            gram.GetIO().merr().printf("End of file has been reached before entry body completely loaded\n");
+            throw E_ParserError();
+        }
 
-   const BSourceState back = txtfile.tellp();
-   token = txtfile.read();
+        const BSourceState back = txtfile.tellp();
+        token = txtfile.read();
 
-   if( token.GetToken()==B_CFIGPAREN )
-    {
-     // Описание статьи закончено
-     looping=false;
-     break;
-    }
+        if (token.GetToken() == B_CFIGPAREN)
+        {
+            // РћРїРёСЃР°РЅРёРµ СЃС‚Р°С‚СЊРё Р·Р°РєРѕРЅС‡РµРЅРѕ
+            looping = false;
+            break;
+        }
 
-   if( token.GetToken()==B_OTRIPAREN )
-    {
-     txtfile.seekp(token.GetBegin());
-     SkipNetSection(txtfile,gram);
-     continue;
-    }
+        if (token.GetToken() == B_OTRIPAREN)
+        {
+            txtfile.seekp(token.GetBegin());
+            SkipNetSection(txtfile, gram);
+            continue;
+        }
 
-   if( ProcessSection(txtfile,gram,token) )
-    continue;
+        if (ProcessSection(txtfile, gram, token))
+            continue;
 
-   txtfile.seekp(back);
+        txtfile.seekp(back);
 
-   if( LoadAttribute(txtfile,gram) )
-    continue;
+        if (LoadAttribute(txtfile, gram))
+            continue;
 
-   // Загружаем словоформу.
-   LoadForm(
+        // Р—Р°РіСЂСѓР¶Р°РµРј СЃР»РѕРІРѕС„РѕСЂРјСѓ.
+        LoadForm(
             txtfile,
             gram,
             common,
-            GramCoordAdr(UNKNOWN,UNKNOWN),
+            GramCoordAdr(UNKNOWN, UNKNOWN),
             UNKNOWN,
-            GramCoordAdr(UNKNOWN,UNKNOWN),
+            GramCoordAdr(UNKNOWN, UNKNOWN),
             UNKNOWN,
             UNKNOWN
-           );
+        );
 
-  } // конец цикла считывания описания статьи
+    } // РєРѕРЅРµС† С†РёРєР»Р° СЃС‡РёС‚С‹РІР°РЅРёСЏ РѕРїРёСЃР°РЅРёСЏ СЃС‚Р°С‚СЊРё
 
- return;
+    return;
 }
 #endif
 
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void Base_Entry::BeforeFirstForm( Grammar& gram )
+void Base_Entry::BeforeFirstForm(Grammar& gram)
 {
- if( is_quantor(GetClass()) ) 
-  return;
+    if (is_quantor(GetClass()))
+        return;
 
- const GramClass& cl = gram.classes()[GetClass()];
- const int na=cl.attrs().size();
+    const GramClass& cl = gram.classes()[GetClass()];
+    const int na = cl.attrs().size();
 
- for( int i=0; i<na; i++ )
-  {
-   const GramCoordAdr iglob = cl.attrs()[i];
-
-   const GramClass &cls = gram.classes()[GetClass()];
-
-   if( GetAttrState(iglob)==UNKNOWN )
+    for (int i = 0; i < na; i++)
     {
-     // Для атрибута задано значение по умолчанию?
-     lem::zbool has_def;
-     for( lem::Container::size_type j=0; j<cls.attr_defaults.size(); ++j )
-      if( cls.attr_defaults[j].first==iglob )
-       {
-        if( cls.attr_defaults[j].second!=UNKNOWN )
-         {
-          int ia = attr.FindOnce(iglob);
-          if( ia!=UNKNOWN )
-           attr.Remove(ia);
- 
-          attr.push_back(GramCoordPair(iglob,cls.attr_defaults[j].second));
-         }
+        const GramCoordAdr iglob = cl.attrs()[i];
 
-        has_def=true;
-        break;       
-       }
+        const GramClass &cls = gram.classes()[GetClass()];
 
-     if( !has_def )
-      {
-       // Если это координата с двумя неявно объявленными
-       // состояниями, то следует установить состояние
-       // атрибута как FALSE.
+        if (GetAttrState(iglob) == UNKNOWN)
+        {
+            // Р”Р»СЏ Р°С‚СЂРёР±СѓС‚Р° Р·Р°РґР°РЅРѕ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ?
+            lem::zbool has_def;
+            for (lem::Container::size_type j = 0; j < cls.attr_defaults.size(); ++j)
+            {
+                if (cls.attr_defaults[j].first == iglob)
+                {
+                    if (cls.attr_defaults[j].second != UNKNOWN)
+                    {
+                        int ia = attr.FindOnce(iglob);
+                        if (ia != UNKNOWN)
+                            attr.Remove(ia);
 
-       if( gram.coords()[iglob.GetIndex()].states().empty() )
-        attr.push_back(GramCoordPair(iglob,false));
-      }
+                        attr.push_back(GramCoordPair(iglob, cls.attr_defaults[j].second));
+                    }
+
+                    has_def = true;
+                    break;
+                }
+            }
+
+            if (!has_def)
+            {
+                // Р•СЃР»Рё СЌС‚Рѕ РєРѕРѕСЂРґРёРЅР°С‚Р° СЃ РґРІСѓРјСЏ РЅРµСЏРІРЅРѕ РѕР±СЉСЏРІР»РµРЅРЅС‹РјРё
+                // СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё, С‚Рѕ СЃР»РµРґСѓРµС‚ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                // Р°С‚СЂРёР±СѓС‚Р° РєР°Рє FALSE.
+
+                if (gram.coords()[iglob.GetIndex()].states().empty())
+                    attr.push_back(GramCoordPair(iglob, false));
+            }
+        }
     }
-  }
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /*********************************************************************
- Все атрибуты должны быть определены! Метод вызывается после чтения
- тела описания Статьи.
+ Р’СЃРµ Р°С‚СЂРёР±СѓС‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РµРЅС‹! РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ С‡С‚РµРЅРёСЏ
+ С‚РµР»Р° РѕРїРёСЃР°РЅРёСЏ РЎС‚Р°С‚СЊРё.
 **********************************************************************/
-void Base_Entry::CheckAttr( Macro_Parser& txtfile, Grammar& gram )
+void Base_Entry::CheckAttr(Macro_Parser& txtfile, Grammar& gram)
 {
- if( is_quantor(GetClass()) ) 
-  return;
+    if (is_quantor(GetClass()))
+        return;
 
- const GramClass& cl = gram.classes()[GetClass()];
- const int na = CastSizeToInt(cl.attrs().size());
+    const GramClass& cl = gram.classes()[GetClass()];
+    const int na = CastSizeToInt(cl.attrs().size());
 
- for( int i=0; i<na; i++ )
-  {
-   const GramCoordAdr iglob = cl.attrs()[i];
-
-   const GramClass &cls = gram.classes()[GetClass()];
-
-   if( GetAttrState(iglob)==UNKNOWN )
+    for (int i = 0; i < na; i++)
     {
-     lem::zbool def_unk;
-     for( lem::Container::size_type j=0; j<cl.attr_defaults.size(); ++j )
-      if( cl.attr_defaults[j].first==iglob && cl.attr_defaults[j].second==UNKNOWN ) 
-       {
-        def_unk=true;
-        break; 
-       } 
+        const GramCoordAdr iglob = cl.attrs()[i];
 
-     if( !def_unk )
-      {
-       // Состояние аттрибута не определено!
-       Print_Error(txtfile);
-       gram.GetIO().merr().printf(
-                                  "Not defined attribute [%us] state\n",
-                                  gram.coords()[iglob.GetIndex()].GetName()[iglob.GetVar()].c_str()
-                                 );
-       throw E_ParserError();
-      }
+        const GramClass &cls = gram.classes()[GetClass()];
+
+        if (GetAttrState(iglob) == UNKNOWN)
+        {
+            lem::zbool def_unk;
+            for (lem::Container::size_type j = 0; j < cl.attr_defaults.size(); ++j)
+            {
+                if (cl.attr_defaults[j].first == iglob && cl.attr_defaults[j].second == UNKNOWN)
+                {
+                    def_unk = true;
+                    break;
+                }
+            }
+
+            if (!def_unk)
+            {
+                // РЎРѕСЃС‚РѕСЏРЅРёРµ Р°С‚С‚СЂРёР±СѓС‚Р° РЅРµ РѕРїСЂРµРґРµР»РµРЅРѕ!
+                Print_Error(txtfile);
+                gram.GetIO().merr().printf(
+                    "Not defined attribute [%us] state\n",
+                    gram.coords()[iglob.GetIndex()].GetName()[iglob.GetVar()].c_str()
+                );
+                throw E_ParserError();
+            }
+        }
     }
-  }
 
- return;
+    return;
 }
 #endif

@@ -6,15 +6,15 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Класс GramClass - описание Грамматического Класса (парадигмы) для любой
-// Грамматики.
+// РљР»Р°СЃСЃ GramClass - РѕРїРёСЃР°РЅРёРµ Р“СЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РљР»Р°СЃСЃР° (РїР°СЂР°РґРёРіРјС‹) РґР»СЏ Р»СЋР±РѕР№
+// Р“СЂР°РјРјР°С‚РёРєРё.
 //
-// 27.08.2008 - добавлена возможность задавать для класса алиасы имени.
-// 13.12.2008 - добавлена возможность задавать секцию импорта атрибутов.
+// 27.08.2008 - РґРѕР±Р°РІР»РµРЅР° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ Р·Р°РґР°РІР°С‚СЊ РґР»СЏ РєР»Р°СЃСЃР° Р°Р»РёР°СЃС‹ РёРјРµРЅРё.
+// 13.12.2008 - РґРѕР±Р°РІР»РµРЅР° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ Р·Р°РґР°РІР°С‚СЊ СЃРµРєС†РёСЋ РёРјРїРѕСЂС‚Р° Р°С‚СЂРёР±СѓС‚РѕРІ.
 // -----------------------------------------------------------------------------
 //
 // CD->06.10.1995
-// LC->20.11.2010
+// LC->02.04.2018
 // --------------
 
 #include <lem/macro_parser.h>
@@ -33,445 +33,447 @@ using namespace Solarix;
 using namespace lem::Iridium;
 
 
-GramClass::GramClass(void)
+GramClass::GramClass()
 {
- #if defined SOL_LOADTXT && defined SOL_COMPILER
- is_realized = false;
- #endif
- is_parent = false;
- return;
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+    is_realized = false;
+#endif
+    is_parent = false;
+    return;
 }
 
 
 #if defined SOL_LOADBIN
-GramClass::GramClass( lem::Stream &bin )
-{ LoadBin(bin); }
+GramClass::GramClass(lem::Stream &bin)
+{
+    LoadBin(bin);
+}
 #endif
 
-GramClass::~GramClass(void)
+GramClass::~GramClass()
 {}
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /**********************************************************************
- Загрузка описания грамматического класса из текстового файла Словаря.
- Формат:
-        1. class имя_класса [,alias1,alias2,...] AS export_name
+ Р—Р°РіСЂСѓР·РєР° РѕРїРёСЃР°РЅРёСЏ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР° РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РЎР»РѕРІР°СЂСЏ.
+ Р¤РѕСЂРјР°С‚:
+        1. class РёРјСЏ_РєР»Р°СЃСЃР° [,alias1,alias2,...] AS export_name
 
-           Самый простой формат. Определение тела класса отсутствует,
-           что означает, что оно пустое. Данный формат распознается по
-           отсутствию токена '{' после имени класса.
+           РЎР°РјС‹Р№ РїСЂРѕСЃС‚РѕР№ С„РѕСЂРјР°С‚. РћРїСЂРµРґРµР»РµРЅРёРµ С‚РµР»Р° РєР»Р°СЃСЃР° РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚,
+           С‡С‚Рѕ РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РѕРЅРѕ РїСѓСЃС‚РѕРµ. Р”Р°РЅРЅС‹Р№ С„РѕСЂРјР°С‚ СЂР°СЃРїРѕР·РЅР°РµС‚СЃСЏ РїРѕ
+           РѕС‚СЃСѓС‚СЃС‚РІРёСЋ С‚РѕРєРµРЅР° '{' РїРѕСЃР»Рµ РёРјРµРЅРё РєР»Р°СЃСЃР°.
 
-        2. class имя_класса [,alias1,alias2,...] AS export_name
+        2. class РёРјСЏ_РєР»Р°СЃСЃР° [,alias1,alias2,...] AS export_name
            {
-            атрибуты
-            тэги 
-            измерения
+            Р°С‚СЂРёР±СѓС‚С‹
+            С‚СЌРіРё
+            РёР·РјРµСЂРµРЅРёСЏ
            }
 
-          Полный формат. В фигурных скобочках определено тело класса,
-          состоящее из списка определений координат-атрибутов и
-          координат-измерений.
+          РџРѕР»РЅС‹Р№ С„РѕСЂРјР°С‚. Р’ С„РёРіСѓСЂРЅС‹С… СЃРєРѕР±РѕС‡РєР°С… РѕРїСЂРµРґРµР»РµРЅРѕ С‚РµР»Рѕ РєР»Р°СЃСЃР°,
+          СЃРѕСЃС‚РѕСЏС‰РµРµ РёР· СЃРїРёСЃРєР° РѕРїСЂРµРґРµР»РµРЅРёР№ РєРѕРѕСЂРґРёРЅР°С‚-Р°С‚СЂРёР±СѓС‚РѕРІ Рё
+          РєРѕРѕСЂРґРёРЅР°С‚-РёР·РјРµСЂРµРЅРёР№.
 
-         2.1 атрибуты ::= attributes
+         2.1 Р°С‚СЂРёР±СѓС‚С‹ ::= attributes
                           {
-                           имя_коорд [=состояние_по_умолчанию]
-                           имя_коорд [=состояние_по_умолчанию]
+                           РёРјСЏ_РєРѕРѕСЂРґ [=СЃРѕСЃС‚РѕСЏРЅРёРµ_РїРѕ_СѓРјРѕР»С‡Р°РЅРёСЋ]
+                           РёРјСЏ_РєРѕРѕСЂРґ [=СЃРѕСЃС‚РѕСЏРЅРёРµ_РїРѕ_СѓРјРѕР»С‡Р°РЅРёСЋ]
                               :
                               :
                           }
 
-             Секция атрибутов содержит перечень имен координат, уже
-             известных грамматике.
+             РЎРµРєС†РёСЏ Р°С‚СЂРёР±СѓС‚РѕРІ СЃРѕРґРµСЂР¶РёС‚ РїРµСЂРµС‡РµРЅСЊ РёРјРµРЅ РєРѕРѕСЂРґРёРЅР°С‚, СѓР¶Рµ
+             РёР·РІРµСЃС‚РЅС‹С… РіСЂР°РјРјР°С‚РёРєРµ.
 
-         2.2 тэги ::= tags
+         2.2 С‚СЌРіРё ::= tags
                       {
-                       имя_коорд
-                       имя_коорд
+                       РёРјСЏ_РєРѕРѕСЂРґ
+                       РёРјСЏ_РєРѕРѕСЂРґ
                           :
                           :
                       }
-                        
 
-         2.3 измерения ::= dimensions
+
+         2.3 РёР·РјРµСЂРµРЅРёСЏ ::= dimensions
                            {
-                            имя_коорд
-                            имя_коорд
+                            РёРјСЏ_РєРѕРѕСЂРґ
+                            РёРјСЏ_РєРѕРѕСЂРґ
                                 :
                                 :
                            }
 
-             Секция измерений в общем-то аналогична секции атрибутов.
+             РЎРµРєС†РёСЏ РёР·РјРµСЂРµРЅРёР№ РІ РѕР±С‰РµРј-С‚Рѕ Р°РЅР°Р»РѕРіРёС‡РЅР° СЃРµРєС†РёРё Р°С‚СЂРёР±СѓС‚РѕРІ.
 
-        3. Задание наследования свойств других классов
+        3. Р—Р°РґР°РЅРёРµ РЅР°СЃР»РµРґРѕРІР°РЅРёСЏ СЃРІРѕР№СЃС‚РІ РґСЂСѓРіРёС… РєР»Р°СЃСЃРѕРІ
 
            class X [,alias1,alias2,...] AS export_name : Y, Z ...
 
 ***********************************************************************/
 void GramClass::LoadTxt(
-                        Macro_Parser &txtfile,
-                        Grammar& gram,
-                        bool IsRealized
-                       )
+    Macro_Parser &txtfile,
+    Grammar& gram,
+    bool IsRealized
+)
 {
- is_realized = IsRealized;
+    is_realized = IsRealized;
 
- // *** Имя класса ***
- const BethToken class_name = txtfile.read();
- sol_check_s_name(gram.GetDict(),txtfile,class_name,true);
- name=class_name.string();
+    // *** РРјСЏ РєР»Р°СЃСЃР° ***
+    const BethToken class_name = txtfile.read();
+    sol_check_s_name(gram.GetDict(), txtfile, class_name, true);
+    name = class_name.string();
 
- if( gram.GetDict().GetDebugLevel_ir()>=3 )
-  {
-   // Эхо-сообщение о начале трансляции класса.
-   gram.GetIO().mecho().printf(
-                               "%us [%vfE%us%vn]->",
-                               sol_get_token(B_CLASS).c_str(),
-                               name.c_str()
-                              );
-  }
-
- // Может быть список алиасов - дополнительных имен класса
- if( txtfile.read().GetToken() == B_COMMA )
-  {
-   while( !txtfile.eof() )
+    if (gram.GetDict().GetDebugLevel_ir() >= 3)
     {
-     UCString alias = txtfile.read();
-  
-     bool doubled = alias.eqi(name);
-     if( !doubled )
-      {
-       for( lem::Container::size_type i=0; i<aliases.size(); i++ )
-        if( aliases[i].eqi(alias) )
-         {
-          doubled=true;
-          break; 
-         }
-      }
-
-     if( doubled )
-      {
-       Print_Error( class_name, txtfile );
-
-       gram.GetIO().merr().printf(
-                                  "Alias [%ls] is already used as name or alias for class [%ls]",
-                                  alias.c_str(), name.c_str()
-                                 );
-
-       throw E_ParserError();
-      } 
-
-     aliases.push_back(alias);
-
-     if( txtfile.read().GetToken() != B_COMMA )
-      {
-       txtfile.backward(); 
-       break; 
-      }
+        // Р­С…Рѕ-СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ С‚СЂР°РЅСЃР»СЏС†РёРё РєР»Р°СЃСЃР°.
+        gram.GetIO().mecho().printf(
+            "%us [%vfE%us%vn]->",
+            sol_get_token(B_CLASS).c_str(),
+            name.c_str()
+        );
     }
-  }
- else
-  {
-   txtfile.backward(); 
-  } 
+
+    // РњРѕР¶РµС‚ Р±С‹С‚СЊ СЃРїРёСЃРѕРє Р°Р»РёР°СЃРѕРІ - РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… РёРјРµРЅ РєР»Р°СЃСЃР°
+    if (txtfile.read().GetToken() == B_COMMA)
+    {
+        while (!txtfile.eof())
+        {
+            UCString alias = txtfile.read();
+
+            bool doubled = alias.eqi(name);
+            if (!doubled)
+            {
+                for (lem::Container::size_type i = 0; i < aliases.size(); i++)
+                    if (aliases[i].eqi(alias))
+                    {
+                        doubled = true;
+                        break;
+                    }
+            }
+
+            if (doubled)
+            {
+                Print_Error(class_name, txtfile);
+
+                gram.GetIO().merr().printf(
+                    "Alias [%ls] is already used as name or alias for class [%ls]",
+                    alias.c_str(), name.c_str()
+                );
+
+                throw E_ParserError();
+            }
+
+            aliases.push_back(alias);
+
+            if (txtfile.read().GetToken() != B_COMMA)
+            {
+                txtfile.backward();
+                break;
+            }
+        }
+    }
+    else
+    {
+        txtfile.backward();
+    }
 
 
- // Может быть задано имя для C-кода
- if( txtfile.read().GetToken() == B_AS )
-  c_name = txtfile.read();
- else
-  txtfile.backward(); 
+    // РњРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅРѕ РёРјСЏ РґР»СЏ C-РєРѕРґР°
+    if (txtfile.read().GetToken() == B_AS)
+        c_name = txtfile.read();
+    else
+        txtfile.backward();
 
- // Есть ли задание списка родительских классов.
- const BSourceState prepar = txtfile.tellp();
- if( txtfile.read().GetToken()==B_COLON )
-  while( !txtfile.eof() )
-   {
-    // Да, считываем их имена.
-    const BethToken par_name = txtfile.read();
-    sol_check_s_name(gram.GetDict(),txtfile,par_name,true);
+    // Р•СЃС‚СЊ Р»Рё Р·Р°РґР°РЅРёРµ СЃРїРёСЃРєР° СЂРѕРґРёС‚РµР»СЊСЃРєРёС… РєР»Р°СЃСЃРѕРІ.
+    const BSourceState prepar = txtfile.tellp();
+    if (txtfile.read().GetToken() == B_COLON)
+        while (!txtfile.eof())
+        {
+            // Р”Р°, СЃС‡РёС‚С‹РІР°РµРј РёС… РёРјРµРЅР°.
+            const BethToken par_name = txtfile.read();
+            sol_check_s_name(gram.GetDict(), txtfile, par_name, true);
 
-    const int ipar = gram.FindClass( par_name.string() );
-    if( ipar==UNKNOWN )
+            const int ipar = gram.FindClass(par_name.string());
+            if (ipar == UNKNOWN)
+            {
+                // РќРµ РЅР°Р№РґРµРЅ РєР»Р°СЃСЃ...
+                Print_Error(par_name, txtfile);
+                gram.GetIO().merr().printf("The class [%us] is not previously declared in grammar\n", par_name.string().c_str());
+                throw E_ParserError();
+            }
+
+            parent.push_back(ipar);
+
+            // РўРµРїРµСЂСЊ РјС‹ Р·РЅР°РµРј, С‡С‚Рѕ РєР»Р°СЃСЃ СЃ РёРЅРґРµРєСЃРѕРј ipar СЏРІР»СЏРµС‚СЃСЏ СЂРѕРґРёС‚РµР»СЊСЃРєРёРј.
+            GramClass &P = gram.classes().GetClass(ipar);
+            P.is_parent = true;
+
+            // РџРµСЂРµСЃС‹Р»Р°РµРј, РЅРµ РґРѕРїСѓСЃРєР°СЏ РїРѕРІС‚РѕСЂРѕРІ, РёРЅРґРµРєСЃС‹ Р°С‚СЂРёР±СѓС‚РѕРІ, С‚СЌРіРѕРІ Рё РёР·РјРµСЂРµРЅРёР№.
+            for (lem::Container::size_type ia = 0; ia < P.attr_index.size(); ia++)
+            {
+                if (attr_index.FindTwice(P.attr_index[ia]) != UNKNOWN || tag_index.FindTwice(P.attr_index[ia]) != UNKNOWN)
+                {
+                    Print_Error(class_name, txtfile);
+
+                    gram.GetIO().merr().printf(
+                        "Attribute [%us] is already declared as an attribute or a tag for the class\n",
+                        gram.coords()[P.attr_index[ia].GetIndex()].GetName().string().c_str()
+                    );
+
+                    throw E_ParserError();
+                }
+
+                if (attr_index.FindTwice(P.attr_index[ia]) == UNKNOWN)
+                    attr_index.push_back(P.attr_index[ia]);
+            }
+
+            for (lem::Container::size_type id = 0; id < P.dim_index.size(); id++)
+            {
+                if (attr_index.FindTwice(P.dim_index[id]) != UNKNOWN || tag_index.FindTwice(P.dim_index[id]) != UNKNOWN)
+                {
+                    Print_Error(class_name, txtfile);
+
+                    gram.GetIO().merr().printf(
+                        "Dimension [%us] is already declared as an attribute or tag for the class\n",
+                        gram.coords()[P.dim_index[id].GetIndex()].GetName().string().c_str()
+                    );
+
+                    throw E_ParserError();
+                }
+
+                if (dim_index.FindTwice(P.dim_index[id]) == UNKNOWN)
+                    dim_index.push_back(P.dim_index[id]);
+            }
+
+            for (lem::Container::size_type id = 0; id < P.tag_index.size(); id++)
+            {
+                if (attr_index.FindTwice(P.tag_index[id]) != UNKNOWN || dim_index.FindTwice(P.tag_index[id]) != UNKNOWN)
+                {
+                    Print_Error(class_name, txtfile);
+
+                    gram.GetIO().merr().printf(
+                        "Tag [%us] is already declared as an attribute or dimension for the class\n",
+                        gram.coords()[P.tag_index[id].GetIndex()].GetName().string().c_str()
+                    );
+
+                    throw E_ParserError();
+                }
+
+                if (tag_index.FindTwice(P.tag_index[id]) == UNKNOWN)
+                    tag_index.push_back(P.tag_index[id]);
+            }
+
+
+            // Р СЃС‡РёС‚Р°РµРј СЂРѕРґРёС‚РµР»РµР№ Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° СЃРІРѕРёРјРё СЂРѕРґРёС‚РµР»СЏРјРё С‚Р°РєР¶Рµ.
+            for (lem::Container::size_type ic = 0; ic < P.parent.size(); ic++)
+                if (find(parent, P.parent[ic]) == UNKNOWN)
+                    parent.push_back(P.parent[ic]);
+
+            // РЎРІРѕР№СЃС‚РІР° РѕС‡РµСЂРµРґРЅРѕРіРѕ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РєР»Р°СЃСЃР° РґРѕР±Р°РІР»РµРЅС‹.
+
+            const BethToken precom = txtfile.read();
+            if (precom.GetToken() != B_COMMA)
+            {
+                txtfile.seekp(precom.GetBegin());
+                break;
+            }
+        }
+    else
+        txtfile.seekp(prepar);
+
+    bool looping = true;
+
+    // Р’РѕР·РјРѕР¶РЅРѕ, РёРјРµРµРј РґРµР»Рѕ СЃ РєСЂР°С‚РєРѕР№ С„РѕСЂРјРѕР№ РѕР±СЉСЏРІР»РµРЅРёСЏ РєР»Р°СЃСЃР° Р±РµР·
+    // РїСѓСЃС‚РѕРіРѕ Р±Р»РѕРєР° '{}'
+
+    const BSourceState prefig = txtfile.tellp();
+    const BethToken isfig = txtfile.read();
+
+    if (isfig.GetToken() != B_OFIGPAREN)
+    {
+        txtfile.seekp(prefig);
+        looping = false;
+    }
+
+    while (looping) // Р¦РёРєР» СЃС‡РёС‚С‹РІР°РЅРёСЏ СЃРµРєС†РёР№ РѕРїРёСЃР°РЅРёСЏ РєР»Р°СЃСЃР°
+    {
+        if (txtfile.eof())
+        {
+            // Р¤Р°Р№Р» Р·Р°РєРѕРЅС‡РёР»СЃСЏ РїСЂРµР¶РґРµ, С‡РµРј РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РіСЂСѓР¶РµРЅРѕ РѕРїРёСЃР°РЅРёРµ
+            // РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+            Print_Error(txtfile);
+            gram.GetIO().merr().printf(
+                "End of file has been reached before grammatical class [%us] completely loaded\n"
+                , name.c_str()
+            );
+            throw E_ParserError();
+        }
+
+        const BethToken buffer = txtfile.read();
+
+        switch (buffer.GetToken())
+        {
+        case B_ATTRIBUTES:
+            LoadAttributesTxt(txtfile, gram);
+            break;
+
+        case B_TAGS:
+            LoadTagsTxt(txtfile, gram);
+            break;
+
+        case B_DIMENTIONS:
+            LoadDimentionsTxt(txtfile, gram);
+            break;
+
+        case B_CFIGPAREN:
+            looping = false;
+            break;
+
+        default:
+        {
+            // РџСЂРѕРёР·РІРѕРґРЅС‹Рµ РєР»Р°СЃСЃС‹ РјРѕРіСѓС‚ РёРјРµС‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ РІ С‚РµРєСЃС‚РѕРІРѕРј
+            // РѕРїРёСЃР°РЅРёРё.  
+            if (!Load_Private_Data(buffer, txtfile, gram))
+            {
+                // РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ Р»РµРєСЃРµРјС‹ РІ РѕРїСЂРµРґРµР»РµРЅРёРё РєР»Р°СЃСЃР°.
+                Print_Error(buffer, txtfile);
+                gram.GetIO().merr().printf("Error in class definition\n");
+                throw E_ParserError();
+            }
+
+            break;
+        }
+        }
+    }
+
+    if (gram.GetDict().GetDebugLevel_ir() >= 3)
+    {
+        // Р­С…Рѕ-СЃРѕРѕР±С‰РµРЅРёРµ: С‚СЂР°РЅСЃР»РёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃ Р·Р°РєРѕРЅС‡РёР»Рё.
+        gram.GetIO().mecho().printf("%vfAOK%vn\n");
+    }
+
+    return;
+}
+#endif // defined SOL_LOADTXT
+
+
+
+
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+/***********************************************************************
+               Р—Р°РіСЂСѓР¶Р°РµРј СЃРµРєС†РёСЋ РѕРїРёСЃР°РЅРёСЏ Р°С‚СЂРёР±СѓС‚РѕРІ
+
+ РџРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РёРјРµРЅР° РєРѕРѕСЂРґРёРЅР°С‚, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ СЃС‡РёС‚Р°С‚СЊСЃСЏ Р°С‚СЂРёР±СѓС‚РёРІРЅС‹РјРё
+ (СЃС‚Р°С‚РёС‡РЅС‹РјРё) РїСЂРёР·РЅР°РєР°РјРё СЃС‚Р°С‚РµР№ РґР»СЏ РґР°РЅРЅРѕРіРѕ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+ РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РІ РєР»Р°СЃСЃРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СѓР¶Рµ РѕР±СЉСЏРІР»РµРЅС‹ РІ РєР»Р°СЃСЃРµ
+ РіСЂР°РјРјР°С‚РёРєРё, С‚Рѕ РµСЃС‚СЊ СЃСЃС‹Р»РєРё РІРїРµСЂРµРґ РЅРµ РґРѕРїСѓСЃС‚РёРјС‹.
+************************************************************************/
+void GramClass::LoadAttributesTxt(
+    Macro_Parser &txtfile,
+    const Grammar& gram
+)
+{
+    // РќР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° - РІСЃРµРіРґР° '{'
+    txtfile.read_it(B_OFIGPAREN);
+
+    FOREVER
+    {
+     if (txtfile.eof())
+      {
+         // Р¤Р°Р№Р» Р·Р°РєРѕРЅС‡РёР»СЃСЏ РїСЂРµР¶РґРµ, С‡РµРј РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РіСЂСѓР¶РµРЅРѕ СЃРѕРґРµСЂР¶РёРјРѕРµ
+         // СЃРµРєС†РёРё Р°С‚СЂРёР±СѓС‚РѕРІ РІ РѕРїРёСЃР°РЅРёРё РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+         Print_Error(txtfile);
+         gram.GetIO().merr().printf(
+                                    "End-of-file has been reached before attributes section is read "
+                                    "for the class [%us]\n"
+                                    , name.c_str()
+                                   );
+         throw E_ParserError();
+        }
+
+    // РРјСЏ Р°С‚СЂРёР±СѓС‚Р°, РЅР°РІРµСЂРЅРѕРµ.
+    const BethToken attr_name = txtfile.read();
+
+    // Р•СЃР»Рё СЌС‚Рѕ '}', С‚Рѕ СЃРїРёСЃРѕРє Р°С‚СЂРёР±СѓС‚РѕРІ Р·Р°РІРµСЂС€РµРЅ.
+    if (attr_name.GetToken() == B_CFIGPAREN)
+     break;
+
+    // РС‰РµРј Р°С‚СЂРёР±СѓС‚ (РєРѕРѕСЂРґРёРЅР°С‚Сѓ) СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СЃ СЃРїРёСЃРєРµ СЃР»РѕРІР°СЂСЏ.
+    const GramCoordAdr iattr = gram.FindCoord(attr_name.string());
+
+    if (iattr.GetIndex() == UNKNOWN)
      {
-      // Не найден класс...
-      Print_Error(par_name,txtfile);
-      gram.GetIO().merr().printf( "The class [%us] is not previously declared in grammar\n", par_name.string().c_str() );
+        // РљРѕРѕСЂРґРёРЅР°С‚Р°, РёРјСЏ РєРѕС‚РѕСЂРѕР№ РёСЃРїРѕР»СЊР·РѕРІР°РЅРѕ, РЅРµ РѕР±СЉСЏРІР»РµРЅР°.
+        Print_Error(attr_name,txtfile);
+        gram.GetIO().merr().printf(
+                                   "The coordinate [%us] is not previously declared in grammar\n"
+                                   , attr_name.c_str()
+                                  );
+        throw E_ParserError();
+       }
+
+    // РљРѕРЅС‚СЂРѕР»СЊ Р·Р° РїРѕРІС‚РѕСЂРЅС‹Рј РѕР±СЉСЏРІР»РµРЅРёРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ РєР»Р°СЃСЃРµ.
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… Р°С‚СЂРёР±СѓС‚РѕРІ...
+    if (attr_index.FindTwice(iattr) != UNKNOWN)
+     {
+        // РќР°С€Р»Рё!
+        Print_Error(attr_name,txtfile);
+        gram.GetIO().merr().printf("Attribute is already defined for the class\n");
+        throw E_ParserError();
+       }
+
+    // РђС‚СЂРёР±СѓС‚ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ РёР·РјРµСЂРµРЅРёРµРј РґР»СЏ РЅР°С€РµРіРѕ Р¶Рµ РєР»Р°СЃСЃР°.
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ РѕРїСЂРµРґРµР»РµРЅРЅС‹С… РёР·РјРµСЂРµРЅРёР№.
+    if (dim_index.FindTwice(iattr) != UNKNOWN || tag_index.FindTwice(iattr) != UNKNOWN)
+     {
+      Print_Error(attr_name,txtfile);
+      gram.GetIO().merr().printf("Attribute is already declared as dimension or tag for the class\n");
       throw E_ParserError();
      }
 
-    parent.push_back( ipar );
+    // Р”РѕР±Р°РІР»СЏРµРј РёРЅРґРµРєСЃ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ СЃРїРёСЃРѕРє Р°С‚СЂРёР±СѓС‚РѕРІ.
+    attr_index.push_back(iattr);
 
-    // Теперь мы знаем, что класс с индексом ipar является родительским.
-    GramClass &P = gram.classes().GetClass( ipar );
-    P.is_parent = true;
-
-    // Пересылаем, не допуская повторов, индексы атрибутов, тэгов и измерений.
-    for( lem::Container::size_type ia=0; ia<P.attr_index.size(); ia++ )
+    if (txtfile.pick().GetToken() == B_EQUAL)
      {
-      if( attr_index.FindTwice(P.attr_index[ia])!=UNKNOWN || tag_index.FindTwice(P.attr_index[ia])!=UNKNOWN )
-       {
-        Print_Error(class_name,txtfile);
+        // Р—Р°РґР°РЅРѕ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ Р°С‚СЂРёР±СѓС‚Р°
+        txtfile.read();
+        BethToken state_name = txtfile.read();
 
-        gram.GetIO().merr().printf(
-                                   "Attribute [%us] is already declared as an attribute or a tag for the class\n",
-                                   gram.coords()[P.attr_index[ia].GetIndex()].GetName().string().c_str()
-                                  );
-
-        throw E_ParserError();
-       }
-
-      if( attr_index.FindTwice(P.attr_index[ia])==UNKNOWN )
-       attr_index.push_back( P.attr_index[ia] );
-     }
-
-    for( lem::Container::size_type id=0; id<P.dim_index.size(); id++ )
-     {
-      if( attr_index.FindTwice(P.dim_index[id])!=UNKNOWN || tag_index.FindTwice(P.dim_index[id])!=UNKNOWN )
-       {
-        Print_Error(class_name,txtfile);
-
-        gram.GetIO().merr().printf(
-                                   "Dimension [%us] is already declared as an attribute or tag for the class\n",
-                                   gram.coords()[P.dim_index[id].GetIndex()].GetName().string().c_str()
-                                  );
-
-        throw E_ParserError();
-       }
-
-      if( dim_index.FindTwice(P.dim_index[id])==UNKNOWN )
-       dim_index.push_back( P.dim_index[id]);
-     }
-
-    for( lem::Container::size_type id=0; id<P.tag_index.size(); id++ )
-     {
-      if( attr_index.FindTwice(P.tag_index[id])!=UNKNOWN || dim_index.FindTwice(P.tag_index[id])!=UNKNOWN )
-       {
-        Print_Error(class_name,txtfile);
-
-        gram.GetIO().merr().printf(
-                                   "Tag [%us] is already declared as an attribute or dimension for the class\n",
-                                   gram.coords()[P.tag_index[id].GetIndex()].GetName().string().c_str()
-                                  );
-
-        throw E_ParserError();
-       }
-
-      if( tag_index.FindTwice(P.tag_index[id])==UNKNOWN )
-       tag_index.push_back( P.tag_index[id]);
-     }
-
-
-    // И считаем родителей базового класса своими родителями также.
-    for( lem::Container::size_type ic=0; ic<P.parent.size(); ic++ )
-     if( find( parent, P.parent[ic] )==UNKNOWN )
-      parent.push_back( P.parent[ic] );
-
-    // Свойства очередного родительского класса добавлены.
-
-    const BethToken precom = txtfile.read();
-    if( precom.GetToken()!=B_COMMA )
-     {
-      txtfile.seekp( precom.GetBegin() );
-      break;
-     }
-   }
-  else
-   txtfile.seekp(prepar);
-
- bool looping=true;
-
- // Возможно, имеем дело с краткой формой объявления класса без
- // пустого блока '{}'
-
- const BSourceState prefig = txtfile.tellp();
- const BethToken isfig = txtfile.read();
-
- if( isfig.GetToken()!=B_OFIGPAREN )
-  {
-   txtfile.seekp(prefig);
-   looping=false;
-  }
-
- while( looping ) // Цикл считывания секций описания класса
-  {
-   if( txtfile.eof() )
-    {
-     // Файл закончился прежде, чем полностью загружено описание
-     // грамматического класса.
-     Print_Error(txtfile);
-     gram.GetIO().merr().printf(
-                                "End of file has been reached before grammatical class [%us] completely loaded\n"
-                                , name.c_str()
-                               );
-     throw E_ParserError();
-    }
-
-   const BethToken buffer = txtfile.read();
-
-   switch(buffer.GetToken())
-    {
-     case B_ATTRIBUTES:
-      LoadAttributesTxt(txtfile,gram);
-      break;
-
-     case B_TAGS:
-      LoadTagsTxt(txtfile,gram);
-      break;
-
-     case B_DIMENTIONS:
-      LoadDimentionsTxt(txtfile,gram);
-      break;
-
-     case B_CFIGPAREN:
-      looping=false;
-      break;
-
-     default:
-      {
-       // Производные классы могут иметь дополнительные поля в текстовом
-       // описании.  
-       if( !Load_Private_Data( buffer, txtfile, gram ) )
-        {
-         // Некорректное использование лексемы в определении класса.
-         Print_Error(buffer,txtfile);
-         gram.GetIO().merr().printf( "Error in class definition\n" );
-         throw E_ParserError();
-        }
-
-       break;
-      }
-    }
-  }
-
- if( gram.GetDict().GetDebugLevel_ir()>=3 )
-  {
-   // Эхо-сообщение: транслировать класс закончили.
-   gram.GetIO().mecho().printf( "%vfAOK%vn\n" );
-  }
-
- return;
-}
-#endif // defined SOL_LOADTXT
-
-
-
-
-#if defined SOL_LOADTXT && defined SOL_COMPILER
-/***********************************************************************
-               Загружаем секцию описания атрибутов
-
- Перечисляются имена координат, которые будут считаться атрибутивными
- (статичными) признаками статей для данного грамматического класса.
- Используемые в классе координаты должны быть уже объявлены в классе
- грамматики, то есть ссылки вперед не допустимы.
-************************************************************************/
-void GramClass::LoadAttributesTxt(
-                                  Macro_Parser &txtfile,
-                                  const Grammar& gram
-                                 )
-{
- // Начало списка - всегда '{'
- txtfile.read_it(B_OFIGPAREN);
-
- FOREVER
-  {
-   if( txtfile.eof() )
-    {
-     // Файл закончился прежде, чем полностью загружено содержимое
-     // секции атрибутов в описании грамматического класса.
-     Print_Error(txtfile);
-     gram.GetIO().merr().printf(
-                                "End-of-file has been reached before attributes section is read "
-                                "for the class [%us]\n"
-                                , name.c_str()
-                               );
-     throw E_ParserError();
-    }
-
-   // Имя атрибута, наверное.
-   const BethToken attr_name = txtfile.read();
-
-   // Если это '}', то список атрибутов завершен.
-   if( attr_name.GetToken()==B_CFIGPAREN )
-    break;
-
-   // Ищем атрибут (координату) с таким именем с списке словаря.
-   const GramCoordAdr iattr = gram.FindCoord(attr_name.string());
-
-   if( iattr.GetIndex()==UNKNOWN )
-    {
-     // Координата, имя которой использовано, не объявлена.
-     Print_Error(attr_name,txtfile);
-     gram.GetIO().merr().printf(
-                                "The coordinate [%us] is not previously declared in grammar\n"
-                                , attr_name.c_str()
-                               );
-     throw E_ParserError();
-    }
-
-   // Контроль за повторным объявлением координаты в классе.
-   // Просматриваем список уже загруженных атрибутов...
-   if( attr_index.FindTwice(iattr)!=UNKNOWN )
-    {
-     // Нашли!
-     Print_Error(attr_name,txtfile);
-     gram.GetIO().merr().printf( "Attribute is already defined for the class\n" );
-     throw E_ParserError();
-    }
-
-   // Атрибут не может быть одновременно измерением для нашего же класса.
-   // Просматриваем список уже определенных измерений.
-   if( dim_index.FindTwice(iattr)!=UNKNOWN || tag_index.FindTwice(iattr)!=UNKNOWN )
-    {
-     Print_Error(attr_name,txtfile);
-     gram.GetIO().merr().printf( "Attribute is already declared as dimension or tag for the class\n" );
-     throw E_ParserError();
-    }
-
-   // Добавляем индекс координаты в список атрибутов.
-   attr_index.push_back( iattr );
-
-   if( txtfile.pick().GetToken()==B_EQUAL )
-    {
-     // Задано значение по умолчанию для атрибута
-     txtfile.read();
-     BethToken state_name = txtfile.read();
-
-     if( state_name.GetToken()==B_UNKNOWN )
-      {
-       // Конструкция типа координата=? задает пустое множество - то есть по умолчанию
-       // атрибут не определен, и это не является ошибкой.
-       attr_defaults.push_back( std::make_pair(GramCoordAdr(iattr),UNKNOWN) );
-      }
-     else
-      { 
-       const int istate = gram.coords()[iattr.GetIndex()].FindState(state_name);
-       if( istate==UNKNOWN )
-        {
-         Print_Error(state_name,txtfile);
-         gram.GetIO().merr().printf( "State [%us] is not defined for attribute [%us] in class [%us]\n",
-          state_name.c_str(), attr_name.c_str(), GetName().c_str() );
-         throw E_ParserError();
-        }
-
-       lem::zbool found;
-       for( lem::Container::size_type i=0; i<attr_defaults.size(); ++i )
-        if( attr_defaults[i].first==iattr )
+        if (state_name.GetToken() == B_UNKNOWN)
          {
-          found=true;
-          break; 
+            // РљРѕРЅСЃС‚СЂСѓРєС†РёСЏ С‚РёРїР° РєРѕРѕСЂРґРёРЅР°С‚Р°=? Р·Р°РґР°РµС‚ РїСѓСЃС‚РѕРµ РјРЅРѕР¶РµСЃС‚РІРѕ - С‚Рѕ РµСЃС‚СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+            // Р°С‚СЂРёР±СѓС‚ РЅРµ РѕРїСЂРµРґРµР»РµРЅ, Рё СЌС‚Рѕ РЅРµ СЏРІР»СЏРµС‚СЃСЏ РѕС€РёР±РєРѕР№.
+            attr_defaults.push_back(std::make_pair(GramCoordAdr(iattr),UNKNOWN));
+           }
+          else
+           {
+            const int istate = gram.coords()[iattr.GetIndex()].FindState(state_name);
+            if (istate == UNKNOWN)
+             {
+              Print_Error(state_name,txtfile);
+              gram.GetIO().merr().printf("State [%us] is not defined for attribute [%us] in class [%us]\n",
+               state_name.c_str(), attr_name.c_str(), GetName().c_str());
+              throw E_ParserError();
+             }
+
+            lem::zbool found;
+            for (lem::Container::size_type i = 0; i < attr_defaults.size(); ++i)
+             if (attr_defaults[i].first == iattr)
+              {
+               found = true;
+               break;
+              }
+
+            if (!found)
+             {
+              attr_defaults.push_back(std::make_pair(GramCoordAdr(iattr),istate));
+             }
+           }
          }
-
-       if( !found )
-        {
-         attr_defaults.push_back( std::make_pair(GramCoordAdr(iattr),istate) );
-        }
-      }
     }
-  }
 
- return;
+    return;
 }
 #endif // defined SOL_LOADTXT
 
@@ -479,437 +481,432 @@ void GramClass::LoadAttributesTxt(
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /***********************************************************************
-               Загружаем секцию описания тэгов
+               Р—Р°РіСЂСѓР¶Р°РµРј СЃРµРєС†РёСЋ РѕРїРёСЃР°РЅРёСЏ С‚СЌРіРѕРІ
 
- Перечисляются имена координат, которые будут считаться тэгами -
- опциональными признаками статей для данного грамматического класса.
- Используемые в классе координаты должны быть уже объявлены в классе
- грамматики, то есть ссылки вперед не допустимы.
+ РџРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РёРјРµРЅР° РєРѕРѕСЂРґРёРЅР°С‚, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ СЃС‡РёС‚Р°С‚СЊСЃСЏ С‚СЌРіР°РјРё -
+ РѕРїС†РёРѕРЅР°Р»СЊРЅС‹РјРё РїСЂРёР·РЅР°РєР°РјРё СЃС‚Р°С‚РµР№ РґР»СЏ РґР°РЅРЅРѕРіРѕ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+ РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РІ РєР»Р°СЃСЃРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СѓР¶Рµ РѕР±СЉСЏРІР»РµРЅС‹ РІ РєР»Р°СЃСЃРµ
+ РіСЂР°РјРјР°С‚РёРєРё, С‚Рѕ РµСЃС‚СЊ СЃСЃС‹Р»РєРё РІРїРµСЂРµРґ РЅРµ РґРѕРїСѓСЃС‚РёРјС‹.
 ************************************************************************/
 void GramClass::LoadTagsTxt(
-                            Macro_Parser &txtfile,
-                            const Grammar& gram
-                           )
+    Macro_Parser &txtfile,
+    const Grammar& gram
+)
 {
- // Начало списка - всегда '{'
- txtfile.read_it(B_OFIGPAREN);
+    // РќР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° - РІСЃРµРіРґР° '{'
+    txtfile.read_it(B_OFIGPAREN);
 
- FOREVER
-  {
-   if( txtfile.eof() )
+    FOREVER
     {
-     // Файл закончился прежде, чем полностью загружено содержимое
-     // секции тэгов в описании грамматического класса.
-     Print_Error(txtfile);
-     gram.GetIO().merr().printf(
-                                "End-of-file has been reached before tags section is read "
-                                "for the class [%us]\n"
-                                , name.c_str()
-                               );
-     throw E_ParserError();
+     if (txtfile.eof())
+      {
+         // Р¤Р°Р№Р» Р·Р°РєРѕРЅС‡РёР»СЃСЏ РїСЂРµР¶РґРµ, С‡РµРј РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РіСЂСѓР¶РµРЅРѕ СЃРѕРґРµСЂР¶РёРјРѕРµ
+         // СЃРµРєС†РёРё С‚СЌРіРѕРІ РІ РѕРїРёСЃР°РЅРёРё РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+         Print_Error(txtfile);
+         gram.GetIO().merr().printf(
+                                    "End-of-file has been reached before tags section is read "
+                                    "for the class [%us]\n"
+                                    , name.c_str()
+                                   );
+         throw E_ParserError();
+        }
+
+    // РРјСЏ С‚СЌРіР°.
+    const BethToken tag_name = txtfile.read();
+
+    // Р•СЃР»Рё СЌС‚Рѕ '}', С‚Рѕ СЃРїРёСЃРѕРє С‚СЌРіРѕРІ Р·Р°РІРµСЂС€РµРЅ.
+    if (tag_name.GetToken() == B_CFIGPAREN)
+     break;
+
+    // РС‰РµРј РєРѕРѕСЂРґРёРЅР°С‚Сѓ СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СЃ СЃРїРёСЃРєРµ СЃР»РѕРІР°СЂСЏ.
+    const GramCoordAdr itag = gram.FindCoord(tag_name.string());
+
+    if (itag.GetIndex() == UNKNOWN)
+     {
+        // РљРѕРѕСЂРґРёРЅР°С‚Р°, РёРјСЏ РєРѕС‚РѕСЂРѕР№ РёСЃРїРѕР»СЊР·РѕРІР°РЅРѕ, РЅРµ РѕР±СЉСЏРІР»РµРЅР°.
+        Print_Error(tag_name,txtfile);
+        gram.GetIO().merr().printf(
+                                   "The coordinate [%us] is not previously declared in grammar\n"
+                                   , tag_name.c_str()
+                                  );
+        throw E_ParserError();
+       }
+
+    // РљРѕРЅС‚СЂРѕР»СЊ Р·Р° РїРѕРІС‚РѕСЂРЅС‹Рј РѕР±СЉСЏРІР»РµРЅРёРµРј С‚СЌРіРѕРІ РІ РєР»Р°СЃСЃРµ.
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… Р°С‚СЂРёР±СѓС‚РѕРІ...
+    if (tag_index.FindTwice(itag) != UNKNOWN)
+     {
+        // РќР°С€Р»Рё!
+        Print_Error(tag_name,txtfile);
+        gram.GetIO().merr().printf("Tag is already defined for the class\n");
+        throw E_ParserError();
+       }
+
+    // РўСЌРі РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ РёР·РјРµСЂРµРЅРёРµРј РёР»Рё Р°С‚СЂРёР±СѓС‚РѕРј РґР»СЏ РЅР°С€РµРіРѕ Р¶Рµ РєР»Р°СЃСЃР°.
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ РѕРїСЂРµРґРµР»РµРЅРЅС‹С… РёР·РјРµСЂРµРЅРёР№ Рё Р°С‚СЂРёР±СѓС‚РѕРІ.
+    if (dim_index.FindTwice(itag) != UNKNOWN || attr_index.FindTwice(itag) != UNKNOWN)
+     {
+      Print_Error(tag_name,txtfile);
+      gram.GetIO().merr().printf("Tag is already declared as dimension or attribute for the class\n");
+      throw E_ParserError();
+     }
+
+    // Р”РѕР±Р°РІР»СЏРµРј РёРЅРґРµРєСЃ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ СЃРїРёСЃРѕРє С‚СЌРіРѕРІ.
+    tag_index.push_back(itag);
     }
 
-   // Имя тэга.
-   const BethToken tag_name = txtfile.read();
-
-   // Если это '}', то список тэгов завершен.
-   if( tag_name.GetToken()==B_CFIGPAREN )
-    break;
-
-   // Ищем координату с таким именем с списке словаря.
-   const GramCoordAdr itag = gram.FindCoord(tag_name.string());
-
-   if( itag.GetIndex()==UNKNOWN )
-    {
-     // Координата, имя которой использовано, не объявлена.
-     Print_Error(tag_name,txtfile);
-     gram.GetIO().merr().printf(
-                                "The coordinate [%us] is not previously declared in grammar\n"
-                                , tag_name.c_str()
-                               );
-     throw E_ParserError();
-    }
-
-   // Контроль за повторным объявлением тэгов в классе.
-   // Просматриваем список уже загруженных атрибутов...
-   if( tag_index.FindTwice(itag)!=UNKNOWN )
-    {
-     // Нашли!
-     Print_Error(tag_name,txtfile);
-     gram.GetIO().merr().printf( "Tag is already defined for the class\n" );
-     throw E_ParserError();
-    }
-
-   // Тэг не может быть одновременно измерением или атрибутом для нашего же класса.
-   // Просматриваем список уже определенных измерений и атрибутов.
-   if( dim_index.FindTwice(itag)!=UNKNOWN || attr_index.FindTwice(itag)!=UNKNOWN )
-    {
-     Print_Error(tag_name,txtfile);
-     gram.GetIO().merr().printf( "Tag is already declared as dimension or attribute for the class\n" );
-     throw E_ParserError();
-    }
-
-   // Добавляем индекс координаты в список тэгов.
-   tag_index.push_back( itag );
-  }
-
- return;
+    return;
 }
 #endif // defined SOL_LOADTXT
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /************************************************************************
-                Загружаем секцию описания измерений.
- Перечисляются имена координат, которые будут меняться для словоформ в
- рамках одной статьи, и таким образом отличать одну грамматическую форму
- от другой. Используемые в классе координаты должны быть уже объявлены в
- классе грамматики, то есть ссылки по координатам вперед не допустимы.
+                Р—Р°РіСЂСѓР¶Р°РµРј СЃРµРєС†РёСЋ РѕРїРёСЃР°РЅРёСЏ РёР·РјРµСЂРµРЅРёР№.
+ РџРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РёРјРµРЅР° РєРѕРѕСЂРґРёРЅР°С‚, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РјРµРЅСЏС‚СЊСЃСЏ РґР»СЏ СЃР»РѕРІРѕС„РѕСЂРј РІ
+ СЂР°РјРєР°С… РѕРґРЅРѕР№ СЃС‚Р°С‚СЊРё, Рё С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј РѕС‚Р»РёС‡Р°С‚СЊ РѕРґРЅСѓ РіСЂР°РјРјР°С‚РёС‡РµСЃРєСѓСЋ С„РѕСЂРјСѓ
+ РѕС‚ РґСЂСѓРіРѕР№. РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РІ РєР»Р°СЃСЃРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СѓР¶Рµ РѕР±СЉСЏРІР»РµРЅС‹ РІ
+ РєР»Р°СЃСЃРµ РіСЂР°РјРјР°С‚РёРєРё, С‚Рѕ РµСЃС‚СЊ СЃСЃС‹Р»РєРё РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј РІРїРµСЂРµРґ РЅРµ РґРѕРїСѓСЃС‚РёРјС‹.
 **************************************************************************/
 void GramClass::LoadDimentionsTxt(
-                                  Macro_Parser &txtfile,
-                                  const Grammar& gram
-                                 )
+    Macro_Parser &txtfile,
+    const Grammar& gram
+)
 {
- // Секция всегда начинается токеном '{'
- txtfile.read_it(B_OFIGPAREN);
+    // РЎРµРєС†РёСЏ РІСЃРµРіРґР° РЅР°С‡РёРЅР°РµС‚СЃСЏ С‚РѕРєРµРЅРѕРј '{'
+    txtfile.read_it(B_OFIGPAREN);
 
- FOREVER
-  {
-   if( txtfile.eof() )
+    FOREVER
     {
-     // Файл закончился прежде, чем полностью загружено содержимое
-     // секции измерений в описании грамматического класса.
-     Print_Error(txtfile);
-     gram.GetIO().merr().printf(
-                                "End-of-file has been reached before dimensions section is read "
-                                "for the class [%us]\n"
-                            , name.c_str()
-                           );
-     throw E_ParserError();
-    }
-
-   // Имя измерения?
-   const BethToken dim__name = txtfile.read();
-
-   // Если это '}', то список измерений завершен.
-   if( dim__name.GetToken()==B_CFIGPAREN )
-    break;
-
-   // Ищем координату с таким именем с списке словаря.
-   const GramCoordAdr idim = gram.FindCoord(dim__name.string());
-
-   if( idim.GetIndex()==UNKNOWN )
-    {
-     // Использовано имя неизвестной координаты.
-     Print_Error(dim__name,txtfile);
-     gram.GetIO().merr().printf(
-                                "The coordinate [%us] is not previously declared in grammar\n"
-                                , dim__name.c_str()
+     if (txtfile.eof())
+      {
+         // Р¤Р°Р№Р» Р·Р°РєРѕРЅС‡РёР»СЃСЏ РїСЂРµР¶РґРµ, С‡РµРј РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РіСЂСѓР¶РµРЅРѕ СЃРѕРґРµСЂР¶РёРјРѕРµ
+         // СЃРµРєС†РёРё РёР·РјРµСЂРµРЅРёР№ РІ РѕРїРёСЃР°РЅРёРё РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
+         Print_Error(txtfile);
+         gram.GetIO().merr().printf(
+                                    "End-of-file has been reached before dimensions section is read "
+                                    "for the class [%us]\n"
+                                , name.c_str()
                                );
-     throw E_ParserError();
+         throw E_ParserError();
+        }
+
+    // РРјСЏ РёР·РјРµСЂРµРЅРёСЏ?
+    const BethToken dim__name = txtfile.read();
+
+    // Р•СЃР»Рё СЌС‚Рѕ '}', С‚Рѕ СЃРїРёСЃРѕРє РёР·РјРµСЂРµРЅРёР№ Р·Р°РІРµСЂС€РµРЅ.
+    if (dim__name.GetToken() == B_CFIGPAREN)
+     break;
+
+    // РС‰РµРј РєРѕРѕСЂРґРёРЅР°С‚Сѓ СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СЃ СЃРїРёСЃРєРµ СЃР»РѕРІР°СЂСЏ.
+    const GramCoordAdr idim = gram.FindCoord(dim__name.string());
+
+    if (idim.GetIndex() == UNKNOWN)
+     {
+        // РСЃРїРѕР»СЊР·РѕРІР°РЅРѕ РёРјСЏ РЅРµРёР·РІРµСЃС‚РЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+        Print_Error(dim__name,txtfile);
+        gram.GetIO().merr().printf(
+                                   "The coordinate [%us] is not previously declared in grammar\n"
+                                   , dim__name.c_str()
+                                  );
+        throw E_ParserError();
+       }
+
+    // РљРѕРЅС‚СЂРѕР»СЊ Р·Р° РїРѕРІС‚РѕСЂРЅС‹Рј РѕР±СЉСЏРІР»РµРЅРёРµРј РґР»СЏ РєР»Р°СЃСЃР°.
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РёР·РјРµСЂРµРЅРёР№...
+    if (dim_index.FindTwice(idim) != UNKNOWN)
+     {
+        // РќР°С€Р»Рё !
+        Print_Error(dim__name,txtfile);
+        gram.GetIO().merr().printf("Redefinition of dimension for the class\n");
+        throw E_ParserError();
+       }
+
+    // РР·РјРµСЂРµРЅРёРµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ Р°С‚СЂРёР±СѓС‚РѕРј РґР»СЏ РєР»Р°СЃСЃР°!
+    if (attr_index.FindTwice(idim) != UNKNOWN || tag_index.FindTwice(idim) != UNKNOWN)
+     {
+      Print_Error(dim__name,txtfile);
+      gram.GetIO().merr().printf("Dimension is already declared as attribute or tag for the class\n");
+      throw E_ParserError();
+     }
+
+    dim_index.push_back(idim); // Р”РѕР±Р°РІР»СЏРµРј РёРЅРґРµРєСЃ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ РЅР°С€ СЃРїРёСЃРѕРє.
     }
 
-   // Контроль за повторным объявлением для класса.
-   // Просматриваем список уже загруженных измерений...
-   if( dim_index.FindTwice(idim)!=UNKNOWN )
-    {
-     // Нашли !
-     Print_Error(dim__name,txtfile);
-     gram.GetIO().merr().printf( "Redefinition of dimension for the class\n" );
-     throw E_ParserError();
-    }
-
-   // Измерение не может быть одновременно атрибутом для класса!
-   if( attr_index.FindTwice(idim)!=UNKNOWN || tag_index.FindTwice(idim)!=UNKNOWN )
-    {
-     Print_Error(dim__name,txtfile);
-     gram.GetIO().merr().printf( "Dimension is already declared as attribute or tag for the class\n" );
-     throw E_ParserError();
-    }
-
-   dim_index.push_back( idim ); // Добавляем индекс координаты в наш список.
-  }
-
- return;
+    return;
 }
 #endif // defined SOL_LOADTXT
 
 #if defined SOL_SAVEBIN
 /************************************************************
- Сохранение описания грамматического класса в бинарном файле.
+ РЎРѕС…СЂР°РЅРµРЅРёРµ РѕРїРёСЃР°РЅРёСЏ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР° РІ Р±РёРЅР°СЂРЅРѕРј С„Р°Р№Р»Рµ.
 *************************************************************/
-void GramClass::SaveBin( lem::Stream &bin ) const
+void GramClass::SaveBin(lem::Stream &bin) const
 {
- Save_Packed( name, bin );
- aliases.Save_Packed(bin);
+    Save_Packed(name, bin);
+    aliases.Save_Packed(bin);
 
- bin.write( &is_parent, sizeof(is_parent) );
+    bin.write(&is_parent, sizeof(is_parent));
 
- attr_index.SaveBin(bin);
- dim_index.SaveBin(bin);
- tag_index.SaveBin(bin);
- parent.SaveBin(bin);
- attr_defaults.SaveBin(bin);
- return;
+    attr_index.SaveBin(bin);
+    dim_index.SaveBin(bin);
+    tag_index.SaveBin(bin);
+    parent.SaveBin(bin);
+    attr_defaults.SaveBin(bin);
+    return;
 }
 #endif
 
 /**********************************************
- Загрузка описания класса из бинарного файла.
+ Р—Р°РіСЂСѓР·РєР° РѕРїРёСЃР°РЅРёСЏ РєР»Р°СЃСЃР° РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°.
 ***********************************************/
-void GramClass::LoadBin( lem::Stream &bin )
+void GramClass::LoadBin(lem::Stream &bin)
 {
- Load_Packed( &name, bin );
- aliases.Load_Packed(bin);
+    Load_Packed(&name, bin);
+    aliases.Load_Packed(bin);
 
- bin.read( &is_parent, sizeof(is_parent) );
- attr_index.LoadBin(bin);
- dim_index.LoadBin(bin);
- tag_index.LoadBin(bin);
- parent.LoadBin(bin);
- attr_defaults.LoadBin(bin);
+    bin.read(&is_parent, sizeof(is_parent));
+    attr_index.LoadBin(bin);
+    dim_index.LoadBin(bin);
+    tag_index.LoadBin(bin);
+    parent.LoadBin(bin);
+    attr_defaults.LoadBin(bin);
 
- #if defined SOL_LOADTXT && defined SOL_COMPILER
- is_realized = true;
- #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+    is_realized = true;
+#endif
 
- return;
+    return;
 }
 
 
 
 #if defined SOL_SAVETXT
 /*******************************************************************
- Записывает в указанный текстовый поток исходный текст реализации
- грамматического класса.
+ Р—Р°РїРёСЃС‹РІР°РµС‚ РІ СѓРєР°Р·Р°РЅРЅС‹Р№ С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕС‚РѕРє РёСЃС…РѕРґРЅС‹Р№ С‚РµРєСЃС‚ СЂРµР°Р»РёР·Р°С†РёРё
+ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРіРѕ РєР»Р°СЃСЃР°.
 ********************************************************************/
 void GramClass::SaveTxt(
-                        OFormatter& txtfile,
-                        Grammar& gram
-                       ) const
+    OFormatter& txtfile,
+    Grammar& gram
+) const
 {
- txtfile.printf(
-                " // class %us   %d attribute(s)  %d dimension(s)   %d tag(s)\n"
-                , name.c_str()
-                , CastSizeToInt(attrs().size())
-                , CastSizeToInt(dims().size())
-                , CastSizeToInt(tags().size())
-               );
+    txtfile.printf(
+        " // class %us   %d attribute(s)  %d dimension(s)   %d tag(s)\n"
+        , name.c_str()
+        , CastSizeToInt(attrs().size())
+        , CastSizeToInt(dims().size())
+        , CastSizeToInt(tags().size())
+    );
 
- txtfile.printf(
-                " %us %us",
-                sol_get_token(B_CLASS).c_str(),
-                name.c_str()
-               );
+    txtfile.printf(
+        " %us %us",
+        sol_get_token(B_CLASS).c_str(),
+        name.c_str()
+    );
 
- if( !aliases.empty() )
-  {
-   for( lem::Container::size_type i=0; i<aliases.size(); ++i )
+    if (!aliases.empty())
     {
-     txtfile.printf( ", %us", aliases[i].c_str() );
-    }
-  }
-
- if( !parents().empty() )
-  {
-   // Через запятую перечень родительских классов
-   txtfile << sol_get_token(B_COLON);
-
-   for( lem::Container::size_type i=0; i<parent.size(); i++ )
-    {
-     if( i )
-      txtfile << sol_get_token(B_COMMA);
-
-     txtfile << gram.classes()[ parent[i] ].GetName();
+        for (lem::Container::size_type i = 0; i < aliases.size(); ++i)
+        {
+            txtfile.printf(", %us", aliases[i].c_str());
+        }
     }
 
-   txtfile.eol();
-  }
+    if (!parents().empty())
+    {
+        // Р§РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ РїРµСЂРµС‡РµРЅСЊ СЂРѕРґРёС‚РµР»СЊСЃРєРёС… РєР»Р°СЃСЃРѕРІ
+        txtfile << sol_get_token(B_COLON);
+
+        for (lem::Container::size_type i = 0; i < parent.size(); i++)
+        {
+            if (i)
+                txtfile << sol_get_token(B_COMMA);
+
+            txtfile << gram.classes()[parent[i]].GetName();
+        }
+
+        txtfile.eol();
+    }
 
 
- txtfile.printf( " %us\n", sol_get_token(B_OFIGPAREN).c_str() );
+    txtfile.printf(" %us\n", sol_get_token(B_OFIGPAREN).c_str());
 
- if( !attrs().empty() || !dims().empty() || !tags().empty() )
-  {
-   SaveAttributesTxt(txtfile,gram);
-   SaveDimentionsTxt(txtfile,gram);
-   SaveTagsTxt(txtfile,gram);
-  }
+    if (!attrs().empty() || !dims().empty() || !tags().empty())
+    {
+        SaveAttributesTxt(txtfile, gram);
+        SaveDimentionsTxt(txtfile, gram);
+        SaveTagsTxt(txtfile, gram);
+    }
 
- Save_Private_Txt( txtfile, gram );
+    Save_Private_Txt(txtfile, gram);
 
- txtfile.printf( " %us\n\n", sol_get_token(B_CFIGPAREN).c_str() );
+    txtfile.printf(" %us\n\n", sol_get_token(B_CFIGPAREN).c_str());
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_SAVETXT
 /*****************************************************
- Восстановление текстового описания атрибутной секции
+ Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ С‚РµРєСЃС‚РѕРІРѕРіРѕ РѕРїРёСЃР°РЅРёСЏ Р°С‚СЂРёР±СѓС‚РЅРѕР№ СЃРµРєС†РёРё
 *****************************************************/
 void GramClass::SaveAttributesTxt(
-                                  OFormatter &txtfile,
-                                  const Grammar& gram
-                                 ) const
+    OFormatter &txtfile,
+    const Grammar& gram
+) const
 {
- if( attrs().empty() )
-  return; /* if nothing there, exit...*/
+    if (attrs().empty())
+        return; /* if nothing there, exit...*/
 
- txtfile.printf(
-                "  %us\n  %us\n",
-                sol_get_token(B_ATTRIBUTES).c_str(),
-                sol_get_token(B_OFIGPAREN).c_str()
-               );
+    txtfile.printf(
+        "  %us\n  %us\n",
+        sol_get_token(B_ATTRIBUTES).c_str(),
+        sol_get_token(B_OFIGPAREN).c_str()
+    );
 
- for( lem::Container::size_type i=0; i<attrs().size(); i++ )
-  {
-   txtfile.printf(
-                  "   %us",
-                  gram.coords()[
-                                attrs()[i].GetIndex()
-                               ].GetName()[ attrs()[i].GetVar() ].c_str()
-                 );
+    for (auto& attr : attrs())
+    {
+        txtfile.printf("   %us", gram.coords()[attr.GetIndex()].GetName()[attr.GetVar()].c_str());
 
 
-   for( lem::Container::size_type j=0; j<attr_defaults.size(); ++j )
-    if( attr_defaults[j].first==attrs()[i] )
-     {
-      if( attr_defaults[j].second==UNKNOWN )
-       txtfile.printf( "%us%us",
-        sol_get_token(B_EQUAL).c_str(),
-        sol_get_token(B_UNKNOWN).c_str()
-        );
-      else 
-       txtfile.printf( "%us%us", 
-        sol_get_token(B_EQUAL).c_str(),
-        gram.coords()[attr_defaults[j].first.GetIndex()].GetStateName( attr_defaults[j].second ).c_str()
-       ); 
-      break;
-     }
+        for (lem::Container::size_type j = 0; j < attr_defaults.size(); ++j)
+            if (attr_defaults[j].first == attr)
+            {
+                if (attr_defaults[j].second == UNKNOWN)
+                    txtfile.printf("%us%us",
+                        sol_get_token(B_EQUAL).c_str(),
+                        sol_get_token(B_UNKNOWN).c_str()
+                    );
+                else
+                    txtfile.printf("%us%us",
+                        sol_get_token(B_EQUAL).c_str(),
+                        gram.coords()[attr_defaults[j].first.GetIndex()].GetStateName(attr_defaults[j].second).c_str()
+                    );
+                break;
+            }
 
-   txtfile.eol();
-  } 
+        txtfile.eol();
+    }
 
- txtfile.printf( "  %us\n", sol_get_token(B_CFIGPAREN).c_str() );
- return;
+    txtfile.printf("  %us\n", sol_get_token(B_CFIGPAREN).c_str());
+    return;
 }
 #endif
 
 #if defined SOL_SAVETXT
 /****************************************************
- Восстановление текстового описания секции измерений
+ Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ С‚РµРєСЃС‚РѕРІРѕРіРѕ РѕРїРёСЃР°РЅРёСЏ СЃРµРєС†РёРё РёР·РјРµСЂРµРЅРёР№
 *****************************************************/
 void GramClass::SaveDimentionsTxt(
-                                  OFormatter& txtfile,
-                                  const Grammar& gram
-                                 ) const
+    OFormatter& txtfile,
+    const Grammar& gram
+) const
 {
- if( dims().empty() )
-  return; /* if nothing there, exit...*/
+    if (dims().empty())
+        return; /* if nothing there, exit...*/
 
- txtfile.printf(
-                "  %us\n  %us\n",
-                sol_get_token(B_DIMENTIONS).c_str(),
-                sol_get_token(B_OFIGPAREN).c_str()
-               );
+    txtfile.printf(
+        "  %us\n  %us\n",
+        sol_get_token(B_DIMENTIONS).c_str(),
+        sol_get_token(B_OFIGPAREN).c_str()
+    );
 
- for( lem::Container::size_type i=0; i<dims().size(); i++ )
-  txtfile.printf(
-                 "   %us\n",
-                 gram.coords()[
-                               dims()[i].GetIndex()
-                              ].GetName()[ dims()[i].GetVar() ].c_str()
-                );
+    for (auto& dim : dims())
+    {
+        txtfile.printf("   %us\n", gram.coords()[dim.GetIndex()].GetName()[dim.GetVar()].c_str());
+    }
 
- txtfile.printf( "  %us\n", sol_get_token(B_CFIGPAREN).c_str() );
- return;
+    txtfile.printf("  %us\n", sol_get_token(B_CFIGPAREN).c_str());
+    return;
 }
 #endif
 
 
 #if defined SOL_SAVETXT
 /****************************************************
- Восстановление текстового описания секции тэгов
+ Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ С‚РµРєСЃС‚РѕРІРѕРіРѕ РѕРїРёСЃР°РЅРёСЏ СЃРµРєС†РёРё С‚СЌРіРѕРІ
 *****************************************************/
 void GramClass::SaveTagsTxt(
-                            OFormatter& txtfile,
-                            const Grammar& gram
-                           ) const
+    OFormatter& txtfile,
+    const Grammar& gram
+) const
 {
- if( tags().empty() )
-  return; /* if nothing there, exit...*/
+    if (tags().empty())
+        return; /* if nothing there, exit...*/
 
- txtfile.printf(
-                "  %us\n  %us\n",
-                sol_get_token(B_TAGS).c_str(),
-                sol_get_token(B_OFIGPAREN).c_str()
-               );
+    txtfile.printf(
+        "  %us\n  %us\n",
+        sol_get_token(B_TAGS).c_str(),
+        sol_get_token(B_OFIGPAREN).c_str()
+    );
 
- for( lem::Container::size_type i=0; i<tags().size(); i++ )
-  txtfile.printf(
-                 "   %us\n",
-                 gram.coords()[
-                               tags()[i].GetIndex()
-                              ].GetName()[ tags()[i].GetVar() ].c_str()
-                );
+    for (auto& tag : tags())
+    {
+        txtfile.printf("   %us\n", gram.coords()[tag.GetIndex()].GetName()[tag.GetVar()].c_str());
+    }
 
- txtfile.printf( "  %us\n", sol_get_token(B_CFIGPAREN).c_str() );
- return;
+    txtfile.printf("  %us\n", sol_get_token(B_CFIGPAREN).c_str());
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-bool GramClass::operator==( const GramClass & c ) const
-{ return dim_index==c.dim_index && attr_index==c.attr_index && tag_index==c.tag_index; }
+bool GramClass::operator==(const GramClass & c) const
+{
+    return dim_index == c.dim_index && attr_index == c.attr_index && tag_index == c.tag_index;
+}
 
-bool GramClass::operator!=( const GramClass & c ) const
-{ return dim_index!=c.dim_index || attr_index!=c.attr_index || tag_index!=c.tag_index; }
+bool GramClass::operator!=(const GramClass & c) const
+{
+    return dim_index != c.dim_index || attr_index != c.attr_index || tag_index != c.tag_index;
+}
 #endif
 
 
 /************************************************************************
- Функция объединяет методы FindLocAttrIndex и FindLocDimIndex, производя
- поиск и среди измерений, и среди атрибутов.
+ Р¤СѓРЅРєС†РёСЏ РѕР±СЉРµРґРёРЅСЏРµС‚ РјРµС‚РѕРґС‹ FindLocAttrIndex Рё FindLocDimIndex, РїСЂРѕРёР·РІРѕРґСЏ
+ РїРѕРёСЃРє Рё СЃСЂРµРґРё РёР·РјРµСЂРµРЅРёР№, Рё СЃСЂРµРґРё Р°С‚СЂРёР±СѓС‚РѕРІ.
 *************************************************************************/
-bool GramClass::FindLocCoordIndex( const GramCoordAdr iglobal, bool strict ) const
+bool GramClass::FindLocCoordIndex(const GramCoordAdr iglobal, bool strict) const
 {
- return
-       dim_index.find_fuzzy(iglobal,strict) != UNKNOWN
-       ||
-       tag_index.find_fuzzy(iglobal,strict) != UNKNOWN
-       ||
-       attr_index.find_fuzzy(iglobal,strict) != UNKNOWN;
+    return
+        dim_index.find_fuzzy(iglobal, strict) != UNKNOWN
+        ||
+        tag_index.find_fuzzy(iglobal, strict) != UNKNOWN
+        ||
+        attr_index.find_fuzzy(iglobal, strict) != UNKNOWN;
 }
 
 
-bool GramClass::MatchName( const lem::UCString &n ) const
+bool GramClass::MatchName(const lem::UCString &n) const
 {
- if( name.eqi(n) )
-  return true;
+    if (name.eqi(n))
+        return true;
 
- for( lem::Container::size_type i=0; i<aliases.size(); ++i )
-  if( aliases[i].eqi(n) )
-   return true;
+    for (auto& alias : aliases)
+    {
+        if (alias.eqi(n))
+            return true;
+    }
 
- return false;
+    return false;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-bool GramClass::Load_Private_Data( 
-                                  const BethToken &t,
-                                  Macro_Parser &txtfile,
-                                  Grammar& gram
-                                 )
+bool GramClass::Load_Private_Data(
+    const BethToken &t,
+    Macro_Parser &txtfile,
+    Grammar& gram
+)
 {
- return false;
+    return false;
 }
 #endif
 
 #if defined SOL_SAVETXT
-void GramClass::Save_Private_Txt( OFormatter& txtfile, const Grammar& gram ) const
+void GramClass::Save_Private_Txt(OFormatter& txtfile, const Grammar& gram) const
 {}
 #endif

@@ -16,35 +16,35 @@ protected:
 public:
     ParsingResults_XMLStream(lem::OFormatter & stream);
 
-    virtual void Start();
-    virtual void End();
-    virtual void Flush();
-    virtual void StartSentence(const lem::UFString & sentence_str, int paragraph_id);
-    virtual void EndSentence();
+    virtual void Start() override;
+    virtual void End() override;
+    virtual void Flush() override;
+    virtual void StartSentence(const lem::UFString & sentence_str, int paragraph_id) override;
+    virtual void EndSentence() override;
 
-    virtual void StartChunking();
-    virtual void PrintChunking( int word_position, int chunk_label);
-    virtual void EndChunking();
+    virtual void StartChunking() override;
+    virtual void PrintChunking( int word_position, int chunk_label) override;
+    virtual void EndChunking() override;
 
-    virtual void StartTokens();
-    virtual void EndTokens();
+    virtual void StartTokens() override;
+    virtual void EndTokens() override;
 
-    virtual void StartToken();
+    virtual void StartToken() override;
     virtual void PrintToken(
         bool known_word,
         const wchar_t * word,
         const wchar_t * lemma,
         int position,
-        const wchar_t * part_of_speech);
-    virtual void EndToken();
+        const wchar_t * part_of_speech) override;
+    virtual void EndToken() override;
 
-    virtual void StartTags();
-    virtual void PrintTag(int tag_counter, const wchar_t * tag_name, const wchar_t * tag_value);
-    virtual void EndTags();
+    virtual void StartTags() override;
+    virtual void PrintTag(int tag_counter, const wchar_t * tag_name, const wchar_t * tag_value) override;
+    virtual void EndTags() override;
 
-    virtual void PrintTreeRendering( const wchar_t * tree_rendering );
-    virtual void StartSyntaxTree();
-    virtual void EndSyntaxTree();
+    virtual void PrintTreeRendering( const wchar_t * tree_rendering ) override;
+    virtual void StartSyntaxTree() override;
+    virtual void EndSyntaxTree() override;
     virtual void PrintSyntaxNode(
         bool is_root,
         bool is_orphant,
@@ -52,7 +52,7 @@ public:
         int word_pos,
         const wchar_t * edge_name,
         int parent_index,
-        const wchar_t * parent_word_str);
+        const wchar_t * parent_word_str) override;
 
 };
 

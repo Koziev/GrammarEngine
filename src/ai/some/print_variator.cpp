@@ -28,7 +28,7 @@ void Solarix::print_morphology(
    out_file.printf( "<p>" );
   }
 
- // Выведем результаты морфологического анализа.
+ // Р’С‹РІРµРґРµРј СЂРµР·СѓР»СЊС‚Р°С‚С‹ РјРѕСЂС„РѕР»РѕРіРёС‡РµСЃРєРѕРіРѕ Р°РЅР°Р»РёР·Р°.
  if( pack.vars().empty() )
   {
    if( html )
@@ -66,7 +66,7 @@ void Solarix::print_morphology(
           is_unknown = true; 
          else
           {  
-           // Посмотрим, сколько грамматических классов среди вариантов.
+           // РџРѕСЃРјРѕС‚СЂРёРј, СЃРєРѕР»СЊРєРѕ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєР»Р°СЃСЃРѕРІ СЃСЂРµРґРё РІР°СЂРёР°РЅС‚РѕРІ.
            for( int i=1; i<nalt; ++i )
             {
              const int ekeyi = node.GetNode().GetAlts()[i-1]->GetEntryKey();
@@ -82,7 +82,7 @@ void Solarix::print_morphology(
         }
    
    
-       // Сначала напечатаем слово.
+       // РЎРЅР°С‡Р°Р»Р° РЅР°РїРµС‡Р°С‚Р°РµРј СЃР»РѕРІРѕ.
    
        if( html )
         { 
@@ -111,14 +111,14 @@ void Solarix::print_morphology(
    
        if( !lem::is_udelim(wrd) && wrd!=L"\"" )
         {
-         // Теперь выведем список альтернативных грамматических классов для этой словоформы
+         // РўРµРїРµСЂСЊ РІС‹РІРµРґРµРј СЃРїРёСЃРѕРє Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹С… РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєР»Р°СЃСЃРѕРІ РґР»СЏ СЌС‚РѕР№ СЃР»РѕРІРѕС„РѕСЂРјС‹
          lem::MCollect<int> printed;
    
-         // число альтернатив для слова
+         // С‡РёСЃР»Рѕ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІ РґР»СЏ СЃР»РѕРІР°
          if( nalt>1 )
           {
-           // если все альтернативы - одна и та же словарная статья, то используем один цвет,
-           // а если разные - то надо выделить поярче.
+           // РµСЃР»Рё РІСЃРµ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІС‹ - РѕРґРЅР° Рё С‚Р° Р¶Рµ СЃР»РѕРІР°СЂРЅР°СЏ СЃС‚Р°С‚СЊСЏ, С‚Рѕ РёСЃРїРѕР»СЊР·СѓРµРј РѕРґРёРЅ С†РІРµС‚,
+           // Р° РµСЃР»Рё СЂР°Р·РЅС‹Рµ - С‚Рѕ РЅР°РґРѕ РІС‹РґРµР»РёС‚СЊ РїРѕСЏСЂС‡Рµ.
            lem::MCollect<int> partsofspeech;
            if( !lem::is_quantor(ekey0) )
             {
@@ -141,7 +141,7 @@ void Solarix::print_morphology(
    
            if( html ) 
             {
-             // Если есть альтернативы (nalt>1), то верхним индексов выводим их число.
+             // Р•СЃР»Рё РµСЃС‚СЊ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІС‹ (nalt>1), С‚Рѕ РІРµСЂС…РЅРёРј РёРЅРґРµРєСЃРѕРІ РІС‹РІРѕРґРёРј РёС… С‡РёСЃР»Рѕ.
              if( partsofspeech.size()>1 )
               {
                out_file.printf( "<small><sup><b><span style=\"color: #FF0000;\"><span style=\"background-color: #CCCCFF\">%d</span></span></b></sup></small>", nalt );
@@ -221,7 +221,7 @@ namespace
   void PrintAttributes( OFormatter & out, Solarix::SynGram & sg, const Solarix::Word_Form & word ) const;
 
   NodePrintBlock( const Tree_Node & node, SynGram & sg, bool html, bool detailed );
-  ~NodePrintBlock(void);
+  ~NodePrintBlock();
 
   void PushLine( const UFString & s );
 
@@ -239,7 +239,7 @@ namespace
   lem::Char_Stream::UTF16_MemWriter mem; 
   OUFormatter mf( &mem, false );
 
-  // Первая строка - узловое слово
+  // РџРµСЂРІР°СЏ СЃС‚СЂРѕРєР° - СѓР·Р»РѕРІРѕРµ СЃР»РѕРІРѕ
   node.GetNode().PrintPlain( mf, false );
   if( detailed )
    PrintAttributes( mf, sg, node.GetNode() );
@@ -250,17 +250,17 @@ namespace
 
   const int nleaf = CastSizeToInt(node.leafs().size());
 
-  // Теперь дадим каждому узлу построить свой блок отображения
+  // РўРµРїРµСЂСЊ РґР°РґРёРј РєР°Р¶РґРѕРјСѓ СѓР·Р»Сѓ РїРѕСЃС‚СЂРѕРёС‚СЊ СЃРІРѕР№ Р±Р»РѕРє РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
   for( lem::Container::size_type i=0; i<node.leafs().size(); ++i )
    {
     NodePrintBlock *nb = new NodePrintBlock( node.leafs()[i], sg, html, detailed );
     child.push_back(nb);
    }
 
-  // Начинаем распечатку узлов с соединительными линиями к корню
+  // РќР°С‡РёРЅР°РµРј СЂР°СЃРїРµС‡Р°С‚РєСѓ СѓР·Р»РѕРІ СЃ СЃРѕРµРґРёРЅРёС‚РµР»СЊРЅС‹РјРё Р»РёРЅРёСЏРјРё Рє РєРѕСЂРЅСЋ
   for( int i=nleaf-1; i>=0; --i )
    {
-    // Разделительная строка содержит вертикальные штрихи - по числу оставшихся веток
+    // Р Р°Р·РґРµР»РёС‚РµР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° СЃРѕРґРµСЂР¶РёС‚ РІРµСЂС‚РёРєР°Р»СЊРЅС‹Рµ С€С‚СЂРёС…Рё - РїРѕ С‡РёСЃР»Сѓ РѕСЃС‚Р°РІС€РёС…СЃСЏ РІРµС‚РѕРє
     UFString hstrokes;
 
     if( html )
@@ -292,7 +292,7 @@ namespace
     
       if( iline==0 )
        {
-        // Первая строка для блока содержит ответвление вправо для крайне правой линии.
+        // РџРµСЂРІР°СЏ СЃС‚СЂРѕРєР° РґР»СЏ Р±Р»РѕРєР° СЃРѕРґРµСЂР¶РёС‚ РѕС‚РІРµС‚РІР»РµРЅРёРµ РІРїСЂР°РІРѕ РґР»СЏ РєСЂР°Р№РЅРµ РїСЂР°РІРѕР№ Р»РёРЅРёРё.
         const int n_down = i;
         str_prefix += UFString( n_down, 0x2502 );
         str_prefix += 0x2514;
@@ -301,7 +301,7 @@ namespace
        }
       else
        {
-        // остальные - только вертикальные линии слева и пробелы справа
+        // РѕСЃС‚Р°Р»СЊРЅС‹Рµ - С‚РѕР»СЊРєРѕ РІРµСЂС‚РёРєР°Р»СЊРЅС‹Рµ Р»РёРЅРёРё СЃР»РµРІР° Рё РїСЂРѕР±РµР»С‹ СЃРїСЂР°РІР°
         const int n_down = i;
         str_prefix += UFString( n_down, 0x2502 );
         const int n_hor = 3 + (nleaf-1-i);
@@ -311,11 +311,11 @@ namespace
       if( html )
        str_prefix += L"</span>";
 
-      // Справа добавляем строку блока
+      // РЎРїСЂР°РІР° РґРѕР±Р°РІР»СЏРµРј СЃС‚СЂРѕРєСѓ Р±Р»РѕРєР°
       const UFString &block_line = nb.GetLine(iline);
       str_prefix += block_line;
 
-      // Строка полностью готова
+      // РЎС‚СЂРѕРєР° РїРѕР»РЅРѕСЃС‚СЊСЋ РіРѕС‚РѕРІР°
       PushLine(str_prefix);
      }
    }
@@ -391,7 +391,7 @@ void Solarix::print_syntax_tree(
                                 bool detailed
                                )
 {
- // Выведем синтаксический граф
+ // Р’С‹РІРµРґРµРј СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёР№ РіСЂР°С„
  const int ivar = pack.GetShortestVar();
  if( ivar!=UNKNOWN )
   {
@@ -499,7 +499,7 @@ lem::UFString Solarix::VarToStr( const Solarix::Dictionary &dict, const Solarix:
         }
        else
         {
-         // Выставим правильный регистр.
+         // Р’С‹СЃС‚Р°РІРёРј РїСЂР°РІРёР»СЊРЅС‹Р№ СЂРµРіРёСЃС‚СЂ.
          const Word_Form &wf = tn.GetNode();
          const int ekey = wf.GetEntryKey();
          const Solarix::SG_Entry &e = dict.GetSynGram().GetEntry(ekey);

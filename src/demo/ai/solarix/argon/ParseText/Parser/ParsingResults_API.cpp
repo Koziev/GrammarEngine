@@ -1,16 +1,17 @@
 #include "ParsingResults_API.h"
+#include <assert.h>
 
 
 ParsingResults_API::ParsingResults_API()
 {
-    sentence_being_created = NULL;
-    token_being_created = NULL;
+    sentence_being_created = nullptr;
+    token_being_created = nullptr;
 }
 
 ParsingResults_API::~ParsingResults_API()
 {
     delete sentence_being_created;
-    sentence_being_created = NULL;
+    sentence_being_created = nullptr;
 }
 
 void ParsingResults_API::Start()
@@ -25,17 +26,17 @@ void ParsingResults_API::Flush() {}
 
 void ParsingResults_API::StartSentence(const lem::UFString & sentence_str, int paragraph_id)
 {
-    assert(sentence_being_created == NULL);
-    assert(token_being_created == NULL);
+    assert(sentence_being_created == nullptr);
+    assert(token_being_created == nullptr);
     sentence_being_created = new ParsingResult_Sentence();
 }
 
 void ParsingResults_API::EndSentence()
 {
-    assert(sentence_being_created != NULL);
-    assert(token_being_created == NULL);
+    assert(sentence_being_created != nullptr);
+    assert(token_being_created == nullptr);
     sentences.push_back(sentence_being_created);
-    sentence_being_created = NULL;
+    sentence_being_created = nullptr;
 }
 
 
@@ -65,7 +66,7 @@ void ParsingResults_API::EndTokens() {}
 
 void ParsingResults_API::StartToken()
 {
-    assert(token_being_created == NULL);
+    assert(token_being_created == nullptr);
     token_being_created = new ParsingResult_Token();
 }
 
@@ -76,7 +77,7 @@ void ParsingResults_API::PrintToken(
     int position,
     const wchar_t * part_of_speech)
 {
-    assert(token_being_created != NULL);
+    assert(token_being_created != nullptr);
 
     token_being_created->word = word;
     token_being_created->lemma = lemma;
@@ -86,10 +87,10 @@ void ParsingResults_API::PrintToken(
 
 void ParsingResults_API::EndToken()
 {
-    assert(token_being_created != NULL);
-    assert(sentence_being_created != NULL);
+    assert(token_being_created != nullptr);
+    assert(sentence_being_created != nullptr);
     sentence_being_created->AddToken(token_being_created);
-    token_being_created = NULL;
+    token_being_created = nullptr;
 }
 
 void ParsingResults_API::StartTags()
@@ -98,7 +99,7 @@ void ParsingResults_API::StartTags()
 
 void ParsingResults_API::PrintTag(int tag_counter, const wchar_t * tag_name, const wchar_t * tag_value)
 {
-    assert(token_being_created != NULL);
+    assert(token_being_created != nullptr);
     token_being_created->AddTag(tag_name, tag_value);
 }
 

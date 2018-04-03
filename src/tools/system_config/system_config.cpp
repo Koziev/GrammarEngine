@@ -1,27 +1,25 @@
 // -----------------------------------------------------------------------------
 // File SYSTEM_CONFIG.CPP
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Licensed under the terms of GNU Lesser GPL
 // You must not eliminate, delete or supress these copyright strings
 // from the file!
 //
 // Content:
-// LEM C++ library  http://www.solarix.ru
+// Р”РѕСЃС‚СѓРї Рє СЃР»СѓР¶Р±Р°Рј СЃРёСЃС‚РµРјРЅРѕРіРѕ Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёСЏ.
 //
-// Доступ к службам системного администрирования.
+// Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РјРµРЅРµРґР¶РµСЂРѕРј РїСЂРѕС†РµСЃСЃРѕРІ РћРїРµСЂР°С†РёРѕРЅРЅРѕР№ РЎРёСЃС‚РµРјС‹.
 //
-// Взаимодействие с менеджером процессов Операционной Системы.
+// РџСЂРѕС†РµРґСѓСЂС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ hardware. Р‘РѕР»СЊС€Р°СЏ Р·Р°РІРёСЃРёРјРѕСЃС‚СЊ РѕС‚ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹ Рё РѕС‚
+// РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РєРѕРјРїРёР»СЏС‚РѕСЂР° C/C++!
 //
-// Процедуры для работы с hardware. Большая зависимость от архитектуры и от
-// используемого компилятора C/C++!
-//
-// 04.02.2007 - введена SupportUnicodeGui
-// 07.04.2007 - добавлены IsNetfx10Installed, IsNetfx11Installed, 
+// 04.02.2007 - РІРІРµРґРµРЅР° SupportUnicodeGui
+// 07.04.2007 - РґРѕР±Р°РІР»РµРЅС‹ IsNetfx10Installed, IsNetfx11Installed, 
 //              GetNetfx10SPLevel, GetNetfx11SPLevel.  
 // 13.04.2007 - GetHardwareInfo. 
 //
@@ -29,17 +27,17 @@
 //
 // 27.04.2007 - utf-8 console locale detection in SupportUnicodeConsole()
 //
-// 09.05.2007 - исправлена функция детектирования WinNT 4.0
+// 09.05.2007 - РёСЃРїСЂР°РІР»РµРЅР° С„СѓРЅРєС†РёСЏ РґРµС‚РµРєС‚РёСЂРѕРІР°РЅРёСЏ WinNT 4.0
 //
-// 28.06.2007 - добавлено обнаружение MS Windows Vista в GetHostOs
+// 28.06.2007 - РґРѕР±Р°РІР»РµРЅРѕ РѕР±РЅР°СЂСѓР¶РµРЅРёРµ MS Windows Vista РІ GetHostOs
 // 
-// 16.04.2008 - добавлена функция IsOS64()
+// 16.04.2008 - РґРѕР±Р°РІР»РµРЅР° С„СѓРЅРєС†РёСЏ IsOS64()
 //
-// 22.04.2008 - добавлены функции GetFilesystemCP и IsFilesystemUtf8
+// 22.04.2008 - РґРѕР±Р°РІР»РµРЅС‹ С„СѓРЅРєС†РёРё GetFilesystemCP Рё IsFilesystemUtf8
 // -----------------------------------------------------------------------------
 //
 // CD->23.10.2000
-// LC->29.05.2010
+// LC->01.04.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -56,18 +54,12 @@
  #include <sys/utsname.h>
 #endif
 
-#if defined LEM_WXWIDGETS
- #include <wx/utils.h>
-#endif
-
 #if defined LEM_WINDOWS || defined LEM_DOS
 
- #if !defined LEM_MFC
-  #include <windows.h>
- #endif
+ #include <windows.h>
 
  #include <tchar.h>
- #include <Lmcons.h> // для UNLEN в GetUserName
+ #include <Lmcons.h> // РґР»СЏ UNLEN РІ GetUserName
 
  #if defined LEM_MSC && _MSC_VER>=1300 && _MSC_VER<1800
   #include <atlstr.h>
@@ -75,20 +67,6 @@
  #endif
  
  #include <shlobj.h>
-
- // In case the machine this is compiled on does not have the most recent platform SDK
- // with these values defined, define them here
- #ifndef SM_TABLETPC
-  #define SM_TABLETPC		86
- #endif
-
- #ifndef SM_MEDIACENTER
-  #define SM_MEDIACENTER	87
- #endif
-#endif
-
-#if defined LEM_QT
- #include <QDir>
 #endif
 
 #include <lem/system_config.h>
@@ -149,7 +127,7 @@ static bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszVal
 
 
 // *****************************************************************
-// Возвращается имя домашнего каталога для юзера в текущей сессии.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РёРјСЏ РґРѕРјР°С€РЅРµРіРѕ РєР°С‚Р°Р»РѕРіР° РґР»СЏ СЋР·РµСЂР° РІ С‚РµРєСѓС‰РµР№ СЃРµСЃСЃРёРё.
 // *****************************************************************
 /*
 const lem::Path lem::System_Config::GetHomeDir(void)
@@ -176,7 +154,7 @@ const lem::Path lem::System_Config::GetHomeDir(void)
     }
   }
 
- // Эта переменная окружения существует только для Win NT.
+ // Р­С‚Р° РїРµСЂРµРјРµРЅРЅР°СЏ РѕРєСЂСѓР¶РµРЅРёСЏ СЃСѓС‰РµСЃС‚РІСѓРµС‚ С‚РѕР»СЊРєРѕ РґР»СЏ Win NT.
  const char *home = getenv( "USERPROFILE" );
 
  if( !home )
@@ -184,7 +162,7 @@ const lem::Path lem::System_Config::GetHomeDir(void)
    home = getenv( "HOMEPATH" );
    if( !home )
     {
-     // Для Win9x все гораздо корявее - один каталог на всех...
+     // Р”Р»СЏ Win9x РІСЃРµ РіРѕСЂР°Р·РґРѕ РєРѕСЂСЏРІРµРµ - РѕРґРёРЅ РєР°С‚Р°Р»РѕРі РЅР° РІСЃРµС…...
      home = getenv( "windir" );
 
      if( !home )
@@ -237,9 +215,9 @@ const lem::Path lem::System_Config::GetHomeDir(void)
 
 
 // **********************************************************
-// Возвращается путь к каталогу "...\юзер\Application Data\" 
-// или его аналогу для текущей платформы, для сохранения
-// данных программы.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ "...\СЋР·РµСЂ\Application Data\" 
+// РёР»Рё РµРіРѕ Р°РЅР°Р»РѕРіСѓ РґР»СЏ С‚РµРєСѓС‰РµР№ РїР»Р°С‚С„РѕСЂРјС‹, РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ
+// РґР°РЅРЅС‹С… РїСЂРѕРіСЂР°РјРјС‹.
 // **********************************************************
 /*
 const lem::Path lem::System_Config::GetAppdataDir(void)
@@ -265,8 +243,8 @@ const lem::Path lem::System_Config::GetAppdataDir(void)
     }
   }
 
- // Эта переменная окружения существует только для Win 2000/XP/2003.
- // ATTENTION! Ее нет в WinNT 4.0!
+ // Р­С‚Р° РїРµСЂРµРјРµРЅРЅР°СЏ РѕРєСЂСѓР¶РµРЅРёСЏ СЃСѓС‰РµСЃС‚РІСѓРµС‚ С‚РѕР»СЊРєРѕ РґР»СЏ Win 2000/XP/2003.
+ // ATTENTION! Р•Рµ РЅРµС‚ РІ WinNT 4.0!
  const char *path = getenv( "APPDATA" );
 
  if( !path )
@@ -278,7 +256,7 @@ const lem::Path lem::System_Config::GetAppdataDir(void)
      return p;
     }
 
-   // Для Win98/Me каталог c:\Windows\Application Data
+   // Р”Р»СЏ Win98/Me РєР°С‚Р°Р»РѕРі c:\Windows\Application Data
 
    std::string p;
 
@@ -299,7 +277,7 @@ const lem::Path lem::System_Config::GetAppdataDir(void)
      return lem::Path(u);
     }
 
-   // Возвращаем путь к домашнему каталогу
+   // Р’РѕР·РІСЂР°С‰Р°РµРј РїСѓС‚СЊ Рє РґРѕРјР°С€РЅРµРјСѓ РєР°С‚Р°Р»РѕРіСѓ
    return GetHomeDir();
   }
  else
@@ -335,7 +313,7 @@ bool lem::System_Config::SupportUnicodeGui(void)
  #if defined LEM_UNIX
   return false;
  #elif defined LEM_WINDOWS 
-  // Для Win9x - есть проблемы.
+  // Р”Р»СЏ Win9x - РµСЃС‚СЊ РїСЂРѕР±Р»РµРјС‹.
   //if( IsWin9x() )
   // return false;
 
@@ -372,7 +350,7 @@ bool lem::System_Config::SupportUnicodeFilenames(void)
  #elif defined LEM_UNIX
   return false;
  #elif defined LEM_WINDOWS
-  // Для Win9x - есть проблемы.
+  // Р”Р»СЏ Win9x - РµСЃС‚СЊ РїСЂРѕР±Р»РµРјС‹.
   //if( IsWin9x() )
   // return false;
 
@@ -387,18 +365,18 @@ bool lem::System_Config::SupportUnicodeConsole(void)
 {
  #if defined LEM_UNIX || defined LEM_DARWIN
 
-  // utf-8 консоль под Linux
+  // utf-8 РєРѕРЅСЃРѕР»СЊ РїРѕРґ Linux
   const char *lang = getenv("LANG");
   if( lang!=NULL && (lem::lem_findi( lang, "UTF-8" )!=UNKNOWN || lem::lem_findi( lang, "UTF8" )!=UNKNOWN) )
    return true;
    
   return false;
  #elif defined LEM_WINDOWS
-  // Для Win9x - есть проблемы.
+  // Р”Р»СЏ Win9x - РµСЃС‚СЊ РїСЂРѕР±Р»РµРјС‹.
   //if( IsWin9x() )
   // return false;
 
-  // Линейка WinNT нормально поддерживает UNICODE
+  // Р›РёРЅРµР№РєР° WinNT РЅРѕСЂРјР°Р»СЊРЅРѕ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ UNICODE
   return true;
  #else
   return false; 
@@ -570,7 +548,7 @@ bool lem::System_Config::IsMediaCenter(void)
 */
 
 // ********************************************************
-// ВОзвращает описание версии установленного .NET Framework
+// Р’РћР·РІСЂР°С‰Р°РµС‚ РѕРїРёСЃР°РЅРёРµ РІРµСЂСЃРёРё СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕРіРѕ .NET Framework
 // ********************************************************
 /*
 const std::string lem::System_Config::GetNetfxInfo(void)
@@ -611,7 +589,7 @@ const std::string lem::System_Config::GetNetfxInfo(void)
 
 
 // ********************************************************
-// На какой платформе исполняется программа
+// РќР° РєР°РєРѕР№ РїР»Р°С‚С„РѕСЂРјРµ РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРѕРіСЂР°РјРјР°
 // ********************************************************
 const std::string lem::System_Config::GetHostOs( bool detailed )
 {
@@ -723,7 +701,7 @@ const std::string lem::System_Config::GetHostOs( bool detailed )
           {
            ret = product.c_str();  
  
-           // Номер сервис-пака
+           // РќРѕРјРµСЂ СЃРµСЂРІРёСЃ-РїР°РєР°
            lem::FString sp = osvi.szCSDVersion;// reg.get_string( "CSDVersion" );
            if( !sp.empty() )
             { 
@@ -995,8 +973,8 @@ const std::string lem::System_Config::GetHostName(void)
 
 
 // *************************************************************************
-// Проверка простейшей методики определения режима выравнивания полей в
-// структурах на границу слов. Проверена для нескольких компиляторов:
+// РџСЂРѕРІРµСЂРєР° РїСЂРѕСЃС‚РµР№С€РµР№ РјРµС‚РѕРґРёРєРё РѕРїСЂРµРґРµР»РµРЅРёСЏ СЂРµР¶РёРјР° РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РїРѕР»РµР№ РІ
+// СЃС‚СЂСѓРєС‚СѓСЂР°С… РЅР° РіСЂР°РЅРёС†Сѓ СЃР»РѕРІ. РџСЂРѕРІРµСЂРµРЅР° РґР»СЏ РЅРµСЃРєРѕР»СЊРєРёС… РєРѕРјРїРёР»СЏС‚РѕСЂРѕРІ:
 //
 //  Borland C++ 3.1 (DOS): byte + word alignment
 //  Borland C++ 4.5 (Win32 console): byte + word + dword + qword alignment
@@ -1004,11 +982,11 @@ const std::string lem::System_Config::GetHostName(void)
 //  Watcom C++ v.10,11 (DOS Extender): byte + word + dword + qword alignment
 //  GNU C++ (DJGPP) Compiler: dword alignment
 //
-// Написать код для обнаружения выравнивания на границу параграфа (16 байт)
-// для Borland C++ Builder не удалось, так как встроенного типа с размером
-// 16 байт нет, а 10-ти байтовый long double для IBM PC не даёт нужного
-// эффекта. Для Watcom C++ v.11 определение выравнивания на 16-байтный
-// параграф работает нормально.
+// РќР°РїРёСЃР°С‚СЊ РєРѕРґ РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РЅР° РіСЂР°РЅРёС†Сѓ РїР°СЂР°РіСЂР°С„Р° (16 Р±Р°Р№С‚)
+// РґР»СЏ Borland C++ Builder РЅРµ СѓРґР°Р»РѕСЃСЊ, С‚Р°Рє РєР°Рє РІСЃС‚СЂРѕРµРЅРЅРѕРіРѕ С‚РёРїР° СЃ СЂР°Р·РјРµСЂРѕРј
+// 16 Р±Р°Р№С‚ РЅРµС‚, Р° 10-С‚Рё Р±Р°Р№С‚РѕРІС‹Р№ long double РґР»СЏ IBM PC РЅРµ РґР°С‘С‚ РЅСѓР¶РЅРѕРіРѕ
+// СЌС„С„РµРєС‚Р°. Р”Р»СЏ Watcom C++ v.11 РѕРїСЂРµРґРµР»РµРЅРёРµ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ РЅР° 16-Р±Р°Р№С‚РЅС‹Р№
+// РїР°СЂР°РіСЂР°С„ СЂР°Р±РѕС‚Р°РµС‚ РЅРѕСЂРјР°Р»СЊРЅРѕ.
 // *************************************************************************
 
 // 17 -> byte
@@ -1051,9 +1029,9 @@ int lem::System_Config::GetAlignmentSize(void)
 }
 
 // *************************************************************************
-// Мы должны определить тип адресной архитектуры, а именно - используется ли
-// сегментация, каков размер сегмента и смещения. Возвращается символическая
-// константа либо UNKNOWN.
+// РњС‹ РґРѕР»Р¶РЅС‹ РѕРїСЂРµРґРµР»РёС‚СЊ С‚РёРї Р°РґСЂРµСЃРЅРѕР№ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹, Р° РёРјРµРЅРЅРѕ - РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ Р»Рё
+// СЃРµРіРјРµРЅС‚Р°С†РёСЏ, РєР°РєРѕРІ СЂР°Р·РјРµСЂ СЃРµРіРјРµРЅС‚Р° Рё СЃРјРµС‰РµРЅРёСЏ. Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРёРјРІРѕР»РёС‡РµСЃРєР°СЏ
+// РєРѕРЅСЃС‚Р°РЅС‚Р° Р»РёР±Рѕ UNKNOWN.
 // *************************************************************************
 lem::System_Config::AddressingType lem::System_Config::GetAddressingType(void)
 {
@@ -1070,8 +1048,8 @@ lem::System_Config::AddressingType lem::System_Config::GetAddressingType(void)
  a += 65535;
  a++;
 
- // Если теперь значение a снова равно NULL, то имеем дело с архитектурой
- // 16+16, то есть значение сегмента (16 бит) и значение смещения (16 бит).
+ // Р•СЃР»Рё С‚РµРїРµСЂСЊ Р·РЅР°С‡РµРЅРёРµ a СЃРЅРѕРІР° СЂР°РІРЅРѕ NULL, С‚Рѕ РёРјРµРµРј РґРµР»Рѕ СЃ Р°СЂС…РёС‚РµРєС‚СѓСЂРѕР№
+ // 16+16, С‚Рѕ РµСЃС‚СЊ Р·РЅР°С‡РµРЅРёРµ СЃРµРіРјРµРЅС‚Р° (16 Р±РёС‚) Рё Р·РЅР°С‡РµРЅРёРµ СЃРјРµС‰РµРЅРёСЏ (16 Р±РёС‚).
  if( !a )
   return ADDRESSING_16_16;
 
@@ -1321,7 +1299,7 @@ int lem::System_Config::GetNetfx11SPLevel(void)
 */
 
 // *******************************************************
-// Возвращает имя пользователя (логин) для текущей сессии
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (Р»РѕРіРёРЅ) РґР»СЏ С‚РµРєСѓС‰РµР№ СЃРµСЃСЃРёРё
 // *******************************************************
 const std::string lem::System_Config::GetUserLogin(void)
 {
@@ -1427,7 +1405,7 @@ bool lem::System_Config::IsCmdLineOption( char ch )
 
 
 // *********************************************************
-// Поддерживает ли платформа Unicode строки в вызовах API
+// РџРѕРґРґРµСЂР¶РёРІР°РµС‚ Р»Рё РїР»Р°С‚С„РѕСЂРјР° Unicode СЃС‚СЂРѕРєРё РІ РІС‹Р·РѕРІР°С… API
 // *********************************************************
 bool lem::System_Config::SupportUnicodeAPI(void)
 {
@@ -1535,9 +1513,9 @@ bool lem::System_Config::IsFilesystemUtf8( const lem::Path *path )
 
 
 // *********************************************************************************
-// Возвращает кодировку имен файлов, опционально может быть указан также некий путь
-// к файлу или папке, если файловая система допускает монтирование множества
-// устройств с разными настройками кодировок.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРґРёСЂРѕРІРєСѓ РёРјРµРЅ С„Р°Р№Р»РѕРІ, РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅ С‚Р°РєР¶Рµ РЅРµРєРёР№ РїСѓС‚СЊ
+// Рє С„Р°Р№Р»Сѓ РёР»Рё РїР°РїРєРµ, РµСЃР»Рё С„Р°Р№Р»РѕРІР°СЏ СЃРёСЃС‚РµРјР° РґРѕРїСѓСЃРєР°РµС‚ РјРѕРЅС‚РёСЂРѕРІР°РЅРёРµ РјРЅРѕР¶РµСЃС‚РІР°
+// СѓСЃС‚СЂРѕР№СЃС‚РІ СЃ СЂР°Р·РЅС‹РјРё РЅР°СЃС‚СЂРѕР№РєР°РјРё РєРѕРґРёСЂРѕРІРѕРє.
 // *********************************************************************************
 const lem::CodeConverter* lem::System_Config::GetFilesystemCP( const lem::Path *path )
 {
@@ -1564,11 +1542,11 @@ const lem::CodeConverter* lem::System_Config::GetFilesystemCP( const lem::Path *
 }
 
 // ********************************************************************
-// Символы окончания строки
-// \r\n для Windows
-// \n для Linux
+// РЎРёРјРІРѕР»С‹ РѕРєРѕРЅС‡Р°РЅРёСЏ СЃС‚СЂРѕРєРё
+// \r\n РґР»СЏ Windows
+// \n РґР»СЏ Linux
 //
-// Если escaped=true, то возвращаемая строка будет иметь символы слеш
+// Р•СЃР»Рё escaped=true, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРјР°СЏ СЃС‚СЂРѕРєР° Р±СѓРґРµС‚ РёРјРµС‚СЊ СЃРёРјРІРѕР»С‹ СЃР»РµС€
 // ********************************************************************
 const std::string lem::System_Config::GetLineTerminator( bool escaped )
 {
@@ -1584,5 +1562,3 @@ const std::string lem::System_Config::GetLineTerminator( bool escaped )
    return std::string("\n");  
  #endif 
 }
-
-

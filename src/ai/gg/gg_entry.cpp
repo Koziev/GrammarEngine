@@ -6,13 +6,13 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Класс GG_Entry - статья Графической Грамматики, хранит набор буквоформ, то
-// есть различных представлений одной буквы объектного языка. Данный класс
-// является производным от Base_Entry class.
+// РљР»Р°СЃСЃ GG_Entry - СЃС‚Р°С‚СЊСЏ Р“СЂР°С„РёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРё, С…СЂР°РЅРёС‚ РЅР°Р±РѕСЂ Р±СѓРєРІРѕС„РѕСЂРј, С‚Рѕ
+// РµСЃС‚СЊ СЂР°Р·Р»РёС‡РЅС‹С… РїСЂРµРґСЃС‚Р°РІР»РµРЅРёР№ РѕРґРЅРѕР№ Р±СѓРєРІС‹ РѕР±СЉРµРєС‚РЅРѕРіРѕ СЏР·С‹РєР°. Р”Р°РЅРЅС‹Р№ РєР»Р°СЃСЃ
+// СЏРІР»СЏРµС‚СЃСЏ РїСЂРѕРёР·РІРѕРґРЅС‹Рј РѕС‚ Base_Entry class.
 // -----------------------------------------------------------------------------
 //
 // CD->10.08.1996
-// LC->09.01.2012
+// LC->01.04.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -29,227 +29,227 @@ using namespace lem;
 using namespace Solarix;
 
 /*****************************************************************************
-   Статья Графической Грамматики содержит описание всевозможных представлений
- одной и той же буквы Алфавита. К примеру, символы 'A' и 'a' суть две формы
- для первой буквы латинского алфавита. А символы 'Е', 'е', 'Ё' и 'ё' задают
- различные возможные формы представления буквы 'Ё' в русской азбуке с учетом
- того, что эта буква, введенная Карамзиным, в официальных текстах пишется как
- 'E', ХОТЯ ЭТО ЗНАКИ ДЛЯ РАЗНЫХ ФОНЕМ.
+   РЎС‚Р°С‚СЊСЏ Р“СЂР°С„РёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРё СЃРѕРґРµСЂР¶РёС‚ РѕРїРёСЃР°РЅРёРµ РІСЃРµРІРѕР·РјРѕР¶РЅС‹С… РїСЂРµРґСЃС‚Р°РІР»РµРЅРёР№
+ РѕРґРЅРѕР№ Рё С‚РѕР№ Р¶Рµ Р±СѓРєРІС‹ РђР»С„Р°РІРёС‚Р°. Рљ РїСЂРёРјРµСЂСѓ, СЃРёРјРІРѕР»С‹ 'A' Рё 'a' СЃСѓС‚СЊ РґРІРµ С„РѕСЂРјС‹
+ РґР»СЏ РїРµСЂРІРѕР№ Р±СѓРєРІС‹ Р»Р°С‚РёРЅСЃРєРѕРіРѕ Р°Р»С„Р°РІРёС‚Р°. Рђ СЃРёРјРІРѕР»С‹ 'Р•', 'Рµ', 'РЃ' Рё 'С‘' Р·Р°РґР°СЋС‚
+ СЂР°Р·Р»РёС‡РЅС‹Рµ РІРѕР·РјРѕР¶РЅС‹Рµ С„РѕСЂРјС‹ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ Р±СѓРєРІС‹ 'РЃ' РІ СЂСѓСЃСЃРєРѕР№ Р°Р·Р±СѓРєРµ СЃ СѓС‡РµС‚РѕРј
+ С‚РѕРіРѕ, С‡С‚Рѕ СЌС‚Р° Р±СѓРєРІР°, РІРІРµРґРµРЅРЅР°СЏ РљР°СЂР°РјР·РёРЅС‹Рј, РІ РѕС„РёС†РёР°Р»СЊРЅС‹С… С‚РµРєСЃС‚Р°С… РїРёС€РµС‚СЃСЏ РєР°Рє
+ 'E', РҐРћРўРЇ Р­РўРћ Р—РќРђРљР Р”Р›РЇ Р РђР—РќР«РҐ Р¤РћРќР•Рњ.
 
-   Очень легко можно продемонстрировать полезность нашего представлени
- Алфавита на примере французского или немецкого языков. В них очень активно
- используются диактрические значки, типа треугольных шляпок, двоеточий,
- черточек, хвостиков и так далее, для различения различных фонем, обозначаемых
- одной буквой. Сводя подмножество разновидностей одной буквы в "буквостатью",
- мы вносим элемент систематичности и уменьшаем количество потенциальных
- ошибок распознавания слов.
+   РћС‡РµРЅСЊ Р»РµРіРєРѕ РјРѕР¶РЅРѕ РїСЂРѕРґРµРјРѕРЅСЃС‚СЂРёСЂРѕРІР°С‚СЊ РїРѕР»РµР·РЅРѕСЃС‚СЊ РЅР°С€РµРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРё
+ РђР»С„Р°РІРёС‚Р° РЅР° РїСЂРёРјРµСЂРµ С„СЂР°РЅС†СѓР·СЃРєРѕРіРѕ РёР»Рё РЅРµРјРµС†РєРѕРіРѕ СЏР·С‹РєРѕРІ. Р’ РЅРёС… РѕС‡РµРЅСЊ Р°РєС‚РёРІРЅРѕ
+ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РґРёР°РєС‚СЂРёС‡РµСЃРєРёРµ Р·РЅР°С‡РєРё, С‚РёРїР° С‚СЂРµСѓРіРѕР»СЊРЅС‹С… С€Р»СЏРїРѕРє, РґРІРѕРµС‚РѕС‡РёР№,
+ С‡РµСЂС‚РѕС‡РµРє, С…РІРѕСЃС‚РёРєРѕРІ Рё С‚Р°Рє РґР°Р»РµРµ, РґР»СЏ СЂР°Р·Р»РёС‡РµРЅРёСЏ СЂР°Р·Р»РёС‡РЅС‹С… С„РѕРЅРµРј, РѕР±РѕР·РЅР°С‡Р°РµРјС‹С…
+ РѕРґРЅРѕР№ Р±СѓРєРІРѕР№. РЎРІРѕРґСЏ РїРѕРґРјРЅРѕР¶РµСЃС‚РІРѕ СЂР°Р·РЅРѕРІРёРґРЅРѕСЃС‚РµР№ РѕРґРЅРѕР№ Р±СѓРєРІС‹ РІ "Р±СѓРєРІРѕСЃС‚Р°С‚СЊСЋ",
+ РјС‹ РІРЅРѕСЃРёРј СЌР»РµРјРµРЅС‚ СЃРёСЃС‚РµРјР°С‚РёС‡РЅРѕСЃС‚Рё Рё СѓРјРµРЅСЊС€Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕС‚РµРЅС†РёР°Р»СЊРЅС‹С…
+ РѕС€РёР±РѕРє СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ СЃР»РѕРІ.
 ******************************************************************************/
 
 
 
-GG_Entry::GG_Entry(void):Base_Entry()
+GG_Entry::GG_Entry(void) :Base_Entry()
 {
- name=0; id_alphabet=UNKNOWN;
+    name = 0; id_alphabet = UNKNOWN;
 }
 
-GG_Entry::GG_Entry( const GG_Entry& e )
-:Base_Entry(e), name(e.name), id_alphabet(e.id_alphabet), form(e.form)
+GG_Entry::GG_Entry(const GG_Entry& e)
+    : Base_Entry(e), name(e.name), id_alphabet(e.id_alphabet), form(e.form)
 {}
 
 GG_Entry::GG_Entry(
-                   lem::uint32_t Ucs4Name,
-                   int _id_class,
-                   int _id_alphabet,
-                   const lem::MCollect<Solarix::GramCoordPair> &_attrs
-                  )
- : Base_Entry()
+    lem::uint32_t Ucs4Name,
+    int _id_class,
+    int _id_alphabet,
+    const lem::MCollect<Solarix::GramCoordPair> &_attrs
+)
+    : Base_Entry()
 {
- name = Ucs4Name;
- iclass = _id_class;
- id_alphabet = _id_alphabet;
- attr = _attrs;
- return;
+    name = Ucs4Name;
+    iclass = _id_class;
+    id_alphabet = _id_alphabet;
+    attr = _attrs;
+    return;
 }
 
 
 
-GG_Entry& GG_Entry::operator=( const GG_Entry& e )
+GG_Entry& GG_Entry::operator=(const GG_Entry& e)
 {
- if( &e!=this )
-  {
-   Base_Entry::operator=(e);
-   name        = e.name;
-   form        = e.form;
-   id_alphabet = e.id_alphabet;
-  }
+    if (&e != this)
+    {
+        Base_Entry::operator=(e);
+        name = e.name;
+        form = e.form;
+        id_alphabet = e.id_alphabet;
+    }
 
- return *this;
+    return *this;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /*****************************************************************************
- Базовый класс Base_Entry прочитал определение формы (буквоформы) нашей
- статьи, и теперь мы должны создать на основе предъявляемого описания -
- списка координатных пар и имени - буквоформу и добавить ее в свой внутренний
- список. По поводу правил преобразования строки ANSI-символов в UNICODE-символ
- смотри комментарии в файле [SOL_UNIC.CPP], так как formname может содержать
- сложное числовое представление UNICODE-символа.
+ Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ Base_Entry РїСЂРѕС‡РёС‚Р°Р» РѕРїСЂРµРґРµР»РµРЅРёРµ С„РѕСЂРјС‹ (Р±СѓРєРІРѕС„РѕСЂРјС‹) РЅР°С€РµР№
+ СЃС‚Р°С‚СЊРё, Рё С‚РµРїРµСЂСЊ РјС‹ РґРѕР»Р¶РЅС‹ СЃРѕР·РґР°С‚СЊ РЅР° РѕСЃРЅРѕРІРµ РїСЂРµРґСЉСЏРІР»СЏРµРјРѕРіРѕ РѕРїРёСЃР°РЅРёСЏ -
+ СЃРїРёСЃРєР° РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ Рё РёРјРµРЅРё - Р±СѓРєРІРѕС„РѕСЂРјСѓ Рё РґРѕР±Р°РІРёС‚СЊ РµРµ РІ СЃРІРѕР№ РІРЅСѓС‚СЂРµРЅРЅРёР№
+ СЃРїРёСЃРѕРє. РџРѕ РїРѕРІРѕРґСѓ РїСЂР°РІРёР» РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ СЃС‚СЂРѕРєРё ANSI-СЃРёРјРІРѕР»РѕРІ РІ UNICODE-СЃРёРјРІРѕР»
+ СЃРјРѕС‚СЂРё РєРѕРјРјРµРЅС‚Р°СЂРёРё РІ С„Р°Р№Р»Рµ [SOL_UNIC.CPP], С‚Р°Рє РєР°Рє formname РјРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ
+ СЃР»РѕР¶РЅРѕРµ С‡РёСЃР»РѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ UNICODE-СЃРёРјРІРѕР»Р°.
 ******************************************************************************/
 void GG_Entry::AddForm(
-                       const CP_Array& dim,
-                       const WordFormName& form_name,
-                       Dictionary&
-                      )
+    const CP_Array& dim,
+    const WordFormName& form_name,
+    Dictionary&
+)
 {
- lem::uint32_t ucs4=0;
+    lem::uint32_t ucs4 = 0;
 
- UCString tmp(form_name.form_name);
- tmp=strip_quotes(tmp);
+    UCString tmp(form_name.form_name);
+    tmp = strip_quotes(tmp);
 
- if( tmp.eq_beg( L"0x" ) )
-  {
-   int code;
-   if( lem::to_int( tmp.c_str()+2, &code, 16 ) )
+    if (tmp.eq_beg(L"0x"))
     {
-     ucs4 = code;
+        int code;
+        if (lem::to_int(tmp.c_str() + 2, &code, 16))
+        {
+            ucs4 = code;
+        }
+        else
+        {
+            lem::MemFormatter mem;
+            mem.printf("Invalid symbol definition [%us]", form_name.form_name.c_str());
+            throw E_BaseException(mem.string());
+        }
     }
-   else
+    else
     {
-     lem::MemFormatter mem;
-     mem.printf( "Invalid symbol definition [%us]", form_name.form_name.c_str() );
-     throw E_BaseException( mem.string() );
-    }
-  }
- else
-  {
-   WideStringUcs4 senum( tmp.c_str() );
-   ucs4 = senum.Fetch();
+        WideStringUcs4 senum(tmp.c_str());
+        ucs4 = senum.Fetch();
 
-   if( senum.Fetch()!=0 )
-    {
-     lem::MemFormatter mem;
-     mem.printf( "Invalid symbol definition [%us]", form_name.form_name.c_str() );
-     throw E_BaseException( mem.string() );
+        if (senum.Fetch() != 0)
+        {
+            lem::MemFormatter mem;
+            mem.printf("Invalid symbol definition [%us]", form_name.form_name.c_str());
+            throw E_BaseException(mem.string());
+        }
     }
-  }
- 
 
- form.push_back( GG_EntryForm( dim, ucs4 ) );
- return;
+
+    form.push_back(GG_EntryForm(dim, ucs4));
+    return;
 }
 #endif
 
 
-void GG_Entry::Add( const GG_EntryForm &f )
+void GG_Entry::Add(const GG_EntryForm &f)
 {
- form.push_back(f);
- return;
+    form.push_back(f);
+    return;
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /***************************************************************************
- Загружаем имя буквостатьи из текстового файла Словаря. Так как Система
- работет с аппаратно-независимой кодировкой символов типа UNICODE, а
- текстовый файл Словаря представляет из себя текст формата ANSI, то
- необходимо уметь формировать код UNICODE-символа через цепочку
- ANSI-символов. Такое преобразование осуществляется функцией
- sol_str_to_unicode, для справки обращайтесь к комментариям в файле
+ Р—Р°РіСЂСѓР¶Р°РµРј РёРјСЏ Р±СѓРєРІРѕСЃС‚Р°С‚СЊРё РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РЎР»РѕРІР°СЂСЏ. РўР°Рє РєР°Рє РЎРёСЃС‚РµРјР°
+ СЂР°Р±РѕС‚РµС‚ СЃ Р°РїРїР°СЂР°С‚РЅРѕ-РЅРµР·Р°РІРёСЃРёРјРѕР№ РєРѕРґРёСЂРѕРІРєРѕР№ СЃРёРјРІРѕР»РѕРІ С‚РёРїР° UNICODE, Р°
+ С‚РµРєСЃС‚РѕРІС‹Р№ С„Р°Р№Р» РЎР»РѕРІР°СЂСЏ РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ РёР· СЃРµР±СЏ С‚РµРєСЃС‚ С„РѕСЂРјР°С‚Р° ANSI, С‚Рѕ
+ РЅРµРѕР±С…РѕРґРёРјРѕ СѓРјРµС‚СЊ С„РѕСЂРјРёСЂРѕРІР°С‚СЊ РєРѕРґ UNICODE-СЃРёРјРІРѕР»Р° С‡РµСЂРµР· С†РµРїРѕС‡РєСѓ
+ ANSI-СЃРёРјРІРѕР»РѕРІ. РўР°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РѕСЃСѓС‰РµСЃС‚РІР»СЏРµС‚СЃСЏ С„СѓРЅРєС†РёРµР№
+ sol_str_to_unicode, РґР»СЏ СЃРїСЂР°РІРєРё РѕР±СЂР°С‰Р°Р№С‚РµСЃСЊ Рє РєРѕРјРјРµРЅС‚Р°СЂРёСЏРј РІ С„Р°Р№Р»Рµ
  SOL_UNIC.CPP.
 ****************************************************************************/
-void GG_Entry::LoadName( Macro_Parser& txtfile, Dictionary &dict )
+void GG_Entry::LoadName(Macro_Parser& txtfile, Dictionary &dict)
 {
- lem::UCString str( strip_quotes( txtfile.read().string() ) );
+    lem::UCString str(strip_quotes(txtfile.read().string()));
 
- WideStringUcs4 senum( str.c_str() );
- name = senum.Fetch();
- if( senum.Fetch()!=0 )
-  {
-   lem::MemFormatter mem;
-   mem.printf( "Invalid symbol entry name [%us]", str.c_str() );
-   throw E_BaseException( mem.string() );
-  }
+    WideStringUcs4 senum(str.c_str());
+    name = senum.Fetch();
+    if (senum.Fetch() != 0)
+    {
+        lem::MemFormatter mem;
+        mem.printf("Invalid symbol entry name [%us]", str.c_str());
+        throw E_BaseException(mem.string());
+    }
 
- txtfile.read_it(B_COLON);
+    txtfile.read_it(B_COLON);
 
- if( dict.GetDebugLevel_ir()>=3 )
-  {
-   dict.GetIO().mecho().printf(
-                               "%us [",
-                               sol_get_token(B_ENTRY).c_str()
-                              );
-   PrintName( dict.GetIO().mecho() );
-   dict.GetIO().mecho().printf( "]->" );
-  }
+    if (dict.GetDebugLevel_ir() >= 3)
+    {
+        dict.GetIO().mecho().printf(
+            "%us [",
+            sol_get_token(B_ENTRY).c_str()
+        );
+        PrintName(dict.GetIO().mecho());
+        dict.GetIO().mecho().printf("]->");
+    }
 
- return;
+    return;
 }
 #endif
 
 
 // *****************************************************************
-// Печать имени графической статьи (буквостатьи) в указанный поток.
+// РџРµС‡Р°С‚СЊ РёРјРµРЅРё РіСЂР°С„РёС‡РµСЃРєРѕР№ СЃС‚Р°С‚СЊРё (Р±СѓРєРІРѕСЃС‚Р°С‚СЊРё) РІ СѓРєР°Р·Р°РЅРЅС‹Р№ РїРѕС‚РѕРє.
 // *****************************************************************
-void GG_Entry::PrintName( OFormatter &to ) const
+void GG_Entry::PrintName(OFormatter &to) const
 {
- to.printf( "%vfE%us%vn", GetNameWide().c_str() );
- return;
+    to.printf("%vfE%us%vn", GetNameWide().c_str());
+    return;
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 bool GG_Entry::ProcessSection(
-                              Macro_Parser &txtfile,
-                              Grammar &gram,
-                              const BethToken &t
-                             )
+    Macro_Parser &txtfile,
+    Grammar &gram,
+    const BethToken &t
+)
 {
- if( t.GetToken() == B_ALPHABET )
-  {
-   const UCString abc_name = txtfile.read().string();
-   id_alphabet = static_cast<const GraphGram&>(gram).Find_Alphabet( abc_name );
-
-   if( id_alphabet == UNKNOWN )  
+    if (t.GetToken() == B_ALPHABET)
     {
-     lem::Iridium::Print_Error(txtfile);
-     gram.GetIO().merr().printf( "Unknown alphabet [%us] referenced\n", abc_name.c_str() );
-     throw E_ParserError();
+        const UCString abc_name = txtfile.read().string();
+        id_alphabet = static_cast<const GraphGram&>(gram).Find_Alphabet(abc_name);
+
+        if (id_alphabet == UNKNOWN)
+        {
+            lem::Iridium::Print_Error(txtfile);
+            gram.GetIO().merr().printf("Unknown alphabet [%us] referenced\n", abc_name.c_str());
+            throw E_ParserError();
+        }
+
+        return true;
     }
 
-   return true;
-  }
-
- return false;
+    return false;
 }
 #endif
 
-const Grammar& GG_Entry::GetGrammar( const Dictionary &dict )
+const Grammar& GG_Entry::GetGrammar(const Dictionary &dict)
 {
- return dict.GetGraphGram();
+    return dict.GetGraphGram();
 }
 
-Grammar& GG_Entry::GetGrammar( Dictionary &dict )
+Grammar& GG_Entry::GetGrammar(Dictionary &dict)
 {
- return dict.GetGraphGram();
+    return dict.GetGraphGram();
 }
 
 lem::CString GG_Entry::GetNameUtf8(void) const
 {
- return Solarix::EncodeChar32ToUtf8(name);
+    return Solarix::EncodeChar32ToUtf8(name);
 }
 
 lem::UCString GG_Entry::GetNameWide(void) const
 {
- return Solarix::EncodeChar32ToWide(name);
+    return Solarix::EncodeChar32ToWide(name);
 }
 
 /*********************************************************************
- Метод возвращает буквоформу. Обращаю внимание на то, что если индекс
- формы i задан как UNKNOWN, то вместо хранящейся формы следует создать
- новую временную и вернуть ее. Такая ситуация возникает при работе со
- статьей, которая не имеет буквоформ. К примеру, таковы статьи для
- пунктуаторов.
+ РњРµС‚РѕРґ РІРѕР·РІСЂР°С‰Р°РµС‚ Р±СѓРєРІРѕС„РѕСЂРјСѓ. РћР±СЂР°С‰Р°СЋ РІРЅРёРјР°РЅРёРµ РЅР° С‚Рѕ, С‡С‚Рѕ РµСЃР»Рё РёРЅРґРµРєСЃ
+ С„РѕСЂРјС‹ i Р·Р°РґР°РЅ РєР°Рє UNKNOWN, С‚Рѕ РІРјРµСЃС‚Рѕ С…СЂР°РЅСЏС‰РµР№СЃСЏ С„РѕСЂРјС‹ СЃР»РµРґСѓРµС‚ СЃРѕР·РґР°С‚СЊ
+ РЅРѕРІСѓСЋ РІСЂРµРјРµРЅРЅСѓСЋ Рё РІРµСЂРЅСѓС‚СЊ РµРµ. РўР°РєР°СЏ СЃРёС‚СѓР°С†РёСЏ РІРѕР·РЅРёРєР°РµС‚ РїСЂРё СЂР°Р±РѕС‚Рµ СЃРѕ
+ СЃС‚Р°С‚СЊРµР№, РєРѕС‚РѕСЂР°СЏ РЅРµ РёРјРµРµС‚ Р±СѓРєРІРѕС„РѕСЂРј. Рљ РїСЂРёРјРµСЂСѓ, С‚Р°РєРѕРІС‹ СЃС‚Р°С‚СЊРё РґР»СЏ
+ РїСѓРЅРєС‚СѓР°С‚РѕСЂРѕРІ.
 **********************************************************************/
-const GG_EntryForm GG_Entry::GetForm( int i ) const
+const GG_EntryForm GG_Entry::GetForm(int i) const
 {
- return form.empty() ? GG_EntryForm( attrs(), GetName() ) : form[i];
+    return form.empty() ? GG_EntryForm(attrs(), GetName()) : form[i];
 }

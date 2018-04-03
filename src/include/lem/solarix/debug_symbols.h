@@ -2,48 +2,48 @@
 #define SOL_DEBUG_SYMBOLS__H
 #pragma once
 
- #include <lem/path.h>
- #include <lem/ptr_container.h>
+#include <lem/path.h>
+#include <lem/ptr_container.h>
 
- namespace lem
- {
-  namespace Iridium
-  {
-   class BSourceState;
-   class Macro_Parser;
-  }
- }
+namespace lem
+{
+    namespace Iridium
+    {
+        class BSourceState;
+        class Macro_Parser;
+    }
+}
 
- namespace Solarix
- {
-  class LexiconStorage;
+namespace Solarix
+{
+    class LexiconStorage;
 
-  class SourceFilenameEnumerator;
+    class SourceFilenameEnumerator;
 
-  class DebugSymbols
-  {
-   private:
-    Solarix::LexiconStorage *storage;
- 
-   public:
-    DebugSymbols(void);
-    ~DebugSymbols(void);
+    class DebugSymbols
+    {
+    private:
+        Solarix::LexiconStorage *storage;
 
-    void SetStorage( Solarix::LexiconStorage * _storage );
+    public:
+        DebugSymbols();
+        ~DebugSymbols();
 
-    #if defined SOL_COMPILER && defined SOL_LOADTXT
-    int RegisterLocation( const lem::Iridium::Macro_Parser &txt, const lem::Iridium::BSourceState &pos );
-    #endif
-  
-    lem::Path GetFileName( int id_filename );
-    bool GetLocation( int iloc, lem::Path &filename, int &line, int &column );
-    bool GetLocation( int iloc, int &id_file, int &line, int &column );
-    int Find( int ifile, int line, bool prox=false );
-    SourceFilenameEnumerator *ListFiles(void);
-  };
+        void SetStorage(Solarix::LexiconStorage * _storage);
+
+#if defined SOL_COMPILER && defined SOL_LOADTXT
+        int RegisterLocation(const lem::Iridium::Macro_Parser &txt, const lem::Iridium::BSourceState &pos);
+#endif
+
+        lem::Path GetFileName(int id_filename);
+        bool GetLocation(int iloc, lem::Path &filename, int &line, int &column);
+        bool GetLocation(int iloc, int &id_file, int &line, int &column);
+        int Find(int ifile, int line, bool prox = false);
+        SourceFilenameEnumerator *ListFiles();
+    };
 
 
- } // namespace Solarix
+} // namespace Solarix
 
 
 #endif

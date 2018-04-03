@@ -6,309 +6,313 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Базовые классы для создания словарных статей в Грамматиках.
+// Р‘Р°Р·РѕРІС‹Рµ РєР»Р°СЃСЃС‹ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ РІ Р“СЂР°РјРјР°С‚РёРєР°С….
 // -----------------------------------------------------------------------------
 //
 // CD->01.09.1997
-// LC->27.11.2010
+// LC->02.04.2018
 // --------------
 
 #ifndef SOL_ENTR__H
 #define SOL_ENTR__H
 #pragma once
 
- #include <lem/macros.h>
- #include <lem/containers.h>
- #include <lem/noncopyable.h>
+#include <lem/macros.h>
+#include <lem/containers.h>
+#include <lem/noncopyable.h>
 
- #include <lem/solarix/WordCoord.h>
- #include <lem/solarix/coord_pair.h>
+#include <lem/solarix/WordCoord.h>
+#include <lem/solarix/coord_pair.h>
 
- #undef AddForm
- #undef GetForm
+#undef AddForm
+#undef GetForm
 
- namespace lem
- {
-  namespace Iridium {
-                     class Macro_Parser;
-                     class BethToken;
-                    } 
-  class OFormatter;
-  class Stream;
- }
+namespace lem
+{
+    namespace Iridium {
+        class Macro_Parser;
+        class BethToken;
+    }
+    class OFormatter;
+    class Stream;
+}
 
- namespace Solarix
- {
-  using lem::Iridium::Macro_Parser;
-  using lem::Iridium::BethToken;
-  using lem::OFormatter;
-  using lem::Stream;
-  using lem::IntCollect;
+namespace Solarix
+{
+    using lem::Iridium::Macro_Parser;
+    using lem::Iridium::BethToken;
+    using lem::OFormatter;
+    using lem::Stream;
+    using lem::IntCollect;
 
- class Grammar;
-
-
- struct WordFormName : lem::NonCopyable
- {
-  lem::UCString form_name;
-  lem::Collect< std::pair< lem::UCString /*aux_type*/, lem::UFString /*aux_data*/ > > aux;
-
-  void clear(void) { aux.clear(); }
-
-  void AddAux( const lem::UCString &aux_type, const lem::UFString &aux_data );
-  bool HasAux(void) const { return !aux.empty(); }
- };
+    class Grammar;
 
 
- /********************************************************
-  Базовый класс для Таблиц Склонений и Словарных Статей.
- *********************************************************/
- class Dictionary;
- class Form_Table
- {
-  private:
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   void LoadFormName(
-                     Macro_Parser & txtfile,
-                     Grammar & gram,
-                     WordFormName & form_name
-                    ) const;
-   #endif
+    struct WordFormName : lem::NonCopyable
+    {
+        lem::UCString form_name;
+        lem::Collect< std::pair< lem::UCString /*aux_type*/, lem::UFString /*aux_data*/ > > aux;
 
-  protected:
-   int key;  // Уникальный ключ-идентификатор для Словарной Статьи или
-                // заданный пользователем код для Таблицы Склонения.
-                
-   int iclass;  // Грамматический класс (его индекс в Грамматике), к которому
-                // относится Словарная Статья или будут относиться все Статьи,
-                // словоформы для которых создаст Автомат Склонения по Таблице
-                // Склонения.
+        void clear() { aux.clear(); }
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   bool is_realized; // false, если было объявление, true, если была реализация.
-   #endif
+        void AddAux(const lem::UCString &aux_type, const lem::UFString &aux_data);
+        bool HasAux() const { return !aux.empty(); }
+    };
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
 
-   // Метод должен быть перегружен для грамматических кванторов, чтобы правильно
-   // обрабатывать координатные пары вида КООРДИНАТА:* в измерениях словоформы.
-   virtual bool StoreQuantors(void) const { return false; }
+    /********************************************************
+     Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РўР°Р±Р»РёС† РЎРєР»РѕРЅРµРЅРёР№ Рё РЎР»РѕРІР°СЂРЅС‹С… РЎС‚Р°С‚РµР№.
+    *********************************************************/
+    class Dictionary;
+    class Form_Table
+    {
+    private:
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void LoadFormName(
+            Macro_Parser & txtfile,
+            Grammar & gram,
+            WordFormName & form_name
+        ) const;
+#endif
 
-   virtual void BeforeFirstForm( Grammar& gram );
-   virtual void Loaded( const Dictionary &dict );
-   bool LoadAttribute( Macro_Parser &txtfile, Grammar& gram );
-   void LoadForm(
-                 Macro_Parser& txtfile,
-                 Grammar& gram,
-                 CP_Array &common,
-                 const GramCoordAdr Do_Autoload,
-                 int iDoAutoload,
-                 const GramCoordAdr Indexing,
-                 int iIndexing,
-                 int AllQuantor
-                );
+    protected:
+        int key;  // РЈРЅРёРєР°Р»СЊРЅС‹Р№ РєР»СЋС‡-РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РґР»СЏ РЎР»РѕРІР°СЂРЅРѕР№ РЎС‚Р°С‚СЊРё РёР»Рё
+                     // Р·Р°РґР°РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РєРѕРґ РґР»СЏ РўР°Р±Р»РёС†С‹ РЎРєР»РѕРЅРµРЅРёСЏ.
 
-   void LoadFormsGroup(
-                       Macro_Parser& txtfile,
-                       Grammar& gram,
-                       CP_Array &dim,
-                       const GramCoordAdr do_autoload,
-                       int iDoAutoload,
-                       const GramCoordAdr indexing,
-                       int iIndexing,
-                       int AllQuantor
-                      );
+        int iclass;  // Р“СЂР°РјРјР°С‚РёС‡РµСЃРєРёР№ РєР»Р°СЃСЃ (РµРіРѕ РёРЅРґРµРєСЃ РІ Р“СЂР°РјРјР°С‚РёРєРµ), Рє РєРѕС‚РѕСЂРѕРјСѓ
+                     // РѕС‚РЅРѕСЃРёС‚СЃСЏ РЎР»РѕРІР°СЂРЅР°СЏ РЎС‚Р°С‚СЊСЏ РёР»Рё Р±СѓРґСѓС‚ РѕС‚РЅРѕСЃРёС‚СЊСЃСЏ РІСЃРµ РЎС‚Р°С‚СЊРё,
+                     // СЃР»РѕРІРѕС„РѕСЂРјС‹ РґР»СЏ РєРѕС‚РѕСЂС‹С… СЃРѕР·РґР°СЃС‚ РђРІС‚РѕРјР°С‚ РЎРєР»РѕРЅРµРЅРёСЏ РїРѕ РўР°Р±Р»РёС†Рµ
+                     // РЎРєР»РѕРЅРµРЅРёСЏ.
 
-   void AddForms(
-                 CP_Array &dim,
-                 const WordFormName& form_name,
-                 const GramCoordAdr do_autoload,
-                 int iDoAutoload,
-                 Grammar& gram
-                );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        bool is_realized; // false, РµСЃР»Рё Р±С‹Р»Рѕ РѕР±СЉСЏРІР»РµРЅРёРµ, true, РµСЃР»Рё Р±С‹Р»Р° СЂРµР°Р»РёР·Р°С†РёСЏ.
+#endif
 
-   #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
 
-   void Init( const Form_Table& ft );
+// РњРµС‚РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ РґР»СЏ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєРІР°РЅС‚РѕСЂРѕРІ, С‡С‚РѕР±С‹ РїСЂР°РІРёР»СЊРЅРѕ
+// РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рµ РїР°СЂС‹ РІРёРґР° РљРћРћР Р”РРќРђРўРђ:* РІ РёР·РјРµСЂРµРЅРёСЏС… СЃР»РѕРІРѕС„РѕСЂРјС‹.
+        virtual bool StoreQuantors() const { return false; }
 
-  protected:
-   CP_Array attr; // Список координатных пар атрибутов.
+        virtual void BeforeFirstForm(Grammar& gram);
+        virtual void Loaded(const Dictionary &dict);
+        bool LoadAttribute(Macro_Parser &txtfile, Grammar& gram);
+        void LoadForm(
+            Macro_Parser& txtfile,
+            Grammar& gram,
+            CP_Array &common,
+            const GramCoordAdr Do_Autoload,
+            int iDoAutoload,
+            const GramCoordAdr Indexing,
+            int iIndexing,
+            int AllQuantor
+        );
 
-   virtual Grammar& GetGrammar( Dictionary &dict )=0;
-   virtual const Grammar& GetGrammar( const Dictionary &dict )=0;
+        void LoadFormsGroup(
+            Macro_Parser& txtfile,
+            Grammar& gram,
+            CP_Array &dim,
+            const GramCoordAdr do_autoload,
+            int iDoAutoload,
+            const GramCoordAdr indexing,
+            int iIndexing,
+            int AllQuantor
+        );
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   virtual bool ProcessSection(
-                               Macro_Parser &txtfile,
-                               Grammar &gram,
-                               const BethToken &t
-                              ) { return false; }
+        void AddForms(
+            CP_Array &dim,
+            const WordFormName& form_name,
+            const GramCoordAdr do_autoload,
+            int iDoAutoload,
+            Grammar& gram
+        );
 
-   virtual void LoadName(
-                         Macro_Parser &txtfile,
-                         Dictionary &dict
-                        ) {}
+#endif
 
-   virtual void LoadBody( Macro_Parser &txtfile, Grammar &gram );
+        void Init(const Form_Table& ft);
 
-   virtual void AddForm(
-                        const CP_Array& dim,
-                        const WordFormName& form_name,
-                        Dictionary &dict
-                       );
+    protected:
+        CP_Array attr; // РЎРїРёСЃРѕРє РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ Р°С‚СЂРёР±СѓС‚РѕРІ.
 
-   virtual void ReadAdditionalInfo( Grammar &gram, int iForm, Macro_Parser& txtfile ) {}
+        virtual Grammar& GetGrammar(Dictionary &dict) = 0;
+        virtual const Grammar& GetGrammar(const Dictionary &dict) = 0;
 
-   #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual bool ProcessSection(
+            Macro_Parser &txtfile,
+            Grammar &gram,
+            const BethToken &t
+        ) {
+            return false;
+        }
 
-   #if defined SOL_SAVETXT
-   virtual bool DoSaveAttrTxt( int iattr, const Grammar &gram ) const;
-   void SaveCoordinatesTxt(
-                           OFormatter& txtfile,
-                           const Grammar& gram
-                          ) const;
-   #endif
+        virtual void LoadName(
+            Macro_Parser &txtfile,
+            Dictionary &dict
+        ) {}
 
-  public:
-   Form_Table(void);
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   Form_Table(
-              Macro_Parser& txtfile,
-              Grammar& gram,
-              bool IsRealized
-             );
-   #endif
+        virtual void LoadBody(Macro_Parser &txtfile, Grammar &gram);
 
-   Form_Table( lem::Stream& bin );
-   Form_Table( const Form_Table& e );
+        virtual void AddForm(
+            const CP_Array& dim,
+            const WordFormName& form_name,
+            Dictionary &dict
+        );
 
-   virtual ~Form_Table(void) {}
+        virtual void ReadAdditionalInfo(Grammar &gram, int iForm, Macro_Parser& txtfile) {}
 
-   void operator=( const Form_Table& e );
+#endif
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   virtual int CountForms(void) const=0;
-   #endif
+#if defined SOL_SAVETXT
+        virtual bool DoSaveAttrTxt(int iattr, const Grammar &gram) const;
+        void SaveCoordinatesTxt(
+            OFormatter& txtfile,
+            const Grammar& gram
+        ) const;
+#endif
 
-   inline int GetKey(void) const { return key;    }
-   inline int GetClass(void)  const { return iclass; }
+    public:
+        Form_Table();
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        Form_Table(
+            Macro_Parser& txtfile,
+            Grammar& gram,
+            bool IsRealized
+        );
+#endif
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   void LoadTxt(
-                Macro_Parser &txtfile,
-                Grammar& gram,
-                bool IsRealized
-               );
-   #endif
+        Form_Table(lem::Stream& bin);
+        Form_Table(const Form_Table& e);
 
-   /*****************************************************************
-    Каждая статья автоматически получает уникальный номер.
-    Это сделано для того, чтобы физическое положение статьи в списке
-    грамматики не влияло на процесс анализа.
-   ******************************************************************/
-   inline void SetKey( int NewKey ) { key=NewKey; }
+        virtual ~Form_Table() {}
 
-   #if defined SOL_SAVEBIN
-   void SaveBin( lem::Stream& bin ) const;
-   #endif
+        void operator=(const Form_Table& e);
 
-   void LoadBin( lem::Stream& bin );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual int CountForms(void) const = 0;
+#endif
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   inline bool IsRealized(void) const { return is_realized; }
-   inline void HasBeenRealized(void) { is_realized=true; }
-   #endif
+        inline int GetKey() const { return key; }
+        inline int GetClass()  const { return iclass; }
 
-   inline const CP_Array& attrs(void) const { return attr; }
-   inline CP_Array& attrs(void) { return attr; }
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void LoadTxt(
+            Macro_Parser &txtfile,
+            Grammar& gram,
+            bool IsRealized
+        );
+#endif
 
-   void SetAttr( const Solarix::GramCoordPair &p );   
+        /*****************************************************************
+         РљР°Р¶РґР°СЏ СЃС‚Р°С‚СЊСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїРѕР»СѓС‡Р°РµС‚ СѓРЅРёРєР°Р»СЊРЅС‹Р№ РЅРѕРјРµСЂ.
+         Р­С‚Рѕ СЃРґРµР»Р°РЅРѕ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ С„РёР·РёС‡РµСЃРєРѕРµ РїРѕР»РѕР¶РµРЅРёРµ СЃС‚Р°С‚СЊРё РІ СЃРїРёСЃРєРµ
+         РіСЂР°РјРјР°С‚РёРєРё РЅРµ РІР»РёСЏР»Рѕ РЅР° РїСЂРѕС†РµСЃСЃ Р°РЅР°Р»РёР·Р°.
+        ******************************************************************/
+        inline void SetKey(int NewKey) { key = NewKey; }
 
-   /*******************************************************
-    Возвращает локальный индекс атрибута в списке статьи.
-    Если атрибут не найден, то возвращает UNKNOWN
-   ********************************************************/
-   inline int GetAttr( const GramCoordAdr id_attr ) const
-   { return attr.FindTwice(id_attr); }
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream& bin) const;
+#endif
 
-   // Возвращается состояние для заданного атрибута.
-   // Если атрибут не найден, то возвращает UNKNOWN
-   int GetAttrState( const GramCoordAdr id_attr ) const;
-   const IntCollect GetAttrStates( const GramCoordAdr id_attr ) const;
+        void LoadBin(lem::Stream& bin);
 
-   virtual void PrintName( OFormatter &/*dst_stream*/ ) const {}
- };
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        inline bool IsRealized() const { return is_realized; }
+        inline void HasBeenRealized() { is_realized = true; }
+#endif
 
- /*************************************************************
-  Базовый класс для описания Словарных Статей всех Грамматик.
- **************************************************************/
- class Base_Entry : public Form_Table
- {
-  private:
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   void CheckAttr( Macro_Parser& txtfile, Grammar& gram );
-   void LoadTxtEx( Macro_Parser& txtfile, Grammar& gram );
-   virtual void SkipNetSection(
-                               Macro_Parser &txtfile,
-                               Grammar &gram
-                              ) {}
-   #endif
+        inline const CP_Array& attrs() const { return attr; }
+        inline CP_Array& attrs() { return attr; }
 
-   void Init( const Base_Entry& e );
+        void SetAttr(const Solarix::GramCoordPair &p);
 
-  protected:
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   virtual void BeforeFirstForm( Grammar& gram );
-   virtual bool ProcessSection(
-                               Macro_Parser &txtfile,
-                               Grammar &gram,
-                               const BethToken &t
-                              );
+        /*******************************************************
+         Р’РѕР·РІСЂР°С‰Р°РµС‚ Р»РѕРєР°Р»СЊРЅС‹Р№ РёРЅРґРµРєСЃ Р°С‚СЂРёР±СѓС‚Р° РІ СЃРїРёСЃРєРµ СЃС‚Р°С‚СЊРё.
+         Р•СЃР»Рё Р°С‚СЂРёР±СѓС‚ РЅРµ РЅР°Р№РґРµРЅ, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚ UNKNOWN
+        ********************************************************/
+        inline int GetAttr(const GramCoordAdr id_attr) const
+        {
+            return attr.FindTwice(id_attr);
+        }
 
-   /***********************************************************************
-    Данный метод должен быть перегружен производным классом. Он вызывается
-    "извне" для загрузки имени статьи.
-   ***********************************************************************/
-   virtual void LoadName(
-                         Macro_Parser& txtfile,
-                         Dictionary &dict
-                        ) {}
+        // Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРѕСЃС‚РѕСЏРЅРёРµ РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ Р°С‚СЂРёР±СѓС‚Р°.
+        // Р•СЃР»Рё Р°С‚СЂРёР±СѓС‚ РЅРµ РЅР°Р№РґРµРЅ, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚ UNKNOWN
+        int GetAttrState(const GramCoordAdr id_attr) const;
+        const IntCollect GetAttrStates(const GramCoordAdr id_attr) const;
 
-   virtual void LoadBody( Macro_Parser &txtfile, Grammar &gram );
-   #endif
+        virtual void PrintName(OFormatter &/*dst_stream*/) const {}
+    };
 
-  public:
-   Base_Entry(void);
+    /*************************************************************
+     Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РѕРїРёСЃР°РЅРёСЏ РЎР»РѕРІР°СЂРЅС‹С… РЎС‚Р°С‚РµР№ РІСЃРµС… Р“СЂР°РјРјР°С‚РёРє.
+    **************************************************************/
+    class Base_Entry : public Form_Table
+    {
+    private:
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void CheckAttr(Macro_Parser& txtfile, Grammar& gram);
+        void LoadTxtEx(Macro_Parser& txtfile, Grammar& gram);
+        virtual void SkipNetSection(
+            Macro_Parser &txtfile,
+            Grammar &gram
+        ) {}
+#endif
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   Base_Entry(
-              Macro_Parser& txtfile,
-              Grammar& gram,
-              bool IsRealized
-             );
-   #endif
+        void Init(const Base_Entry& e);
 
-   Base_Entry( lem::Stream& bin );
+    protected:
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual void BeforeFirstForm(Grammar& gram);
+        virtual bool ProcessSection(
+            Macro_Parser &txtfile,
+            Grammar &gram,
+            const BethToken &t
+        );
 
-   virtual ~Base_Entry(void) {}
+        /***********************************************************************
+         Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ РїСЂРѕРёР·РІРѕРґРЅС‹Рј РєР»Р°СЃСЃРѕРј. РћРЅ РІС‹Р·С‹РІР°РµС‚СЃСЏ
+         "РёР·РІРЅРµ" РґР»СЏ Р·Р°РіСЂСѓР·РєРё РёРјРµРЅРё СЃС‚Р°С‚СЊРё.
+        ***********************************************************************/
+        virtual void LoadName(
+            Macro_Parser& txtfile,
+            Dictionary &dict
+        ) {}
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   /*********************************************************************
-    После полного прохода секции определения Грамматики в текстовом
-    файле Словаря может понадобиться провести второй проход, к примеру -
-    для разрешения ссылок вперед на другие статьи. Вызов данного метода
-    дает объекту данного класса возможность позиционироваться на нужный
-    участок исходного файла Словаря и читать информацию.
-   ***********************************************************************/
-   virtual void AfterFirstRead(void) {}
-   #endif
+        virtual void LoadBody(Macro_Parser &txtfile, Grammar &gram);
+#endif
 
-   /***********************************************************
-    Метод вызывается для печати имени статьи в указанный поток.
-   ************************************************************/
-   virtual void PrintName( OFormatter &/*dst_stream*/ ) const {}
- };
+    public:
+        Base_Entry();
 
- } // namespace 'Solarix'
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        Base_Entry(
+            Macro_Parser& txtfile,
+            Grammar& gram,
+            bool IsRealized
+        );
+#endif
+
+        Base_Entry(lem::Stream& bin);
+
+        virtual ~Base_Entry() {}
+
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        /*********************************************************************
+         РџРѕСЃР»Рµ РїРѕР»РЅРѕРіРѕ РїСЂРѕС…РѕРґР° СЃРµРєС†РёРё РѕРїСЂРµРґРµР»РµРЅРёСЏ Р“СЂР°РјРјР°С‚РёРєРё РІ С‚РµРєСЃС‚РѕРІРѕРј
+         С„Р°Р№Р»Рµ РЎР»РѕРІР°СЂСЏ РјРѕР¶РµС‚ РїРѕРЅР°РґРѕР±РёС‚СЊСЃСЏ РїСЂРѕРІРµСЃС‚Рё РІС‚РѕСЂРѕР№ РїСЂРѕС…РѕРґ, Рє РїСЂРёРјРµСЂСѓ -
+         РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ СЃСЃС‹Р»РѕРє РІРїРµСЂРµРґ РЅР° РґСЂСѓРіРёРµ СЃС‚Р°С‚СЊРё. Р’С‹Р·РѕРІ РґР°РЅРЅРѕРіРѕ РјРµС‚РѕРґР°
+         РґР°РµС‚ РѕР±СЉРµРєС‚Сѓ РґР°РЅРЅРѕРіРѕ РєР»Р°СЃСЃР° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°С‚СЊСЃСЏ РЅР° РЅСѓР¶РЅС‹Р№
+         СѓС‡Р°СЃС‚РѕРє РёСЃС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° РЎР»РѕРІР°СЂСЏ Рё С‡РёС‚Р°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ.
+        ***********************************************************************/
+        virtual void AfterFirstRead() {}
+#endif
+
+        /***********************************************************
+         РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РґР»СЏ РїРµС‡Р°С‚Рё РёРјРµРЅРё СЃС‚Р°С‚СЊРё РІ СѓРєР°Р·Р°РЅРЅС‹Р№ РїРѕС‚РѕРє.
+        ************************************************************/
+        virtual void PrintName(OFormatter &/*dst_stream*/) const {}
+    };
+
+} // namespace 'Solarix'
 
 #endif

@@ -132,8 +132,6 @@
 
    // пересортируем так, чтобы сначала шли самые короткие варианты
    void SortByLengthDescending(void);
-
-   void SortByCoverageAscending(void);
  };
 
 

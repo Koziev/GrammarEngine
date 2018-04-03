@@ -17,32 +17,32 @@
    public:
     StorageConnection_SQLITE( const lem::UFString &connection_string );
 
-    virtual ~StorageConnection_SQLITE(void);
+    virtual ~StorageConnection_SQLITE();
 
-    virtual void Escape( lem::UFString &str );
+    virtual void Escape( lem::UFString &str ) override;
 
-    virtual TransactionGuard* GetTx(void);
-    virtual TransactionGuard* GetReadTx(void);
+    virtual TransactionGuard* GetTx() override;
+    virtual TransactionGuard* GetReadTx() override;
 
-    virtual bool IsConnected(void) const;
+    virtual bool IsConnected() const override;
 
-    virtual void BeginTx(void);
-    virtual void CommitTx(void);
-    virtual void RollbackTx(void);
+    virtual void BeginTx() override;
+    virtual void CommitTx() override;
+    virtual void RollbackTx() override;
 
-    virtual void BeginReadTx(void);
-    virtual void EndReadTx(void);
+    virtual void BeginReadTx() override;
+    virtual void EndReadTx() override;
 
-    virtual void Error( const lem::FString &sql );
-    virtual void Error(void);
-    virtual void Execute( const lem::FString &sql );
-    virtual int GetLastId(void);
+    virtual void Error( const lem::FString &sql ) override;
+    virtual void Error() override;
+    virtual void Execute( const lem::FString &sql ) override;
+    virtual int GetLastId() override;
 
-    virtual LS_ResultSet* Select( const lem::FString &sql );
-    virtual int SelectInt( const lem::FString &sql, int default_value );
+    virtual LS_ResultSet* Select( const lem::FString &sql ) override;
+    virtual int SelectInt( const lem::FString &sql, int default_value ) override;
 
-    virtual bool DoesIndexExist( const lem::FString &index_name, const lem::FString &table_name );
-    virtual bool DoesTableExist( const lem::FString &table_name );
+    virtual bool DoesIndexExist( const lem::FString &index_name, const lem::FString &table_name ) override;
+    virtual bool DoesTableExist( const lem::FString &table_name ) override;
   };
  }
 

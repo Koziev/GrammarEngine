@@ -1,4 +1,4 @@
-#include <lem/solarix/dictionary.h>
+#include <lem/solarix/Dictionary.h>
 #include "SentenceEOL.h"
 
 using namespace Solarix;
@@ -39,10 +39,9 @@ bool SentenceEOL::Fetch(lem::UFString & line, int & line_paragraph_id)
         {
             break;
         }
-        else line.Add_Dirty(c);
+        else line += c;
     }
 
-    line.calc_hash();
     line.trim();
 
     return true;

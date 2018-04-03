@@ -1,17 +1,8 @@
-// -----------------------------------------------------------------------------
-// File WORD_FORM.H
-//
-// (c) 1995 Koziev Elijah
-// Licensed under LGPL 
-//
-// Content:
-// SOLARIX Intellectronix Project  http://www.solarix.ru
-//
-// Класс Word_Form и его составные части - описание СЛОВОФОРМЫ.
+// РљР»Р°СЃСЃ Word_Form Рё РµРіРѕ СЃРѕСЃС‚Р°РІРЅС‹Рµ С‡Р°СЃС‚Рё - РѕРїРёСЃР°РЅРёРµ РЎР›РћР’РћР¤РћР РњР«.
 // -----------------------------------------------------------------------------
 //
 // CD->06.10.1995
-// LC->30.03.2018
+// LC->02.04.2018
 // --------------
 
 #ifndef SOL_WORDFORM__H
@@ -42,7 +33,7 @@ namespace Solarix
     class SynGram;
 
     // ************************************************************
-    // Класс представляет словоформу и, одновременно, синтаксему.
+    // РљР»Р°СЃСЃ РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃР»РѕРІРѕС„РѕСЂРјСѓ Рё, РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ, СЃРёРЅС‚Р°РєСЃРµРјСѓ.
     // ************************************************************
     class Word_Form
     {
@@ -50,20 +41,20 @@ namespace Solarix
         static lem::Process::InterlockedInt seq_iversion;
         int iversion;
 
-        RC_Lexem name;      // Лексическое содержимое словоформы в ИСХОДНОМ РЕГИСТРЕ
-        RC_Lexem normalized; // С нормализованным регистром и диакритическими значками
+        RC_Lexem name;      // Р›РµРєСЃРёС‡РµСЃРєРѕРµ СЃРѕРґРµСЂР¶РёРјРѕРµ СЃР»РѕРІРѕС„РѕСЂРјС‹ РІ РРЎРҐРћР”РќРћРњ Р Р•Р“РРЎРўР Р•
+        RC_Lexem normalized; // РЎ РЅРѕСЂРјР°Р»РёР·РѕРІР°РЅРЅС‹Рј СЂРµРіРёСЃС‚СЂРѕРј Рё РґРёР°РєСЂРёС‚РёС‡РµСЃРєРёРјРё Р·РЅР°С‡РєР°РјРё
 
-        CPE_Array pair;     // Список координатных пар (измерений и атрибутов) для центра.
+        CPE_Array pair;     // РЎРїРёСЃРѕРє РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ (РёР·РјРµСЂРµРЅРёР№ Рё Р°С‚СЂРёР±СѓС‚РѕРІ) РґР»СЏ С†РµРЅС‚СЂР°.
 
-        int entry_key;      // Ключ базовой статьи (центра) в списке Синтаксической Грамматики.
+        int entry_key;      // РљР»СЋС‡ Р±Р°Р·РѕРІРѕР№ СЃС‚Р°С‚СЊРё (С†РµРЅС‚СЂР°) РІ СЃРїРёСЃРєРµ РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРё.
 
-        //Real1 val;           // Оценка достоверности хранящейся информации
-        float score;           // скоринг
-        int origin_pos;      // Начальная позиция в предложении (UNKNOWN, если неизвестно).
+        //Real1 val;           // РћС†РµРЅРєР° РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё С…СЂР°РЅСЏС‰РµР№СЃСЏ РёРЅС„РѕСЂРјР°С†РёРё
+        float score;           // СЃРєРѕСЂРёРЅРі
+        int origin_pos;      // РќР°С‡Р°Р»СЊРЅР°СЏ РїРѕР·РёС†РёСЏ РІ РїСЂРµРґР»РѕР¶РµРЅРёРё (UNKNOWN, РµСЃР»Рё РЅРµРёР·РІРµСЃС‚РЅРѕ).
 
         lem::Ptr<lem::UFString> tokenizer_flags;
 
-        lem::MCollect<Word_Form*> alt; // альтернативные варианты
+        lem::MCollect<Word_Form*> alt; // Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ РІР°СЂРёР°РЅС‚С‹
 
         void Init(const Word_Form& fw, bool copy_versions);
 
@@ -154,8 +145,8 @@ namespace Solarix
         inline       CPE_Array& pairs(void) { return pair; }
 
 #if defined SOL_CAA
-        // Замена состояния координатной пары. iCoord - индекс пары во
-        // внутреннем списке.
+        // Р—Р°РјРµРЅР° СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚РЅРѕР№ РїР°СЂС‹. iCoord - РёРЅРґРµРєСЃ РїР°СЂС‹ РІРѕ
+        // РІРЅСѓС‚СЂРµРЅРЅРµРј СЃРїРёСЃРєРµ.
         void SetState(int Internal_Pair_Index, int istate);
 #endif
 
@@ -166,13 +157,13 @@ namespace Solarix
         inline float GetScore() const { return score; }
         void SetScore(float _score) { score = _score; }
 
-        // максимальное значение оценки среди всех версий 
+        // РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РѕС†РµРЅРєРё СЃСЂРµРґРё РІСЃРµС… РІРµСЂСЃРёР№ 
         float GetMaxScore() const;
 
 #if defined SOL_CAA
         /******************************************************
-         Коррекция оценки достоверности словоформы посредством
-         домножения на указанный коэффициент Factor.
+         РљРѕСЂСЂРµРєС†РёСЏ РѕС†РµРЅРєРё РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё СЃР»РѕРІРѕС„РѕСЂРјС‹ РїРѕСЃСЂРµРґСЃС‚РІРѕРј
+         РґРѕРјРЅРѕР¶РµРЅРёСЏ РЅР° СѓРєР°Р·Р°РЅРЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚ Factor.
         *******************************************************/
         //inline void Multiply( Real1 f ) { val = val*f; }
 #endif
@@ -190,13 +181,13 @@ namespace Solarix
 #if defined SOL_CAA
         void RemoveCoord(int Internal_Pair_Index);
 
-        // Удаляем все пары, относящиеся к заданной координате.
+        // РЈРґР°Р»СЏРµРј РІСЃРµ РїР°СЂС‹, РѕС‚РЅРѕСЃСЏС‰РёРµСЃСЏ Рє Р·Р°РґР°РЅРЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚Рµ.
         void Remove_Coord_States(const GramCoordAdr &coord);
 
         const CA_Array GetIndeces(void) const;
 
-        // Значение указанной координаты устанавливается в нужное
-        // состояние.
+        // Р—РЅР°С‡РµРЅРёРµ СѓРєР°Р·Р°РЅРЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РІ РЅСѓР¶РЅРѕРµ
+        // СЃРѕСЃС‚РѕСЏРЅРёРµ.
         void SetState(const GramCoordPair& toset, bool do_add = true, bool apply_versions = true);
 
         Word_Form* CreateNewVersioned(const std::set<int> & ialt) const;
@@ -211,14 +202,6 @@ namespace Solarix
         void Print(OFormatter &txt, SynGram *gram, bool detailed) const;
         void PrintPlain(OFormatter &txt, bool EntryKey) const;
         void PrintXML(OFormatter &xml, SynGram &gram) const;
-
-        //   bool is_beth_type( SynGram &sg ) const;
-        //   int GetBethType( SynGram &sg ) const;
-        //   bool IsAnyQuantor(void) const;
-        //   bool IsUnknownQuantor(void) const;
-        //   bool IsMultyplicator( SynGram &sg ) const;
-        //   bool IsReplacer( SynGram &sg ) const;
-        //   bool IsQuantor( SynGram &sg ) const;
 
 #if defined SOL_LOADTXT
         void LoadTxt(
@@ -236,16 +219,6 @@ namespace Solarix
         void SaveBin(lem::Stream &binfile) const;
 #endif
 
-        /*
-           Word_Form* GetCreated(
-                                 SynGram *gram
-                                 #if defined SOL_CAA
-                                 , const PM_SupContext &context
-                                 , const PM_Yield &yield
-                                 , const PM_SuperIndex &CONFIG
-                                 #endif
-                                ) const;*/
-
 #if defined SOL_SAVETXT
         void SaveTxt(
             OFormatter &txtfile,
@@ -256,11 +229,8 @@ namespace Solarix
 
 #if defined SOL_CAA
         void Rename_By_States(SynGram &sg, bool apply_versions = true);
-        //   void Clear_Convolution();
         void AddAlt(Word_Form *wf);
 #endif
-
-        //   int GetMaxContextLen(void) const;
 
         void SetTokenizerFlag(const lem::UFString &str);
         bool MatchTokenizerFlag(const lem::UFString &str) const;

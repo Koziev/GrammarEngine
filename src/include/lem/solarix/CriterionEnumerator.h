@@ -2,24 +2,24 @@
 #define CriterionEnumerator__H
 #pragma once
 
- #include <lem/noncopyable.h>
+#include <lem/noncopyable.h>
 
- namespace Solarix
- {
-  class Criterion;
+namespace Solarix
+{
+    class Criterion;
 
-  class CriterionEnumerator : lem::NonCopyable
-  {
-   protected:
-    CriterionEnumerator(void) {}
+    class CriterionEnumerator : lem::NonCopyable
+    {
+    protected:
+        CriterionEnumerator() {}
 
-   public:
-    virtual ~CriterionEnumerator(void) {}
+    public:
+        virtual ~CriterionEnumerator() {}
 
-    virtual bool Fetch(void)=0;
-    virtual int GetId(void)=0;
-    virtual const Criterion& GetItem(void)=0;
-  };
- }
+        virtual bool Fetch() = 0;
+        virtual int GetId() = 0;
+        virtual const Criterion& GetItem() = 0;
+    };
+}
 
 #endif

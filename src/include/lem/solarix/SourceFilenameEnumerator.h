@@ -1,25 +1,25 @@
 #if !defined SourceFilenameEnumerator__H
- #define SourceFilenameEnumerator__H
+#define SourceFilenameEnumerator__H
 
- #include <lem/noncopyable.h>
- #include <lem/path.h>
+#include <lem/noncopyable.h>
+#include <lem/path.h>
 
- namespace Solarix
- {
-  class LS_ResultSet;
-  class SourceFilenameEnumerator : lem::NonCopyable
-  {
-   private:
-    LS_ResultSet *rs;
+namespace Solarix
+{
+    class LS_ResultSet;
+    class SourceFilenameEnumerator : lem::NonCopyable
+    {
+    private:
+        LS_ResultSet *rs;
 
-   public:
-    SourceFilenameEnumerator( LS_ResultSet * _rs );
-    ~SourceFilenameEnumerator(void);
+    public:
+        SourceFilenameEnumerator(LS_ResultSet * _rs);
+        ~SourceFilenameEnumerator();
 
-    bool Fetch(void);
-    int GetId(void);
-    lem::Path GetFilename(void);
-  };
- }
+        bool Fetch();
+        int GetId();
+        lem::Path GetFilename();
+    };
+}
 
 #endif

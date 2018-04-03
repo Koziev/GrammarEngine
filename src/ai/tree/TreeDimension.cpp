@@ -1,7 +1,7 @@
 // 11.10.2011 - добавлена сериализация в XML
 
 // CD->06.07.2009
-// LC->11.10.2011
+// LC->02.04.2018
 
 #if !defined SOL_NO_AA
 
@@ -15,157 +15,157 @@ TreeDimension::TreeDimension(void)
 {
 }
 
-TreeDimension::TreeDimension( const UCString &x )
- : name(x)
+TreeDimension::TreeDimension(const UCString &x)
+    : name(x)
 {
 }
 
 
-TreeDimension::TreeDimension( const TreeDimension &x )
+TreeDimension::TreeDimension(const TreeDimension &x)
 {
- name = x.name;
- for( lem::Container::size_type i=0; i<x.nodes.size(); ++i )
-  nodes.push_back( new Tree_Node( *x.nodes[i] ) );
+    name = x.name;
+    for (lem::Container::size_type i = 0; i < x.nodes.size(); ++i)
+        nodes.push_back(new Tree_Node(*x.nodes[i]));
 
- return;
+    return;
 }
 
 TreeDimension::~TreeDimension(void)
 {
- Clear();
- return;
+    Clear();
+    return;
 }
 
-void TreeDimension::operator=( const TreeDimension &x )
+void TreeDimension::operator=(const TreeDimension &x)
 {
- name = x.name;
- for( lem::Container::size_type i=0; i<x.nodes.size(); ++i )
-  nodes.push_back( new Tree_Node( *x.nodes[i] ) );
+    name = x.name;
+    for (lem::Container::size_type i = 0; i < x.nodes.size(); ++i)
+        nodes.push_back(new Tree_Node(*x.nodes[i]));
 
- return;
+    return;
 }
 
 void TreeDimension::Clear(void)
 {
- for( lem::Container::size_type i=0; i<nodes.size(); ++i )
-  delete nodes[i];
+    for (auto node : nodes)
+    {
+        delete node;
+    }
 
- nodes.clear();
+    nodes.clear();
 
- return;
+    return;
 }
 
-void TreeDimension::Remove( int i )
+void TreeDimension::Remove(int i)
 {
- nodes.Remove(i);
- return;
+    nodes.Remove(i);
+    return;
 }
 
 
-void TreeDimension::Add( Tree_Node *x )
+void TreeDimension::Add(Tree_Node *x)
 {
- if( x==NULL )
-  throw E_BaseException( L"TreeDimension::Add(NULL) is not valid usage" );
+    if (x == nullptr)
+        throw E_BaseException(L"TreeDimension::Add(NULL) is not valid usage");
 
- nodes.push_back(x);
- return;
+    nodes.push_back(x);
+    return;
 }
 
 
-void TreeDimension::Add( const TreeDimension &src )
-{ 
- for( lem::Container::size_type i=0; i<src.size(); ++i )
-  nodes.push_back( new Tree_Node( src[CastSizeToInt(i)] ) );
+void TreeDimension::Add(const TreeDimension &src)
+{
+    for (lem::Container::size_type i = 0; i < src.size(); ++i)
+        nodes.push_back(new Tree_Node(src[CastSizeToInt(i)]));
 
- return;
+    return;
 }
 
 
 #if defined SOL_SAVEBIN
-void TreeDimension::SaveBin( lem::Stream &bin ) const
+void TreeDimension::SaveBin(lem::Stream &bin) const
 {
- bin.write( &name, sizeof(name) );
+    bin.write(&name, sizeof(name));
 
- bin.write_int( CastSizeToInt(nodes.size()) );
- for( lem::Container::size_type i=0; i<nodes.size(); ++i )
-  nodes[i]->SaveBin(bin);
+    bin.write_int(CastSizeToInt(nodes.size()));
+    for (auto node : nodes)
+    {
+        node->SaveBin(bin);
+    }
 
- return; 
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADBIN
-void TreeDimension::LoadBin( lem::Stream &bin )
+void TreeDimension::LoadBin(lem::Stream &bin)
 {
- bin.read( &name, sizeof(name) );
- const int n = bin.read_int();
- for( int i=0; i<n; ++i )
-  nodes.push_back( new Tree_Node(bin) );
- 
- return;
+    bin.read(&name, sizeof(name));
+    const int n = bin.read_int();
+    for (int i = 0; i < n; ++i)
+        nodes.push_back(new Tree_Node(bin));
+
+    return;
 }
 #endif
 
 
-void TreeDimension::Print( const Solarix::Dictionary & dict, lem::OFormatter & out, bool detailed ) const
+void TreeDimension::Print(const Solarix::Dictionary & dict, lem::OFormatter & out, bool detailed) const
 {
- if( !nodes.empty() )
-  {
-   out.printf( "%vf6<<%vn%vfB%us%vn%vf6>>:%vn", name.c_str() );
-   if( nodes.size()>1 )
-    out.printf( "%vf6{%vn" );
- 
-   for( lem::Container::size_type i=0; i<nodes.size(); ++i )
+    if (!nodes.empty())
     {
-     out.printf( ' ' );
-     nodes[i]->Print( out, dict.GetSynGram(), 0, detailed );
+        out.printf("%vf6<<%vn%vfB%us%vn%vf6>>:%vn", name.c_str());
+        if (nodes.size() > 1)
+            out.printf("%vf6{%vn");
+
+        for (auto node : nodes)
+        {
+            out.printf(' ');
+            node->Print(out, dict.GetSynGram(), 0, detailed);
+        }
+
+        if (nodes.size() > 1)
+            out.printf(" %vf6}%vn");
     }
 
-   if( nodes.size()>1 )
-    out.printf( " %vf6}%vn" );
-  }
-
- return;
+    return;
 }
 
 
-void TreeDimension::PrintXML( lem::OFormatter & xml, const Solarix::Dictionary & dict ) const
+void TreeDimension::PrintXML(lem::OFormatter & xml, const Solarix::Dictionary & dict) const
 {
- xml.printf( "<dimension>\n" ); 
- xml.printf( "<name>%us</name>\n", name.c_str() );
+    xml.printf("<dimension>\n");
+    xml.printf("<name>%us</name>\n", name.c_str());
 
- xml.printf( "<trees count=\"%d\">\n", CastSizeToInt(nodes.size()) );
- for( lem::Container::size_type i=0; i<nodes.size(); ++i )
- {
-  xml.printf( "<tree n=\"%d\">\n", CastSizeToInt(i) );
-  nodes[i]->PrintXML( xml, dict.GetSynGram() );
-  xml.printf( "</tree>\n" );
- }
- xml.printf( "</trees>\n" );
+    xml.printf("<trees count=\"%d\">\n", CastSizeToInt(nodes.size()));
+    for (lem::Container::size_type i = 0; i < nodes.size(); ++i)
+    {
+        xml.printf("<tree n=\"%d\">\n", CastSizeToInt(i));
+        nodes[i]->PrintXML(xml, dict.GetSynGram());
+        xml.printf("</tree>\n");
+    }
+    xml.printf("</trees>\n");
 
- xml.printf( "</dimension>\n" ); 
+    xml.printf("</dimension>\n");
 
- return;
-}
-
-namespace {
-static bool node_sorter( const Tree_Node * x, const Tree_Node * y )
-{
- return x->GetNode().GetOriginPos() < y->GetNode().GetOriginPos();
-}
+    return;
 }
 
 void TreeDimension::SortByWordIndex()
 {
- std::sort( nodes.begin(), nodes.end(), node_sorter );
+    std::sort(nodes.begin(), nodes.end(),
+        [](const Tree_Node * x, const Tree_Node * y) {return x->GetNode().GetOriginPos() < y->GetNode().GetOriginPos(); }
+    );
 
- for( int i=0; i<nodes.size(); ++i )
-  nodes[i]->leafs().SortByWordIndex();
+    for (auto node : nodes)
+    {
+        node->leafs().SortByWordIndex();
+    }
 
- return;
+    return;
 }
-
 
 
 #endif

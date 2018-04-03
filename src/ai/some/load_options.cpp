@@ -2,7 +2,7 @@
 
 using namespace Solarix;
 
-Load_Options::Load_Options(void)
+Load_Options::Load_Options()
 {
  load_semnet = true;
  affix_table = false;

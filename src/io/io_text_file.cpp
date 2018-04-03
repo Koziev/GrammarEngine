@@ -1,22 +1,19 @@
 // -----------------------------------------------------------------------------
 // File IO_TEXT_FILE.CPP
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Content:
-// Áèíàðíûå ïîòîêè ââîäà-âûâîäà: êëàññ TextFile - òåêñòîâûå ôàéëû.
+// Ð‘Ð¸Ð½Ð°Ñ€Ð½Ñ‹Ðµ Ð¿Ð¾Ñ‚Ð¾ÐºÐ¸ Ð²Ð²Ð¾Ð´Ð°-Ð²Ñ‹Ð²Ð¾Ð´Ð°: ÐºÐ»Ð°ÑÑ TextFile - Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ðµ Ñ„Ð°Ð¹Ð»Ñ‹.
 //
-// 27.12.2008 - äëÿ óäîáñòâà ââåäåíû êëàññû TextReader è TextWriter.
+// 27.12.2008 - Ð´Ð»Ñ ÑƒÐ´Ð¾Ð±ÑÑ‚Ð²Ð° Ð²Ð²ÐµÐ´ÐµÐ½Ñ‹ ÐºÐ»Ð°ÑÑÑ‹ TextReader Ð¸ TextWriter.
 // -----------------------------------------------------------------------------
 //
 // CD->02.03.1996
-// LC->27.12.2008
+// LC->01.04.2018
 // --------------
 
 #include <stdio.h> // for _wfopen
@@ -26,49 +23,49 @@
 
 using namespace lem;
 
-TextFile::TextFile(void):BinaryFile() {}
+TextFile::TextFile(void) :BinaryFile() {}
 
 
 TextFile::TextFile(
-                   const lem::Path& filename,
-                   bool for_read,
-                   bool for_write,
-                   bool for_append
-                  ):BinaryFile(filename,for_read,for_write,for_append)
+    const lem::Path& filename,
+    bool for_read,
+    bool for_write,
+    bool for_append
+) : BinaryFile(filename, for_read, for_write, for_append)
 {
- binary = false;
+    binary = false;
 
- const char *amode = NULL;
- const wchar_t *umode = NULL;
+    const char *amode = NULL;
+    const wchar_t *umode = NULL;
 
- if( for_read && !for_write )
-  {
-   amode = "rt";
-   umode = L"rt";
-  }
-
- if( for_write && !for_read )
-  {
-   if( for_append )
+    if (for_read && !for_write)
     {
-     amode = "at";
-     umode = L"at";
+        amode = "rt";
+        umode = L"rt";
     }
-   else
+
+    if (for_write && !for_read)
     {
-     amode = "wt";
-     umode = L"wt";
+        if (for_append)
+        {
+            amode = "at";
+            umode = L"at";
+        }
+        else
+        {
+            amode = "wt";
+            umode = L"wt";
+        }
     }
-  }
 
- if( for_write && for_read )
-  {
-   amode = "rt+";
-   umode = L"rt+";
-  }
+    if (for_write && for_read)
+    {
+        amode = "rt+";
+        umode = L"rt+";
+    }
 
- OpenDiskFile( amode, umode, true );
- return;
+    OpenDiskFile(amode, umode, true);
+    return;
 }
 
 
@@ -78,33 +75,33 @@ TextFile::TextFile(
 // ***********************************************************
 const FString TextFile::read_till_eol(void)
 {
- FString str;
+    FString str;
 
- while( !eof() )
-  {
-   int ch = get();
-   if( ch==EOF || ch=='\n' )
-    break;
+    while (!eof())
+    {
+        int ch = get();
+        if (ch == EOF || ch == '\n')
+            break;
 
-   str += ch;
-  }
+        str += ch;
+    }
 
- return str; 
+    return str;
 }
 
 
 
-TextReader::TextReader(void):TextFile() {}
+TextReader::TextReader(void) :TextFile() {}
 
 
-TextReader::TextReader( const Path& filename )
- : TextFile( filename, true, false )
+TextReader::TextReader(const Path& filename)
+    : TextFile(filename, true, false)
 {}
 
 
-TextWriter::TextWriter(void):TextFile() {}
+TextWriter::TextWriter(void) : TextFile() {}
 
 
-TextWriter::TextWriter( const Path& filename )
- : TextFile( filename, false, true )
+TextWriter::TextWriter(const Path& filename)
+    : TextFile(filename, false, true)
 {}

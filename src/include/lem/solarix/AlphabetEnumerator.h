@@ -1,27 +1,27 @@
 #if !defined ALPHABET_ENUMERATOR__H
- #define ALPHABET_ENUMERATOR__H
- 
- #include <lem/noncopyable.h>
+#define ALPHABET_ENUMERATOR__H
 
- namespace Solarix
- {
-  class Alphabet;
-  class Alphabets;
-  class LS_ResultSet;
+#include <lem/noncopyable.h>
 
-  class AlphabetEnumerator : lem::NonCopyable
-  {
-   private:
-    LS_ResultSet *rs;
-    Alphabets *alphabets;
+namespace Solarix
+{
+    class Alphabet;
+    class Alphabets;
+    class LS_ResultSet;
 
-   public:
-    AlphabetEnumerator( Alphabets *_alphabets, LS_ResultSet *_ts );
-    virtual ~AlphabetEnumerator(void);
+    class AlphabetEnumerator : lem::NonCopyable
+    {
+    private:
+        LS_ResultSet *rs;
+        Alphabets *alphabets;
 
-    virtual bool Fetch(void);
-    virtual int GetId(void);
-    virtual const Alphabet& GetItem(void);
-  };
- }
+    public:
+        AlphabetEnumerator(Alphabets *_alphabets, LS_ResultSet *_ts);
+        virtual ~AlphabetEnumerator();
+
+        virtual bool Fetch();
+        virtual int GetId();
+        virtual const Alphabet& GetItem();
+    };
+}
 #endif

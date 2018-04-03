@@ -4,64 +4,56 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
+//                                https://github.com/Koziev/GrammarEngine
 //
 // You must not eliminate, delete or supress these copyright strings
 // from the file!
 //
 // Content:
-// Доступ к консоли: посимвольный ввод.
-// Поток для обмена с терминальной клавиатурой как виртуальным файлом.
+// Р”РѕСЃС‚СѓРї Рє РєРѕРЅСЃРѕР»Рё: РїРѕСЃРёРјРІРѕР»СЊРЅС‹Р№ РІРІРѕРґ.
+// РџРѕС‚РѕРє РґР»СЏ РѕР±РјРµРЅР° СЃ С‚РµСЂРјРёРЅР°Р»СЊРЅРѕР№ РєР»Р°РІРёР°С‚СѓСЂРѕР№ РєР°Рє РІРёСЂС‚СѓР°Р»СЊРЅС‹Рј С„Р°Р№Р»РѕРј.
 //
-// 01.09.2007 - исправлена ошибка рассинхронизации с mout: после ввода строки
-//              с нажатием Enter'а значение OFormatter::npos оставалось
-//              необнуленным, что приводило к неверному форматированию в
-//              некоторых случаях.
-// 26.05.2008 - правка для совместимости с MFC
-// 28.02.2009 - переделана ask_ufstring для Windows - чтение UNICODE-текста
-//              через прямые функции WinAPI, а не косвенно через ascii.
+// 01.09.2007 - РёСЃРїСЂР°РІР»РµРЅР° РѕС€РёР±РєР° СЂР°СЃСЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё СЃ mout: РїРѕСЃР»Рµ РІРІРѕРґР° СЃС‚СЂРѕРєРё
+//              СЃ РЅР°Р¶Р°С‚РёРµРј Enter'Р° Р·РЅР°С‡РµРЅРёРµ OFormatter::npos РѕСЃС‚Р°РІР°Р»РѕСЃСЊ
+//              РЅРµРѕР±РЅСѓР»РµРЅРЅС‹Рј, С‡С‚Рѕ РїСЂРёРІРѕРґРёР»Рѕ Рє РЅРµРІРµСЂРЅРѕРјСѓ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёСЋ РІ
+//              РЅРµРєРѕС‚РѕСЂС‹С… СЃР»СѓС‡Р°СЏС….
+// 26.05.2008 - РїСЂР°РІРєР° РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ MFC
+// 28.02.2009 - РїРµСЂРµРґРµР»Р°РЅР° ask_ufstring РґР»СЏ Windows - С‡С‚РµРЅРёРµ UNICODE-С‚РµРєСЃС‚Р°
+//              С‡РµСЂРµР· РїСЂСЏРјС‹Рµ С„СѓРЅРєС†РёРё WinAPI, Р° РЅРµ РєРѕСЃРІРµРЅРЅРѕ С‡РµСЂРµР· ascii.
 // -----------------------------------------------------------------------------
 //
 // CD->08.02.1996
-// LC->10.12.2010
+// LC->01.04.2018
 // --------------
 
 #include <lem/config.h>
 
-#if defined LEM_MFC
- #include <afxwin.h>
-#endif
-
 #if defined LEM_WINDOWS && defined LEM_GUI
- #if defined LEM_MFC
-  #include <afxwin.h>
- #else 
-  #include <windows.h>
- #endif
+#include <windows.h>
 #elif defined LEM_WINDOWS && defined LEM_CONSOLE
- #include <conio.h>
+#include <conio.h>
 #endif
 
 #include <lem/keyboard.h>
 
 #if defined LEM_UNIX
- #include <curses.h>
+#include <curses.h>
 #endif
 
 #if defined LEM_CONSOLE && defined LEM_WIN32
-  #if defined LEM_MFC
-   #include <afxwin.h>
-  #else 
-   #include <windows.h>
-  #endif
+#if defined LEM_MFC
+#include <afxwin.h>
+#else 
+#include <windows.h>
+#endif
 #endif
 
 #if defined LEM_CONSOLE
- #include <iostream>
+#include <iostream>
 
- #if defined LEM_UNIX
-  #include <termios.h>
- #endif
+#if defined LEM_UNIX
+#include <termios.h>
+#endif
 
 #endif
 
@@ -77,1069 +69,974 @@ using namespace lem;
 
 static int lem_getch(void);
 
-#if defined LEM_CONSOLE && defined LEM_WIN32
-  // see 'lem_coap.cpp'
-//  extern HANDLE lem_hConsoleOutput;
-//  extern HANDLE lem_hConsoleInput;
-#endif
-
-
-
-/*****************************************************************************
-
-  1. This code plays a role of keyboard driver. Its principal function is to
-     interact with computer hardware by use of system low-level calls and
-     to hide all architecture dependent aspects. The Solaris System Kernel
-     works with virtual stream which supplies the codes of pressed keys as
-     these codes were retrieved from a sequentially-accessed disk file.
-     Actual source of these codes depends on the operating system being used.
-     Under MSDOS we use a simple console-based mechanism, and under MSWindows
-     we take some advantages of GUI.
-
-  2. Keyboard inlet stream may be redirected in order to satisfy any specific
-     requirement of an operating system.
-
-  3. It is worth mentioning that this streaming class is the one and only
-     legal way for Solaris Verbal Conveyer to get data from keyboard-like
-     peripheral device. Once you adjust this code there is no more need to
-     look through the whole source code of Solaris.
-
-  4. There is one more thing you are supposed to take into account when
-     creating your own keyboard driver. Sometimes the Kernel creates more than
-     one keyboard stream simultaneously. Sure only one of these streams
-     considered as active at a moment. But you must be prepared to create
-     separate window for each stream under Windows (as I do).
-
-  5. Only two procedures are used to retrieve keyboard data: ::isready() and
-     ::read_fstring(). The method ::get() can be used but is not recommended,
-     as it's incompatible with MSWindows keyboard streaming approach.
-
-  6. Under MSDOS two special keys F3 and F10 are used. F3 is used to force
-     recording sound data from microphone. F10 shuts down the program.
-     The way these key are processed may look intricate: ::read_fstring()
-     returns the strings 'stop' and ' record!' when one of the keys is struck.
-     This is the duty of Verbal Conveyer to recognize those strings and take
-     appropriate measures. Note, that lexical content of the predefined
-     command strings is stored in [sol_ssss.cpp] file.
-*******************************************************************************/
 
 #if defined LEM_CONSOLE || defined LEM_EASYWIN
 
 IKbdFormatter::IKbdFormatter(void)
-{ dev_cp=local_cp=866; }
-
-IKbdFormatter::IKbdFormatter( lem::Ptr<KbdStream> s )
 {
- stream=s;
- dev_cp=local_cp=866;
+    dev_cp = local_cp = 866;
 }
 
-void IKbdFormatter::SetCP( int Device, int Local )
-{ dev_cp=Device; local_cp=Local; }
+IKbdFormatter::IKbdFormatter(lem::Ptr<KbdStream> s)
+{
+    stream = s;
+    dev_cp = local_cp = 866;
+}
+
+void IKbdFormatter::SetCP(int Device, int Local)
+{
+    dev_cp = Device; local_cp = Local;
+}
 
 
 #undef getch
 int IKbdFormatter::getch(void)
 {
- return stream->get();
+    return stream->get();
 }
 
 /**************************************************************
- Открывается новый поток для считывания данных с клавиатуры,
- аргумент name - условное имя потока (никакой роли не играет).
+ РћС‚РєСЂС‹РІР°РµС‚СЃСЏ РЅРѕРІС‹Р№ РїРѕС‚РѕРє РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ РґР°РЅРЅС‹С… СЃ РєР»Р°РІРёР°С‚СѓСЂС‹,
+ Р°СЂРіСѓРјРµРЅС‚ name - СѓСЃР»РѕРІРЅРѕРµ РёРјСЏ РїРѕС‚РѕРєР° (РЅРёРєР°РєРѕР№ СЂРѕР»Рё РЅРµ РёРіСЂР°РµС‚).
 ***************************************************************/
 KbdStream::KbdStream(void)
-:Stream()
+    :Stream()
 {
- SetMode( true, false, false );
- return;
+    SetMode(true, false, false);
+    return;
 }
 
 KbdStream::~KbdStream(void)
 {
- return;
+    return;
 }
 
 
-void KbdStream::write( const void * /*src*/, size_t /*size*/ ) {}
+void KbdStream::write(const void * /*src*/, size_t /*size*/) {}
 
-lem::Stream::pos_type KbdStream::read( void * /*dest*/, size_t /*size*/ ) { return 0; }
-void KbdStream::put( char /*ch*/ ) {}
+lem::Stream::pos_type KbdStream::read(void * /*dest*/, size_t /*size*/) { return 0; }
+void KbdStream::put(char /*ch*/) {}
 bool KbdStream::eof(void) const { return false; }
 lem::Stream::pos_type KbdStream::tellp(void) const { return 0; }
-lem::Stream::pos_type KbdStream::seekp( lem::Stream::off_type /*pos*/, int /*whereto*/ ) { return (size_t)-1; }
-bool KbdStream::move( lem::Stream::off_type /*offset*/ ) { return false; }
+lem::Stream::pos_type KbdStream::seekp(lem::Stream::off_type /*pos*/, int /*whereto*/) { return (size_t)-1; }
+bool KbdStream::move(lem::Stream::off_type /*offset*/) { return false; }
 void KbdStream::close(void) {}
 lem::Stream::pos_type KbdStream::fsize(void) const { return 0; }
 void KbdStream::flush(void) {}
 
 
 /********************************************************************
- Считывание одного символа с клавиатуры. Если буфер клавиатуры пуст,
- то будем ждать ввода.
+ РЎС‡РёС‚С‹РІР°РЅРёРµ РѕРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р° СЃ РєР»Р°РІРёР°С‚СѓСЂС‹. Р•СЃР»Рё Р±СѓС„РµСЂ РєР»Р°РІРёР°С‚СѓСЂС‹ РїСѓСЃС‚,
+ С‚Рѕ Р±СѓРґРµРј Р¶РґР°С‚СЊ РІРІРѕРґР°.
 
- Особое внимание обращаю на то, что метод может возвращать значения
- кодов более 255 - для функциональных клавиш и сочетаний. Это необычно
- для потоков, так как типично метод get возвращает значение считанного
- байта. Собственно символические константы для специальных кодов
- можно посмотреть в файле [io_ekeys.h].
+ РћСЃРѕР±РѕРµ РІРЅРёРјР°РЅРёРµ РѕР±СЂР°С‰Р°СЋ РЅР° С‚Рѕ, С‡С‚Рѕ РјРµС‚РѕРґ РјРѕР¶РµС‚ РІРѕР·РІСЂР°С‰Р°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ
+ РєРѕРґРѕРІ Р±РѕР»РµРµ 255 - РґР»СЏ С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅС‹С… РєР»Р°РІРёС€ Рё СЃРѕС‡РµС‚Р°РЅРёР№. Р­С‚Рѕ РЅРµРѕР±С‹С‡РЅРѕ
+ РґР»СЏ РїРѕС‚РѕРєРѕРІ, С‚Р°Рє РєР°Рє С‚РёРїРёС‡РЅРѕ РјРµС‚РѕРґ get РІРѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ СЃС‡РёС‚Р°РЅРЅРѕРіРѕ
+ Р±Р°Р№С‚Р°. РЎРѕР±СЃС‚РІРµРЅРЅРѕ СЃРёРјРІРѕР»РёС‡РµСЃРєРёРµ РєРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ СЃРїРµС†РёР°Р»СЊРЅС‹С… РєРѕРґРѕРІ
+ РјРѕР¶РЅРѕ РїРѕСЃРјРѕС‚СЂРµС‚СЊ РІ С„Р°Р№Р»Рµ [io_ekeys.h].
 *********************************************************************/
 int KbdStream::get(void)
 {
- return lem_getch();
+    return lem_getch();
 }
 
 /*************************************************************************
- Возвращает true, если в буфере есть данные, то есть была нажата
- клавиша.
+ Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РІ Р±СѓС„РµСЂРµ РµСЃС‚СЊ РґР°РЅРЅС‹Рµ, С‚Рѕ РµСЃС‚СЊ Р±С‹Р»Р° РЅР°Р¶Р°С‚Р°
+ РєР»Р°РІРёС€Р°.
 
- Алгоритм для Win32 выглядит устрашающе, и так оно и есть: я придумал
- его не с первой попытки. Использование PeekConsoleInput для чтения
- одной записи с последующим анализом ничего не дает. Делаем так:
- смотрим все содержимое буфера клавиатуры (там могут быть и особые
- записи - события от мыши и другие). Если в нем находятся две
- записи о НАЖАТИИ клавиши и об ОТПУСКАНИИ клавиши, то значит есть
- ввод. Я не проверяю, чтобы нажималась и отпускалась одна и та же клавиша,
- так как все работает и так.
+ РђР»РіРѕСЂРёС‚Рј РґР»СЏ Win32 РІС‹РіР»СЏРґРёС‚ СѓСЃС‚СЂР°С€Р°СЋС‰Рµ, Рё С‚Р°Рє РѕРЅРѕ Рё РµСЃС‚СЊ: СЏ РїСЂРёРґСѓРјР°Р»
+ РµРіРѕ РЅРµ СЃ РїРµСЂРІРѕР№ РїРѕРїС‹С‚РєРё. РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ PeekConsoleInput РґР»СЏ С‡С‚РµРЅРёСЏ
+ РѕРґРЅРѕР№ Р·Р°РїРёСЃРё СЃ РїРѕСЃР»РµРґСѓСЋС‰РёРј Р°РЅР°Р»РёР·РѕРј РЅРёС‡РµРіРѕ РЅРµ РґР°РµС‚. Р”РµР»Р°РµРј С‚Р°Рє:
+ СЃРјРѕС‚СЂРёРј РІСЃРµ СЃРѕРґРµСЂР¶РёРјРѕРµ Р±СѓС„РµСЂР° РєР»Р°РІРёР°С‚СѓСЂС‹ (С‚Р°Рј РјРѕРіСѓС‚ Р±С‹С‚СЊ Рё РѕСЃРѕР±С‹Рµ
+ Р·Р°РїРёСЃРё - СЃРѕР±С‹С‚РёСЏ РѕС‚ РјС‹С€Рё Рё РґСЂСѓРіРёРµ). Р•СЃР»Рё РІ РЅРµРј РЅР°С…РѕРґСЏС‚СЃСЏ РґРІРµ
+ Р·Р°РїРёСЃРё Рѕ РќРђР–РђРўРР РєР»Р°РІРёС€Рё Рё РѕР± РћРўРџРЈРЎРљРђРќРР РєР»Р°РІРёС€Рё, С‚Рѕ Р·РЅР°С‡РёС‚ РµСЃС‚СЊ
+ РІРІРѕРґ. РЇ РЅРµ РїСЂРѕРІРµСЂСЏСЋ, С‡С‚РѕР±С‹ РЅР°Р¶РёРјР°Р»Р°СЃСЊ Рё РѕС‚РїСѓСЃРєР°Р»Р°СЃСЊ РѕРґРЅР° Рё С‚Р° Р¶Рµ РєР»Р°РІРёС€Р°,
+ С‚Р°Рє РєР°Рє РІСЃРµ СЂР°Р±РѕС‚Р°РµС‚ Рё С‚Р°Рє.
 **************************************************************************/
 bool KbdStream::isready(void) const
 {
-/*
- #if defined LEM_WIN32 && defined LEM_CONSOLE
- DWORD counter=0;
+    /*
+     #if defined LEM_WIN32 && defined LEM_CONSOLE
+     DWORD counter=0;
 
- DWORD ie;
- GetNumberOfConsoleInputEvents(lem_hConsoleInput,&ie);
+     DWORD ie;
+     GetNumberOfConsoleInputEvents(lem_hConsoleInput,&ie);
 
- if( ie<2 )
-  return false;
+     if( ie<2 )
+      return false;
 
- INPUT_RECORD *ir = new INPUT_RECORD[ie];
- memset( ir, 0, sizeof(INPUT_RECORD)*ie );
+     INPUT_RECORD *ir = new INPUT_RECORD[ie];
+     memset( ir, 0, sizeof(INPUT_RECORD)*ie );
 
- if( !PeekConsoleInput( lem_hConsoleInput, ir, ie, &counter ) )
-  {
-   delete[] ir;
-   return false;
-  }
+     if( !PeekConsoleInput( lem_hConsoleInput, ir, ie, &counter ) )
+      {
+       delete[] ir;
+       return false;
+      }
 
- if( ie!=counter )
-  {
-   delete[] ir;
-   return false;
-  }
+     if( ie!=counter )
+      {
+       delete[] ir;
+       return false;
+      }
 
- bool down, up;
+     bool down, up;
 
- for( int i=0; i<int(ie); i++ )
-  {
-   const char ch = ir[i].Event.KeyEvent.uChar.AsciiChar;
+     for( int i=0; i<int(ie); i++ )
+      {
+       const char ch = ir[i].Event.KeyEvent.uChar.AsciiChar;
 
-   if(
-      ir[i].EventType==KEY_EVENT &&
-      !ir[i].Event.KeyEvent.bKeyDown &&
-      isprint(ch)
-     )
-   {
-    down = true;
-    continue;
-   }
+       if(
+          ir[i].EventType==KEY_EVENT &&
+          !ir[i].Event.KeyEvent.bKeyDown &&
+          isprint(ch)
+         )
+       {
+        down = true;
+        continue;
+       }
 
-   if(
-      ir[i].EventType==KEY_EVENT &&
-      ir[i].Event.KeyEvent.bKeyDown &&
-      isprint(ch)
-     )
-    {
-     up = true;
-     continue;
-    }
-  }
+       if(
+          ir[i].EventType==KEY_EVENT &&
+          ir[i].Event.KeyEvent.bKeyDown &&
+          isprint(ch)
+         )
+        {
+         up = true;
+         continue;
+        }
+      }
 
- delete[] ir;
- return down && up;
+     delete[] ir;
+     return down && up;
 
- #else
+     #else
 
- return kbhit();
+     return kbhit();
 
- #endif
-*/
+     #endif
+    */
 
- return false;
+    return false;
 }
 
 /***************************************************************************
- Ввод строки с терминала - запускается небольшой строковый редактор, с
- помощью которого удобно вводить данные и редактировать их.
+ Р’РІРѕРґ СЃС‚СЂРѕРєРё СЃ С‚РµСЂРјРёРЅР°Р»Р° - Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ РЅРµР±РѕР»СЊС€РѕР№ СЃС‚СЂРѕРєРѕРІС‹Р№ СЂРµРґР°РєС‚РѕСЂ, СЃ
+ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂРѕРіРѕ СѓРґРѕР±РЅРѕ РІРІРѕРґРёС‚СЊ РґР°РЅРЅС‹Рµ Рё СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РёС….
 
- В конфигурации MSDOS или WIN/EASYWIN для вывода на терминал используется
- поток mout, так что конкретное устройство вывода определяется
- текущей конфигурацией Ядра.
+ Р’ РєРѕРЅС„РёРіСѓСЂР°С†РёРё MSDOS РёР»Рё WIN/EASYWIN РґР»СЏ РІС‹РІРѕРґР° РЅР° С‚РµСЂРјРёРЅР°Р» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
+ РїРѕС‚РѕРє mout, С‚Р°Рє С‡С‚Рѕ РєРѕРЅРєСЂРµС‚РЅРѕРµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ РІС‹РІРѕРґР° РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ
+ С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРµР№ РЇРґСЂР°.
 ****************************************************************************/
 const FString KbdStream::read_fstring(void)
 {
- FString buffer;
+    FString buffer;
 
-/*
- #if 0 //defined LEM_WIN32 && defined LEM_CONSOLE
+    /*
+     #if 0 //defined LEM_WIN32 && defined LEM_CONSOLE
 
- SetConsoleMode(
-                lem_hConsoleInput,
-                ENABLE_LINE_INPUT |
-                ENABLE_ECHO_INPUT |
-                ENABLE_PROCESSED_INPUT
-               );
+     SetConsoleMode(
+                    lem_hConsoleInput,
+                    ENABLE_LINE_INPUT |
+                    ENABLE_ECHO_INPUT |
+                    ENABLE_PROCESSED_INPUT
+                   );
 
- const char s[]="?";
- DWORD d;
- WriteConsole( lem_hConsoleOutput, s, strlen(s), &d, NULL );
+     const char s[]="?";
+     DWORD d;
+     WriteConsole( lem_hConsoleOutput, s, strlen(s), &d, NULL );
 
- // Выделяем буфер для читаемых с клавиатуры символов.
- SOLACHAR *b = new SOLACHAR[256];
- b[0]=0;
+     // Р’С‹РґРµР»СЏРµРј Р±СѓС„РµСЂ РґР»СЏ С‡РёС‚Р°РµРјС‹С… СЃ РєР»Р°РІРёР°С‚СѓСЂС‹ СЃРёРјРІРѕР»РѕРІ.
+     SOLACHAR *b = new SOLACHAR[256];
+     b[0]=0;
 
- DWORD counter=0;
- while( !counter )
-  ReadConsole( lem_hConsoleInput, b, 255, &counter, NULL );
+     DWORD counter=0;
+     while( !counter )
+      ReadConsole( lem_hConsoleInput, b, 255, &counter, NULL );
 
- if( b[ counter-2 ] == '\r' || b[ counter-2 ] == '\n' )
-  b[counter-2] = 0;
- else
-  // Символы загружены, получаем нормальную C-строку.
-  b[counter]=0;
+     if( b[ counter-2 ] == '\r' || b[ counter-2 ] == '\n' )
+      b[counter-2] = 0;
+     else
+      // РЎРёРјРІРѕР»С‹ Р·Р°РіСЂСѓР¶РµРЅС‹, РїРѕР»СѓС‡Р°РµРј РЅРѕСЂРјР°Р»СЊРЅСѓСЋ C-СЃС‚СЂРѕРєСѓ.
+      b[counter]=0;
 
- buffer=b;
- delete[] b; b=NULL;
+     buffer=b;
+     delete[] b; b=NULL;
 
- // Возвращаем консоль в нормальный режим.
- SetConsoleMode( lem_hConsoleInput, ENABLE_PROCESSED_INPUT );
+     // Р’РѕР·РІСЂР°С‰Р°РµРј РєРѕРЅСЃРѕР»СЊ РІ РЅРѕСЂРјР°Р»СЊРЅС‹Р№ СЂРµР¶РёРј.
+     SetConsoleMode( lem_hConsoleInput, ENABLE_PROCESSED_INPUT );
 
- #else*/
+     #else*/
 
- #if defined LEM_WINDOWS && defined LEM_UNICODE_CONSOLE
- if( lem::System_Config::SupportUnicodeConsole() )
-  {
-   lem::UFString buffer;
-
-   HANDLE hKbd = GetStdHandle(STD_INPUT_HANDLE);
-
-   DWORD OldMode=0;
-   GetConsoleMode( hKbd, &OldMode );
-   SetConsoleMode( hKbd, ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT );
-
-   int ibuf=0;
-   while(true)
+#if defined LEM_WINDOWS && defined LEM_UNICODE_CONSOLE
+    if (lem::System_Config::SupportUnicodeConsole())
     {
-     BOOL rc;
-     DWORD n=0;
-     wchar_t c=0;
-     rc = ReadConsoleW( hKbd, &c, 1, &n, NULL );
-     if( c=='\r' )
-      {
-       rc = ReadConsoleW( hKbd, &c, 1, &n, NULL ); // \n
-       LEM_CHECKIT_Z(c=='\n');
-       break;
-      }
+        lem::UFString buffer;
 
-     if( rc==0 || n!=1 || c=='\r' )
-      break;
+        HANDLE hKbd = GetStdHandle(STD_INPUT_HANDLE);
 
-     buffer += c;
-    }
+        DWORD OldMode = 0;
+        GetConsoleMode(hKbd, &OldMode);
+        SetConsoleMode(hKbd, ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
 
-   SetConsoleMode( hKbd, OldMode );
-
-   return lem::to_ascii( buffer, &lem::UI::get_UI().GetTtyCp() );
-  }
- #endif
-
-
-
- // На всякий случай сбросим застрявшие в буфере.
- mout->flush();
-
-/*
- char b[250];
- b[0] = 0;
- gets(b);
-
- buffer = b;
-*/
- 
-
- bool cont=true;
-// bool insert=true;
-
- int pos=0;
- while(cont)
-  {
-   lem::uint16_t ch=lem_getch();
-
-   if( ch==LEM_EKEY_ESC )
-    {
-     // Отказ от ввода.
-     mout->eol();
-     mout->flush();
-     return FString();
-    }
-
-   switch(ch)
-    {
-     case LEM_EKEY_ENTER:
-      #if defined LEM_WINDOWS
-      mout->printf( '\x0a' );
-      #endif
-      cont=false;
-      break;
-
-     case LEM_EKEY_CR:
-      // Вернем текущую строку.
-      cont=false;
-      break;
-
-     case LEM_EKEY_ESC:
-      {
-       // Нажата 'ESC' - очистим буфер и вернем пустую строку.
-       buffer="";
-       mout->eol();
-       mout->flush();
-       cont=false;
-       break;
-      }
-
-     case LEM_EKEY_BKSP:
-      {
-       // '<-'. Удаляем символ перед курсором и перемещаем курсор назад.
-
-       if( pos>0 )
+        int ibuf = 0;
+        while (true)
         {
-         pos--;
-         buffer.remove(pos);
-         mout->cr();
-         (*mout)<<buffer.c_str();
-         mout->printf(' ');
-         mout->cr();
-         (*mout)<<buffer.c_str();
-         mout->flush();
+            BOOL rc;
+            DWORD n = 0;
+            wchar_t c = 0;
+            rc = ReadConsoleW(hKbd, &c, 1, &n, NULL);
+            if (c == '\r')
+            {
+                rc = ReadConsoleW(hKbd, &c, 1, &n, NULL); // \n
+                LEM_CHECKIT_Z(c == '\n');
+                break;
+            }
+
+            if (rc == 0 || n != 1 || c == '\r')
+                break;
+
+            buffer += c;
         }
 
-       break;
-      }
+        SetConsoleMode(hKbd, OldMode);
 
-     default:
-      buffer.insert_char(pos,(char)ch);
-      mout->flush();
-      pos++;
-      break;
+        return lem::to_ascii(buffer, &lem::UI::get_UI().GetTtyCp());
     }
-  }
+#endif
 
- mout->ResetPos(0);
 
- return buffer;
+
+    // РќР° РІСЃСЏРєРёР№ СЃР»СѓС‡Р°Р№ СЃР±СЂРѕСЃРёРј Р·Р°СЃС‚СЂСЏРІС€РёРµ РІ Р±СѓС„РµСЂРµ.
+    mout->flush();
+
+    /*
+     char b[250];
+     b[0] = 0;
+     gets(b);
+
+     buffer = b;
+    */
+
+
+    bool cont = true;
+    // bool insert=true;
+
+    int pos = 0;
+    while (cont)
+    {
+        lem::uint16_t ch = lem_getch();
+
+        if (ch == LEM_EKEY_ESC)
+        {
+            // РћС‚РєР°Р· РѕС‚ РІРІРѕРґР°.
+            mout->eol();
+            mout->flush();
+            return FString();
+        }
+
+        switch (ch)
+        {
+        case LEM_EKEY_ENTER:
+#if defined LEM_WINDOWS
+            mout->printf('\x0a');
+#endif
+            cont = false;
+            break;
+
+        case LEM_EKEY_CR:
+            // Р’РµСЂРЅРµРј С‚РµРєСѓС‰СѓСЋ СЃС‚СЂРѕРєСѓ.
+            cont = false;
+            break;
+
+        case LEM_EKEY_ESC:
+        {
+            // РќР°Р¶Р°С‚Р° 'ESC' - РѕС‡РёСЃС‚РёРј Р±СѓС„РµСЂ Рё РІРµСЂРЅРµРј РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ.
+            buffer = "";
+            mout->eol();
+            mout->flush();
+            cont = false;
+            break;
+        }
+
+        case LEM_EKEY_BKSP:
+        {
+            // '<-'. РЈРґР°Р»СЏРµРј СЃРёРјРІРѕР» РїРµСЂРµРґ РєСѓСЂСЃРѕСЂРѕРј Рё РїРµСЂРµРјРµС‰Р°РµРј РєСѓСЂСЃРѕСЂ РЅР°Р·Р°Рґ.
+
+            if (pos > 0)
+            {
+                pos--;
+                buffer.remove(pos);
+                mout->cr();
+                (*mout) << buffer.c_str();
+                mout->printf(' ');
+                mout->cr();
+                (*mout) << buffer.c_str();
+                mout->flush();
+            }
+
+            break;
+        }
+
+        default:
+            buffer.insert_char(pos, (char)ch);
+            mout->flush();
+            pos++;
+            break;
+        }
+    }
+
+    mout->ResetPos(0);
+
+    return buffer;
 }
 
 #endif // defined LEM_CONSOLE
 
 
-#if defined(LEM_WINDOWS) && defined(LEM_GUI)
-
-//#include <imb_tty.h>
-
-/*
-KbdStream::KbdStream(void)
-:Stream(true,false,"")
-{
- wnd = NULL;
- return;
-}
-
-KbdStream::~KbdStream(void)
-{
- lem_rub_off(wnd);
- return;
-}
-
-void KbdStream::CreateWnd(void)
-{
- // Создаем окно эмуляции терминала.
-
- LEM_STOPIT; // ...
-
- return;
-}
-
-
-int KbdStream::get(void)
-{
- if( !(wnd) )
-  CreateWnd();
-
- return wnd->getch();
-}
-
-bool KbdStream::isready(void) const
-{
-// if( IS_NIL(wnd) )
-//  CreateWnd();
-
- return !(wnd) ? false : wnd->is_ready();
-}
-
-const FString KbdStream::read_fstring(void)
-{
- if( !wnd )
-  CreateWnd();
-
- return wnd->gets();
-}
-*/
-#endif // defined LEM_WINDOWS && defined LEM_GUI
-
-
-static const char mes0[]=
-                          "Incorrect input [%s]\n"
-                          "Please repeat\n";
+static const char mes0[] =
+"Incorrect input [%s]\n"
+"Please repeat\n";
 
 
 bool IKbdFormatter::isready(void) const
-{ return !stream ? false : stream->isready(); }
+{
+    return !stream ? false : stream->isready();
+}
 
 
 
 const FString IKbdFormatter::ask_fstring(
-                                         const char* question,
-                                         OFormatter &s,
-                                         bool psw
-                                        )
+    const char* question,
+    OFormatter &s,
+    bool psw
+)
 {
- FString buffer;
- bool first=true;
+    FString buffer;
+    bool first = true;
 
- while(true)
-  {
-   if(!first)
-    s.printf( mes0, buffer.c_str() );
+    while (true)
+    {
+        if (!first)
+            s.printf(mes0, buffer.c_str());
 
-   s.printf( "%us", lem::to_unicode(question).c_str() );
+        s.printf("%us", lem::to_unicode(question).c_str());
 
-   buffer=edline("",psw).c_str();
-   if( buffer.length()>0 )
-    break;
+        buffer = edline("", psw).c_str();
+        if (buffer.length() > 0)
+            break;
 
-   first=false;
-  }
+        first = false;
+    }
 
- recode_string( buffer, dev_cp, local_cp );
+    recode_string(buffer, dev_cp, local_cp);
 
- return buffer;
+    return buffer;
 }
 
 
 const UFString IKbdFormatter::ask_ufstring(
-                                           const char* question,
-                                           OFormatter &s,
-                                           bool psw
-                                          )
+    const char* question,
+    OFormatter &s,
+    bool psw
+)
 {
- #if defined LEM_WINDOWS && defined LEM_UNICODE_CONSOLE
- if( lem::System_Config::SupportUnicodeConsole() )
-  {
-   if( question!=NULL )
-    s.printf( "%s", question );
-
-   lem::UFString buffer;
-
-   HANDLE hKbd = GetStdHandle(STD_INPUT_HANDLE);
-
-   DWORD OldMode=0;
-   GetConsoleMode( hKbd, &OldMode );
-   SetConsoleMode( hKbd, ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT );
-
-   int ibuf=0;
-   while(true)
+#if defined LEM_WINDOWS && defined LEM_UNICODE_CONSOLE
+    if (lem::System_Config::SupportUnicodeConsole())
     {
-     BOOL rc;
-     DWORD n=0;
-     wchar_t c=0;
-     rc = ReadConsoleW( hKbd, &c, 1, &n, NULL );
-     if( c=='\r' )
-      {
-       rc = ReadConsoleW( hKbd, &c, 1, &n, NULL ); // \n
-       LEM_CHECKIT_Z(c=='\n');
-       break;
-      }
+        if (question != NULL)
+            s.printf("%s", question);
 
-     if( rc==0 || n!=1 || c=='\r' )
-      break;
+        lem::UFString buffer;
 
-     buffer += c;
+        HANDLE hKbd = GetStdHandle(STD_INPUT_HANDLE);
+
+        DWORD OldMode = 0;
+        GetConsoleMode(hKbd, &OldMode);
+        SetConsoleMode(hKbd, ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
+
+        int ibuf = 0;
+        while (true)
+        {
+            BOOL rc;
+            DWORD n = 0;
+            wchar_t c = 0;
+            rc = ReadConsoleW(hKbd, &c, 1, &n, NULL);
+            if (c == '\r')
+            {
+                rc = ReadConsoleW(hKbd, &c, 1, &n, NULL); // \n
+                LEM_CHECKIT_Z(c == '\n');
+                break;
+            }
+
+            if (rc == 0 || n != 1 || c == '\r')
+                break;
+
+            buffer += c;
+        }
+
+        SetConsoleMode(hKbd, OldMode);
+
+        return buffer;
     }
+#endif
 
-   SetConsoleMode( hKbd, OldMode );
+#if defined LEM_LINUX
+    if (lem::System_Config::SupportUnicodeConsole())
+    {
+        if (question != NULL)
+            s.printf("%s", question);
 
-   return buffer;
-  }
- #endif
+        char buf[1000] = "";
+        fgets(buf, sizeof(buf) - 1, stdin);
+        int l = strlen(buf);
+        if (l > 0 && (buf[l - 1] == '\n' || buf[l - 1] == '\r')) buf[l - 1] = 0;
+        if (l > 1 && (buf[l - 2] == '\n' || buf[l - 2] == '\r')) buf[l - 2] = 0;
+        return lem::from_utf8(buf);
+    }
+#endif
 
- #if defined LEM_LINUX
- if( lem::System_Config::SupportUnicodeConsole() )
-  {
-   if( question!=NULL )
-    s.printf( "%s", question );
-
-   char buf[1000]="";
-   fgets( buf, sizeof(buf)-1, stdin );
-   int l = strlen(buf);
-   if( l>0 && (buf[l-1]=='\n' || buf[l-1]=='\r') ) buf[l-1]=0;
-   if( l>1 && (buf[l-2]=='\n' || buf[l-2]=='\r') ) buf[l-2]=0;
-   return lem::from_utf8(buf);
-  } 
- #endif
-
- return to_unicode( ask_fstring(question,s,psw), &lem::UI::get_UI().GetTtyCp() );
+    return to_unicode(ask_fstring(question, s, psw), &lem::UI::get_UI().GetTtyCp());
 }
 
 
 const lem::CString IKbdFormatter::ask_string(
-                                             const char* question,
-                                             OFormatter &s,
-                                             bool psw
-                                            )
+    const char* question,
+    OFormatter &s,
+    bool psw
+)
 {
- lem::FString buffer;
+    lem::FString buffer;
 
- bool first=true;
+    bool first = true;
 
- while(true)
-  {
-   if(!first)
-    s.printf( mes0, buffer.c_str() );
+    while (true)
+    {
+        if (!first)
+            s.printf(mes0, buffer.c_str());
 
-   s.printf( "%us", lem::to_unicode(question).c_str() );
+        s.printf("%us", lem::to_unicode(question).c_str());
 
-   buffer=edline("",psw);
-   if( buffer.length()>0 )
-    break;
+        buffer = edline("", psw);
+        if (buffer.length() > 0)
+            break;
 
-   first=false;
-  }
+        first = false;
+    }
 
- recode_string( buffer, dev_cp, local_cp );
+    recode_string(buffer, dev_cp, local_cp);
 
- return buffer.c_str();
+    return buffer.c_str();
 }
 
 
-bool IKbdFormatter::ask_bool( const char *question, OFormatter &s )
+bool IKbdFormatter::ask_bool(const char *question, OFormatter &s)
 {
- CString buffer;
- bool res=false, first=true;
+    CString buffer;
+    bool res = false, first = true;
 
- while(true)
-  {
-   if(!first)
-    s.printf( mes0, buffer.c_str() );
-
-   s.printf( "%us", lem::to_unicode(question).c_str() );
-
-   if(!first)
+    while (true)
     {
-     #if defined LEM_RUSSIAN
-      s.printf(
-               " Варианты ответа: [ y,yes,on,да,вкл,1 / n,not,no,off,нет,выкл,0 ] "
-              );
-     #else
-      s.printf(
-               " Acceptable answers: [ y,yes,on,1 / n,not,no,off,0 ] "
-              );
-     #endif
+        if (!first)
+            s.printf(mes0, buffer.c_str());
+
+        s.printf("%us", lem::to_unicode(question).c_str());
+
+        if (!first)
+        {
+#if defined LEM_RUSSIAN
+            s.printf(
+                " Р’Р°СЂРёР°РЅС‚С‹ РѕС‚РІРµС‚Р°: [ y,yes,on,РґР°,РІРєР»,1 / n,not,no,off,РЅРµС‚,РІС‹РєР»,0 ] "
+            );
+#else
+            s.printf(
+                " Acceptable answers: [ y,yes,on,1 / n,not,no,off,0 ] "
+            );
+#endif
+        }
+
+        buffer = edline("").c_str();
+        if (to_bool(buffer.c_str(), &res))
+            break;
+
+        first = false;
     }
 
-   buffer=edline("").c_str();
-   if( to_bool( buffer.c_str(), &res ) )
-    break;
-
-   first=false;
-  }
-
- return res;
+    return res;
 }
 
 #if !defined LEM_NOREAL
 // ******************************************
 // *                                        *
-// *   ВВОД ЧИСЛА С ПЛАВАЮЩЕЙ ТОЧКОЙ REAL   *
+// *   Р’Р’РћР” Р§РРЎР›Рђ РЎ РџР›РђР’РђР®Р©Р•Р™ РўРћР§РљРћР™ REAL   *
 // *                                        *
 // ******************************************
-double IKbdFormatter::ask_real( const char *question, OFormatter &s )
+double IKbdFormatter::ask_real(const char *question, OFormatter &s)
 {
- CString buffer;
+    CString buffer;
 
- bool first=true;
- double res;
+    bool first = true;
+    double res;
 
- while(true)
-  {
-   if(!first)
-    s.printf( mes0, buffer.c_str() );
+    while (true)
+    {
+        if (!first)
+            s.printf(mes0, buffer.c_str());
 
-   s.printf( "%us", lem::to_unicode(question).c_str() );
+        s.printf("%us", lem::to_unicode(question).c_str());
 
-   buffer = edline("").c_str();
-   if( to_real( buffer.c_str(), &res ) )
-    break;
+        buffer = edline("").c_str();
+        if (to_real(buffer.c_str(), &res))
+            break;
 
-   first=false;
-  }
+        first = false;
+    }
 
- return res;
+    return res;
 }
 #endif
 
 // ******************************************
 // *                                        *
-// *   ВВОД ЦЕЛОГО ЧИСЛА ТЕКУЩЕГО ТИПА int  *
+// *   Р’Р’РћР” Р¦Р•Р›РћР“Рћ Р§РРЎР›Рђ РўР•РљРЈР©Р•Р“Рћ РўРРџРђ int  *
 // *                                        *
 // ******************************************
-int IKbdFormatter::ask_int( const char *question, OFormatter &s )
+int IKbdFormatter::ask_int(const char *question, OFormatter &s)
 {
- FString buffer;
- bool first=true;
- int res;
+    FString buffer;
+    bool first = true;
+    int res;
 
- while(true)
-  {
-   if(!first)
-    s.printf( mes0, buffer.c_str() );
+    while (true)
+    {
+        if (!first)
+            s.printf(mes0, buffer.c_str());
 
-   s.printf( "%us", lem::to_unicode(question).c_str() );
+        s.printf("%us", lem::to_unicode(question).c_str());
 
-   buffer=edline("");
-   if( to_int( buffer.c_str(), &res ) )
-    break;
+        buffer = edline("");
+        if (to_int(buffer.c_str(), &res))
+            break;
 
-   first=false;
-  }
+        first = false;
+    }
 
- return res;
+    return res;
 }
 
 
 // *************************************************************************
-// Простенький текстовый строчный редактор - используется для организации
-// более комфортного ввода данных с терминала, вместо стандартной системной
-// процедуры.
+// РџСЂРѕСЃС‚РµРЅСЊРєРёР№ С‚РµРєСЃС‚РѕРІС‹Р№ СЃС‚СЂРѕС‡РЅС‹Р№ СЂРµРґР°РєС‚РѕСЂ - РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РѕСЂРіР°РЅРёР·Р°С†РёРё
+// Р±РѕР»РµРµ РєРѕРјС„РѕСЂС‚РЅРѕРіРѕ РІРІРѕРґР° РґР°РЅРЅС‹С… СЃ С‚РµСЂРјРёРЅР°Р»Р°, РІРјРµСЃС‚Рѕ СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ СЃРёСЃС‚РµРјРЅРѕР№
+// РїСЂРѕС†РµРґСѓСЂС‹.
 //
-// Если psw=true, то вводимые символы заменяются на экране символом '*'.
-// Это обычно используется при вводе паролей.
+// Р•СЃР»Рё psw=true, С‚Рѕ РІРІРѕРґРёРјС‹Рµ СЃРёРјРІРѕР»С‹ Р·Р°РјРµРЅСЏСЋС‚СЃСЏ РЅР° СЌРєСЂР°РЅРµ СЃРёРјРІРѕР»РѕРј '*'.
+// Р­С‚Рѕ РѕР±С‹С‡РЅРѕ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїСЂРё РІРІРѕРґРµ РїР°СЂРѕР»РµР№.
 // *************************************************************************
 const FString IKbdFormatter::edline(
-                                    const char *question,
-                                    bool psw,
-                                    OFormatter &s
-                                   )
+    const char *question,
+    bool psw,
+    OFormatter &s
+)
 {
- LEM_CHECKIT_Z( stream );
+    LEM_CHECKIT_Z(stream);
 
-/*
- int pos=0;
- s.printf( "%s", question );
+    /*
+     int pos=0;
+     s.printf( "%s", question );
 
- FString buffer;
+     FString buffer;
 
- #if defined LEM_WATCOM
+     #if defined LEM_WATCOM
 
- bool cont=true;
+     bool cont=true;
 
- while(cont)
-  {
-   char ch=stream->get();
-
-   switch(ch)
-    {
-     case '\r':
-      // Вернем текущую строку.
-      cont=false;
-      break;
-
-     #if !defined LEM_BORLAND_3_1
-     case 3: // Ctrl-C
-       raise(SIGBREAK);
-       buffer="";
-       cont=false;
-       break;
-     #endif
-
-     case 27:
+     while(cont)
       {
-       // Нажата 'ESC' - очистим буфер и вернем пустую строку.
-       buffer="";
-       cont=false;
-       break;
-      }
-
-     case '\b':
-      {
-       // '<-'
-       if( buffer.len() )
-        {
-         pos--;
-         buffer.remove(pos);
-
-         s.printf( "'\b'" );
-        }
-
-       break;
-      }
-
-     case 0:
-       stream->get();
-       break;
-
-     default:
-       {
-        if( pos<buffer.length() )
-         buffer.set(pos,ch);
-        else
-         buffer += ch;
-
-        pos++;
-
-        if( psw )
-         s.printf( "*" );
-        else
-         s.printf( "%c", ch );
-
-        break;
-       }
-    }
-  }
-
- #elif defined LEM_SYMANTEC || defined LEM_DJGPP
-
-  // Ввод паролей не реализован.
-  LEM_CHECKIT( psw=false );
-
-  char *b = new char[128];
-  gets( b );
-  buffer=b;
-  delete b;
-
- #else
-
- bool cont=true;
- bool insert=true;
-
- int x0=wherex(), y0=wherey();
-
- while(cont)
-  {
-   int x=wherex(), y=wherey();
-
-   char ch=stream->get();
-
-   switch(ch)
-    {
-     case '\r':
-      // Вернем текущую строку.
-      cont=false;
-      s.eol();
-      break;
-
-     #if !defined LEM_BORLAND_3_1
-     case 3: // Ctrl-C
-       raise(SIGBREAK);
-       buffer="";
-       cont=false;
-       break;
-     #endif
-
-     case 27:
-      {
-       // Нажата 'ESC' - очистим буфер и вернем пустую строку.
-       buffer="";
-       cont=false;
-       s.eol();
-       break;
-      }
-
-     case '\b':
-      {
-       // '<-'
-
-       if( pos>0 )
-        {
-         pos--;
-         buffer.remove(pos);
-         gotoxy(x0,y0);
-
-         if( !psw )
-          s.printf( "%s ", buffer.string() );
-         else
-          s.printf( "%H* ", buffer.len() );
-
-         gotoxy(x-1,y);
-        }
-
-       break;
-      }
-
-     case 0:
-      {
-       ch=stream->get();
+       char ch=stream->get();
 
        switch(ch)
         {
-         case 'K':
-          if(pos>0)
-           {
-            pos--;
-            gotoxy(x-1,y);
-           }
+         case '\r':
+          // Р’РµСЂРЅРµРј С‚РµРєСѓС‰СѓСЋ СЃС‚СЂРѕРєСѓ.
+          cont=false;
           break;
 
-         case 'M':
-          if(pos<buffer.len())
+         #if !defined LEM_BORLAND_3_1
+         case 3: // Ctrl-C
+           raise(SIGBREAK);
+           buffer="";
+           cont=false;
+           break;
+         #endif
+
+         case 27:
+          {
+           // РќР°Р¶Р°С‚Р° 'ESC' - РѕС‡РёСЃС‚РёРј Р±СѓС„РµСЂ Рё РІРµСЂРЅРµРј РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ.
+           buffer="";
+           cont=false;
+           break;
+          }
+
+         case '\b':
+          {
+           // '<-'
+           if( buffer.len() )
+            {
+             pos--;
+             buffer.remove(pos);
+
+             s.printf( "'\b'" );
+            }
+
+           break;
+          }
+
+         case 0:
+           stream->get();
+           break;
+
+         default:
            {
+            if( pos<buffer.length() )
+             buffer.set(pos,ch);
+            else
+             buffer += ch;
+
             pos++;
-            gotoxy(x+1,y);
+
+            if( psw )
+             s.printf( "*" );
+            else
+             s.printf( "%c", ch );
+
+            break;
            }
-          break;
-
-         case 'R':
-          #if !defined LEM_WINDOWS
-          if( (insert=!insert) )
-           _setcursortype(_NORMALCURSOR);
-          else
-           _setcursortype(_SOLIDCURSOR);
-          break;
-          #endif
-
-         case 'S':
-          buffer.remove(pos);
-          gotoxy(x0,y0);
-
-          if( !psw )
-           s.printf( "%s ", buffer.string() );
-          else
-           s.printf( "%H* ", buffer.len() );
-
-          gotoxy(x,y);
-          break;
         }
-
-       break;
       }
 
-     default:
-      if( insert )
-       {
-        // Режим вставки символов
-        if( pos<buffer.len() )
-         buffer.set(pos,ch);
-        else
-         buffer += ch;
+     #elif defined LEM_SYMANTEC || defined LEM_DJGPP
 
-        gotoxy(x0,y0);
+      // Р’РІРѕРґ РїР°СЂРѕР»РµР№ РЅРµ СЂРµР°Р»РёР·РѕРІР°РЅ.
+      LEM_CHECKIT( psw=false );
 
-         if( !psw )
-          s.printf( "%s ", buffer.string() );
-         else
-          s.printf( "%H* ", buffer.len() );
+      char *b = new char[128];
+      gets( b );
+      buffer=b;
+      delete b;
 
-        gotoxy(x+1,y);
-        pos++;
-       }
-      else
-       {
-        // Режим 'overwrite'
-        if( pos<buffer.len() )
-         buffer.set(pos,ch);
-        else
-         buffer += ch;
+     #else
 
-        gotoxy(x0,y0);
+     bool cont=true;
+     bool insert=true;
 
-         if( !psw )
-          s.printf( "%s ", buffer.string() );
-         else
-          s.printf( "%H* ", buffer.len() );
+     int x0=wherex(), y0=wherey();
 
-        gotoxy(x,y);
-       }
-    }
-  }
- #endif
+     while(cont)
+      {
+       int x=wherex(), y=wherey();
 
- return buffer;
-*/
+       char ch=stream->get();
 
- return stream->read_fstring();
+       switch(ch)
+        {
+         case '\r':
+          // Р’РµСЂРЅРµРј С‚РµРєСѓС‰СѓСЋ СЃС‚СЂРѕРєСѓ.
+          cont=false;
+          s.eol();
+          break;
+
+         #if !defined LEM_BORLAND_3_1
+         case 3: // Ctrl-C
+           raise(SIGBREAK);
+           buffer="";
+           cont=false;
+           break;
+         #endif
+
+         case 27:
+          {
+           // РќР°Р¶Р°С‚Р° 'ESC' - РѕС‡РёСЃС‚РёРј Р±СѓС„РµСЂ Рё РІРµСЂРЅРµРј РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ.
+           buffer="";
+           cont=false;
+           s.eol();
+           break;
+          }
+
+         case '\b':
+          {
+           // '<-'
+
+           if( pos>0 )
+            {
+             pos--;
+             buffer.remove(pos);
+             gotoxy(x0,y0);
+
+             if( !psw )
+              s.printf( "%s ", buffer.string() );
+             else
+              s.printf( "%H* ", buffer.len() );
+
+             gotoxy(x-1,y);
+            }
+
+           break;
+          }
+
+         case 0:
+          {
+           ch=stream->get();
+
+           switch(ch)
+            {
+             case 'K':
+              if(pos>0)
+               {
+                pos--;
+                gotoxy(x-1,y);
+               }
+              break;
+
+             case 'M':
+              if(pos<buffer.len())
+               {
+                pos++;
+                gotoxy(x+1,y);
+               }
+              break;
+
+             case 'R':
+              #if !defined LEM_WINDOWS
+              if( (insert=!insert) )
+               _setcursortype(_NORMALCURSOR);
+              else
+               _setcursortype(_SOLIDCURSOR);
+              break;
+              #endif
+
+             case 'S':
+              buffer.remove(pos);
+              gotoxy(x0,y0);
+
+              if( !psw )
+               s.printf( "%s ", buffer.string() );
+              else
+               s.printf( "%H* ", buffer.len() );
+
+              gotoxy(x,y);
+              break;
+            }
+
+           break;
+          }
+
+         default:
+          if( insert )
+           {
+            // Р РµР¶РёРј РІСЃС‚Р°РІРєРё СЃРёРјРІРѕР»РѕРІ
+            if( pos<buffer.len() )
+             buffer.set(pos,ch);
+            else
+             buffer += ch;
+
+            gotoxy(x0,y0);
+
+             if( !psw )
+              s.printf( "%s ", buffer.string() );
+             else
+              s.printf( "%H* ", buffer.len() );
+
+            gotoxy(x+1,y);
+            pos++;
+           }
+          else
+           {
+            // Р РµР¶РёРј 'overwrite'
+            if( pos<buffer.len() )
+             buffer.set(pos,ch);
+            else
+             buffer += ch;
+
+            gotoxy(x0,y0);
+
+             if( !psw )
+              s.printf( "%s ", buffer.string() );
+             else
+              s.printf( "%H* ", buffer.len() );
+
+            gotoxy(x,y);
+           }
+        }
+      }
+     #endif
+
+     return buffer;
+    */
+
+    return stream->read_fstring();
 }
 
 
 void IKbdFormatter::wait(void)
 {
- stream->wait_ready();
- return;
+    stream->wait_ready();
+    return;
 }
 
 
 
 #if defined LEM_CONSOLE && defined LEM_UNIX
 static struct termios stored_settings;
-     
+
 static void set_keypress(void)
 {
- struct termios new_settings;
-     
- tcgetattr(0,&stored_settings);
-     
- new_settings = stored_settings;
-     
- /* Disable canonical mode, and set buffer size to 1 byte */
- new_settings.c_lflag &= (~ICANON);
- new_settings.c_cc[VTIME] = 0;
- new_settings.c_cc[VMIN] = 1;
-     
- tcsetattr(0,TCSANOW,&new_settings);
- return;
+    struct termios new_settings;
+
+    tcgetattr(0, &stored_settings);
+
+    new_settings = stored_settings;
+
+    /* Disable canonical mode, and set buffer size to 1 byte */
+    new_settings.c_lflag &= (~ICANON);
+    new_settings.c_cc[VTIME] = 0;
+    new_settings.c_cc[VMIN] = 1;
+
+    tcsetattr(0, TCSANOW, &new_settings);
+    return;
 }
-     
+
 static void reset_keypress(void)
 {
- tcsetattr(0,TCSANOW,&stored_settings);
- return;
+    tcsetattr(0, TCSANOW, &stored_settings);
+    return;
 }
 #endif
 
 
- // ************************************************************************
- // Процедура опрашивает клавиатуру и если была нажата специальная клавиша,
- // то она извлекает из буфера старший код клавиши и возвращает полный
- // 16-битный код.
- //
- // Если нажата обычная клавиша (включая некоторые управляющие типа ENTER),
- // то возвращенное значение будет лежать в диапазоне 0x0000-0x00ff. Для
- // специальных сочетаний и функциональных клавиш возвращаются значения из
- // диапазона 0x0100...0xff00. Смотри константы в файле [io_ekeys.h] - коды
- // специальных сочетаний.
- // *************************************************************************
- static int lem_getch(void)
- {
-  #if defined LEM_WINDOWS && defined LEM_GUI
+// ************************************************************************
+// РџСЂРѕС†РµРґСѓСЂР° РѕРїСЂР°С€РёРІР°РµС‚ РєР»Р°РІРёР°С‚СѓСЂСѓ Рё РµСЃР»Рё Р±С‹Р»Р° РЅР°Р¶Р°С‚Р° СЃРїРµС†РёР°Р»СЊРЅР°СЏ РєР»Р°РІРёС€Р°,
+// С‚Рѕ РѕРЅР° РёР·РІР»РµРєР°РµС‚ РёР· Р±СѓС„РµСЂР° СЃС‚Р°СЂС€РёР№ РєРѕРґ РєР»Р°РІРёС€Рё Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР»РЅС‹Р№
+// 16-Р±РёС‚РЅС‹Р№ РєРѕРґ.
+//
+// Р•СЃР»Рё РЅР°Р¶Р°С‚Р° РѕР±С‹С‡РЅР°СЏ РєР»Р°РІРёС€Р° (РІРєР»СЋС‡Р°СЏ РЅРµРєРѕС‚РѕСЂС‹Рµ СѓРїСЂР°РІР»СЏСЋС‰РёРµ С‚РёРїР° ENTER),
+// С‚Рѕ РІРѕР·РІСЂР°С‰РµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Р±СѓРґРµС‚ Р»РµР¶Р°С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ 0x0000-0x00ff. Р”Р»СЏ
+// СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРѕС‡РµС‚Р°РЅРёР№ Рё С„СѓРЅРєС†РёРѕРЅР°Р»СЊРЅС‹С… РєР»Р°РІРёС€ РІРѕР·РІСЂР°С‰Р°СЋС‚СЃСЏ Р·РЅР°С‡РµРЅРёСЏ РёР·
+// РґРёР°РїР°Р·РѕРЅР° 0x0100...0xff00. РЎРјРѕС‚СЂРё РєРѕРЅСЃС‚Р°РЅС‚С‹ РІ С„Р°Р№Р»Рµ [io_ekeys.h] - РєРѕРґС‹
+// СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРѕС‡РµС‚Р°РЅРёР№.
+// *************************************************************************
+static int lem_getch(void)
+{
+#if defined LEM_WINDOWS && defined LEM_GUI
 
-   MSG msg;
-   HWND hwnd=GetFocus();
+    MSG msg;
+    HWND hwnd = GetFocus();
 
-   // Опрашиваем очередь окна до появления сообщения о нажатии.
+    // РћРїСЂР°С€РёРІР°РµРј РѕС‡РµСЂРµРґСЊ РѕРєРЅР° РґРѕ РїРѕСЏРІР»РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ РЅР°Р¶Р°С‚РёРё.
     do
-     {
-      GetMessage( &msg, hwnd, 0, 0x7FFF );
-     }
-    while (msg.message != WM_KEYDOWN);
-
-   return msg.wParam;
-
-/*
-  #elif defined LEM_WIN32 && defined LEM_CONSOLE
-
-   char b[1]={ '\0' };
-   DWORD counter=0;
-
-   // Ждем, пока не будет нажата клавиша.
-   while(!counter)
-    ReadConsole( lem_hConsoleInput, b, 1, &counter, NULL );
-
-   return b[0];
-*/
-  #elif defined LEM_UNIX && defined LEM_CONSOLE
-
-   set_keypress();
-
-   if( lem::System_Config::SupportUnicodeConsole() )
     {
-     const unsigned int ch0 = getchar();
-  
-     unsigned int ch1 = 0;
-     if( ch0==0 )
-      ch1 = (getchar()<<8);
+        GetMessage(&msg, hwnd, 0, 0x7FFF);
+    } while (msg.message != WM_KEYDOWN);
 
-     const char res_ch = ch1 | ch0;
-   
-     if( res_ch=='\n' )
-      printf( "\r\n" ); 
-  
-      reset_keypress();
-     return res_ch;
-    }
-   else
-    {
+    return msg.wParam;
+
+    /*
+      #elif defined LEM_WIN32 && defined LEM_CONSOLE
+
+       char b[1]={ '\0' };
+       DWORD counter=0;
+
+       // Р–РґРµРј, РїРѕРєР° РЅРµ Р±СѓРґРµС‚ РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р°.
+       while(!counter)
+        ReadConsole( lem_hConsoleInput, b, 1, &counter, NULL );
+
+       return b[0];
+    */
+#elif defined LEM_UNIX && defined LEM_CONSOLE
+
     set_keypress();
 
-     const unsigned int ch0 = getch();
-  
-     unsigned int ch1 = 0;
-     if( ch0==0 )
-      ch1 = (getch()<<8);
-     else
-      {
-       mout->printf(ch0);
-      }           
+    if (lem::System_Config::SupportUnicodeConsole())
+    {
+        const unsigned int ch0 = getchar();
 
-     const char res_ch = ch1 | ch0;
-   
-     if( res_ch=='\n' )
-      printf( "\r\n" ); 
+        unsigned int ch1 = 0;
+        if (ch0 == 0)
+            ch1 = (getchar() << 8);
 
-     reset_keypress();
-     return res_ch;
-    }          
-  
-  #elif defined LEM_WINDOWS && defined LEM_CONSOLE
+        const char res_ch = ch1 | ch0;
 
-   #if defined LEM_BORLAND
-   const unsigned int ch0 = getche();
-   unsigned int ch1 = 0;
-   if( ch0==0 )
-    ch1 = (getche()<<8);
-   #else
-   const unsigned int ch0 = _getche();
-   unsigned int ch1 = 0;
-   if( ch0==0 )
-    ch1 = (_getche()<<8);
-   #endif
+        if (res_ch == '\n')
+            printf("\r\n");
 
-   return ch1 | ch0;
+        reset_keypress();
+        return res_ch;
+    }
+    else
+    {
+        set_keypress();
 
-  #elif /*defined LEM_WINDOWS &&*/ defined LEM_CONSOLE
+        const unsigned int ch0 = getch();
 
-   const unsigned int ch0 = cin.get();
-   unsigned int ch1 = 0;
-   if( ch0==0 )
-    ch1 = (cin.get()<<8);
+        unsigned int ch1 = 0;
+        if (ch0 == 0)
+            ch1 = (getch() << 8);
+        else
+        {
+            mout->printf(ch0);
+        }
 
-   return ch1 | ch0;
+        const char res_ch = ch1 | ch0;
 
-  #elif defined LEM_GNUC && defined LEM_DOS
+        if (res_ch == '\n')
+            printf("\r\n");
 
-   const unsigned int ch0 = getch();
-   unsigned int ch1 = 0;
-   if( ch0==0 )
-    ch1 = (getch()<<8);
+        reset_keypress();
+        return res_ch;
+    }
 
-   return ch1 | ch0;
+#elif defined LEM_WINDOWS && defined LEM_CONSOLE
 
-  #else
+#if defined LEM_BORLAND
+    const unsigned int ch0 = getche();
+    unsigned int ch1 = 0;
+    if (ch0 == 0)
+        ch1 = (getche() << 8);
+#else
+    const unsigned int ch0 = _getche();
+    unsigned int ch1 = 0;
+    if (ch0 == 0)
+        ch1 = (_getche() << 8);
+#endif
 
-   const unsigned int ch0 = getch();
-   unsigned int ch1 = 0;
-   if( ch0==0 )
-    ch1 = (getch()<<8);
+    return ch1 | ch0;
 
-   return ch1 | ch0;
+#elif /*defined LEM_WINDOWS &&*/ defined LEM_CONSOLE
 
-  #endif
- }
+    const unsigned int ch0 = cin.get();
+    unsigned int ch1 = 0;
+    if (ch0 == 0)
+        ch1 = (cin.get() << 8);
+
+    return ch1 | ch0;
+
+#elif defined LEM_GNUC && defined LEM_DOS
+
+    const unsigned int ch0 = getch();
+    unsigned int ch1 = 0;
+    if (ch0 == 0)
+        ch1 = (getch() << 8);
+
+    return ch1 | ch0;
+
+#else
+
+    const unsigned int ch0 = getch();
+    unsigned int ch1 = 0;
+    if (ch0 == 0)
+        ch1 = (getch() << 8);
+
+    return ch1 | ch0;
+
+#endif
+}

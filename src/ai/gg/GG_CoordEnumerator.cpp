@@ -8,7 +8,7 @@ using namespace Solarix;
 
 
 GG_CoordEnumerator::GG_CoordEnumerator( AlphabetStorage *_db, GG_Coordinates * _p )
- : rs(NULL), db(_db), p(_p)
+ : rs(nullptr), db(_db), p(_p)
 {
 }
 
@@ -20,7 +20,7 @@ GG_CoordEnumerator::~GG_CoordEnumerator(void)
 
 bool GG_CoordEnumerator::Fetch(void)
 {
- if( rs==NULL )
+ if( rs==nullptr )
   {
    rs = db->ListCoords();
   }

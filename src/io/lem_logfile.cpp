@@ -1,6 +1,6 @@
-// 02.10.2007 - введена синхронизация для мультитредовых приложений.
-// 11.01.2008 - введены методы Begin() и Commit() для принудительного блокирования записи
-//              с конкурирующих тредов. 
+п»ї// 02.10.2007 - РІРІРµРґРµРЅР° СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ РґР»СЏ РјСѓР»СЊС‚РёС‚СЂРµРґРѕРІС‹С… РїСЂРёР»РѕР¶РµРЅРёР№.
+// 11.01.2008 - РІРІРµРґРµРЅС‹ РјРµС‚РѕРґС‹ Begin() Рё Commit() РґР»СЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРіРѕ Р±Р»РѕРєРёСЂРѕРІР°РЅРёСЏ Р·Р°РїРёСЃРё
+//              СЃ РєРѕРЅРєСѓСЂРёСЂСѓСЋС‰РёС… С‚СЂРµРґРѕРІ. 
 
 #include <lem/streams.h>
 #include <lem/console_streams.h>
@@ -11,15 +11,15 @@ using namespace lem;
 lem::Ptr<OFormatter> lem::LogFile::logfile;
 
 #if defined LEM_BORLAND
- namespace std
- {
-  void swap( lem::OFormatter *a, lem::OFormatter *b )
-  {
-   OFormatter *c = a;
-   a=b;
-   b=c;  
-  }
- }
+namespace std
+{
+    void swap(lem::OFormatter *a, lem::OFormatter *b)
+    {
+        OFormatter *c = a;
+        a = b;
+        b = c;
+    }
+}
 #endif
 
 
@@ -32,136 +32,140 @@ LogFile::LogFile(void)
 }
 
 
-void LogFile::Open( const lem::Path& filename )
+void LogFile::Open(const lem::Path& filename)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- logfile = lem::Ptr<OFormatter>( new OUFormatter(filename) );
- logfile->GetStream()->NoBuffer();
- logfile->SetAutoflush();
+    logfile = lem::Ptr<OFormatter>(new OUFormatter(filename));
+    logfile->GetStream()->NoBuffer();
+    logfile->SetAutoflush();
 
- return;
+    return;
 }
 
 
-void LogFile::Set( lem::Ptr<OFormatter> file )
+void LogFile::Set(lem::Ptr<OFormatter> file)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- logfile=file;
+    logfile = file;
 
- return;
+    return;
 }
 
 
 // *****************************************
-// Выводить отладочные сообщения на консоль
+// Р’С‹РІРѕРґРёС‚СЊ РѕС‚Р»Р°РґРѕС‡РЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ РЅР° РєРѕРЅСЃРѕР»СЊ
 // *****************************************
 void LogFile::Tty(void)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- #if defined LEM_CONSOLE
- logfile = lem::Ptr<OFormatter>( lem::mout, null_deleter() );
- #else
- logfile.reset();
- #endif
- return;
+#if defined LEM_CONSOLE
+    logfile = lem::Ptr<OFormatter>(lem::mout, null_deleter());
+#else
+    logfile.reset();
+#endif
+    return;
 }
 
 
 
 void LogFile::Close(void)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- if( logfile )
-  {
-   logfile.reset();
-  }
+    if (logfile)
+    {
+        logfile.reset();
+    }
 
- return;
+    return;
 }
 
 bool LogFile::IsOpen(void)
 {
- return !!logfile;
+    return !!logfile;
 }
 
 void LogFile::TimeStamp(void)
 {
- if( logfile )
-  logfile->printf( "%W24us ", timestamp().c_str() ); 
+    if (logfile)
+        logfile->printf("%W24us ", timestamp().c_str());
 
- return;
+    return;
 }
 
 
 
-void LogFile::Print( const char *mes )
+void LogFile::Print(const char *mes)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- if( logfile )
-  {
-   TimeStamp();
-   logfile->printf( "%s\r\n", mes );
-  }
+    if (logfile)
+    {
+        TimeStamp();
+        logfile->printf("%s\r\n", mes);
+    }
 
- return;
+    return;
 }
 
 
-void LogFile::Print( const wchar_t *mes )
+void LogFile::Print(const wchar_t *mes)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker cs_quard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker cs_quard(&cs);
+#endif
 
- if( logfile )
-  {
-   TimeStamp();
-   logfile->printf( "%us\r\n", mes );
-  }
+    if (logfile)
+    {
+        TimeStamp();
+        logfile->printf("%us\r\n", mes);
+    }
 
- return;
+    return;
 }
 
-void LogFile::Print( const lem::UFString & mes )
-{ Print(mes.c_str()); }
+void LogFile::Print(const lem::UFString & mes)
+{
+    Print(mes.c_str());
+}
 
-void LogFile::Print( const std::wstring & mes )
-{ Print(mes.c_str()); }
+void LogFile::Print(const std::wstring & mes)
+{
+    Print(mes.c_str());
+}
 
 
 // ******************************************************
-// Для записи нескольких сообщений можно принудительно
-// запретить другим тредам вмешиваться в запись.
+// Р”Р»СЏ Р·Р°РїРёСЃРё РЅРµСЃРєРѕР»СЊРєРёС… СЃРѕРѕР±С‰РµРЅРёР№ РјРѕР¶РЅРѕ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ
+// Р·Р°РїСЂРµС‚РёС‚СЊ РґСЂСѓРіРёРј С‚СЂРµРґР°Рј РІРјРµС€РёРІР°С‚СЊСЃСЏ РІ Р·Р°РїРёСЃСЊ.
 // ******************************************************
 void LogFile::Begin(void)
 {
- #if defined LEM_THREADS
- cs.Enter();
- #endif
+#if defined LEM_THREADS
+    cs.Enter();
+#endif
 }
 
 
 // *******************************************
-// Разрешаем другим тредам запись в журнал
+// Р Р°Р·СЂРµС€Р°РµРј РґСЂСѓРіРёРј С‚СЂРµРґР°Рј Р·Р°РїРёСЃСЊ РІ Р¶СѓСЂРЅР°Р»
 // *******************************************
 void LogFile::Commit(void)
 {
- #if defined LEM_THREADS
- cs.Leave();
- #endif
+#if defined LEM_THREADS
+    cs.Leave();
+#endif
 }

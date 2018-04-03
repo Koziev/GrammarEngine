@@ -1,27 +1,27 @@
 #if !defined SYMBOL_ENUMERATOR__H
- #define SYMBOL_ENUMERATOR__H
- 
- #include <lem/noncopyable.h>
+#define SYMBOL_ENUMERATOR__H
 
- namespace Solarix
- {
-  class GG_Entry;
-  class Symbols;
-  class LS_ResultSet;
+#include <lem/noncopyable.h>
 
-  class SymbolEnumerator : lem::NonCopyable
-  {
-   private:
-    LS_ResultSet *rs;
-    Symbols *symbols;
+namespace Solarix
+{
+    class GG_Entry;
+    class Symbols;
+    class LS_ResultSet;
 
-   public:
-    SymbolEnumerator( Symbols *_symbols, LS_ResultSet *_ts );
-    virtual ~SymbolEnumerator(void);
+    class SymbolEnumerator : lem::NonCopyable
+    {
+    private:
+        LS_ResultSet *rs;
+        Symbols *symbols;
 
-    virtual bool Fetch(void);
-    virtual int GetId(void);
-    virtual const GG_Entry& GetItem(void);
-  };
- }
+    public:
+        SymbolEnumerator(Symbols *_symbols, LS_ResultSet *_ts);
+        virtual ~SymbolEnumerator();
+
+        virtual bool Fetch();
+        virtual int GetId();
+        virtual const GG_Entry& GetItem();
+    };
+}
 #endif

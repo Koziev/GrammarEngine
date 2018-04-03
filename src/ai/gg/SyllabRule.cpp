@@ -6,68 +6,68 @@
 
 using namespace Solarix;
 
-SyllabRule::SyllabRule(void)
+SyllabRule::SyllabRule()
 {
- id_src=id_language=UNKNOWN;
- return;
+    id_src = id_language = UNKNOWN;
+    return;
 }
 
 
-SyllabRule::SyllabRule( const lem::UCString &_name, int _id_src, int _id_language )
- : name(_name), id_src(_id_src), id_language(_id_language)
+SyllabRule::SyllabRule(const lem::UCString &_name, int _id_src, int _id_language)
+    : name(_name), id_src(_id_src), id_language(_id_language)
 {
 }
 
 
-   
+
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void SyllabRule::LoadTxt( lem::Iridium::Macro_Parser &txtfile, Dictionary &dict )
+void SyllabRule::LoadTxt(lem::Iridium::Macro_Parser &txtfile, Dictionary &dict)
 {
- lem::Iridium::BSourceState point_begin = txtfile.tellp();
- id_src = dict.GetDebugSymbols().RegisterLocation( txtfile, point_begin );
+    lem::Iridium::BSourceState point_begin = txtfile.tellp();
+    id_src = dict.GetDebugSymbols().RegisterLocation(txtfile, point_begin);
 
- // øàïêà: syllab_rule XXXX language=YYY
- name = txtfile.read().string();
- txtfile.read_it( B_LANGUAGE );
- txtfile.read_it( B_EQUAL );
- lem::Iridium::BethToken lang = txtfile.read();
- id_language = dict.GetSynGram().Find_Language(lang.string());
- if( id_language==UNKNOWN )
-  {
-   lem::Iridium::Print_Error(lang,txtfile);
-   dict.GetIO().merr().printf( "Unknown language name %us\n", lang.c_str() );
-   throw lem::E_BaseException();
-  }     
+    // ÑˆÐ°Ð¿ÐºÐ°: syllab_rule XXXX language=YYY
+    name = txtfile.read().string();
+    txtfile.read_it(B_LANGUAGE);
+    txtfile.read_it(B_EQUAL);
+    lem::Iridium::BethToken lang = txtfile.read();
+    id_language = dict.GetSynGram().Find_Language(lang.string());
+    if (id_language == UNKNOWN)
+    {
+        lem::Iridium::Print_Error(lang, txtfile);
+        dict.GetIO().merr().printf("Unknown language name %us\n", lang.c_str());
+        throw lem::E_BaseException();
+    }
 
- txtfile.read_it( B_OFIGPAREN );
+    txtfile.read_it(B_OFIGPAREN);
 
- txtfile.read_it( B_IF );
- txtfile.read_it( B_CONTEXT );
+    txtfile.read_it(B_IF);
+    txtfile.read_it(B_CONTEXT);
 
- condition.LoadTxt( txtfile, dict );
+    condition.LoadTxt(txtfile, dict);
 
- txtfile.read_it( B_THEN );
- txtfile.read_it( B_OFIGPAREN );
- txtfile.read_it( B_CONTEXT );
+    txtfile.read_it(B_THEN);
+    txtfile.read_it(B_OFIGPAREN);
+    txtfile.read_it(B_CONTEXT);
 
- result.LoadTxt( txtfile, dict, condition );
- 
- txtfile.read_it( B_CFIGPAREN ); // çàêðûâàåì áëîê then { ... }
- 
- txtfile.read_it( B_CFIGPAREN ); // çàêðûâàåì òåëî ïðàâèëà
+    result.LoadTxt(txtfile, dict, condition);
 
- return; 
+    txtfile.read_it(B_CFIGPAREN); // Ð·Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð±Ð»Ð¾Ðº then { ... }
+
+    txtfile.read_it(B_CFIGPAREN); // Ð·Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ñ‚ÐµÐ»Ð¾ Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð°
+
+    return;
 }
 #endif
 
 
-void SyllabRule::Store( AlphabetStorage * storage ) const
+void SyllabRule::Store(AlphabetStorage * storage) const
 {
- const int id_rule = storage->StoreSyllabRule( GetName(), GetLanguage(), GetSource(), GetResult().GetShift() );
+    const int id_rule = storage->StoreSyllabRule(GetName(), GetLanguage(), GetSource(), GetResult().GetShift());
 
- GetCondition().Store( storage, id_rule );
- GetResult().Store( storage, id_rule );
+    GetCondition().Store(storage, id_rule);
+    GetResult().Store(storage, id_rule);
 
- return;
+    return;
 }
 

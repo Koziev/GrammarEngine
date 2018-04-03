@@ -3,23 +3,23 @@
 
 using namespace Solarix;
 
-CriterionEnumeratorInFile::CriterionEnumeratorInFile( const CriteriaInFile *_criteria )
- : criteria(_criteria), i(-1)
+CriterionEnumeratorInFile::CriterionEnumeratorInFile(const CriteriaInFile *_criteria)
+    : criteria(_criteria), i(-1)
 {
 }
 
-bool CriterionEnumeratorInFile::Fetch(void)
+bool CriterionEnumeratorInFile::Fetch()
 {
- i++;
- return i<CastSizeToInt(criteria->list.size());
+    i++;
+    return i < CastSizeToInt(criteria->list.size());
 }
 
-int CriterionEnumeratorInFile::GetId(void)
+int CriterionEnumeratorInFile::GetId()
 {
- return i;
+    return i;
 }
 
-const Criterion& CriterionEnumeratorInFile::GetItem(void)
+const Criterion& CriterionEnumeratorInFile::GetItem()
 {
- return criteria->list[i];
+    return criteria->list[i];
 }

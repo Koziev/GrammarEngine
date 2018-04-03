@@ -4,27 +4,27 @@
 
 using namespace Solarix;
 
-CriterionEnumerator_SQL::CriterionEnumerator_SQL( LS_ResultSet *_rs, CriteriaInStorage *_db )
- : rs(_rs), db(_db)
+CriterionEnumerator_SQL::CriterionEnumerator_SQL(LS_ResultSet *_rs, CriteriaInStorage *_db)
+    : rs(_rs), db(_db)
 {
 }
 
-CriterionEnumerator_SQL::~CriterionEnumerator_SQL(void)
+CriterionEnumerator_SQL::~CriterionEnumerator_SQL()
 {
- delete rs;
+    delete rs;
 }
 
-bool CriterionEnumerator_SQL::Fetch(void)
+bool CriterionEnumerator_SQL::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int CriterionEnumerator_SQL::GetId(void)
+int CriterionEnumerator_SQL::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-const Criterion& CriterionEnumerator_SQL::GetItem(void)
+const Criterion& CriterionEnumerator_SQL::GetItem()
 {
- return (*db)[GetId()];
+    return (*db)[GetId()];
 }

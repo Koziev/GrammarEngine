@@ -1,266 +1,264 @@
 // -----------------------------------------------------------------------------
 // File BASE_LEXER.CPP
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// Licensed under the terms of GNU Lesser GPL
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Content:
-// Немного статических объектов для лексера (класса-шаблона BaseParser<...>).
+// РќРµРјРЅРѕРіРѕ СЃС‚Р°С‚РёС‡РµСЃРєРёС… РѕР±СЉРµРєС‚РѕРІ РґР»СЏ Р»РµРєСЃРµСЂР° (РєР»Р°СЃСЃР°-С€Р°Р±Р»РѕРЅР° BaseParser<...>).
 // -----------------------------------------------------------------------------
 //
 // CD->13.08.2004
-// LC->04.01.2009
+// LC->01.04.2018
 // --------------
 
 #include <lem/lexers.h>
 
 using namespace lem;
 
-int     Special_Char<char>::eof(void)    { return EOF; }
+int     Special_Char<char>::eof(void) { return EOF; }
 
 wchar_t Special_Char<wchar_t>::eof(void) { return WEOF; }
 
 
 
-  /************************************************************************
-   Процедура подготавливает акселератор поиска лексемы в списке токенов.
-   Применяется такой алгоритм. Все пространство значений хэшей (мне самому
-   нравится это начало) разбивается на 256 подклассов. Каждому подклассу
-   соответствует подсписок токенов. Чтобы токенизировать лексему (поясняю:
-   найти для неё соответствующий токен), достаточно взять хэш-код строки,
-   а он уже вычислен!, и определить, к какому подпространству относитс
-   лексема. Далее будем искать в списке, относящемся к данному подклассу.
-  *************************************************************************/
-  void ASrcLookUpTable::Prepare( const std::vector< lem::CString > &Tokens )
-  {
-   int it=0;
-   for( std::vector< lem::CString >::const_iterator i=Tokens.begin(); i!=Tokens.end(); i++, it++ )
-    push_back( ASrcTok( *i, it ) );
-
-   const int N=CastSizeToInt(size());
-   ASrcTok dummy;
-
-   for( int gap=N/2; gap>0; gap/=2 )
-    for( int i=gap; i<N; i++ )
-     for( int j=i-gap; j>=0; j-=gap )
-      {
-       if( get(j+gap).GetHash() > get(j).GetHash() )
-        break;
-
-       dummy          = get(j);
-       (*this)[j]     = get(j+gap);
-       (*this)[j+gap] = dummy;
-      }
-
-   return;
-  }
-
-  void USrcLookUpTable::Prepare( const std::vector< UCString > &Tokens )
-  {
-   int it=0;
-   for( std::vector< UCString >::const_iterator i=Tokens.begin(); i!=Tokens.end(); i++, it++ )
-    push_back( USrcTok( *i, it ) );
-
-   const int N=CastSizeToInt(size());
-   USrcTok dummy;
-
-   for( int gap=N/2; gap>0; gap/=2 )
-    for( int i=gap; i<N; i++ )
-     for( int j=i-gap; j>=0; j-=gap )
-      {
-       if( get(j+gap).GetHash() > get(j).GetHash() )
-        break;
-
-       dummy          = get(j);
-       (*this)[j]     = get(j+gap);
-       (*this)[j+gap] = dummy;
-      }
-
-   return;
-  }
-
-  int ASrcLookUpTable::Find( const lem::CString &s ) const
-  {
-   const lem::uint8_t hash = s.GetHash();
-
-   int ileft=0, iright=CastSizeToInt(size())-1;
-
-   while( (iright-ileft)>1 )
+/************************************************************************
+ РџСЂРѕС†РµРґСѓСЂР° РїРѕРґРіРѕС‚Р°РІР»РёРІР°РµС‚ Р°РєСЃРµР»РµСЂР°С‚РѕСЂ РїРѕРёСЃРєР° Р»РµРєСЃРµРјС‹ РІ СЃРїРёСЃРєРµ С‚РѕРєРµРЅРѕРІ.
+ РџСЂРёРјРµРЅСЏРµС‚СЃСЏ С‚Р°РєРѕР№ Р°Р»РіРѕСЂРёС‚Рј. Р’СЃРµ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№ С…СЌС€РµР№ (РјРЅРµ СЃР°РјРѕРјСѓ
+ РЅСЂР°РІРёС‚СЃСЏ СЌС‚Рѕ РЅР°С‡Р°Р»Рѕ) СЂР°Р·Р±РёРІР°РµС‚СЃСЏ РЅР° 256 РїРѕРґРєР»Р°СЃСЃРѕРІ. РљР°Р¶РґРѕРјСѓ РїРѕРґРєР»Р°СЃСЃСѓ
+ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїРѕРґСЃРїРёСЃРѕРє С‚РѕРєРµРЅРѕРІ. Р§С‚РѕР±С‹ С‚РѕРєРµРЅРёР·РёСЂРѕРІР°С‚СЊ Р»РµРєСЃРµРјСѓ (РїРѕСЏСЃРЅСЏСЋ:
+ РЅР°Р№С‚Рё РґР»СЏ РЅРµС‘ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С‚РѕРєРµРЅ), РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РІР·СЏС‚СЊ С…СЌС€-РєРѕРґ СЃС‚СЂРѕРєРё,
+ Р° РѕРЅ СѓР¶Рµ РІС‹С‡РёСЃР»РµРЅ!, Рё РѕРїСЂРµРґРµР»РёС‚СЊ, Рє РєР°РєРѕРјСѓ РїРѕРґРїСЂРѕСЃС‚СЂР°РЅСЃС‚РІСѓ РѕС‚РЅРѕСЃРёС‚СЃ
+ Р»РµРєСЃРµРјР°. Р”Р°Р»РµРµ Р±СѓРґРµРј РёСЃРєР°С‚СЊ РІ СЃРїРёСЃРєРµ, РѕС‚РЅРѕСЃСЏС‰РµРјСЃСЏ Рє РґР°РЅРЅРѕРјСѓ РїРѕРґРєР»Р°СЃСЃСѓ.
+*************************************************************************/
+void ASrcLookUpTable::Prepare(const std::vector< lem::CString > &Tokens)
+{
+    int it = 0;
+    for (std::vector< lem::CString >::const_iterator i = Tokens.begin(); i != Tokens.end(); i++, it++)
     {
-     const int imid = (iright+ileft)/2;
-     if( get(imid).GetHash() > hash )
-      iright = imid;
-     else if( get(imid).GetHash() == hash )
-      {
-       // The item with equal hash is found. It can be
-       // more than one item with the same hash, so we must
-       // scan the whole range of items with equal hashes.
-
-       if( get(imid) == s )
-        return get(imid).index;
-
-       // Scan backward to the origin of equal hashes
-       for( int i1=imid-1; i1>=ileft; i1-- )
-        if( get(i1).GetHash() != hash )
-         break;
-        else if( get(i1) == s )
-         return get(i1).index;
-
-       // and scan forward for the same reason
-       for( int i2=imid+1; i2<=iright; i2++ )
-        if( get(i2).GetHash() != hash )
-         break;
-        else if( get(i2) == s )
-         return get(i2).index;
-
-       return UNKNOWN;
-      }
-     else
-      ileft = imid;
+        push_back(ASrcTok(*i, it));
     }
 
-   if( get(ileft) == s )
-    return get(ileft).index;
+    const int N = CastSizeToInt(size());
+    ASrcTok dummy;
 
-   if( get(iright) == s )
-    return get(iright).index;
+    for (int gap = N / 2; gap > 0; gap /= 2)
+        for (int i = gap; i < N; i++)
+            for (int j = i - gap; j >= 0; j -= gap)
+            {
+                if (get(j + gap).GetHash() > get(j).GetHash())
+                    break;
 
-   return UNKNOWN;
-  }
+                dummy = get(j);
+                (*this)[j] = get(j + gap);
+                (*this)[j + gap] = dummy;
+            }
 
-  int USrcLookUpTable::Find( const UCString &s ) const
-  {
-   const lem::uint8_t hash = s.GetHash();
+    return;
+}
 
-   int ileft=0, iright=CastSizeToInt(size())-1;
+void USrcLookUpTable::Prepare(const std::vector< UCString > &Tokens)
+{
+    int it = 0;
+    for (std::vector< UCString >::const_iterator i = Tokens.begin(); i != Tokens.end(); i++, it++)
+        push_back(USrcTok(*i, it));
 
-   while( (iright-ileft)>1 )
+    const int N = CastSizeToInt(size());
+    USrcTok dummy;
+
+    for (int gap = N / 2; gap > 0; gap /= 2)
+        for (int i = gap; i < N; i++)
+            for (int j = i - gap; j >= 0; j -= gap)
+            {
+                if (get(j + gap).GetHash() > get(j).GetHash())
+                    break;
+
+                dummy = get(j);
+                (*this)[j] = get(j + gap);
+                (*this)[j + gap] = dummy;
+            }
+
+    return;
+}
+
+int ASrcLookUpTable::Find(const lem::CString &s) const
+{
+    const lem::uint8_t hash = s.GetHash();
+
+    int ileft = 0, iright = CastSizeToInt(size()) - 1;
+
+    while ((iright - ileft) > 1)
     {
-     const int imid = (iright+ileft)/2;
-     if( get(imid).GetHash() > hash )
-      iright = imid;
-     else if( get(imid).GetHash() == hash )
-      {
-       // The item with equal hash is found. It can be
-       // more than one item with the same hash, so we must
-       // scan the whole range of items with equal hashes.
+        const int imid = (iright + ileft) / 2;
+        if (get(imid).GetHash() > hash)
+            iright = imid;
+        else if (get(imid).GetHash() == hash)
+        {
+            // The item with equal hash is found. It can be
+            // more than one item with the same hash, so we must
+            // scan the whole range of items with equal hashes.
 
-       if( get(imid) == s )
-        return get(imid).index;
+            if (get(imid) == s)
+                return get(imid).index;
 
-       // Scan backward to the origin of equal hashes
-       for( int i1=imid-1; i1>=ileft; i1-- )
-        if( get(i1).GetHash() != hash )
-         break;
-        else if( get(i1) == s )
-         return get(i1).index;
+            // Scan backward to the origin of equal hashes
+            for (int i1 = imid - 1; i1 >= ileft; i1--)
+                if (get(i1).GetHash() != hash)
+                    break;
+                else if (get(i1) == s)
+                    return get(i1).index;
 
-       // and scan forward for the same reason
-       for( int i2=imid+1; i2<=iright; i2++ )
-        if( get(i2).GetHash() != hash )
-         break;
-        else if( get(i2) == s )
-         return get(i2).index;
+            // and scan forward for the same reason
+            for (int i2 = imid + 1; i2 <= iright; i2++)
+                if (get(i2).GetHash() != hash)
+                    break;
+                else if (get(i2) == s)
+                    return get(i2).index;
 
-       return UNKNOWN;
-      }
-     else
-      ileft = imid;
+            return UNKNOWN;
+        }
+        else
+            ileft = imid;
     }
 
-   if( get(ileft) == s )
-    return get(ileft).index;
+    if (get(ileft) == s)
+        return get(ileft).index;
 
-   if( get(iright) == s )
-    return get(iright).index;
+    if (get(iright) == s)
+        return get(iright).index;
 
-   return UNKNOWN;
-  }
+    return UNKNOWN;
+}
+
+int USrcLookUpTable::Find(const UCString &s) const
+{
+    const lem::uint8_t hash = s.GetHash();
+
+    int ileft = 0, iright = CastSizeToInt(size()) - 1;
+
+    while ((iright - ileft) > 1)
+    {
+        const int imid = (iright + ileft) / 2;
+        if (get(imid).GetHash() > hash)
+            iright = imid;
+        else if (get(imid).GetHash() == hash)
+        {
+            // The item with equal hash is found. It can be
+            // more than one item with the same hash, so we must
+            // scan the whole range of items with equal hashes.
+
+            if (get(imid) == s)
+                return get(imid).index;
+
+            // Scan backward to the origin of equal hashes
+            for (int i1 = imid - 1; i1 >= ileft; i1--)
+                if (get(i1).GetHash() != hash)
+                    break;
+                else if (get(i1) == s)
+                    return get(i1).index;
+
+            // and scan forward for the same reason
+            for (int i2 = imid + 1; i2 <= iright; i2++)
+                if (get(i2).GetHash() != hash)
+                    break;
+                else if (get(i2) == s)
+                    return get(i2).index;
+
+            return UNKNOWN;
+        }
+        else
+            ileft = imid;
+    }
+
+    if (get(ileft) == s)
+        return get(ileft).index;
+
+    if (get(iright) == s)
+        return get(iright).index;
+
+    return UNKNOWN;
+}
 
 
 
 ASrcToken::ASrcToken(
-             const str_type &Str,
-             const SourceState &pos,
-             bool ignore_case,
-             const std::vector< lem::CString > &Tokens
-            ) : lem::CString(Str), begin(pos)
+    const str_type &Str,
+    const SourceState &pos,
+    bool ignore_case,
+    const std::vector< lem::CString > &Tokens
+) : lem::CString(Str), begin(pos)
+{
+    token = UNKNOWN;
+
+    // РС‰РµРј Р»РµРєСЃРµРјСѓ РІ С‚Р°Р±Р»РёС†Рµ РєР»СЋС‡РµРІС‹С… СЃР»РѕРІ.
+    if (ignore_case)
     {
-     token=UNKNOWN;
+        str_type ls = lem::to_lower(static_cast<str_type>(*this));
 
-     // Ищем лексему в таблице ключевых слов.
-     if( ignore_case )
-      {
-       str_type ls = lem::to_lower( static_cast<str_type>(*this) );
-
-       int i=0;
-       for( std::vector< lem::CString >::const_iterator j=Tokens.begin(); j!=Tokens.end(); j++, i++ )
-         if( lem::to_lower( *j ) == ls )
-          {
-           token=i;
-           break;
-          }
-      }
-     else
-      {
-       int i=0;
-       for( std::vector< lem::CString >::const_iterator j=Tokens.begin(); j!=Tokens.end(); j++, i++ )
-        if( *j == str )
-         {
-          token=i;
-          break;
-         }
-      }
-
-     return;
+        int i = 0;
+        for (std::vector< lem::CString >::const_iterator j = Tokens.begin(); j != Tokens.end(); j++, i++)
+            if (lem::to_lower(*j) == ls)
+            {
+                token = i;
+                break;
+            }
     }
+    else
+    {
+        int i = 0;
+        for (std::vector< lem::CString >::const_iterator j = Tokens.begin(); j != Tokens.end(); j++, i++)
+            if (*j == str)
+            {
+                token = i;
+                break;
+            }
+    }
+
+    return;
+}
 
 USrcToken::USrcToken(
-             const str_type &Str,
-             const SourceState &pos,
-             bool ignore_case,
-             const std::vector< UCString > &Tokens
-            ) : UCString(Str), begin(pos)
+    const str_type &Str,
+    const SourceState &pos,
+    bool ignore_case,
+    const std::vector< UCString > &Tokens
+) : UCString(Str), begin(pos)
+{
+    token = UNKNOWN;
+
+    // РС‰РµРј Р»РµРєСЃРµРјСѓ РІ С‚Р°Р±Р»РёС†Рµ РєР»СЋС‡РµРІС‹С… СЃР»РѕРІ.
+    if (ignore_case)
     {
-     token=UNKNOWN;
+        str_type ls = lem::to_lower(static_cast<str_type>(*this));
 
-     // Ищем лексему в таблице ключевых слов.
-     if( ignore_case )
-      {
-       str_type ls = lem::to_lower( static_cast<str_type>(*this) );
-
-       int i=0;
-       for( std::vector< UCString >::const_iterator j=Tokens.begin(); j!=Tokens.end(); j++, i++ )
-         if( lem::to_lower( *j ) == ls )
-          {
-           token=i;
-           break;
-          }
-      }
-     else
-      {
-       int i=0;
-       for( std::vector< UCString >::const_iterator j=Tokens.begin(); j!=Tokens.end(); j++, i++ )
-        if( *j == str )
-         {
-          token=i;
-          break;
-         }
-      }
-
-     return;
+        int i = 0;
+        for (std::vector< UCString >::const_iterator j = Tokens.begin(); j != Tokens.end(); j++, i++)
+            if (lem::to_lower(*j) == ls)
+            {
+                token = i;
+                break;
+            }
     }
+    else
+    {
+        int i = 0;
+        for (std::vector< UCString >::const_iterator j = Tokens.begin(); j != Tokens.end(); j++, i++)
+            if (*j == str)
+            {
+                token = i;
+                break;
+            }
+    }
+
+    return;
+}
 
 
 
 UCString ASrcToken::GetUnicode(void) const
 {
- return to_unicode(*this);
+    return to_unicode(*this);
 }
 

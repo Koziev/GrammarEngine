@@ -4,18 +4,18 @@
 // (c) by Koziev Elijah
 //
 // Content:
-// Класс Lexem - внутреннее представление ЛЕКСЕМЫ. Основное отличие лексемы
-// от простого слова: слово - это просто конгломерат неких символов
-// (не обязательно букв!), а лексема - это последовательность распознанных букв,
-// с полной информацией об их местоположении в Алфавите Графической Грамматики.
-// DO PAY ATTENTION: экономии памяти ради мы совмещаем хранение ЛЕКСЕМ и
-// СПЕЦИАЛЬНЫХ КОМАНД для СубАвтомата Формообразования, так что в некоторых
-// случаях лексемы могут содержать специальные символы, явно не
-// зарегистрированные в Алфавите.
+// РљР»Р°СЃСЃ Lexem - РІРЅСѓС‚СЂРµРЅРЅРµРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ Р›Р•РљРЎР•РњР«. РћСЃРЅРѕРІРЅРѕРµ РѕС‚Р»РёС‡РёРµ Р»РµРєСЃРµРјС‹
+// РѕС‚ РїСЂРѕСЃС‚РѕРіРѕ СЃР»РѕРІР°: СЃР»РѕРІРѕ - СЌС‚Рѕ РїСЂРѕСЃС‚Рѕ РєРѕРЅРіР»РѕРјРµСЂР°С‚ РЅРµРєРёС… СЃРёРјРІРѕР»РѕРІ
+// (РЅРµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ Р±СѓРєРІ!), Р° Р»РµРєСЃРµРјР° - СЌС‚Рѕ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ СЂР°СЃРїРѕР·РЅР°РЅРЅС‹С… Р±СѓРєРІ,
+// СЃ РїРѕР»РЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРµР№ РѕР± РёС… РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРё РІ РђР»С„Р°РІРёС‚Рµ Р“СЂР°С„РёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРё.
+// DO PAY ATTENTION: СЌРєРѕРЅРѕРјРёРё РїР°РјСЏС‚Рё СЂР°РґРё РјС‹ СЃРѕРІРјРµС‰Р°РµРј С…СЂР°РЅРµРЅРёРµ Р›Р•РљРЎР•Рњ Рё
+// РЎРџР•Р¦РРђР›Р¬РќР«РҐ РљРћРњРђРќР” РґР»СЏ РЎСѓР±РђРІС‚РѕРјР°С‚Р° Р¤РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ, С‚Р°Рє С‡С‚Рѕ РІ РЅРµРєРѕС‚РѕСЂС‹С…
+// СЃР»СѓС‡Р°СЏС… Р»РµРєСЃРµРјС‹ РјРѕРіСѓС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹, СЏРІРЅРѕ РЅРµ
+// Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Рµ РІ РђР»С„Р°РІРёС‚Рµ.
 // -----------------------------------------------------------------------------
 //
 // CD->17.10.1995
-// LC->06.05.2011
+// LC->02.04.2018
 // --------------
 
 #include <algorithm>
@@ -31,7 +31,7 @@
 #include <lem/solarix/lexem.h>
 
 #if LEM_DEBUGGING==1
- #include <lem/console_streams.h>
+#include <lem/console_streams.h>
 #endif
 
 using namespace boost;
@@ -39,475 +39,476 @@ using namespace std;
 using namespace lem;
 using namespace Solarix;
 
-wchar_t Lexem::DelimiterChar=L' ';
-const wchar_t * Lexem::DelimiterStr=L" ";
+wchar_t Lexem::DelimiterChar = L' ';
+const wchar_t * Lexem::DelimiterStr = L" ";
 
 
-Lexem::Lexem( const UCStringSet &list )
+Lexem::Lexem(const UCStringSet &list)
 {
- for( lem::Container::size_type i=0; i<list.size(); i++ )
-  Add( list[i] );
+    for (lem::Container::size_type i = 0; i < list.size(); i++)
+        Add(list[i]);
 
- return;
+    return;
 }
 
 
-Lexem::Lexem( lem::Stream & bin )
-{ LoadBin(bin); }
+Lexem::Lexem(lem::Stream & bin)
+{
+    LoadBin(bin);
+}
 
-Lexem::Lexem( const wchar_t *str )
-: UCString(str)
+Lexem::Lexem(const wchar_t *str)
+    : UCString(str)
 {}
 
-Lexem::Lexem( const UCString &x ) : UCString(x)
+Lexem::Lexem(const UCString &x) : UCString(x)
 {}
 
 
 
 #if defined SOL_LOADTXT
 /*******************************************************************************
-               ***  ЧАСТЬ КОДА СУБАВТОМАТА ФОРМООБРАЗОВАНИЯ ***
+               ***  Р§РђРЎРўР¬ РљРћР”Рђ РЎРЈР‘РђР’РўРћРњРђРўРђ Р¤РћР РњРћРћР‘Р РђР—РћР’РђРќРРЇ ***
 
- Преобразуем линейное описание лексемы в наше внутреннее представление.
- С помощью комбинаций специальных символов может быть определено положение
- ударения, задана безударность фонем, введено требования точного соответстви
- большие/малые буквы, а также описаны некоторые команды для Автомата Склонений.
+ РџСЂРµРѕР±СЂР°Р·СѓРµРј Р»РёРЅРµР№РЅРѕРµ РѕРїРёСЃР°РЅРёРµ Р»РµРєСЃРµРјС‹ РІ РЅР°С€Рµ РІРЅСѓС‚СЂРµРЅРЅРµРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ.
+ РЎ РїРѕРјРѕС‰СЊСЋ РєРѕРјР±РёРЅР°С†РёР№ СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РµРЅРѕ РїРѕР»РѕР¶РµРЅРёРµ
+ СѓРґР°СЂРµРЅРёСЏ, Р·Р°РґР°РЅР° Р±РµР·СѓРґР°СЂРЅРѕСЃС‚СЊ С„РѕРЅРµРј, РІРІРµРґРµРЅРѕ С‚СЂРµР±РѕРІР°РЅРёСЏ С‚РѕС‡РЅРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРё
+ Р±РѕР»СЊС€РёРµ/РјР°Р»С‹Рµ Р±СѓРєРІС‹, Р° С‚Р°РєР¶Рµ РѕРїРёСЃР°РЅС‹ РЅРµРєРѕС‚РѕСЂС‹Рµ РєРѕРјР°РЅРґС‹ РґР»СЏ РђРІС‚РѕРјР°С‚Р° РЎРєР»РѕРЅРµРЅРёР№.
 
- Если управляющий параметр mode==1 (случай по умолчанию), то подразумевается,
- что команды для Автомата Склонений отключены и должны вызвать печать диагностики
- ошибки. Если же mode==2, то требуется анализ и этих команд.
+ Р•СЃР»Рё СѓРїСЂР°РІР»СЏСЋС‰РёР№ РїР°СЂР°РјРµС‚СЂ mode==1 (СЃР»СѓС‡Р°Р№ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ), С‚Рѕ РїРѕРґСЂР°Р·СѓРјРµРІР°РµС‚СЃСЏ,
+ С‡С‚Рѕ РєРѕРјР°РЅРґС‹ РґР»СЏ РђРІС‚РѕРјР°С‚Р° РЎРєР»РѕРЅРµРЅРёР№ РѕС‚РєР»СЋС‡РµРЅС‹ Рё РґРѕР»Р¶РЅС‹ РІС‹Р·РІР°С‚СЊ РїРµС‡Р°С‚СЊ РґРёР°РіРЅРѕСЃС‚РёРєРё
+ РѕС€РёР±РєРё. Р•СЃР»Рё Р¶Рµ mode==2, С‚Рѕ С‚СЂРµР±СѓРµС‚СЃСЏ Р°РЅР°Р»РёР· Рё СЌС‚РёС… РєРѕРјР°РЅРґ.
 
- Обращаю особое внимание, что any modifications в системе спецкоманд для DSA
- должны сопровождаться модификацией как нижеследующего метода, так и кода
- класса SG_DeclensionForm.
+ РћР±СЂР°С‰Р°СЋ РѕСЃРѕР±РѕРµ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ any modifications РІ СЃРёСЃС‚РµРјРµ СЃРїРµС†РєРѕРјР°РЅРґ РґР»СЏ DSA
+ РґРѕР»Р¶РЅС‹ СЃРѕРїСЂРѕРІРѕР¶РґР°С‚СЊСЃСЏ РјРѕРґРёС„РёРєР°С†РёРµР№ РєР°Рє РЅРёР¶РµСЃР»РµРґСѓСЋС‰РµРіРѕ РјРµС‚РѕРґР°, С‚Р°Рє Рё РєРѕРґР°
+ РєР»Р°СЃСЃР° SG_DeclensionForm.
 *********************************************************************************/
 
-void Lexem::Translate( const GraphGram &gram, int mode )
+void Lexem::Translate(const GraphGram &gram, int mode)
 {
- lem::MCollect<int> dummy;
- Translate( gram, mode, dummy );
- return;
+    lem::MCollect<int> dummy;
+    Translate(gram, mode, dummy);
+    return;
 }
 
-void Lexem::Translate( const GraphGram &gram, int mode, const lem::MCollect<int>& id_alphabet )
+void Lexem::Translate(const GraphGram &gram, int mode, const lem::MCollect<int>& id_alphabet)
 {
- wchar_t buffer[LEM_CSTRING_LEN1]; // Временный буфер для размещения результата.
- memset( buffer, 0, sizeof(buffer) );
- int i_res=0;
- TranslateThis( i_res, str, buffer, gram, mode, id_alphabet );
- lem_strcpy( str, buffer );
- calc_hash();
- return;
+    wchar_t buffer[LEM_CSTRING_LEN1]; // Р’СЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ СЂРµР·СѓР»СЊС‚Р°С‚Р°.
+    memset(buffer, 0, sizeof(buffer));
+    int i_res = 0;
+    TranslateThis(i_res, str, buffer, gram, mode, id_alphabet);
+    lem_strcpy(str, buffer);
+    calc_hash();
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT
 void Lexem::TranslateThis(
-                          int &i_res,
-                          const wchar_t src[],
-                          wchar_t buffer[],
-                          const GraphGram &gram,
-                          int mode,
-                          const lem::MCollect<int>& id_alphabet
-                         ) const
+    int &i_res,
+    const wchar_t src[],
+    wchar_t buffer[],
+    const GraphGram &gram,
+    int mode,
+    const lem::MCollect<int>& id_alphabet
+) const
 {
- const int l=lem::lem_strlen(src);
- int i_src=0;
+    const int l = lem::lem_strlen(src);
+    int i_src = 0;
 
- bool precise_form=false;
- int8_t sflag=ANY_STATE;
+    bool precise_form = false;
+    int8_t sflag = ANY_STATE;
 
- while(i_src<l)
-  {
-   wchar_t ch = src[i_src++];
-
-   switch(ch)
+    while (i_src < l)
     {
-     case B_PRECISE_METACHAR:
-      {
-       // Для последующего символа следует точно запомнить им
-       // формы, то есть есть различие, к примеру, для больших и малых букв.
-       precise_form = true;
-       break;
-      }
+        wchar_t ch = src[i_src++];
 
-     case B_STRESS_METACHAR:
-      {
-       // Ударный гласный звук.
-       sflag = STRESSED_FLAG;
-       break;
-      }
-
-     case B_UNSTRESS_METACHAR:
-      {
-       // Безударный гласный.
-       sflag = UNSTRESSED_FLAG;
-       break;
-      }
-
-     case B_COMMAND_METACHAR:
-      {
-       if( mode==2 )
+        switch (ch)
         {
-         // Только в этом режиме могут транслироваться команды для Автомата
-         // склонений.
-         buffer[i_res++]=ch;
-
-         switch( ch=src[i_src++] )
-          {
-           case B_COMMAND_METACHAR:
-            buffer[i_res++]=ch; // %% --> %
+        case B_PRECISE_METACHAR:
+        {
+            // Р”Р»СЏ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЃРёРјРІРѕР»Р° СЃР»РµРґСѓРµС‚ С‚РѕС‡РЅРѕ Р·Р°РїРѕРјРЅРёС‚СЊ РёРј
+            // С„РѕСЂРјС‹, С‚Рѕ РµСЃС‚СЊ РµСЃС‚СЊ СЂР°Р·Р»РёС‡РёРµ, Рє РїСЂРёРјРµСЂСѓ, РґР»СЏ Р±РѕР»СЊС€РёС… Рё РјР°Р»С‹С… Р±СѓРєРІ.
+            precise_form = true;
             break;
-            
+        }
 
-           case B_REDUCE_METACHAR:        // %-N
-            buffer[i_res++]=ch;           // символ команды '-'
-            buffer[i_res++]=str[i_src++]; // аргумент-цифра N
+        case B_STRESS_METACHAR:
+        {
+            // РЈРґР°СЂРЅС‹Р№ РіР»Р°СЃРЅС‹Р№ Р·РІСѓРє.
+            sflag = STRESSED_FLAG;
             break;
+        }
 
-           case B_DOUBLE_METACHAR:        // %D
-            buffer[i_res++]=ch;           // символ команды 'D'
+        case B_UNSTRESS_METACHAR:
+        {
+            // Р‘РµР·СѓРґР°СЂРЅС‹Р№ РіР»Р°СЃРЅС‹Р№.
+            sflag = UNSTRESSED_FLAG;
             break;
+        }
 
-           case B_STRESS_METACHAR:      // %+RRRR...R%
-            {                           // %+RRR         - до конца строки
-             buffer[i_res++]=ch;        // символ '+'
+        case B_COMMAND_METACHAR:
+        {
+            if (mode == 2)
+            {
+                // РўРѕР»СЊРєРѕ РІ СЌС‚РѕРј СЂРµР¶РёРјРµ РјРѕРіСѓС‚ С‚СЂР°РЅСЃР»РёСЂРѕРІР°С‚СЊСЃСЏ РєРѕРјР°РЅРґС‹ РґР»СЏ РђРІС‚РѕРјР°С‚Р°
+                // СЃРєР»РѕРЅРµРЅРёР№.
+                buffer[i_res++] = ch;
 
-             if( src[i_src]==B_GROUP_BEGIN_METACHAR )
-              {
-               buffer[i_res++]=src[i_src++]; // символ '{'
-               TranslateSubString(
-                                  src,
-                                  i_src,
-                                  buffer,
-                                  i_res,
-                                  gram,
-                                  mode,
-                                  id_alphabet
-                                 );
-               buffer[i_res++]=src[i_src++]; // Символ '}'
-              }
-             else
-              {
-               ch = src[i_src++];
-
-               do
+                switch (ch = src[i_src++])
                 {
-                 TranslateChar(
-                               gram,
-                               ch,
-                               src,
-                               buffer[i_res],
-                               id_alphabet
-                              );
-                 i_res++;
-                 ch=src[i_src++];
-                }
-               while( ch && ch!=B_COMMAND_METACHAR );
-              }
+                case B_COMMAND_METACHAR:
+                    buffer[i_res++] = ch; // %% --> %
+                    break;
 
-             break;
-            }
 
-           case B_CUT_METACHAR:           // %cN
-            buffer[i_res++]=ch;           // символ команды 'c'
-            buffer[i_res++]=src[i_src++]; // аргумент-цифра N
-            break;
+                case B_REDUCE_METACHAR:        // %-N
+                    buffer[i_res++] = ch;           // СЃРёРјРІРѕР» РєРѕРјР°РЅРґС‹ '-'
+                    buffer[i_res++] = str[i_src++]; // Р°СЂРіСѓРјРµРЅС‚-С†РёС„СЂР° N
+                    break;
 
-           case B_PREFIX_INSERT_METACHAR: // %aNR
-            {
-             buffer[i_res++]=ch;           // символ команды 'a'
-             buffer[i_res++]=src[i_src++]; // аргумент-цифра N
+                case B_DOUBLE_METACHAR:        // %D
+                    buffer[i_res++] = ch;           // СЃРёРјРІРѕР» РєРѕРјР°РЅРґС‹ 'D'
+                    break;
 
-             if( src[i_src]==B_GROUP_BEGIN_METACHAR )
-              {
-               buffer[i_res++]=src[i_src++]; // символ '{'
-               TranslateSubString(
-                                  src,
-                                  i_src,
-                                  buffer,
-                                  i_res,
-                                  gram,
-                                  mode,
-                                  id_alphabet
-                                 );
-               buffer[i_res++]=src[i_src++]; // Символ '}'
-              }
-             else
-              {
-               TranslateChar(
-                             gram,
-                             src[i_src++], // аргумент-буква R
-                             src,
-                             buffer[i_res],
-                             id_alphabet
+                case B_STRESS_METACHAR:      // %+RRRR...R%
+                {                           // %+RRR         - РґРѕ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё
+                    buffer[i_res++] = ch;        // СЃРёРјРІРѕР» '+'
+
+                    if (src[i_src] == B_GROUP_BEGIN_METACHAR)
+                    {
+                        buffer[i_res++] = src[i_src++]; // СЃРёРјРІРѕР» '{'
+                        TranslateSubString(
+                            src,
+                            i_src,
+                            buffer,
+                            i_res,
+                            gram,
+                            mode,
+                            id_alphabet
+                        );
+                        buffer[i_res++] = src[i_src++]; // РЎРёРјРІРѕР» '}'
+                    }
+                    else
+                    {
+                        ch = src[i_src++];
+
+                        do
+                        {
+                            TranslateChar(
+                                gram,
+                                ch,
+                                src,
+                                buffer[i_res],
+                                id_alphabet
                             );
-               i_res++;
-              }
+                            i_res++;
+                            ch = src[i_src++];
+                        } while (ch && ch != B_COMMAND_METACHAR);
+                    }
 
-             break;
+                    break;
+                }
+
+                case B_CUT_METACHAR:           // %cN
+                    buffer[i_res++] = ch;           // СЃРёРјРІРѕР» РєРѕРјР°РЅРґС‹ 'c'
+                    buffer[i_res++] = src[i_src++]; // Р°СЂРіСѓРјРµРЅС‚-С†РёС„СЂР° N
+                    break;
+
+                case B_PREFIX_INSERT_METACHAR: // %aNR
+                {
+                    buffer[i_res++] = ch;           // СЃРёРјРІРѕР» РєРѕРјР°РЅРґС‹ 'a'
+                    buffer[i_res++] = src[i_src++]; // Р°СЂРіСѓРјРµРЅС‚-С†РёС„СЂР° N
+
+                    if (src[i_src] == B_GROUP_BEGIN_METACHAR)
+                    {
+                        buffer[i_res++] = src[i_src++]; // СЃРёРјРІРѕР» '{'
+                        TranslateSubString(
+                            src,
+                            i_src,
+                            buffer,
+                            i_res,
+                            gram,
+                            mode,
+                            id_alphabet
+                        );
+                        buffer[i_res++] = src[i_src++]; // РЎРёРјРІРѕР» '}'
+                    }
+                    else
+                    {
+                        TranslateChar(
+                            gram,
+                            src[i_src++], // Р°СЂРіСѓРјРµРЅС‚-Р±СѓРєРІР° R
+                            src,
+                            buffer[i_res],
+                            id_alphabet
+                        );
+                        i_res++;
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    gram.GetIO().merr().printf(
+                        "Illegal control char in control sequence for Declenson SubAutomaton:\n"
+                        "[%us]\n"
+                        , src
+                    );
+
+                    gram.GetIO().merr().printf("%H ^", i_src);
+                    throw E_ParserError();
+                }
+                }
             }
-
-           default:
+            else
             {
-             gram.GetIO().merr().printf(
-                                        "Illegal control char in control sequence for Declenson SubAutomaton:\n"
-                                        "[%us]\n"
-                                        , src
-                                       );
-
-             gram.GetIO().merr().printf( "%H ^", i_src );
-             throw E_ParserError();
+                buffer[i_res++] = ch;
             }
-          }
+
+            break;
         }
-       else
+
+        case B_PLAIN_METACHAR:
         {
-         buffer[i_res++]=ch;
+            ch = src[i_src++];
+            // Р”Р°Р»СЊС€Рµ РёРґРµС‚ СЃРёРјРІРѕР», РєРѕС‚РѕСЂС‹Р№ РЅРµ СЃР»РµРґСѓРµС‚ РїРѕРЅРёРјР°С‚СЊ РєР°Рє РјРµС‚Р°СЃРёРјРІРѕР».
+            // РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃРёРјРІРѕР»С‹ % Рё РґСЂСѓРіРёРµ РґР»СЏ
+            // Р»РµРєСЃРёС‡РµСЃРєРѕРіРѕ РЅР°РїРѕР»РЅРµРЅРёСЏ РёРјРµРЅРё Р»РµРєСЃРµРјС‹, РЅРµ РѕРїР°СЃР°СЏСЃСЊ РЅРµРѕР¶РёРґР°РЅРЅРѕРіРѕ
+            // РїРµСЂРµРІРѕРґР° С‚Р°РєРёС… СЃРёРјРІРѕР»РѕРІ РІ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ РґРµР№СЃС‚РІРёСЏ.
+            //
+            // РњС‹ РЅРµ РјРµРЅСЏРµРј С‚РµРєСѓС‰РёРµ С„Р»Р°РіРё СѓРґР°СЂРЅРѕСЃС‚Рё Рё С‚РѕС‡РЅРѕР№ СЃС‚Р°С‚СЊРё, С‚Р°Рє С‡С‚Рѕ РµСЃС‚СЊ
+            // РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СѓРїРѕС‚СЂРµР±Р»СЏС‚СЊ СЃРїРµС†СЃРёРјРІРѕР»С‹ РІРЅСѓС‚СЂРё РєРѕРјР°РЅРґРЅС‹С… РіСЂСѓРїРї!
+            if (!ch)
+            {
+                wchar_t b[2];
+                b[0] = B_PLAIN_METACHAR;
+                b[1] = 0;
+                gram.GetIO().merr().printf(
+                    "Incorrect format of form generation template [%us]:"
+                    " must be a char after metachar '%us'.\n"
+                    , src, b
+                );
+
+                throw E_ParserError();
+            }
+
+            TranslateChar(
+                gram,
+                ch,
+                src,
+                buffer[i_res],
+                id_alphabet
+            );
+            i_res++;
+            break;
         }
 
-       break;
-      }
-
-     case B_PLAIN_METACHAR:
-      {
-       ch = src[i_src++];
-       // Дальше идет символ, который не следует понимать как метасимвол.
-       // Таким образом, можно использовать символы % и другие для
-       // лексического наполнения имени лексемы, не опасаясь неожиданного
-       // перевода таких символов в специальные действия.
-       //
-       // Мы не меняем текущие флаги ударности и точной статьи, так что есть
-       // возможность употреблять спецсимволы внутри командных групп!
-       if( !ch )
+        default:
         {
-         wchar_t b[2];
-         b[0] = B_PLAIN_METACHAR;
-         b[1] = 0;
-         gram.GetIO().merr().printf(
-                                    "Incorrect format of form generation template [%us]:"
-                                    " must be a char after metachar '%us'.\n"
-                                    , src, b
-                                   );
-
-         throw E_ParserError();
+            TranslateChar(
+                gram,
+                ch,
+                src,
+                buffer[i_res],
+                id_alphabet
+            );
+            i_res++;
+            sflag = ANY_STATE;
+            precise_form = false;
+            break;
         }
-
-       TranslateChar(
-                     gram,
-                     ch,
-                     src,
-                     buffer[i_res],
-                     id_alphabet
-                    );
-       i_res++;
-       break;
-      }
-
-     default:
-      {
-       TranslateChar(
-                     gram,
-                     ch,
-                     src,
-                     buffer[i_res],
-                     id_alphabet
-                    );
-       i_res++;
-       sflag        = ANY_STATE;
-       precise_form = false;
-       break;
-      }
+        }
     }
-  }
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT
 void Lexem::TranslateChar(
-                          const GraphGram &gram,
-                          wchar_t ch,
-                          const wchar_t *src,
-                          wchar_t &res_char,
-                          const lem::MCollect<int>& id_alphabet
-                         ) const
+    const GraphGram &gram,
+    wchar_t ch,
+    const wchar_t *src,
+    wchar_t &res_char,
+    const lem::MCollect<int>& id_alphabet
+) const
 {
- // Пробел используется как разделитель однолексем
- if( ch==DelimiterChar )
-  {
-   res_char = ch;
-   return;
-  }
+    // РџСЂРѕР±РµР» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РєР°Рє СЂР°Р·РґРµР»РёС‚РµР»СЊ РѕРґРЅРѕР»РµРєСЃРµРј
+    if (ch == DelimiterChar)
+    {
+        res_char = ch;
+        return;
+    }
 
- // Отыскиваем символ ch в Алфавите.
- const Word_Coord wc = gram.FindSymbol(ch,id_alphabet);
+    // РћС‚С‹СЃРєРёРІР°РµРј СЃРёРјРІРѕР» ch РІ РђР»С„Р°РІРёС‚Рµ.
+    const Word_Coord wc = gram.FindSymbol(ch, id_alphabet);
 
- if( wc.GetEntry()==UNKNOWN )
-  {
-/*
-#if LEM_DEBUGGING==1
-lem::mout->printf( "There are %d alphabets: ", gram.alphabets().size() );
-for( lem::Container::size_type i=0; i<gram.alphabets().size(); ++i )
- {
-  const GG_Alphabet &a = gram.alphabets()[i];
-  lem::mout->printf( "[%d] %us ", a.get_Id(), a.get_Name().c_str() );
- }
-lem::mout->eol();
+    if (wc.GetEntry() == UNKNOWN)
+    {
+        /*
+        #if LEM_DEBUGGING==1
+        lem::mout->printf( "There are %d alphabets: ", gram.alphabets().size() );
+        for( lem::Container::size_type i=0; i<gram.alphabets().size(); ++i )
+         {
+          const GG_Alphabet &a = gram.alphabets()[i];
+          lem::mout->printf( "[%d] %us ", a.get_Id(), a.get_Name().c_str() );
+         }
+        lem::mout->eol();
 
-{
-lem::mout->printf( "There are %d symbols: ", gram.entries().size() );
-for( int i=0; i<gram.entries().size(); ++i )
- {
-  gram.entries()[i].PrintName(*mout);
-  lem::mout->printf( ' ' );
- }
-}
+        {
+        lem::mout->printf( "There are %d symbols: ", gram.entries().size() );
+        for( int i=0; i<gram.entries().size(); ++i )
+         {
+          gram.entries()[i].PrintName(*mout);
+          lem::mout->printf( ' ' );
+         }
+        }
 
-lem::mout->eol();
+        lem::mout->eol();
 
-#endif
-*/
-   wchar_t dummy[2];
-   dummy[0]=ch; dummy[1]=0;
-   UFString err = lem::format_str(L"Symbol [%s] with hex code [%x] in lexem [%s] is not defined in Alphabet\n", dummy, int(ch), src );
-   throw E_ParserError(err.c_str());
-  }
+        #endif
+        */
+        wchar_t dummy[2];
+        dummy[0] = ch; dummy[1] = 0;
+        UFString err = lem::format_str(L"Symbol [%s] with hex code [%x] in lexem [%s] is not defined in Alphabet\n", dummy, int(ch), src);
+        throw E_ParserError(err.c_str());
+    }
 
- // Теперь это - не просто некий символ, а БУКВА.
+    // РўРµРїРµСЂСЊ СЌС‚Рѕ - РЅРµ РїСЂРѕСЃС‚Рѕ РЅРµРєРёР№ СЃРёРјРІРѕР», Р° Р‘РЈРљР’Рђ.
 
- const GG_Entry &entry = gram.entries()[ wc.GetEntry() ];
- res_char   = entry.GetName();
+    const GG_Entry &entry = gram.entries()[wc.GetEntry()];
+    res_char = entry.GetName();
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT
 /****************************************************************
- Транслируем сложный аргумент метакоманды {RR...R} и добавляем
- соответствующие коды в буфер buffer и наши внутренние вектора
- form и stress. Предполагаем, что i_src указывает сейчас на
- символ после '{' в исходном буфере src. После работы процедуры
- i_src будет указывать на символ '}', закрывающей нашу подстроку.
+ РўСЂР°РЅСЃР»РёСЂСѓРµРј СЃР»РѕР¶РЅС‹Р№ Р°СЂРіСѓРјРµРЅС‚ РјРµС‚Р°РєРѕРјР°РЅРґС‹ {RR...R} Рё РґРѕР±Р°РІР»СЏРµРј
+ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РєРѕРґС‹ РІ Р±СѓС„РµСЂ buffer Рё РЅР°С€Рё РІРЅСѓС‚СЂРµРЅРЅРёРµ РІРµРєС‚РѕСЂР°
+ form Рё stress. РџСЂРµРґРїРѕР»Р°РіР°РµРј, С‡С‚Рѕ i_src СѓРєР°Р·С‹РІР°РµС‚ СЃРµР№С‡Р°СЃ РЅР°
+ СЃРёРјРІРѕР» РїРѕСЃР»Рµ '{' РІ РёСЃС…РѕРґРЅРѕРј Р±СѓС„РµСЂРµ src. РџРѕСЃР»Рµ СЂР°Р±РѕС‚С‹ РїСЂРѕС†РµРґСѓСЂС‹
+ i_src Р±СѓРґРµС‚ СѓРєР°Р·С‹РІР°С‚СЊ РЅР° СЃРёРјРІРѕР» '}', Р·Р°РєСЂС‹РІР°СЋС‰РµР№ РЅР°С€Сѓ РїРѕРґСЃС‚СЂРѕРєСѓ.
 *****************************************************************/
 void Lexem::TranslateSubString(
-                               const wchar_t src[],
-                               int &i_src,
-                               wchar_t buffer[],
-                               int &i_res,
-                               const GraphGram &gram,
-                               int mode,
-                               const lem::MCollect<int>& id_alphabet
-                              ) const
+    const wchar_t src[],
+    int &i_src,
+    wchar_t buffer[],
+    int &i_res,
+    const GraphGram &gram,
+    int mode,
+    const lem::MCollect<int>& id_alphabet
+) const
 {
- // Сначала извлечём символы RRR..RRR в скобках { } в отдельный буфер.
- wchar_t rrr[LEM_CSTRING_LEN1];
- memset( rrr, 0, sizeof(rrr) );
- int i_rrr=0;
+    // РЎРЅР°С‡Р°Р»Р° РёР·РІР»РµС‡С‘Рј СЃРёРјРІРѕР»С‹ RRR..RRR РІ СЃРєРѕР±РєР°С… { } РІ РѕС‚РґРµР»СЊРЅС‹Р№ Р±СѓС„РµСЂ.
+    wchar_t rrr[LEM_CSTRING_LEN1];
+    memset(rrr, 0, sizeof(rrr));
+    int i_rrr = 0;
 
- while( src[i_src]!=B_GROUP_END_METACHAR )
-  {
-   if( src[i_src]==0 )
+    while (src[i_src] != B_GROUP_END_METACHAR)
     {
-     gram.GetIO().merr().printf(
-                                "Illegal control char in control sequence "
-                                " for Declenson SubAutomaton:\n[%us]\n"
-                                , src
-                               );
-     gram.GetIO().merr().printf( "%H ^", i_src );
-     throw E_ParserError();
+        if (src[i_src] == 0)
+        {
+            gram.GetIO().merr().printf(
+                "Illegal control char in control sequence "
+                " for Declenson SubAutomaton:\n[%us]\n"
+                , src
+            );
+            gram.GetIO().merr().printf("%H ^", i_src);
+            throw E_ParserError();
+        }
+
+        rrr[i_rrr++] = src[i_src++];
     }
 
-   rrr[i_rrr++] = src[i_src++];
-  }
+    rrr[i_rrr] = 0;
 
- rrr[i_rrr]=0;
-
- TranslateThis( i_res, rrr, buffer, gram, mode, id_alphabet );
- return;
+    TranslateThis(i_res, rrr, buffer, gram, mode, id_alphabet);
+    return;
 }
 #endif
 
 /*************************************************************************
- Преобразуем лексему в текстовую строку так, что сохраняются специальные
- управляющие признаки, поэтому можно будет по сохраненной строке точно
- восстановить лексему. Этот метод используется, в частности, при
- декомпиляции Словаря, когда нужно восстановить команды СубАвтомата
- Формообразования.
+ РџСЂРµРѕР±СЂР°Р·СѓРµРј Р»РµРєСЃРµРјСѓ РІ С‚РµРєСЃС‚РѕРІСѓСЋ СЃС‚СЂРѕРєСѓ С‚Р°Рє, С‡С‚Рѕ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ СЃРїРµС†РёР°Р»СЊРЅС‹Рµ
+ СѓРїСЂР°РІР»СЏСЋС‰РёРµ РїСЂРёР·РЅР°РєРё, РїРѕСЌС‚РѕРјСѓ РјРѕР¶РЅРѕ Р±СѓРґРµС‚ РїРѕ СЃРѕС…СЂР°РЅРµРЅРЅРѕР№ СЃС‚СЂРѕРєРµ С‚РѕС‡РЅРѕ
+ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ Р»РµРєСЃРµРјСѓ. Р­С‚РѕС‚ РјРµС‚РѕРґ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ, РІ С‡Р°СЃС‚РЅРѕСЃС‚Рё, РїСЂРё
+ РґРµРєРѕРјРїРёР»СЏС†РёРё РЎР»РѕРІР°СЂСЏ, РєРѕРіРґР° РЅСѓР¶РЅРѕ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ РєРѕРјР°РЅРґС‹ РЎСѓР±РђРІС‚РѕРјР°С‚Р°
+ Р¤РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ.
 *************************************************************************/
 const UCString Lexem::ToString(void) const
 {
- wchar_t buffer[LEM_CSTRING_LEN1]; // Временный буфер для размещения результата.
+    wchar_t buffer[LEM_CSTRING_LEN1]; // Р’СЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ СЂРµР·СѓР»СЊС‚Р°С‚Р°.
 
- int ipos=0;
- const int l=length();
- bool plain_char=false;
- for( int i=0; i<l && ipos<LEM_CSTRING_LEN-1; /*...nothing...*/ )
-  {
-   if( plain_char )
+    int ipos = 0;
+    const int l = length();
+    bool plain_char = false;
+    for (int i = 0; i < l && ipos < LEM_CSTRING_LEN - 1; /*...nothing...*/)
     {
-     ToString( &i, &ipos, buffer );
-     plain_char=false;
-     continue;
+        if (plain_char)
+        {
+            ToString(&i, &ipos, buffer);
+            plain_char = false;
+            continue;
+        }
+
+        if (str[i] == B_PLAIN_METACHAR)
+        {
+            // РљРѕРЅСЃС‚СЂСѓРєС†РёСЏ С‚РёРїР° $x, РЅР°РїСЂРёРјРµСЂ $%.
+            buffer[ipos++] = str[i++];
+            plain_char = true;
+            continue;
+        }
+
+        if (str[i] == B_COMMAND_METACHAR)
+        {
+            // Р”РёСЂРµРєС‚РёРІР° %...
+            buffer[ipos++] = str[i++]; // РЎР°Рј СЃРёРјРІРѕР» РґРёСЂРµРєС‚РёРІС‹ %
+            buffer[ipos++] = str[i++]; // РЎРїРµС†РёС„РёРєР°С‚РѕСЂ РєРѕРјР°РЅРґС‹.
+            // Р”Р°Р»РµРµ Р±СѓРґСѓС‚ РёРґС‚Рё РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјР°РЅРґС‹.
+            continue;
+        }
+
+        // РћР±С‹С‡РЅС‹Р№ СЃРёРјРІРѕР», РІРѕР·РјРѕР¶РЅРѕ - СЃ С„Р»Р°РіР°РјРё РєРѕРЅС‚СЂРѕР»СЏ СѓРґР°СЂРЅРѕСЃС‚Рё Рё
+        // С‚РѕС‡РЅРѕСЃС‚Рё С„РѕСЂРјС‹.
+        ToString(&i, &ipos, buffer);
     }
 
-   if( str[i]==B_PLAIN_METACHAR )
-    {
-     // Конструкция типа $x, например $%.
-     buffer[ipos++] = str[i++];
-     plain_char=true;
-     continue;
-    }
-
-   if( str[i]==B_COMMAND_METACHAR )
-    {
-     // Директива %...
-     buffer[ipos++] = str[i++]; // Сам символ директивы %
-     buffer[ipos++] = str[i++]; // Спецификатор команды.
-     // Далее будут идти параметры команды.
-     continue;
-    }
-
-   // Обычный символ, возможно - с флагами контроля ударности и
-   // точности формы.
-   ToString( &i, &ipos, buffer );
-  }
-
- buffer[ipos]=0;
- return UCString(buffer);
+    buffer[ipos] = 0;
+    return UCString(buffer);
 }
 
-void Lexem::ToString( int *isrc, int *idst, wchar_t *buffer ) const
+void Lexem::ToString(int *isrc, int *idst, wchar_t *buffer) const
 {
- // Возможно, следует вписать флаг точного задания имени буквоформы.
- buffer[(*idst)++] = str[*isrc];
- (*isrc)++;
+    // Р’РѕР·РјРѕР¶РЅРѕ, СЃР»РµРґСѓРµС‚ РІРїРёСЃР°С‚СЊ С„Р»Р°Рі С‚РѕС‡РЅРѕРіРѕ Р·Р°РґР°РЅРёСЏ РёРјРµРЅРё Р±СѓРєРІРѕС„РѕСЂРјС‹.
+    buffer[(*idst)++] = str[*isrc];
+    (*isrc)++;
 
- return;
+    return;
 }
 
 /*********************************************************************
- Внутреннее представление лексемы преобразуется в символьную строку,
- не содержащую специальных команд, и пригодную для чтения человеком.
+ Р’РЅСѓС‚СЂРµРЅРЅРµРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ Р»РµРєСЃРµРјС‹ РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ РІ СЃРёРјРІРѕР»СЊРЅСѓСЋ СЃС‚СЂРѕРєСѓ,
+ РЅРµ СЃРѕРґРµСЂР¶Р°С‰СѓСЋ СЃРїРµС†РёР°Р»СЊРЅС‹С… РєРѕРјР°РЅРґ, Рё РїСЂРёРіРѕРґРЅСѓСЋ РґР»СЏ С‡С‚РµРЅРёСЏ С‡РµР»РѕРІРµРєРѕРј.
 *********************************************************************/
 const UCString Lexem::ToWord(void) const
 {
- wchar_t buffer[LEM_CSTRING_LEN1]; // Временный буфер для результата.
+    wchar_t buffer[LEM_CSTRING_LEN1]; // Р’СЂРµРјРµРЅРЅС‹Р№ Р±СѓС„РµСЂ РґР»СЏ СЂРµР·СѓР»СЊС‚Р°С‚Р°.
 
- const int l=length();
- int ipos=0;
- for( int i=0; i<l; i++ )
-  buffer[ipos++] = str[i];//form[i]==wchar_t(ANY_STATE) ? str[i] : form[i];
+    const int l = length();
+    int ipos = 0;
+    for (int i = 0; i < l; i++)
+        buffer[ipos++] = str[i];//form[i]==wchar_t(ANY_STATE) ? str[i] : form[i];
 
- buffer[l]=0;
- return UCString(buffer);
+    buffer[l] = 0;
+    return UCString(buffer);
 }
 
 /***************************************************************************
- Сравниваем флаги ударности. Это вспомогательная процедура, является частью
- inline-метода CompareAll. Я вынес ее в outline, так как она содержит цикл.
+ РЎСЂР°РІРЅРёРІР°РµРј С„Р»Р°РіРё СѓРґР°СЂРЅРѕСЃС‚Рё. Р­С‚Рѕ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР°, СЏРІР»СЏРµС‚СЃСЏ С‡Р°СЃС‚СЊСЋ
+ inline-РјРµС‚РѕРґР° CompareAll. РЇ РІС‹РЅРµСЃ РµРµ РІ outline, С‚Р°Рє РєР°Рє РѕРЅР° СЃРѕРґРµСЂР¶РёС‚ С†РёРєР».
 ****************************************************************************/
 /*
 bool Lexem::CompareAcsents( const Lexem &l ) const
@@ -528,272 +529,272 @@ bool Lexem::CompareAcsents( const Lexem &l ) const
 */
 
 /*******************************************************************************
- Сравниваем содержимое лексем, но не требуем полного соответствия - необходимо,
- чтобы совпали начальные части: наша (вся) и аргумента l (часть). То есть,
- длина l может превышать длину нашей лексемы, но наша длина не может превышать
- длину l.
+ РЎСЂР°РІРЅРёРІР°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ Р»РµРєСЃРµРј, РЅРѕ РЅРµ С‚СЂРµР±СѓРµРј РїРѕР»РЅРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ - РЅРµРѕР±С…РѕРґРёРјРѕ,
+ С‡С‚РѕР±С‹ СЃРѕРІРїР°Р»Рё РЅР°С‡Р°Р»СЊРЅС‹Рµ С‡Р°СЃС‚Рё: РЅР°С€Р° (РІСЃСЏ) Рё Р°СЂРіСѓРјРµРЅС‚Р° l (С‡Р°СЃС‚СЊ). РўРѕ РµСЃС‚СЊ,
+ РґР»РёРЅР° l РјРѕР¶РµС‚ РїСЂРµРІС‹С€Р°С‚СЊ РґР»РёРЅСѓ РЅР°С€РµР№ Р»РµРєСЃРµРјС‹, РЅРѕ РЅР°С€Р° РґР»РёРЅР° РЅРµ РјРѕР¶РµС‚ РїСЂРµРІС‹С€Р°С‚СЊ
+ РґР»РёРЅСѓ l.
 ********************************************************************************/
-bool Lexem::CompareAll_1( const Lexem &l ) const
+bool Lexem::CompareAll_1(const Lexem &l) const
 {
- const int L=length();
+    const int L = length();
 
- for( int j=0; j<L; j++ )
-  if( str[j]!=l.str[j] )
-   return false;
+    for (int j = 0; j < L; j++)
+        if (str[j] != l.str[j])
+            return false;
 
-/*
- // Проверим флаги ударности.
- LEM_LOOP( i, L )
-  {
-   if( stress[i]!=(int8_t)ANY_STATE && l.stress[i]!=(int8_t)ANY_STATE )
-    if( stress[i] != l.stress[i] )
-     return false;
+    /*
+     // РџСЂРѕРІРµСЂРёРј С„Р»Р°РіРё СѓРґР°СЂРЅРѕСЃС‚Рё.
+     LEM_LOOP( i, L )
+      {
+       if( stress[i]!=(int8_t)ANY_STATE && l.stress[i]!=(int8_t)ANY_STATE )
+        if( stress[i] != l.stress[i] )
+         return false;
 
-   if( form[i]!=wchar_t(ANY_STATE) && l.form[i]!=wchar_t(ANY_STATE) )
-    if( form[i]!=l.form[i] )
-     return false;
-  }
-*/
+       if( form[i]!=wchar_t(ANY_STATE) && l.form[i]!=wchar_t(ANY_STATE) )
+        if( form[i]!=l.form[i] )
+         return false;
+      }
+    */
 
- return true;
+    return true;
 }
 
 namespace lem
 {
- enum lex_store_flags {
-                       f_entries_packed=0x80
-//                       f_has_stress=1,
-//                       f_has_forms=2,
-//                       f_forms_equal_entries=4,
-//                       f_forms_packed=16
-                      };
+    enum lex_store_flags {
+        f_entries_packed = 0x80
+        //                       f_has_stress=1,
+        //                       f_has_forms=2,
+        //                       f_forms_equal_entries=4,
+        //                       f_forms_packed=16
+    };
 
- void write_packed( Stream &bin, const wchar_t *src, int len )
- {
-  bin.write( src, sizeof(wchar_t) );
-
-  for( int i=1; i<len; i++ )
-   {
-    int8_t delta = int8_t(src[i] - *src);
-    bin.write( &delta, 1 );
-   }
-
-  return;
- }
-
- void read_packed( Stream &bin, wchar_t *src, int len )
- {
-  bin.read( src, sizeof(wchar_t) );
-
-  for( int i=1; i<len; i++ )
-   {
-    int8_t delta=0;
-    bin.read( &delta, 1 );
-    src[i] = int16_t(*src) + int16_t(delta);
-   }
-
-  return;
- }
-}
-
-void Lexem::SaveBin( Stream &bin ) const
-{
- bool entries_packed=true;
-
- for( int i=1; i<len; i++ )
-  {
-   int e_delta = str[i] - *str;
-
-   if( e_delta > 127 )
-    entries_packed = false;
-   else if( e_delta < -127 )
-    entries_packed = false;
-  }
-
- // Длину сохраняем вместе с флагами сжатия
- uint8_t flags = ( entries_packed ? f_entries_packed : 0 ) | len;
- bin.write( &flags, sizeof(flags) );
-
- if( entries_packed )
-  write_packed( bin, str, len );
- else
-  bin.write( str, sizeof(*str)*len );
-
- return;
-}
-
-
-void Lexem::LoadBin( Stream &bin )
-{
- // Length & flags
- uint8_t flags=0;
- bin.read( &flags, sizeof(flags) );
- len = flags & 0x7f;
-
-// flags &= 0xf0;
-
- // Chars
- if( (flags & f_entries_packed) == f_entries_packed )
-  read_packed( bin, str, len );
- else
-  bin.read( str, sizeof(*str)*len );
-
- // Terminate them because zero is not stored in stream.
- str[len]  = 0;
- calc_hash();
-
- return;
-}
-
-
-// ************************************************************
-// Вернет true, если можно сжимать относительно лексемы base.
-// У данной лексемы и у base должна быть общая часть.
-//
-// Через pack_flags возвращается дополнительная информация об
-// упаковке.
-// ************************************************************
-bool Lexem::Can_Be_Packed( const Lexem &base, lem::uint8_t *pack_flags ) const
-{
- int l = std::min( length(), base.length() );
- if( l )
-  {
-   int common_len=0;
-   for( int i=0; i<l; i++ )
-    if( str[i] == base.str[i] )
-     common_len++;
-    else
-     break;
-
-   // Общая часть достаточно длинна, чтобы покрыть расходы на хранение
-   // дополнительных флагов?  
-   if( common_len>3 )
+    void write_packed(Stream &bin, const wchar_t *src, int len)
     {
-     *pack_flags = common_len;
-     return true;
-    }
-  }
+        bin.write(src, sizeof(wchar_t));
 
- return false;
+        for (int i = 1; i < len; i++)
+        {
+            int8_t delta = int8_t(src[i] - *src);
+            bin.write(&delta, 1);
+        }
+
+        return;
+    }
+
+    void read_packed(Stream &bin, wchar_t *src, int len)
+    {
+        bin.read(src, sizeof(wchar_t));
+
+        for (int i = 1; i < len; i++)
+        {
+            int8_t delta = 0;
+            bin.read(&delta, 1);
+            src[i] = int16_t(*src) + int16_t(delta);
+        }
+
+        return;
+    }
+}
+
+void Lexem::SaveBin(Stream &bin) const
+{
+    bool entries_packed = true;
+
+    for (int i = 1; i < len; i++)
+    {
+        int e_delta = str[i] - *str;
+
+        if (e_delta > 127)
+            entries_packed = false;
+        else if (e_delta < -127)
+            entries_packed = false;
+    }
+
+    // Р”Р»РёРЅСѓ СЃРѕС…СЂР°РЅСЏРµРј РІРјРµСЃС‚Рµ СЃ С„Р»Р°РіР°РјРё СЃР¶Р°С‚РёСЏ
+    uint8_t flags = (entries_packed ? f_entries_packed : 0) | len;
+    bin.write(&flags, sizeof(flags));
+
+    if (entries_packed)
+        write_packed(bin, str, len);
+    else
+        bin.write(str, sizeof(*str)*len);
+
+    return;
+}
+
+
+void Lexem::LoadBin(Stream &bin)
+{
+    // Length & flags
+    uint8_t flags = 0;
+    bin.read(&flags, sizeof(flags));
+    len = flags & 0x7f;
+
+    // flags &= 0xf0;
+
+     // Chars
+    if ((flags & f_entries_packed) == f_entries_packed)
+        read_packed(bin, str, len);
+    else
+        bin.read(str, sizeof(*str)*len);
+
+    // Terminate them because zero is not stored in stream.
+    str[len] = 0;
+    calc_hash();
+
+    return;
+}
+
+
+// ************************************************************
+// Р’РµСЂРЅРµС‚ true, РµСЃР»Рё РјРѕР¶РЅРѕ СЃР¶РёРјР°С‚СЊ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Р»РµРєСЃРµРјС‹ base.
+// РЈ РґР°РЅРЅРѕР№ Р»РµРєСЃРµРјС‹ Рё Сѓ base РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РѕР±С‰Р°СЏ С‡Р°СЃС‚СЊ.
+//
+// Р§РµСЂРµР· pack_flags РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РѕР±
+// СѓРїР°РєРѕРІРєРµ.
+// ************************************************************
+bool Lexem::Can_Be_Packed(const Lexem &base, lem::uint8_t *pack_flags) const
+{
+    int l = std::min(length(), base.length());
+    if (l)
+    {
+        int common_len = 0;
+        for (int i = 0; i < l; i++)
+            if (str[i] == base.str[i])
+                common_len++;
+            else
+                break;
+
+        // РћР±С‰Р°СЏ С‡Р°СЃС‚СЊ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР»РёРЅРЅР°, С‡С‚РѕР±С‹ РїРѕРєСЂС‹С‚СЊ СЂР°СЃС…РѕРґС‹ РЅР° С…СЂР°РЅРµРЅРёРµ
+        // РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… С„Р»Р°РіРѕРІ?  
+        if (common_len > 3)
+        {
+            *pack_flags = common_len;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 
 // ***************************************************************************
-// Сохраняем лексему в сжатом виде - как добавку к базовой части
-// другой лексемы base. Обе лексемы имеют общую часть длиной pack_flags,
-// причем - с самого начала.
+// РЎРѕС…СЂР°РЅСЏРµРј Р»РµРєСЃРµРјСѓ РІ СЃР¶Р°С‚РѕРј РІРёРґРµ - РєР°Рє РґРѕР±Р°РІРєСѓ Рє Р±Р°Р·РѕРІРѕР№ С‡Р°СЃС‚Рё
+// РґСЂСѓРіРѕР№ Р»РµРєСЃРµРјС‹ base. РћР±Рµ Р»РµРєСЃРµРјС‹ РёРјРµСЋС‚ РѕР±С‰СѓСЋ С‡Р°СЃС‚СЊ РґР»РёРЅРѕР№ pack_flags,
+// РїСЂРёС‡РµРј - СЃ СЃР°РјРѕРіРѕ РЅР°С‡Р°Р»Р°.
 //
-// Для сохранения аффикса в опять-таки упакованном виде конструируем
-// временную лексему.
+// Р”Р»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ Р°С„С„РёРєСЃР° РІ РѕРїСЏС‚СЊ-С‚Р°РєРё СѓРїР°РєРѕРІР°РЅРЅРѕРј РІРёРґРµ РєРѕРЅСЃС‚СЂСѓРёСЂСѓРµРј
+// РІСЂРµРјРµРЅРЅСѓСЋ Р»РµРєСЃРµРјСѓ.
 // ***************************************************************************
 void Lexem::SaveBin_Packed(
-                           Stream &bin,
-                           const Lexem &base,
-                           lem::uint8_t pack_flags
-                          ) const
+    Stream &bin,
+    const Lexem &base,
+    lem::uint8_t pack_flags
+) const
 {
- Lexem( str+pack_flags ).SaveBin(bin);
- return;
+    Lexem(str + pack_flags).SaveBin(bin);
+    return;
 }
 
 void Lexem::LoadBin_Packed(
-                           Stream &bin,
-                           const Lexem &base,
-                           lem::uint8_t pack_flags
-                          )
+    Stream &bin,
+    const Lexem &base,
+    lem::uint8_t pack_flags
+)
 {
- Lexem affix;
- affix.LoadBin(bin);
+    Lexem affix;
+    affix.LoadBin(bin);
 
- // Копируем себе содержимое base
- copy( base.str,    base.str+pack_flags,    str    );
+    // РљРѕРїРёСЂСѓРµРј СЃРµР±Рµ СЃРѕРґРµСЂР¶РёРјРѕРµ base
+    copy(base.str, base.str + pack_flags, str);
 
- // добавляем аффикс
- copy( affix.str,    affix.str+affix.len+1,  str+pack_flags );
+    // РґРѕР±Р°РІР»СЏРµРј Р°С„С„РёРєСЃ
+    copy(affix.str, affix.str + affix.len + 1, str + pack_flags);
 
- calc_hash();
+    calc_hash();
 }
 
 
-void Lexem::Split( UCStringSet &list ) const
+void Lexem::Split(UCStringSet &list) const
 {
- const int n = Count_Lexems();
+    const int n = Count_Lexems();
 
- if( n==1 )
-  {
-   list.push_back(*this);
-   return;
-  }
+    if (n == 1)
+    {
+        list.push_back(*this);
+        return;
+    }
 
- list.reserve(n);
- for( int i=0; i<length(); ) 
-  { 
-   UCString part;
-   
-   while( str[i] && str[i]!=DelimiterChar )
-    part += str[i++];
+    list.reserve(n);
+    for (int i = 0; i < length(); )
+    {
+        UCString part;
 
-   list.push_back(part);
-     
-   i++;
-  }
+        while (str[i] && str[i] != DelimiterChar)
+            part += str[i++];
 
- return;
+        list.push_back(part);
+
+        i++;
+    }
+
+    return;
 }
 
-void Lexem::Add( const UCString &str )
+void Lexem::Add(const UCString &str)
 {
- if( !empty() )
-  (*this) += DelimiterChar;
+    if (!empty())
+        (*this) += DelimiterChar;
 
- (*this) += str;
- return;
+    (*this) += str;
+    return;
 }
 
-void Lexem::CorrectFormSpaces( UCString &f )
+void Lexem::CorrectFormSpaces(UCString &f)
 {
- if( f.count(L' ')>1 )
-  {
-   // Для мультилексем уберем лишние пробелы между составными частями
-   UFString us(f.c_str());
-   us.subst_all( L" ,", L"," );
-   us.subst_all( L" - ", L"-" );
-   f = us.c_str();
-  } 
+    if (f.count(L' ') > 1)
+    {
+        // Р”Р»СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРј СѓР±РµСЂРµРј Р»РёС€РЅРёРµ РїСЂРѕР±РµР»С‹ РјРµР¶РґСѓ СЃРѕСЃС‚Р°РІРЅС‹РјРё С‡Р°СЃС‚СЏРјРё
+        UFString us(f.c_str());
+        us.subst_all(L" ,", L",");
+        us.subst_all(L" - ", L"-");
+        f = us.c_str();
+    }
 
- return;
+    return;
 }
 
 
-// Процедура меняет регистр символов в мультилексеме по шаблону Нью-Йорк - то есть
-// каждая лексема начинается с заглавной.
-void Solarix::MakeEachLexemAa( lem::UCString &s )
+// РџСЂРѕС†РµРґСѓСЂР° РјРµРЅСЏРµС‚ СЂРµРіРёСЃС‚СЂ СЃРёРјРІРѕР»РѕРІ РІ РјСѓР»СЊС‚РёР»РµРєСЃРµРјРµ РїРѕ С€Р°Р±Р»РѕРЅСѓ РќСЊСЋ-Р™РѕСЂРє - С‚Рѕ РµСЃС‚СЊ
+// РєР°Р¶РґР°СЏ Р»РµРєСЃРµРјР° РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ Р·Р°РіР»Р°РІРЅРѕР№.
+void Solarix::MakeEachLexemAa(lem::UCString &s)
 {
- s.to_Aa();
- const int l = s.length();
- for( int i=1; i<l-1; ++i )
-  {
-   const wchar_t c = s[i];
-   if( c==Lexem::DelimiterChar || lem::is_udelim(c) )
-    s.set( i+1, lem::to_uupper(s[i+1]) );
-  }
+    s.to_Aa();
+    const int l = s.length();
+    for (int i = 1; i < l - 1; ++i)
+    {
+        const wchar_t c = s[i];
+        if (c == Lexem::DelimiterChar || lem::is_udelim(c))
+            s.set(i + 1, lem::to_uupper(s[i + 1]));
+    }
 
- s.calc_hash();
+    s.calc_hash();
 
- return;
+    return;
 }
 
-void Solarix::MakeEachLexemAa( lem::UFString &s )
+void Solarix::MakeEachLexemAa(lem::UFString &s)
 {
- s.to_Aa();
- const int l = s.length();
- for( int i=1; i<l-1; ++i )
-  {
-   const wchar_t c = s[i];
-   if( c==Lexem::DelimiterChar || c==L'-' )
-    s.set( i+1, lem::to_uupper(s[i+1]) );
-  }
+    s.to_Aa();
+    const int l = s.length();
+    for (int i = 1; i < l - 1; ++i)
+    {
+        const wchar_t c = s[i];
+        if (c == Lexem::DelimiterChar || c == L'-')
+            s.set(i + 1, lem::to_uupper(s[i + 1]));
+    }
 
- return;
+    return;
 }
 

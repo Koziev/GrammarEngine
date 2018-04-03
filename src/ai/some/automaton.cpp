@@ -1,23 +1,17 @@
 // -----------------------------------------------------------------------------
 // File AUTOMATON.CPP
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
-//
+//                                https://github.com/Koziev/GrammarEngine
 // Content:
-// SOLARIX Grammar engine
-//
-// Êëàññ Automaton - áàçîâûé äëÿ ñîçäàíèÿ Àâòîìàòîâ (â òîì ÷èñëå Ãðàììàòèê)
-// Ñèñòåìû.
+// ÐšÐ»Ð°ÑÑ Automaton - Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¹ Ð´Ð»Ñ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¾Ð² (Ð² Ñ‚Ð¾Ð¼ Ñ‡Ð¸ÑÐ»Ðµ Ð“Ñ€Ð°Ð¼Ð¼Ð°Ñ‚Ð¸Ðº)
+// Ð¡Ð¸ÑÑ‚ÐµÐ¼Ñ‹.
 // -----------------------------------------------------------------------------
 //
 // CD->29.05.1997
-// LC->04.01.2011
+// LC->02.04.2018
 // --------------
 
 #include <lem/macro_parser.h>
@@ -33,260 +27,251 @@ using namespace Solarix;
 using namespace lem::Iridium;
 
 /****************************************************************************
-   Àâòîìàò - îñíîâíàÿ ñòðóêòóðíàÿ åäèíèöà äåëåíèÿ Ñèñòåìû. Êàæäûé Àâòîìàò
- ÿâëÿåòñÿ ôóíêöèîíàëüíî çàêîí÷åíîé ïîäñèñòåìîé, ñêðûâàþùåé îñîáåííîñòè
- âíóòðåííåé ðåàëèçàöèè (èíêàïñóëèðóþùåé èõ) è ïðåäîñòàâëÿþùåé íàáîð
- èíòåðôåéñíûõ ôóíêöèé äëÿ äîñòóïà ê õðàíèìûì äàííûì è àëãîðèòìàì. Â
- íåêîòîðûõ ñëó÷àÿõ Àâòîìàòû âûïîëíÿþò ïàññèâíóþ ðîëü ñ òî÷êè çðåíèÿ
- îáðàáîòêè ïîòîêîâ äàííûõ Âåðáàëüíîé Ìàøèíû. Òàêîâûìè ÿâëÿþòñÿ Ãðàììàòèêè
- (ñì. ôàéë sol_gram.cpp). Äðóãèå Àâòîìàòû âêëþ÷àþòñÿ íà îäíîì èç ýòàïîâ â
- ïîòîê àíàëèçà Âåðáàëüíîé Ìàøèíû è àêòèâíî ìîäèôèöèðóþò äàííûå, ïðèìåíÿÿ
- ïðîäóêöèîííûå ïðàâèëà è èòåðàòîðû (ñì. êëàññû SolSynRule è ProcedureBeth).
+   ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚ - Ð¾ÑÐ½Ð¾Ð²Ð½Ð°Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð½Ð°Ñ ÐµÐ´Ð¸Ð½Ð¸Ñ†Ð° Ð´ÐµÐ»ÐµÐ½Ð¸Ñ Ð¡Ð¸ÑÑ‚ÐµÐ¼Ñ‹. ÐšÐ°Ð¶Ð´Ñ‹Ð¹ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚
+ ÑÐ²Ð»ÑÐµÑ‚ÑÑ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾ Ð·Ð°ÐºÐ¾Ð½Ñ‡ÐµÐ½Ð¾Ð¹ Ð¿Ð¾Ð´ÑÐ¸ÑÑ‚ÐµÐ¼Ð¾Ð¹, ÑÐºÑ€Ñ‹Ð²Ð°ÑŽÑ‰ÐµÐ¹ Ð¾ÑÐ¾Ð±ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸
+ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½ÐµÐ¹ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ (Ð¸Ð½ÐºÐ°Ð¿ÑÑƒÐ»Ð¸Ñ€ÑƒÑŽÑ‰ÐµÐ¹ Ð¸Ñ…) Ð¸ Ð¿Ñ€ÐµÐ´Ð¾ÑÑ‚Ð°Ð²Ð»ÑÑŽÑ‰ÐµÐ¹ Ð½Ð°Ð±Ð¾Ñ€
+ Ð¸Ð½Ñ‚ÐµÑ€Ñ„ÐµÐ¹ÑÐ½Ñ‹Ñ… Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¹ Ð´Ð»Ñ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð° Ðº Ñ…Ñ€Ð°Ð½Ð¸Ð¼Ñ‹Ð¼ Ð´Ð°Ð½Ð½Ñ‹Ð¼ Ð¸ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð°Ð¼. Ð’
+ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ñ… ÑÐ»ÑƒÑ‡Ð°ÑÑ… ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ñ‹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑŽÑ‚ Ð¿Ð°ÑÑÐ¸Ð²Ð½ÑƒÑŽ Ñ€Ð¾Ð»ÑŒ Ñ Ñ‚Ð¾Ñ‡ÐºÐ¸ Ð·Ñ€ÐµÐ½Ð¸Ñ
+ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ Ð¿Ð¾Ñ‚Ð¾ÐºÐ¾Ð² Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð’ÐµÑ€Ð±Ð°Ð»ÑŒÐ½Ð¾Ð¹ ÐœÐ°ÑˆÐ¸Ð½Ñ‹. Ð¢Ð°ÐºÐ¾Ð²Ñ‹Ð¼Ð¸ ÑÐ²Ð»ÑÑŽÑ‚ÑÑ Ð“Ñ€Ð°Ð¼Ð¼Ð°Ñ‚Ð¸ÐºÐ¸
+ (ÑÐ¼. Ñ„Ð°Ð¹Ð» sol_gram.cpp). Ð”Ñ€ÑƒÐ³Ð¸Ðµ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ñ‹ Ð²ÐºÐ»ÑŽÑ‡Ð°ÑŽÑ‚ÑÑ Ð½Ð° Ð¾Ð´Ð½Ð¾Ð¼ Ð¸Ð· ÑÑ‚Ð°Ð¿Ð¾Ð² Ð²
+ Ð¿Ð¾Ñ‚Ð¾Ðº Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ð’ÐµÑ€Ð±Ð°Ð»ÑŒÐ½Ð¾Ð¹ ÐœÐ°ÑˆÐ¸Ð½Ñ‹ Ð¸ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ Ð¼Ð¾Ð´Ð¸Ñ„Ð¸Ñ†Ð¸Ñ€ÑƒÑŽÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ðµ, Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÑÑ
+ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ Ð¿Ñ€Ð°Ð²Ð¸Ð»Ð° Ð¸ Ð¸Ñ‚ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ñ‹ (ÑÐ¼. ÐºÐ»Ð°ÑÑÑ‹ SolSynRule Ð¸ ProcedureBeth).
 
-   Êëàññ Automaton íå èñïîëüçóåòñÿ ñàì ïî ñåáå, íî ñëóæèò áàçîâûì êëàññîì
- äëÿ äðóãèõ êëàññîâ Àâòîìàòîâ. Èç òåêñòîâîãî ôàéëà Ñëîâàðÿ ýòîò êëàññ
- ñ÷èòûâàåò òîëüêî îïðåäåëåíèÿ ïàðàìåòðîâ (îáúåêòû êëàññà Criterion),
- ïðåäîñòàâëÿÿ ÷åðåç ìåõàíèçì ïåðåãðóçêè âèðòóàëüíûõ ôóíêöèé âîçìîæíîñòü
- çàãðóæàòü ñïåöèôè÷åñêèå äàííûå ïðîèçâîäíûì êëàññàì Àâòîìàòîâ.
+   ÐšÐ»Ð°ÑÑ Automaton Ð½Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ ÑÐ°Ð¼ Ð¿Ð¾ ÑÐµÐ±Ðµ, Ð½Ð¾ ÑÐ»ÑƒÐ¶Ð¸Ñ‚ Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¼ ÐºÐ»Ð°ÑÑÐ¾Ð¼
+ Ð´Ð»Ñ Ð´Ñ€ÑƒÐ³Ð¸Ñ… ÐºÐ»Ð°ÑÑÐ¾Ð² ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¾Ð². Ð˜Ð· Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð³Ð¾ Ñ„Ð°Ð¹Ð»Ð° Ð¡Ð»Ð¾Ð²Ð°Ñ€Ñ ÑÑ‚Ð¾Ñ‚ ÐºÐ»Ð°ÑÑ
+ ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°ÐµÑ‚ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ñ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð² (Ð¾Ð±ÑŠÐµÐºÑ‚Ñ‹ ÐºÐ»Ð°ÑÑÐ° Criterion),
+ Ð¿Ñ€ÐµÐ´Ð¾ÑÑ‚Ð°Ð²Ð»ÑÑ Ñ‡ÐµÑ€ÐµÐ· Ð¼ÐµÑ…Ð°Ð½Ð¸Ð·Ð¼ Ð¿ÐµÑ€ÐµÐ³Ñ€ÑƒÐ·ÐºÐ¸ Ð²Ð¸Ñ€Ñ‚ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ñ… Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¹ Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ÑÑ‚ÑŒ
+ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°Ñ‚ÑŒ ÑÐ¿ÐµÑ†Ð¸Ñ„Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð½Ñ‹Ð¼ ÐºÐ»Ð°ÑÑÐ°Ð¼ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¾Ð².
 *****************************************************************************/
-Automaton::Automaton( int Index )
+Automaton::Automaton(int Index)
 {
- // Åùå ñàì ïî ñåáå, áåç ñâÿçè ñî Ñëîâàðåì...
- dict = NULL;
- param = NULL;
+    // Ð•Ñ‰Ðµ ÑÐ°Ð¼ Ð¿Ð¾ ÑÐµÐ±Ðµ, Ð±ÐµÐ· ÑÐ²ÑÐ·Ð¸ ÑÐ¾ Ð¡Ð»Ð¾Ð²Ð°Ñ€ÐµÐ¼...
+    dict = nullptr;
+    param = nullptr;
 
- // Àâòîìàò ïóñò.
- was_loaded = false;
+    // ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚ Ð¿ÑƒÑÑ‚.
+    was_loaded = false;
 
- index = Index;
+    index = Index;
 
- return;
+    return;
 }
 
-Automaton::~Automaton(void)
+Automaton::~Automaton()
 {
- delete param;
- return;
+    delete param;
+    return;
 }
 
 
 /***************************************************************************
- Íàëàæèâàåì ñâÿçü ñ íàøèì áàçîâûì Ñëîâàðåì. Îáëàäàíèå óêàçàòåëåì íà Ñëîâàðü
- ïîçâîëÿåò ïîñûëàòü ñîîáùåíèÿ ê äðóãèì Àâòîìàòàì è ïîëüçîâàòüñÿ èõ ñåðâèñîì.
+ ÐÐ°Ð»Ð°Ð¶Ð¸Ð²Ð°ÐµÐ¼ ÑÐ²ÑÐ·ÑŒ Ñ Ð½Ð°ÑˆÐ¸Ð¼ Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¼ Ð¡Ð»Ð¾Ð²Ð°Ñ€ÐµÐ¼. ÐžÐ±Ð»Ð°Ð´Ð°Ð½Ð¸Ðµ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÐµÐ¼ Ð½Ð° Ð¡Ð»Ð¾Ð²Ð°Ñ€ÑŒ
+ Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ Ð¿Ð¾ÑÑ‹Ð»Ð°Ñ‚ÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ðº Ð´Ñ€ÑƒÐ³Ð¸Ð¼ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð°Ð¼ Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒÑÑ Ð¸Ñ… ÑÐµÑ€Ð²Ð¸ÑÐ¾Ð¼.
 ****************************************************************************/
-void Automaton::SetDictPtr( Dictionary *d )
-{ dict=d; }
+void Automaton::SetDictPtr(Dictionary *d)
+{
+    dict = d;
+}
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /********************************************************************
- Êëàññ Ñëîâàðÿ Dictionary îáíàðóæèë â òåêñòîâîì ôàéëå ñåêöèþ îïèñàíèÿ
- Àâòîìàòà è ïðîñèò íàñ çàãðóçèòü åå òåëî (øàïêà óæå ñ÷èòàíà èì).
- Ïåðåä íà÷àëîì ïåðâîé çàãðóçêè Àâòîìàòà âûçûâàåòñÿ ìåòîä PreLoad, à
- ïîñëå ñ÷èòûâàíèÿ î÷åðåäíîé ïîðöèè âûçûâàåòñÿ PostRead.
+ ÐšÐ»Ð°ÑÑ Ð¡Ð»Ð¾Ð²Ð°Ñ€Ñ Dictionary Ð¾Ð±Ð½Ð°Ñ€ÑƒÐ¶Ð¸Ð» Ð² Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð¼ Ñ„Ð°Ð¹Ð»Ðµ ÑÐµÐºÑ†Ð¸ÑŽ Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ñ
+ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð° Ð¸ Ð¿Ñ€Ð¾ÑÐ¸Ñ‚ Ð½Ð°Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÐµÐµ Ñ‚ÐµÐ»Ð¾ (ÑˆÐ°Ð¿ÐºÐ° ÑƒÐ¶Ðµ ÑÑ‡Ð¸Ñ‚Ð°Ð½Ð° Ð¸Ð¼).
+ ÐŸÐµÑ€ÐµÐ´ Ð½Ð°Ñ‡Ð°Ð»Ð¾Ð¼ Ð¿ÐµÑ€Ð²Ð¾Ð¹ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð° Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ð¼ÐµÑ‚Ð¾Ð´ PreLoad, Ð°
+ Ð¿Ð¾ÑÐ»Ðµ ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°Ð½Ð¸Ñ Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð½Ð¾Ð¹ Ð¿Ð¾Ñ€Ñ†Ð¸Ð¸ Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ PostRead.
 *********************************************************************/
 void Automaton::LoadTxt(
-                        Macro_Parser &txtfile,
-                        const Binarization_Options &options
-                       )
+    Macro_Parser &txtfile,
+    const Binarization_Options &options
+)
 {
- try
-  {
-   if( !was_loaded )
-    PreLoad(txtfile,options);
+    try
+    {
+        if (!was_loaded)
+            PreLoad(txtfile, options);
 
-   was_loaded=true;
-   txtfile.read_it(B_OFIGPAREN);
-   load(txtfile,options);
-   PostRead(txtfile,options);
-  }
- catch( E_ParserError &x )
-  {
-   GetIO().merr().printf(
-                         "Syntax error in automaton [%us] section\n%us\n"
-                         , GetName().c_str()
-                         , x.what()
-                        );
+        was_loaded = true;
+        txtfile.read_it(B_OFIGPAREN);
+        load(txtfile, options);
+        PostRead(txtfile, options);
+    }
+    catch (E_ParserError &x)
+    {
+        GetIO().merr().printf(
+            "Syntax error in automaton [%us] section\n%us\n"
+            , GetName().c_str()
+            , x.what()
+        );
 
-   was_loaded = false;
-   throw(x);
-  }
+        was_loaded = false;
+        throw(x);
+    }
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 bool Automaton::ProcessLexem2(
-                              const BethToken &t,
-                              Macro_Parser &txtfile,
-                              const Binarization_Options &options
-                             )
+    const BethToken &t,
+    Macro_Parser &txtfile,
+    const Binarization_Options &options
+)
 {
- return false;
+    return false;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /************************************************************************
- Ñîáñòâåííî, çàãðóçêà ñîäåðæèìîãî òåëà ñåêöèè Àâòîìàòà. Äàáû ïîçâîëèòü
- ïðîèçâîäíûì êëàññàì àâòîìàòîâ ðàçïîçíàâàòü è çàãðóæàòü ñâîè ñîáñòâåííûå
- ñòðóêòóðû äàííûõ ñâåðõ òîãî, ÷òî ðàñïîçíàåò è çàãðóæàåò íàø êëàññ,
- âûçûâàåòñÿ âèðòóàëüíûé ìåòîä ProcessLexem.
+ Ð¡Ð¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ð¾, Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ð³Ð¾ Ñ‚ÐµÐ»Ð° ÑÐµÐºÑ†Ð¸Ð¸ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð°. Ð”Ð°Ð±Ñ‹ Ð¿Ð¾Ð·Ð²Ð¾Ð»Ð¸Ñ‚ÑŒ
+ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð½Ñ‹Ð¼ ÐºÐ»Ð°ÑÑÐ°Ð¼ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¾Ð² Ñ€Ð°Ð·Ð¿Ð¾Ð·Ð½Ð°Ð²Ð°Ñ‚ÑŒ Ð¸ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°Ñ‚ÑŒ ÑÐ²Ð¾Ð¸ ÑÐ¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ðµ
+ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑÐ²ÐµÑ€Ñ… Ñ‚Ð¾Ð³Ð¾, Ñ‡Ñ‚Ð¾ Ñ€Ð°ÑÐ¿Ð¾Ð·Ð½Ð°ÐµÑ‚ Ð¸ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÑ‚ Ð½Ð°Ñˆ ÐºÐ»Ð°ÑÑ,
+ Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ð²Ð¸Ñ€Ñ‚ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´ ProcessLexem.
 *************************************************************************/
 void Automaton::load(
-                     Macro_Parser &txtfile,
-                     const Binarization_Options &options
-                    )
+    Macro_Parser &txtfile,
+    const Binarization_Options &options
+)
 {
- bool looping=true;
- while( looping )
-  {
-   if( txtfile.eof() )
+    bool looping = true;
+    while (looping)
     {
-     Print_Error(txtfile);
-     GetIO().merr().printf(
-                           "End of file has been reached before Automaton [%us] section completely loaded\n"
-                           , GetName().c_str()
-                          );
-     throw E_ParserError();
-    }
-
-   const BethToken t=txtfile.read();
-
-   if( !ProcessLexem(t,txtfile,options) )
-    {
-     switch(t.GetToken())
-      {
-       case B_CRITERION:
-        if( param!=NULL )
-         param->LoadTxt( GetIO(), txtfile );
-        break;
-
-       case B_CFIGPAREN:
-        looping=false;
-        break;
-
-       default:
+        if (txtfile.eof())
         {
-         const BSourceState back=txtfile.tellp();
-
-         if( param!=NULL )
-          {
-           if( txtfile.read().GetToken()==B_EQUAL )
-            {
-             txtfile.seekp( t.GetBegin() );
-             param->LoadTxt(GetIO(),txtfile);
-             break;
-            }
-          }
-         else
-          {
-           LEM_STOPIT;
-          }
-
-         txtfile.seekp(back);
-
-         // Íåðàñïîçíàííàÿ ëåêñåìà.
-         GetIO().merr().printf( "\nIncorrect lexem [%us]\n", t.string().c_str() );
-         Print_Error(t,txtfile);
-         throw E_ParserError();
+            Print_Error(txtfile);
+            GetIO().merr().printf(
+                "End of file has been reached before Automaton [%us] section completely loaded\n"
+                , GetName().c_str()
+            );
+            throw E_ParserError();
         }
-      }
-    }
-  }
 
- return;
+        const BethToken t = txtfile.read();
+
+        if (!ProcessLexem(t, txtfile, options))
+        {
+            switch (t.GetToken())
+            {
+            case B_CRITERION:
+                if (param != NULL)
+                    param->LoadTxt(GetIO(), txtfile);
+                break;
+
+            case B_CFIGPAREN:
+                looping = false;
+                break;
+
+            default:
+            {
+                const BSourceState back = txtfile.tellp();
+
+                if (param != NULL)
+                {
+                    if (txtfile.read().GetToken() == B_EQUAL)
+                    {
+                        txtfile.seekp(t.GetBegin());
+                        param->LoadTxt(GetIO(), txtfile);
+                        break;
+                    }
+                }
+                else
+                {
+                    LEM_STOPIT;
+                }
+
+                txtfile.seekp(back);
+
+                // ÐÐµÑ€Ð°ÑÐ¿Ð¾Ð·Ð½Ð°Ð½Ð½Ð°Ñ Ð»ÐµÐºÑÐµÐ¼Ð°.
+                GetIO().merr().printf("\nIncorrect lexem [%us]\n", t.string().c_str());
+                Print_Error(t, txtfile);
+                throw E_ParserError();
+            }
+            }
+        }
+    }
+
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /**********************************************************************
- Ýòîò ìåòîä ïðåäíàçíà÷åí äëÿ ïåðåãðóçêè ïðîèçâîäíûì êëàññîì Àâòîìàòà
- ÷òîáû çàãðóæàòü ñïåöèôè÷åñêèå äàííûå èç ñâîåé ñåêöèè. Åñëè âîçâðàùåíî
- true, òî áëîê äàííûõ, íà÷èíàþùèéñÿ òîêåíîì t, ðàñïîçíàí è çàãðóæåí.
+ Ð­Ñ‚Ð¾Ñ‚ Ð¼ÐµÑ‚Ð¾Ð´ Ð¿Ñ€ÐµÐ´Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½ Ð´Ð»Ñ Ð¿ÐµÑ€ÐµÐ³Ñ€ÑƒÐ·ÐºÐ¸ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð½Ñ‹Ð¼ ÐºÐ»Ð°ÑÑÐ¾Ð¼ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð°
+ Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°Ñ‚ÑŒ ÑÐ¿ÐµÑ†Ð¸Ñ„Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¸Ð· ÑÐ²Ð¾ÐµÐ¹ ÑÐµÐºÑ†Ð¸Ð¸. Ð•ÑÐ»Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¾
+ true, Ñ‚Ð¾ Ð±Ð»Ð¾Ðº Ð´Ð°Ð½Ð½Ñ‹Ñ…, Ð½Ð°Ñ‡Ð¸Ð½Ð°ÑŽÑ‰Ð¸Ð¹ÑÑ Ñ‚Ð¾ÐºÐµÐ½Ð¾Ð¼ t, Ñ€Ð°ÑÐ¿Ð¾Ð·Ð½Ð°Ð½ Ð¸ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.
 ***********************************************************************/
 bool Automaton::ProcessLexem(
-                              const BethToken &/*t*/,
-                              Macro_Parser& /*txt*/,
-                              const Binarization_Options& /*options*/
-                             )
-{ return false; }
+    const BethToken &/*t*/,
+    Macro_Parser& /*txt*/,
+    const Binarization_Options& /*options*/
+)
+{
+    return false;
+}
 #endif
 
 
-void Automaton::PrintMap( OFormatter &txtfile )
+void Automaton::PrintMap(OFormatter &txtfile)
 {}
 
 
 #if defined SOL_LOADBIN
 /********************************************************************************
- Ìåòîä çàãðóæàåò èíôîðìàöèþ â êîíòåéíåðû Àâòîìàòà èç óêàçàííîãî áèíàðíîãî ïîòîêà
- (ôàéëà). Â ïðîèçâîäíîì êëàññå ìåòîä ïåðåãðóæàåì, íî íàø áàçîâûé ìåòîä äîëæåí
- áûòü âûçâàí äëÿ çàãðóçêè òàáëèöû ïàðàìåòðîâ param.
+ ÐœÐµÑ‚Ð¾Ð´ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÑ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð² ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€Ñ‹ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð° Ð¸Ð· ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð±Ð¸Ð½Ð°Ñ€Ð½Ð¾Ð³Ð¾ Ð¿Ð¾Ñ‚Ð¾ÐºÐ°
+ (Ñ„Ð°Ð¹Ð»Ð°). Ð’ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð½Ð¾Ð¼ ÐºÐ»Ð°ÑÑÐµ Ð¼ÐµÑ‚Ð¾Ð´ Ð¿ÐµÑ€ÐµÐ³Ñ€ÑƒÐ¶Ð°ÐµÐ¼, Ð½Ð¾ Ð½Ð°Ñˆ Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´ Ð´Ð¾Ð»Ð¶ÐµÐ½
+ Ð±Ñ‹Ñ‚ÑŒ Ð²Ñ‹Ð·Ð²Ð°Ð½ Ð´Ð»Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð² param.
 *********************************************************************************/
-void Automaton::LoadBin( lem::Stream &bin, const Load_Options &opt )
+void Automaton::LoadBin(lem::Stream &bin, const Load_Options &opt)
 {
- if( bin.read_bool() && param!=NULL )
-  param->LoadBin(bin);
+    if (bin.read_bool() && param != nullptr)
+        param->LoadBin(bin);
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_SAVEBIN
 /****************************************************************************
- Ìåòîä ñîõðàíÿåò èíôîðìàöèþ â êîíòåéíåðàõ Àâòîìàòà â áèíàðíîì ïîòîêå (ôàéëå).
- Ïðîèçâîäíûå êëàññû ïåðåãðóæàþò ìåòîä, íî äîëæíû â íîâîì ìåòîäå âûçâàòü íàø
- áàçîâûé äëÿ ñîõðàíåíèÿ ñîäåæèìîãî òàáëèöû ïàðàìåòðîâ.
+ ÐœÐµÑ‚Ð¾Ð´ ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÑ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð² ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€Ð°Ñ… ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð° Ð² Ð±Ð¸Ð½Ð°Ñ€Ð½Ð¾Ð¼ Ð¿Ð¾Ñ‚Ð¾ÐºÐµ (Ñ„Ð°Ð¹Ð»Ðµ).
+ ÐŸÑ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð½Ñ‹Ðµ ÐºÐ»Ð°ÑÑÑ‹ Ð¿ÐµÑ€ÐµÐ³Ñ€ÑƒÐ¶Ð°ÑŽÑ‚ Ð¼ÐµÑ‚Ð¾Ð´, Ð½Ð¾ Ð´Ð¾Ð»Ð¶Ð½Ñ‹ Ð² Ð½Ð¾Ð²Ð¾Ð¼ Ð¼ÐµÑ‚Ð¾Ð´Ðµ Ð²Ñ‹Ð·Ð²Ð°Ñ‚ÑŒ Ð½Ð°Ñˆ
+ Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¹ Ð´Ð»Ñ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ ÑÐ¾Ð´ÐµÐ¶Ð¸Ð¼Ð¾Ð³Ð¾ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð².
 *****************************************************************************/
-void Automaton::SaveBin( lem::Stream &bin ) const
+void Automaton::SaveBin(lem::Stream &bin) const
 {
- bin.write_bool( param!=NULL );
- if( param!=NULL )
-  param->SaveBin(bin);
+    bin.write_bool(param != nullptr);
+    if (param != nullptr)
+        param->SaveBin(bin);
 
- return;
+    return;
 }
 #endif
 
-/*
-#if defined SOL_CAA && !defined SOL_NO_AA
-PhrasoBlock* Automaton::Process( PhrasoBlock *block )
-{
- if( GetDebugLevel()>3 && lem::LogFile::IsOpen() )
-  lem::LogFile::logfile->printf(
-                                "OVERDEBUGGING: automaton [%us] ::Process(...) phrasoblock key=%d\n",
-                                GetName().c_str(),
-                                block!=NULL ? block->GetKey() : UNKNOWN
-                               );
-
- return block;
-}
-#endif
-*/
 
 #if defined SOL_REPORT
 /********************************************************************
- Ìåòîä âûçûâàåòñÿ îáû÷íî äëÿ ïå÷àòè â Æóðíàëå ñâåäåíèé î çàíèìàåìîé
- Àâòîìàòîì ïàìÿòè, ÷èñëå çàãðóæåííûõ ñòðóêòóð è òàê äàëåå.
+ ÐœÐµÑ‚Ð¾Ð´ Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾ Ð´Ð»Ñ Ð¿ÐµÑ‡Ð°Ñ‚Ð¸ Ð² Ð–ÑƒÑ€Ð½Ð°Ð»Ðµ ÑÐ²ÐµÐ´ÐµÐ½Ð¸Ð¹ Ð¾ Ð·Ð°Ð½Ð¸Ð¼Ð°ÐµÐ¼Ð¾Ð¹
+ ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¾Ð¼ Ð¿Ð°Ð¼ÑÑ‚Ð¸, Ñ‡Ð¸ÑÐ»Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ð½Ñ‹Ñ… ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€ Ð¸ Ñ‚Ð°Ðº Ð´Ð°Ð»ÐµÐµ.
 *********************************************************************/
-void Automaton::Report( OFormatter &mrep )
+void Automaton::Report(OFormatter &mrep)
 {
- mrep.printf(
-             "Automaton [%us]:\n"
-             , GetName().c_str()
-            );
+    mrep.printf(
+        "Automaton [%us]:\n"
+        , GetName().c_str()
+    );
 
- return;
+    return;
 }
 #endif
 
 
 // ****************************************************
-// Äëÿ óïðîùåíèÿ äîñòóïà ê îêðóæåíèþ ââîäà-âûâîäà...
+// Ð”Ð»Ñ ÑƒÐ¿Ñ€Ð¾Ñ‰ÐµÐ½Ð¸Ñ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð° Ðº Ð¾ÐºÑ€ÑƒÐ¶ÐµÐ½Ð¸ÑŽ Ð²Ð²Ð¾Ð´Ð°-Ð²Ñ‹Ð²Ð¾Ð´Ð°...
 // ****************************************************
-const Sol_IO& Automaton::GetIO(void) const
-{ return dict->GetIO(); }
+const Sol_IO& Automaton::GetIO() const
+{
+    return dict->GetIO();
+}

@@ -7,7 +7,7 @@
 using namespace Solarix;
 
 
-SyllabResultPoint::SyllabResultPoint(void)
+SyllabResultPoint::SyllabResultPoint()
 {
  copy_index=merge_index0=merge_count=UNKNOWN;
 }

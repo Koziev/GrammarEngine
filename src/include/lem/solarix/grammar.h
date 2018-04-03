@@ -1,126 +1,107 @@
-// -----------------------------------------------------------------------------
-// File GRAMMAR.H
-//
-// (c) by Koziev Elijah     all rights reserved 
-//
-// SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// Content:
-// LEM C++ library  http://www.solarix.ru
-// Классы поддержки Грамматик - разновидности Автоматов.
-//
-// 16.11.2010 - рефакторинг интерфейса доступа к списку классов.
-// -----------------------------------------------------------------------------
-//
-// CD->29.05.1997
-// LC->16.11.2010
-// --------------
-
 #ifndef SOL_GRAMMAR__H
 #define SOL_GRAMMAR__H
 #pragma once
 
- #include <lem/ptr_container.h>
- #include <lem/solarix/automaton.h>
- #include <lem/solarix/coordinate.h>
- #include <lem/solarix/gram_class.h>
+#include <lem/ptr_container.h>
+#include <lem/solarix/automaton.h>
+#include <lem/solarix/coordinate.h>
+#include <lem/solarix/gram_class.h>
 
- namespace Solarix
- {
-  class ClassList;
-  class CoordList;
+namespace Solarix
+{
+    class ClassList;
+    class CoordList;
 
-  /**************************************************************
-   Базовый класс для описания различных грамматик, основанный на
-   некоторых обнаруженных теоретически общих моментах.
-  **************************************************************/
-  class Grammar : public Automaton
-  {
-   private:
-    friend class Dictionary;
+    /**************************************************************
+     Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РѕРїРёСЃР°РЅРёСЏ СЂР°Р·Р»РёС‡РЅС‹С… РіСЂР°РјРјР°С‚РёРє, РѕСЃРЅРѕРІР°РЅРЅС‹Р№ РЅР°
+     РЅРµРєРѕС‚РѕСЂС‹С… РѕР±РЅР°СЂСѓР¶РµРЅРЅС‹С… С‚РµРѕСЂРµС‚РёС‡РµСЃРєРё РѕР±С‰РёС… РјРѕРјРµРЅС‚Р°С….
+    **************************************************************/
+    class Grammar : public Automaton
+    {
+    private:
+        friend class Dictionary;
 
-   protected:
-    ClassList * aclass; // Список определений грамматических классов.
-    CoordList * coord;  // справочник определений грамматических категорий
-    int ilink_type;     // Индекс перечня имен связок (особого вида координаты)
-    
-   protected:
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
+    protected:
+        ClassList * aclass; // РЎРїРёСЃРѕРє РѕРїСЂРµРґРµР»РµРЅРёР№ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєР»Р°СЃСЃРѕРІ.
+        CoordList * coord;  // СЃРїСЂР°РІРѕС‡РЅРёРє РѕРїСЂРµРґРµР»РµРЅРёР№ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєР°С‚РµРіРѕСЂРёР№
+        int ilink_type;     // РРЅРґРµРєСЃ РїРµСЂРµС‡РЅСЏ РёРјРµРЅ СЃРІСЏР·РѕРє (РѕСЃРѕР±РѕРіРѕ РІРёРґР° РєРѕРѕСЂРґРёРЅР°С‚С‹)
 
-    /************************************************************************
-     Этот метод переопределяется производным классом Грамматики и вызывается
-     из метода ProcessLexem для загрузки словарной статьи из текстового
-     файла. Курсор чтения находится на первом символе заголовка статьи.
-    *************************************************************************/
-    virtual void LoadEntry(
-                           Macro_Parser& txtfile,
-                           bool is_extern,
-                           const Binarization_Options &options
-                          ) {}
+    protected:
+#if defined SOL_LOADTXT && defined SOL_COMPILER
 
-    virtual void LoadCoord( Macro_Parser& txtfile, bool is_extern );
-    virtual void LoadClass( Macro_Parser& txtfile, bool is_extern );
+        /************************************************************************
+         Р­С‚РѕС‚ РјРµС‚РѕРґ РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РїСЂРѕРёР·РІРѕРґРЅС‹Рј РєР»Р°СЃСЃРѕРј Р“СЂР°РјРјР°С‚РёРєРё Рё РІС‹Р·С‹РІР°РµС‚СЃСЏ
+         РёР· РјРµС‚РѕРґР° ProcessLexem РґР»СЏ Р·Р°РіСЂСѓР·РєРё СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ
+         С„Р°Р№Р»Р°. РљСѓСЂСЃРѕСЂ С‡С‚РµРЅРёСЏ РЅР°С…РѕРґРёС‚СЃСЏ РЅР° РїРµСЂРІРѕРј СЃРёРјРІРѕР»Рµ Р·Р°РіРѕР»РѕРІРєР° СЃС‚Р°С‚СЊРё.
+        *************************************************************************/
+        virtual void LoadEntry(
+            Macro_Parser& txtfile,
+            bool is_extern,
+            const Binarization_Options &options
+        ) {}
 
-    /***********************************************************************
-     Перед началом первой загрузки Грамматики из текстового файла установим
-     нумерацию ключей.
-    ************************************************************************/
-    virtual void PreLoad(
-                         Macro_Parser &txtfile,
-                         const Binarization_Options &options
-                        ) {}
+        virtual void LoadCoord(Macro_Parser& txtfile, bool is_extern);
+        virtual void LoadClass(Macro_Parser& txtfile, bool is_extern);
 
-    virtual bool ProcessLexem(
-                              const BethToken &t,
-                              Macro_Parser& txt,
-                              const Binarization_Options &options
-                             );
-    #endif
+        /***********************************************************************
+         РџРµСЂРµРґ РЅР°С‡Р°Р»РѕРј РїРµСЂРІРѕР№ Р·Р°РіСЂСѓР·РєРё Р“СЂР°РјРјР°С‚РёРєРё РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° СѓСЃС‚Р°РЅРѕРІРёРј
+         РЅСѓРјРµСЂР°С†РёСЋ РєР»СЋС‡РµР№.
+        ************************************************************************/
+        virtual void PreLoad(
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        ) override {}
 
-   public:
-    Grammar( int Index );
-    virtual ~Grammar(void);
+        virtual bool ProcessLexem(
+            const BethToken &t,
+            Macro_Parser& txt,
+            const Binarization_Options &options
+        ) override;
+#endif
 
-    #if defined SOL_LOADBIN
-    void LoadBin( lem::Stream& bin, const Load_Options &opt );
-    #endif
+    public:
+        Grammar(int Index);
+        virtual ~Grammar();
 
-    #if defined SOL_SAVEBIN
-    virtual void SaveBin( lem::Stream& bin ) const;
-    #endif
+#if defined SOL_LOADBIN
+        void LoadBin(lem::Stream& bin, const Load_Options &opt);
+#endif
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual void Prepare( const lem::Path &outdir, const Binarization_Options &opts );
-    #endif
+#if defined SOL_SAVEBIN
+        virtual void SaveBin(lem::Stream& bin) const override;
+#endif
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    GramCoordAdr LoadCoordIdTxt( lem::Iridium::Macro_Parser & txtfile, bool allow_quantors ) const;
-    #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual void Prepare(const lem::Path &outdir, const Binarization_Options &opts) override;
+#endif
 
-    const GramCoordAdr FindCoord( const UCString& coord_name ) const;
-    const GramCoordPair FindCoordPair(
-                                      Macro_Parser& txtfile,
-                                      bool index_ref=false
-                                     ) const;
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        GramCoordAdr LoadCoordIdTxt(lem::Iridium::Macro_Parser & txtfile, bool allow_quantors) const;
+#endif
 
-    // Returns the index of class with name given
-    int FindClass( const UCString& class_name ) const;
+        const GramCoordAdr FindCoord(const UCString& coord_name) const;
+        const GramCoordPair FindCoordPair(
+            Macro_Parser& txtfile,
+            bool index_ref = false
+        ) const;
 
-    // Access to the list of grammatical category declarations
-    inline CoordList& coords(void) const { return *coord; }
+        // Returns the index of class with name given
+        int FindClass(const UCString& class_name) const;
 
-    inline ClassList& classes(void) { return *aclass; }
+        // Access to the list of grammatical category declarations
+        inline CoordList& coords() const { return *coord; }
 
-    int GetnLink(void);
-    int FindLink( const UCString& link_name );
-    const UCString& GetLink( int i );
+        inline ClassList& classes() { return *aclass; }
 
-    #if defined SOL_REPORT
-    virtual void Report( OFormatter &where_to );
-    #endif
-  };
+        int GetnLink();
+        int FindLink(const UCString& link_name);
+        const UCString& GetLink(int i);
 
- } // namespace 'Solarix'
+#if defined SOL_REPORT
+        virtual void Report(OFormatter &where_to) override;
+#endif
+    };
+
+} // namespace 'Solarix'
 
 #endif

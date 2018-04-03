@@ -5,9 +5,6 @@
 
 using namespace Solarix;
 
-LS_ResultSet *rs;
-GG_CharOperations *operations;
-
 CharOperationEnumerator::CharOperationEnumerator( LS_ResultSet *RS, GG_CharOperations *OPERS )
  : rs(RS), operations(OPERS)
 {

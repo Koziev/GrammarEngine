@@ -1,267 +1,244 @@
 // -----------------------------------------------------------------------------
 // File TREE_NODE.H
 //
-// (c) by Koziev Elijah     all rights reserved 
+// (c) by Koziev Elijah
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
 //                                http://sourceforge.net/projects/solarix  
 //
-// Licensed under the terms of GNU Lesser GPL
-//
 // Content:
-// Деревья-beth (грамматические деревья).
+// Р“СЂР°РјРјР°С‚РёС‡РµСЃРєРёРµ РґРµСЂРµРІСЊСЏ РґР»СЏ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРіРѕ Р°РЅР°Р»РёР·Р°С‚РѕСЂР°.
 //
-// PS: с этого заголовочного файла начиналась СОЛЯРИС в 1995 году...
+// PS: СЃ СЌС‚РѕРіРѕ Р·Р°РіРѕР»РѕРІРѕС‡РЅРѕРіРѕ С„Р°Р№Р»Р° РЅР°С‡РёРЅР°Р»Р°СЃСЊ РЎРћР›РЇР РРЎ РІ 1995 РіРѕРґСѓ...
 // -----------------------------------------------------------------------------
 //
 // CD->06.10.1995
-// LC->28.06.2012
+// LC->02.04.2018
 // --------------
 
-#if !defined( SOL_MATHLING__H )
-#define SOL_MATHLING__H
+#if !defined( TREE_NODE__H )
+#define TREE_NODE__H
 #pragma once
 
- #include <lem/macros.h>
- #include <lem/ptr_container.h>
- #include <lem/oformatter.h>
- #include <lem/set.h>
+#include <lem/macros.h>
+#include <lem/ptr_container.h>
+#include <lem/oformatter.h>
+#include <lem/set.h>
 
- #include <lem/solarix/ref_name.h>
- #include <lem/solarix/gram_class.h>
- #include <lem/solarix/tree_link.h>
- #include <lem/solarix/word_form.h>
- #include <lem/solarix/form_table.h>
+#include <lem/solarix/ref_name.h>
+#include <lem/solarix/gram_class.h>
+#include <lem/solarix/tree_link.h>
+#include <lem/solarix/word_form.h>
+#include <lem/solarix/form_table.h>
 
- namespace Solarix
- {
-  using lem::PtrCollect;
-  using lem::CloneCollect;
-  using lem::Real1Array;
-  using lem::Collect;
-  using lem::MCollect;
-  using lem::BaseSet;
+namespace Solarix
+{
+    using lem::PtrCollect;
+    using lem::CloneCollect;
+    using lem::Real1Array;
+    using lem::Collect;
+    using lem::MCollect;
+    using lem::BaseSet;
 
-  class Dictionary;
-  class PM_Input;
-  class SynGram;
-  class Res_Pack;
-  class PA_PrologSpace;
-  class PA_Predicate;
-  class PA_PrologSpace;
-  class Result_Section;
-
-
-  // ******************************
-  // Слой связей.
-  // ******************************
-  class Tree_Node;
-  class TreeDimension
-  {
-   private:
-    lem::UCString name;
-    lem::MCollect<Tree_Node*> nodes;
-
-   public:
-    TreeDimension(void);
-    TreeDimension( const UCString &name );
-    TreeDimension( const TreeDimension &x );
-    ~TreeDimension(void);
-    void operator=( const TreeDimension &x );
-
-    void Clear(void);
-
-    const UCString& GetName(void) const { return name; }
-    const Tree_Node& operator[]( int i ) const { return *nodes[i]; }
-          Tree_Node& operator[]( int i )       { return *nodes[i]; }
-
-    void Add( Tree_Node *x );
-    void Add( const TreeDimension &src );
-    void Forget( int i ) { nodes[i]=NULL; }
-    void Remove( int i );
-    bool Empty(void) const { return nodes.empty(); }
-    lem::Container::size_type size(void) const { return nodes.size(); }
-
-    void SortByWordIndex();
-
-    #if defined SOL_LOADBIN
-    void LoadBin( lem::Stream &bin );
-    #endif
-
-    #if defined SOL_SAVEBIN
-    void SaveBin( lem::Stream &bin ) const;
-    #endif
-
-    void Print( const Solarix::Dictionary & dict, lem::OFormatter & out, bool detailed ) const;
-    void PrintXML( lem::OFormatter & xml, const Solarix::Dictionary & dict ) const;
-  };
-
-  // ***********************************
-  // Блок меток для узла.
-  // ***********************************
-  class TrValue;
-  class TreeMarks
-  {
-   private:
-    lem::UCString name; // имя блока
-    lem::MCollect<TrValue*> values; // метки
-
-   public:
-    TreeMarks(void);
-    TreeMarks( const UCString &Name );
-    TreeMarks( const TreeMarks & x );
-    ~TreeMarks(void);
- 
-    void operator=( const TreeMarks &x );
-
-    const UCString & GetName(void) const { return name; }
-    int Size(void) const { return CastSizeToInt(values.size()); } 
-    const TrValue& operator[]( int i ) const { return * values[i]; }
-          TrValue& operator[]( int i )       { return * values[i]; }
-
-    void Add( TrValue *v );
-    void Add( const TreeMarks &src );
-    void Clear(void);
-
-    #if defined SOL_LOADBIN
-    void LoadBin( lem::Stream &bin );
-    #endif
-
-    #if defined SOL_SAVEBIN
-    void SaveBin( lem::Stream &bin ) const;
-    #endif
-
-    void Print( const Solarix::Dictionary &dict, lem::OFormatter &out ) const;
-    void PrintXML( lem::OFormatter &out, const Solarix::Dictionary &dict ) const;
-  };
+    class Dictionary;
+    class PM_Input;
+    class SynGram;
+    class Res_Pack;
+    class PA_PrologSpace;
+    class PA_Predicate;
+    class PA_PrologSpace;
+    class Result_Section;
 
 
- /*********************************************************************
-  Универсальный класс для представления синтаксических (грамматических)
-  деревьев в итерациях синтаксического анализа.
- **********************************************************************/
- class Tree_Node
- {
-  protected:
-   Tree_Link ilink;                     // Связка, которой наш узел подключен к вышестоящему
-   lem::Ptr<Word_Form> node;            // Узловая синтаксема
-   TreeDimension child;                 // Подсоединенные ветви - синтаксическое измерение графа
-   lem::PtrCollect<TreeDimension> dims; // дополнительные измерения
-   lem::PtrCollect<TreeMarks> marks;    // пометки
+    // ******************************
+    // РЎР»РѕР№ СЃРІСЏР·РµР№.
+    // ******************************
+    class Tree_Node;
+    class TreeDimension
+    {
+    private:
+        lem::UCString name;
+        lem::MCollect<Tree_Node*> nodes;
 
-   void Init( const Tree_Node& tn );
+    public:
+        TreeDimension(void);
+        TreeDimension(const UCString &name);
+        TreeDimension(const TreeDimension &x);
+        ~TreeDimension(void);
+        void operator=(const TreeDimension &x);
 
-  public:
-   Tree_Node(void);
-   Tree_Node( const Tree_Node& tn );
-   explicit Tree_Node( const Word_Form& s );
-   Tree_Node( Word_Form *s, bool dummy );
-   explicit Tree_Node( lem::Stream &bin );
+        void Clear(void);
 
-   void operator=( const Tree_Node& tn );
+        const UCString& GetName(void) const { return name; }
+        const Tree_Node& operator[](int i) const { return *nodes[i]; }
+        Tree_Node& operator[](int i) { return *nodes[i]; }
 
-   void ForgetChild( int ichild );
-   void ClearChildren(void);
+        void Add(Tree_Node *x);
+        void Add(const TreeDimension &src);
+        void Forget(int i) { nodes[i] = nullptr; }
+        void Remove(int i);
+        bool Empty(void) const { return nodes.empty(); }
+        lem::Container::size_type size(void) const { return nodes.size(); }
 
-   inline const Tree_Link& GetLinkIndex( int i ) const { return child[i].GetLink(); }
-   inline const Tree_Link& GetLink(void) const { return ilink; }
-   inline void SetLink( const Tree_Link& il ) { ilink=il; }
- 
-   // После этого вызова гарантировано будет измерение с именем name.
-   TreeDimension& TouchDimension( const UCString &name );
+        void SortByWordIndex();
 
-   // Поиск измерения с указанным именем. Если не найдется, то возвращается NULL;
-   TreeDimension* FindDimension( const UCString &name );
-   const TreeDimension* FindDimension( const UCString &name ) const;
+#if defined SOL_LOADBIN
+        void LoadBin(lem::Stream &bin);
+#endif
 
-   const lem::PtrCollect<TreeDimension>& GetDimensions(void) const { return dims; }
-         lem::PtrCollect<TreeDimension>& GetDimensions(void)       { return dims; }
-   const TreeDimension& leafs(void) const { return child; }
-         TreeDimension& leafs(void)       { return child; }
-   const TreeDimension& leafs( const UCString &name ) const;
-         TreeDimension& leafs( const UCString &name );
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream &bin) const;
+#endif
 
-   TreeMarks& TouchMarks( const UCString &name );
-   TreeMarks* FindMarks( const UCString &name );
-   const TreeMarks* FindMarks( const UCString &name ) const;
+        void Print(const Solarix::Dictionary & dict, lem::OFormatter & out, bool detailed) const;
+        void PrintXML(lem::OFormatter & xml, const Solarix::Dictionary & dict) const;
+    };
 
-         lem::PtrCollect<TreeMarks>& GetMarks(void)       { return marks; }
-   const lem::PtrCollect<TreeMarks>& GetMarks(void) const { return marks; }
+    // ***********************************
+    // Р‘Р»РѕРє РјРµС‚РѕРє РґР»СЏ СѓР·Р»Р°.
+    // ***********************************
+    class TrValue;
+    class TreeMarks
+    {
+    private:
+        lem::UCString name; // РёРјСЏ Р±Р»РѕРєР°
+        lem::MCollect<TrValue*> values; // РјРµС‚РєРё
 
-   inline const Word_Form& GetNode(void) const { return *node; }
-   inline       Word_Form& GetNode(void)       { return *node; }
-//   inline const Word_Form& GetOrgNode(void) const { return *org_node; }
+    public:
+        TreeMarks(void);
+        TreeMarks(const UCString &Name);
+        TreeMarks(const TreeMarks & x);
+        ~TreeMarks(void);
 
-   void SetNode( Solarix::Word_Form *new_node );
+        void operator=(const TreeMarks &x);
 
-   // Проверяет полное владение указателем и если указатель разделяемый,
-   // то создает свою копию.
-   Word_Form& GetUnique(void);
+        const UCString & GetName(void) const { return name; }
+        int Size(void) const { return CastSizeToInt(values.size()); }
+        const TrValue& operator[](int i) const { return *values[i]; }
+        TrValue& operator[](int i) { return *values[i]; }
 
-//   inline int GetBethType( SynGram &sg ) const { return GetNode().GetBethType(sg); }
-//   inline bool IsQuantor( SynGram &sg ) const { return node->IsQuantor(sg); }
-//   inline bool IsAnyQuantor(void) const { return node->IsAnyQuantor(); }
-//   inline bool IsUnknownQuantor(void) const { return node->IsUnknownQuantor(); }
-//   inline bool IsMultyplicator( SynGram &sg ) const { return node->IsMultyplicator(sg); }
+        void Add(TrValue *v);
+        void Add(const TreeMarks &src);
+        void Clear(void);
 
-//   void Assemble_Entries_List( BaseSet<int> &entries ) const;
+#if defined SOL_LOADBIN
+        void LoadBin(lem::Stream &bin);
+#endif
 
-//   int CountClass( int iclass, SynGram &sg ) const;
-//   int CountEntry( int ie ) const;
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream &bin) const;
+#endif
 
-   int FindLinkedBy( const Tree_Link ilink ) const;
-
-   bool DoesMatch( SynGram &sg, const Tree_Node& tn, bool strict_position=true ) const;
-   bool operator==( const Tree_Node& tn ) const;
-   bool operator!=( const Tree_Node& tn ) const;
-
-   void Add( Tree_Node *to_add );
-   void Add( const Tree_Node& to_add );
-
-   #if defined SOL_CAA
-   void Remove( int ichild );
-   #endif
-
-   void Print( lem::OFormatter &txtfile, SynGram &gram, int offset=-1, bool detailed=true ) const;
-   void PrintPlain( lem::OFormatter &s, bool EntryKey ) const;
-   void PrintXML( lem::OFormatter &xmlfile, SynGram &gram ) const;
-
-   #if defined SOL_LOADBIN
-   void LoadBin( lem::Stream &binfile );
-   #endif
-
-    #if defined SOL_SAVEBIN
-   void SaveBin( lem::Stream &binfile ) const;
-   #endif
+        void Print(const Solarix::Dictionary &dict, lem::OFormatter &out) const;
+        void PrintXML(lem::OFormatter &out, const Solarix::Dictionary &dict) const;
+    };
 
 
-   #if defined SOL_SAVETXT
-   void SaveTxt(
-                lem::OFormatter &txtfile,
-                SynGram &gram,
-                int Offset=0,
-                bool detailed=true
-               ) const;
-   #endif
+    /*********************************************************************
+     РЈРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёС… (РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС…)
+     РґРµСЂРµРІСЊРµРІ РІ РёС‚РµСЂР°С†РёСЏС… СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРіРѕ Р°РЅР°Р»РёР·Р°.
+    **********************************************************************/
+    class Tree_Node
+    {
+    protected:
+        Tree_Link ilink;                     // РЎРІСЏР·РєР°, РєРѕС‚РѕСЂРѕР№ РЅР°С€ СѓР·РµР» РїРѕРґРєР»СЋС‡РµРЅ Рє РІС‹С€РµСЃС‚РѕСЏС‰РµРјСѓ
+        lem::Ptr<Word_Form> node;            // РЈР·Р»РѕРІР°СЏ СЃРёРЅС‚Р°РєСЃРµРјР°
+        TreeDimension child;                 // РџРѕРґСЃРѕРµРґРёРЅРµРЅРЅС‹Рµ РІРµС‚РІРё - СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРµ РёР·РјРµСЂРµРЅРёРµ РіСЂР°С„Р°
+        lem::PtrCollect<TreeDimension> dims; // РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РёР·РјРµСЂРµРЅРёСЏ
+        lem::PtrCollect<TreeMarks> marks;    // РїРѕРјРµС‚РєРё
 
-   #if defined SOL_CAA
-//   inline int GetLabel(void) const { return label; }
-//   inline void SetLabel( int l ) { label=l; }
-//   void Label(void);
-//   Tree_Node* CreateVersionedTree( const PM_Yield &yield ) const;
-   #endif
+        void Init(const Tree_Node& tn);
 
-//   bool Does_Contain_Class( int iClass, SynGram &sg ) const;
+    public:
+        Tree_Node(void);
+        Tree_Node(const Tree_Node& tn);
+        explicit Tree_Node(const Word_Form& s);
+        Tree_Node(Word_Form *s, bool dummy);
+        explicit Tree_Node(lem::Stream &bin);
 
-   Tree_Node* DeepCopy(void) const;
- };
+        void operator=(const Tree_Node& tn);
+
+        void ForgetChild(int ichild);
+        void ClearChildren(void);
+
+        inline const Tree_Link& GetLinkIndex(int i) const { return child[i].GetLink(); }
+        inline const Tree_Link& GetLink(void) const { return ilink; }
+        inline void SetLink(const Tree_Link& il) { ilink = il; }
+
+        // РџРѕСЃР»Рµ СЌС‚РѕРіРѕ РІС‹Р·РѕРІР° РіР°СЂР°РЅС‚РёСЂРѕРІР°РЅРѕ Р±СѓРґРµС‚ РёР·РјРµСЂРµРЅРёРµ СЃ РёРјРµРЅРµРј name.
+        TreeDimension& TouchDimension(const UCString &name);
+
+        // РџРѕРёСЃРє РёР·РјРµСЂРµРЅРёСЏ СЃ СѓРєР°Р·Р°РЅРЅС‹Рј РёРјРµРЅРµРј. Р•СЃР»Рё РЅРµ РЅР°Р№РґРµС‚СЃСЏ, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ nullptr;
+        TreeDimension* FindDimension(const UCString &name);
+        const TreeDimension* FindDimension(const UCString &name) const;
+
+        const lem::PtrCollect<TreeDimension>& GetDimensions(void) const { return dims; }
+        lem::PtrCollect<TreeDimension>& GetDimensions(void) { return dims; }
+        const TreeDimension& leafs(void) const { return child; }
+        TreeDimension& leafs(void) { return child; }
+        const TreeDimension& leafs(const UCString &name) const;
+        TreeDimension& leafs(const UCString &name);
+
+        TreeMarks& TouchMarks(const UCString &name);
+        TreeMarks* FindMarks(const UCString &name);
+        const TreeMarks* FindMarks(const UCString &name) const;
+
+        lem::PtrCollect<TreeMarks>& GetMarks(void) { return marks; }
+        const lem::PtrCollect<TreeMarks>& GetMarks(void) const { return marks; }
+
+        inline const Word_Form& GetNode(void) const { return *node; }
+        inline       Word_Form& GetNode(void) { return *node; }
+
+        void SetNode(Solarix::Word_Form *new_node);
+
+        // РџСЂРѕРІРµСЂСЏРµС‚ РїРѕР»РЅРѕРµ РІР»Р°РґРµРЅРёРµ СѓРєР°Р·Р°С‚РµР»РµРј Рё РµСЃР»Рё СѓРєР°Р·Р°С‚РµР»СЊ СЂР°Р·РґРµР»СЏРµРјС‹Р№,
+        // С‚Рѕ СЃРѕР·РґР°РµС‚ СЃРІРѕСЋ РєРѕРїРёСЋ.
+        Word_Form& GetUnique(void);
+
+        int FindLinkedBy(const Tree_Link ilink) const;
+
+        bool DoesMatch(SynGram &sg, const Tree_Node& tn, bool strict_position = true) const;
+        bool operator==(const Tree_Node& tn) const;
+        bool operator!=(const Tree_Node& tn) const;
+
+        void Add(Tree_Node *to_add);
+        void Add(const Tree_Node& to_add);
+
+#if defined SOL_CAA
+        void Remove(int ichild);
+#endif
+
+        void Print(lem::OFormatter &txtfile, SynGram &gram, int offset = -1, bool detailed = true) const;
+        void PrintPlain(lem::OFormatter &s, bool EntryKey) const;
+        void PrintXML(lem::OFormatter &xmlfile, SynGram &gram) const;
+
+#if defined SOL_LOADBIN
+        void LoadBin(lem::Stream &binfile);
+#endif
+
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream &binfile) const;
+#endif
 
 
- class Predef_Tree_Node : public Tree_Node
- {
-  public:
-   Predef_Tree_Node( int id_entry, SynGram &gram, int FakePosition=UNKNOWN );
- };
+#if defined SOL_SAVETXT
+        void SaveTxt(
+            lem::OFormatter &txtfile,
+            SynGram &gram,
+            int Offset = 0,
+            bool detailed = true
+        ) const;
+#endif
+
+        Tree_Node* DeepCopy(void) const;
+    };
+
+
+    class Predef_Tree_Node : public Tree_Node
+    {
+    public:
+        Predef_Tree_Node(int id_entry, SynGram &gram, int FakePosition = UNKNOWN);
+    };
 
 } // namespace 'Solarix'
 

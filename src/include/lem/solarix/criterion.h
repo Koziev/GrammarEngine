@@ -1,103 +1,87 @@
-// -----------------------------------------------------------------------------
-// File SOL_PARM.H
-//
-// (c) Koziev Elijah
-//
-// Content:
-// Классы описания параметров - загружаемых из текстового файла Словаря (то есть
-// определяемых пользователем) управляющих полей, задающих поведение Автоматов
-// Системы в некоторых пограничных случаях, когда предусмотреть универсальный
-// ответ на все случаи нет возможности.
-// -----------------------------------------------------------------------------
-//
-// CD->06.10.1995
-// LC->04.01.2011
-// --------------
-
 #ifndef SOL_CRITERIA__H
 #define SOL_CRITERIA__H
 #pragma once
 
- #include <lem/noncopyable.h>
- #include <lem/containers.h>
- #include <lem/math/fp1.h>
- #include <lem/nullable.h>
+#include <lem/noncopyable.h>
+#include <lem/containers.h>
+#include <lem/math/fp1.h>
+#include <lem/nullable.h>
 
- namespace lem
- {
-  namespace Iridium { class Macro_Parser; }
-  class OFormatter;
-  class Stream;
-  struct Sol_IO;
- }
+namespace lem
+{
+    namespace Iridium { class Macro_Parser; }
+    class OFormatter;
+    class Stream;
+    struct Sol_IO;
+}
 
- namespace Solarix
- {
+namespace Solarix
+{
 
-  /*******************************************************************
-   Классы для внутреннего хранения КРИТЕРИЕВ - числовых и строковых
-   параметров, управляющих работой Автоматов.
-  ********************************************************************/
-  class Criterion
-  {
-   private:
-    lem::UCString name; // Имя критерия
+    /*******************************************************************
+     РљР»Р°СЃСЃС‹ РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ С…СЂР°РЅРµРЅРёСЏ РљР РРўР•Р РР•Р’ - С‡РёСЃР»РѕРІС‹С… Рё СЃС‚СЂРѕРєРѕРІС‹С…
+     РїР°СЂР°РјРµС‚СЂРѕРІ, СѓРїСЂР°РІР»СЏСЋС‰РёС… СЂР°Р±РѕС‚РѕР№ РђРІС‚РѕРјР°С‚РѕРІ.
+    ********************************************************************/
+    class Criterion
+    {
+    private:
+        lem::UCString name; // РРјСЏ РєСЂРёС‚РµСЂРёСЏ
 
-    lem::UFString str; // строковое значение
-    lem::Nullable<double> rval; // вещественное значение, если строка допускает такое преобразование
+        lem::UFString str; // СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ
+        lem::Nullable<double> rval; // РІРµС‰РµСЃС‚РІРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ, РµСЃР»Рё СЃС‚СЂРѕРєР° РґРѕРїСѓСЃРєР°РµС‚ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ
 
-   public:
-    Criterion(void);
+    public:
+        Criterion();
 
-    Criterion( const Criterion &c );
+        Criterion(const Criterion &c);
 
-    #if defined SOL_LOADTXT
-    Criterion( const lem::Sol_IO &dict, lem::Iridium::Macro_Parser &txtfile );
-    #endif
+#if defined SOL_LOADTXT
+        Criterion(const lem::Sol_IO &dict, lem::Iridium::Macro_Parser &txtfile);
+#endif
 
-    Criterion( const lem::UCString &_name, const lem::UFString &_str );
+        Criterion(const lem::UCString &_name, const lem::UFString &_str);
 
-    void operator=( const Criterion &c );
+        void operator=(const Criterion &c);
 
-    const lem::UCString& GetName(void) const { return name; }
+        const lem::UCString& GetName() const { return name; }
 
-    const lem::UFString& GetString(void) const { return str; }
-    int GetInt(void) const;
-    double GetDouble(void) const;
+        const lem::UFString& GetString() const { return str; }
+        int GetInt() const;
+        double GetDouble() const;
 
-    #if defined SOL_LOADTXT
-    void LoadTxt( const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile );
-    #endif
+#if defined SOL_LOADTXT
+        void LoadTxt(const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile);
+#endif
 
-    void SaveBin( lem::Stream &bin ) const;
-    void LoadBin( lem::Stream &bin );
-  };
+        void SaveBin(lem::Stream &bin) const;
+        void LoadBin(lem::Stream &bin);
+    };
 
 
-  class CriterionEnumerator;
+    class CriterionEnumerator;
 
-  class Criteria_List : lem::NonCopyable
-  {
-   protected:
-    Criteria_List(void) {}
+    class Criteria_List : lem::NonCopyable
+    {
+    protected:
+        Criteria_List() {}
 
-   public:
-    virtual ~Criteria_List(void) {}
+    public:
+        virtual ~Criteria_List() {}
 
-    #if defined SOL_LOADTXT
-    virtual void LoadTxt( const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile )=0;
-    #endif
+#if defined SOL_LOADTXT
+        virtual void LoadTxt(const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile) = 0;
+#endif
 
-    virtual int Find( const lem::UCString &name )=0;
-    virtual const Criterion& operator[]( int id )=0;
-    virtual const Criterion& operator[]( const lem::UCString &name )=0;
+        virtual int Find(const lem::UCString &name) = 0;
+        virtual const Criterion& operator[](int id) = 0;
+        virtual const Criterion& operator[](const lem::UCString &name) = 0;
 
-    virtual void SaveBin( lem::Stream &bin ) const=0;
-    virtual void LoadBin( lem::Stream &bin )=0;
+        virtual void SaveBin(lem::Stream &bin) const = 0;
+        virtual void LoadBin(lem::Stream &bin) = 0;
 
-    virtual CriterionEnumerator* Enumerate(void)=0;
-  };
+        virtual CriterionEnumerator* Enumerate() = 0;
+    };
 
- } // end of namespace 'Solarix'
+} // end of namespace 'Solarix'
 
 #endif

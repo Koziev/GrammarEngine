@@ -1,65 +1,65 @@
 #if !defined GG_Coordinates__H
- #define GG_Coordinates__H
+#define GG_Coordinates__H
 
- #include <map>
- #include <lem/process.h>
- #include <lem/containers.h>
- #include <lem/ptr_container.h>
- #include <lem/ucstring.h>
- #include <lem/solarix/coordinate.h>
- #include <lem/solarix/CoordList.h>
+#include <map>
+#include <lem/process.h>
+#include <lem/containers.h>
+#include <lem/ptr_container.h>
+#include <lem/ucstring.h>
+#include <lem/solarix/coordinate.h>
+#include <lem/solarix/CoordList.h>
 
- namespace lem
- {
-  class UCString;
- }
+namespace lem
+{
+    class UCString;
+}
 
- namespace Solarix
- {
-  class AlphabetStorage;
-  class GraphGram;
+namespace Solarix
+{
+    class AlphabetStorage;
+    class GraphGram;
 
-  class GG_Coordinates : public CoordList
-  {
-   private:
-    GraphGram *gg;
-    AlphabetStorage *db;
+    class GG_Coordinates : public CoordList
+    {
+    private:
+        GraphGram *gg;
+        AlphabetStorage *db;
 
-    lem::PtrCollect< GramCoord > coord_ptr;
-    lem::MCollect<int> coord_id;
- 
-    std::map< int /*id*/, int/*index*/ > id2coord;
-    std::map< lem::UCString, int > name2id;
+        lem::PtrCollect< GramCoord > coord_ptr;
+        lem::MCollect<int> coord_id;
 
-    #if defined LEM_THREADS
-    lem::Process::CriticalSection cs;
-    #endif
+        std::map< int /*id*/, int/*index*/ > id2coord;
+        std::map< lem::UCString, int > name2id;
 
-    void AddNewCoord( GramCoord *new_coord, bool IsRealized );
-    GramCoord* Get( int id );
-    int Id2Index( int id );
+#if defined LEM_THREADS
+        lem::Process::CriticalSection cs;
+#endif
 
-   public:
-    GG_Coordinates( GraphGram *_sg );
-    virtual ~GG_Coordinates() {}
+        void AddNewCoord(GramCoord *new_coord, bool IsRealized);
+        GramCoord* Get(int id);
+        int Id2Index(int id);
 
-    void Connect( AlphabetStorage *_db );
+    public:
+        GG_Coordinates(GraphGram *_sg);
+        virtual ~GG_Coordinates() {}
 
-    virtual const GramCoord& operator[]( int id );
-    virtual GramCoord& GetCoord( int id );
+        void Connect(AlphabetStorage *_db);
 
-    virtual int Find( const lem::UCString &name );
-    virtual int Count(void);
+        virtual const GramCoord& operator[](int id) override;
+        virtual GramCoord& GetCoord(int id) override;
 
-    virtual CoordEnumerator* Enumerate(void);
+        virtual int Find(const lem::UCString &name) override;
+        virtual int Count() override;
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual GramCoord* LoadTxt(
-                               lem::Iridium::Macro_Parser &txtfile,
-                               bool IsRealized
-                              );
-    #endif
-  };
- }
+        virtual CoordEnumerator* Enumerate() override;
+
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual GramCoord* LoadTxt(
+            lem::Iridium::Macro_Parser &txtfile,
+            bool IsRealized
+        ) override;
+#endif
+    };
+}
 
 #endif

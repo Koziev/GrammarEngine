@@ -4,14 +4,11 @@
 // (c) by Elijah Koziev     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Content:
-// Ðåàëèçàöèÿ TtyStream - ïîòîêà äëÿ âûâîäà ñèìâîëîâ íà òåðìèíàë (èëè â îêíî
-// ýìóëÿöèè òåðìèíàëà äëÿ ãðàôè÷åñêèõ ñðåä).
+// Ð ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ TtyStream - Ð¿Ð¾Ñ‚Ð¾ÐºÐ° Ð´Ð»Ñ Ð²Ñ‹Ð²Ð¾Ð´Ð° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² Ð½Ð° Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð°Ð» (Ð¸Ð»Ð¸ Ð² Ð¾ÐºÐ½Ð¾
+// ÑÐ¼ÑƒÐ»ÑÑ†Ð¸Ð¸ Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð°Ð»Ð° Ð´Ð»Ñ Ð³Ñ€Ð°Ñ„Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… ÑÑ€ÐµÐ´).
 //
 // 27.04.2007 - TtyUcs4Stream and TtyUtf8Stream are implemented for Windows and
 //              Linux UNICODE console.
@@ -20,7 +17,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->20.06.1998
-// LC->13.11.2010
+// LC->01.04.2018
 // --------------
 
 #include <lem/config.h>
@@ -28,25 +25,21 @@
 #include <stdio.h>
 
 #if defined LEM_DOS
- #include <conio.h>
+#include <conio.h>
 #elif defined LEM_UNIX
- #if LEM_USES_NCURSES==1
-  #include <curses.h>
- #endif
+#if LEM_USES_NCURSES==1
+#include <curses.h>
+#endif
 #endif
 
 #include <lem/unicode.h>
 #include <lem/console_application.h>
 #include <lem/streams.h>
 
-#if defined LEM_WINDOWS && !defined LEM_DOT_NET
- #define WIN_CUI
-  #if defined LEM_MFC
-   #include <afxwin.h>
-  #else 
-   #include <windows.h>
-  #endif
- static HANDLE hOut=0;
+#if defined LEM_WINDOWS
+#define WIN_CUI
+#include <windows.h>
+static HANDLE hOut = 0;
 #endif
 
 
@@ -54,86 +47,98 @@ using namespace lem;
 
 
 #if defined LEM_UNIX
- // Make NCURSES initialization once.
- static volatile int inited_ncurses=0;
+// Make NCURSES initialization once.
+static volatile int inited_ncurses = 0;
 #endif
 
 TtyStreamStd::TtyStreamStd(void)
-:Stream(false,true)
+    :Stream(false, true)
 {
- SetMode( false, true, false );
+    SetMode(false, true, false);
 
- binary = false;
+    binary = false;
 
- return;
+    return;
 }
 
 TtyStreamStd::~TtyStreamStd(void)
 {}
 
 void TtyStreamStd::close(void)
-{ return; }
-
-void TtyStreamStd::write( const void *src, pos_type size )
 {
- for( pos_type i=0; i<size; i++ )
-  put( ((const char*)src)[i] );
-
- return;
+    return;
 }
 
-void TtyStreamStd::put( char ch )
+void TtyStreamStd::write(const void *src, pos_type size)
 {
- putchar( 0x00ff & ch );
- return;
+    for (pos_type i = 0; i < size; i++)
+        put(((const char*)src)[i]);
+
+    return;
 }
 
-void TtyStreamStd::puts( const char *s )
+void TtyStreamStd::put(char ch)
 {
- ::puts(s);
- return;
+    putchar(0x00ff & ch);
+    return;
+}
+
+void TtyStreamStd::puts(const char *s)
+{
+    ::puts(s);
+    return;
 }
 
 int TtyStreamStd::get(void)
-{ return 0; }
+{
+    return 0;
+}
 
 bool TtyStreamStd::eof(void) const
-{ return false; }
-
-
-lem::Stream::pos_type TtyStreamStd::seekp( off_type /*pos*/, int /*whereto*/ )
-{ return 0; }
-
-lem::Stream::pos_type TtyStreamStd::tellp(void) const
 {
- LEM_STOPIT;
- #if !defined LEM_BORLAND
- return pos_type();
- #endif
+    return false;
 }
 
 
-bool TtyStreamStd::move( lem::Stream::off_type /*offset*/ )
-{ return false; }
+lem::Stream::pos_type TtyStreamStd::seekp(off_type /*pos*/, int /*whereto*/)
+{
+    return 0;
+}
+
+lem::Stream::pos_type TtyStreamStd::tellp(void) const
+{
+    LEM_STOPIT;
+#if !defined LEM_BORLAND
+    return pos_type();
+#endif
+}
+
+
+bool TtyStreamStd::move(lem::Stream::off_type /*offset*/)
+{
+    return false;
+}
 
 lem::Stream::pos_type TtyStreamStd::fsize(void) const
-{ return 0; }
+{
+    return 0;
+}
 
 
 void TtyStreamStd::flush(void)
 {
- fflush(stdout);
- return;
+    fflush(stdout);
+    return;
 }
 
-void TtyStreamStd::SetForeGroundColor( int iColor )
-{} 
+void TtyStreamStd::SetForeGroundColor(int iColor)
+{}
 
-void TtyStreamStd::SetBackGroundColor( int iColor )
+void TtyStreamStd::SetBackGroundColor(int iColor)
 {}
 
 
-void TtyStreamStd::SetBlinkMode( bool blinks )
+void TtyStreamStd::SetBlinkMode(bool blinks)
 {}
 
 void TtyStreamStd::SetHighLightMode(void)
@@ -145,107 +150,117 @@ void TtyStreamStd::SetLowLightMode(void)
 void TtyStreamStd::SetNormalMode(void)
 {}
 
-lem::Stream::pos_type TtyStreamStd::read( void * /*dest*/, size_t /*size*/ )
+lem::Stream::pos_type TtyStreamStd::read(void * /*dest*/, size_t /*size*/)
 {
- LEM_STOPIT;
- #if !defined LEM_BORLAND
- return pos_type();
- #endif
+    LEM_STOPIT;
+#if !defined LEM_BORLAND
+    return pos_type();
+#endif
 }
 
 // ##############################################################
 
 
 /***************************************************************************
- Ðàáîòà ñ òåðìèíàëîì ñòàíäàðòíûìè UNIX-ïîäîáíûìè ñðåäñòâàìè íå ñîñòàâëÿåò
- òðóäà è èíòåðåñà. Îáðàùàþ âíèìàíèå ëèøü íà ñïîñîá, êîòîðûì ìû ìàíèïóëèðóåì
- öâåòîâûìè õàðàêòåðèñòèêàìè âûâîäèìûõ ñèìâîëîâ (ñ ïîìîùüþ ñòàíäàðòíîé
- áèáëèîòåêè NCURSES). Äëÿ óïðàâëåíèÿ öâåòîì êîíñîëè Windows èñïîëüçóþòñÿ
- òàêæå ñòàíäàðòíûå ôóíêöèè WinAPI).
+ Ð Ð°Ð±Ð¾Ñ‚Ð° Ñ Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð°Ð»Ð¾Ð¼ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ð¼Ð¸ UNIX-Ð¿Ð¾Ð´Ð¾Ð±Ð½Ñ‹Ð¼Ð¸ ÑÑ€ÐµÐ´ÑÑ‚Ð²Ð°Ð¼Ð¸ Ð½Ðµ ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚
+ Ñ‚Ñ€ÑƒÐ´Ð° Ð¸ Ð¸Ð½Ñ‚ÐµÑ€ÐµÑÐ°. ÐžÐ±Ñ€Ð°Ñ‰Ð°ÑŽ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ Ð»Ð¸ÑˆÑŒ Ð½Ð° ÑÐ¿Ð¾ÑÐ¾Ð±, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼ Ð¼Ñ‹ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»Ð¸Ñ€ÑƒÐµÐ¼
+ Ñ†Ð²ÐµÑ‚Ð¾Ð²Ñ‹Ð¼Ð¸ Ñ…Ð°Ñ€Ð°ÐºÑ‚ÐµÑ€Ð¸ÑÑ‚Ð¸ÐºÐ°Ð¼Ð¸ Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² (Ñ Ð¿Ð¾Ð¼Ð¾Ñ‰ÑŒÑŽ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ð¾Ð¹
+ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸ NCURSES). Ð”Ð»Ñ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ñ†Ð²ÐµÑ‚Ð¾Ð¼ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸ Windows Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑŽÑ‚ÑÑ
+ Ñ‚Ð°ÐºÐ¶Ðµ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ WinAPI).
 ****************************************************************************/
 
 TtyStream::TtyStream(void)
-:Stream(false,true)
+    :Stream(false, true)
 {
- SetMode( false, true, false );
+    SetMode(false, true, false);
 
- binary = false;
+    binary = false;
 
- #if defined LEM_UNIX && LEM_USES_NCURSES==1
- // ************************************************
- // Èíèöèàëèçàöèÿ áèáëèîòåêè NCURSES äëÿ LINUX
- // ************************************************
- if( !inited_ncurses )
-  {
-   initscr();
-   start_color();
-   cbreak();
-//   nonl();
-//   intrflush(stdscr,FALSE);
+#if defined LEM_UNIX && LEM_USES_NCURSES==1
+    // ************************************************
+    // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸ NCURSES Ð´Ð»Ñ LINUX
+    // ************************************************
+    if (!inited_ncurses)
+    {
+        initscr();
+        start_color();
+        cbreak();
+        //   nonl();
+        //   intrflush(stdscr,FALSE);
 
-   noecho();
-   scrollok(stdscr,TRUE);
+        noecho();
+        scrollok(stdscr, TRUE);
 
-   init_pair( 1, COLOR_BLACK,   COLOR_WHITE );
-   init_pair( 2, COLOR_BLUE,    COLOR_BLACK );
-   init_pair( 3, COLOR_GREEN,   COLOR_BLACK );
-   init_pair( 4, COLOR_CYAN,    COLOR_BLACK );
-   init_pair( 5, COLOR_RED,     COLOR_BLACK );
-   init_pair( 6, COLOR_MAGENTA, COLOR_BLACK );
-   init_pair( 7, COLOR_YELLOW,  COLOR_BLACK );
-   init_pair( 8, COLOR_WHITE,   COLOR_BLACK );
-   
-   refresh();
-  }
+        init_pair(1, COLOR_BLACK, COLOR_WHITE);
+        init_pair(2, COLOR_BLUE, COLOR_BLACK);
+        init_pair(3, COLOR_GREEN, COLOR_BLACK);
+        init_pair(4, COLOR_CYAN, COLOR_BLACK);
+        init_pair(5, COLOR_RED, COLOR_BLACK);
+        init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+        init_pair(7, COLOR_YELLOW, COLOR_BLACK);
+        init_pair(8, COLOR_WHITE, COLOR_BLACK);
 
- inited_ncurses++;
- #endif
+        refresh();
+    }
 
- #if defined WIN_CUI
- if( !hOut )
-  hOut = GetStdHandle( STD_OUTPUT_HANDLE );
+    inited_ncurses++;
+#endif
 
- fg = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
- bg = 0;
+#if defined WIN_CUI
+    if (!hOut)
+        hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
- #endif
- 
- return;
+    fg = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
+    bg = 0;
+
+#endif
+
+    return;
 }
 
 
 
 int TtyStream::get(void)
-{ return 0; }
+{
+    return 0;
+}
 
 bool TtyStream::eof(void) const
-{ return false; }
+{
+    return false;
+}
 
 Stream::pos_type TtyStream::tellp(void) const
 {
- LEM_STOPIT;
- #if !defined LEM_BORLAND
- return pos_type();
- #endif
+    LEM_STOPIT;
+#if !defined LEM_BORLAND
+    return pos_type();
+#endif
 }
 
-Stream::pos_type TtyStream::seekp( lem::Stream::off_type /*pos*/, int /*whereto*/ )
-{ return 0; }
+Stream::pos_type TtyStream::seekp(lem::Stream::off_type /*pos*/, int /*whereto*/)
+{
+    return 0;
+}
 
-bool TtyStream::move( Stream::off_type /*offset*/ )
-{ return false; }
+bool TtyStream::move(Stream::off_type /*offset*/)
+{
+    return false;
+}
 
 Stream::pos_type TtyStream::fsize(void) const
-{ return 0; }
-
-
-
-Stream::pos_type TtyStream::read( void * /*dest*/, size_t /*size*/ )
 {
- LEM_STOPIT;
- #if !defined LEM_BORLAND
- return pos_type();
- #endif
+    return 0;
+}
+
+
+
+Stream::pos_type TtyStream::read(void * /*dest*/, size_t /*size*/)
+{
+    LEM_STOPIT;
+#if !defined LEM_BORLAND
+    return pos_type();
+#endif
 }
 
 
@@ -253,93 +268,93 @@ Stream::pos_type TtyStream::read( void * /*dest*/, size_t /*size*/ )
 
 TtyStream::~TtyStream(void)
 {
- #if defined LEM_UNIX && LEM_USES_NCURSES==1
- if( !--inited_ncurses )
-  {
-   // NCURSES should be closed
-   endwin();
-  }    
- #endif
+#if defined LEM_UNIX && LEM_USES_NCURSES==1
+    if (!--inited_ncurses)
+    {
+        // NCURSES should be closed
+        endwin();
+    }
+#endif
 
- /* ... nothing to do ... */
- return;
+    /* ... nothing to do ... */
+    return;
 }
 
 void TtyStream::close(void)
 {
- return;
+    return;
 }
 
 
 
-void TtyStream::write( const void *src, pos_type size )
+void TtyStream::write(const void *src, pos_type size)
 {
- for( pos_type i=0; i<size; i++ )
-  put( ((const char*)src)[i] );
+    for (pos_type i = 0; i < size; i++)
+        put(((const char*)src)[i]);
 
- return;
+    return;
 }
 
-void TtyStream::put( char ch )
+void TtyStream::put(char ch)
 {
- #if defined WIN_CUI
+#if defined WIN_CUI
 
-  char buf[1]= { ch };
-  DWORD dummy;
+    char buf[1] = { ch };
+    DWORD dummy;
 
-  SetConsoleTextAttribute( hOut, fg | bg );   // set the current colors
-  WriteConsoleA( hOut, buf, 1, &dummy, NULL ); // put the char
+    SetConsoleTextAttribute(hOut, fg | bg);   // set the current colors
+    WriteConsoleA(hOut, buf, 1, &dummy, NULL); // put the char
 
- #elif defined LEM_WIN32 && defined LEM_CONSOLE
+#elif defined LEM_WIN32 && defined LEM_CONSOLE
 
-   printf( "%c", ch );
+    printf("%c", ch);
 
- #elif defined LEM_UNIX && LEM_USES_NCURSES==1
+#elif defined LEM_UNIX && LEM_USES_NCURSES==1
 
-   // UNIX (including LINUX) does not require 0x0d character in eol's.
-//   putchar(ch);
-   
-   addch( 0x00ffU & lem::uint16_t(ch) );
+    // UNIX (including LINUX) does not require 0x0d character in eol's.
+ //   putchar(ch);
 
-   if( ch=='\n' )
+    addch(0x00ffU & lem::uint16_t(ch));
+
+    if (ch == '\n')
     {
-     refresh();
+        refresh();
     }
 
- #else
+#else
 
-   printf( "%c", ch );
-   if( ch=='\n' )
-    printf( "\r" );
+    printf("%c", ch);
+    if (ch == '\n')
+        printf("\r");
 
- #endif
+#endif
 
- return;
+    return;
 }
 
-void TtyStream::puts( const char *s )
+void TtyStream::puts(const char *s)
 {
- #if defined WIN_CUI
+#if defined WIN_CUI
 
-  DWORD dummy;
-  SetConsoleTextAttribute( hOut, fg | bg );
-  WriteConsoleA( hOut, s, lem_strlen(s), &dummy, NULL );
+    DWORD dummy;
+    SetConsoleTextAttribute(hOut, fg | bg);
+    WriteConsoleA(hOut, s, lem_strlen(s), &dummy, NULL);
 
- #elif defined LEM_WIN32 && defined LEM_CONSOLE
+#elif defined LEM_WIN32 && defined LEM_CONSOLE
 
-  int i=0;
-  while( s[i] )
-   put(s[i++]);
+    int i = 0;
+    while (s[i])
+        put(s[i++]);
 
- #else
+#else
 
-  int i=0;
-  while( s[i] )
-   put(s[i++]);
+    int i = 0;
+    while (s[i])
+        put(s[i++]);
 
- #endif
+#endif
 
- return;
+    return;
 }
 
 
@@ -350,191 +365,191 @@ void TtyStream::puts( const char *s )
 
 
 // *********************************************************
-// Âñå ñèìâîëû, çàñòðÿâøèå â áóôåðå âûâîäà, ïðèíóäèòåëüíî
-// îòðèñîâûâàþòñÿ íà ýêðàíå.
+// Ð’ÑÐµ ÑÐ¸Ð¼Ð²Ð¾Ð»Ñ‹, Ð·Ð°ÑÑ‚Ñ€ÑÐ²ÑˆÐ¸Ðµ Ð² Ð±ÑƒÑ„ÐµÑ€Ðµ Ð²Ñ‹Ð²Ð¾Ð´Ð°, Ð¿Ñ€Ð¸Ð½ÑƒÐ´Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾
+// Ð¾Ñ‚Ñ€Ð¸ÑÐ¾Ð²Ñ‹Ð²Ð°ÑŽÑ‚ÑÑ Ð½Ð° ÑÐºÑ€Ð°Ð½Ðµ.
 // *********************************************************
 void TtyStream::flush(void)
 {
- #if defined WIN_CUI
-  // nothing to do
- #elif defined LEM_WIN32 && defined LEM_CONSOLE
-  // nothing to do
- #elif defined LEM_UNIX && defined LEM_CONSOLE && LEM_USES_NCURSES==1
-  refresh();
- #else
-  fflush(stdout);
- #endif
+#if defined WIN_CUI
+    // nothing to do
+#elif defined LEM_WIN32 && defined LEM_CONSOLE
+    // nothing to do
+#elif defined LEM_UNIX && defined LEM_CONSOLE && LEM_USES_NCURSES==1
+    refresh();
+#else
+    fflush(stdout);
+#endif
 
- return;
+    return;
 }
 
 
 /********************************************************
- Èíäåêñîì çàäàåòñÿ öâåò ñèìâîëîâ äëÿ ïîñëåäóþùåãî âûâîäà.
+ Ð˜Ð½Ð´ÐµÐºÑÐ¾Ð¼ Ð·Ð°Ð´Ð°ÐµÑ‚ÑÑ Ñ†Ð²ÐµÑ‚ ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² Ð´Ð»Ñ Ð¿Ð¾ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð°.
 *********************************************************/
-void TtyStream::SetForeGroundColor( int iColor )
+void TtyStream::SetForeGroundColor(int iColor)
 {
- #if defined WIN_CUI
+#if defined WIN_CUI
 
-  switch( iColor )
-  {
-   case 0: fg = 0;                                   break;
-   case 1: fg = FOREGROUND_BLUE;                     break;
-   case 2: fg = FOREGROUND_GREEN;                    break;
-   case 3: fg = FOREGROUND_BLUE  | FOREGROUND_GREEN; break;   // CYAN
-   case 4: fg = FOREGROUND_RED;                      break;
-   case 5: fg = FOREGROUND_RED   | FOREGROUND_BLUE;  break;   // MAGENTA
-   case 6: fg = FOREGROUND_RED   | FOREGROUND_GREEN; break;   // BROWN
+    switch (iColor)
+    {
+    case 0: fg = 0;                                   break;
+    case 1: fg = FOREGROUND_BLUE;                     break;
+    case 2: fg = FOREGROUND_GREEN;                    break;
+    case 3: fg = FOREGROUND_BLUE | FOREGROUND_GREEN; break;   // CYAN
+    case 4: fg = FOREGROUND_RED;                      break;
+    case 5: fg = FOREGROUND_RED | FOREGROUND_BLUE;  break;   // MAGENTA
+    case 6: fg = FOREGROUND_RED | FOREGROUND_GREEN; break;   // BROWN
 
-   case 7:
-    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
-    FOREGROUND_INTENSITY; // LIGHTGRAY
-    break;
+    case 7:
+        fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+            FOREGROUND_INTENSITY; // LIGHTGRAY
+        break;
 
-   case 8:
-    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // DARKWHITE
-    break;
+    case 8:
+        fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // DARKWHITE
+        break;
 
-   case 9:
-    fg = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
-    break;
+    case 9:
+        fg = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+        break;
 
-   case 10:
-    fg = FOREGROUND_GREEN  | FOREGROUND_INTENSITY;
-    break;
+    case 10:
+        fg = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+        break;
 
-   case 11:
-    fg = FOREGROUND_BLUE | FOREGROUND_GREEN  | FOREGROUND_INTENSITY;
-    break;
+    case 11:
+        fg = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+        break;
 
-   case 12:
-    fg = FOREGROUND_RED  | FOREGROUND_INTENSITY;
-    break;
+    case 12:
+        fg = FOREGROUND_RED | FOREGROUND_INTENSITY;
+        break;
 
-   case 13:
-    fg = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
-    break;
+    case 13:
+        fg = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+        break;
 
-   case 14:
-    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
-    break;
+    case 14:
+        fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+        break;
 
-   case 15:
-    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
-         FOREGROUND_INTENSITY; // WHITE
-    break;
-  }
+    case 15:
+        fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+            FOREGROUND_INTENSITY; // WHITE
+        break;
+    }
 
- #elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+#elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
 
-  textcolor(iColor);
+    textcolor(iColor);
 
- #elif defined LEM_UNIX && LEM_USES_NCURSES==1
+#elif defined LEM_UNIX && LEM_USES_NCURSES==1
 
-  switch( iColor )
-  {
-   case 0:  attrset(COLOR_PAIR(1)); break;
-   case 1:  attrset(COLOR_PAIR(2)); break;
-   case 2:  attrset(COLOR_PAIR(3)); break;
-   case 3:  attrset(COLOR_PAIR(4)); break;
-   case 4:  attrset(COLOR_PAIR(5)); break;
-   case 5:  attrset(COLOR_PAIR(6)); break;
-   case 6:  attrset(COLOR_PAIR(7)); break;
-   case 7:  attrset(COLOR_PAIR(8)); break;
-   case 8:  attrset(0); break;
-   case 9:  attrset(COLOR_PAIR(2) | A_BOLD); break;
-   case 10: attrset(COLOR_PAIR(3) | A_BOLD); break;
-   case 11: attrset(COLOR_PAIR(4) | A_BOLD); break;
-   case 12: attrset(COLOR_PAIR(5) | A_BOLD); break;
-   case 13: attrset(COLOR_PAIR(6) | A_BOLD); break;
-   case 14: attrset(COLOR_PAIR(7) | A_BOLD); break;
-   case 15: attrset(COLOR_PAIR(8) | A_BOLD); break;
-  }
+    switch (iColor)
+    {
+    case 0:  attrset(COLOR_PAIR(1)); break;
+    case 1:  attrset(COLOR_PAIR(2)); break;
+    case 2:  attrset(COLOR_PAIR(3)); break;
+    case 3:  attrset(COLOR_PAIR(4)); break;
+    case 4:  attrset(COLOR_PAIR(5)); break;
+    case 5:  attrset(COLOR_PAIR(6)); break;
+    case 6:  attrset(COLOR_PAIR(7)); break;
+    case 7:  attrset(COLOR_PAIR(8)); break;
+    case 8:  attrset(0); break;
+    case 9:  attrset(COLOR_PAIR(2) | A_BOLD); break;
+    case 10: attrset(COLOR_PAIR(3) | A_BOLD); break;
+    case 11: attrset(COLOR_PAIR(4) | A_BOLD); break;
+    case 12: attrset(COLOR_PAIR(5) | A_BOLD); break;
+    case 13: attrset(COLOR_PAIR(6) | A_BOLD); break;
+    case 14: attrset(COLOR_PAIR(7) | A_BOLD); break;
+    case 15: attrset(COLOR_PAIR(8) | A_BOLD); break;
+    }
 
- #endif
- return;
+#endif
+    return;
 }
 
 /****************************************************************
- Ïðè âûâîäå íà òåðìèíàë - óñòàíîâêà òåêóùåãî öâåòà ôîíà ñèìâîëîâ.
- Öâåò çàäàåòñÿ èíäåêñîì.
+ ÐŸÑ€Ð¸ Ð²Ñ‹Ð²Ð¾Ð´Ðµ Ð½Ð° Ñ‚ÐµÑ€Ð¼Ð¸Ð½Ð°Ð» - ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ñ†Ð²ÐµÑ‚Ð° Ñ„Ð¾Ð½Ð° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð².
+ Ð¦Ð²ÐµÑ‚ Ð·Ð°Ð´Ð°ÐµÑ‚ÑÑ Ð¸Ð½Ð´ÐµÐºÑÐ¾Ð¼.
 *****************************************************************/
-void TtyStream::SetBackGroundColor( int iColor )
+void TtyStream::SetBackGroundColor(int iColor)
 {
- #if defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
- textbackground(iColor);
- #endif
- return;
+#if defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+    textbackground(iColor);
+#endif
+    return;
 }
 
 
 // ***********************************************************************
-// Ðåæèì ìåðöàíèÿ ñèìâîëîâ - áûë äîñòóïåí äëÿ MSDOS. Îñîáîé ïîëüçû îò íåãî
-// íåò, íî îñòàâèë ìåòîä äëÿ ïîääåðæêè ñîâìåñòèìîñòè ñòàðûõ ïðîãðàìì.
+// Ð ÐµÐ¶Ð¸Ð¼ Ð¼ÐµÑ€Ñ†Ð°Ð½Ð¸Ñ ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² - Ð±Ñ‹Ð» Ð´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½ Ð´Ð»Ñ MSDOS. ÐžÑÐ¾Ð±Ð¾Ð¹ Ð¿Ð¾Ð»ÑŒÐ·Ñ‹ Ð¾Ñ‚ Ð½ÐµÐ³Ð¾
+// Ð½ÐµÑ‚, Ð½Ð¾ Ð¾ÑÑ‚Ð°Ð²Ð¸Ð» Ð¼ÐµÑ‚Ð¾Ð´ Ð´Ð»Ñ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¸ ÑÐ¾Ð²Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚Ð¸ ÑÑ‚Ð°Ñ€Ñ‹Ñ… Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼.
 // ***********************************************************************
-void TtyStream::SetBlinkMode( bool blinks )
+void TtyStream::SetBlinkMode(bool blinks)
 {
- #if defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
-  text_info ti;
-  gettextinfo(&ti);
-  int atr = ti.attribute;
-  atr ^= BLINK;
-  textattr(atr);
- #endif
+#if defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+    text_info ti;
+    gettextinfo(&ti);
+    int atr = ti.attribute;
+    atr ^= BLINK;
+    textattr(atr);
+#endif
 
- return;
+    return;
 }
 
 // ***********************************************************************
-// Óñòàíîâêà ðåæèìà âûâîäà ñèìâîëîâ ñ ïîâûøåííîé ÿðêîñòüþ (áåëûå).
+// Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ€ÐµÐ¶Ð¸Ð¼Ð° Ð²Ñ‹Ð²Ð¾Ð´Ð° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² Ñ Ð¿Ð¾Ð²Ñ‹ÑˆÐµÐ½Ð½Ð¾Ð¹ ÑÑ€ÐºÐ¾ÑÑ‚ÑŒÑŽ (Ð±ÐµÐ»Ñ‹Ðµ).
 // ***********************************************************************
 void TtyStream::SetHighLightMode(void)
 {
- #if defined WIN_CUI
-  fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-  bg = 0;
- #elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
- highvideo();
- #endif
- return;
+#if defined WIN_CUI
+    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+    bg = 0;
+#elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+    highvideo();
+#endif
+    return;
 }
 
 
 // ***********************************************************************
-// Óñòàíîâêà ðåæèìà âûâîäà ñèìâîëîâ ñ ïîíèæåííîé ÿðêîñòüþ (òåìíî-ñåðûå).
+// Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ€ÐµÐ¶Ð¸Ð¼Ð° Ð²Ñ‹Ð²Ð¾Ð´Ð° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² Ñ Ð¿Ð¾Ð½Ð¸Ð¶ÐµÐ½Ð½Ð¾Ð¹ ÑÑ€ÐºÐ¾ÑÑ‚ÑŒÑŽ (Ñ‚ÐµÐ¼Ð½Ð¾-ÑÐµÑ€Ñ‹Ðµ).
 // ***********************************************************************
 void TtyStream::SetLowLightMode(void)
 {
- #if defined WIN_CUI
-  fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-  bg = 0;
- #elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
-  lowvideo();
- #endif
+#if defined WIN_CUI
+    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+    bg = 0;
+#elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+    lowvideo();
+#endif
 
- return;
+    return;
 }
 
 
 // *********************************************************************
-// Óñòàíîâêà ðåæèìà âûâîäà ñèìâîëîâ îáû÷íîãî öâåòà (ñåðåáðèñòî-ñåðûå).
+// Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ€ÐµÐ¶Ð¸Ð¼Ð° Ð²Ñ‹Ð²Ð¾Ð´Ð° ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾Ð³Ð¾ Ñ†Ð²ÐµÑ‚Ð° (ÑÐµÑ€ÐµÐ±Ñ€Ð¸ÑÑ‚Ð¾-ÑÐµÑ€Ñ‹Ðµ).
 // *********************************************************************
 void TtyStream::SetNormalMode(void)
 {
- #if defined WIN_CUI
-  fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-  bg = 0;
- // –¢¥â  ä®­  ¨ á¨¬¢®«®¢ ¯® ã¬®«ç ­¨î.
- #elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
-// normvideo();
- lowvideo();
+#if defined WIN_CUI
+    fg = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+    bg = 0;
+    // â€“ÑžÒÐ²Â  Ð´Â®Â­Â  Ð Ð±ÐÂ¬ÑžÂ®Â«Â®Ñž Ð‡Â® Ð³Â¬Â®Â«Ð·Â Â­ÐÐ¾.
+#elif defined(LEM_BORLAND_3_1) && defined(LEM_DOS)
+    // normvideo();
+    lowvideo();
 
- #elif defined LEM_UNIX && LEM_USES_NCURSES==1
+#elif defined LEM_UNIX && LEM_USES_NCURSES==1
 
- attrset(0);
+    attrset(0);
 
- #endif
- return;
+#endif
+    return;
 }
 
 
@@ -552,25 +567,25 @@ TtyUcs2Stream::TtyUcs2Stream(void) : TtyStream()
 
 int TtyUcs2Stream::Bits_Per_Char(void) const
 {
- return 16;
+    return 16;
 }
 
 
-void TtyUcs2Stream::wput( wchar_t ch )
+void TtyUcs2Stream::wput(wchar_t ch)
 {
- #if defined WIN_CUI
+#if defined WIN_CUI
 
-  wchar_t buf[1]= { ch };
-  DWORD dummy;
+    wchar_t buf[1] = { ch };
+    DWORD dummy;
 
-  BOOL res = SetConsoleTextAttribute( hOut, fg | bg );   // set the current colors
-  LEM_CHECKIT_Z( res!=0 );
-  res = WriteConsoleW( hOut, buf, 1, &dummy, NULL ); // put the char
-  LEM_CHECKIT_Z( res!=0 );
+    BOOL res = SetConsoleTextAttribute(hOut, fg | bg);   // set the current colors
+    LEM_CHECKIT_Z(res != 0);
+    res = WriteConsoleW(hOut, buf, 1, &dummy, NULL); // put the char
+    LEM_CHECKIT_Z(res != 0);
 
- #else
-  LEM_STOPIT;
- #endif
+#else
+    LEM_STOPIT;
+#endif
 }
 #endif
 
@@ -580,68 +595,36 @@ TtyUtf8Stream::TtyUtf8Stream(void) : TtyStreamStd()
 {}
 
 
-void TtyUtf8Stream::put( char ch )
+void TtyUtf8Stream::put(char ch)
 {
-/*
- // Èç òåêóùåé êîäèðîâêè (ýòî áóäåò koi8) ïðåîáðàçóåì
- // íå-ëàòèíèöó â utf8.
- if( lem::is_latin(ch) || lem::is_digit(ch) )
-  {
-   putchar(ch);
-  } 
- else
-  {
-   wput( lem::cp847->to_unicode(ch) );
-  }
-*/
+    putchar(ch);
 
- putchar(ch);
- 
- if( ch=='\n' )
-  {
-   putchar('\r');
-  }
+    if (ch == '\n')
+    {
+        putchar('\r');
+    }
 
- return;
+    return;
 }
 
 
-void TtyUtf8Stream::wput( wchar_t ch )
+void TtyUtf8Stream::wput(wchar_t ch)
 {
- if( !(0xffffff00 & ch) )
-  putchar( ch );
- else
-  {
-   uint8_t utf8[8];
-   const int n8 = lem::UCS4_to_UTF8( ch, utf8 );
-   for( int i=0; i<n8; i++ )
-    putchar( utf8[i+1] );
-  }     
+    if (!(0xffffff00 & ch))
+        putchar(ch);
+    else
+    {
+        uint8_t utf8[8];
+        const int n8 = lem::UCS4_to_UTF8(ch, utf8);
+        for (int i = 0; i < n8; i++)
+            putchar(utf8[i + 1]);
+    }
 
- if( ch==L'\n' )
-  {
-   putchar('\r');    
-//   refresh();
-  }
-
-/*
- if( !(0xffffff00 & ch) )
-  addch( ch );
- else
-  {   
-   uint8_t utf8[8];
-   const int n8 = lem::UCS4_to_UTF8( ch, utf8 );
-
-   for( int i=0; i<n8; i++ )
-    if( (utf8[1+i] & 0x80) == 0x80 )
-     addch( 0x0000ff00 | utf8[1+i] );
-    else    
-     addch( 0x000000ffU & utf8[1+i] );
-  }    
-
- if( ch==L'\n' )
-  refresh();
-  */
+    if (ch == L'\n')
+    {
+        putchar('\r');
+        //   refresh();
+    }
 }
 #endif
 
@@ -650,90 +633,97 @@ void TtyUtf8Stream::wput( wchar_t ch )
 
 
 StdTtyStream::StdTtyStream(void)
-{ stream=NULL; }
-
-StdTtyStream::StdTtyStream( ostream *s )
-:Stream(false,true)
-{ stream=s; }
-
-void StdTtyStream::write( const void *src, pos_type size )
 {
- stream->write( (const char*)src, size );
+    stream = NULL;
 }
 
-void StdTtyStream::put( char Ch )
+StdTtyStream::StdTtyStream(ostream *s)
+    :Stream(false, true)
 {
- stream->put(Ch);
- #if LEM_DEBUGGING==1
- Assert();
- #endif
+    stream = s;
 }
 
-lem::Stream::pos_type StdTtyStream::read( void * /*dest*/, pos_type /*size*/ )
-{ return 0; }
+void StdTtyStream::write(const void *src, pos_type size)
+{
+    stream->write((const char*)src, size);
+}
+
+void StdTtyStream::put(char Ch)
+{
+    stream->put(Ch);
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+}
+
+lem::Stream::pos_type StdTtyStream::read(void * /*dest*/, pos_type /*size*/)
+{
+    return 0;
+}
 
 int StdTtyStream::get(void)
-{ return -1; }
+{
+    return -1;
+}
 
 void StdTtyStream::Check(void) const
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
 }
 
 void StdTtyStream::flush(void)
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- stream->flush();
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    stream->flush();
 }
 
 void StdTtyStream::close(void)
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
 }
 
 bool StdTtyStream::eof(void) const
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- return false;
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    return false;
 }
 
 lem::Stream::pos_type StdTtyStream::tellp(void) const
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- return 0;
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    return 0;
 }
 
-StdTtyStream::pos_type StdTtyStream::seekp( lem::Stream::off_type /*to*/, int /*whereto*/ )
+StdTtyStream::pos_type StdTtyStream::seekp(lem::Stream::off_type /*to*/, int /*whereto*/)
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- return (size_t)-1;
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    return (size_t)-1;
 }
 
-bool StdTtyStream::move( off_type /*offset*/ )
+bool StdTtyStream::move(off_type /*offset*/)
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- return false;
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    return false;
 }
 
 lem::Stream::pos_type StdTtyStream::fsize(void) const
 {
- #if LEM_DEBUGGING==1
- Assert();
- #endif
- return 0;
+#if LEM_DEBUGGING==1
+    Assert();
+#endif
+    return 0;
 }
-

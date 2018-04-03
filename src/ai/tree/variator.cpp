@@ -4,16 +4,16 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Вариатор - класс Variator: представление ОДНОГО контекста, то есть списка
-// деревьев-beth. Является элементом списка для ResPack.
+// Р’Р°СЂРёР°С‚РѕСЂ - РєР»Р°СЃСЃ Variator: РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РћР”РќРћР“Рћ РєРѕРЅС‚РµРєСЃС‚Р°, С‚Рѕ РµСЃС‚СЊ СЃРїРёСЃРєР°
+// РґРµСЂРµРІСЊРµРІ-beth. РЇРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј СЃРїРёСЃРєР° РґР»СЏ ResPack.
 //
-// 01.09.2007 - печать содержимого вариатора через PrintRoot - концевые спецузлы
-//              BEGIN и END не печатаются. 
-// 11.10.2011 - добавлена сериализация в XML
+// 01.09.2007 - РїРµС‡Р°С‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РІР°СЂРёР°С‚РѕСЂР° С‡РµСЂРµР· PrintRoot - РєРѕРЅС†РµРІС‹Рµ СЃРїРµС†СѓР·Р»С‹
+//              BEGIN Рё END РЅРµ РїРµС‡Р°С‚Р°СЋС‚СЃСЏ. 
+// 11.10.2011 - РґРѕР±Р°РІР»РµРЅР° СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ РІ XML
 // -----------------------------------------------------------------------------
 //
 // CD->14.11.1995
-// LC->31.03.2018
+// LC->02.04.2018
 // --------------
 
 #if !defined SOL_NO_AA
@@ -33,395 +33,395 @@ using namespace Solarix;
 
 Variator::~Variator(void)
 {
- Delete();
- return;
+    Delete();
+    return;
 }
 
 
-Variator::Variator( const Variator& t )
+Variator::Variator(const Variator& t)
 {
- Init(t);
- key = UNKNOWN;
- return;
+    Init(t);
+    key = UNKNOWN;
+    return;
 }
 
 
 
-void Variator::operator=( const Variator& t )
+void Variator::operator=(const Variator& t)
 {
- if( &t==this )
-  return;
+    if (&t == this)
+        return;
 
- Delete();
- Clear();
- Init(t);
- key = UNKNOWN;
- return;
+    Delete();
+    Clear();
+    Init(t);
+    key = UNKNOWN;
+    return;
 }
 
 
 
 Variator::Variator(void)
 {
- roots.reserve(16);
- Clear();
- key     = UNKNOWN;
- org_key = UNKNOWN;
- return;
+    roots.reserve(16);
+    Clear();
+    key = UNKNOWN;
+    org_key = UNKNOWN;
+    return;
 }
 
 /************************************************************************
- Конструирование вариатора на основе поданного списка деревьев tree_list.
- Важно, что указатели из списка tree_list запоминаются в нашем списке
- прямо, без дубликации самих деревьев, поэтому эти указатели НЕ ДОЛЖНЫ
- освобождаться во внешней процедуре. Это сделано ради экономии памяти.
+ РљРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°РЅРёРµ РІР°СЂРёР°С‚РѕСЂР° РЅР° РѕСЃРЅРѕРІРµ РїРѕРґР°РЅРЅРѕРіРѕ СЃРїРёСЃРєР° РґРµСЂРµРІСЊРµРІ tree_list.
+ Р’Р°Р¶РЅРѕ, С‡С‚Рѕ СѓРєР°Р·Р°С‚РµР»Рё РёР· СЃРїРёСЃРєР° tree_list Р·Р°РїРѕРјРёРЅР°СЋС‚СЃСЏ РІ РЅР°С€РµРј СЃРїРёСЃРєРµ
+ РїСЂСЏРјРѕ, Р±РµР· РґСѓР±Р»РёРєР°С†РёРё СЃР°РјРёС… РґРµСЂРµРІСЊРµРІ, РїРѕСЌС‚РѕРјСѓ СЌС‚Рё СѓРєР°Р·Р°С‚РµР»Рё РќР• Р”РћР›Р–РќР«
+ РѕСЃРІРѕР±РѕР¶РґР°С‚СЊСЃСЏ РІРѕ РІРЅРµС€РЅРµР№ РїСЂРѕС†РµРґСѓСЂРµ. Р­С‚Рѕ СЃРґРµР»Р°РЅРѕ СЂР°РґРё СЌРєРѕРЅРѕРјРёРё РїР°РјСЏС‚Рё.
 *************************************************************************/
-Variator::Variator( const MCollect<Tree_Node*> &tree_list )
+Variator::Variator(const MCollect<Tree_Node*> &tree_list)
 {
- Clear();
- key     = UNKNOWN;
- org_key = UNKNOWN;
+    Clear();
+    key = UNKNOWN;
+    org_key = UNKNOWN;
 
- const int ntree=CastSizeToInt(tree_list.size());
- roots.reserve(ntree);
+    const int ntree = CastSizeToInt(tree_list.size());
+    roots.reserve(ntree);
 
- val = Real1(100);
+    val = Real1(100);
 
- for( int i=0; i<ntree; i++ )
-  roots.push_back( tree_list[i] );
+    for (int i = 0; i < ntree; i++)
+        roots.push_back(tree_list[i]);
 
- return;
+    return;
 }
 
 #if defined SOL_CAA
 /*********************************************************************
- Сборка вариатора из словоформ. Каждая словоформа из списка slist
- служит основой для создания дерева. На основе оценок достоверности
- словоформ списка slist расчитываем общую достоверность вариатора.
+ РЎР±РѕСЂРєР° РІР°СЂРёР°С‚РѕСЂР° РёР· СЃР»РѕРІРѕС„РѕСЂРј. РљР°Р¶РґР°СЏ СЃР»РѕРІРѕС„РѕСЂРјР° РёР· СЃРїРёСЃРєР° slist
+ СЃР»СѓР¶РёС‚ РѕСЃРЅРѕРІРѕР№ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РґРµСЂРµРІР°. РќР° РѕСЃРЅРѕРІРµ РѕС†РµРЅРѕРє РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё
+ СЃР»РѕРІРѕС„РѕСЂРј СЃРїРёСЃРєР° slist СЂР°СЃС‡РёС‚С‹РІР°РµРј РѕР±С‰СѓСЋ РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ РІР°СЂРёР°С‚РѕСЂР°.
 *********************************************************************/
-Variator::Variator( const Word_Form *slist, int nsynt )
+Variator::Variator(const Word_Form *slist, int nsynt)
 {
- Clear();
- key     = UNKNOWN;
- org_key = UNKNOWN;
+    Clear();
+    key = UNKNOWN;
+    org_key = UNKNOWN;
 
- roots.reserve(nsynt);
+    roots.reserve(nsynt);
 
- for( int i=0; i<nsynt; i++ )
-  roots.push_back( new Tree_Node(slist[i]) );
+    for (int i = 0; i < nsynt; i++)
+        roots.push_back(new Tree_Node(slist[i]));
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADBIN
-Variator::Variator( lem::Stream &bin )
+Variator::Variator(lem::Stream &bin)
 {
- LoadBin(bin);
- key     = UNKNOWN;
- org_key = UNKNOWN;
- return;
+    LoadBin(bin);
+    key = UNKNOWN;
+    org_key = UNKNOWN;
+    return;
 }
 #endif
 
 void Variator::Clear(void)
 {
- LEM_CHECKIT_Z( roots.empty() );
- roots.clear();
+    LEM_CHECKIT_Z(roots.empty());
+    roots.clear();
 
- val     = Real1(100);
- freq    = 0;
- key     =
- org_key = UNKNOWN;
- score = 0;
+    val = Real1(100);
+    freq = 0;
+    key =
+        org_key = UNKNOWN;
+    score = 0;
 
- marks.clear();
+    marks.clear();
 
- return;
+    return;
 }
 
 
 void Variator::Delete(void)
 {
- for( lem::Container::size_type i=0; i<roots.size(); ++i )
-  {
-   delete roots[i];
-  }
+    for (auto root : roots)
+    {
+        delete root;
+    }
 
- roots.clear();
- marks.clear();
+    roots.clear();
+    marks.clear();
 
- return;
+    return;
 }
 
-void Variator::Init( const Variator& t )
+void Variator::Init(const Variator& t)
 {
- LEM_CHECKIT_Z( &t!=NULL );
+    LEM_CHECKIT_Z(&t != nullptr);
 
- freq     = t.freq;
- val      = t.val;
- org_key  = t.org_key;
+    freq = t.freq;
+    val = t.val;
+    org_key = t.org_key;
 
- const int nroot=t.size();
+    const int nroot = t.size();
+    roots.resize(nroot);
+    for (int i = 0; i < nroot; i++)
+        roots[i] = new Tree_Node(t.get(i));
 
- roots.resize(nroot);
+    marks = t.marks;
 
- for( int i=0; i<nroot; i++ )
-  roots[i] = new Tree_Node( t.get(i) );
-
- marks = t.marks;
-
- return;
+    return;
 }
 
 
 Variator* Variator::DeepCopy(void) const
 {
- Variator * res = new Variator();
+    Variator * res = new Variator();
 
- res->freq = freq;
- res->val      = val;
- res->org_key  = org_key;
+    res->freq = freq;
+    res->val = val;
+    res->org_key = org_key;
 
- for( lem::Container::size_type i=0; i<roots.size(); ++i )
-  res->roots.push_back( new Tree_Node( get(i) ) );
+    for (lem::Container::size_type i = 0; i < roots.size(); ++i)
+    {
+        res->roots.push_back(new Tree_Node(get(i)));
+    }
 
- res->marks = marks;
+    res->marks = marks;
 
- return res;
+    return res;
 }
 
 
 
 
 
-void Variator::Add( Tree_Node *to_add )
+void Variator::Add(Tree_Node *to_add)
 {
- roots.push_back( to_add );
- return;
+    roots.push_back(to_add);
+    return;
 }
 
 
 #if defined SOL_CAA
 /*****************************************************************************
- Добавляем дерево to_add в заданную позицию where_to, расширяя список. Если
- where_to=0, то дерево to_add будет добавлено в самое начало списка в нулевую
- позицию, а весь список окажется сдвинутым вправо, и так далее. Внешний код
- теряет контроль над указателем to_add!
+ Р”РѕР±Р°РІР»СЏРµРј РґРµСЂРµРІРѕ to_add РІ Р·Р°РґР°РЅРЅСѓСЋ РїРѕР·РёС†РёСЋ where_to, СЂР°СЃС€РёСЂСЏСЏ СЃРїРёСЃРѕРє. Р•СЃР»Рё
+ where_to=0, С‚Рѕ РґРµСЂРµРІРѕ to_add Р±СѓРґРµС‚ РґРѕР±Р°РІР»РµРЅРѕ РІ СЃР°РјРѕРµ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° РІ РЅСѓР»РµРІСѓСЋ
+ РїРѕР·РёС†РёСЋ, Р° РІРµСЃСЊ СЃРїРёСЃРѕРє РѕРєР°Р¶РµС‚СЃСЏ СЃРґРІРёРЅСѓС‚С‹Рј РІРїСЂР°РІРѕ, Рё С‚Р°Рє РґР°Р»РµРµ. Р’РЅРµС€РЅРёР№ РєРѕРґ
+ С‚РµСЂСЏРµС‚ РєРѕРЅС‚СЂРѕР»СЊ РЅР°Рґ СѓРєР°Р·Р°С‚РµР»РµРј to_add!
 ******************************************************************************/
-void Variator::Insert( int where_to, Tree_Node *to_add )
+void Variator::Insert(int where_to, Tree_Node *to_add)
 {
- roots.Insert( where_to, to_add );
- return;
+    roots.Insert(where_to, to_add);
+    return;
 }
 #endif
 
 
 
 /***********************************************************************
- Процедура распечатки содержимого вариатора, причем - в максимально
- понятной форме. Алгоритм достаточно сложен, так как мы печатаем
- набор грамматических деревьев, которые составляют вариатор, в виде
- списка ПО ГОРИЗОНТАЛИ. А так как каждое дерево может иметь произвольно
- сложную структуру, то размещение отдельных распечаток деревьев -
- нетривиальная задача. Тем не менее, она решается через использование
- промежуточных буферов распечатки отдельных деревьев.
+ РџСЂРѕС†РµРґСѓСЂР° СЂР°СЃРїРµС‡Р°С‚РєРё СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РІР°СЂРёР°С‚РѕСЂР°, РїСЂРёС‡РµРј - РІ РјР°РєСЃРёРјР°Р»СЊРЅРѕ
+ РїРѕРЅСЏС‚РЅРѕР№ С„РѕСЂРјРµ. РђР»РіРѕСЂРёС‚Рј РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃР»РѕР¶РµРЅ, С‚Р°Рє РєР°Рє РјС‹ РїРµС‡Р°С‚Р°РµРј
+ РЅР°Р±РѕСЂ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РґРµСЂРµРІСЊРµРІ, РєРѕС‚РѕСЂС‹Рµ СЃРѕСЃС‚Р°РІР»СЏСЋС‚ РІР°СЂРёР°С‚РѕСЂ, РІ РІРёРґРµ
+ СЃРїРёСЃРєР° РџРћ Р“РћР РР—РћРќРўРђР›Р. Рђ С‚Р°Рє РєР°Рє РєР°Р¶РґРѕРµ РґРµСЂРµРІРѕ РјРѕР¶РµС‚ РёРјРµС‚СЊ РїСЂРѕРёР·РІРѕР»СЊРЅРѕ
+ СЃР»РѕР¶РЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ, С‚Рѕ СЂР°Р·РјРµС‰РµРЅРёРµ РѕС‚РґРµР»СЊРЅС‹С… СЂР°СЃРїРµС‡Р°С‚РѕРє РґРµСЂРµРІСЊРµРІ -
+ РЅРµС‚СЂРёРІРёР°Р»СЊРЅР°СЏ Р·Р°РґР°С‡Р°. РўРµРј РЅРµ РјРµРЅРµРµ, РѕРЅР° СЂРµС€Р°РµС‚СЃСЏ С‡РµСЂРµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ
+ РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹С… Р±СѓС„РµСЂРѕРІ СЂР°СЃРїРµС‡Р°С‚РєРё РѕС‚РґРµР»СЊРЅС‹С… РґРµСЂРµРІСЊРµРІ.
 ************************************************************************/
 
 void Variator::Print(
-                     OFormatter &s,
-                     SynGram& gram,
-                     bool detailed
-                    ) const
+    OFormatter &s,
+    SynGram& gram,
+    bool detailed
+) const
 {
- #if defined SOL_CAA
+#if defined SOL_CAA
 
- s.printf( "%d item(s)", size() );
+    s.printf("%d item(s)", size());
 
- // Первая часть. Пробуем разместить деревья вариатора друг за другом
- // по горизонтали. Это облегчает просмотр содержимого вариатора человеком.
- // -----------------------------------------------------------------------
- // Сначала каждое дерево вариатора распечатывается в отдельный поток,
- // размещаемый в оперативной памяти.
- //
- // Алгоритм легко работает и с вариаторами, в которых связки деревьев хранят
- // по несколько элементов:
- //    bunch0  bunch1  bunch2
- //      A1      B1      C1
- //      A2              C2
- //                      C3
- //
- //
- // Отдельные деревья-мультипликаторы одной связки распечатываются друг под
- // другом с одной пробельной строкой.
+    // РџРµСЂРІР°СЏ С‡Р°СЃС‚СЊ. РџСЂРѕР±СѓРµРј СЂР°Р·РјРµСЃС‚РёС‚СЊ РґРµСЂРµРІСЊСЏ РІР°СЂРёР°С‚РѕСЂР° РґСЂСѓРі Р·Р° РґСЂСѓРіРѕРј
+    // РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё. Р­С‚Рѕ РѕР±Р»РµРіС‡Р°РµС‚ РїСЂРѕСЃРјРѕС‚СЂ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РІР°СЂРёР°С‚РѕСЂР° С‡РµР»РѕРІРµРєРѕРј.
+    // -----------------------------------------------------------------------
+    // РЎРЅР°С‡Р°Р»Р° РєР°Р¶РґРѕРµ РґРµСЂРµРІРѕ РІР°СЂРёР°С‚РѕСЂР° СЂР°СЃРїРµС‡Р°С‚С‹РІР°РµС‚СЃСЏ РІ РѕС‚РґРµР»СЊРЅС‹Р№ РїРѕС‚РѕРє,
+    // СЂР°Р·РјРµС‰Р°РµРјС‹Р№ РІ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё.
+    //
+    // РђР»РіРѕСЂРёС‚Рј Р»РµРіРєРѕ СЂР°Р±РѕС‚Р°РµС‚ Рё СЃ РІР°СЂРёР°С‚РѕСЂР°РјРё, РІ РєРѕС‚РѕСЂС‹С… СЃРІСЏР·РєРё РґРµСЂРµРІСЊРµРІ С…СЂР°РЅСЏС‚
+    // РїРѕ РЅРµСЃРєРѕР»СЊРєРѕ СЌР»РµРјРµРЅС‚РѕРІ:
+    //    bunch0  bunch1  bunch2
+    //      A1      B1      C1
+    //      A2              C2
+    //                      C3
+    //
+    //
+    // РћС‚РґРµР»СЊРЅС‹Рµ РґРµСЂРµРІСЊСЏ-РјСѓР»СЊС‚РёРїР»РёРєР°С‚РѕСЂС‹ РѕРґРЅРѕР№ СЃРІСЏР·РєРё СЂР°СЃРїРµС‡Р°С‚С‹РІР°СЋС‚СЃСЏ РґСЂСѓРі РїРѕРґ
+    // РґСЂСѓРіРѕРј СЃ РѕРґРЅРѕР№ РїСЂРѕР±РµР»СЊРЅРѕР№ СЃС‚СЂРѕРєРѕР№.
 
- PtrCollect< lem::Collect<UFString> > vstr;
- vstr.reserve(size());
+    PtrCollect< lem::Collect<UFString> > vstr;
+    vstr.reserve(size());
 
- int nlines=0; // максимальное число строк в распечатках
+    int nlines = 0; // РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ СЃС‚СЂРѕРє РІ СЂР°СЃРїРµС‡Р°С‚РєР°С…
 
- for( int itree=0; itree<size(); itree++ )
-  {
-   // Создаем текстовый поточек, в который печатаем очередную связку деревьев.
-   lem::Char_Stream::UTF16_MemWriter mem;
-   OUFormatter out(&mem);
-
-   // Дополнительная информация о каждой связке.
-   out.printf( "tree #%2d \n", itree );
-   get(itree).Print( out, gram, 0, detailed );
-
-   UFString *str = mem.Pick_String();
-
-   lem::Collect<UFString> *ss = new lem::Collect<UFString>;
-   lem::parse( *str, *ss, L"\n" );
-   for( lem::Container::size_type k=0; k<ss->size(); ++k )
-    ss->get(k).subst_all( L"\r", L"" );
-
-   nlines = std::max( nlines, CastSizeToInt(ss->size()) );
-
-   vstr.push_back(ss);
-   delete str;
-  }
-
- // Переменная nlines теперь содержит число строк в максимально развесистом
- // дереве.
-
- /*--------------------------------------------------------------------
-  Теперь необходимо совместить получившиеся изображения так, чтобы
-  с одной стороны минимизировать зазор между соседями и, с другой, не
-  допустить перекрытия текстов.
-
-  Пусть два очередных соседа имеют вид:
-
-    первый блок       второй блок      результат совмещени
-  |#########     |   |$$$$$$     | ==> #########     :$$$$$$
-  |########      |   | $$$$$$$   | ==> ########      : $$$$$$$
-  |  #######     |   | $$$$$$    | ==>   #######     : $$$$$$
-  |   #######    |   |  $$$$$$$  | ==>     ######    :  $$$$$$$
-  |   ###########|   |  $$$$$$$$$| ==>      #########:  $$$$$$$$$
-  |              |   |           | ==>
-  l0             r0  l1          r1
-
-  Вычисленные зазоры сохраняются в векторе gap.
- -------------------------------------------------------------------*/
- IntCollect most_right;
- most_right.reserve(size());
-
- {
- for( int itree=0; itree<size(); itree++ )
-  {
-   const lem::Collect<UFString> &block = * vstr[itree];
-
-   size_t max_right=0;
-   for( lem::Container::size_type i=0; i<block.size(); i++ )
-    max_right = std::max( max_right, block[i].length() );
-
-   most_right.push_back( max_right );
-  }
- }
-
- // Теперь переносим строки из потоков, указатели на которые сохранены
- // в векторе vstr, в конечный поток-приемник s.
- s.printf( " val=%us\n", to_ustr( val ).c_str() );
-
- // Построчно сканируем распечатки деревьев...
- for( int iline=0; iline<nlines; iline++ )
-  {
-   for( Container::size_type iblock=0; iblock<vstr.size(); iblock++ )
+    for (int itree = 0; itree < size(); itree++)
     {
-     const lem::Collect<UFString> &block = *vstr[iblock];
+        // РЎРѕР·РґР°РµРј С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕС‚РѕС‡РµРє, РІ РєРѕС‚РѕСЂС‹Р№ РїРµС‡Р°С‚Р°РµРј РѕС‡РµСЂРµРґРЅСѓСЋ СЃРІСЏР·РєСѓ РґРµСЂРµРІСЊРµРІ.
+        lem::Char_Stream::UTF16_MemWriter mem;
+        OUFormatter out(&mem);
 
-     if( CastSizeToInt(block.size())<=iline )
-      // допечатаем пустую строку, так как в этом блоке строк оказалось меньше,
-      // чем  в самом многострочном блоке.
-      s.printf( "%H ", most_right[iblock] );
-     else
-      {
-       // все строки одного блока должны иметь одну длину
-       const int add = most_right[iblock]-block[iline].length();
-       s.printf( "%us%H ", block[iline].c_str(), add );
-      }
+        // Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РєР°Р¶РґРѕР№ СЃРІСЏР·РєРµ.
+        out.printf("tree #%2d \n", itree);
+        get(itree).Print(out, gram, 0, detailed);
 
-     // вертикальный разделитель блоков
-     s.printf( " | " );
+        UFString *str = mem.Pick_String();
+
+        lem::Collect<UFString> *ss = new lem::Collect<UFString>;
+        lem::parse(*str, *ss, L"\n");
+        for (lem::Container::size_type k = 0; k < ss->size(); ++k)
+            ss->get(k).subst_all(L"\r", L"");
+
+        nlines = std::max(nlines, CastSizeToInt(ss->size()));
+
+        vstr.push_back(ss);
+        delete str;
     }
 
-   s.eol();
-  }
+    // РџРµСЂРµРјРµРЅРЅР°СЏ nlines С‚РµРїРµСЂСЊ СЃРѕРґРµСЂР¶РёС‚ С‡РёСЃР»Рѕ СЃС‚СЂРѕРє РІ РјР°РєСЃРёРјР°Р»СЊРЅРѕ СЂР°Р·РІРµСЃРёСЃС‚РѕРј
+    // РґРµСЂРµРІРµ.
 
- s.eol();
- #endif
+    /*--------------------------------------------------------------------
+     РўРµРїРµСЂСЊ РЅРµРѕР±С…РѕРґРёРјРѕ СЃРѕРІРјРµСЃС‚РёС‚СЊ РїРѕР»СѓС‡РёРІС€РёРµСЃСЏ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ С‚Р°Рє, С‡С‚РѕР±С‹
+     СЃ РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅС‹ РјРёРЅРёРјРёР·РёСЂРѕРІР°С‚СЊ Р·Р°Р·РѕСЂ РјРµР¶РґСѓ СЃРѕСЃРµРґСЏРјРё Рё, СЃ РґСЂСѓРіРѕР№, РЅРµ
+     РґРѕРїСѓСЃС‚РёС‚СЊ РїРµСЂРµРєСЂС‹С‚РёСЏ С‚РµРєСЃС‚РѕРІ.
 
- return;
+     РџСѓСЃС‚СЊ РґРІР° РѕС‡РµСЂРµРґРЅС‹С… СЃРѕСЃРµРґР° РёРјРµСЋС‚ РІРёРґ:
+
+       РїРµСЂРІС‹Р№ Р±Р»РѕРє       РІС‚РѕСЂРѕР№ Р±Р»РѕРє      СЂРµР·СѓР»СЊС‚Р°С‚ СЃРѕРІРјРµС‰РµРЅРё
+     |#########     |   |$$$$$$     | ==> #########     :$$$$$$
+     |########      |   | $$$$$$$   | ==> ########      : $$$$$$$
+     |  #######     |   | $$$$$$    | ==>   #######     : $$$$$$
+     |   #######    |   |  $$$$$$$  | ==>     ######    :  $$$$$$$
+     |   ###########|   |  $$$$$$$$$| ==>      #########:  $$$$$$$$$
+     |              |   |           | ==>
+     l0             r0  l1          r1
+
+     Р’С‹С‡РёСЃР»РµРЅРЅС‹Рµ Р·Р°Р·РѕСЂС‹ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ РІ РІРµРєС‚РѕСЂРµ gap.
+    -------------------------------------------------------------------*/
+    IntCollect most_right;
+    most_right.reserve(size());
+
+    {
+        for (int itree = 0; itree < size(); itree++)
+        {
+            const lem::Collect<UFString> &block = *vstr[itree];
+
+            size_t max_right = 0;
+            for (lem::Container::size_type i = 0; i < block.size(); i++)
+                max_right = std::max(max_right, block[i].length());
+
+            most_right.push_back(max_right);
+        }
+    }
+
+    // РўРµРїРµСЂСЊ РїРµСЂРµРЅРѕСЃРёРј СЃС‚СЂРѕРєРё РёР· РїРѕС‚РѕРєРѕРІ, СѓРєР°Р·Р°С‚РµР»Рё РЅР° РєРѕС‚РѕСЂС‹Рµ СЃРѕС…СЂР°РЅРµРЅС‹
+    // РІ РІРµРєС‚РѕСЂРµ vstr, РІ РєРѕРЅРµС‡РЅС‹Р№ РїРѕС‚РѕРє-РїСЂРёРµРјРЅРёРє s.
+    s.printf(" val=%us\n", to_ustr(val).c_str());
+
+    // РџРѕСЃС‚СЂРѕС‡РЅРѕ СЃРєР°РЅРёСЂСѓРµРј СЂР°СЃРїРµС‡Р°С‚РєРё РґРµСЂРµРІСЊРµРІ...
+    for (int iline = 0; iline < nlines; iline++)
+    {
+        for (Container::size_type iblock = 0; iblock < vstr.size(); iblock++)
+        {
+            const lem::Collect<UFString> &block = *vstr[iblock];
+
+            if (CastSizeToInt(block.size()) <= iline)
+                // РґРѕРїРµС‡Р°С‚Р°РµРј РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ, С‚Р°Рє РєР°Рє РІ СЌС‚РѕРј Р±Р»РѕРєРµ СЃС‚СЂРѕРє РѕРєР°Р·Р°Р»РѕСЃСЊ РјРµРЅСЊС€Рµ,
+                // С‡РµРј  РІ СЃР°РјРѕРј РјРЅРѕРіРѕСЃС‚СЂРѕС‡РЅРѕРј Р±Р»РѕРєРµ.
+                s.printf("%H ", most_right[iblock]);
+            else
+            {
+                // РІСЃРµ СЃС‚СЂРѕРєРё РѕРґРЅРѕРіРѕ Р±Р»РѕРєР° РґРѕР»Р¶РЅС‹ РёРјРµС‚СЊ РѕРґРЅСѓ РґР»РёРЅСѓ
+                const int add = most_right[iblock] - block[iline].length();
+                s.printf("%us%H ", block[iline].c_str(), add);
+            }
+
+            // РІРµСЂС‚РёРєР°Р»СЊРЅС‹Р№ СЂР°Р·РґРµР»РёС‚РµР»СЊ Р±Р»РѕРєРѕРІ
+            s.printf(" | ");
+        }
+
+        s.eol();
+    }
+
+    s.eol();
+#endif
+
+    return;
 }
 
 
 
 #if defined SOL_LOADBIN
-void Variator::LoadBin( lem::Stream &bin )
+void Variator::LoadBin(lem::Stream &bin)
 {
- bin.read( &key,          sizeof(key)          );
- bin.read( &org_key,      sizeof(org_key)      );
- bin.read( &val,          sizeof(val)          );
- bin.read( &freq,         sizeof(freq)         );
- bin.read( &score,        sizeof(score)        );
- 
- Container::size_type n=0;
- bin.read( &n, sizeof(n) );
- roots.reserve(n);
- 
- for( Container::size_type i=0; i<n; i++ )
-  {
-   Tree_Node *to_add = new Tree_Node();
-   to_add->LoadBin(bin);
-   roots.push_back(to_add);
-  }
+    bin.read(&key, sizeof(key));
+    bin.read(&org_key, sizeof(org_key));
+    bin.read(&val, sizeof(val));
+    bin.read(&freq, sizeof(freq));
+    bin.read(&score, sizeof(score));
 
- return;
+    Container::size_type n = 0;
+    bin.read(&n, sizeof(n));
+    roots.reserve(n);
+
+    for (Container::size_type i = 0; i < n; i++)
+    {
+        Tree_Node *to_add = new Tree_Node();
+        to_add->LoadBin(bin);
+        roots.push_back(to_add);
+    }
+
+    return;
 }
 #endif
 
 
-void Variator::SaveBin( lem::Stream &bin ) const
+void Variator::SaveBin(lem::Stream &bin) const
 {
- #if defined SOL_SAVEBIN
- bin.write( &key,      sizeof(key)      );
- bin.write( &org_key,  sizeof(org_key)  );
- bin.write( &val,      sizeof(val)      );
- bin.write( &freq,     sizeof(freq)     );
- bin.write( &score,        sizeof(score)        );
+#if defined SOL_SAVEBIN
+    bin.write(&key, sizeof(key));
+    bin.write(&org_key, sizeof(org_key));
+    bin.write(&val, sizeof(val));
+    bin.write(&freq, sizeof(freq));
+    bin.write(&score, sizeof(score));
 
- const Container::size_type n=size();
- bin.write( &n, sizeof(n) );
- for( Container::size_type i=0; i<n; i++ )
-  roots[i]->SaveBin(bin);
+    const Container::size_type n = size();
+    bin.write(&n, sizeof(n));
+    for (Container::size_type i = 0; i < n; i++)
+        roots[i]->SaveBin(bin);
 
- return;
- #endif
+    return;
+#endif
 }
 
 #if defined SOL_CAA
 /************************************************************************
- Элемент списка указателей на деревья с индексом itree заменяетс
- на t, причем старый указатель в этой ячейке списка не освобождается.
- Можно указать t=NULL, тогда просто будет вписана пустая связка деревьев
- в указанную позицию.
+ Р­Р»РµРјРµРЅС‚ СЃРїРёСЃРєР° СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РґРµСЂРµРІСЊСЏ СЃ РёРЅРґРµРєСЃРѕРј itree Р·Р°РјРµРЅСЏРµС‚СЃ
+ РЅР° t, РїСЂРёС‡РµРј СЃС‚Р°СЂС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РІ СЌС‚РѕР№ СЏС‡РµР№РєРµ СЃРїРёСЃРєР° РЅРµ РѕСЃРІРѕР±РѕР¶РґР°РµС‚СЃСЏ.
+ РњРѕР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ t=NULL, С‚РѕРіРґР° РїСЂРѕСЃС‚Рѕ Р±СѓРґРµС‚ РІРїРёСЃР°РЅР° РїСѓСЃС‚Р°СЏ СЃРІСЏР·РєР° РґРµСЂРµРІСЊРµРІ
+ РІ СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕР·РёС†РёСЋ.
 *************************************************************************/
-void Variator::SetPtr( int itree, Tree_Node *t )
+void Variator::SetPtr(int itree, Tree_Node *t)
 {
- LEM_CHECKIT_Z( roots[itree]==NULL );
+    LEM_CHECKIT_Z(roots[itree] == nullptr);
 
- if( t==NULL )
-  {
-   roots[itree] = new Tree_Node();
-  }
- else
-  {
-   roots[itree] = t;
-  }
+    if (t == nullptr)
+    {
+        roots[itree] = new Tree_Node();
+    }
+    else
+    {
+        roots[itree] = t;
+    }
 
- return;
+    return;
 }
 #endif
 
@@ -431,44 +431,44 @@ void Variator::SetPtr( int itree, Tree_Node *t )
 
 #if defined SOL_CAA
 // ********************************************************
-// Простая распечатка содержимого вариатора - в виде одной
-// строки текста.
+// РџСЂРѕСЃС‚Р°СЏ СЂР°СЃРїРµС‡Р°С‚РєР° СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РІР°СЂРёР°С‚РѕСЂР° - РІ РІРёРґРµ РѕРґРЅРѕР№
+// СЃС‚СЂРѕРєРё С‚РµРєСЃС‚Р°.
 // ********************************************************
 void Variator::PrintRoots(
-                          OFormatter &s,
-                          bool Decoration, // символьные украшательства
-                          bool EntryKeys   // печатать коды словарных статей
-                         ) const
+    OFormatter &s,
+    bool Decoration, // СЃРёРјРІРѕР»СЊРЅС‹Рµ СѓРєСЂР°С€Р°С‚РµР»СЊСЃС‚РІР°
+    bool EntryKeys   // РїРµС‡Р°С‚Р°С‚СЊ РєРѕРґС‹ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№
+) const
 {
- if( Decoration )
-  s.printf( "%W2d roots: ", roots.size() );
+    if (Decoration)
+        s.printf("%W2d roots: ", roots.size());
 
- for( Container::size_type i=0; i<roots.size(); i++ )
-  {
-   if(i)
-    s.printf( "  " );
+    for (Container::size_type i = 0; i < roots.size(); i++)
+    {
+        if (i)
+            s.printf("  ");
 
-   roots[i]->PrintPlain( s, EntryKeys );
-  }
+        roots[i]->PrintPlain(s, EntryKeys);
+    }
 
- if( score!=0 )
-  s.printf( " score=%vfA%d%vn", GetScore() );
+    if (score != 0)
+        s.printf(" score=%vfA%d%vn", GetScore());
 
- s.eol();
+    s.eol();
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_CAA
-void Variator::PrintV( OFormatter &out, SynGram &gram, bool detailed ) const
+void Variator::PrintV(OFormatter &out, SynGram &gram, bool detailed) const
 {
- for( int itree=0; itree<size(); itree++ )
-  {
-   roots[itree]->Print( out, gram, detailed );
-  }
+    for (auto root : roots)
+    {
+        root->Print(out, gram, detailed);
+    }
 
- return;
+    return;
 }
 #endif
 
@@ -476,120 +476,116 @@ void Variator::PrintV( OFormatter &out, SynGram &gram, bool detailed ) const
 #if defined SOL_CAA
 void Variator::DeleteRoots(void)
 {
- for( Container::size_type i=0; i<roots.size(); i++ )
-  delete roots[i]; 
+    for (auto root : roots)
+    {
+        delete root;
+    }
 
- roots.clear();
+    roots.clear();
 
- return;
+    return;
 }
 #endif
 
-bool Variator::operator==( const Variator &x ) const
+bool Variator::operator==(const Variator &x) const
 {
- for( Container::size_type i=0; i<roots.size(); i++ )
-  if( !((*roots[i])==(*x.roots[i])) )
-   return false;
+    for (Container::size_type i = 0; i < roots.size(); i++)
+        if (!((*roots[i]) == (*x.roots[i])))
+            return false;
 
- return true;
+    return true;
 }
 
 
 
-TreeMarks& Variator::TouchMarks( const UCString &name )
+TreeMarks& Variator::TouchMarks(const UCString &name)
 {
- LEM_CHECKIT_Z( !name.empty() );
+    LEM_CHECKIT_Z(!name.empty());
 
- for( lem::Container::size_type i=0; i<marks.size(); ++i )
-  if( marks[i]->GetName().eqi(name) )
-   return * marks[i];
-
- marks.push_back( new TreeMarks(name) );
- return *marks.back();
-}
-
-
-TreeMarks* Variator::FindMarks( const UCString &name )
-{
- LEM_CHECKIT_Z( !name.empty() );
-
- for( lem::Container::size_type i=0; i<marks.size(); ++i )
-  if( marks[i]->GetName().eqi(name) )
-   return marks[i];
-
- return NULL;
-}
-
-const TreeMarks* Variator::FindMarks( const UCString &name ) const
-{
- LEM_CHECKIT_Z( !name.empty() );
-
- for( lem::Container::size_type i=0; i<marks.size(); ++i )
-  if( marks[i]->GetName().eqi(name) )
-   return marks[i];
-
- return NULL;
-}
-
-
-void Variator::RemoveRoot( int index )
-{
- delete roots[index];
- roots.Remove(index);
- return;
-}
-
-
-/*
-void Variator::DeleteBunch( int ibunch )
-{
- delete roots[ibunch];
- roots[ibunch]=NULL;
- return;
-}
-*/
-
-
-void Variator::DeleteTree( int index )
-{
- delete roots[index];
- roots[index]=NULL;
- return;
-}
-
-
-
-
-void Variator::PrintXML( OFormatter &xml, SynGram &gram ) const
-{
- xml.printf( "<rootset>\n" );
-
- xml.printf( "<trees count=\"%d\">\n", CastSizeToInt(roots.size()) );
- for( Container::size_type i=0; i<roots.size(); i++ )
-  {
-   xml.printf( "<tree n=\"%d\">\n", CastSizeToInt(i) );
-   get(i).PrintXML( xml, gram );
-   xml.printf( "</tree>\n" );
-  }
- xml.printf( "</trees>\n" );
-
- if( !marks.empty() )
-  {
-   xml.printf( "<marks count=\"%d\">", CastSizeToInt(marks.size()) );
-   for( lem::Container::size_type i=0; i<marks.size(); ++i )
+    for (auto mark : marks)
     {
-     xml.printf( "<mark n=\"%d\">\n", CastSizeToInt(i) );
-     marks[i]->PrintXML( xml, gram.GetDict() );
-     xml.printf( "</mark>\n" );
+        if (mark->GetName().eqi(name))
+            return *mark;
     }
-   xml.printf( "</marks>" );
-  }
 
- xml.printf( "</rootset>\n" );
-
- return;
+    marks.push_back(new TreeMarks(name));
+    return *marks.back();
 }
 
 
+TreeMarks* Variator::FindMarks(const UCString &name)
+{
+    LEM_CHECKIT_Z(!name.empty());
+
+    for (auto mark : marks)
+    {
+        if (mark->GetName().eqi(name))
+            return mark;
+    }
+
+    return nullptr;
+}
+
+const TreeMarks* Variator::FindMarks(const UCString &name) const
+{
+    LEM_CHECKIT_Z(!name.empty());
+
+    for (auto mark : marks)
+    {
+        if (mark->GetName().eqi(name))
+            return mark;
+    }
+
+    return nullptr;
+}
+
+
+void Variator::RemoveRoot(int index)
+{
+    delete roots[index];
+    roots.Remove(index);
+    return;
+}
+
+
+void Variator::DeleteTree(int index)
+{
+    delete roots[index];
+    roots[index] = NULL;
+    return;
+}
+
+
+
+
+void Variator::PrintXML(OFormatter &xml, SynGram &gram) const
+{
+    xml.printf("<rootset>\n");
+
+    xml.printf("<trees count=\"%d\">\n", CastSizeToInt(roots.size()));
+    for (Container::size_type i = 0; i < roots.size(); i++)
+    {
+        xml.printf("<tree n=\"%d\">\n", CastSizeToInt(i));
+        get(i).PrintXML(xml, gram);
+        xml.printf("</tree>\n");
+    }
+    xml.printf("</trees>\n");
+
+    if (!marks.empty())
+    {
+        xml.printf("<marks count=\"%d\">", CastSizeToInt(marks.size()));
+        for (lem::Container::size_type i = 0; i < marks.size(); ++i)
+        {
+            xml.printf("<mark n=\"%d\">\n", CastSizeToInt(i));
+            marks[i]->PrintXML(xml, gram.GetDict());
+            xml.printf("</mark>\n");
+        }
+        xml.printf("</marks>");
+    }
+
+    xml.printf("</rootset>\n");
+
+    return;
+}
 
 #endif

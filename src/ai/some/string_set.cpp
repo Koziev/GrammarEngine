@@ -4,16 +4,16 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Класс UCStringSet - контейнер для символьных строк. Используется везде, где
-// возникает необходимость работать с множеством строк как с одним целым.
-// Просьба не путать с мультилексемами!
+// РљР»Р°СЃСЃ UCStringSet - РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ СЃРёРјРІРѕР»СЊРЅС‹С… СЃС‚СЂРѕРє. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІРµР·РґРµ, РіРґРµ
+// РІРѕР·РЅРёРєР°РµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚СЊ СЂР°Р±РѕС‚Р°С‚СЊ СЃ РјРЅРѕР¶РµСЃС‚РІРѕРј СЃС‚СЂРѕРє РєР°Рє СЃ РѕРґРЅРёРј С†РµР»С‹Рј.
+// РџСЂРѕСЃСЊР±Р° РЅРµ РїСѓС‚Р°С‚СЊ СЃ РјСѓР»СЊС‚РёР»РµРєСЃРµРјР°РјРё!
 //
-// 28.09.2006 - введено понятие веса состояния координаты, чтобы учитывать
-//              в тезаурусе разную проводимость связей.
+// 28.09.2006 - РІРІРµРґРµРЅРѕ РїРѕРЅСЏС‚РёРµ РІРµСЃР° СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹, С‡С‚РѕР±С‹ СѓС‡РёС‚С‹РІР°С‚СЊ
+//              РІ С‚РµР·Р°СѓСЂСѓСЃРµ СЂР°Р·РЅСѓСЋ РїСЂРѕРІРѕРґРёРјРѕСЃС‚СЊ СЃРІСЏР·РµР№.
 // -----------------------------------------------------------------------------
 //
 // CD->11.12.1995
-// LC->18.12.2009
+// LC->03.04.2018
 // --------------
 
 #include <lem/ucstring_functions.h>
@@ -29,224 +29,228 @@ using namespace lem;
 using namespace Solarix;
 using namespace lem::Iridium;
 
-UCStringSet::UCStringSet(void):MCollect<UCString>()
+UCStringSet::UCStringSet() :MCollect<UCString>()
 {}
 
 #if defined SOL_LOADTXT
-UCStringSet::UCStringSet( const Sol_IO &io, Macro_Parser& txtfile )
-{ LoadTxt(io,txtfile); }
+UCStringSet::UCStringSet(const Sol_IO &io, Macro_Parser& txtfile)
+{
+    LoadTxt(io, txtfile);
+}
 #endif
 
 
-UCStringSet::UCStringSet( const UCString &s )
+UCStringSet::UCStringSet(const UCString &s)
 {
- push_back( s );
- return;
+    push_back(s);
+    return;
 }
 
 #if defined SOL_LOADTXT
 /****************************************************************************
- Загружаем из текстового файла множество символьных строк. Если слово
- только одно, то оно может идти непосредственно. Если необходимо определить
- несколько слов, то они заключаются в фигурные скобочки.
- Форматы:
-         1. лексема
-         2. { лексема лексема ... лексема }
+ Р—Р°РіСЂСѓР¶Р°РµРј РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РјРЅРѕР¶РµСЃС‚РІРѕ СЃРёРјРІРѕР»СЊРЅС‹С… СЃС‚СЂРѕРє. Р•СЃР»Рё СЃР»РѕРІРѕ
+ С‚РѕР»СЊРєРѕ РѕРґРЅРѕ, С‚Рѕ РѕРЅРѕ РјРѕР¶РµС‚ РёРґС‚Рё РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ. Р•СЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ РѕРїСЂРµРґРµР»РёС‚СЊ
+ РЅРµСЃРєРѕР»СЊРєРѕ СЃР»РѕРІ, С‚Рѕ РѕРЅРё Р·Р°РєР»СЋС‡Р°СЋС‚СЃСЏ РІ С„РёРіСѓСЂРЅС‹Рµ СЃРєРѕР±РѕС‡РєРё.
+ Р¤РѕСЂРјР°С‚С‹:
+         1. Р»РµРєСЃРµРјР°
+         2. { Р»РµРєСЃРµРјР° Р»РµРєСЃРµРјР° ... Р»РµРєСЃРµРјР° }
 
- Второй формат охватывает также и первый, если в фигурных скобочках указать
- только одну лексему. Способ хранения в обоих случаях одинаков!
+ Р’С‚РѕСЂРѕР№ С„РѕСЂРјР°С‚ РѕС…РІР°С‚С‹РІР°РµС‚ С‚Р°РєР¶Рµ Рё РїРµСЂРІС‹Р№, РµСЃР»Рё РІ С„РёРіСѓСЂРЅС‹С… СЃРєРѕР±РѕС‡РєР°С… СѓРєР°Р·Р°С‚СЊ
+ С‚РѕР»СЊРєРѕ РѕРґРЅСѓ Р»РµРєСЃРµРјСѓ. РЎРїРѕСЃРѕР± С…СЂР°РЅРµРЅРёСЏ РІ РѕР±РѕРёС… СЃР»СѓС‡Р°СЏС… РѕРґРёРЅР°РєРѕРІ!
 *****************************************************************************/
-void UCStringSet::LoadTxt( const Sol_IO &io, Macro_Parser &txtfile )
+void UCStringSet::LoadTxt(const Sol_IO &io, Macro_Parser &txtfile)
 {
- BethToken t = txtfile.read();
+    BethToken t = txtfile.read();
 
- if( t.GetToken()!=B_OFIGPAREN )
-  {
-   // Первый формат.
-   push_back(t.c_str());
-  }
- else
-  {
-   // Второй формат.
-   while( !txtfile.eof() )
+    if (t.GetToken() != B_OFIGPAREN)
     {
-     if( txtfile.eof() )
-      {
-       Print_Error(t,txtfile);
-       io.merr().printf(
-                        "End of file has been reached before "
-                        "set of lexems completely loaded\n"
-                       );
-       LEM_STOPIT;
-      }
-
-     t = txtfile.read();
-
-     if( t.GetToken()==B_CFIGPAREN )
-      break;
-
-     push_back(t.string());
-     weight.push_back(1);
+        // РџРµСЂРІС‹Р№ С„РѕСЂРјР°С‚.
+        push_back(t.c_str());
     }
-  }
+    else
+    {
+        // Р’С‚РѕСЂРѕР№ С„РѕСЂРјР°С‚.
+        while (!txtfile.eof())
+        {
+            if (txtfile.eof())
+            {
+                Print_Error(t, txtfile);
+                io.merr().printf(
+                    "End of file has been reached before "
+                    "set of lexems completely loaded\n"
+                );
+                LEM_STOPIT;
+            }
 
- return;
+            t = txtfile.read();
+
+            if (t.GetToken() == B_CFIGPAREN)
+                break;
+
+            push_back(t.string());
+            weight.push_back(1);
+        }
+    }
+
+    return;
 }
 #endif
 
 
 
 #if defined SOL_SAVETXT
-void UCStringSet::SaveTxt( OFormatter &txtfile ) const
+void UCStringSet::SaveTxt(OFormatter &txtfile) const
 {
- if( size()!=1 )
-  txtfile << sol_get_token(B_OFIGPAREN);
+    if (size() != 1)
+        txtfile << sol_get_token(B_OFIGPAREN);
 
- Print(txtfile);
+    Print(txtfile);
 
- if( size()!=1 )
-  txtfile << sol_get_token(B_CFIGPAREN);
+    if (size() != 1)
+        txtfile << sol_get_token(B_CFIGPAREN);
 
- return;
+    return;
 }
 #endif
 
 
 /*********************************************************************
- Свободная печать содержимого множества. Обычно вызывается при печати
- имен словарных статей во время компиляции с трассировкой.
+ РЎРІРѕР±РѕРґРЅР°СЏ РїРµС‡Р°С‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РјРЅРѕР¶РµСЃС‚РІР°. РћР±С‹С‡РЅРѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РїРµС‡Р°С‚Рё
+ РёРјРµРЅ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё СЃ С‚СЂР°СЃСЃРёСЂРѕРІРєРѕР№.
 **********************************************************************/
-void UCStringSet::Print( OFormatter &s ) const
+void UCStringSet::Print(OFormatter &s) const
 {
- s.printf( "%vfE" );
+    s.printf("%vfE");
 
- const int n=CastSizeToInt(size());
- for( int i=0; i<n; i++ )
-  {
-   s << get(i);
+    const int n = CastSizeToInt(size());
+    for (int i = 0; i < n; i++)
+    {
+        s << get(i);
 
-   if( i<n-1 )
-    s << " "; // Отдельные слова разделяем пробелом.
-  }
+        if (i < n - 1)
+            s << " "; // РћС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРІР° СЂР°Р·РґРµР»СЏРµРј РїСЂРѕР±РµР»РѕРј.
+    }
 
- s.printf( "%vn" );
- return;
+    s.printf("%vn");
+    return;
 }
 
 /********************************************************************
- Поиск строки в загруженном множестве. Если таковая найдена, то
- возвращаем ее внутренний индекс=(0,...), иначе возвращается UNKNOWN.
+ РџРѕРёСЃРє СЃС‚СЂРѕРєРё РІ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРј РјРЅРѕР¶РµСЃС‚РІРµ. Р•СЃР»Рё С‚Р°РєРѕРІР°СЏ РЅР°Р№РґРµРЅР°, С‚Рѕ
+ РІРѕР·РІСЂР°С‰Р°РµРј РµРµ РІРЅСѓС‚СЂРµРЅРЅРёР№ РёРЅРґРµРєСЃ=(0,...), РёРЅР°С‡Рµ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ UNKNOWN.
 *********************************************************************/
-int UCStringSet::Find( const UCString& name ) const
+int UCStringSet::Find(const UCString& name) const
 {
- for( lem::Container::size_type i=0; i<size(); i++ )
-  if( get(i)==name )
-   return CastSizeToInt(i);
+    for (lem::Container::size_type i = 0; i < size(); i++)
+        if (get(i) == name)
+            return CastSizeToInt(i);
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
-int UCStringSet::FindNoCase( const UCString& name ) const
+int UCStringSet::FindNoCase(const UCString& name) const
 {
- for( lem::Container::size_type i=0; i<size(); i++ )
-  if( get(i).eqi(name) )
-   return CastSizeToInt(i);
+    for (lem::Container::size_type i = 0; i < size(); i++)
+        if (get(i).eqi(name))
+            return CastSizeToInt(i);
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
 /***************************************************************************
- Конкатенация двух множеств лексем (используется прежде всего в объявлении
- грамматических координат, когда наборы состояний постепенно добавляются).
+ РљРѕРЅРєР°С‚РµРЅР°С†РёСЏ РґРІСѓС… РјРЅРѕР¶РµСЃС‚РІ Р»РµРєСЃРµРј (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїСЂРµР¶РґРµ РІСЃРµРіРѕ РІ РѕР±СЉСЏРІР»РµРЅРёРё
+ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёС… РєРѕРѕСЂРґРёРЅР°С‚, РєРѕРіРґР° РЅР°Р±РѕСЂС‹ СЃРѕСЃС‚РѕСЏРЅРёР№ РїРѕСЃС‚РµРїРµРЅРЅРѕ РґРѕР±Р°РІР»СЏСЋС‚СЃСЏ).
 ****************************************************************************/
-void UCStringSet::AddList( const UCStringSet& ss )
+void UCStringSet::AddList(const UCStringSet& ss)
 {
- const int nss=CastSizeToInt(ss.size());
- // Контейнер сразу увеличит свой размер на известное количество
- // элементов добавки nss.
- ReshapeBy(nss);
- for( int i=0; i<nss; i++ )
-  {
-   push_back(ss[i]);
-   weight.push_back( ss.weight[i]);
-  }
+    const int nss = CastSizeToInt(ss.size());
+    // РљРѕРЅС‚РµР№РЅРµСЂ СЃСЂР°Р·Сѓ СѓРІРµР»РёС‡РёС‚ СЃРІРѕР№ СЂР°Р·РјРµСЂ РЅР° РёР·РІРµСЃС‚РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ
+    // СЌР»РµРјРµРЅС‚РѕРІ РґРѕР±Р°РІРєРё nss.
+    ReshapeBy(nss);
+    for (int i = 0; i < nss; i++)
+    {
+        push_back(ss[i]);
+        weight.push_back(ss.weight[i]);
+    }
 
- return;
+    return;
 }
 
-void UCStringSet::Add( const UCString &lexem, int w )
+void UCStringSet::Add(const UCString &lexem, int w)
 {
- push_back( lexem );
- weight.push_back(1);
- return;
+    push_back(lexem);
+    weight.push_back(1);
+    return;
 }
 
 /********************************************************************
- Все строки-элементы объединяет в одну непрерывную строку, отдельные
- лексемы разделены пробелами.
+ Р’СЃРµ СЃС‚СЂРѕРєРё-СЌР»РµРјРµРЅС‚С‹ РѕР±СЉРµРґРёРЅСЏРµС‚ РІ РѕРґРЅСѓ РЅРµРїСЂРµСЂС‹РІРЅСѓСЋ СЃС‚СЂРѕРєСѓ, РѕС‚РґРµР»СЊРЅС‹Рµ
+ Р»РµРєСЃРµРјС‹ СЂР°Р·РґРµР»РµРЅС‹ РїСЂРѕР±РµР»Р°РјРё.
 *********************************************************************/
 const UFString UCStringSet::string(void) const
 {
- UFString res;
- for( lem::Container::size_type i=0; i<size(); i++ )
-  {
-   if(i) res += ' ';
-   res += get(i).c_str();
-  }
+    UFString res;
+    for (lem::Container::size_type i = 0; i < size(); i++)
+    {
+        if (i) res += L' ';
+        res += get(i).c_str();
+    }
 
- return res;
+    return res;
 }
 
 
-bool UCStringSet::operator==( const UCStringSet &x ) const
+bool UCStringSet::operator==(const UCStringSet &x) const
 {
- if( size()!=x.size() )
-  return false;
+    if (size() != x.size())
+        return false;
 
- for( lem::Container::size_type i=0; i<size(); i++ )
-  if( get(i) != x[i] )
-   return false;
+    for (lem::Container::size_type i = 0; i < size(); i++)
+        if (get(i) != x[i])
+            return false;
 
- return true;
+    return true;
 }
 
 
-bool UCStringSet::operator!=( const UCStringSet &x ) const
+bool UCStringSet::operator!=(const UCStringSet &x) const
 {
- if( size()!=x.size() )
-  return true;
+    if (size() != x.size())
+        return true;
 
- for( lem::Container::size_type i=0; i<size(); i++ )
-  if( get(i) != x[i] )
-   return true;
+    for (lem::Container::size_type i = 0; i < size(); i++)
+        if (get(i) != x[i])
+            return true;
 
- return false;
+    return false;
 }
 
 
-void UCStringSet::Save_Packed( lem::Stream &bin ) const
+void UCStringSet::Save_Packed(lem::Stream &bin) const
 {
- uint8_t N = size();
+    uint8_t N = size();
+    LEM_CHECKIT_Z(N < 128);
+    bin.write(&N, 1);
+    for (auto& item : *this)
+    {
+        lem::Save_Packed(item, bin);
+    }
 
- LEM_CHECKIT_Z( N<128 );
-
- bin.write( &N, 1 );
- for( const_iterator i=begin(); i!=end(); i++ )
-  lem::Save_Packed( *i, bin );
-
- return; 
+    return;
 }
 
-void UCStringSet::Load_Packed( lem::Stream &bin )
+void UCStringSet::Load_Packed(lem::Stream &bin)
 {
- uint8_t N = 0;
- bin.read( &N, 1 );
- resize( N );
+    uint8_t N = 0;
+    bin.read(&N, 1);
+    resize(N);
 
- for( int i=0; i<N; i++ )
-  lem::Load_Packed( &(operator[](i)), bin );
+    for (auto& item : *this)
+    {
+        lem::Load_Packed(&item, bin);
+    }
 
- return;
+    return;
 }

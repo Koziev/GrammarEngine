@@ -4,31 +4,31 @@
 using namespace Solarix;
 
 
-SourceFilenameEnumerator::SourceFilenameEnumerator( LS_ResultSet * _rs )
- : rs(_rs)
+SourceFilenameEnumerator::SourceFilenameEnumerator(LS_ResultSet * _rs)
+    : rs(_rs)
 {
 }
 
 
-SourceFilenameEnumerator::~SourceFilenameEnumerator(void)
+SourceFilenameEnumerator::~SourceFilenameEnumerator()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
 
-bool SourceFilenameEnumerator::Fetch(void)
+bool SourceFilenameEnumerator::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
-int SourceFilenameEnumerator::GetId(void)
+int SourceFilenameEnumerator::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
 
-lem::Path SourceFilenameEnumerator::GetFilename(void)
+lem::Path SourceFilenameEnumerator::GetFilename()
 {
- return lem::Path(rs->GetUFString(1));
+    return lem::Path(rs->GetUFString(1));
 }

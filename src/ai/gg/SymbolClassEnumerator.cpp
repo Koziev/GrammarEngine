@@ -6,37 +6,37 @@
 
 using namespace Solarix;
 
-SymbolClassEnumerator::SymbolClassEnumerator( AlphabetStorage *_db, GraphGram *_gg )
- : rs(NULL), db(_db), gg(_gg)
+SymbolClassEnumerator::SymbolClassEnumerator(AlphabetStorage *_db, GraphGram *_gg)
+    : rs(nullptr), db(_db), gg(_gg)
 {
 }
 
 SymbolClassEnumerator::~SymbolClassEnumerator(void)
 {
- lem_rub_off(rs);
- return;
+    lem_rub_off(rs);
+    return;
 }
 
 
 bool SymbolClassEnumerator::Fetch(void)
 {
- if( rs==NULL )
-  {
-   rs = db->ListClasses();
-  }
+    if (rs == nullptr)
+    {
+        rs = db->ListClasses();
+    }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
 int SymbolClassEnumerator::GetId(void)
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
 const GramClass& SymbolClassEnumerator::GetItem(void)
 {
- const int id = rs->GetInt(0);
- return (const GramClass&)gg->classes()[id]; 
+    const int id = rs->GetInt(0);
+    return (const GramClass&)gg->classes()[id];
 }
 

@@ -1,8 +1,8 @@
 #if !defined SOL_NO_AA
 
-// 11.10.2011 - äîáàâëåíà ñåðèàëèçàöèÿ â XML
+// 11.10.2011 - Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° ÑÐµÑ€Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð² XML
 
-// LC->11.10.2011
+// LC->02.04.2018
 
 #include <lem/conversions.h>
 #include <lem/solarix/tokens.h>
@@ -17,136 +17,138 @@ TreeMarks::TreeMarks(void)
 {
 }
 
-TreeMarks::TreeMarks( const UCString &Name )
- : name(Name)
+TreeMarks::TreeMarks(const UCString &Name)
+    : name(Name)
 {
- LEM_CHECKIT_Z(name.empty()==false );
+    LEM_CHECKIT_Z(name.empty() == false);
 }
 
-TreeMarks::TreeMarks( const TreeMarks & x )
- : name(x.name)
+TreeMarks::TreeMarks(const TreeMarks & x)
+    : name(x.name)
 {
- for( lem::Container::size_type i=0; i<x.values.size(); ++i )
-  values.push_back( new TrValue( * x.values[i] ) );
+    for (lem::Container::size_type i = 0; i < x.values.size(); ++i)
+        values.push_back(new TrValue(*x.values[i]));
 
- return;
+    return;
 }
 
 TreeMarks::~TreeMarks(void)
 {
- Clear();
- return;
-}
-
- 
-void TreeMarks::operator=( const TreeMarks &x )
-{
- if( this!=&x )
-  {
-   name = x.name;
-   Clear();
-
-   for( lem::Container::size_type i=0; i<x.values.size(); ++i )
-    values.push_back( new TrValue( * x.values[i] ) );
-  }
-
- return;
-}
-
-void TreeMarks::Add( TrValue *v )
-{
- values.push_back(v);
- return;
+    Clear();
+    return;
 }
 
 
-void TreeMarks::Add( const TreeMarks &src )
+void TreeMarks::operator=(const TreeMarks &x)
 {
- for( lem::Container::size_type i=0; i<src.values.size(); ++i )
-  Add( new TrValue( *src.values[i] ) );
+    if (this != &x)
+    {
+        name = x.name;
+        Clear();
 
- return;
+        for (lem::Container::size_type i = 0; i < x.values.size(); ++i)
+            values.push_back(new TrValue(*x.values[i]));
+    }
+
+    return;
+}
+
+void TreeMarks::Add(TrValue *v)
+{
+    values.push_back(v);
+    return;
+}
+
+
+void TreeMarks::Add(const TreeMarks &src)
+{
+    for (lem::Container::size_type i = 0; i < src.values.size(); ++i)
+        Add(new TrValue(*src.values[i]));
+
+    return;
 }
 
 
 void TreeMarks::Clear(void)
 {
- for( lem::Container::size_type i=0; i<values.size(); ++i )
-  delete values[i];
+    for (auto value : values)
+    {
+        delete value;
+    }
 
- values.clear();
- return; 
+    values.clear();
+    return;
 }
 
 
 #if defined SOL_SAVEBIN
-void TreeMarks::SaveBin( lem::Stream &bin ) const
+void TreeMarks::SaveBin(lem::Stream &bin) const
 {
- bin.write( &name, sizeof(name) );
- bin.write_int( CastSizeToInt(values.size()) );
- for( lem::Container::size_type i=0; i<values.size(); ++i )
-  values[i]->SaveBin(bin); 
+    bin.write(&name, sizeof(name));
+    bin.write_int(CastSizeToInt(values.size()));
+    for (auto value : values)
+    {
+        value->SaveBin(bin);
+    }
 
- return;
+    return;
 }
 #endif
 
 
 
 #if defined SOL_LOADBIN
-void TreeMarks::LoadBin( lem::Stream &bin )
+void TreeMarks::LoadBin(lem::Stream &bin)
 {
- bin.read( &name, sizeof(name) );
- const int n = bin.read_int();
- for( int i=0; i<n; ++i )
-  {
-   TrValue *v = new TrValue;
-   v->LoadBin(bin);
-   // todo v->Link(...)
-  }
- 
+    bin.read(&name, sizeof(name));
+    const int n = bin.read_int();
+    for (int i = 0; i < n; ++i)
+    {
+        TrValue *v = new TrValue;
+        v->LoadBin(bin);
+    }
+
 }
 #endif
 
 
-void TreeMarks::Print( const Solarix::Dictionary &dict, lem::OFormatter &out ) const
+void TreeMarks::Print(const Solarix::Dictionary &dict, lem::OFormatter &out) const
 {
- out.printf( "%vfA%us%vn=", name.c_str() );
- if( values.size()>1 )
-  out.printf( "%vf6{%vn " );
+    out.printf("%vfA%us%vn=", name.c_str());
+    if (values.size() > 1)
+        out.printf("%vf6{%vn ");
 
- for( lem::Container::size_type i=0; i<values.size(); ++i )
-  {
-   out.printf( ' ' );
-   values[i]->Print( dict, out );
-  }
+    for (auto value : values)
+    {
+        out.printf(' ');
+        value->Print(dict, out);
+    }
 
- if( values.size()>1 )
-  out.printf( " %vf6{%vn" );
+    if (values.size() > 1)
+        out.printf(" %vf6{%vn");
 
- return;
+    return;
 }
 
 
-void TreeMarks::PrintXML( lem::OFormatter &xml, const Solarix::Dictionary &dict ) const
+void TreeMarks::PrintXML(lem::OFormatter &xml, const Solarix::Dictionary &dict) const
 {
- xml.printf( "<mark>\n" );
- xml.printf( "<name>%us</name>\n", name.c_str() );
+    xml.printf("<mark>\n");
+    xml.printf("<name>%us</name>\n", name.c_str());
 
- xml.printf( "<values count=\"%d\">\n", CastSizeToInt(values.size()) );
+    xml.printf("<values count=\"%d\">\n", CastSizeToInt(values.size()));
 
- for( lem::Container::size_type i=0; i<values.size(); ++i )
-  {
-   xml.printf( "<value n=\"%d\">\n", CastSizeToInt(i) );
-   values[i]->PrintXML( xml, dict );
-   xml.printf( "</value>\n" );
-  }
- xml.printf( "</values>\n" );
+    for (lem::Container::size_type i = 0; i < values.size(); ++i)
+    {
+        xml.printf("<value n=\"%d\">\n", CastSizeToInt(i));
+        values[i]->PrintXML(xml, dict);
+        xml.printf("</value>\n");
+    }
+    xml.printf("</values>\n");
 
- xml.printf( "</mark>\n" );
+    xml.printf("</mark>\n");
 
- return;
+    return;
 }
-
 
 #endif

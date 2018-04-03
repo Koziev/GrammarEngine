@@ -9,280 +9,282 @@
 using namespace Solarix;
 
 
-GG_Coordinates::GG_Coordinates( GraphGram *_gg )
- : gg(_gg), db(NULL)
+GG_Coordinates::GG_Coordinates(GraphGram *_gg)
+    : gg(_gg), db(nullptr)
 {
 }
 
 
-void GG_Coordinates::Connect( AlphabetStorage *_db )
+void GG_Coordinates::Connect(AlphabetStorage *_db)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker guard(&cs);
+#endif
 
- coord_ptr.clear();
- coord_id.clear();
- id2coord.clear();
- name2id.clear();
+    coord_ptr.clear();
+    coord_id.clear();
+    id2coord.clear();
+    name2id.clear();
 
- LEM_CHECKIT_Z(_db!=NULL);
- db = _db;
- return;
+    LEM_CHECKIT_Z(_db != nullptr);
+    db = _db;
+    return;
 }
 
 
-GramCoord* GG_Coordinates::Get( int id )
+GramCoord* GG_Coordinates::Get(int id)
 {
- LEM_CHECKIT_Z( id!=UNKNOWN );
+    LEM_CHECKIT_Z(id != UNKNOWN);
 
- std::map< int, int >::const_iterator it = id2coord.find(id);
- if( it!=id2coord.end() )
-  {
-   return coord_ptr[it->second];
-  }
+    auto it = id2coord.find(id);
+    if (it != id2coord.end())
+    {
+        return coord_ptr[it->second];
+    }
 
- // â êýøå êëàññ ñ óêàçàííûì id íå íàéäåí, ïîèùåì â ÁÄ.
- GramCoord *new_coord = new GramCoord();
- if( db->GetCoord( id, *new_coord ) )
-  { 
-   const int index = CastSizeToInt(coord_ptr.size());
-   coord_ptr.push_back(new_coord);
-   coord_id.push_back(id);
-   id2coord.insert( std::make_pair( id, index ) );
-   name2id.insert( std::make_pair( lem::to_upper(new_coord->GetName().front()), id ) );
+    // Ð² ÐºÑÑˆÐµ ÐºÐ»Ð°ÑÑ Ñ ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ñ‹Ð¼ id Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½, Ð¿Ð¾Ð¸Ñ‰ÐµÐ¼ Ð² Ð‘Ð”.
+    GramCoord *new_coord = new GramCoord();
+    if (db->GetCoord(id, *new_coord))
+    {
+        const int index = CastSizeToInt(coord_ptr.size());
+        coord_ptr.push_back(new_coord);
+        coord_id.push_back(id);
+        id2coord.insert(std::make_pair(id, index));
+        name2id.insert(std::make_pair(lem::to_upper(new_coord->GetName().front()), id));
 
-   return new_coord;
-  }
- else
-  {
-   delete new_coord;
-   lem::UFString msg( lem::format_str( L"Can not find the coordinate id=%d", id ) );
-   throw lem::E_BaseException(msg);
-  }
+        return new_coord;
+    }
+    else
+    {
+        delete new_coord;
+        lem::UFString msg(lem::format_str(L"Can not find the coordinate id=%d", id));
+        throw lem::E_BaseException(msg);
+    }
 }
 
 
-const GramCoord& GG_Coordinates::operator[]( int id )
+const GramCoord& GG_Coordinates::operator[](int id)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker guard(&cs);
+#endif
 
- return *Get(id);
+    return *Get(id);
 }
 
-GramCoord& GG_Coordinates::GetCoord( int id )
+GramCoord& GG_Coordinates::GetCoord(int id)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker guard(&cs);
+#endif
 
- return *Get(id);
+    return *Get(id);
 }
 
 
-int GG_Coordinates::Find( const UCString &name )
+int GG_Coordinates::Find(const UCString &name)
 {
- LEM_CHECKIT_Z( !name.empty() );
+    LEM_CHECKIT_Z(!name.empty());
 
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker guard(&cs);
+#endif
 
- lem::UCString uname(lem::to_upper(name));
- std::map<lem::UCString,int>::const_iterator it = name2id.find( uname );
- if( it!=name2id.end() )
-  return it->second;
+    lem::UCString uname(lem::to_upper(name));
+    auto it = name2id.find(uname);
+    if (it != name2id.end())
+        return it->second;
 
- // ïîèùåì â ÁÄ
- const int id = db->FindCoord(name);
+    // Ð¿Ð¾Ð¸Ñ‰ÐµÐ¼ Ð² Ð‘Ð”
+    const int id = db->FindCoord(name);
 
- if( id!=UNKNOWN )
-  name2id.insert( std::make_pair(uname,id) );
+    if (id != UNKNOWN)
+        name2id.insert(std::make_pair(uname, id));
 
- return id;
+    return id;
 }
 
 
 int GG_Coordinates::Count(void)
 {
- return db->CountCoords();
+    return db->CountCoords();
 }
 
 
-int GG_Coordinates::Id2Index( int id )
+int GG_Coordinates::Id2Index(int id)
 {
- LEM_CHECKIT_Z( id!=UNKNOWN );
+    LEM_CHECKIT_Z(id != UNKNOWN);
 
- std::map< int, int >::const_iterator it = id2coord.find(id);
- if( it!=id2coord.end() )
-  {
-   return it->second;
-  }
+    auto it = id2coord.find(id);
+    if (it != id2coord.end())
+    {
+        return it->second;
+    }
 
- GramCoord *dummy = Get(id);
- return id2coord.find(id)->second;
+    GramCoord *dummy = Get(id);
+    return id2coord.find(id)->second;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 GramCoord* GG_Coordinates::LoadTxt(
-                                   lem::Iridium::Macro_Parser &txtfile,
-                                   bool IsRealized
-                                  )
+    lem::Iridium::Macro_Parser &txtfile,
+    bool IsRealized
+)
 {
- LEM_CHECKIT_Z( db!=NULL );
+    LEM_CHECKIT_Z(db != nullptr);
 
- #if defined LEM_THREADS
- lem::Process::CritSecLocker guard(&cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker guard(&cs);
+#endif
 
- const bool is_extern = !IsRealized;
+    const bool is_extern = !IsRealized;
 
- // Çàãðóæàåì ðåàëèçàöèþ èëè îáúÿâëåíèå êîîðäèíàòû.
- GramCoord *cl = new GramCoord( txtfile, *gg, IsRealized );
+    // Ð—Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑŽ Ð¸Ð»Ð¸ Ð¾Ð±ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹.
+    GramCoord *cl = new GramCoord(txtfile, *gg, IsRealized);
 
- const int ic = Find(cl->GetName().front());
+    const int ic = Find(cl->GetName().front());
 
- if( ic==UNKNOWN )
-  {
-   AddNewCoord(cl,IsRealized);
-   return cl;
-  } 
- else
-  {
-   const int index = Id2Index(ic);
-   GramCoord *old_coord = coord_ptr[index];
-   if( is_extern && !old_coord->IsRealized() )
+    if (ic == UNKNOWN)
     {
-     // Ôðàãìåíò òèïà:
-     //
-     // extern enum X
-     //         :
-     // extern enum X
+        AddNewCoord(cl, IsRealized);
+        return cl;
+    }
+    else
+    {
+        const int index = Id2Index(ic);
+        GramCoord *old_coord = coord_ptr[index];
+        if (is_extern && !old_coord->IsRealized())
+        {
+            // Ð¤Ñ€Ð°Ð³Ð¼ÐµÐ½Ñ‚ Ñ‚Ð¸Ð¿Ð°:
+            //
+            // extern enum X
+            //         :
+            // extern enum X
 
-     if( *old_coord != *cl )
-      {
-       // Íå ñîâïàäàþò îáúÿâëåíèÿ äëÿ êëàññà.
-       gg->GetIO().merr().printf(
-                                  "%vfDTwo coordinates have the same name [%us].%vn\n"
-                                  , cl->GetName().front().c_str()
-                                 );
-       lem::Iridium::Print_Error(txtfile);
-       throw lem::E_ParserError();
-      }
+            if (*old_coord != *cl)
+            {
+                // ÐÐµ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÑŽÑ‚ Ð¾Ð±ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ñ Ð´Ð»Ñ ÐºÐ»Ð°ÑÑÐ°.
+                gg->GetIO().merr().printf(
+                    "%vfDTwo coordinates have the same name [%us].%vn\n"
+                    , cl->GetName().front().c_str()
+                );
+                lem::Iridium::Print_Error(txtfile);
+                throw lem::E_ParserError();
+            }
 
-     delete cl;
-     return NULL;
+            delete cl;
+            return nullptr;
+        }
+
+        if (!is_extern && !old_coord->IsRealized())
+        {
+            // Ð¤Ñ€Ð°Ð³Ð¼ÐµÐ½Ñ‚ Ñ‚Ð¸Ð¿Ð°:
+            //
+            // extern enum X
+            //         :
+            // enum X { ... }
+            if (old_coord->IsRealized() && *cl != *old_coord)
+            {
+                gg->GetIO().merr().printf(
+                    "%vfDTwo coords have the same name [%us].%vn\n"
+                    , cl->GetName().front().c_str()
+                );
+                lem::Iridium::Print_Error(txtfile);
+                throw lem::E_ParserError();
+            }
+            else
+            {
+                // Ð—Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°ÐµÐ¼ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑŽ Ð²Ð¼ÐµÑÑ‚Ð¾ Ð¾Ð±ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ñ.
+                cl->id = old_coord->id;
+                delete old_coord;
+                coord_ptr[index] = cl;
+                db->StoreCoord(cl->id, *cl);
+            }
+
+            return nullptr;
+        }
+
+        if (is_extern && old_coord->IsRealized())
+        {
+            // Ð¤Ñ€Ð°Ð³Ð¼ÐµÐ½Ñ‚:
+            //
+            //   enum X { ... }
+            //          :
+            //   extern enum X
+
+            if (cl->IsRealized() && *cl != *old_coord)
+            {
+                gg->GetIO().merr().printf(
+                    "%vfDTwo coordinates have the same name [%us].%vn\n"
+                    , cl->GetName().front().c_str()
+                );
+                lem::Iridium::Print_Error(txtfile);
+                throw lem::E_ParserError();
+            }
+
+            delete cl;
+            return nullptr;
+        }
+
+        // Ð•ÑÐ»Ð¸ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ð° Ñ Ñ‚Ð°ÐºÐ¸Ð¼ Ð¸Ð¼ÐµÐ½ÐµÐ¼ ÑƒÐ¶Ðµ Ð±Ñ‹Ð»Ð° Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð°, Ñ‚Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼
+        // Ðº Ð½ÐµÐ¹ Ð½Ð¾Ð²Ñ‹Ðµ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ñ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ð¹.
+        if (!is_extern && old_coord->IsRealized())
+        {
+            // ÐŸÑ€Ð¾Ð²Ð¾Ð´Ð¸Ð¼ ÐºÐ¾Ð½ÐºÐ°Ñ‚ÐµÐ½Ð°Ñ†Ð¸ÑŽ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚. ÐÐ¾ ÑÐ½Ð°Ñ‡Ð°Ð»Ð° Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ð¼, Ñ‡Ñ‚Ð¾
+            // Ð½ÐµÑ‚ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð° ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ð¹.
+            const int nstates = cl->GetTotalStates();
+            for (int is = 0; is < nstates; is++)
+            {
+                if (old_coord->FindState(cl->GetStateName(is)) != UNKNOWN)
+                {
+                    gg->GetIO().merr().printf(
+                        "%vfDState [%us] definition duplicated for a coordinate [%us]%vn\n",
+                        cl->GetStateName(is).c_str(),
+                        cl->GetName().string().c_str()
+                    );
+
+                    Print_Error(txtfile);
+                    throw lem::E_ParserError();
+                }
+            }
+
+            lem::Ptr<GramCoordUpdator> updator = old_coord->updator;
+            old_coord->updator.Delete();
+            old_coord->Add(*cl);
+            delete cl;
+            db->StoreCoord(old_coord->id, *old_coord);
+            old_coord->updator = updator;
+            return nullptr;
+        }
     }
 
-   if( !is_extern && !old_coord->IsRealized() )
-    {
-     // Ôðàãìåíò òèïà:
-     //
-     // extern enum X
-     //         :
-     // enum X { ... }
-     if( old_coord->IsRealized() && *cl!=*old_coord )
-      {
-       gg->GetIO().merr().printf(
-                                  "%vfDTwo coords have the same name [%us].%vn\n"
-                                  , cl->GetName().front().c_str()
-                                 );
-       lem::Iridium::Print_Error(txtfile);
-       throw lem::E_ParserError();
-      }
-     else
-      {
-       // Çàïîìèíàåì ðåàëèçàöèþ âìåñòî îáúÿâëåíèÿ.
-       cl->id = old_coord->id;
-       delete old_coord;
-       coord_ptr[index] = cl;
-       db->StoreCoord(cl->id,*cl);
-      }
-
-     return NULL;
-    }
-
-   if( is_extern && old_coord->IsRealized() )
-    {
-     // Ôðàãìåíò:
-     //
-     //   enum X { ... }
-     //          :
-     //   extern enum X
-
-     if( cl->IsRealized() && *cl!=*old_coord )
-      {
-       gg->GetIO().merr().printf(
-                                  "%vfDTwo coordinates have the same name [%us].%vn\n"
-                                  , cl->GetName().front().c_str()
-                                 );
-       lem::Iridium::Print_Error(txtfile);
-       throw lem::E_ParserError();
-      }
-
-     delete cl;
-     return NULL;
-    }
-
-   // Åñëè êîîðäèíàòà ñ òàêèì èìåíåì óæå áûëà îïðåäåëåíà, òî äîáàâëÿåì
-   // ê íåé íîâûå îïðåäåëåíèÿ ñîñòîÿíèé.
-   if( !is_extern && old_coord->IsRealized() )
-    {
-     // Ïðîâîäèì êîíêàòåíàöèþ êîîðäèíàò. Íî ñíà÷àëà ïðîâåðèì, ÷òî
-     // íåò ïîâòîðà ñîñòîÿíèé.
-     const int nstates=cl->GetTotalStates();
-     for( int is=0; is<nstates; is++ )
-      if( old_coord->FindState( cl->GetStateName(is) ) != UNKNOWN )
-       {
-        gg->GetIO().merr().printf(
-                              "%vfDState [%us] definition duplicated for a coordinate [%us]%vn\n",
-                              cl->GetStateName(is).c_str(),
-                              cl->GetName().string().c_str()
-                             );
-
-        Print_Error(txtfile);
-        throw lem::E_ParserError();
-       }
-
-     lem::Ptr<GramCoordUpdator> updator = old_coord->updator;
-     old_coord->updator.Delete();
-     old_coord->Add(*cl);
-     delete cl;
-     db->StoreCoord( old_coord->id, *old_coord );
-     old_coord->updator = updator;
-     return NULL;
-    }
-  }
-
- delete cl;
- return NULL;
+    delete cl;
+    return nullptr;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void GG_Coordinates::AddNewCoord( GramCoord *new_coord, bool IsRealized )
+void GG_Coordinates::AddNewCoord(GramCoord *new_coord, bool IsRealized)
 {
- const int index = CastSizeToInt(coord_ptr.size());
+    const int index = CastSizeToInt(coord_ptr.size());
 
- const int id = db->AddCoord( *new_coord );
- new_coord->id = id;
+    const int id = db->AddCoord(*new_coord);
+    new_coord->id = id;
 
- coord_ptr.push_back(new_coord);
- coord_id.push_back(id);
- id2coord.insert( std::make_pair( id, index ) );
+    coord_ptr.push_back(new_coord);
+    coord_id.push_back(id);
+    id2coord.insert(std::make_pair(id, index));
 
- name2id.insert( std::make_pair( lem::to_upper(new_coord->GetName().front()), id ) );
+    name2id.insert(std::make_pair(lem::to_upper(new_coord->GetName().front()), id));
 
- return;
+    return;
 }
 #endif
 
-CoordEnumerator* GG_Coordinates::Enumerate(void)
+CoordEnumerator* GG_Coordinates::Enumerate()
 {
- return new GG_CoordEnumerator( db, this );
+    return new GG_CoordEnumerator(db, this);
 }
 

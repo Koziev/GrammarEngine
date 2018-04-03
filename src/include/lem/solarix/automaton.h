@@ -1,204 +1,176 @@
-// -----------------------------------------------------------------------------
-// File AUTOMATON.H
-//
-// (c) by Koziev Elijah     all rights reserved 
-//
-// SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
-//
-// Content:
-// SOLARIX Grammar engine
-// Automaton - базовый класс для создания Автоматов Системы.
-// -----------------------------------------------------------------------------
-//
-// CD->29.05.1997
-// LC->02.07.2012
-// --------------
-
 #ifndef SOL_AUTOMATON__H
 #define SOL_AUTOMATON__H
 #pragma once
 
- #include <lem/sol_io.h>
- #include <lem/fstring.h>
- #include <lem/noncopyable.h>
- #include <lem/solarix/solarix_binarization_options.h>
- #include <lem/solarix/criterion.h>
- #include <lem/solarix/form_table.h>
- #include <lem/solarix/load_options.h>
- #include <lem/solarix/sql_production.h>
+#include <lem/sol_io.h>
+#include <lem/fstring.h>
+#include <lem/noncopyable.h>
+#include <lem/solarix/solarix_binarization_options.h>
+#include <lem/solarix/criterion.h>
+#include <lem/solarix/form_table.h>
+#include <lem/solarix/load_options.h>
+#include <lem/solarix/sql_production.h>
 
- namespace Solarix
- {
-  using lem::Iridium::BethToken;
-  using lem::Iridium::Macro_Parser;
-  using lem::OFormatter;
-  using lem::Stream;
+namespace Solarix
+{
+    using lem::Iridium::BethToken;
+    using lem::Iridium::Macro_Parser;
+    using lem::OFormatter;
+    using lem::Stream;
 
-  class Dictionary;
+    class Dictionary;
 
-  class Automaton : lem::NonCopyable
-  {
-   private:
-    bool was_loaded;    // true после первой загрузки из txt-файла.
-    int index;             // Индекс (идентификатор) автомата.
+    class Automaton : lem::NonCopyable
+    {
+    private:
+        bool was_loaded;    // true РїРѕСЃР»Рµ РїРµСЂРІРѕР№ Р·Р°РіСЂСѓР·РєРё РёР· txt-С„Р°Р№Р»Р°.
+        int index;          // РРЅРґРµРєСЃ (РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ) Р°РІС‚РѕРјР°С‚Р°.
 
-    // Запрещаем копировать Автомат (it is frightening to think what would
-    // have happened...)
-    Automaton( const Automaton& );
-    void operator=( const Automaton& );
+        // Р—Р°РїСЂРµС‰Р°РµРј РєРѕРїРёСЂРѕРІР°С‚СЊ РђРІС‚РѕРјР°С‚ (it is frightening to think what would
+        // have happened...)
+        Automaton(const Automaton&)=delete;
+        void operator=(const Automaton&)=delete;
 
-   protected:
-    Criteria_List *param;  // Список управляющих параметров.
-    Dictionary *dict;      // Указатель на Словарь, поддерживающий Автомат.
+    protected:
+        Criteria_List *param;  // РЎРїРёСЃРѕРє СѓРїСЂР°РІР»СЏСЋС‰РёС… РїР°СЂР°РјРµС‚СЂРѕРІ.
+        Dictionary *dict;      // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РЎР»РѕРІР°СЂСЊ, РїРѕРґРґРµСЂР¶РёРІР°СЋС‰РёР№ РђРІС‚РѕРјР°С‚.
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual bool ProcessLexem(
-                              const BethToken &t,
-                              Macro_Parser& txt,
-                              const Binarization_Options &options
-                             );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual bool ProcessLexem(
+            const BethToken &t,
+            Macro_Parser& txt,
+            const Binarization_Options &options
+        );
 
-    void load(
-              Macro_Parser &txtfile,
-              const Binarization_Options &options
-             );
+        void load(
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        );
 
-    /**************************************************************************
-     Метод вызывается перед первой загрузкой содержимого Автомата из текстового
-     файла. Может быть перегружен производными классами, чтобы реализовать
-     какую-либо подготовку к считыванию. Следует помнить, что описание автомата
-     может быть разнесено в несколько секций с одинаковой шапкой: например,
-     для Алфавита в одном файле секция Графической Грамматики содержит
-     определения цифр, в другом - определения латиницы, и так далее. Но только
-     перед считыванием первой секции будет вызван метод PreLoad.
-    ***************************************************************************/
-    virtual void PreLoad(
-                         Macro_Parser &txtfile,
-                         const Binarization_Options &options
-                        ) {}
+        /**************************************************************************
+         РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРµСЂРµРґ РїРµСЂРІРѕР№ Р·Р°РіСЂСѓР·РєРѕР№ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РђРІС‚РѕРјР°С‚Р° РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ
+         С„Р°Р№Р»Р°. РњРѕР¶РµС‚ Р±С‹С‚СЊ РїРµСЂРµРіСЂСѓР¶РµРЅ РїСЂРѕРёР·РІРѕРґРЅС‹РјРё РєР»Р°СЃСЃР°РјРё, С‡С‚РѕР±С‹ СЂРµР°Р»РёР·РѕРІР°С‚СЊ
+         РєР°РєСѓСЋ-Р»РёР±Рѕ РїРѕРґРіРѕС‚РѕРІРєСѓ Рє СЃС‡РёС‚С‹РІР°РЅРёСЋ. РЎР»РµРґСѓРµС‚ РїРѕРјРЅРёС‚СЊ, С‡С‚Рѕ РѕРїРёСЃР°РЅРёРµ Р°РІС‚РѕРјР°С‚Р°
+         РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°Р·РЅРµСЃРµРЅРѕ РІ РЅРµСЃРєРѕР»СЊРєРѕ СЃРµРєС†РёР№ СЃ РѕРґРёРЅР°РєРѕРІРѕР№ С€Р°РїРєРѕР№: РЅР°РїСЂРёРјРµСЂ,
+         РґР»СЏ РђР»С„Р°РІРёС‚Р° РІ РѕРґРЅРѕРј С„Р°Р№Р»Рµ СЃРµРєС†РёСЏ Р“СЂР°С„РёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРё СЃРѕРґРµСЂР¶РёС‚
+         РѕРїСЂРµРґРµР»РµРЅРёСЏ С†РёС„СЂ, РІ РґСЂСѓРіРѕРј - РѕРїСЂРµРґРµР»РµРЅРёСЏ Р»Р°С‚РёРЅРёС†С‹, Рё С‚Р°Рє РґР°Р»РµРµ. РќРѕ С‚РѕР»СЊРєРѕ
+         РїРµСЂРµРґ СЃС‡РёС‚С‹РІР°РЅРёРµРј РїРµСЂРІРѕР№ СЃРµРєС†РёРё Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ РјРµС‚РѕРґ PreLoad.
+        ***************************************************************************/
+        virtual void PreLoad(
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        ) {}
 
-    /************************************************************
-     Метод вызывается после загрузки каждой секции для выполнени
-     любых ритуалов над загруженной информацией. Например, можно
-     организовать второй проход по секции для разрешения ссылок
-     вперед.
-    *************************************************************/
-    virtual void PostRead(
-                          Macro_Parser &txtfile,
-                          const Binarization_Options &options
-                         ) {}
-    #endif
+        /************************************************************
+         РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё РєР°Р¶РґРѕР№ СЃРµРєС†РёРё РґР»СЏ РІС‹РїРѕР»РЅРµРЅРё
+         Р»СЋР±С‹С… СЂРёС‚СѓР°Р»РѕРІ РЅР°Рґ Р·Р°РіСЂСѓР¶РµРЅРЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРµР№. РќР°РїСЂРёРјРµСЂ, РјРѕР¶РЅРѕ
+         РѕСЂРіР°РЅРёР·РѕРІР°С‚СЊ РІС‚РѕСЂРѕР№ РїСЂРѕС…РѕРґ РїРѕ СЃРµРєС†РёРё РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ СЃСЃС‹Р»РѕРє
+         РІРїРµСЂРµРґ.
+        *************************************************************/
+        virtual void PostRead(
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        ) {}
+#endif
 
-   public:
-    Automaton( int Index );
-    virtual ~Automaton(void);
+    public:
+        Automaton(int Index);
+        virtual ~Automaton();
 
-    virtual void SetDictPtr( Dictionary *d );
+        virtual void SetDictPtr(Dictionary *d);
 
-    inline Criteria_List& params(void) const { return *param; }
+        inline Criteria_List& params() const { return *param; }
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual void Optimize(void) {}
-    #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual void Optimize() {}
+#endif
 
-    virtual void BeforeSyntaxRecompilation(void) {}
+        virtual void BeforeSyntaxRecompilation() {}
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual void LoadTxt(
-                         Macro_Parser &txtfile,
-                         const Binarization_Options &options
-                        );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual void LoadTxt(
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        );
 
-    /*************************************************************************
-     После полной загрузки Словаря из текстового файла необходимо подготовить
-     все подсистемы к работе в составе Вербальной Машины. Для этого классом
-     Dictionary вызывается данный виртуальный метод, переопределяемый
-     производными классами Автоматов.
-    **************************************************************************/
-    virtual void Prepare( const lem::Path &outdir, const Binarization_Options &opts ) {}
-    #endif
-
-
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual bool ProcessLexem2(
-                               const BethToken &t,
-                               Macro_Parser &txtfile,
-                               const Binarization_Options &options
-                              );
-    #endif
-
-    inline int GetIndex(void) const { return index; }
-
-    virtual void PrintMap( OFormatter &dst_stream );
-
-    #if defined SOL_LOADBIN
-    virtual void LoadBin( lem::Stream &bin, const Load_Options &opt );
-    #endif
-
-    #if defined SOL_LOADBIN
-    // Метод вызывается после загрузки автомата из бинарного файла
-    // Словаря и может перегружаться автоматами для выполнения
-    // развертывания неких своих структур.
-    virtual void AfterLoadBin(void) {}
-    virtual void DictionaryLoaded(void) {}
-    #endif
-
-    #if defined SOL_SAVEBIN
-    virtual void SaveBin( lem::Stream &bin ) const;
-    #endif
+        /*************************************************************************
+         РџРѕСЃР»Рµ РїРѕР»РЅРѕР№ Р·Р°РіСЂСѓР·РєРё РЎР»РѕРІР°СЂСЏ РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РЅРµРѕР±С…РѕРґРёРјРѕ РїРѕРґРіРѕС‚РѕРІРёС‚СЊ
+         РІСЃРµ РїРѕРґСЃРёСЃС‚РµРјС‹ Рє СЂР°Р±РѕС‚Рµ РІ СЃРѕСЃС‚Р°РІРµ Р’РµСЂР±Р°Р»СЊРЅРѕР№ РњР°С€РёРЅС‹. Р”Р»СЏ СЌС‚РѕРіРѕ РєР»Р°СЃСЃРѕРј
+         Dictionary РІС‹Р·С‹РІР°РµС‚СЃСЏ РґР°РЅРЅС‹Р№ РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ, РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµРјС‹Р№
+         РїСЂРѕРёР·РІРѕРґРЅС‹РјРё РєР»Р°СЃСЃР°РјРё РђРІС‚РѕРјР°С‚РѕРІ.
+        **************************************************************************/
+        virtual void Prepare(const lem::Path &outdir, const Binarization_Options &opts) {}
+#endif
 
 
-    #if defined SOL_CAA
-//    virtual void Squeeze(void) {}
-    #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual bool ProcessLexem2(
+            const BethToken &t,
+            Macro_Parser &txtfile,
+            const Binarization_Options &options
+        );
+#endif
 
-    #if defined SOL_CAA && !defined SOL_NO_AA
-//    virtual PhrasoBlock* Process( PhrasoBlock *block );
-    #endif
+        inline int GetIndex() const { return index; }
 
-    #if defined SOL_CAA
-    // ******************************************************************
-    // Необходимо выполнить инициализацию - подготовку Автомата к работе.
-    // ******************************************************************
-    virtual void Initialize(void) {}
+        virtual void PrintMap(OFormatter &dst_stream);
 
-    // ********************************************************
-    // Производится финализация (завершение работы автомата).
-    // ********************************************************
-    virtual void Finalize(void) {}
-    #endif
+#if defined SOL_LOADBIN
+        virtual void LoadBin(lem::Stream &bin, const Load_Options &opt);
+#endif
 
-    /*********************************************************************
-     Возвращаем условное имя Автомата. Так как данный класс сам по себе не
-     используется для создания объектов-автоматов, то функция нулевая,
-     а производные классы перегружают эту функцию.
-    **********************************************************************/
-    virtual const lem::UCString GetName(void) const = 0;
+#if defined SOL_LOADBIN
+        // РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё Р°РІС‚РѕРјР°С‚Р° РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°
+        // РЎР»РѕРІР°СЂСЏ Рё РјРѕР¶РµС‚ РїРµСЂРµРіСЂСѓР¶Р°С‚СЊСЃСЏ Р°РІС‚РѕРјР°С‚Р°РјРё РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ
+        // СЂР°Р·РІРµСЂС‚С‹РІР°РЅРёСЏ РЅРµРєРёС… СЃРІРѕРёС… СЃС‚СЂСѓРєС‚СѓСЂ.
+        virtual void AfterLoadBin() {}
+        virtual void DictionaryLoaded() {}
+#endif
 
-    inline Dictionary& GetDict(void) const { return *dict; }
+#if defined SOL_SAVEBIN
+        virtual void SaveBin(lem::Stream &bin) const;
+#endif
 
-    const lem::Sol_IO& GetIO(void) const;
 
-    #if defined SOL_REPORT
-    // Метод распечатывает краткую сводку о загрузке Автомата.
-    virtual void Report( lem::OFormatter &dst_stream );
-    virtual void Save_SQL( lem::OFormatter &txt, OFormatter &alters, const SQL_Production &sql_version ) {}
-    virtual void SaveRules_SQL( lem::OFormatter &txt, OFormatter &alters, const SQL_Production &sql_version ) {}
-    #endif
-  };
+#if defined SOL_CAA
+// ******************************************************************
+// РќРµРѕР±С…РѕРґРёРјРѕ РІС‹РїРѕР»РЅРёС‚СЊ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ - РїРѕРґРіРѕС‚РѕРІРєСѓ РђРІС‚РѕРјР°С‚Р° Рє СЂР°Р±РѕС‚Рµ.
+// ******************************************************************
+        virtual void Initialize() {}
 
-  // Символические имена секций с информацией для Автоматов: используются,
-  // к примеру, в директиве automat XXX { ... } языка ПРИИСК. Лексическое
-  // наполнение констант - в файле SOL_AUNA.CPP
-  extern const wchar_t SOL_GRAPHAUTO_MARK[];
-  extern const wchar_t SOL_SYNAUTO_MARK[];
-  extern const wchar_t SOL_LEXAUTO_MARK[];
-  extern const wchar_t SOL_ALEPHAUTO_MARK[];
+        // ********************************************************
+        // РџСЂРѕРёР·РІРѕРґРёС‚СЃСЏ С„РёРЅР°Р»РёР·Р°С†РёСЏ (Р·Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹ Р°РІС‚РѕРјР°С‚Р°).
+        // ********************************************************
+        virtual void Finalize() {}
+#endif
 
- } // namespace 'Solarix'
+        /*********************************************************************
+         Р’РѕР·РІСЂР°С‰Р°РµРј СѓСЃР»РѕРІРЅРѕРµ РёРјСЏ РђРІС‚РѕРјР°С‚Р°. РўР°Рє РєР°Рє РґР°РЅРЅС‹Р№ РєР»Р°СЃСЃ СЃР°Рј РїРѕ СЃРµР±Рµ РЅРµ
+         РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚РѕРІ-Р°РІС‚РѕРјР°С‚РѕРІ, С‚Рѕ С„СѓРЅРєС†РёСЏ РЅСѓР»РµРІР°СЏ,
+         Р° РїСЂРѕРёР·РІРѕРґРЅС‹Рµ РєР»Р°СЃСЃС‹ РїРµСЂРµРіСЂСѓР¶Р°СЋС‚ СЌС‚Сѓ С„СѓРЅРєС†РёСЋ.
+        **********************************************************************/
+        virtual const lem::UCString GetName(void) const = 0;
+
+        inline Dictionary& GetDict() const { return *dict; }
+
+        const lem::Sol_IO& GetIO() const;
+
+#if defined SOL_REPORT
+        // РњРµС‚РѕРґ СЂР°СЃРїРµС‡Р°С‚С‹РІР°РµС‚ РєСЂР°С‚РєСѓСЋ СЃРІРѕРґРєСѓ Рѕ Р·Р°РіСЂСѓР·РєРµ РђРІС‚РѕРјР°С‚Р°.
+        virtual void Report(lem::OFormatter &dst_stream);
+        virtual void Save_SQL(lem::OFormatter &txt, OFormatter &alters, const SQL_Production &sql_version) {}
+        virtual void SaveRules_SQL(lem::OFormatter &txt, OFormatter &alters, const SQL_Production &sql_version) {}
+#endif
+    };
+
+    // РЎРёРјРІРѕР»РёС‡РµСЃРєРёРµ РёРјРµРЅР° СЃРµРєС†РёР№ СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ РґР»СЏ РђРІС‚РѕРјР°С‚РѕРІ: РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ,
+    // Рє РїСЂРёРјРµСЂСѓ, РІ РґРёСЂРµРєС‚РёРІРµ automat XXX { ... } СЏР·С‹РєР° РџР РРРЎРљ. Р›РµРєСЃРёС‡РµСЃРєРѕРµ
+    // РЅР°РїРѕР»РЅРµРЅРёРµ РєРѕРЅСЃС‚Р°РЅС‚ - РІ С„Р°Р№Р»Рµ SOL_AUNA.CPP
+    extern const wchar_t SOL_GRAPHAUTO_MARK[];
+    extern const wchar_t SOL_SYNAUTO_MARK[];
+    extern const wchar_t SOL_LEXAUTO_MARK[];
+    extern const wchar_t SOL_ALEPHAUTO_MARK[];
+
+} // namespace 'Solarix'
 
 #endif

@@ -306,10 +306,10 @@ void ParserEngineBase::ParseString(const lem::UFString & sentence,
                     if (!feats.empty())
                     {
                         // Predefined delimiter of individual tags
-                        feats.Add_Dirty('|');
+                        feats += '|';
                     }
 
-                    feats.Add_Dirty(lem::format_str("%d=%d", pair.GetCoord().GetIndex(), pair.GetState()));
+                    feats += lem::format_str("%d=%d", pair.GetCoord().GetIndex(), pair.GetState());
                 }
             }
 
@@ -318,7 +318,7 @@ void ParserEngineBase::ParseString(const lem::UFString & sentence,
                 feats = "_";
             }
 
-            desr_input.Add_Dirty(lem::format_str("%d\t_\t_\t_\t%d\t%s\t?\t?\t_\t_\n", CastSizeToInt(i), id_tag, feats.c_str()));
+            desr_input += lem::format_str("%d\t_\t_\t_\t%d\t%s\t?\t?\t_\t_\n", CastSizeToInt(i), id_tag, feats.c_str());
         }
 
         // lem::mout->printf( "DEBUG: Before syntax...\n" );

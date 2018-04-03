@@ -19,11 +19,11 @@
    public:
     CriterionEnumeratorInFile( const CriteriaInFile *_criteria );
 
-    virtual ~CriterionEnumeratorInFile(void) {}
+    virtual ~CriterionEnumeratorInFile() {}
 
-    virtual bool Fetch(void);
-    virtual int GetId(void);
-    virtual const Criterion& GetItem(void);
+    virtual bool Fetch() override;
+    virtual int GetId() override;
+    virtual const Criterion& GetItem() override;
   };
  }
 

@@ -4,24 +4,21 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
-//
-// You must not eliminate, delete or supress these copyright strings
-// from the file!
+//                                https://github.com/Koziev/GrammarEngine
 //
 // Content:
 // SOLARIX Grammar engine
-// Класс GramCoord - описание координаты и ее состояний. Используется прежде
-// всего как именованное множество символических констант.
+// РљР»Р°СЃСЃ GramCoord - РѕРїРёСЃР°РЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ Рё РµРµ СЃРѕСЃС‚РѕСЏРЅРёР№. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїСЂРµР¶РґРµ
+// РІСЃРµРіРѕ РєР°Рє РёРјРµРЅРѕРІР°РЅРЅРѕРµ РјРЅРѕР¶РµСЃС‚РІРѕ СЃРёРјРІРѕР»РёС‡РµСЃРєРёС… РєРѕРЅСЃС‚Р°РЅС‚.
 //
-// 17.02.2008 - добавлена генерация констант для биндинга с CSharp
-// 12.12.2008 - поиск состояния по имени без учета регистра
-// 12.01.2009 - добавлена генерация экспортного модуля для Pascal
-// 26.10.2011 - добавлена генерация экспортного модуля для PHP
+// 17.02.2008 - РґРѕР±Р°РІР»РµРЅР° РіРµРЅРµСЂР°С†РёСЏ РєРѕРЅСЃС‚Р°РЅС‚ РґР»СЏ Р±РёРЅРґРёРЅРіР° СЃ CSharp
+// 12.12.2008 - РїРѕРёСЃРє СЃРѕСЃС‚РѕСЏРЅРёСЏ РїРѕ РёРјРµРЅРё Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°
+// 12.01.2009 - РґРѕР±Р°РІР»РµРЅР° РіРµРЅРµСЂР°С†РёСЏ СЌРєСЃРїРѕСЂС‚РЅРѕРіРѕ РјРѕРґСѓР»СЏ РґР»СЏ Pascal
+// 26.10.2011 - РґРѕР±Р°РІР»РµРЅР° РіРµРЅРµСЂР°С†РёСЏ СЌРєСЃРїРѕСЂС‚РЅРѕРіРѕ РјРѕРґСѓР»СЏ РґР»СЏ PHP
 // -----------------------------------------------------------------------------
 //
 // CD->23.10.1995
-// LC->26.10.2011
+// LC->02.04.2018
 // --------------
 
 #include <lem/solarix/tokens.h>
@@ -33,88 +30,92 @@ using namespace lem;
 using namespace Solarix;
 using namespace lem::Iridium;
 
-GramCoord::GramCoord( const GramCoord& c )
-: id(c.id), name(c.name), state(c.state)
- #if defined SOL_LOADTXT
- , c_name( c.c_name )
- #endif
+GramCoord::GramCoord(const GramCoord& c)
+    : id(c.id), name(c.name), state(c.state)
+#if defined SOL_LOADTXT
+    , c_name(c.c_name)
+#endif
 {
- #if defined SOL_LOADTXT
- is_realized = c.is_realized;
- #endif
- return;
+#if defined SOL_LOADTXT
+    is_realized = c.is_realized;
+#endif
+    return;
 }
 
 GramCoord::GramCoord(void)
- : id(UNKNOWN)
+    : id(UNKNOWN)
 {
- #if defined SOL_LOADTXT
- is_realized=false;
- #endif
- return;
+#if defined SOL_LOADTXT
+    is_realized = false;
+#endif
+    return;
 }
 
 
 
 #if defined SOL_LOADTXT
 GramCoord::GramCoord(
-                     Macro_Parser& txtfile,
-                     const Grammar& gram,
-                     bool IsRealized
-                    )
- : id(UNKNOWN)
+    Macro_Parser& txtfile,
+    const Grammar& gram,
+    bool IsRealized
+)
+    : id(UNKNOWN)
 {
- LoadTxt(txtfile,gram,IsRealized);
- return;
+    LoadTxt(txtfile, gram, IsRealized);
+    return;
 }
 #endif
 
-GramCoord::GramCoord( lem::Stream& binfile )
-{ LoadBin(binfile); }
-
-void GramCoord::operator=( const GramCoord& c )
+GramCoord::GramCoord(lem::Stream& binfile)
 {
- id = c.id;
- name        = c.name;
- state       = c.state;
- #if defined SOL_LOADTXT
- is_realized = c.is_realized;
- c_name = c.c_name; 
- #endif
- return;
+    LoadBin(binfile);
 }
 
-void GramCoord::Add( const GramCoord &c )
+void GramCoord::operator=(const GramCoord& c)
 {
- state.AddList( c.state );
-
- if( updator!=NULL )
-  updator->Update( *this );
-
- return;
+    id = c.id;
+    name = c.name;
+    state = c.state;
+#if defined SOL_LOADTXT
+    is_realized = c.is_realized;
+    c_name = c.c_name;
+#endif
+    return;
 }
 
-void GramCoord::Add( const GramCoordState &cs )
+void GramCoord::Add(const GramCoord &c)
 {
- state.push_back( cs );
+    state.AddList(c.state);
 
- if( updator!=NULL )
-  updator->Update( *this );
+    if (updator.NotNull())
+    {
+        updator->Update(*this);
+    }
 
- return;
+    return;
+}
+
+void GramCoord::Add(const GramCoordState &cs)
+{
+    state.push_back(cs);
+
+    if (updator.NotNull())
+        updator->Update(*this);
+
+    return;
 }
 
 #if defined SOL_LOADTXT
-void GramCoord::AddState( const UCString &s )
+void GramCoord::AddState(const UCString &s)
 {
- GramCoordState cs;
- cs.push_back( s );
- state.push_back( cs );
+    GramCoordState cs;
+    cs.push_back(s);
+    state.push_back(cs);
 
- if( updator!=NULL )
-  updator->Update( *this );
+    if (updator.NotNull())
+        updator->Update(*this);
 
- return;
+    return;
 }
 #endif
 
@@ -122,649 +123,640 @@ void GramCoord::AddState( const UCString &s )
 #if defined SOL_LOADTXT
 /*************************************************************************
 
-                 ЗАГРУЗКА ОПИСАНИЯ ИЗ ТЕКСТОВОГО ФАЙЛА
+                 Р—РђР“Р РЈР—РљРђ РћРџРРЎРђРќРРЇ РР— РўР•РљРЎРўРћР’РћР“Рћ Р¤РђР™Р›Рђ
 
-  1. Общий формат:
+  1. РћР±С‰РёР№ С„РѕСЂРјР°С‚:
 
-     1.1 Заголовок
+     1.1 Р—Р°РіРѕР»РѕРІРѕРє
 
-     enum имя, синоним1, синоним2, ...
+     enum РёРјСЏ, СЃРёРЅРѕРЅРёРј1, СЃРёРЅРѕРЅРёРј2, ...
 
-     Кроме основного имени можно устанавливать альтернативные имена
-     координаты (синонимы). Это необходимо для работы с некоторыми
-     просторечными конструкциями (типа слова 'ЕГОННЫЙ'). Имя координаты
-     должно начинаться с буквы или символа '_'.
+     РљСЂРѕРјРµ РѕСЃРЅРѕРІРЅРѕРіРѕ РёРјРµРЅРё РјРѕР¶РЅРѕ СѓСЃС‚Р°РЅР°РІР»РёРІР°С‚СЊ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ РёРјРµРЅР°
+     РєРѕРѕСЂРґРёРЅР°С‚С‹ (СЃРёРЅРѕРЅРёРјС‹). Р­С‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РЅРµРєРѕС‚РѕСЂС‹РјРё
+     РїСЂРѕСЃС‚РѕСЂРµС‡РЅС‹РјРё РєРѕРЅСЃС‚СЂСѓРєС†РёСЏРјРё (С‚РёРїР° СЃР»РѕРІР° 'Р•Р“РћРќРќР«Р™'). РРјСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹
+     РґРѕР»Р¶РЅРѕ РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃ Р±СѓРєРІС‹ РёР»Рё СЃРёРјРІРѕР»Р° '_'.
 
-     1.2 Список состояний (два взаимоисключающих случая):
+     1.2 РЎРїРёСЃРѕРє СЃРѕСЃС‚РѕСЏРЅРёР№ (РґРІР° РІР·Р°РёРјРѕРёСЃРєР»СЋС‡Р°СЋС‰РёС… СЃР»СѓС‡Р°СЏ):
 
-     ... = имя_источника
+     ... = РёРјСЏ_РёСЃС‚РѕС‡РЅРёРєР°
 
-     - таким способом координата [имя] получает тот же список состояний,
-       что и заявленые для [имя_источник].
+     - С‚Р°РєРёРј СЃРїРѕСЃРѕР±РѕРј РєРѕРѕСЂРґРёРЅР°С‚Р° [РёРјСЏ] РїРѕР»СѓС‡Р°РµС‚ С‚РѕС‚ Р¶Рµ СЃРїРёСЃРѕРє СЃРѕСЃС‚РѕСЏРЅРёР№,
+       С‡С‚Рѕ Рё Р·Р°СЏРІР»РµРЅС‹Рµ РґР»СЏ [РёРјСЏ_РёСЃС‚РѕС‡РЅРёРє].
 
-     ... { сост1 сост2 ... состN }
+     ... { СЃРѕСЃС‚1 СЃРѕСЃС‚2 ... СЃРѕСЃС‚N }
 
-     - в фигурных скобочках перечисляются имена состояний.
+     - РІ С„РёРіСѓСЂРЅС‹С… СЃРєРѕР±РѕС‡РєР°С… РїРµСЂРµС‡РёСЃР»СЏСЋС‚СЃСЏ РёРјРµРЅР° СЃРѕСЃС‚РѕСЏРЅРёР№.
 
-  2. Один из особых случаев - координаты с двумя состояниями,
-     представимыми по смыслу как TRUE и FALSE. Формат описани
-     их несколько иной. Объявление имеет такой формат:
-
-                 :
-
-     enum имя_координаты
+  2. РћРґРёРЅ РёР· РѕСЃРѕР±С‹С… СЃР»СѓС‡Р°РµРІ - РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃ РґРІСѓРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё,
+     РїСЂРµРґСЃС‚Р°РІРёРјС‹РјРё РїРѕ СЃРјС‹СЃР»Сѓ РєР°Рє TRUE Рё FALSE. Р¤РѕСЂРјР°С‚ РѕРїРёСЃР°РЅРё
+     РёС… РЅРµСЃРєРѕР»СЊРєРѕ РёРЅРѕР№. РћР±СЉСЏРІР»РµРЅРёРµ РёРјРµРµС‚ С‚Р°РєРѕР№ С„РѕСЂРјР°С‚:
 
                  :
 
+     enum РёРјСЏ_РєРѕРѕСЂРґРёРЅР°С‚С‹
 
-     То есть имена состояний явно не объявляются. Внутреннее описание
-     также не загружается подставными именами состояний, но при операциях
-     с координатами появление координаты с нулевым количеством состояний
-     отлавливается и особо учитывается.
+                 :
+
+
+     РўРѕ РµСЃС‚СЊ РёРјРµРЅР° СЃРѕСЃС‚РѕСЏРЅРёР№ СЏРІРЅРѕ РЅРµ РѕР±СЉСЏРІР»СЏСЋС‚СЃСЏ. Р’РЅСѓС‚СЂРµРЅРЅРµРµ РѕРїРёСЃР°РЅРёРµ
+     С‚Р°РєР¶Рµ РЅРµ Р·Р°РіСЂСѓР¶Р°РµС‚СЃСЏ РїРѕРґСЃС‚Р°РІРЅС‹РјРё РёРјРµРЅР°РјРё СЃРѕСЃС‚РѕСЏРЅРёР№, РЅРѕ РїСЂРё РѕРїРµСЂР°С†РёСЏС…
+     СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё РїРѕСЏРІР»РµРЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃ РЅСѓР»РµРІС‹Рј РєРѕР»РёС‡РµСЃС‚РІРѕРј СЃРѕСЃС‚РѕСЏРЅРёР№
+     РѕС‚Р»Р°РІР»РёРІР°РµС‚СЃСЏ Рё РѕСЃРѕР±Рѕ СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ.
 **************************************************************************/
 void GramCoord::LoadTxt(
-                        Macro_Parser &txtfile,
-                        const Grammar& gram,
-                        bool IsRealized
-                       )
+    Macro_Parser &txtfile,
+    const Grammar& gram,
+    bool IsRealized
+)
 {
- is_realized = IsRealized;
+    is_realized = IsRealized;
 
- BethToken coord_name = txtfile.read();
- sol_check_coord_name(gram.GetDict(),txtfile,coord_name);
- name.push_back(coord_name.c_str());
+    BethToken coord_name = txtfile.read();
+    sol_check_coord_name(gram.GetDict(), txtfile, coord_name);
+    name.push_back(coord_name.c_str());
 
- const bool Me = gram.GetDict().GetDebugLevel_ir()>=3;
- if( Me )
-  {
-   // Эхо-сообщение: начали трансляцию координаты.
-   gram.GetIO().mecho().printf(
-                               "%us [%vfE%us%vn]->",
-                               sol_get_token(B_COORDINATE).c_str(),
-                               name.get(0).c_str()
-                              );
-  }
-
-
- BSourceState back = txtfile.tellp();
-
- bool cname_loaded=false;
- if( txtfile.read().GetToken() == B_AS )
-  {
-   c_name = txtfile.read();
-   back = txtfile.tellp();
-   cname_loaded = true;
-  }
- else
-  txtfile.seekp(back);  
-
- // Цикл загрузки компонентов описания координаты.
- bool loading=true;
- while(loading)
-  {
-   const BethToken t1 = txtfile.read();
-
-   switch( t1.GetToken())
+    const bool Me = gram.GetDict().GetDebugLevel_ir() >= 3;
+    if (Me)
     {
-     case B_EQUAL:
-      {
-       // Встретили спецификацию '='. Так что пересылаем себе состояния
-       // другой координаты, имя которой идёт следом.
+        // Р­С…Рѕ-СЃРѕРѕР±С‰РµРЅРёРµ: РЅР°С‡Р°Р»Рё С‚СЂР°РЅСЃР»СЏС†РёСЋ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+        gram.GetIO().mecho().printf(
+            "%us [%vfE%us%vn]->",
+            sol_get_token(B_COORDINATE).c_str(),
+            name.get(0).c_str()
+        );
+    }
 
-       const BethToken another = txtfile.read();
-       const GramCoordAdr ianother = gram.FindCoord(another.string());
 
-       if( ianother.GetIndex()==UNKNOWN )
+    BSourceState back = txtfile.tellp();
+
+    bool cname_loaded = false;
+    if (txtfile.read().GetToken() == B_AS)
+    {
+        c_name = txtfile.read();
+        back = txtfile.tellp();
+        cname_loaded = true;
+    }
+    else
+        txtfile.seekp(back);
+
+    // Р¦РёРєР» Р·Р°РіСЂСѓР·РєРё РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РѕРїРёСЃР°РЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+    bool loading = true;
+    while (loading)
+    {
+        const BethToken t1 = txtfile.read();
+
+        switch (t1.GetToken())
         {
-         Print_Error(another,txtfile);
-         MemFormatter f;
-         f.printf(
-                  "The coordinate [%us] is not previously "
-                  "declared in grammar\n"
-                  , another.c_str()
-                 );
-         throw E_Solarix( f.string().c_str() );
-        }
-
-       state = gram.coords()[ianother.GetIndex()].state; // Пересылаем себе состояния
-
-       #if defined SOL_COMPILER  
-       // Очищаем C-имена состояний
-       for( lem::Container::size_type i=0; i<state.size(); ++i )
+        case B_EQUAL:
         {
-         state[i].Clear_API_Names();
-        } 
-       #endif
+            // Р’СЃС‚СЂРµС‚РёР»Рё СЃРїРµС†РёС„РёРєР°С†РёСЋ '='. РўР°Рє С‡С‚Рѕ РїРµСЂРµСЃС‹Р»Р°РµРј СЃРµР±Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+            // РґСЂСѓРіРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹, РёРјСЏ РєРѕС‚РѕСЂРѕР№ РёРґС‘С‚ СЃР»РµРґРѕРј.
 
-       loading=false; // Больше считывать нечего
-       break;
-      }
+            const BethToken another = txtfile.read();
+            const GramCoordAdr ianother = gram.FindCoord(another.string());
 
-     case B_COMMA:
-      {
-       // Через запятую идут синонимы имени координаты.
-       const BethToken t2 = txtfile.read();
-       sol_check_s_name(gram.GetDict(),txtfile,t2,true);
-       if( name.Find(t2.c_str())!=UNKNOWN )
-        {
-         Print_Error(t2,txtfile);
-         MemFormatter f;
-         f.printf( "Duplication of the name in coordinate [%us] declaration\n", t2.c_str() );
-         throw E_Solarix( f.string().c_str() );
-        }
-
-       name.push_back(t2.c_str());
-       break;
-      }
-
-     case B_OFIGPAREN:
-      {
-       // В фигурных скобочках перечислены возможные состояния координаты.
-
-       while(!txtfile.eof())
-        {
-         const BSourceState back2 = txtfile.tellp();
-
-         // Если это '}', то список атрибутов завершен.
-         if( txtfile.read().GetToken()==B_CFIGPAREN )
-          break;
-
-         txtfile.seekp(back2);
-         GramCoordState dummy;
-         dummy.LoadTxt( gram.GetIO(), txtfile );
-
-         // Нет повторных объявлений состояний?
-         for( lem::Container::size_type i=0; i<dummy.size(); i++ )
-          {
-           // Проверим, чтобы в загруженной подгруппе не было двух
-           // одинаковых имен.
-           for( lem::Container::size_type j=0; j<dummy.size(); j++ )
-            if( i!=j )
-             if( dummy[i]==dummy[j] )
-              {
-               Print_Error(txtfile);
-               MemFormatter f;
-               f.printf( "Two equal names in a coordinate [%us] state subgroup\n", name.string().c_str() );
-               throw E_Solarix( f.string().c_str() );
-              }
-
-           const UCString& look_for = dummy.get(i);
-           if( FindState(look_for)!=UNKNOWN )
+            if (ianother.GetIndex() == UNKNOWN)
             {
-             Print_Error(txtfile);
-             MemFormatter f;
-             f.printf( "Two states of coordinate [%us] have got the same name\n", name.string().c_str() );
-             throw E_Solarix( f.string().c_str() );
+                Print_Error(another, txtfile);
+                MemFormatter f;
+                f.printf(
+                    "The coordinate [%us] is not previously "
+                    "declared in grammar\n"
+                    , another.c_str()
+                );
+                throw E_Solarix(f.string().c_str());
             }
-          }
 
-         state.push_back(dummy);
+            state = gram.coords()[ianother.GetIndex()].state; // РџРµСЂРµСЃС‹Р»Р°РµРј СЃРµР±Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 
-         if( Me )
-          gram.GetIO().mecho().printf('.');
+#if defined SOL_COMPILER  
+// РћС‡РёС‰Р°РµРј C-РёРјРµРЅР° СЃРѕСЃС‚РѕСЏРЅРёР№
+            for (lem::Container::size_type i = 0; i < state.size(); ++i)
+            {
+                state[i].Clear_API_Names();
+            }
+#endif
+
+            loading = false; // Р‘РѕР»СЊС€Рµ СЃС‡РёС‚С‹РІР°С‚СЊ РЅРµС‡РµРіРѕ
+            break;
         }
 
-       loading=false;
-       break;
-      }
-
-     default:
-      {
-       if( states().size() )
+        case B_COMMA:
         {
-         Print_Error(t1,txtfile);
-         MemFormatter f;
-         f.printf(
-                  "Definition of the coordinate [%us] is not"
-                  " identical to previous one.\n"
-                  , name.string().c_str()  
-                 );
-         throw E_Solarix( f.string().c_str() );
+            // Р§РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ РёРґСѓС‚ СЃРёРЅРѕРЅРёРјС‹ РёРјРµРЅРё РєРѕРѕСЂРґРёРЅР°С‚С‹.
+            const BethToken t2 = txtfile.read();
+            sol_check_s_name(gram.GetDict(), txtfile, t2, true);
+            if (name.Find(t2.c_str()) != UNKNOWN)
+            {
+                Print_Error(t2, txtfile);
+                MemFormatter f;
+                f.printf("Duplication of the name in coordinate [%us] declaration\n", t2.c_str());
+                throw E_Solarix(f.string().c_str());
+            }
+
+            name.push_back(t2.c_str());
+            break;
         }
 
-       // Если это не открывающая фигурная скобочка, то имеем координату
-       // с двумя состояниями TRUE и FALSE (бистабильную координату).
-       txtfile.seekp(back);
+        case B_OFIGPAREN:
+        {
+            // Р’ С„РёРіСѓСЂРЅС‹С… СЃРєРѕР±РѕС‡РєР°С… РїРµСЂРµС‡РёСЃР»РµРЅС‹ РІРѕР·РјРѕР¶РЅС‹Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹.
 
-       // На этом считывание описания заканчиваем.
-       loading = false;
-       break;
-      }
-    } // end of switch
-  } // end of while
+            while (!txtfile.eof())
+            {
+                const BSourceState back2 = txtfile.tellp();
 
+                // Р•СЃР»Рё СЌС‚Рѕ '}', С‚Рѕ СЃРїРёСЃРѕРє Р°С‚СЂРёР±СѓС‚РѕРІ Р·Р°РІРµСЂС€РµРЅ.
+                if (txtfile.read().GetToken() == B_CFIGPAREN)
+                    break;
 
- // Проверим, чтобы число заявленных состояний не превысило SOL_MAXCATEGORY -
- // число битов в int32 (см. "lem_bita.h")
- //
- // Ошибкой этот случай не является, так как возможно использование таких
- // координат в int-полях.
-/*
- if( GetTotalStates()>LEM_MAXCATEGORY )
-  {
-   Print_Error( coord_name, txtfile, 1 );
-   gram.GetIO().merr().printf(
-            "Number of enumeration [%us] states exceeds the maximum number of flag bitfield digits\n"
-            , name.string().c_str() 
-           );
-  }
-*/
+                txtfile.seekp(back2);
+                GramCoordState dummy;
+                dummy.LoadTxt(gram.GetIO(), txtfile);
 
- if( Me )
-  {
-   // Эхо-сообщение: закончили трансляцию координаты.
-   gram.GetIO().mecho().printf( "%vfAOK%vn\n" );
-  }
+                // РќРµС‚ РїРѕРІС‚РѕСЂРЅС‹С… РѕР±СЉСЏРІР»РµРЅРёР№ СЃРѕСЃС‚РѕСЏРЅРёР№?
+                for (lem::Container::size_type i = 0; i < dummy.size(); i++)
+                {
+                    // РџСЂРѕРІРµСЂРёРј, С‡С‚РѕР±С‹ РІ Р·Р°РіСЂСѓР¶РµРЅРЅРѕР№ РїРѕРґРіСЂСѓРїРїРµ РЅРµ Р±С‹Р»Рѕ РґРІСѓС…
+                    // РѕРґРёРЅР°РєРѕРІС‹С… РёРјРµРЅ.
+                    for (lem::Container::size_type j = 0; j < dummy.size(); j++)
+                    {
+                        if (i != j)
+                            if (dummy[i] == dummy[j])
+                            {
+                                Print_Error(txtfile);
+                                MemFormatter f;
+                                f.printf("Two equal names in a coordinate [%us] state subgroup\n", name.string().c_str());
+                                throw E_Solarix(f.string().c_str());
+                            }
+                    }
 
- return;
+                    const UCString& look_for = dummy.get(i);
+                    if (FindState(look_for) != UNKNOWN)
+                    {
+                        Print_Error(txtfile);
+                        MemFormatter f;
+                        f.printf("Two states of coordinate [%us] have got the same name\n", name.string().c_str());
+                        throw E_Solarix(f.string().c_str());
+                    }
+                }
+
+                state.push_back(dummy);
+
+                if (Me)
+                    gram.GetIO().mecho().printf('.');
+            }
+
+            loading = false;
+            break;
+        }
+
+        default:
+        {
+            if (states().size())
+            {
+                Print_Error(t1, txtfile);
+                MemFormatter f;
+                f.printf(
+                    "Definition of the coordinate [%us] is not"
+                    " identical to previous one.\n"
+                    , name.string().c_str()
+                );
+                throw E_Solarix(f.string().c_str());
+            }
+
+            // Р•СЃР»Рё СЌС‚Рѕ РЅРµ РѕС‚РєСЂС‹РІР°СЋС‰Р°СЏ С„РёРіСѓСЂРЅР°СЏ СЃРєРѕР±РѕС‡РєР°, С‚Рѕ РёРјРµРµРј РєРѕРѕСЂРґРёРЅР°С‚Сѓ
+            // СЃ РґРІСѓРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё TRUE Рё FALSE (Р±РёСЃС‚Р°Р±РёР»СЊРЅСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ).
+            txtfile.seekp(back);
+
+            // РќР° СЌС‚РѕРј СЃС‡РёС‚С‹РІР°РЅРёРµ РѕРїРёСЃР°РЅРёСЏ Р·Р°РєР°РЅС‡РёРІР°РµРј.
+            loading = false;
+            break;
+        }
+        } // end of switch
+    } // end of while
+
+    if (Me)
+    {
+        // Р­С…Рѕ-СЃРѕРѕР±С‰РµРЅРёРµ: Р·Р°РєРѕРЅС‡РёР»Рё С‚СЂР°РЅСЃР»СЏС†РёСЋ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+        gram.GetIO().mecho().printf("%vfAOK%vn\n");
+    }
+
+    return;
 }
 #endif
 
 
-void GramCoord::LoadBin( lem::Stream& bin )
+void GramCoord::LoadBin(lem::Stream& bin)
 {
- name.Load_Packed(bin);
+    name.Load_Packed(bin);
 
- state.LoadBin(bin);
+    state.LoadBin(bin);
 
- #if defined SOL_LOADTXT
- is_realized=true;
- #endif
+#if defined SOL_LOADTXT
+    is_realized = true;
+#endif
 
- return;
+    return;
 }
 
 #if defined SOL_SAVEBIN
-void GramCoord::SaveBin( lem::Stream& bin ) const
+void GramCoord::SaveBin(lem::Stream& bin) const
 {
- name.Save_Packed(bin);
+    name.Save_Packed(bin);
 
- state.SaveBin(bin);
- return;
+    state.SaveBin(bin);
+    return;
 }
 #endif
 
 /**************************************************************************
-  Итак, мы теперь допускаем объявление состояний следующим форматом:
+  РС‚Р°Рє, РјС‹ С‚РµРїРµСЂСЊ РґРѕРїСѓСЃРєР°РµРј РѕР±СЉСЏРІР»РµРЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёР№ СЃР»РµРґСѓСЋС‰РёРј С„РѕСЂРјР°С‚РѕРј:
 
-  enum имя { сост1 сост2 ... { сост5 сост6 ... } ... }
+  enum РёРјСЏ { СЃРѕСЃС‚1 СЃРѕСЃС‚2 ... { СЃРѕСЃС‚5 СЃРѕСЃС‚6 ... } ... }
 
-  Таким образом, можно группировать несколько состояний. Это полезно в тех
-  случаях, когда очень небольшое число словарных статей имеет различные
-  формы для сост5, сост6 ... . В этом случае считаем, что сост5 и далее
-  являются лишь разновидностями сост5.
+  РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РјРѕР¶РЅРѕ РіСЂСѓРїРїРёСЂРѕРІР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЃРѕСЃС‚РѕСЏРЅРёР№. Р­С‚Рѕ РїРѕР»РµР·РЅРѕ РІ С‚РµС…
+  СЃР»СѓС‡Р°СЏС…, РєРѕРіРґР° РѕС‡РµРЅСЊ РЅРµР±РѕР»СЊС€РѕРµ С‡РёСЃР»Рѕ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ РёРјРµРµС‚ СЂР°Р·Р»РёС‡РЅС‹Рµ
+  С„РѕСЂРјС‹ РґР»СЏ СЃРѕСЃС‚5, СЃРѕСЃС‚6 ... . Р’ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ СЃРѕСЃС‚5 Рё РґР°Р»РµРµ
+  СЏРІР»СЏСЋС‚СЃСЏ Р»РёС€СЊ СЂР°Р·РЅРѕРІРёРґРЅРѕСЃС‚СЏРјРё СЃРѕСЃС‚5.
 
-  Внутренний формат хранения состояний и подсостояний следующий:
+  Р’РЅСѓС‚СЂРµРЅРЅРёР№ С„РѕСЂРјР°С‚ С…СЂР°РЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёР№ Рё РїРѕРґСЃРѕСЃС‚РѕСЏРЅРёР№ СЃР»РµРґСѓСЋС‰РёР№:
 
 
    i=0   i=1  ...  i=5  i=6
-  сост1 сост2 ... сост5 ...
-                  сост6
+  СЃРѕСЃС‚1 СЃРѕСЃС‚2 ... СЃРѕСЃС‚5 ...
+                  СЃРѕСЃС‚6
                     :
                     :
 
 
-  То есть при переборе состояний первого уровня индекс i может не
-  соответствовать используемому в других местах ИНДЕКСУ СОСТОЯНИЯ.
+  РўРѕ РµСЃС‚СЊ РїСЂРё РїРµСЂРµР±РѕСЂРµ СЃРѕСЃС‚РѕСЏРЅРёР№ РїРµСЂРІРѕРіРѕ СѓСЂРѕРІРЅСЏ РёРЅРґРµРєСЃ i РјРѕР¶РµС‚ РЅРµ
+  СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ РёСЃРїРѕР»СЊР·СѓРµРјРѕРјСѓ РІ РґСЂСѓРіРёС… РјРµСЃС‚Р°С… РРќР”Р•РљРЎРЈ РЎРћРЎРўРћРЇРќРРЇ.
 
-  Надо отметить, что имена кванторов, поданные на вход, распознаются
-  корректно и происходит возврат соответствующих кодов.
+  РќР°РґРѕ РѕС‚РјРµС‚РёС‚СЊ, С‡С‚Рѕ РёРјРµРЅР° РєРІР°РЅС‚РѕСЂРѕРІ, РїРѕРґР°РЅРЅС‹Рµ РЅР° РІС…РѕРґ, СЂР°СЃРїРѕР·РЅР°СЋС‚СЃСЏ
+  РєРѕСЂСЂРµРєС‚РЅРѕ Рё РїСЂРѕРёСЃС…РѕРґРёС‚ РІРѕР·РІСЂР°С‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РєРѕРґРѕРІ.
 ***************************************************************************/
-int GramCoord::FindState( const UCString& sname ) const
+int GramCoord::FindState(const UCString& sname) const
 {
- int index=0;
+    int index = 0;
 
- if( sname==sol_get_token(B_ANY) )
-  return ANY_STATE;
+    if (sname == sol_get_token(B_ANY))
+        return ANY_STATE;
 
- if( sname==sol_get_token(B_UNKNOWN) )
-  return UNKNOWN_STATE;
+    if (sname == sol_get_token(B_UNKNOWN))
+        return UNKNOWN_STATE;
 
- for( lem::Container::size_type i=0; i<states().size(); i++ )
-  {
-   // 12.12.2008: поиск без учета регистра!
-   const int res = GetTopState(i).FindNoCase(sname);
-
-   if( res!=UNKNOWN )
-    return res+index;
-
-   index+=CastSizeToInt(GetTopState(i).size());
-  }
-
- return UNKNOWN;
-}
-
-/********************************************************************
- Линейный индекс LI преобразуем в индекс состояния.
-*********************************************************************/
-int GramCoord::GetIndexOfState( int LI ) const
-{
- int index=0;
-
- for( int i=0; i<LI; i++ )
-  index+=CastSizeToInt(GetTopState(i).size());
-
- return index;
-}
-
-/********************************************************************
-  Возвращаем имя состояния по его ИСТИННОМУ ИНДЕКСУ RI.
-*********************************************************************/
-const UCString& GramCoord::GetStateName( int RI ) const
-{
- if( RI == ANY_STATE )
-  return sol_get_token(B_ANY);
-
- int index=0;
-
- for( lem::Container::size_type i=0; i<state.size(); i++ )
-  {
-   const int ns = CastSizeToInt(state[i].size());
-
-   if( index+ns>RI )
+    for (lem::Container::size_type i = 0; i < states().size(); i++)
     {
-     #if defined LEM_BORLAND
-     // 27.08.2006 CBuilder code generator bug - original code
-     //            causes Access Violation.
-     const GramCoordState &y = state.get(i);
-     const UCString &z = y.get(RI-index);
-     return z;
-     #else
-     return state[i][RI-index];
-     #endif
-    }   
+        // 12.12.2008: РїРѕРёСЃРє Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°!
+        const int res = GetTopState(i).FindNoCase(sname);
 
-   index+=ns;
-  }
+        if (res != UNKNOWN)
+            return res + index;
 
- LEM_STOPIT;
- return GetTopState(0).get(0);
+        index += CastSizeToInt(GetTopState(i).size());
+    }
+
+    return UNKNOWN;
+}
+
+/********************************************************************
+ Р›РёРЅРµР№РЅС‹Р№ РёРЅРґРµРєСЃ LI РїСЂРµРѕР±СЂР°Р·СѓРµРј РІ РёРЅРґРµРєСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ.
+*********************************************************************/
+int GramCoord::GetIndexOfState(int LI) const
+{
+    int index = 0;
+
+    for (int i = 0; i < LI; i++)
+        index += CastSizeToInt(GetTopState(i).size());
+
+    return index;
+}
+
+/********************************************************************
+  Р’РѕР·РІСЂР°С‰Р°РµРј РёРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РїРѕ РµРіРѕ РРЎРўРРќРќРћРњРЈ РРќР”Р•РљРЎРЈ RI.
+*********************************************************************/
+const UCString& GramCoord::GetStateName(int RI) const
+{
+    if (RI == ANY_STATE)
+        return sol_get_token(B_ANY);
+
+    int index = 0;
+
+    for (lem::Container::size_type i = 0; i < state.size(); i++)
+    {
+        const int ns = CastSizeToInt(state[i].size());
+
+        if (index + ns > RI)
+        {
+#if defined LEM_BORLAND
+            // 27.08.2006 CBuilder code generator bug - original code
+            //            causes Access Violation.
+            const GramCoordState &y = state.get(i);
+            const UCString &z = y.get(RI - index);
+            return z;
+#else
+            return state[i][RI - index];
+#endif
+        }
+
+        index += ns;
+    }
+
+    LEM_STOPIT;
+    return GetTopState(0).get(0);
 }
 
 /*****************************************************************
- Возвращает индекс подгруппы взаимозамены, к которой принадлежит
- состояние.
+ Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РїРѕРґРіСЂСѓРїРїС‹ РІР·Р°РёРјРѕР·Р°РјРµРЅС‹, Рє РєРѕС‚РѕСЂРѕР№ РїСЂРёРЅР°РґР»РµР¶РёС‚
+ СЃРѕСЃС‚РѕСЏРЅРёРµ.
 *****************************************************************/
-int GramCoord::GetSubgroup( int RI ) const
+int GramCoord::GetSubgroup(int RI) const
 {
- int index=0;
+    int index = 0;
 
- for( lem::Container::size_type i=0; i<states().size(); i++ )
-  {
-   const int ns = CastSizeToInt(GetTopState(i).size());
+    for (lem::Container::size_type i = 0; i < states().size(); i++)
+    {
+        const int ns = CastSizeToInt(GetTopState(i).size());
 
-   if( index+ns>RI )
-    return i;
+        if (index + ns > RI)
+            return i;
 
-   index+=ns;
-  }
+        index += ns;
+    }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 /**************************************************************************
- Принадлежит ли состояние к подгруппе взаимнозаменяемых (многоохватных)
+ РџСЂРёРЅР°РґР»РµР¶РёС‚ Р»Рё СЃРѕСЃС‚РѕСЏРЅРёРµ Рє РїРѕРґРіСЂСѓРїРїРµ РІР·Р°РёРјРЅРѕР·Р°РјРµРЅСЏРµРјС‹С… (РјРЅРѕРіРѕРѕС…РІР°С‚РЅС‹С…)
 **************************************************************************/
-bool GramCoord::IsDefState( int RI ) const
+bool GramCoord::IsDefState(int RI) const
 {
- const int isubgroup = GetSubgroup(RI);
+    const int isubgroup = GetSubgroup(RI);
 
- // Такого индекса вообще нет...
- if( isubgroup==UNKNOWN )
-  return false;
+    // РўР°РєРѕРіРѕ РёРЅРґРµРєСЃР° РІРѕРѕР±С‰Рµ РЅРµС‚...
+    if (isubgroup == UNKNOWN)
+        return false;
 
- // Принадлежит, если в группе более одного элемента.
- return GetTopState(isubgroup).size()>1;
+    // РџСЂРёРЅР°РґР»РµР¶РёС‚, РµСЃР»Рё РІ РіСЂСѓРїРїРµ Р±РѕР»РµРµ РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°.
+    return GetTopState(isubgroup).size() > 1;
 }
 
 /*************************************************
- Есть ли группы замены?
+ Р•СЃС‚СЊ Р»Рё РіСЂСѓРїРїС‹ Р·Р°РјРµРЅС‹?
 **************************************************/
 bool GramCoord::HasDefStates(void) const
 {
- for( Container::size_type i=0; i<states().size(); i++ )
-  if( GetTopState(i).size()>1 )
-   return true;
+    for (Container::size_type i = 0; i < states().size(); i++)
+    {
+        if (GetTopState(i).size() > 1)
+            return true;
+    }
 
- return false;
+    return false;
 }
 
 /*******************************************************************
- Вернем список индексов состояний, входящих в указанную подгруппу.
+ Р’РµСЂРЅРµРј СЃРїРёСЃРѕРє РёРЅРґРµРєСЃРѕРІ СЃРѕСЃС‚РѕСЏРЅРёР№, РІС…РѕРґСЏС‰РёС… РІ СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕРґРіСЂСѓРїРїСѓ.
 *******************************************************************/
-const IntCollect GramCoord::GetSubgroupIndeces( int isubgroup ) const
+const IntCollect GramCoord::GetSubgroupIndeces(int isubgroup) const
 {
- int istart=0;
+    int istart = 0;
 
- for( int i1=0; i1<isubgroup; i1++ )
-  istart += CastSizeToInt(GetTopState(i1).size());
+    for (int i1 = 0; i1 < isubgroup; i1++)
+        istart += CastSizeToInt(GetTopState(i1).size());
 
- IntCollect is;
- for( lem::Container::size_type i2=0; i2<GetTopState(isubgroup).size(); i2++ )
-  is.push_back(istart+i2);
+    IntCollect is;
+    for (lem::Container::size_type i2 = 0; i2 < GetTopState(isubgroup).size(); i2++)
+        is.push_back(istart + i2);
 
- return is;
+    return is;
 }
 
 /**********************************************************************
- Определяет, является ли состояние главным в подгруппе многоохватных.
- Следует заметить, что даже группа длиной в 1 состояние принимается.
+ РћРїСЂРµРґРµР»СЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЃРѕСЃС‚РѕСЏРЅРёРµ РіР»Р°РІРЅС‹Рј РІ РїРѕРґРіСЂСѓРїРїРµ РјРЅРѕРіРѕРѕС…РІР°С‚РЅС‹С….
+ РЎР»РµРґСѓРµС‚ Р·Р°РјРµС‚РёС‚СЊ, С‡С‚Рѕ РґР°Р¶Рµ РіСЂСѓРїРїР° РґР»РёРЅРѕР№ РІ 1 СЃРѕСЃС‚РѕСЏРЅРёРµ РїСЂРёРЅРёРјР°РµС‚СЃСЏ.
 **********************************************************************/
-bool GramCoord::IsHeadState( int RI ) const
+bool GramCoord::IsHeadState(int RI) const
 {
- const int ig = GetSubgroup(RI);
- int istart=0;
+    const int ig = GetSubgroup(RI);
+    int istart = 0;
 
- for( int i=0; i<ig; i++ )
-  istart += CastSizeToInt(GetTopState(i).size());
+    for (int i = 0; i < ig; i++)
+        istart += CastSizeToInt(GetTopState(i).size());
 
- return istart==RI;
+    return istart == RI;
 }
 
 /*****************************************************
- Подсчитывает общее число состояний по всем группам.
+ РџРѕРґСЃС‡РёС‚С‹РІР°РµС‚ РѕР±С‰РµРµ С‡РёСЃР»Рѕ СЃРѕСЃС‚РѕСЏРЅРёР№ РїРѕ РІСЃРµРј РіСЂСѓРїРїР°Рј.
 *****************************************************/
 int GramCoord::GetTotalStates(void) const
 {
- int ts=0;
+    int ts = 0;
 
- for( lem::Container::size_type i=0; i<states().size(); i++ )
-  ts += CastSizeToInt(GetTopState(i).size());
+    for (lem::Container::size_type i = 0; i < states().size(); i++)
+        ts += CastSizeToInt(GetTopState(i).size());
 
- return ts;
+    return ts;
 }
 
 /***********************************************************
- Проверяем, совпадают ли имена состояний у двух координат.
+ РџСЂРѕРІРµСЂСЏРµРј, СЃРѕРІРїР°РґР°СЋС‚ Р»Рё РёРјРµРЅР° СЃРѕСЃС‚РѕСЏРЅРёР№ Сѓ РґРІСѓС… РєРѕРѕСЂРґРёРЅР°С‚.
 ***********************************************************/
-bool GramCoord::operator!=( const GramCoord& x ) const
+bool GramCoord::operator!=(const GramCoord& x) const
 {
- if( states().size() != x.states().size() )
-  {
-   #if LEM_DEBUGGING==1
-   int n1 = states().size();
-   int n2 = x.states().size();
-   #endif
-   return true;
-  }
+    if (states().size() != x.states().size())
+    {
+#if LEM_DEBUGGING==1
+        int n1 = states().size();
+        int n2 = x.states().size();
+#endif
+        return true;
+    }
 
- for( lem::Container::size_type i=0; i<states().size(); i++ )
-  if( GetTopState(i)!=x.GetTopState(i) )
-   return true;
+    for (lem::Container::size_type i = 0; i < states().size(); i++)
+    {
+        if (GetTopState(i) != x.GetTopState(i))
+            return true;
+    }
 
- return false;
+    return false;
 }
 
 
-bool GramCoord::operator==( const GramCoord& x ) const
+bool GramCoord::operator==(const GramCoord& x) const
 {
- if( states().size() != x.states().size() )
-  return false;
+    if (states().size() != x.states().size())
+        return false;
 
- for( lem::Container::size_type i=0; i<states().size(); i++ )
-  if( GetTopState(i)!=x.GetTopState(i) )
-   return false;
+    for (lem::Container::size_type i = 0; i < states().size(); i++)
+    {
+        if (GetTopState(i) != x.GetTopState(i))
+            return false;
+    }
 
- return true;
+    return true;
 }
 
 
 /********************************************************************
- Если данная лексема является одним из имен координаты, то
- возвращаем индекс имени в списке. Если такое имя не присутствует в
- списке синонимов, вернем UNKNOWN.
+ Р•СЃР»Рё РґР°РЅРЅР°СЏ Р»РµРєСЃРµРјР° СЏРІР»СЏРµС‚СЃСЏ РѕРґРЅРёРј РёР· РёРјРµРЅ РєРѕРѕСЂРґРёРЅР°С‚С‹, С‚Рѕ
+ РІРѕР·РІСЂР°С‰Р°РµРј РёРЅРґРµРєСЃ РёРјРµРЅРё РІ СЃРїРёСЃРєРµ. Р•СЃР»Рё С‚Р°РєРѕРµ РёРјСЏ РЅРµ РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ РІ
+ СЃРїРёСЃРєРµ СЃРёРЅРѕРЅРёРјРѕРІ, РІРµСЂРЅРµРј UNKNOWN.
 ********************************************************************/
-int GramCoord::IsName( const UCString& s ) const
+int GramCoord::IsName(const UCString& s) const
 {
- for( lem::Container::size_type i=0; i<name.size(); i++ )
-  if( GetName()[i].eqi(s) )
-   return i;
+    for (lem::Container::size_type i = 0; i < name.size(); i++)
+        if (GetName()[i].eqi(s))
+            return i;
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
 
 #if defined SOL_SAVETXT
 /*****************************************************
- Восстановление исходного кода реализации координаты.
- Код печатается в указанный текстовый поток.
+ Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РёСЃС…РѕРґРЅРѕРіРѕ РєРѕРґР° СЂРµР°Р»РёР·Р°С†РёРё РєРѕРѕСЂРґРёРЅР°С‚С‹.
+ РљРѕРґ РїРµС‡Р°С‚Р°РµС‚СЃСЏ РІ СѓРєР°Р·Р°РЅРЅС‹Р№ С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕС‚РѕРє.
 *****************************************************/
-void GramCoord::SaveTxt( OFormatter& txtfile ) const
+void GramCoord::SaveTxt(OFormatter& txtfile) const
 {
- txtfile.printf(
-                " %us %us",
-                sol_get_token(B_COORDINATE).c_str(),
-                GetName().front().c_str()
-               );
+    txtfile.printf(
+        " %us %us",
+        sol_get_token(B_COORDINATE).c_str(),
+        GetName().front().c_str()
+    );
 
- for( lem::Container::size_type ivar=1; ivar<name.size(); ivar++ )
-  txtfile << sol_get_token(B_COMMA) << name[ivar];
+    for (lem::Container::size_type ivar = 1; ivar < name.size(); ivar++)
+        txtfile << sol_get_token(B_COMMA) << name[ivar];
 
- if( state.empty() )
-  txtfile.printf( " /* no states */\n" );
- else
-  txtfile.printf(
-                 " /* %d state(s) */\n"
-                 , state.size()
-                );
+    if (state.empty())
+        txtfile.printf(" /* no states */\n");
+    else
+        txtfile.printf(
+            " /* %d state(s) */\n"
+            , state.size()
+        );
 
- if( !state.empty() )
-  {
-   txtfile.printf( " %s ", sol_get_token(B_OFIGPAREN).c_str() );
-
-   for( lem::Container::size_type i=0; i<state.size(); i++ )
+    if (!state.empty())
     {
-     GetTopState(i).SaveTxt(txtfile);
-     txtfile.printf(' ');
+        txtfile.printf(" %s ", sol_get_token(B_OFIGPAREN).c_str());
+
+        for (lem::Container::size_type i = 0; i < state.size(); i++)
+        {
+            GetTopState(i).SaveTxt(txtfile);
+            txtfile.printf(' ');
+        }
+
+        txtfile << sol_get_token(B_CFIGPAREN);
     }
 
-   txtfile << sol_get_token(B_CFIGPAREN);
-  }
-
- txtfile.eol();
- txtfile.eol();
- return;
+    txtfile.eol();
+    txtfile.eol();
+    return;
 }
 #endif
 
 #if defined SOL_COMPILER
-void GramCoord::Save_API( OFormatter &cpp, lem::Binding::Language lang ) const
+void GramCoord::Save_API(OFormatter &cpp, lem::Binding::Language lang) const
 {
- if( lang==lem::Binding::CPP || lang==lem::Binding::CSharp )
-  {
-   if( !state.empty() )
+    if (lang == lem::Binding::CPP || lang == lem::Binding::CSharp)
     {
-     cpp.printf( "// Coordiname %us states:\n", GetName().front().c_str() );
+        if (!state.empty())
+        {
+            cpp.printf("// Coordiname %us states:\n", GetName().front().c_str());
+        }
     }
-  }
- else if( lang==lem::Binding::Pascal )
-  {
-   if( !state.empty() )
+    else if (lang == lem::Binding::Pascal)
     {
-     cpp.printf( "{ Coordiname %us states: }\n", GetName().front().c_str() );
+        if (!state.empty())
+        {
+            cpp.printf("{ Coordiname %us states: }\n", GetName().front().c_str());
+        }
     }
-  }
- else if( lang==lem::Binding::Python )
-  {
-   if( !state.empty() )
+    else if (lang == lem::Binding::Python)
     {
-     cpp.printf( "# Coordiname %us states:\n", GetName().front().c_str() );
+        if (!state.empty())
+        {
+            cpp.printf("# Coordiname %us states:\n", GetName().front().c_str());
+        }
     }
-  }
- else if( lang==lem::Binding::PHP )
-  {
-   if( !state.empty() )
+    else if (lang == lem::Binding::PHP)
     {
-     cpp.printf( "// Coordiname %us states:\n", GetName().front().c_str() );
+        if (!state.empty())
+        {
+            cpp.printf("// Coordiname %us states:\n", GetName().front().c_str());
+        }
     }
-  }
- else
-  {
-   LEM_STOPIT;
-  } 
-
- int istate=0;
- for( lem::Container::size_type i=0; i<state.size(); i++ )
-  {
-   const GramCoordState& s = state[i];
-
-   if( !s.get_C_Name().empty() )
+    else
     {
-     if( lang==lem::Binding::CPP || lang==lem::Binding::CSharp )
-      {
-       if( lang==lem::Binding::CSharp )
-        cpp.printf( " public " );
-
-       cpp.printf(
-                  "const int %us = %d; %50t // %us : %us\n", 
-                  s.get_C_Name().c_str(),
-                  istate,
-                  GetName().front().c_str(),
-                  s.front().c_str()
-                 );   
-      }
-     else if( lang==lem::Binding::Pascal )
-      {
-       cpp.printf(
-                  "const %us: integer = %d; %50t // %us : %us\n", 
-                  s.get_C_Name().c_str(),
-                  istate,
-                  GetName().front().c_str(),
-                  s.front().c_str()
-                 );
-      }
-     else if( lang==lem::Binding::Python )
-      {
-       cpp.printf(
-                  "%us = %d %50t # %us : %us\n", 
-                  s.get_C_Name().c_str(),
-                  istate,
-                  GetName().front().c_str(),
-                  s.front().c_str()
-                 );
-      }
-     else if( lang==lem::Binding::PHP )
-      {
-       cpp.printf(
-                  "define( '%us', %d ); %50t // %us : %us\n", 
-                  s.get_C_Name().c_str(),
-                  istate,
-                  GetName().front().c_str(),
-                  s.front().c_str()
-                 );
-      }
-     else
-      {
-       LEM_STOPIT;
-      } 
+        LEM_STOPIT;
     }
 
-   s.Save_API( istate, cpp, lang );
+    int istate = 0;
+    for (lem::Container::size_type i = 0; i < state.size(); i++)
+    {
+        const GramCoordState& s = state[i];
 
-   istate += CastSizeToInt(s.size());
-  }
+        if (!s.get_C_Name().empty())
+        {
+            if (lang == lem::Binding::CPP || lang == lem::Binding::CSharp)
+            {
+                if (lang == lem::Binding::CSharp)
+                    cpp.printf(" public ");
 
- return;
+                cpp.printf(
+                    "const int %us = %d; %50t // %us : %us\n",
+                    s.get_C_Name().c_str(),
+                    istate,
+                    GetName().front().c_str(),
+                    s.front().c_str()
+                );
+            }
+            else if (lang == lem::Binding::Pascal)
+            {
+                cpp.printf(
+                    "const %us: integer = %d; %50t // %us : %us\n",
+                    s.get_C_Name().c_str(),
+                    istate,
+                    GetName().front().c_str(),
+                    s.front().c_str()
+                );
+            }
+            else if (lang == lem::Binding::Python)
+            {
+                cpp.printf(
+                    "%us = %d %50t # %us : %us\n",
+                    s.get_C_Name().c_str(),
+                    istate,
+                    GetName().front().c_str(),
+                    s.front().c_str()
+                );
+            }
+            else if (lang == lem::Binding::PHP)
+            {
+                cpp.printf(
+                    "define( '%us', %d ); %50t // %us : %us\n",
+                    s.get_C_Name().c_str(),
+                    istate,
+                    GetName().front().c_str(),
+                    s.front().c_str()
+                );
+            }
+            else
+            {
+                LEM_STOPIT;
+            }
+        }
+
+        s.Save_API(istate, cpp, lang);
+
+        istate += CastSizeToInt(s.size());
+    }
+
+    return;
 }
 #endif

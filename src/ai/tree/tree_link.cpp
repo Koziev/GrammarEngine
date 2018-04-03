@@ -1,15 +1,15 @@
-// -----------------------------------------------------------------------------
+п»ї// -----------------------------------------------------------------------------
 // File TREE_LINK.CPP
 //
-// (c) by Koziev Elijah
+// (c) by Koziev Elijah https://github.com/Koziev/GrammarEngine
 //
 // Content:
-// Класс Tree_Link - представление связок между узлами для построения
-// деревьев-beth.
+// РљР»Р°СЃСЃ Tree_Link - РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРІСЏР·РѕРє РјРµР¶РґСѓ СѓР·Р»Р°РјРё РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ
+// РґРµСЂРµРІСЊРµРІ-beth.
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.1997
-// LC->20.11.2010
+// LC->02.02.2018
 // --------------
 
 #include <lem/macro_parser.h>
@@ -22,227 +22,229 @@
 using namespace lem;
 using namespace Solarix;
 
-Tree_Link::Tree_Link( int is )
-{ icoord=I_NET; istate=is; }
+Tree_Link::Tree_Link(int is)
+{
+    icoord = I_NET; istate = is;
+}
 
 #if defined SOL_LOADTXT
-Tree_Link::Tree_Link( Macro_Parser &txtfile, const SynGram &gram )
-{ LoadTxt(txtfile,gram); }
+Tree_Link::Tree_Link(Macro_Parser &txtfile, const SynGram &gram)
+{
+    LoadTxt(txtfile, gram);
+}
 #endif
 
 
 #if defined SOL_LOADTXT
 /*************************************************************************
 
- Загрузка описания связки-beth из текстового файла. Распознаются форматы:
+ Р—Р°РіСЂСѓР·РєР° РґРµСЃРєСЂРёРїС‚РѕСЂР° СЂРµР±СЂР° РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р°. Р Р°СЃРїРѕР·РЅР°СЋС‚СЃСЏ С„РѕСЂРјР°С‚С‹:
 
- 1. <имя_коорд:имя_связки>
+ 1. <РёРјСЏ_РєРѕРѕСЂРґ:РёРјСЏ_СЃРІСЏР·РєРё>
 
-   Расширенный формат, явно задано имя координаты имя_коорд, одно из
-   состояний которой имя_связки признается за имя связки. Угловые скобки
-   обязательны. Частные случаи этого формата:
+   Р Р°СЃС€РёСЂРµРЅРЅС‹Р№ С„РѕСЂРјР°С‚, СЏРІРЅРѕ Р·Р°РґР°РЅРѕ РёРјСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹ РёРјСЏ_РєРѕРѕСЂРґ, РѕРґРЅРѕ РёР·
+   СЃРѕСЃС‚РѕСЏРЅРёР№ РєРѕС‚РѕСЂРѕР№ РёРјСЏ_СЃРІСЏР·РєРё РїСЂРёР·РЅР°РµС‚СЃСЏ Р·Р° РёРјСЏ СЃРІСЏР·РєРё. РЈРіР»РѕРІС‹Рµ СЃРєРѕР±РєРё
+   РѕР±СЏР·Р°С‚РµР»СЊРЅС‹. Р§Р°СЃС‚РЅС‹Рµ СЃР»СѓС‡Р°Рё СЌС‚РѕРіРѕ С„РѕСЂРјР°С‚Р°:
 
- 1.1 <имя_коорд:*>
+ 1.1 <РёРјСЏ_РєРѕРѕСЂРґ:*>
 
-   То есть имя связки (состояния координаты имя_коорд) задается квантором
-   производьности, и в дальнейших проверках игнорируется.
+   РўРѕ РµСЃС‚СЊ РёРјСЏ СЃРІСЏР·РєРё (СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹ РёРјСЏ_РєРѕРѕСЂРґ) Р·Р°РґР°РµС‚СЃСЏ РєРІР°РЅС‚РѕСЂРѕРј
+   РїСЂРѕРёР·РІРѕРґСЊРЅРѕСЃС‚Рё, Рё РІ РґР°Р»СЊРЅРµР№С€РёС… РїСЂРѕРІРµСЂРєР°С… РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ.
 
- 1.2 <имя_коорд:?>
+ 1.2 <РёРјСЏ_РєРѕРѕСЂРґ:?>
 
-   Имя связки задано как квантор UNKNOWN.
+   РРјСЏ СЃРІСЏР·РєРё Р·Р°РґР°РЅРѕ РєР°Рє РєРІР°РЅС‚РѕСЂ UNKNOWN.
 
- 2. <имя_связки>
+ 2. <РёРјСЏ_СЃРІСЏР·РєРё>
 
-   Сокращенный формат, имя связки должно быть объявлено как имя
-   состояния координаты с предопределенным именем net.
+   РЎРѕРєСЂР°С‰РµРЅРЅС‹Р№ С„РѕСЂРјР°С‚, РёРјСЏ СЃРІСЏР·РєРё РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РѕР±СЉСЏРІР»РµРЅРѕ РєР°Рє РёРјСЏ
+   СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃ РїСЂРµРґРѕРїСЂРµРґРµР»РµРЅРЅС‹Рј РёРјРµРЅРµРј net.
 
  3. <*>
 
-   Связка задана как квантор всеобщности, так что в операциях сравнения
-   она будет подходить для любой другой связки.
+   РЎРІСЏР·РєР° Р·Р°РґР°РЅР° РєР°Рє РєРІР°РЅС‚РѕСЂ РІСЃРµРѕР±С‰РЅРѕСЃС‚Рё, С‚Р°Рє С‡С‚Рѕ РІ РѕРїРµСЂР°С†РёСЏС… СЃСЂР°РІРЅРµРЅРёСЏ
+   РѕРЅР° Р±СѓРґРµС‚ РїРѕРґС…РѕРґРёС‚СЊ РґР»СЏ Р»СЋР±РѕР№ РґСЂСѓРіРѕР№ СЃРІСЏР·РєРё.
 
  4. <?>
 
-   Особое задание связки - через квантор UNKNOWN.
+   РћСЃРѕР±РѕРµ Р·Р°РґР°РЅРёРµ СЃРІСЏР·РєРё - С‡РµСЂРµР· РєРІР°РЅС‚РѕСЂ UNKNOWN.
 
 ***************************************************************************/
-bool Tree_Link::LoadTxt( Macro_Parser &txtfile, const SynGram &gram )
+bool Tree_Link::LoadTxt(Macro_Parser &txtfile, const SynGram &gram)
 {
- const BSourceState back = txtfile.tellp();
- BethToken coord_name=txtfile.read();
- if( coord_name.GetToken()==B_OTRIPAREN )
-  {
-   coord_name = txtfile.read();
-
-   switch(coord_name.GetToken())
+    const BSourceState back = txtfile.tellp();
+    BethToken coord_name = txtfile.read();
+    if (coord_name.GetToken() == B_OTRIPAREN)
     {
-     case ANY_STATE:     icoord=ANY_STATE;     break;
-     case UNKNOWN_STATE: icoord=UNKNOWN_STATE; break;
+        coord_name = txtfile.read();
 
-     default:
-      {
-       const BethToken t=txtfile.read();
-
-       if( t.GetToken() == B_COLON )
+        switch (coord_name.GetToken())
         {
-         // Полный, расширенный формат с указанием имени координаты.
-         if( (icoord = gram.FindCoord(coord_name.string()).GetIndex())==UNKNOWN )
-          {
-           lem::Iridium::Print_Error(coord_name,txtfile);
+        case ANY_STATE:     icoord = ANY_STATE;     break;
+        case UNKNOWN_STATE: icoord = UNKNOWN_STATE; break;
 
-           gram.GetIO().merr().printf(
-                                      "The coordinate [%us] is not previously declared in grammar\n"
-                                      , coord_name.c_str()
-                                     );
-           throw E_ParserError();
-          }
-        }
-       else
+        default:
         {
-         icoord = I_NET;
-         txtfile.seekp(coord_name);
+            const BethToken t = txtfile.read();
+
+            if (t.GetToken() == B_COLON)
+            {
+                // РџРѕР»РЅС‹Р№, СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ С„РѕСЂРјР°С‚ СЃ СѓРєР°Р·Р°РЅРёРµРј РёРјРµРЅРё РєРѕРѕСЂРґРёРЅР°С‚С‹.
+                if ((icoord = gram.FindCoord(coord_name.string()).GetIndex()) == UNKNOWN)
+                {
+                    lem::Iridium::Print_Error(coord_name, txtfile);
+
+                    gram.GetIO().merr().printf(
+                        "The coordinate [%us] is not previously declared in grammar\n"
+                        , coord_name.c_str()
+                    );
+                    throw E_ParserError();
+                }
+            }
+            else
+            {
+                icoord = I_NET;
+                txtfile.seekp(coord_name);
+            }
+
+            const BethToken state_name = txtfile.read();
+            switch (state_name.GetToken())
+            {
+            case B_ANY:     istate = ANY_STATE;     break;
+            case B_UNKNOWN: istate = UNKNOWN_STATE; break;
+            default:
+                if ((istate = gram.coords()[icoord].FindState(state_name.string())) == UNKNOWN)
+                {
+                    lem::Iridium::Print_Error(state_name, txtfile);
+                    gram.GetIO().merr().printf(
+                        "State [%us] is not declared for coordinate [%us]\n"
+                        , state_name.c_str(), gram.coords()[icoord].GetName().string().c_str()
+                    );
+
+                    throw E_ParserError();
+                }
+                break;
+            }
+
+            break;
+        }
         }
 
-       const BethToken state_name = txtfile.read();
-       switch( state_name.GetToken() )
-        {
-         case B_ANY:     istate = ANY_STATE;     break;
-         case B_UNKNOWN: istate = UNKNOWN_STATE; break;
-         default:
-          if( (istate = gram.coords()[icoord].FindState(state_name.string()))==UNKNOWN )
-           {
-            lem::Iridium::Print_Error(state_name,txtfile);
-            gram.GetIO().merr().printf(
-                                       "State [%us] is not declared for coordinate [%us]\n"
-                                       , state_name.c_str(), gram.coords()[icoord].GetName().string().c_str()
-                                      );
-
-            throw E_ParserError();
-           }
-          break;
-        }
-
-       break;
-      }
+        txtfile.read_it(B_CTRIPAREN);
+        return true;
+    }
+    else
+    {
+        txtfile.seekp(back);
+        icoord = UNKNOWN;
+        istate = UNKNOWN;
+        return false;
     }
 
-   txtfile.read_it(B_CTRIPAREN);
-   return true;
-  }
- else
-  {
-   txtfile.seekp(back);
-   icoord=UNKNOWN;
-   istate=UNKNOWN;
-   return false;
-  }
-
- return false;
+    return false;
 }
 #endif
 
 
-void Tree_Link::Print( OFormatter &txtfile, const SynGram &gram ) const
+void Tree_Link::Print(OFormatter &txtfile, const SynGram &gram) const
 {
- if( icoord==UNKNOWN_STATE || icoord==UNKNOWN || istate==UNKNOWN || istate==ANY_STATE || istate==UNKNOWN_STATE )
-  return;
+    if (icoord == UNKNOWN_STATE || icoord == UNKNOWN || istate == UNKNOWN || istate == ANY_STATE || istate == UNKNOWN_STATE)
+        return;
 
- txtfile.printf( "%vfC%us", sol_get_token(B_OTRIPAREN).c_str() );
+    txtfile.printf("%vfC%us", sol_get_token(B_OTRIPAREN).c_str());
 
- switch(icoord)
-  {
-//   case UNKNOWN:
-//   case UNKNOWN_STATE:
-//    txtfile.printf( "%us", sol_get_token(B_UNKNOWN).c_str() );
-//    break;
+    switch (icoord)
+    {
+        //   case UNKNOWN:
+        //   case UNKNOWN_STATE:
+        //    txtfile.printf( "%us", sol_get_token(B_UNKNOWN).c_str() );
+        //    break;
 
-   case ANY_STATE:
-    txtfile.printf( "%us", sol_get_token(B_ANY).c_str() );
-    break;
+    case ANY_STATE:
+        txtfile.printf("%us", sol_get_token(B_ANY).c_str());
+        break;
 
-   case I_NET:
-    txtfile.printf(
-                   "%vf2%us",
-                   gram.coords()[icoord].GetStateName(istate).c_str()
-                  );
-    break;
+    case I_NET:
+        txtfile.printf(
+            "%vf2%us",
+            gram.coords()[icoord].GetStateName(istate).c_str()
+        );
+        break;
 
-   default:
-    txtfile.printf(
-                   "%vf2%us%vfC%us",
-                   gram.coords()[icoord].GetName().string().c_str(),
-                   sol_get_token(B_COLON).c_str()
-                  );
+    default:
+        txtfile.printf(
+            "%vf2%us%vfC%us",
+            gram.coords()[icoord].GetName().string().c_str(),
+            sol_get_token(B_COLON).c_str()
+        );
 
-    switch(istate)
-     {
-      case ANY_STATE:
-       txtfile.printf(
-                      "%vf2%us",
-                      sol_get_token(B_ANY).c_str()
-                     );
-       break;
+        switch (istate)
+        {
+        case ANY_STATE:
+            txtfile.printf(
+                "%vf2%us",
+                sol_get_token(B_ANY).c_str()
+            );
+            break;
 
-      case UNKNOWN_STATE:
-       txtfile.printf(
-                      "%vf2%us",
-                      sol_get_token(B_UNKNOWN).c_str()
-                     );
-       break;
+        case UNKNOWN_STATE:
+            txtfile.printf(
+                "%vf2%us",
+                sol_get_token(B_UNKNOWN).c_str()
+            );
+            break;
 
-      default:
-       txtfile.printf(
-                      "%vf2%us",
-                      gram.coords()[icoord].GetStateName(istate).c_str()
-                     );
-       break;
-     }
-    break;
-  }
+        default:
+            txtfile.printf(
+                "%vf2%us",
+                gram.coords()[icoord].GetStateName(istate).c_str()
+            );
+            break;
+        }
+        break;
+    }
 
- txtfile.printf( "%vfC%us%vn", sol_get_token(B_CTRIPAREN).c_str() );
- return;
+    txtfile.printf("%vfC%us%vn", sol_get_token(B_CTRIPAREN).c_str());
+    return;
 }
 
 
 #if defined SOL_SAVETXT
-void Tree_Link::SaveTxt( OFormatter &txtfile, const SynGram &gram ) const
+void Tree_Link::SaveTxt(OFormatter &txtfile, const SynGram &gram) const
 {
- if( icoord==UNKNOWN || icoord==UNKNOWN_STATE || icoord==ANY_STATE )
-  return;
+    if (icoord == UNKNOWN || icoord == UNKNOWN_STATE || icoord == ANY_STATE)
+        return;
 
- txtfile<<sol_get_token(B_OTRIPAREN);
+    txtfile << sol_get_token(B_OTRIPAREN);
 
- switch(icoord)
-  {
-   case ANY_STATE:
-    txtfile<<sol_get_token(B_ANY);
-    break;
-
-   case I_NET:
-    txtfile<<gram.coords()[icoord].GetStateName(istate);
-    break;
-
-   default:
+    switch (icoord)
     {
-     txtfile<<gram.coords()[icoord].GetName().front()<<sol_get_token(B_COLON);
-
-     switch(istate)
-      {
-       case ANY_STATE:     txtfile<<sol_get_token(B_ANY);     break;
-       case UNKNOWN_STATE: txtfile<<sol_get_token(B_UNKNOWN); break;
-       default:
-        txtfile<<gram.coords()[icoord].GetStateName(istate);
+    case ANY_STATE:
+        txtfile << sol_get_token(B_ANY);
         break;
-      }
 
-     break;
+    case I_NET:
+        txtfile << gram.coords()[icoord].GetStateName(istate);
+        break;
+
+    default:
+    {
+        txtfile << gram.coords()[icoord].GetName().front() << sol_get_token(B_COLON);
+
+        switch (istate)
+        {
+        case ANY_STATE:     txtfile << sol_get_token(B_ANY);     break;
+        case UNKNOWN_STATE: txtfile << sol_get_token(B_UNKNOWN); break;
+        default:
+            txtfile << gram.coords()[icoord].GetStateName(istate);
+            break;
+        }
+
+        break;
     }
-  }
+    }
 
- txtfile<<sol_get_token(B_CTRIPAREN);
- return;
+    txtfile << sol_get_token(B_CTRIPAREN);
+    return;
 }
 #endif
-
-// -------------------------- End Of File [TREE_LINK.CPP] ----------------------

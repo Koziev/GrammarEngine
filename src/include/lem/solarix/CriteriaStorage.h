@@ -2,31 +2,31 @@
 #define SOL_CRITERIA_STORAGE__H
 #pragma once
 
- #include <lem/noncopyable.h>
+#include <lem/noncopyable.h>
 
- namespace lem
- {
-  class UCString;
- }
+namespace lem
+{
+    class UCString;
+}
 
- namespace Solarix
- {
-  class LS_ResultSet;
-  class Criterion;
-  
-  class CriteriaStorage : lem::NonCopyable
-  {
-   protected:
-    CriteriaStorage(void) {}
+namespace Solarix
+{
+    class LS_ResultSet;
+    class Criterion;
 
-   public:
-    virtual ~CriteriaStorage(void) {}
+    class CriteriaStorage : lem::NonCopyable
+    {
+    protected:
+        CriteriaStorage() {}
 
-    virtual int FindCriterion( const lem::UCString & name )=0;
-    virtual int StoreCriterion( const Criterion &x )=0;
-    virtual Criterion* GetCriterion( int id )=0;
-    virtual LS_ResultSet* EnumerateCriteria(void)=0;
-  };
- }
+    public:
+        virtual ~CriteriaStorage() {}
+
+        virtual int FindCriterion(const lem::UCString & name) = 0;
+        virtual int StoreCriterion(const Criterion &x) = 0;
+        virtual Criterion* GetCriterion(int id) = 0;
+        virtual LS_ResultSet* EnumerateCriteria() = 0;
+    };
+}
 
 #endif

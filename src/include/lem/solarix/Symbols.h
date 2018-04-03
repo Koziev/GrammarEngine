@@ -61,14 +61,14 @@ namespace Solarix
     public:
         Symbols(GraphGram *_gg);
 
-        ~Symbols(void);
+        ~Symbols();
 
         void Connect(AlphabetStorage *_storage);
 
-        int Count(void);
-        int CountForms(void);
+        int Count();
+        int CountForms();
 
-        SymbolEnumerator* Enumerate(void);
+        SymbolEnumerator* Enumerate();
         const GG_Entry& operator[](int id);
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
@@ -77,7 +77,7 @@ namespace Solarix
             bool is_extern,
             const Binarization_Options &options
         );
-        void FinishCompilation(void);
+        void FinishCompilation();
 #endif
 
         const Word_Coord FindSymbol(lem::uint32_t code);

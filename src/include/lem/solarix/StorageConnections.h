@@ -24,13 +24,13 @@
     virtual StorageConnection* CreateConnection( const lem::UFString &provider, const lem::UFString &connection_string );
 
    public:
-    StorageConnections(void);
-    virtual ~StorageConnections(void);
+    StorageConnections();
+    virtual ~StorageConnections();
 
     virtual StorageConnection* Connect( const lem::UFString &provider, const lem::UFString &connection_string );
     virtual void Disconnect( StorageConnection* cnx );
 
-    virtual void Ping(void);
+    virtual void Ping();
   };
  }
 
