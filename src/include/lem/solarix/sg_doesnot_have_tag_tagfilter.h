@@ -14,9 +14,9 @@
    public:
     TF_DoesNotHaveTag( const Dictionary &dict, const UCString &tag_name );
 
-    virtual bool Match( SG_TagsList x ) const;
+    virtual bool Match( SG_TagsList x ) const override;
 
-    virtual bool Empty(void) const;
+    virtual bool Empty() const override;
   };
 
  } // namespace Solarix

@@ -3,48 +3,48 @@
 using namespace lem;
 using namespace Solarix;
 
-LS_ResultSet_MCollectCref::LS_ResultSet_MCollectCref( const lem::MCollect<int> &_list )
- : LS_ResultSet(NULL), i(0), int_dataset(_list), n(CastSizeToInt(_list.size()))
+LS_ResultSet_MCollectCref::LS_ResultSet_MCollectCref(const lem::MCollect<int> &_list)
+    : LS_ResultSet(nullptr), i(0), int_dataset(_list), n(CastSizeToInt(_list.size()))
 {
- return;
+    return;
 }
 
 
-bool LS_ResultSet_MCollectCref::Fetch(void)
+bool LS_ResultSet_MCollectCref::Fetch()
 {
- if( i<n-1 )
-  {
-   i++;
-   return true; 
-  }
- else
-  {
-   return false;
-  }
+    if (i < n - 1)
+    {
+        i++;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
-int LS_ResultSet_MCollectCref::GetInt( int FieldIndex )
+int LS_ResultSet_MCollectCref::GetInt(int FieldIndex)
 {
- LEM_CHECKIT_Z(FieldIndex==0);
- return int_dataset[i];
+    LEM_CHECKIT_Z(FieldIndex == 0);
+    return int_dataset[i];
 }
 
 
-lem::UCString LS_ResultSet_MCollectCref::GetUCString( int FieldIndex )
+lem::UCString LS_ResultSet_MCollectCref::GetUCString(int FieldIndex)
 {
- LEM_STOPIT;
- return UCString();
+    LEM_STOPIT;
+    return UCString();
 }
 
-lem::UFString LS_ResultSet_MCollectCref::GetUFString( int FieldIndex )
+lem::UFString LS_ResultSet_MCollectCref::GetUFString(int FieldIndex)
 {
- LEM_STOPIT;
- return UFString();
+    LEM_STOPIT;
+    return UFString();
 }
 
-lem::FString LS_ResultSet_MCollectCref::GetFString( int FieldIndex )
+lem::FString LS_ResultSet_MCollectCref::GetFString(int FieldIndex)
 {
- LEM_STOPIT;
- return FString();
+    LEM_STOPIT;
+    return FString();
 }

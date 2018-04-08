@@ -5,124 +5,124 @@
 
 using namespace Solarix;
 
-PhraseLinkEnumerator::PhraseLinkEnumerator( SG_Net *th )
- : id_phrase1(UNKNOWN), thesaurus(th)
+PhraseLinkEnumerator::PhraseLinkEnumerator(SG_Net *th)
+    : id_phrase1(UNKNOWN), thesaurus(th)
 {
- rs = NULL;
- id_phrase1_field=id_phrase2_field=link_type_field=tags_field=UNKNOWN;
- return;
+    rs = nullptr;
+    id_phrase1_field = id_phrase2_field = link_type_field = tags_field = UNKNOWN;
+    return;
 }
 
 
-PhraseLinkEnumerator::PhraseLinkEnumerator( SG_Net *th, int _id_phrase1 )
- : id_phrase1(_id_phrase1), thesaurus(th)
+PhraseLinkEnumerator::PhraseLinkEnumerator(SG_Net *th, int _id_phrase1)
+    : id_phrase1(_id_phrase1), thesaurus(th)
 {
- LEM_CHECKIT_Z( id_phrase1!=UNKNOWN );
- rs = NULL;
- id_phrase1_field=id_phrase2_field=link_type_field=tags_field=UNKNOWN;
- return;
+    LEM_CHECKIT_Z(id_phrase1 != UNKNOWN);
+    rs = nullptr;
+    id_phrase1_field = id_phrase2_field = link_type_field = tags_field = UNKNOWN;
+    return;
 }
 
-PhraseLinkEnumerator::PhraseLinkEnumerator( SG_Net *th, int _id_phrase1, int _link_type )
- : id_phrase1(_id_phrase1), thesaurus(th)
+PhraseLinkEnumerator::PhraseLinkEnumerator(SG_Net *th, int _id_phrase1, int _link_type)
+    : id_phrase1(_id_phrase1), thesaurus(th)
 {
- LEM_CHECKIT_Z( id_phrase1!=UNKNOWN );
- LEM_CHECKIT_Z( _link_type!=UNKNOWN );
+    LEM_CHECKIT_Z(id_phrase1 != UNKNOWN);
+    LEM_CHECKIT_Z(_link_type != UNKNOWN);
 
- link_types.push_back(_link_type);
- rs = NULL;
- id_phrase1_field=id_phrase2_field=link_type_field=tags_field=UNKNOWN;
- return;
-}
-
-
-PhraseLinkEnumerator::PhraseLinkEnumerator( SG_Net *th, int _id_phrase1, const lem::MCollect<int> _link_types )
- : id_phrase1(_id_phrase1), thesaurus(th), link_types(_link_types)
-{
- LEM_CHECKIT_Z( id_phrase1!=UNKNOWN );
-
- rs = NULL;
- id_phrase1_field=id_phrase2_field=link_type_field=tags_field=UNKNOWN;
- return;
+    link_types.push_back(_link_type);
+    rs = nullptr;
+    id_phrase1_field = id_phrase2_field = link_type_field = tags_field = UNKNOWN;
+    return;
 }
 
 
-PhraseLinkEnumerator::~PhraseLinkEnumerator(void)
+PhraseLinkEnumerator::PhraseLinkEnumerator(SG_Net *th, int _id_phrase1, const lem::MCollect<int> _link_types)
+    : id_phrase1(_id_phrase1), thesaurus(th), link_types(_link_types)
 {
- lem_rub_off(rs);
- return;
+    LEM_CHECKIT_Z(id_phrase1 != UNKNOWN);
+
+    rs = nullptr;
+    id_phrase1_field = id_phrase2_field = link_type_field = tags_field = UNKNOWN;
+    return;
 }
 
 
-bool PhraseLinkEnumerator::Fetch(void)
+PhraseLinkEnumerator::~PhraseLinkEnumerator()
 {
- if( rs==NULL )
-  {
-   if( id_phrase1==UNKNOWN )
+    lem_rub_off(rs);
+    return;
+}
+
+
+bool PhraseLinkEnumerator::Fetch()
+{
+    if (rs == nullptr)
     {
-     rs = thesaurus->GetStorage().ListPhraseLinks();
-     id_phrase1_field=1;
-     id_phrase2_field=2;
-     link_type_field=4;
-     tags_field=5;
+        if (id_phrase1 == UNKNOWN)
+        {
+            rs = thesaurus->GetStorage().ListPhraseLinks();
+            id_phrase1_field = 1;
+            id_phrase2_field = 2;
+            link_type_field = 4;
+            tags_field = 5;
+        }
+        else if (id_phrase1 != UNKNOWN && link_types.empty())
+        {
+            rs = thesaurus->GetStorage().ListPhraseLinks(id_phrase1);
+            id_phrase2_field = 1;
+            link_type_field = 3;
+            tags_field = 4;
+        }
+        else
+        {
+            rs = thesaurus->GetStorage().ListPhraseLinks(id_phrase1, link_types);
+            id_phrase2_field = 1;
+            link_type_field = 3;
+            tags_field = 4;
+        }
     }
-   else if( id_phrase1!=UNKNOWN && link_types.empty() )
-    {
-     rs = thesaurus->GetStorage().ListPhraseLinks(id_phrase1);
-     id_phrase2_field=1;
-     link_type_field=3;
-     tags_field=4;
-    }
-   else
-    {
-     rs = thesaurus->GetStorage().ListPhraseLinks(id_phrase1,link_types);
-     id_phrase2_field=1;
-     link_type_field=3;
-     tags_field=4;
-    }
-  }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
-int PhraseLinkEnumerator::GetLinkId(void)
+int PhraseLinkEnumerator::GetLinkId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-int PhraseLinkEnumerator::GetIdPhrase1(void)
+int PhraseLinkEnumerator::GetIdPhrase1()
 {
- if( id_phrase1==UNKNOWN )
-  return rs->GetInt( id_phrase1_field );
- else
-  return id_phrase1;
-}
-
-
-int PhraseLinkEnumerator::GetIdPhrase2(void)
-{
- return rs->GetInt(id_phrase2_field);
+    if (id_phrase1 == UNKNOWN)
+        return rs->GetInt(id_phrase1_field);
+    else
+        return id_phrase1;
 }
 
 
-int PhraseLinkEnumerator::GetLinkType(void)
+int PhraseLinkEnumerator::GetIdPhrase2()
 {
- if( link_types.size()==1 )
-  return link_types.front();
- else
-  return rs->GetInt(link_type_field);
-}
-
-int PhraseLinkEnumerator::GetTagsId(void)
-{
- const int id_tags = rs->GetInt(tags_field);
- return id_tags;
+    return rs->GetInt(id_phrase2_field);
 }
 
 
-SG_TagsList PhraseLinkEnumerator::GetTags(void)
+int PhraseLinkEnumerator::GetLinkType()
 {
- const int id_tags = rs->GetInt(tags_field);
- return thesaurus->GetPhraseLinkTags( id_tags, GetLinkId() );
+    if (link_types.size() == 1)
+        return link_types.front();
+    else
+        return rs->GetInt(link_type_field);
+}
+
+int PhraseLinkEnumerator::GetTagsId()
+{
+    const int id_tags = rs->GetInt(tags_field);
+    return id_tags;
+}
+
+
+SG_TagsList PhraseLinkEnumerator::GetTags()
+{
+    const int id_tags = rs->GetInt(tags_field);
+    return thesaurus->GetPhraseLinkTags(id_tags, GetLinkId());
 }

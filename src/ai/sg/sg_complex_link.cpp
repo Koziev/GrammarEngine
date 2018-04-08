@@ -4,14 +4,14 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Класс SG_ComplexLink - сложная связка в тезаурусе
+// РљР»Р°СЃСЃ SG_ComplexLink - СЃР»РѕР¶РЅР°СЏ СЃРІСЏР·РєР° РІ С‚РµР·Р°СѓСЂСѓСЃРµ
 //
-// 06.12.2007 - архитектура сложных связок полностью переделана.
-// 27.11.2009 - добавлена поддержка длинных токенов через BethToken::GetFullStr
+// 06.12.2007 - Р°СЂС…РёС‚РµРєС‚СѓСЂР° СЃР»РѕР¶РЅС‹С… СЃРІСЏР·РѕРє РїРѕР»РЅРѕСЃС‚СЊСЋ РїРµСЂРµРґРµР»Р°РЅР°.
+// 27.11.2009 - РґРѕР±Р°РІР»РµРЅР° РїРѕРґРґРµСЂР¶РєР° РґР»РёРЅРЅС‹С… С‚РѕРєРµРЅРѕРІ С‡РµСЂРµР· BethToken::GetFullStr
 // -----------------------------------------------------------------------------
 //
 // CD->22.09.2006
-// LC->19.11.2010
+// LC->08.04.2018
 // --------------
 
 #include <lem/oformatter.h>
@@ -27,129 +27,129 @@
 using namespace lem;
 using namespace Solarix;
 
-SG_ComplexLink::SG_ComplexLink(void)
+SG_ComplexLink::SG_ComplexLink()
 {
- tl_id=UNKNOWN;
- tags=NULL;
- return;
+    tl_id = UNKNOWN;
+    tags = NULL;
+    return;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 
-void SG_ComplexLink::LoadPoint( Macro_Parser &txtfile, SynGram &gram, lem::UFString &entry )
+void SG_ComplexLink::LoadPoint(Macro_Parser &txtfile, SynGram &gram, lem::UFString &entry)
 {
- BethToken t = txtfile.read();
+    BethToken t = txtfile.read();
 
- if( t.GetToken()==B_ENTRY )
-  {
-   // Особый формат entry Класс:Статья { уточнение }
-   // преобразуется в ключ статьи и возвращается в виде #ключ
-   UCString class0 = txtfile.read().string();
-   const int ic0 = class0==L"?" ? ANY_STATE : gram.FindClass(class0);
-   if( ic0==UNKNOWN ) 
+    if (t.GetToken() == B_ENTRY)
     {
-     Print_Error( txtfile );
-     gram.GetIO().merr().printf( "Unknown class %us\n", class0.c_str() );
-     throw E_BaseException();
+        // РћСЃРѕР±С‹Р№ С„РѕСЂРјР°С‚ entry РљР»Р°СЃСЃ:РЎС‚Р°С‚СЊСЏ { СѓС‚РѕС‡РЅРµРЅРёРµ }
+        // РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ РІ РєР»СЋС‡ СЃС‚Р°С‚СЊРё Рё РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РІ РІРёРґРµ #РєР»СЋС‡
+        UCString class0 = txtfile.read().string();
+        const int ic0 = class0 == L"?" ? ANY_STATE : gram.FindClass(class0);
+        if (ic0 == UNKNOWN)
+        {
+            Print_Error(txtfile);
+            gram.GetIO().merr().printf("Unknown class %us\n", class0.c_str());
+            throw E_BaseException();
+        }
+
+        txtfile.read_it(B_COLON);
+        UCString entry0 = sol_read_multyname(gram.GetIO(), txtfile, B_OFIGPAREN);
+        entry0.strip(L'"');
+        entry0.trim();
+
+        // РњРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅР° РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ С„РёР»СЊС‚СЂСѓСЋС‰Р°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р°
+        Solarix::CP_Array coords0;
+        coords0.LoadTxt(txtfile, gram);
+
+        if (gram.IsOmonym(ic0, lem::to_upper(entry0)) && coords0.empty())
+        {
+            Print_Error(txtfile);
+            gram.GetIO().merr().printf("Omonym %us:%us requires the coordinate array\n", class0.c_str(), entry0.c_str());
+            throw E_BaseException();
+        }
+
+        const int ie0 = coords0.empty() ? gram.FindEntry(entry0, ic0, false) : gram.FindEntryOmonym(entry0, ic0, coords0);
+        if (ie0 == UNKNOWN)
+        {
+            Print_Error(txtfile);
+            gram.GetIO().merr().printf("Unknown entry %us:%us\n", class0.c_str(), entry0.c_str());
+            throw E_BaseException();
+        }
+
+        const int ekey = gram.GetEntry(ie0).GetKey();
+        entry = lem::format_str(L"#%d", ekey);
+
+        return;
     }
 
-   txtfile.read_it( B_COLON );
-   UCString entry0 = sol_read_multyname( gram.GetIO(), txtfile, B_OFIGPAREN );
-   entry0.strip(L'"');
-   entry0.trim();
+    bool figparen = t.GetToken() == B_OFIGPAREN;
 
-   // Может быть задана дополнительная фильтрующая координата
-   Solarix::CP_Array coords0;
-   coords0.LoadTxt( txtfile, gram );
-   
-   if( gram.IsOmonym(ic0,lem::to_upper(entry0)) && coords0.empty() )
+    if (!figparen)
+        txtfile.seekp(t);
+
+    entry.reserve(128);
+
+    if (t.string() == L'@')
     {
-     Print_Error( txtfile );
-     gram.GetIO().merr().printf( "Omonym %us:%us requires the coordinate array\n", class0.c_str(), entry0.c_str() );
-     throw E_BaseException();
+        entry = L'@';
+        t = txtfile.read();
     }
 
-   const int ie0 = coords0.empty() ? gram.FindEntry(entry0,ic0,false) : gram.FindEntryOmonym(entry0,ic0,coords0);
-   if( ie0==UNKNOWN ) 
+    while (!txtfile.eof())
     {
-     Print_Error( txtfile );
-     gram.GetIO().merr().printf( "Unknown entry %us:%us\n", class0.c_str(), entry0.c_str() );
-     throw E_BaseException();
+        BethToken t = txtfile.read();
+        if (figparen && t.GetToken() == B_CFIGPAREN)
+            break;
+
+        if (!entry.empty())
+            entry += L' ';
+
+        UFString ts(t.GetFullStr());
+        ts.strip(L'"');
+        entry += ts;
+
+        if (!figparen)
+            break;
     }
 
-   const int ekey = gram.GetEntry(ie0).GetKey();
-   entry = lem::format_str( L"#%d", ekey );
+    if (entry.front() == L'@')
+    {
+        // РЎРїРµС†СЃРёРјРІРѕР» @ Р·Р°СЃС‚Р°РІР»СЏРµС‚ Р·Р°РїРѕРјРЅРёС‚СЊ СЃС‚СЂРѕРєСѓ РІ РІРёРґРµ "РєР°Рє РµСЃС‚СЊ"
+        entry.remove(0);
+        entry.trim();
+    }
+    else
+    {
+        entry.strip(L'"');
+        gram.GetDict().GetLexAuto().TranslateLexem(entry, true);
+    }
 
-   return;
-  }
-
- bool figparen = t.GetToken()==B_OFIGPAREN;
-
- if( !figparen )
-  txtfile.seekp(t);
- 
- entry.reserve(128);
-
- if( t.string()==L'@' )
-  {
-   entry = L'@';
-   t = txtfile.read();
-  }
-
- while( !txtfile.eof() )
-  {
-   BethToken t = txtfile.read();
-   if( figparen && t.GetToken()==B_CFIGPAREN )
-    break;
-   
-   if( !entry.empty() )
-    entry += L' ';
-
-   UFString ts( t.GetFullStr() );
-   ts.strip(L'"');
-   entry += ts;
-
-   if( !figparen )
-    break;
-  }
-
- if( entry.front()==L'@' )
-  {
-   // Спецсимвол @ заставляет запомнить строку в виде "как есть"
-   entry.remove(0);
-   entry.trim();
-  }
- else
-  {
-   entry.strip(L'"');
-   gram.GetDict().GetLexAuto().TranslateLexem(entry,true);
-  }
-
- return;
+    return;
 }
 
 
 
 
-void SG_ComplexLink::LoadTxt( Macro_Parser &txtfile, SynGram &gram )
+void SG_ComplexLink::LoadTxt(Macro_Parser &txtfile, SynGram &gram)
 {
- LoadPoint(txtfile,gram,entry1); 
- link.LoadTxt(txtfile,gram);
- LoadPoint(txtfile,gram,entry2); 
- return;
+    LoadPoint(txtfile, gram, entry1);
+    link.LoadTxt(txtfile, gram);
+    LoadPoint(txtfile, gram, entry2);
+    return;
 }
 
 
 
-bool SG_ComplexLink::operator<( const SG_ComplexLink &x ) const
+bool SG_ComplexLink::operator<(const SG_ComplexLink &x) const
 {
- if( entry1 < x.entry1 )
-  return true;
+    if (entry1 < x.entry1)
+        return true;
 
- if( entry1 > x.entry1 )
-  return false;
- 
- return entry2 < x.entry2;
+    if (entry1 > x.entry1)
+        return false;
+
+    return entry2 < x.entry2;
 }
 #endif

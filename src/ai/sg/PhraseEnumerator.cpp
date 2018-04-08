@@ -6,34 +6,34 @@
 
 using namespace Solarix;
 
-PhraseEnumerator::PhraseEnumerator( LS_ResultSet *_rs, int _pk_field, SynGram *_sg )
- : rs(_rs), sg(_sg), pk_field(_pk_field)
+PhraseEnumerator::PhraseEnumerator(LS_ResultSet *_rs, int _pk_field, SynGram *_sg)
+    : rs(_rs), sg(_sg), pk_field(_pk_field)
 {
 }
 
 
-PhraseEnumerator::~PhraseEnumerator(void)
+PhraseEnumerator::~PhraseEnumerator()
 {
- lem_rub_off(rs);
- return;
+    lem_rub_off(rs);
+    return;
 }
 
-bool PhraseEnumerator::Fetch(void)
+bool PhraseEnumerator::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int PhraseEnumerator::GetPhraseId(void)
+int PhraseEnumerator::GetPhraseId()
 {
- return rs->GetInt(pk_field);
+    return rs->GetInt(pk_field);
 }
 
 
-void PhraseEnumerator::GetText( lem::UFString &text )
+void PhraseEnumerator::GetText(lem::UFString &text)
 {
- int id = GetPhraseId();
- SG_Phrase frz;
- sg->GetStorage().GetPhrase( id, frz );
- text = frz.GetText();
- return;
+    int id = GetPhraseId();
+    SG_Phrase frz;
+    sg->GetStorage().GetPhrase(id, frz);
+    text = frz.GetText();
+    return;
 }

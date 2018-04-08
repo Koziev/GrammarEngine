@@ -11,143 +11,142 @@ using namespace lem;
 using namespace Solarix;
 
 #if defined SOL_LOADTXT
-void ExactWordEntryLocator::LoadAuxSelector( Macro_Parser &txtfile, SynGram &sg )
+void ExactWordEntryLocator::LoadAuxSelector(Macro_Parser &txtfile, SynGram &sg)
 {
- aux_type = txtfile.read().string();
- if( aux_type.front()==L'"' )
-  aux_type.strip(L'"');
- else
-  aux_type.strip(L'\'');
+    aux_type = txtfile.read().string();
+    if (aux_type.front() == L'"')
+        aux_type.strip(L'"');
+    else
+        aux_type.strip(L'\'');
 
- txtfile.read_it( B_EQUAL );
+    txtfile.read_it(B_EQUAL);
 
- lem::Iridium::BethToken t = txtfile.read();
+    lem::Iridium::BethToken t = txtfile.read();
 
- aux_value = t.string();
+    aux_value = t.string();
 
- if( aux_value.front()==L'"' )
-  aux_value.strip(L'"');
- else
-  aux_value.strip(L'\'');
- 
- if( sg.GetAuxFormTypes()[aux_type]==UNKNOWN )
-  {
-   lem::Iridium::Print_Error( t, txtfile );
-   sg.GetIO().merr().printf( "Unknown aux form type %us\n", aux_type.c_str() );
-   throw E_ParserError();
-  }
+    if (aux_value.front() == L'"')
+        aux_value.strip(L'"');
+    else
+        aux_value.strip(L'\'');
 
- return;
+    if (sg.GetAuxFormTypes()[aux_type] == UNKNOWN)
+    {
+        lem::Iridium::Print_Error(t, txtfile);
+        sg.GetIO().merr().printf("Unknown aux form type %us\n", aux_type.c_str());
+        throw E_ParserError();
+    }
+
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADTXT
 // Загружаем список координатных пар до токена } (курсор будет после него)
-void ExactWordEntryLocator::LoadTxt( Macro_Parser &txtfile, SynGram &sg )
+void ExactWordEntryLocator::LoadTxt(Macro_Parser &txtfile, SynGram &sg)
 {
- while( !txtfile.eof() )
-  {
-   if( txtfile.probe(B_CFIGPAREN) )
-    break; 
-
-   if( txtfile.probe( L"aux" ) )
+    while (!txtfile.eof())
     {
-     LoadAuxSelector( txtfile, sg );
-    }
-   else
-    {
-     Solarix::GramCoordPair p;
-     p.LoadTxt(txtfile,sg);
-     pairs.push_back( p );
-    }
-  }
+        if (txtfile.probe(B_CFIGPAREN))
+            break;
 
- return;
+        if (txtfile.probe(L"aux"))
+        {
+            LoadAuxSelector(txtfile, sg);
+        }
+        else
+        {
+            Solarix::GramCoordPair p;
+            p.LoadTxt(txtfile, sg);
+            pairs.push_back(p);
+        }
+    }
+
+    return;
 }
 #endif
 
 
-void ExactWordEntryLocator::SaveBin( lem::Stream &bin ) const
+void ExactWordEntryLocator::SaveBin(lem::Stream &bin) const
 {
- pairs.SaveBin(bin);
- bin.write(&aux_type,sizeof(aux_type));
- bin.write(&aux_value,sizeof(aux_value));
- return;
+    pairs.SaveBin(bin);
+    bin.write(&aux_type, sizeof(aux_type));
+    bin.write(&aux_value, sizeof(aux_value));
+    return;
 }
 
-void ExactWordEntryLocator::LoadBin( lem::Stream &bin )
+void ExactWordEntryLocator::LoadBin(lem::Stream &bin)
 {
- pairs.LoadBin(bin);
- bin.read(&aux_type,sizeof(aux_type));
- bin.read(&aux_value,sizeof(aux_value));
- return;
+    pairs.LoadBin(bin);
+    bin.read(&aux_type, sizeof(aux_type));
+    bin.read(&aux_value, sizeof(aux_value));
+    return;
 }
 
-bool ExactWordEntryLocator::Empty(void) const
+bool ExactWordEntryLocator::Empty() const
 {
- return pairs.empty() && aux_type.empty() && aux_value.empty();
+    return pairs.empty() && aux_type.empty() && aux_value.empty();
 }
 
 
 
-bool ExactWordEntryLocator::Check( const SG_Entry & e, SynGram & sg ) const
+bool ExactWordEntryLocator::Check(const SG_Entry & e, SynGram & sg) const
 {
- bool all=true;
+    bool all = true;
 
- for( lem::Container::size_type k=0; k<pairs.size(); ++k )
-  {
-   IntCollect e_states = e.GetAttrStates(pairs[k].GetCoord());
-   if( e_states.find( pairs[k].GetState() )==UNKNOWN )
+    for (auto& pair : pairs)
     {
-     if( pairs[k].GetState()==0 && sg.coords()[ pairs[k].GetCoord().GetIndex() ].IsBistable() )
-      {
-       // Задано состояние 0 бистабильной координаты, это равнозначно проверке, что такой координаты вообще нет в списке пар статьи.
-       if( e_states.empty() )
-        continue;
-      }
+        IntCollect e_states = e.GetAttrStates(pair.GetCoord());
+        if (e_states.find(pair.GetState()) == UNKNOWN)
+        {
+            if (pair.GetState() == 0 && sg.coords()[pair.GetCoord().GetIndex()].IsBistable())
+            {
+                // Задано состояние 0 бистабильной координаты, это равнозначно проверке, что такой координаты вообще нет в списке пар статьи.
+                if (e_states.empty())
+                    continue;
+            }
 
-     all = false;
-     break; 
-    }
-  } 
- 
- if( all && HasAuxSelector() )
-  {
-   all = false;
-   const int aux_type_id = sg.GetAuxFormTypes()[ aux_type ];
-   if( aux_type_id==UNKNOWN )
-    {
-     lem::MemFormatter mem;
-     mem.printf( "Unknown aux type [%us]", aux_type.c_str() );
-     throw E_BaseException( mem.string() );
+            all = false;
+            break;
+        }
     }
 
-   lem::UFString aux_data;
-   int aux_id = sg.GetStorage().GetAuxEntryData( e.GetKey(), aux_type_id, aux_data );
-   if( aux_id!=UNKNOWN && aux_data==aux_value.c_str() )
+    if (all && HasAuxSelector())
     {
-     all = true;
+        all = false;
+        const int aux_type_id = sg.GetAuxFormTypes()[aux_type];
+        if (aux_type_id == UNKNOWN)
+        {
+            lem::MemFormatter mem;
+            mem.printf("Unknown aux type [%us]", aux_type.c_str());
+            throw E_BaseException(mem.string());
+        }
+
+        lem::UFString aux_data;
+        int aux_id = sg.GetStorage().GetAuxEntryData(e.GetKey(), aux_type_id, aux_data);
+        if (aux_id != UNKNOWN && aux_data == aux_value.c_str())
+        {
+            all = true;
+        }
     }
-  }
 
- return all;
+    return all;
 }
 
 
-void ExactWordEntryLocator::Print( lem::OFormatter & to, SynGram & sg ) const
+void ExactWordEntryLocator::Print(lem::OFormatter & to, SynGram & sg) const
 {
- for( lem::Container::size_type i=0; i<pairs.size(); ++i )
-  {
-   to.printf( " " );
-   pairs[i].SaveTxt( to, sg );
-  }
+    for (auto &pair : pairs)
+    {
+        to.printf(" ");
+        pair.SaveTxt(to, sg);
+    }
 
- if( !aux_type.empty() )
-  {
-   to.printf( " aux %us", aux_type.c_str() );
-  }
+    if (!aux_type.empty())
+    {
+        to.printf(" aux %us", aux_type.c_str());
+    }
 
- return;
+    return;
 }
-

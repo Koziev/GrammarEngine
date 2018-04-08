@@ -44,17 +44,17 @@ namespace Solarix
     class WordEntries
     {
     public:
-        WordEntries(void) {}
-        virtual ~WordEntries(void) {}
+        WordEntries() {}
+        virtual ~WordEntries() {}
 
-        virtual void CreateDefaultEntries(void) = 0;
+        virtual void CreateDefaultEntries() = 0;
 
         virtual int CountEntries(int id_class, int id_language) = 0;
         virtual int CountForms(int id_language) = 0;
 
-        virtual bool PreferPrefixSearch(void) = 0;
+        virtual bool PreferPrefixSearch() = 0;
 
-        virtual int GetMaxMultilexemLen(void) = 0;
+        virtual int GetMaxMultilexemLen() = 0;
         virtual bool IsMultilexemHead(const lem::UCString &word, MultiLexemInfo &info) = 0;
         virtual bool IsMultilexemForm(const Solarix::Lexem &lex) = 0;
         virtual bool IsWordForm(const Solarix::Lexem &lex) = 0;
@@ -64,9 +64,8 @@ namespace Solarix
         virtual int FindEntryOmonym(const Lexem& lname, int iclass, const lem::MCollect<Solarix::GramCoordPair> &p) = 0;
         virtual int FindEntryOmonym(const Lexem& lname, int iclass, const ExactWordEntryLocator &locator) = 0;
 
-        //virtual WordEntryEnumerator* ListEntries( const lem::triple<wchar_t,wchar_t,wchar_t> & prefix3 )=0;
         virtual WordEntryEnumerator* ListEntries(const lem::UCString &name, int id_class) = 0;
-        virtual WordEntryEnumerator* ListEntries(void) = 0;
+        virtual WordEntryEnumerator* ListEntries() = 0;
 
         virtual Word_Coord FindWordForm(const lem::UCString& name) = 0;
         virtual WordFormEnumerator* ListWordForms(const lem::UCString &form, bool allow_nonterminals) = 0;
@@ -74,8 +73,8 @@ namespace Solarix
         virtual WordFormEnumerator* ListWordForms_Fuzzy(const lem::UCString &word, float min_val) = 0;
         virtual WordFormEnumerator* ListWordForms_Globbing(const lem::UFString &mask) = 0;
 
-        virtual int CountLexemes(void) = 0;
-        virtual LexemeEnumerator* ListLexemes(void) = 0;
+        virtual int CountLexemes() = 0;
+        virtual LexemeEnumerator* ListLexemes() = 0;
 
         virtual const SG_Entry& GetEntry(int ekey) = 0;
         virtual SG_Entry& GetEntryForChange(int ekey) = 0;
@@ -93,10 +92,10 @@ namespace Solarix
         virtual const Lexem* ReattachLexeme(const Lexem *ptr) = 0;
         virtual const CP_Array* ReattachCoordPairs(const CP_Array *ptr) = 0;
 
-        virtual void PrepareForMerging(void) = 0;
+        virtual void PrepareForMerging() = 0;
         virtual void CommitCompilation(lem::OFormatter &err) = 0;
 
-        virtual CharNode* GetPrefixTreeForAllLanguages(void) = 0;
+        virtual CharNode* GetPrefixTreeForAllLanguages() = 0;
         virtual CharNode* GetPrefixTree(const std::set<int>& allowed_langs) = 0;
 
         virtual void ReplaceEntry(int ekey, SG_Entry *dummy) = 0;
@@ -107,15 +106,15 @@ namespace Solarix
 
         virtual void DetailedReport(lem::OFormatter &txtfile) = 0;
 
-        virtual LD_Seeker* Get_Seeker(void) = 0;
+        virtual LD_Seeker* Get_Seeker() = 0;
 
 #if defined SOL_LOADBIN
         virtual LD_Seeker* Load_Seeker(lem::Stream &bin) = 0;
 #endif
 
-        virtual const lem::IntCollect& GetUEntries(void) = 0;
+        virtual const lem::IntCollect& GetUEntries() = 0;
 
-        virtual int GetUnknownEntryKey(void) = 0;
+        virtual int GetUnknownEntryKey() = 0;
     };
 
 }

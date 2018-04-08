@@ -16,14 +16,14 @@ LexemeEnumerator_MySQL::LexemeEnumerator_MySQL( WordEntries_MySQL *_entries, LS_
 }
 
 
-LexemeEnumerator_MySQL::~LexemeEnumerator_MySQL(void)
+LexemeEnumerator_MySQL::~LexemeEnumerator_MySQL()
 {
  lem_rub_off(rs);
  return;
 }
 
     
-bool LexemeEnumerator_MySQL::Fetch(void)
+bool LexemeEnumerator_MySQL::Fetch()
 {
  return rs->Fetch();
 }

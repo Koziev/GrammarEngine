@@ -1,58 +1,60 @@
 #if !defined SG_ComplexLink__H
- #define SG_ComplexLink__H
+#define SG_ComplexLink__H
 
- #include <lem/ufstring.h>
- #include <lem/solarix/tree_link.h>
- #include <lem/solarix/SG_TagsList.h>
+#include <lem/ufstring.h>
+#include <lem/solarix/tree_link.h>
+#include <lem/solarix/SG_TagsList.h>
 
- namespace lem
- {
-  namespace Iridium
-  {
-   class Macro_Parser;
-  }
- }
+namespace lem
+{
+    namespace Iridium
+    {
+        class Macro_Parser;
+    }
+}
 
- namespace Solarix
- {
-  class SynGram;
+namespace Solarix
+{
+    class SynGram;
 
- class SG_ComplexLink
- {
-  public:
-   int tl_id; // PK в таблице sg_tlink
-   Tree_Link link; // тип связи
-   lem::UFString entry1; // какая статья 
-   lem::UFString entry2; // с какой составной статьей связана
-   SG_TagsList tags;
+    class SG_ComplexLink
+    {
+    public:
+        int tl_id; // PK РІ С‚Р°Р±Р»РёС†Рµ sg_tlink
+        Tree_Link link; // С‚РёРї СЃРІСЏР·Рё
+        lem::UFString entry1; // РєР°РєР°СЏ СЃС‚Р°С‚СЊСЏ 
+        lem::UFString entry2; // СЃ РєР°РєРѕР№ СЃРѕСЃС‚Р°РІРЅРѕР№ СЃС‚Р°С‚СЊРµР№ СЃРІСЏР·Р°РЅР°
+        SG_TagsList tags;
 
-  private:
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   static void LoadPoint( lem::Iridium::Macro_Parser &txtfile, SynGram &gram, lem::UFString &entry );
-   #endif
+    private:
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        static void LoadPoint(lem::Iridium::Macro_Parser &txtfile, SynGram &gram, lem::UFString &entry);
+#endif
 
-  public:
-   SG_ComplexLink(void); 
+    public:
+        SG_ComplexLink();
 
-   #if defined SOL_LOADTXT && defined SOL_COMPILER
-   void LoadTxt( lem::Iridium::Macro_Parser &txtfile, SynGram &gram );
-   #endif
-   
-   // Оператор сравнения применяется для сортировки списка связок
-   bool operator<( const SG_ComplexLink &x ) const;
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void LoadTxt(lem::Iridium::Macro_Parser &txtfile, SynGram &gram);
+#endif
 
-   inline bool operator==( const SG_ComplexLink &x ) const 
-   { return entry1==x.entry1 &&
-            link==x.link &&
-            entry2==x.entry2 &&
-            tags==x.tags; }
+        // РћРїРµСЂР°С‚РѕСЂ СЃСЂР°РІРЅРµРЅРёСЏ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё СЃРїРёСЃРєР° СЃРІСЏР·РѕРє
+        bool operator<(const SG_ComplexLink &x) const;
 
-   inline Tree_Link GetLink(void) const { return link; }
-   inline const lem::UFString& GetEntry1(void) const { return entry1; }
-   inline const lem::UFString& GetEntry2(void) const { return entry2; }
-   inline SG_TagsList GetTags(void) const { return tags; }
- };
+        inline bool operator==(const SG_ComplexLink &x) const
+        {
+            return entry1 == x.entry1 &&
+                link == x.link &&
+                entry2 == x.entry2 &&
+                tags == x.tags;
+        }
+
+        inline Tree_Link GetLink() const { return link; }
+        inline const lem::UFString& GetEntry1() const { return entry1; }
+        inline const lem::UFString& GetEntry2() const { return entry2; }
+        inline SG_TagsList GetTags() const { return tags; }
+    };
 
 
- }
+}
 #endif

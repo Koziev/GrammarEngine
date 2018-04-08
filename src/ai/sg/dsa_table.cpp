@@ -6,21 +6,21 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Класс SG_DeclensionTable - описание Таблицы Формообразования для
-// Синтаксической грамматики. Одна такая таблица содержит команды для Автомата
-// Формообразования и позволяет построить полный набор словоформ из некоторой
-// базовой формы для словарной статьи.
+// РљР»Р°СЃСЃ SG_DeclensionTable - РѕРїРёСЃР°РЅРёРµ РўР°Р±Р»РёС†С‹ Р¤РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РґР»СЏ
+// РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕР№ РіСЂР°РјРјР°С‚РёРєРё. РћРґРЅР° С‚Р°РєР°СЏ С‚Р°Р±Р»РёС†Р° СЃРѕРґРµСЂР¶РёС‚ РєРѕРјР°РЅРґС‹ РґР»СЏ РђРІС‚РѕРјР°С‚Р°
+// Р¤РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ Рё РїРѕР·РІРѕР»СЏРµС‚ РїРѕСЃС‚СЂРѕРёС‚СЊ РїРѕР»РЅС‹Р№ РЅР°Р±РѕСЂ СЃР»РѕРІРѕС„РѕСЂРј РёР· РЅРµРєРѕС‚РѕСЂРѕР№
+// Р±Р°Р·РѕРІРѕР№ С„РѕСЂРјС‹ РґР»СЏ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
 //
-// 07.05.2006 - для регекспа образца включена опция "игнорировать регистр"
-// 08.07.2009 - название парадигм теперь могут быть не только числами, но и
-//              произвольными строками.
-// 19.03.2010 - для автопарадигм теперь также можно задавать имена, чтобы
-//              выдавать их пользователю в программе SQLex для автозаполнения
-//              форм создаваемой словарной статьи.
+// 07.05.2006 - РґР»СЏ СЂРµРіРµРєСЃРїР° РѕР±СЂР°Р·С†Р° РІРєР»СЋС‡РµРЅР° РѕРїС†РёСЏ "РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ СЂРµРіРёСЃС‚СЂ"
+// 08.07.2009 - РЅР°Р·РІР°РЅРёРµ РїР°СЂР°РґРёРіРј С‚РµРїРµСЂСЊ РјРѕРіСѓС‚ Р±С‹С‚СЊ РЅРµ С‚РѕР»СЊРєРѕ С‡РёСЃР»Р°РјРё, РЅРѕ Рё
+//              РїСЂРѕРёР·РІРѕР»СЊРЅС‹РјРё СЃС‚СЂРѕРєР°РјРё.
+// 19.03.2010 - РґР»СЏ Р°РІС‚РѕРїР°СЂР°РґРёРіРј С‚РµРїРµСЂСЊ С‚Р°РєР¶Рµ РјРѕР¶РЅРѕ Р·Р°РґР°РІР°С‚СЊ РёРјРµРЅР°, С‡С‚РѕР±С‹
+//              РІС‹РґР°РІР°С‚СЊ РёС… РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ РІ РїСЂРѕРіСЂР°РјРјРµ SQLex РґР»СЏ Р°РІС‚РѕР·Р°РїРѕР»РЅРµРЅРёСЏ
+//              С„РѕСЂРј СЃРѕР·РґР°РІР°РµРјРѕР№ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
 // -----------------------------------------------------------------------------
 //
 // CD->10.03.1997
-// LC->27.06.2011
+// LC->07.04.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -38,136 +38,135 @@
 #include <lem/solarix/Paradigma.h>
 
 using namespace boost;
+using boost::wregex;
 using namespace lem;
 using namespace Solarix;
 
-#if !defined FAIND_NO_BOOST_REGEX
-using boost::wregex;
-#endif
-
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 SG_DeclensionTable::SG_DeclensionTable(
-                                       Macro_Parser& txtfile,
-                                       Grammar& gram
-                                      )
-:Form_Table()
-{ LoadTxt(txtfile,gram,false); }
+    Macro_Parser& txtfile,
+    Grammar& gram
+)
+    :Form_Table()
+{
+    LoadTxt(txtfile, gram, false);
+}
 #endif
 
 
 SG_DeclensionTable::SG_DeclensionTable(
-                                       const lem::MCollect<lem::UCString> & Names,
-                                       const lem::UFString & matcher_str,
-                                       int PartOfSpeech,
-                                       const CP_Array & Attrs,
-                                       const lem::MCollect<SG_DeclensionForm*> &Forms
-                                      )
-:Form_Table(), names(Names), condition(matcher_str)
+    const lem::MCollect<lem::UCString> & Names,
+    const lem::UFString & matcher_str,
+    int PartOfSpeech,
+    const CP_Array & Attrs,
+    const lem::MCollect<SG_DeclensionForm*> &Forms
+)
+    :Form_Table(), names(Names), condition(matcher_str)
 {
- if( !names.empty() ) name=names.front();
- iclass = PartOfSpeech;
- attr = Attrs;
- form = Forms;
- return;
+    if (!names.empty()) name = names.front();
+    iclass = PartOfSpeech;
+    attr = Attrs;
+    form = Forms;
+    return;
 }
 
 
 
 
-SG_DeclensionTable::~SG_DeclensionTable(void)
+SG_DeclensionTable::~SG_DeclensionTable()
 {
- for( lem::Container::size_type i=0; i<form.size(); ++i )
-  delete form[i];
-
- return;
+    for (auto f : form)
+    {
+        delete f;
+    }
 }
 
 
-const Grammar& SG_DeclensionTable::GetGrammar( const Dictionary &dict )
+const Grammar& SG_DeclensionTable::GetGrammar(const Dictionary &dict)
 {
- return dict.GetSynGram();
+    return dict.GetSynGram();
 }
 
-Grammar& SG_DeclensionTable::GetGrammar( Dictionary &dict )
+Grammar& SG_DeclensionTable::GetGrammar(Dictionary &dict)
 {
- return dict.GetSynGram();
+    return dict.GetSynGram();
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /*******************************************************************
- Именем таблицы в данном случае является целое неотрицательное число
- в десятеричной системе счисления.
+ РРјРµРЅРµРј С‚Р°Р±Р»РёС†С‹ РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ СЏРІР»СЏРµС‚СЃСЏ С†РµР»РѕРµ РЅРµРѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ С‡РёСЃР»Рѕ
+ РІ РґРµСЃСЏС‚РµСЂРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ СЃС‡РёСЃР»РµРЅРёСЏ.
 ********************************************************************/
 void SG_DeclensionTable::LoadName(
-                                  Macro_Parser &txtfile,
-                                  Dictionary &dict
-                                 )
+    Macro_Parser &txtfile,
+    Dictionary &dict
+)
 {
- const BethToken& t = txtfile.read();
- key = ANY_STATE;
+    const BethToken& t = txtfile.read();
+    key = ANY_STATE;
 
- // Формат:
- // paradigma Условное_Имя, Алиас1, ... :
- name = t.string();
- names.push_back(name);
+    // Р¤РѕСЂРјР°С‚:
+    // paradigma РЈСЃР»РѕРІРЅРѕРµ_РРјСЏ, РђР»РёР°СЃ1, ... :
+    name = t.string();
+    names.push_back(name);
 
- key = ANY_STATE;
+    key = ANY_STATE;
 
- while( !txtfile.eof() && txtfile.pick().GetToken()==B_COMMA )
-  {
-   txtfile.read_it(B_COMMA);  
-   names.push_back( txtfile.read().string() );
-  } 
+    while (!txtfile.eof() && txtfile.pick().GetToken() == B_COMMA)
+    {
+        txtfile.read_it(B_COMMA);
+        names.push_back(txtfile.read().string());
+    }
 
- txtfile.read_it(B_COLON);
+    txtfile.read_it(B_COLON);
 
- if( dict.GetDebugLevel_ir()>=3 )
-  {
-   dict.GetIO().mecho().printf(
-                               "%us [%vfE%us%vn]->",
-                               sol_get_token(B_PARADIGMA).c_str(),
-                               GetName().c_str()
-                              );
-  }
+    if (dict.GetDebugLevel_ir() >= 3)
+    {
+        dict.GetIO().mecho().printf(
+            "%us [%vfE%us%vn]->",
+            sol_get_token(B_PARADIGMA).c_str(),
+            GetName().c_str()
+        );
+    }
 
- return;
+    return;
 }
 #endif
 
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-// Синтаксис реализации таблицы склонения может быть более сложным,
-// чем для обычных таблиц форм:
+// РЎРёРЅС‚Р°РєСЃРёСЃ СЂРµР°Р»РёР·Р°С†РёРё С‚Р°Р±Р»РёС†С‹ СЃРєР»РѕРЅРµРЅРёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»РµРµ СЃР»РѕР¶РЅС‹Рј,
+// С‡РµРј РґР»СЏ РѕР±С‹С‡РЅС‹С… С‚Р°Р±Р»РёС† С„РѕСЂРј:
 //
 // declension auto : NOUN for "(.+)S"
 // {                      ^^^^^^^^^^^
 //  :    
 //
 //
-// Курсор считывания стоит на первой после имени класса (NOUN в примере)
-// лексеме.
-void SG_DeclensionTable::LoadBody( Macro_Parser &txtfile, Grammar& gram )
+// РљСѓСЂСЃРѕСЂ СЃС‡РёС‚С‹РІР°РЅРёСЏ СЃС‚РѕРёС‚ РЅР° РїРµСЂРІРѕР№ РїРѕСЃР»Рµ РёРјРµРЅРё РєР»Р°СЃСЃР° (NOUN РІ РїСЂРёРјРµСЂРµ)
+// Р»РµРєСЃРµРјРµ.
+void SG_DeclensionTable::LoadBody(Macro_Parser &txtfile, Grammar& gram)
 {
- if( txtfile.probe(B_FOR) )
-  {
-   condition.LoadTxt( txtfile, GetClass(), (SynGram&)gram );
-  }
+    if (txtfile.probe(B_FOR))
+    {
+        condition.LoadTxt(txtfile, GetClass(), (SynGram&)gram);
+    }
 
- Form_Table::LoadBody( txtfile, gram );
+    Form_Table::LoadBody(txtfile, gram);
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void SG_DeclensionTable::Loaded( const Dictionary &dict )
+void SG_DeclensionTable::Loaded(const Dictionary &dict)
 {
- if( dict.GetDebugLevel_ir()>=3 )
-  dict.GetIO().merr().printf( "%vfAOK%vn\n" );
+    if (dict.GetDebugLevel_ir() >= 3)
+        dict.GetIO().merr().printf("%vfAOK%vn\n");
 
- return;
+    return;
 }
 #endif
 
@@ -175,121 +174,123 @@ void SG_DeclensionTable::Loaded( const Dictionary &dict )
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 void SG_DeclensionTable::AddForm(
-                                 const CP_Array &dim,
-                                 const WordFormName &form_name,
-                                 Dictionary &dict
-                                )
+    const CP_Array &dim,
+    const WordFormName &form_name,
+    Dictionary &dict
+)
 {
- try
-  {
-   form.push_back( new SG_DeclensionForm(dim,form_name.form_name) );
-  }
- catch( ... )
-  {
-   dict.GetIO().merr().printf( "Error in paradigma [%us] syntax\n", GetName().c_str() ); 
-   throw E_BaseException();
-  }
+    try
+    {
+        form.push_back(new SG_DeclensionForm(dim, form_name.form_name));
+    }
+    catch (...)
+    {
+        dict.GetIO().merr().printf("Error in paradigma [%us] syntax\n", GetName().c_str());
+        throw E_BaseException();
+    }
 }
 #endif
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /****************************************************************************
- Заканчиваем преобразование описаний мультилексем в корректные мультилексемы.
- Вызывается непосредственно после загрузки описания таблицы из текстового
- файла Словаря.
+ Р—Р°РєР°РЅС‡РёРІР°РµРј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РѕРїРёСЃР°РЅРёР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРј РІ РєРѕСЂСЂРµРєС‚РЅС‹Рµ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹.
+ Р’С‹Р·С‹РІР°РµС‚СЃСЏ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё РѕРїРёСЃР°РЅРёСЏ С‚Р°Р±Р»РёС†С‹ РёР· С‚РµРєСЃС‚РѕРІРѕРіРѕ
+ С„Р°Р№Р»Р° РЎР»РѕРІР°СЂСЏ.
 *****************************************************************************/
-void SG_DeclensionTable::Translate( const GraphGram &gram )
+void SG_DeclensionTable::Translate(const GraphGram &gram)
 {
- for( lem::Container::size_type i=0; i<form.size(); i++ )
-  form[i]->Translate(GetClass(),gram);
-
- return;
+    for (auto f : form)
+    {
+        f->Translate(GetClass(), gram);
+    }
 }
 #endif
 
 
 // *********************************************************************
-// Можно ли использовать таблицу для генерации форм у статьи с заданным
-// именем.
+// РњРѕР¶РЅРѕ Р»Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С‚Р°Р±Р»РёС†Сѓ РґР»СЏ РіРµРЅРµСЂР°С†РёРё С„РѕСЂРј Сѓ СЃС‚Р°С‚СЊРё СЃ Р·Р°РґР°РЅРЅС‹Рј
+// РёРјРµРЅРµРј.
 // *********************************************************************
-bool SG_DeclensionTable::CanApply( const UCString &entry_name ) const
+bool SG_DeclensionTable::CanApply(const UCString &entry_name) const
 {
- return condition.Match(entry_name);
+    return condition.Match(entry_name);
 }
 
 bool SG_DeclensionTable::IsAuto(void) const
 {
- return !condition.Empty();
+    return !condition.Empty();
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void SG_DeclensionTable::ReadAdditionalInfo( Grammar &gram, int iForm, Macro_Parser& txtfile )
+void SG_DeclensionTable::ReadAdditionalInfo(Grammar &gram, int iForm, Macro_Parser& txtfile)
 {
- form[iForm]->ReadAdditionalInfo(gram,*this,txtfile);
- return;
+    form[iForm]->ReadAdditionalInfo(gram, *this, txtfile);
+    return;
 }
 #endif
 
 
-int SG_DeclensionTable::CountForms(void) const
+int SG_DeclensionTable::CountForms() const
 {
- return CastSizeToInt(form.size());
+    return CastSizeToInt(form.size());
 }
 
 
 void SG_DeclensionTable::GenerateForms(
-                                       const Lexem &entry_name,
-                                       lem::MCollect<Lexem> &res,
-                                       const SynGram &sg,
-                                       const SG_DeclensionAutomat &dsa 
-                                      ) const
+    const Lexem &entry_name,
+    lem::MCollect<Lexem> &res,
+    const SynGram &sg,
+    const SG_DeclensionAutomat &dsa
+) const
 {
- res.reserve(form.size());
+    res.reserve(form.size());
 
- for( lem::Container::size_type i=0; i<form.size(); i++ )
-  {
-   UCString frm( dsa.ProduceForm( entry_name, GetClass(), *form[i], sg ) );
+    for (auto f : form)
+    {
+        UCString frm(dsa.ProduceForm(entry_name, GetClass(), *f, sg));
 
-   // Без повторов
-   if( std::find( res.begin(), res.end(), frm )==res.end() )
-    res.push_back( frm );
-  }
+        // Р‘РµР· РїРѕРІС‚РѕСЂРѕРІ
+        if (std::find(res.begin(), res.end(), frm) == res.end())
+        {
+            res.push_back(frm);
+        }
+    }
 
- return;
+    return;
 }
 
 
 void SG_DeclensionTable::GenerateForms(
-                                       const Lexem &entry_name,
-                                       lem::MCollect<Lexem> & res,
-                                       lem::PtrCollect<CP_Array> & form_dims, 
-                                       const SynGram &sg,
-                                       const SG_DeclensionAutomat &dsa 
-                                      ) const
+    const Lexem &entry_name,
+    lem::MCollect<Lexem> & res,
+    lem::PtrCollect<CP_Array> & form_dims,
+    const SynGram &sg,
+    const SG_DeclensionAutomat &dsa
+) const
 {
- res.reserve(form.size());
+    res.reserve(form.size());
 
- for( lem::Container::size_type i=0; i<form.size(); i++ )
-  {
-   UCString frm( dsa.ProduceForm( entry_name, GetClass(), *form[i], sg ) );
+    for (lem::Container::size_type i = 0; i < form.size(); i++)
+    {
+        UCString frm(dsa.ProduceForm(entry_name, GetClass(), *form[i], sg));
 
-   res.push_back( frm);
-   form_dims.push_back( new CP_Array( form[i]->GetDim() ) );
-  }
+        res.push_back(frm);
+        form_dims.push_back(new CP_Array(form[i]->GetDim()));
+    }
 
- return;
+    return;
 }
 
 
 
-bool SG_DeclensionTable::MatchName( const lem::UCString &s ) const
+bool SG_DeclensionTable::MatchName(const lem::UCString &s) const
 {
- for( lem::Container::size_type j=0; j<names.size(); j++ )
-  {
-   if( names[j].eqi(s) )
-    return true;
-  }
+    for (auto& name : names)
+    {
+        if (name.eqi(s))
+            return true;
+    }
 
- return false;
+    return false;
 }

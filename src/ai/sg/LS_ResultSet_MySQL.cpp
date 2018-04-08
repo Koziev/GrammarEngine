@@ -7,64 +7,64 @@
 using namespace lem;
 using namespace Solarix;
 
-LS_ResultSet_MySQL::LS_ResultSet_MySQL( MySQLCnx *_cnx, MYSQL_RES *h, TransactionGuard *tx )
- : LS_ResultSet(tx), cnx(_cnx), stmt(h)
+LS_ResultSet_MySQL::LS_ResultSet_MySQL(MySQLCnx *_cnx, MYSQL_RES *h, TransactionGuard *tx)
+    : LS_ResultSet(tx), cnx(_cnx), stmt(h)
 {
- LEM_CHECKIT_Z(h!=NULL);
- row = NULL;
- return;
+    LEM_CHECKIT_Z(h != nullptr);
+    row = NULL;
+    return;
 }
 
 
-LS_ResultSet_MySQL::~LS_ResultSet_MySQL(void)
+LS_ResultSet_MySQL::~LS_ResultSet_MySQL()
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- mysql_free_result(stmt);
- stmt=NULL;
+    LEM_CHECKIT_Z(stmt != nullptr);
+    mysql_free_result(stmt);
+    stmt = NULL;
 
- if( read_tx.get()!=NULL )
-  read_tx->Commit();
+    if (read_tx.get() != nullptr)
+        read_tx->Commit();
 
- #if defined LEM_THREADS
- cnx->cs.Leave();
- #endif
- return; 
+#if defined LEM_THREADS
+    cnx->cs.Leave();
+#endif
+    return;
 }
 
 
-bool LS_ResultSet_MySQL::Fetch(void)
+bool LS_ResultSet_MySQL::Fetch()
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- row = mysql_fetch_row(stmt);
- return row!=NULL;
+    LEM_CHECKIT_Z(stmt != nullptr);
+    row = mysql_fetch_row(stmt);
+    return row != NULL;
 }
 
 
-int LS_ResultSet_MySQL::GetInt( int FieldIndex )
+int LS_ResultSet_MySQL::GetInt(int FieldIndex)
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- int res = lem::mysql_column_int(row,FieldIndex);
- return res;  
+    LEM_CHECKIT_Z(stmt != nullptr);
+    int res = lem::mysql_column_int(row, FieldIndex);
+    return res;
 }
 
 
-lem::UCString LS_ResultSet_MySQL::GetUCString( int FieldIndex )
+lem::UCString LS_ResultSet_MySQL::GetUCString(int FieldIndex)
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- return lem::mysql_column_ucstring(row,FieldIndex);
+    LEM_CHECKIT_Z(stmt != nullptr);
+    return lem::mysql_column_ucstring(row, FieldIndex);
 }
 
-lem::UFString LS_ResultSet_MySQL::GetUFString( int FieldIndex )
+lem::UFString LS_ResultSet_MySQL::GetUFString(int FieldIndex)
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- return lem::mysql_column_ufstring(row,FieldIndex);
+    LEM_CHECKIT_Z(stmt != nullptr);
+    return lem::mysql_column_ufstring(row, FieldIndex);
 }
 
 
-lem::FString LS_ResultSet_MySQL::GetFString( int FieldIndex )
+lem::FString LS_ResultSet_MySQL::GetFString(int FieldIndex)
 {
- LEM_CHECKIT_Z(stmt!=NULL);
- return lem::mysql_column_fstring(row,FieldIndex);
+    LEM_CHECKIT_Z(stmt != nullptr);
+    return lem::mysql_column_fstring(row, FieldIndex);
 }
 
 #endif

@@ -1,30 +1,29 @@
 #if !defined SG_CoordEnumerator__H
- #define SG_CoordEnumerator__H
+#define SG_CoordEnumerator__H
 
- #include <lem/solarix/CoordEnumerator.h>
+#include <lem/solarix/CoordEnumerator.h>
 
- namespace Solarix
- {
-  class SG_Coordinates;
-  class LS_ResultSet;
-  class LexiconStorage;
-  class Coordinate;
+namespace Solarix
+{
+    class SG_Coordinates;
+    class LS_ResultSet;
+    class LexiconStorage;
 
-  class SG_CoordEnumerator : public CoordEnumerator
-  {
-   private:
-    LS_ResultSet *rs;
-    LexiconStorage *db;
-    SG_Coordinates *p;
+    class SG_CoordEnumerator : public CoordEnumerator
+    {
+    private:
+        LS_ResultSet *rs;
+        LexiconStorage *db;
+        SG_Coordinates *p;
 
-   public:
-    SG_CoordEnumerator( LexiconStorage *_db, SG_Coordinates * _p );
-    virtual ~SG_CoordEnumerator(void);
+    public:
+        SG_CoordEnumerator(LexiconStorage *_db, SG_Coordinates * _p);
+        virtual ~SG_CoordEnumerator();
 
-    virtual bool Fetch(void);
-    virtual int GetId(void);
-    virtual const GramCoord& GetItem(void);
-  };
- }
+        virtual bool Fetch() override;
+        virtual int GetId() override;
+        virtual const GramCoord& GetItem() override;
+    };
+}
 
 #endif

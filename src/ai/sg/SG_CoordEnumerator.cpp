@@ -7,35 +7,35 @@
 using namespace Solarix;
 
 
-SG_CoordEnumerator::SG_CoordEnumerator( LexiconStorage *_db, SG_Coordinates * _p )
- : rs(NULL), db(_db), p(_p)
+SG_CoordEnumerator::SG_CoordEnumerator(LexiconStorage *_db, SG_Coordinates * _p)
+    : rs(nullptr), db(_db), p(_p)
 {
 }
 
-SG_CoordEnumerator::~SG_CoordEnumerator(void)
+SG_CoordEnumerator::~SG_CoordEnumerator()
 {
- lem_rub_off(rs);
- return;
+    lem_rub_off(rs);
+    return;
 }
 
-bool SG_CoordEnumerator::Fetch(void)
+bool SG_CoordEnumerator::Fetch()
 {
- if( rs==NULL )
-  {
-   rs = db->ListCoords();
-  }
+    if (rs == nullptr)
+    {
+        rs = db->ListCoords();
+    }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int SG_CoordEnumerator::GetId(void)
+int SG_CoordEnumerator::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-const GramCoord& SG_CoordEnumerator::GetItem(void)
+const GramCoord& SG_CoordEnumerator::GetItem()
 {
- const int id = rs->GetInt(0);
- return (*p)[id]; 
+    const int id = rs->GetInt(0);
+    return (*p)[id];
 }
 

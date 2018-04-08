@@ -1,31 +1,27 @@
 #if !defined PhraseNoteEnumerator__H
- #define PhraseNoteEnumerator__H
+#define PhraseNoteEnumerator__H
 
- namespace lem
- {
-  class UFString;
- }
+namespace Solarix
+{
+    class LS_ResultSet;
+    class SynGram;
 
- namespace Solarix
- {
-  class LS_ResultSet;
-  class SynGram;
-  class PhraseNoteEnumerator
-  {
-   private:
-    int id_phrase;
-    LS_ResultSet *rs;
-    SynGram *sg;
+    class PhraseNoteEnumerator
+    {
+    private:
+        int id_phrase;
+        LS_ResultSet *rs;
+        SynGram *sg;
 
-   public:
-    PhraseNoteEnumerator( SynGram *_sg, int _id_phrase );
-    ~PhraseNoteEnumerator(void);
+    public:
+        PhraseNoteEnumerator(SynGram *_sg, int _id_phrase);
+        ~PhraseNoteEnumerator();
 
-    bool Fetch(void);
-    int GetNoteId(void);
-    void GetNote( SG_PhraseNote &note );
-  };
+        bool Fetch();
+        int GetNoteId();
+        void GetNote(SG_PhraseNote &note);
+    };
 
- }
+}
 
 #endif

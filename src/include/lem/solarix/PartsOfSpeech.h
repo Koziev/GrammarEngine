@@ -1,64 +1,64 @@
 #if !defined PartsOfSpeech__H
- #define PartsOfSpeech__H
+#define PartsOfSpeech__H
 
- #include <map>
- #include <lem/process.h>
- #include <lem/containers.h>
- #include <lem/ptr_container.h>
- #include <lem/ucstring.h>
- #include <lem/solarix/ClassList.h>
- #include <lem/solarix/PartOfSpeech.h>
+#include <map>
+#include <lem/process.h>
+#include <lem/containers.h>
+#include <lem/ptr_container.h>
+#include <lem/ucstring.h>
+#include <lem/solarix/ClassList.h>
+#include <lem/solarix/PartOfSpeech.h>
 
- namespace lem
- {
-  class UCString;
- }
+namespace lem
+{
+    class UCString;
+}
 
- namespace Solarix
- {
-  class LexiconStorage;
-  class SynGram;
+namespace Solarix
+{
+    class LexiconStorage;
+    class SynGram;
 
-  class PartsOfSpeech : public ClassList
-  {
-   private:
-    LexiconStorage *db;
-    SynGram *sg;
+    class PartsOfSpeech : public ClassList
+    {
+    private:
+        LexiconStorage *db;
+        SynGram *sg;
 
-    lem::PtrCollect< SG_Class > class_ptr;
-    lem::MCollect<int> class_id;
- 
-    std::map< int /*id*/, int/*index*/ > id2class;
-    std::map< lem::UCString, int > name2id;
+        lem::PtrCollect< SG_Class > class_ptr;
+        lem::MCollect<int> class_id;
 
-    #if defined LEM_THREADS
-    lem::Process::CriticalSection cs;
-    #endif
+        std::map< int /*id*/, int/*index*/ > id2class;
+        std::map< lem::UCString, int > name2id;
 
-    void AddNewClass( SG_Class *new_class, bool IsRealized );
-    SG_Class* Get( int id );
+#if defined LEM_THREADS
+        lem::Process::CriticalSection cs;
+#endif
 
-   public:
-    PartsOfSpeech( SynGram *_sg );
-    virtual ~PartsOfSpeech() {}
+        void AddNewClass(SG_Class *new_class, bool IsRealized);
+        SG_Class* Get(int id);
 
-    void Connect( LexiconStorage *_db );
+    public:
+        PartsOfSpeech(SynGram *_sg);
+        virtual ~PartsOfSpeech() {}
 
-    virtual const GramClass& operator[]( int id );
-    virtual GramClass& GetClass( int id );
+        void Connect(LexiconStorage *_db);
 
-    virtual int Find( const lem::UCString &name );
-    virtual int Count(void);
+        virtual const GramClass& operator[](int id) override;
+        virtual GramClass& GetClass(int id) override;
 
-    virtual ClassEnumerator* Enumerate(void);
+        virtual int Find(const lem::UCString &name) override;
+        virtual int Count() override;
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    virtual GramClass* LoadTxt(
-                               lem::Iridium::Macro_Parser &txtfile,
-                               bool IsRealized
-                              );
-    #endif
-  };
- }
+        virtual ClassEnumerator* Enumerate() override;
+
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        virtual GramClass* LoadTxt(
+            lem::Iridium::Macro_Parser &txtfile,
+            bool IsRealized
+        ) override;
+#endif
+    };
+}
 
 #endif

@@ -15,10 +15,10 @@
 
    public:
     LexemeEnumerator_SQLite( WordEntries_SQLite *_entries, LS_ResultSet_SQLITE *_rs );
-    virtual ~LexemeEnumerator_SQLite(void);
+    virtual ~LexemeEnumerator_SQLite();
     
-    virtual bool Fetch(void);
-    virtual const Lexem* Get( Solarix::Lexem &lex );
+    virtual bool Fetch() override;
+    virtual const Lexem* Get( Solarix::Lexem &lex ) override;
   };
  }
 

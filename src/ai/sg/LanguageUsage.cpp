@@ -4,110 +4,110 @@
 
 using namespace Solarix;
 
-LanguageUsage::LanguageUsage( SynGram * SG )
+LanguageUsage::LanguageUsage(SynGram * SG)
 {
- sg = SG;
- storage = NULL;
- return;
+    sg = SG;
+    storage = nullptr;
+    return;
 }
 
-void LanguageUsage::Connect( LexiconStorage * Storage )
+void LanguageUsage::Connect(LexiconStorage * Storage)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs_init); 
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs_init);
+#endif
 
- storage = Storage;
+    storage = Storage;
 
- id_default_input = id_default_output = UNKNOWN;
- id_langs.clear();
- id_input_langs.clear();
- id_output_langs.clear();
- loaded=false;
+    id_default_input = id_default_output = UNKNOWN;
+    id_langs.clear();
+    id_input_langs.clear();
+    id_output_langs.clear();
+    loaded = false;
 
- return;
+    return;
 }
 
 
-void LanguageUsage::Load(void)
+void LanguageUsage::Load()
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs);
+#endif
 
- if( !loaded )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
-
-   loaded = true;
-
-   lem::Ptr<LS_ResultSet> rs( storage->ListLanguageUsage() );
-   while( rs->Fetch() )
+    if (!loaded)
     {
-     int id_language = rs->GetInt(0);
-     bool is_input = rs->GetInt(1)==1;
-     bool is_output = rs->GetInt(2)==1;
-     bool is_default = rs->GetInt(3)==1;
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-     if( id_langs.find(id_language)==UNKNOWN )
-      id_langs.push_back(id_language);
+        loaded = true;
 
-     if( is_input )
-      id_input_langs.push_back(id_language);
+        std::unique_ptr<LS_ResultSet> rs(storage->ListLanguageUsage());
+        while (rs->Fetch())
+        {
+            int id_language = rs->GetInt(0);
+            bool is_input = rs->GetInt(1) == 1;
+            bool is_output = rs->GetInt(2) == 1;
+            bool is_default = rs->GetInt(3) == 1;
 
-     if( is_output )
-      id_output_langs.push_back(id_language);
+            if (id_langs.find(id_language) == UNKNOWN)
+                id_langs.push_back(id_language);
 
-     if( is_input && is_default )
-      id_default_input=id_language;
+            if (is_input)
+                id_input_langs.push_back(id_language);
 
-     if( is_output && is_default )
-      id_default_output=id_language;
+            if (is_output)
+                id_output_langs.push_back(id_language);
+
+            if (is_input && is_default)
+                id_default_input = id_language;
+
+            if (is_output && is_default)
+                id_default_output = id_language;
+        }
     }
-  }
 
- return;
+    return;
 }
 
 
 
-int LanguageUsage::GetDefaultInputLanguage(void)
+int LanguageUsage::GetDefaultInputLanguage()
 {
- Load();
- return id_default_input;
+    Load();
+    return id_default_input;
 }
 
-int LanguageUsage::GetDefaultOutputLanguage(void)
+int LanguageUsage::GetDefaultOutputLanguage()
 {
- Load();
- return id_default_output;
+    Load();
+    return id_default_output;
 }
 
-bool LanguageUsage::HasLanguage( int id_language )
+bool LanguageUsage::HasLanguage(int id_language)
 {
- Load();
- return id_langs.find(id_language)!=UNKNOWN;
+    Load();
+    return id_langs.find(id_language) != UNKNOWN;
 }
 
-void LanguageUsage::GetLanguages( lem::MCollect<int> &ids )
+void LanguageUsage::GetLanguages(lem::MCollect<int> &ids)
 {
- Load();
- ids = id_langs;
- return;
+    Load();
+    ids = id_langs;
+    return;
 }
 
-void LanguageUsage::GetInputLanguages( lem::MCollect<int> &ids )
+void LanguageUsage::GetInputLanguages(lem::MCollect<int> &ids)
 {
- Load();
- ids = id_input_langs;
- return;
+    Load();
+    ids = id_input_langs;
+    return;
 }
 
-void LanguageUsage::GetOutputLanguages( lem::MCollect<int> &ids )
+void LanguageUsage::GetOutputLanguages(lem::MCollect<int> &ids)
 {
- Load();
- ids = id_output_langs;
- return;
+    Load();
+    ids = id_output_langs;
+    return;
 }

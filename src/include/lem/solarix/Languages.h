@@ -1,57 +1,57 @@
 #if !defined Languages__h
- #define Languages__h
+#define Languages__h
 
- #include <map>
- #include <lem/process.h>
- #include <lem/solarix/SG_Language.h>
+#include <map>
+#include <lem/process.h>
+#include <lem/solarix/SG_Language.h>
 
- namespace lem
- {
-  class OFormatter;
-  namespace Iridium
-  {
-   class Macro_Parser;
-  }
- }
+namespace lem
+{
+    class OFormatter;
+    namespace Iridium
+    {
+        class Macro_Parser;
+    }
+}
 
- namespace Solarix
- {
-  class LexiconStorage;
-  class LanguageEnumerator;
-  class SynGram;
+namespace Solarix
+{
+    class LexiconStorage;
+    class LanguageEnumerator;
+    class SynGram;
 
-  class Languages
-  {
-   private:
-    SynGram *sg;
-    LexiconStorage *db;
- 
-    std::map< lem::UCString /*name*/, int /*id*/> name2id;
-    std::map< int, int > id2index;
-    lem::PtrCollect<SG_Language> lang_ptr;
+    class Languages
+    {
+    private:
+        SynGram *sg;
+        LexiconStorage *db;
 
-    #if defined LEM_THREADS
-    lem::Process::CriticalSection cs;
-    #endif
+        std::map< lem::UCString /*name*/, int /*id*/> name2id;
+        std::map< int, int > id2index;
+        lem::PtrCollect<SG_Language> lang_ptr;
 
-    SG_Language* GetByIndex( int i );
+#if defined LEM_THREADS
+        lem::Process::CriticalSection cs;
+#endif
 
-   public:
-    Languages( SynGram *_sg );
-    
-    void Connect( LexiconStorage *_db );
+        SG_Language* GetByIndex(int i);
 
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    void LoadTxt( lem::Iridium::Macro_Parser &txtfile );
-    #endif
+    public:
+        Languages(SynGram *_sg);
 
-    int Count(void);
+        void Connect(LexiconStorage *_db);
 
-    int Find( const lem::UCString &name );
-    const SG_Language& operator[]( int id );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void LoadTxt(lem::Iridium::Macro_Parser &txtfile);
+#endif
 
-    LanguageEnumerator* Enumerate(void);
-  };
- }
+        int Count();
+
+        int Find(const lem::UCString &name);
+        const SG_Language& operator[](int id);
+
+        LanguageEnumerator* Enumerate();
+    };
+}
 
 #endif

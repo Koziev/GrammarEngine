@@ -5,92 +5,94 @@
 using namespace Solarix;
 using namespace lem;
 
-ParadigmaMatcher::ParadigmaMatcher(void)
+ParadigmaMatcher::ParadigmaMatcher()
 {
 }
 
-ParadigmaMatcher::ParadigmaMatcher( const lem::UFString & ConditionStr )
- : condition_str(ConditionStr)
+ParadigmaMatcher::ParadigmaMatcher(const lem::UFString & ConditionStr)
+    : condition_str(ConditionStr)
 {
- Init();
- return;
+    Init();
+    return;
 }
 
-ParadigmaMatcher::ParadigmaMatcher( const ParadigmaMatcher &x )
- : condition_str(x.condition_str)
+ParadigmaMatcher::ParadigmaMatcher(const ParadigmaMatcher &x)
+    : condition_str(x.condition_str)
 {
- Init();
- return;
+    Init();
+    return;
 }
 
-void ParadigmaMatcher::operator=( const ParadigmaMatcher &x )
+void ParadigmaMatcher::operator=(const ParadigmaMatcher &x)
 {
- condition_str = x.condition_str;
- Init();
- return;
+    condition_str = x.condition_str;
+    Init();
+    return;
 }
 
-void ParadigmaMatcher::Init(void)
+void ParadigmaMatcher::Init()
 {
- if( !condition_str.empty() )
-  {
-   condition = boost::wregex( condition_str.c_str(), boost::basic_regex<wchar_t>::icase );
-  }
+    if (!condition_str.empty())
+    {
+        condition = boost::wregex(condition_str.c_str(), boost::basic_regex<wchar_t>::icase);
+    }
 
- return;
+    return;
 }
 
 
-bool ParadigmaMatcher::Empty(void) const
-{ return condition_str.empty(); }
-
-
-bool ParadigmaMatcher::Match( const lem::UCString & entry_name ) const
+bool ParadigmaMatcher::Empty() const
 {
- if( condition_str.empty() )
-  return false;
+    return condition_str.empty();
+}
 
- return regex_match( entry_name.c_str(), condition );
+
+bool ParadigmaMatcher::Match(const lem::UCString & entry_name) const
+{
+    if (condition_str.empty())
+        return false;
+
+    return regex_match(entry_name.c_str(), condition);
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void ParadigmaMatcher::LoadTxt( Macro_Parser &txtfile, int PartOfSpeech, SynGram& sg )
+void ParadigmaMatcher::LoadTxt(Macro_Parser &txtfile, int PartOfSpeech, SynGram& sg)
 {
- lem::Iridium::BSourceState t = txtfile.tellp();
+    lem::Iridium::BSourceState t = txtfile.tellp();
 
- condition_str = txtfile.read().GetFullStr();
- condition_str.strip_quotes();
+    condition_str = txtfile.read().GetFullStr();
+    condition_str.strip_quotes();
 
- if( PartOfSpeech!=UNKNOWN )
-  {
-   const SG_Class &cls = sg.GetClass( PartOfSpeech );
-
-   const int id_lang = cls.GetLanguage();
-   if( id_lang!=UNKNOWN )
+    if (PartOfSpeech != UNKNOWN)
     {
-     const SG_Language &lang = sg.languages()[id_lang];
-     lang.SubstParadigmPattern(condition_str);
-    }
-  }
+        const SG_Class &cls = sg.GetClass(PartOfSpeech);
 
- try
-  {
-   condition = boost::wregex( condition_str.c_str(), boost::basic_regex<wchar_t>::icase );
-  }
- catch(...)
-  {
-   lem::Iridium::Print_Error( t, txtfile );
-   sg.GetIO().merr().printf( "Invalid syntax of regular expression %us", condition_str.c_str() );
-   throw lem::E_ParserError();
-  }
- 
- return; 
+        const int id_lang = cls.GetLanguage();
+        if (id_lang != UNKNOWN)
+        {
+            const SG_Language &lang = sg.languages()[id_lang];
+            lang.SubstParadigmPattern(condition_str);
+        }
+    }
+
+    try
+    {
+        condition = boost::wregex(condition_str.c_str(), boost::basic_regex<wchar_t>::icase);
+    }
+    catch (...)
+    {
+        lem::Iridium::Print_Error(t, txtfile);
+        sg.GetIO().merr().printf("Invalid syntax of regular expression %us", condition_str.c_str());
+        throw lem::E_ParserError();
+    }
+
+    return;
 }
 #endif
 
 
-lem::UFString ParadigmaMatcher::ToString(void) const
+lem::UFString ParadigmaMatcher::ToString() const
 {
- return condition_str;
+    return condition_str;
 }

@@ -6,14 +6,14 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Класс SG_DeclensionForm - описание одного элемента Таблицы Формообразования.
-// Этот элемент позволяет из некоторой базовой формы слова получить одну
-// грамматическую форму, причем такое преобразование одинаково для некоторого
-// подмножества словарных статей.
+// РљР»Р°СЃСЃ SG_DeclensionForm - РѕРїРёСЃР°РЅРёРµ РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РўР°Р±Р»РёС†С‹ Р¤РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ.
+// Р­С‚РѕС‚ СЌР»РµРјРµРЅС‚ РїРѕР·РІРѕР»СЏРµС‚ РёР· РЅРµРєРѕС‚РѕСЂРѕР№ Р±Р°Р·РѕРІРѕР№ С„РѕСЂРјС‹ СЃР»РѕРІР° РїРѕР»СѓС‡РёС‚СЊ РѕРґРЅСѓ
+// РіСЂР°РјРјР°С‚РёС‡РµСЃРєСѓСЋ С„РѕСЂРјСѓ, РїСЂРёС‡РµРј С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РѕРґРёРЅР°РєРѕРІРѕ РґР»СЏ РЅРµРєРѕС‚РѕСЂРѕРіРѕ
+// РїРѕРґРјРЅРѕР¶РµСЃС‚РІР° СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№.
 // -----------------------------------------------------------------------------
 //
 // CD->10.03.1997
-// LC->23.06.2011
+// LC->07.04.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -24,339 +24,341 @@
 #include <lem/solarix/dictionary.h>
 #include <lem/solarix/ClassList.h>
 #include <lem/solarix/PartOfSpeech.h>
-//#include <lem/solarix/sg_autom.h>
 #include <lem/solarix/gg_autom.h>
-//#include <lem/solarix/dsa_main.h>
 #include <lem/solarix/Paradigma.h>
 #include <lem/solarix/ParadigmaForm.h>
 
 using namespace lem;
 using namespace Solarix;
 
-SG_DeclensionForm::SG_DeclensionForm(void)
+SG_DeclensionForm::SG_DeclensionForm()
 {
- valid_condition=false;
+    valid_condition = false;
 }
 
-SG_DeclensionForm::SG_DeclensionForm( const SG_DeclensionForm &df )
-{ Init(df); }
-
-
-SG_DeclensionForm::SG_DeclensionForm(
-                                     const CP_Array &Dim,
-                                     const UCString &Command
-                                    )
+SG_DeclensionForm::SG_DeclensionForm(const SG_DeclensionForm &df)
 {
- dim=Dim;
- form=strip_quotes(Command);
- Check();
-
- valid_condition=valid_flexer_flags=false;
-
- return;
+    Init(df);
 }
 
 
 SG_DeclensionForm::SG_DeclensionForm(
-                                     const lem::UFString & lexem_generator,
-                                     const lem::UFString & rx_condition,
-                                     const lem::UFString & rx_flexer_flags,
-                                     const CP_Array & dims
-                                    )
- : dim(dims), form(lexem_generator.c_str())
+    const CP_Array &Dim,
+    const UCString &Command
+)
 {
- valid_condition = !rx_condition.empty();
- valid_flexer_flags = !rx_flexer_flags.empty();
+    dim = Dim;
+    form = strip_quotes(Command);
+    Check();
 
- condition_str = rx_condition;
- flexer_flags_str = rx_flexer_flags;
- 
+    valid_condition = valid_flexer_flags = false;
 
- if( !condition_str.empty() )
-  condition = boost::wregex( condition_str.c_str(), boost::basic_regex<wchar_t>::icase );
+    return;
+}
 
- if( !flexer_flags.empty() )
-  flexer_flags = boost::wregex( flexer_flags_str.c_str(), boost::basic_regex<wchar_t>::icase );
- 
- return; 
+
+SG_DeclensionForm::SG_DeclensionForm(
+    const lem::UFString & lexem_generator,
+    const lem::UFString & rx_condition,
+    const lem::UFString & rx_flexer_flags,
+    const CP_Array & dims
+)
+    : dim(dims), form(lexem_generator.c_str())
+{
+    valid_condition = !rx_condition.empty();
+    valid_flexer_flags = !rx_flexer_flags.empty();
+
+    condition_str = rx_condition;
+    flexer_flags_str = rx_flexer_flags;
+
+
+    if (!condition_str.empty())
+        condition = boost::wregex(condition_str.c_str(), boost::basic_regex<wchar_t>::icase);
+
+    if (!flexer_flags.empty())
+        flexer_flags = boost::wregex(flexer_flags_str.c_str(), boost::basic_regex<wchar_t>::icase);
+
+    return;
 }
 
 
 
 
-void SG_DeclensionForm::Init( const SG_DeclensionForm &df )
+void SG_DeclensionForm::Init(const SG_DeclensionForm &df)
 {
- dim  = df.dim;
- form = df.form;
+    dim = df.dim;
+    form = df.form;
 
- #if !defined FAIND_NO_BOOST_REGEX
- condition = df.condition;
- flexer_flags = df.flexer_flags;
- #endif
+    condition = df.condition;
+    flexer_flags = df.flexer_flags;
 
- condition_str = df.condition_str;
- valid_condition = df.valid_condition;
- valid_flexer_flags = df.valid_flexer_flags;
- flexer_flags_str = df.flexer_flags_str;
+    condition_str = df.condition_str;
+    valid_condition = df.valid_condition;
+    valid_flexer_flags = df.valid_flexer_flags;
+    flexer_flags_str = df.flexer_flags_str;
 
- return;
+    return;
 }
 
 
-void SG_DeclensionForm::operator=( const SG_DeclensionForm &df )
+void SG_DeclensionForm::operator=(const SG_DeclensionForm &df)
 {
- Init(df);
- return;
+    Init(df);
+    return;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /***********************************************************************
- Отыскиваем в Графической Грамматике буквы, из которых составлены части
- команды на формообразование. Сохраняем информацию о каждой букве: ее
- условное имя и номер буквоформы.
+ РћС‚С‹СЃРєРёРІР°РµРј РІ Р“СЂР°С„РёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРµ Р±СѓРєРІС‹, РёР· РєРѕС‚РѕСЂС‹С… СЃРѕСЃС‚Р°РІР»РµРЅС‹ С‡Р°СЃС‚Рё
+ РєРѕРјР°РЅРґС‹ РЅР° С„РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёРµ. РЎРѕС…СЂР°РЅСЏРµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР°Р¶РґРѕР№ Р±СѓРєРІРµ: РµРµ
+ СѓСЃР»РѕРІРЅРѕРµ РёРјСЏ Рё РЅРѕРјРµСЂ Р±СѓРєРІРѕС„РѕСЂРјС‹.
 ************************************************************************/
-void SG_DeclensionForm::Translate( int id_class, const GraphGram &gram )
+void SG_DeclensionForm::Translate(int id_class, const GraphGram &gram)
 {
- if( !form.empty() )
-  {
-   int id_language=UNKNOWN;
-   if( !lem::is_quantor(id_class) )
+    if (!form.empty())
     {
-     const SG_Class &c = gram.GetDict().GetSynGram().GetClass( id_class );
-     id_language = c.GetLanguage();
-    }
-    
-   if( id_language!=UNKNOWN )
-    {
-     const SG_Language &lang = gram.GetDict().GetSynGram().languages()[id_language];
-     const lem::MCollect<int> &id_alphabets = lang.GetAlphabets();
-     form.Translate(gram,2,id_alphabets);
-    }
-   else
-    {
-     form.Translate(gram,2);
-    }
-  } 
+        int id_language = UNKNOWN;
+        if (!lem::is_quantor(id_class))
+        {
+            const SG_Class &c = gram.GetDict().GetSynGram().GetClass(id_class);
+            id_language = c.GetLanguage();
+        }
 
- return;
+        if (id_language != UNKNOWN)
+        {
+            const SG_Language &lang = gram.GetDict().GetSynGram().languages()[id_language];
+            const lem::MCollect<int> &id_alphabets = lang.GetAlphabets();
+            form.Translate(gram, 2, id_alphabets);
+        }
+        else
+        {
+            form.Translate(gram, 2);
+        }
+    }
+
+    return;
 }
 #endif
 
 /*************************************************************************
- Проверяем правильность команды на формообразование. В случае обнаружения
- ошибки печатаем сообщение и генерируем исключительную ситуацию.
+ РџСЂРѕРІРµСЂСЏРµРј РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РєРѕРјР°РЅРґС‹ РЅР° С„РѕСЂРјРѕРѕР±СЂР°Р·РѕРІР°РЅРёРµ. Р’ СЃР»СѓС‡Р°Рµ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ
+ РѕС€РёР±РєРё РїРµС‡Р°С‚Р°РµРј СЃРѕРѕР±С‰РµРЅРёРµ Рё РіРµРЅРµСЂРёСЂСѓРµРј РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅСѓСЋ СЃРёС‚СѓР°С†РёСЋ.
 **************************************************************************/
-void SG_DeclensionForm::Check(void) const
+void SG_DeclensionForm::Check() const
 {
- int ipos=0, len = form.length();
- wchar_t ch;
+    int ipos = 0, len = form.length();
+    wchar_t ch;
 
- while( ipos<len && (ch=form[ipos++]) )
-  switch(ch)
-   {
-    case B_COMMAND_METACHAR: // '%' - начало команды
-     {
-      switch( ch=form[ipos++] ) // символ команды
-       {
-        case B_DOUBLE_METACHAR:
-         {
-          // Команда дублирования последнего символа не имеет аргументов
-          break;
-         }  
-
-        case B_REDUCE_METACHAR:
-         {
-          // Команда урезания на n символов справа: "...%-n..."
-          const wchar_t number = form[ipos++];
-
-          if( !is_udigit(number) )
-           {
-            merr->printf( "\nMust be a number in Form Builer Automat command:\n [%us]\n", form.c_str() );
-            merr->printf( "%H ^\n", ipos );
-            throw E_ParserError();
-           }
-
-          break;
-         }
-
-        case B_STRESS_METACHAR: // '+'
-         {
-          // Команда добавления символов справа "...%+abcz%..." или "...%+abc"
-          // Особый формат: "...%+{RRR..RR}"
-          if( ch==B_GROUP_BEGIN_METACHAR )
-           {
-            while(
-                  (ch = ipos<len ? form[ipos++] : 0)!=B_GROUP_END_METACHAR
-                 )
-             if( ch==0 )
-              {
-               // Команда незавершена - обрыв строки.
-               merr->printf(
-                            "\nMust be a number "
-                            " in Form Builer Automat command:\n [%us]\n"
-                            , form.c_str()
-                           );
-               merr->printf( "%H ^\n", ipos );
-               throw E_ParserError();
-              }
-           }
-          else
-           while( ipos<len && ch && ch!=B_COMMAND_METACHAR )
+    while (ipos < len && (ch = form[ipos++]))
+    {
+        switch (ch)
+        {
+        case B_COMMAND_METACHAR: // '%' - РЅР°С‡Р°Р»Рѕ РєРѕРјР°РЅРґС‹
+        {
+            switch (ch = form[ipos++]) // СЃРёРјРІРѕР» РєРѕРјР°РЅРґС‹
             {
-             ch=form[ipos++];
+            case B_DOUBLE_METACHAR:
+            {
+                // РљРѕРјР°РЅРґР° РґСѓР±Р»РёСЂРѕРІР°РЅРёСЏ РїРѕСЃР»РµРґРЅРµРіРѕ СЃРёРјРІРѕР»Р° РЅРµ РёРјРµРµС‚ Р°СЂРіСѓРјРµРЅС‚РѕРІ
+                break;
             }
 
-          break;
-         }
+            case B_REDUCE_METACHAR:
+            {
+                // РљРѕРјР°РЅРґР° СѓСЂРµР·Р°РЅРёСЏ РЅР° n СЃРёРјРІРѕР»РѕРІ СЃРїСЂР°РІР°: "...%-n..."
+                const wchar_t number = form[ipos++];
 
-        case B_PREFIX_INSERT_METACHAR: // 'a'
-        case B_CUT_METACHAR:           // 'c'
-         {
-          // Команда вырезания символа, отстоящего на n символов от правого
-          // конца базовой формы, то есть символ в позиции длина-n-1 исчезнет.
-          // Если n=0, то исчезнет последний символ, и так далее.
-          // Формат: "...%cn..."
-          //
-          // Команда вставки символа в позицию, отсчитываемую от начала
-          // слова: формат "%aNR"
+                if (!is_udigit(number))
+                {
+                    merr->printf("\nMust be a number in Form Builer Automat command:\n [%us]\n", form.c_str());
+                    merr->printf("%H ^\n", ipos);
+                    throw E_ParserError();
+                }
 
-          const wchar_t number = form[ipos++];
+                break;
+            }
 
-          if( !is_udigit(number) )
-           {
-            merr->printf(
+            case B_STRESS_METACHAR: // '+'
+            {
+                // РљРѕРјР°РЅРґР° РґРѕР±Р°РІР»РµРЅРёСЏ СЃРёРјРІРѕР»РѕРІ СЃРїСЂР°РІР° "...%+abcz%..." РёР»Рё "...%+abc"
+                // РћСЃРѕР±С‹Р№ С„РѕСЂРјР°С‚: "...%+{RRR..RR}"
+                if (ch == B_GROUP_BEGIN_METACHAR)
+                {
+                    while (
+                        (ch = ipos < len ? form[ipos++] : 0) != B_GROUP_END_METACHAR
+                        )
+                    {
+                        if (ch == 0)
+                        {
+                            // РљРѕРјР°РЅРґР° РЅРµР·Р°РІРµСЂС€РµРЅР° - РѕР±СЂС‹РІ СЃС‚СЂРѕРєРё.
+                            merr->printf(
+                                "\nMust be a number "
+                                " in Form Builer Automat command:\n [%us]\n"
+                                , form.c_str()
+                            );
+                            merr->printf("%H ^\n", ipos);
+                            throw E_ParserError();
+                        }
+                    }
+                }
+                else
+                {
+                    while (ipos < len && ch && ch != B_COMMAND_METACHAR)
+                    {
+                        ch = form[ipos++];
+                    }
+                }
+
+                break;
+            }
+
+            case B_PREFIX_INSERT_METACHAR: // 'a'
+            case B_CUT_METACHAR:           // 'c'
+            {
+                // РљРѕРјР°РЅРґР° РІС‹СЂРµР·Р°РЅРёСЏ СЃРёРјРІРѕР»Р°, РѕС‚СЃС‚РѕСЏС‰РµРіРѕ РЅР° n СЃРёРјРІРѕР»РѕРІ РѕС‚ РїСЂР°РІРѕРіРѕ
+                // РєРѕРЅС†Р° Р±Р°Р·РѕРІРѕР№ С„РѕСЂРјС‹, С‚Рѕ РµСЃС‚СЊ СЃРёРјРІРѕР» РІ РїРѕР·РёС†РёРё РґР»РёРЅР°-n-1 РёСЃС‡РµР·РЅРµС‚.
+                // Р•СЃР»Рё n=0, С‚Рѕ РёСЃС‡РµР·РЅРµС‚ РїРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР», Рё С‚Р°Рє РґР°Р»РµРµ.
+                // Р¤РѕСЂРјР°С‚: "...%cn..."
+                //
+                // РљРѕРјР°РЅРґР° РІСЃС‚Р°РІРєРё СЃРёРјРІРѕР»Р° РІ РїРѕР·РёС†РёСЋ, РѕС‚СЃС‡РёС‚С‹РІР°РµРјСѓСЋ РѕС‚ РЅР°С‡Р°Р»Р°
+                // СЃР»РѕРІР°: С„РѕСЂРјР°С‚ "%aNR"
+
+                const wchar_t number = form[ipos++];
+
+                if (!is_udigit(number))
+                {
+                    merr->printf(
                         "\nMust be a number "
                         "in Form Builer Automat command:\n [%us]\n"
                         , form.c_str()
-                       );
-            merr->printf( "%H ^\n", ipos );
-            throw E_ParserError();
-           }
-
-          if( ch==B_PREFIX_INSERT_METACHAR )
-           {
-            // Встретился особый формат: "...%aN{RRR...R}
-            if( form[ipos]==B_GROUP_BEGIN_METACHAR )
-             {
-              while( (ch=ipos<len ? form[ipos++] : 0)!=B_GROUP_END_METACHAR )
-               if( ch==0 )
-                {
-                 // Команда незавершена - обрыв строки.
-                 merr->printf(
-                              "\nMust be a number "
-                              "in Form Builer Automat command:\n [%us]\n"
-                              , form.c_str()
-                             );
-                 merr->printf( "%H ^\n", ipos );
-                 throw E_ParserError();
+                    );
+                    merr->printf("%H ^\n", ipos);
+                    throw E_ParserError();
                 }
-             }
-            else
-             {
-              ipos++;
-             }
-           }
 
-          break;
-         }
+                if (ch == B_PREFIX_INSERT_METACHAR)
+                {
+                    // Р’СЃС‚СЂРµС‚РёР»СЃСЏ РѕСЃРѕР±С‹Р№ С„РѕСЂРјР°С‚: "...%aN{RRR...R}
+                    if (form[ipos] == B_GROUP_BEGIN_METACHAR)
+                    {
+                        while ((ch = ipos < len ? form[ipos++] : 0) != B_GROUP_END_METACHAR)
+                        {
+                            if (ch == 0)
+                            {
+                                // РљРѕРјР°РЅРґР° РЅРµР·Р°РІРµСЂС€РµРЅР° - РѕР±СЂС‹РІ СЃС‚СЂРѕРєРё.
+                                merr->printf(
+                                    "\nMust be a number "
+                                    "in Form Builer Automat command:\n [%us]\n"
+                                    , form.c_str()
+                                );
+                                merr->printf("%H ^\n", ipos);
+                                throw E_ParserError();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ipos++;
+                    }
+                }
+
+                break;
+            }
+
+            default:
+            {
+                merr->printf(
+                    "\nUnrecognaized control character "
+                    "in Form Builder Automat command:\n[%us]\n"
+                    , form.c_str()
+                );
+                merr->printf("%H ^\n", ipos);
+                throw E_ParserError();
+            }
+            }
+
+            break;
+        }
 
         default:
-         {
-          merr->printf(
-                       "\nUnrecognaized control character "
-                       "in Form Builder Automat command:\n[%us]\n"
-                       , form.c_str()
-                      );
-          merr->printf( "%H ^\n", ipos );
-          throw E_ParserError();
-         }
-       }
+        {
+            merr->printf(
+                "\nUnrecognaized control character %uc (0x%X16d)"
+                " in Form Builder Automat command:\n[%us]\n"
+                , ch, ch, form.c_str()
+            );
+            merr->printf("%H ^\n", ipos);
+            throw E_ParserError();
+        }
+        }
+    }
 
-      break;
-     }
-
-    default:
-     {
-      merr->printf(
-                   "\nUnrecognaized control character %uc (0x%X16d)"
-                   " in Form Builder Automat command:\n[%us]\n"
-                   , ch, ch, form.c_str()
-                  );
-      merr->printf( "%H ^\n", ipos );
-      throw E_ParserError();
-     }
-   }
-
- return;
+    return;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void SG_DeclensionForm::ReadAdditionalInfo( Grammar &gram, const SG_DeclensionTable &table, Macro_Parser& txtfile )
+void SG_DeclensionForm::ReadAdditionalInfo(Grammar &gram, const SG_DeclensionTable &table, Macro_Parser& txtfile)
 {
- // :: flexer рег_выражение for регулярное_выражение
- 
- while( !txtfile.eof() )
-  {
-   BethToken t = txtfile.read();
+    // :: flexer СЂРµРі_РІС‹СЂР°Р¶РµРЅРёРµ for СЂРµРіСѓР»СЏСЂРЅРѕРµ_РІС‹СЂР°Р¶РµРЅРёРµ
 
-   if( t==B_FOR )
+    while (!txtfile.eof())
     {
-     UFString re = strip_quotes( txtfile.read().string() ).c_str();
-     if( table.GetClass()!=UNKNOWN )
-      {
-       const SG_Class &cls = (const SG_Class&)gram.classes()[ table.GetClass() ];
+        BethToken t = txtfile.read();
 
-       const int id_lang = cls.GetLanguage();
-       if( id_lang!=UNKNOWN )
+        if (t == B_FOR)
         {
-         const SG_Language &lang = gram.GetDict().GetSynGram().languages()[id_lang];
-         lang.SubstParadigmPattern(re);
+            UFString re = strip_quotes(txtfile.read().string()).c_str();
+            if (table.GetClass() != UNKNOWN)
+            {
+                const SG_Class &cls = (const SG_Class&)gram.classes()[table.GetClass()];
+
+                const int id_lang = cls.GetLanguage();
+                if (id_lang != UNKNOWN)
+                {
+                    const SG_Language &lang = gram.GetDict().GetSynGram().languages()[id_lang];
+                    lang.SubstParadigmPattern(re);
+                }
+            }
+
+            condition_str = re;
+            condition = boost::wregex(re.c_str(), boost::basic_regex<wchar_t>::icase);
+            valid_condition = true;
         }
-      }
+        else if (t == B_FLEXER)
+        {
+            UFString re = strip_quotes(txtfile.read().string()).c_str();
 
-     condition_str = re;
-     condition = boost::wregex( re.c_str(), boost::basic_regex<wchar_t>::icase );
-     valid_condition = true;
+            flexer_flags_str = re;
+            flexer_flags = boost::wregex(re.c_str(), boost::basic_regex<wchar_t>::icase);
+            valid_flexer_flags = true;
+        }
+        else
+        {
+            txtfile.seekp(t);
+            break;
+        }
     }
-   else if( t==B_FLEXER )
-    {
-     UFString re = strip_quotes( txtfile.read().string() ).c_str();
 
-     flexer_flags_str = re; 
-     flexer_flags = boost::wregex( re.c_str(), boost::basic_regex<wchar_t>::icase );
-     valid_flexer_flags = true;
-    }
-   else
-    {
-     txtfile.seekp(t);
-     break;
-    }
-  }
-
- return;
+    return;
 }
 #endif
 
 
-bool SG_DeclensionForm::MatchCondition( const UCString &str, const UFString &entry_flexer_flags ) const
+bool SG_DeclensionForm::MatchCondition(const UCString &str, const UFString &entry_flexer_flags) const
 {
- #if !defined FAIND_NO_BOOST_REGEX
- if(
-    (!valid_condition || condition.empty()) &&
-    (!valid_flexer_flags || flexer_flags.empty())
-   ) 
-  return true;
+    if (
+        (!valid_condition || condition.empty()) &&
+        (!valid_flexer_flags || flexer_flags.empty())
+        )
+        return true;
 
- if( valid_condition && !boost::regex_match( str.c_str(), condition ) )
-  return false;
+    if (valid_condition && !boost::regex_match(str.c_str(), condition))
+        return false;
 
- if( valid_flexer_flags && !boost::regex_search( entry_flexer_flags.c_str(), flexer_flags ) )
-  return false;
+    if (valid_flexer_flags && !boost::regex_search(entry_flexer_flags.c_str(), flexer_flags))
+        return false;
 
- return true;
- #else
- return false;
- #endif
+    return true;
 }

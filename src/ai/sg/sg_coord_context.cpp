@@ -4,7 +4,7 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Êëàññ SG_CoordContext - èíôîðìàöèÿ î ãðàììàòè÷åñêîì êëàññå è êîîðäèíàòàõ.
+// ÐšÐ»Ð°ÑÑ SG_CoordContext - Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ Ð³Ñ€Ð°Ð¼Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¼ ÐºÐ»Ð°ÑÑÐµ Ð¸ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ð°Ñ….
 // -----------------------------------------------------------------------------
 //
 // CD->09.08.2003
@@ -22,59 +22,67 @@
 using namespace lem;
 using namespace Solarix;
 
-SG_CoordContext::SG_CoordContext(void)
-{ iclass=UNKNOWN; }
-
-SG_CoordContext::SG_CoordContext( int iClass, const Solarix::CP_Array &Coords )
-{ iclass=iClass; coords=Coords; }
-
-SG_CoordContext::SG_CoordContext( const SG_CoordContext &x )
-{ iclass=x.iclass; coords=x.coords; }
-
-void SG_CoordContext::operator=( const SG_CoordContext &x )
-{ iclass=x.iclass; coords=x.coords; }
-
-void SG_CoordContext::SaveTxt( OFormatter &txt, SynGram &sg ) const
+SG_CoordContext::SG_CoordContext()
 {
- const UCString &class_name = sg.classes()[iclass].GetName();
+    iclass = UNKNOWN;
+}
 
- txt.printf(
-            " %us:\"???\" { "
-            , class_name.c_str()
-           );
+SG_CoordContext::SG_CoordContext(int iClass, const Solarix::CP_Array &Coords)
+{
+    iclass = iClass; coords = Coords;
+}
 
- for( Container::size_type k=0; k<coords.size(); k++ )
-  {
-   const int icoord = coords[k].GetCoord().GetIndex();
-   const int istate = coords[k].GetState();
+SG_CoordContext::SG_CoordContext(const SG_CoordContext &x)
+{
+    iclass = x.iclass; coords = x.coords;
+}
 
-   const UCString &coord_name = sg.coords()[ icoord ].GetName().front();
+void SG_CoordContext::operator=(const SG_CoordContext &x)
+{
+    iclass = x.iclass; coords = x.coords;
+}
 
-   if( !sg.coords()[icoord].states().size() )
+void SG_CoordContext::SaveTxt(OFormatter &txt, SynGram &sg) const
+{
+    const UCString &class_name = sg.classes()[iclass].GetName();
+
+    txt.printf(
+        " %us:\"???\" { "
+        , class_name.c_str()
+    );
+
+    for (Container::size_type k = 0; k < coords.size(); k++)
     {
-     if( istate!=0 )
-      txt.printf( " %us", coord_name.c_str() );
-     else
-      txt.printf( " ~%us", coord_name.c_str() );
-    }
-   else
-    {
-     const UCString &state_name = sg.coords()[ icoord ].GetStateName( istate );
-     txt.printf( " %us:%us", coord_name.c_str(), state_name.c_str() );
-    }
-  }
+        const int icoord = coords[k].GetCoord().GetIndex();
+        const int istate = coords[k].GetState();
 
- txt.printf( " }" );
+        const UCString &coord_name = sg.coords()[icoord].GetName().front();
 
- return;
+        if (!sg.coords()[icoord].states().size())
+        {
+            if (istate != 0)
+                txt.printf(" %us", coord_name.c_str());
+            else
+                txt.printf(" ~%us", coord_name.c_str());
+        }
+        else
+        {
+            const UCString &state_name = sg.coords()[icoord].GetStateName(istate);
+            txt.printf(" %us:%us", coord_name.c_str(), state_name.c_str());
+        }
+    }
+
+    txt.printf(" }");
+
+    return;
 }
 
 
 #if defined SOL_LOADTXT
 /*************************************************************************
 ***************************************************************************/
-void SG_CoordContext::LoadTxt( Macro_Parser &txtfile, const SynGram &gram )
+void SG_CoordContext::LoadTxt(Macro_Parser &txtfile, const SynGram &gram)
 {
- return;
+    return;
 }
 #endif

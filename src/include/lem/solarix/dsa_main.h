@@ -1,93 +1,77 @@
-// -----------------------------------------------------------------------------
-// File DSA_MAIN.H
-//
-// (c) by Elijah Koziev
-//
-// Content:
-// SOLARIX Intellectronix Project  http://www.solarix.ru
-//
-// Declension SubAutomaton - СубАвтомат формообразований, часть Синтаксической
-// Грамматики.
-// -----------------------------------------------------------------------------
-//
-// CD->15.03.1996
-// LC->23.06.2011
-// --------------
-
 #ifndef SOL_DSA__H
 #define SOL_DSA__H
 #pragma once
 
- #include <lem/config.h>
+#include <lem/config.h>
 
- #include <lem/ptr_container.h>
- #include <lem/solarix/lexem.h>
- #include <lem/solarix/grammar.h>
+#include <lem/ptr_container.h>
+#include <lem/solarix/lexem.h>
+#include <lem/solarix/grammar.h>
 
- namespace Solarix
- {
-  class SG_DeclensionTable;
-  class SynGram;
-  class LexiconStorage;
-  class ParadigmaFinder;
-  class SQL_Production;
-  class SG_DeclensionForm;
+namespace Solarix
+{
+    class SG_DeclensionTable;
+    class SynGram;
+    class LexiconStorage;
+    class ParadigmaFinder;
+    class SQL_Production;
+    class SG_DeclensionForm;
 
-  class SG_DeclensionAutomat : lem::NonCopyable
-  {
-   private:
-    const SynGram *gram;
-    LexiconStorage *storage;
-    bool store_auto_tables; // нужно ли сохранять автопарадигмы в БД, или после компиляции парадигмы не нужны
+    class SG_DeclensionAutomat : lem::NonCopyable
+    {
+    private:
+        const SynGram *gram;
+        LexiconStorage *storage;
+        bool store_auto_tables; // РЅСѓР¶РЅРѕ Р»Рё СЃРѕС…СЂР°РЅСЏС‚СЊ Р°РІС‚РѕРїР°СЂР°РґРёРіРјС‹ РІ Р‘Р”, РёР»Рё РїРѕСЃР»Рµ РєРѕРјРїРёР»СЏС†РёРё РїР°СЂР°РґРёРіРјС‹ РЅРµ РЅСѓР¶РЅС‹
 
-    #if defined LEM_THREADS
-    lem::Process::RWU_Lock cs_id2decl;
-    #endif
-    lem::MCollect<SG_DeclensionTable*> tables;
-    std::map<int, const SG_DeclensionTable*> id2decl;
-    std::map<lem::UCString /*название_парадигмы*/, const SG_DeclensionTable*> name2decl;
-    std::map<lem::UCString /*название_парадигмы*/,int> name2id;
+#if defined LEM_THREADS
+        lem::Process::RWU_Lock cs_id2decl;
+#endif
+        lem::MCollect<SG_DeclensionTable*> tables;
+        std::map<int, const SG_DeclensionTable*> id2decl;
+        std::map<lem::UCString /*РЅР°Р·РІР°РЅРёРµ_РїР°СЂР°РґРёРіРјС‹*/, const SG_DeclensionTable*> name2decl;
+        std::map<lem::UCString /*РЅР°Р·РІР°РЅРёРµ_РїР°СЂР°РґРёРіРјС‹*/, int> name2id;
 
-    ParadigmaFinder *finder;
+        ParadigmaFinder *finder;
 
-   public:
-    SG_DeclensionAutomat( const SynGram *Gram );
+    public:
+        SG_DeclensionAutomat(const SynGram *Gram);
 
-    void Connect( LexiconStorage *_storage );
+        void Connect(LexiconStorage *_storage);
 
-    ~SG_DeclensionAutomat(void);
+        ~SG_DeclensionAutomat();
 
-    const Lexem ProduceForm(
-                            const Lexem &base,
-                            int id_class,
-                            const SG_DeclensionForm &driver,
-                            const SynGram &gram
-                           ) const;
+        const Lexem ProduceForm(
+            const Lexem &base,
+            int id_class,
+            const SG_DeclensionForm &driver,
+            const SynGram &gram
+        ) const;
 
-    void push_back( SG_DeclensionTable *p );
+        void push_back(SG_DeclensionTable *p);
 
-    const SG_DeclensionTable& GetDecl( int id );
+        const SG_DeclensionTable& GetDecl(int id);
 
-    // *************************************************************************
-    // Находит таблицу склонения по ее названию
-    // *************************************************************************
-    int FindDecl( const lem::UCString &paradigma_name );
+        // *************************************************************************
+        // РќР°С…РѕРґРёС‚ С‚Р°Р±Р»РёС†Сѓ СЃРєР»РѕРЅРµРЅРёСЏ РїРѕ РµРµ РЅР°Р·РІР°РЅРёСЋ
+        // *************************************************************************
+        int FindDecl(const lem::UCString &paradigma_name);
 
-    // **************************************************************************
-    // Подыскивает таблицу склонения, наиболее подходящую для статьи с указанным
-    // именем, принадлежащую указанному грамматическому классу. Поиск парадигмы
-    // выполняется среди "auto" парадигм по соответствию регэкспа и имени статьи.
-    // **************************************************************************
-    const SG_DeclensionTable& GetDecl( const lem::UCString &entry_name, int iclass );
+        // **************************************************************************
+        // РџРѕРґС‹СЃРєРёРІР°РµС‚ С‚Р°Р±Р»РёС†Сѓ СЃРєР»РѕРЅРµРЅРёСЏ, РЅР°РёР±РѕР»РµРµ РїРѕРґС…РѕРґСЏС‰СѓСЋ РґР»СЏ СЃС‚Р°С‚СЊРё СЃ СѓРєР°Р·Р°РЅРЅС‹Рј
+        // РёРјРµРЅРµРј, РїСЂРёРЅР°РґР»РµР¶Р°С‰СѓСЋ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕРјСѓ РєР»Р°СЃСЃСѓ. РџРѕРёСЃРє РїР°СЂР°РґРёРіРјС‹
+        // РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ СЃСЂРµРґРё "auto" РїР°СЂР°РґРёРіРј РїРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЋ СЂРµРіСЌРєСЃРїР° Рё РёРјРµРЅРё СЃС‚Р°С‚СЊРё.
+        // **************************************************************************
+        const SG_DeclensionTable& GetDecl(const lem::UCString &entry_name, int iclass);
 
-    // Возвращает id всех подходящих автопарадигм
-    void FindDecl( const lem::UCString &entry_name, lem::MCollect<int>& ids );
+        // Р’РѕР·РІСЂР°С‰Р°РµС‚ id РІСЃРµС… РїРѕРґС…РѕРґСЏС‰РёС… Р°РІС‚РѕРїР°СЂР°РґРёРіРј
+        void FindDecl(const lem::UCString &entry_name, lem::MCollect<int>& ids);
 
-    void AutoParadigmasMustBeStored(void) { store_auto_tables=true; }
+        void AutoParadigmasMustBeStored() { store_auto_tables = true; }
 
-    void Save_SQL( lem::OFormatter &out, lem::OFormatter &alters, const SQL_Production &sql_version ) const;
-  };
+        void Save_SQL(lem::OFormatter &out, lem::OFormatter &alters, const SQL_Production &sql_version) const;
+    };
 
- } // namespace 'Solarix'
+} // namespace 'Solarix'
 
 #endif

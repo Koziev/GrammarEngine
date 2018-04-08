@@ -1,50 +1,44 @@
 #if !defined SOL_PARADIGMA_MATCHER__H
- #define SOL_PARADIGMA_MATCHER__H
+#define SOL_PARADIGMA_MATCHER__H
 
- #include <lem/config.h>
+#include <lem/config.h>
+#include <boost/regex.hpp>
 
- #if !defined FAIND_NO_BOOST_REGEX
- #include <boost/regex.hpp>
- #endif
+namespace lem
+{
+    namespace Iridium
+    {
+        class Macro_Parser;
+    }
+}
 
- namespace lem
- {
-  namespace Iridium
-  {
-   class Macro_Parser;
-  }
- }
+namespace Solarix
+{
+    class SynGram;
 
- namespace Solarix
- {
-  class SynGram;
+    class ParadigmaMatcher
+    {
+    private:
+        lem::UFString condition_str;
+        boost::wregex condition;
 
-  class ParadigmaMatcher
-  {
-   private:
-    lem::UFString condition_str;
+        void Init();
 
-    #if !defined FAIND_NO_BOOST_REGEX
-    boost::wregex condition;
-    #endif  
+    public:
+        ParadigmaMatcher();
+        ParadigmaMatcher(const lem::UFString & ConditionStr);
+        ParadigmaMatcher(const ParadigmaMatcher &x);
+        void operator=(const ParadigmaMatcher &x);
 
-    void Init(void);
+        bool Empty() const;
+        bool Match(const lem::UCString & entry_name) const;
 
-   public:
-    ParadigmaMatcher(void);
-    ParadigmaMatcher( const lem::UFString & ConditionStr );
-    ParadigmaMatcher( const ParadigmaMatcher &x );
-    void operator=( const ParadigmaMatcher &x );
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+        void LoadTxt(lem::Iridium::Macro_Parser &txtfile, int PartOfSpeech, SynGram& gram);
+#endif
 
-    bool Empty(void) const;
-    bool Match( const lem::UCString & entry_name ) const;
-
-    #if defined SOL_LOADTXT && defined SOL_COMPILER
-    void LoadTxt( lem::Iridium::Macro_Parser &txtfile, int PartOfSpeech, SynGram& gram );
-    #endif
-
-    lem::UFString ToString(void) const;
-  };
- }
+        lem::UFString ToString() const;
+    };
+    }
 
 #endif

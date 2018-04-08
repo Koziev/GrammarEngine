@@ -9,27 +9,27 @@
 using namespace Solarix;
 
 
-LexemeEnumerator_SQLite::LexemeEnumerator_SQLite( WordEntries_SQLite *_entries, LS_ResultSet_SQLITE *_rs )
- : rs(_rs), entries(_entries)
+LexemeEnumerator_SQLite::LexemeEnumerator_SQLite(WordEntries_SQLite *_entries, LS_ResultSet_SQLITE *_rs)
+    : rs(_rs), entries(_entries)
 {
 }
 
 
-LexemeEnumerator_SQLite::~LexemeEnumerator_SQLite(void)
+LexemeEnumerator_SQLite::~LexemeEnumerator_SQLite()
 {
- lem_rub_off(rs);
- return;
-}
-
-    
-bool LexemeEnumerator_SQLite::Fetch(void)
-{
- return rs->Fetch();
+    lem_rub_off(rs);
+    return;
 }
 
 
-const Lexem* LexemeEnumerator_SQLite::Get( Solarix::Lexem &lex )
+bool LexemeEnumerator_SQLite::Fetch()
 {
- lex = Solarix::Lexem(rs->GetUCString(0));
- return entries->RegisterLexem(lex); 
+    return rs->Fetch();
+}
+
+
+const Lexem* LexemeEnumerator_SQLite::Get(Solarix::Lexem &lex)
+{
+    lex = Solarix::Lexem(rs->GetUCString(0));
+    return entries->RegisterLexem(lex);
 }

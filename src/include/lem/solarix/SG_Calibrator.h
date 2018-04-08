@@ -33,21 +33,21 @@
    Solarix::CPE_Array coords; 
    int freq;  // Абсолютная частота использования.
 
-   SG_calibrator(void) : id_class(UNKNOWN), freq(0), freq_type(UnknownType) {}
+   SG_calibrator() : id_class(UNKNOWN), freq(0), freq_type(UnknownType) {}
    SG_calibrator( const SG_calibrator &x );
    SG_calibrator( const lem::UCString & keyword, const Solarix::SynGram &sg, const lem::Sol_IO &io, lem::Iridium::Macro_Parser &txtfile );
 
    void operator=( const SG_calibrator &x );
 
-   inline const Lexem& GetWord(void) const { return word; }
-   inline int GetFreq(void) const { return freq; }
-   int GetClass(void) const { return id_class; }
+   inline const Lexem& GetWord() const { return word; }
+   inline int GetFreq() const { return freq; }
+   int GetClass() const { return id_class; }
 
    bool MatchCoords( const CP_Array &form_coords ) const;
 
-   bool IsWordEntryFreq(void) const { return freq_type==WordEntryFreq; }
-   bool IsWordFormScore(void) const { return freq_type==WordFormScore; }
-   bool IsWordFormsScore(void) const { return freq_type==WordFormsScore; }
+   bool IsWordEntryFreq() const { return freq_type==WordEntryFreq; }
+   bool IsWordFormScore() const { return freq_type==WordFormScore; }
+   bool IsWordFormsScore() const { return freq_type==WordFormsScore; }
 
    void SaveBin( lem::Stream &bin ) const;
    void LoadBin( lem::Stream &bin );

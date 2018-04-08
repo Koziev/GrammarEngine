@@ -1,37 +1,37 @@
-#include <lem/solarix/LanguageEnumerator.h>
 #include <lem/solarix/Languages.h>
 #include <lem/solarix/LexiconStorage.h>
+#include <lem/solarix/LanguageEnumerator.h>
 
 using namespace Solarix;
 
-LanguageEnumerator::LanguageEnumerator( Languages *_langs, LexiconStorage *_db )
- : langs(_langs), db(_db), rs(NULL)
+LanguageEnumerator::LanguageEnumerator(Languages *_langs, LexiconStorage *_db)
+    : langs(_langs), db(_db), rs(nullptr)
 {
 }
 
-LanguageEnumerator::~LanguageEnumerator(void)
+LanguageEnumerator::~LanguageEnumerator()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
 
-bool LanguageEnumerator::Fetch(void)
+bool LanguageEnumerator::Fetch()
 {
- if(rs==NULL)
-  {
-   rs = db->ListLanguages();
-  }
+    if (rs == nullptr)
+    {
+        rs = db->ListLanguages();
+    }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int LanguageEnumerator::GetId(void)
+int LanguageEnumerator::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-const SG_Language& LanguageEnumerator::GetItem(void)
+const SG_Language& LanguageEnumerator::GetItem()
 {
- const int id = rs->GetInt(0);
- return (*langs)[id];
+    const int id = rs->GetInt(0);
+    return (*langs)[id];
 }

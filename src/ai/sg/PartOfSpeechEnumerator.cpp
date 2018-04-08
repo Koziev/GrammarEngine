@@ -8,19 +8,19 @@ using namespace Solarix;
 
 
 PartOfSpeechEnumerator::PartOfSpeechEnumerator( LexiconStorage *_db, PartsOfSpeech * _p )
- : rs(NULL), db(_db), p(_p)
+ : rs(nullptr), db(_db), p(_p)
 {
 }
 
-PartOfSpeechEnumerator::~PartOfSpeechEnumerator(void)
+PartOfSpeechEnumerator::~PartOfSpeechEnumerator()
 {
  lem_rub_off(rs);
  return;
 }
 
-bool PartOfSpeechEnumerator::Fetch(void)
+bool PartOfSpeechEnumerator::Fetch()
 {
- if( rs==NULL )
+ if( rs==nullptr )
   {
    rs = db->ListPartsOfSpeech();
   }
@@ -33,7 +33,7 @@ int PartOfSpeechEnumerator::GetId(void)
  return rs->GetInt(0);
 }
 
-const GramClass& PartOfSpeechEnumerator::GetItem(void)
+const GramClass& PartOfSpeechEnumerator::GetItem()
 {
  const int id = rs->GetInt(0);
  return (*p)[id]; 

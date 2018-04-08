@@ -19,10 +19,10 @@
 
    public:
     PhraseEnumerator( LS_ResultSet *_rs, int _pk_ifield, SynGram *_sg );
-    ~PhraseEnumerator(void);
+    ~PhraseEnumerator();
 
-    bool Fetch(void);
-    int GetPhraseId(void);
+    bool Fetch();
+    int GetPhraseId();
     void GetText( lem::UFString &text );
   };
 

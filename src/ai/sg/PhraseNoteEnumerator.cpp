@@ -6,44 +6,44 @@
 
 using namespace Solarix;
 
-PhraseNoteEnumerator::PhraseNoteEnumerator( SynGram *_sg, int _id_phrase )
- : sg(_sg), id_phrase(_id_phrase), rs(NULL)
+PhraseNoteEnumerator::PhraseNoteEnumerator(SynGram *_sg, int _id_phrase)
+    : sg(_sg), id_phrase(_id_phrase), rs(nullptr)
 {
- LEM_CHECKIT_Z( sg!=NULL );
- LEM_CHECKIT_Z( id_phrase!=UNKNOWN );
- return;
+    LEM_CHECKIT_Z(sg != nullptr);
+    LEM_CHECKIT_Z(id_phrase != UNKNOWN);
+    return;
 }
 
 
-PhraseNoteEnumerator::~PhraseNoteEnumerator(void)
+PhraseNoteEnumerator::~PhraseNoteEnumerator()
 {
- lem_rub_off(rs);
- return;
+    lem_rub_off(rs);
+    return;
 }
 
-bool PhraseNoteEnumerator::Fetch(void)
+bool PhraseNoteEnumerator::Fetch()
 {
- if( rs==NULL )
-  {
-   rs = sg->GetStorage().ListPhraseNotes(id_phrase);
-  }
+    if (rs == nullptr)
+    {
+        rs = sg->GetStorage().ListPhraseNotes(id_phrase);
+    }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int PhraseNoteEnumerator::GetNoteId(void)
+int PhraseNoteEnumerator::GetNoteId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
 
-void PhraseNoteEnumerator::GetNote( SG_PhraseNote &note )
+void PhraseNoteEnumerator::GetNote(SG_PhraseNote &note)
 {
- int id = GetNoteId();
- if( !sg->GetStorage().GetPhraseNote( id, note ) )
-  {
-   LEM_STOPIT;
-  }
+    int id = GetNoteId();
+    if (!sg->GetStorage().GetPhraseNote(id, note))
+    {
+        LEM_STOPIT;
+    }
 
- return;
+    return;
 }

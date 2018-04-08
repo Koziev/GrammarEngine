@@ -4,30 +4,30 @@
 using namespace Solarix;
 
 
-Charpos2EntryEnumerator_SQL::Charpos2EntryEnumerator_SQL( LS_ResultSet * _rs)
- : rs(_rs)
+Charpos2EntryEnumerator_SQL::Charpos2EntryEnumerator_SQL(LS_ResultSet * _rs)
+    : rs(_rs)
 {}
 
-Charpos2EntryEnumerator_SQL::~Charpos2EntryEnumerator_SQL(void)
+Charpos2EntryEnumerator_SQL::~Charpos2EntryEnumerator_SQL()
 {
- delete rs;
- return;
+    delete rs;
+    return;
 }
 
-bool Charpos2EntryEnumerator_SQL::Fetch(void)
+bool Charpos2EntryEnumerator_SQL::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-lem::uint32_t Charpos2EntryEnumerator_SQL::GetChar(void)
+lem::uint32_t Charpos2EntryEnumerator_SQL::GetChar()
 {
- const lem::uint32_t charpos = (lem::uint32_t)rs->GetInt(0);
- return 0x00ffffff & charpos;
+    const lem::uint32_t charpos = (lem::uint32_t)rs->GetInt(0);
+    return 0x00ffffff & charpos;
 }
 
 
-int Charpos2EntryEnumerator_SQL::GetPos(void)
+int Charpos2EntryEnumerator_SQL::GetPos()
 {
- const lem::uint32_t charpos = (lem::uint32_t)rs->GetInt(0);
- return (0xff000000&charpos) >> 24;
+    const lem::uint32_t charpos = (lem::uint32_t)rs->GetInt(0);
+    return (0xff000000 & charpos) >> 24;
 }
