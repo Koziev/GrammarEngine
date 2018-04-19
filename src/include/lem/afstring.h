@@ -27,7 +27,7 @@ namespace lem
     public:
         FString() {}
         FString(char c) { this->operator+=(c); }
-        FString(const char * str) :std::string(str) {}
+        FString(const char * str) { if(str!=nullptr) std::string::operator=(str); }
         FString(const FString & s) :std::string(s) {}
         FString(const std::string s) :std::string(s) {}
         FString(const char * start, const char * beyond_end) :std::string(start, beyond_end) {}
