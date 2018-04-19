@@ -8,7 +8,7 @@
  #if Verb!=NULL
   #begin
    extern entry Verb : ИНФИНИТИВ    
-   link ДЕЕПРИЧАСТИЕ:Name{} <в_инфинитив> ИНФИНИТИВ:Verb{ ВИД:Aspect }
+   link ДЕЕПРИЧАСТИЕ:Name{ВИД:Aspect} <в_инфинитив> ИНФИНИТИВ:Verb{ ВИД:Aspect }
 
    tag ДЕЕПРИЧАСТИЕ:Name
    {

@@ -29,6 +29,13 @@
 "rus_infinitives_sov.sol"
 "rus_verb_tags.sol"
 
+"rus_new_adverbial_participles.sol"
+"rus_deepr_part6.sol"
+"rus_deepr.sol"
+"rus_deepr_part2.sol"
+"rus_deepr_part3.sol"
+"rus_deepr_part4.sol"
+"rus_deepr_part5.sol"
 
 
 "rus_adverbs.sol"
@@ -57,10 +64,16 @@
 "rus_verbs_part9.sol"
 "rus_verbs_6003.sol"
 "rus_verbs_6011.sol"
+"rus_verbs_6019.sol"
 "rus_verbs_6032.sol"
+"rus_verbs_6034.sol"
 "rus_verbs_6035.sol"
+"rus_verbs_6049.sol"
+"rus_verbs_6052.sol"
+"rus_verbs_6053.sol"
 "rus_verbs_7001.sol"
 "rus_verbs_7002.sol"
+"rus_verbs_7009.sol"
 "rus_verbs_7014.sol"
 "rus_verbs_7015.sol"
 "rus_verbs_7025.sol"
@@ -71,6 +84,7 @@
 "rus_verbs_7044.sol"
 "rus_verbs_7048.sol"
 "rus_verbs_7052.sol"
+"rus_verbs_7072.sol"
 "rus_verbs_7082.sol"
 "rus_verbs_7084.sol"
 
@@ -274,13 +288,6 @@
 
 
 
-
-"rus_deepr_part6.sol"
-"rus_deepr.sol"
-"rus_deepr_part2.sol"
-"rus_deepr_part3.sol"
-"rus_deepr_part4.sol"
-"rus_deepr_part5.sol"
 
 
 
