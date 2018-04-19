@@ -801,7 +801,7 @@
                        // обрабатывался не дисковый файл.
 
 
-    std::auto_ptr<lem::OUFormatter> dump_utf8;
+    std::unique_ptr<lem::OUFormatter> dump_utf8;
 
     #if defined LEM_WINDOWS
     CRITICAL_SECTION cs;

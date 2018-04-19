@@ -4138,7 +4138,7 @@ FString lem::to_utf8( const wchar_t *ustr )
  
     int n = utf8[0];
     for( int j=0; j<n; j++ )
-     res.Add_Dirty( utf8[j+1] );
+     res += utf8[j+1];
    }
 
   return res; 

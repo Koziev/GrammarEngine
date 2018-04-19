@@ -61,7 +61,7 @@ int TagSets::Register(const lem::MCollect< std::pair<int, int> > &tags)
 
     // Для устранения вариантов записи одного и того же набора тегов отсортируем элементы по id_tag.
     lem::MCollect< std::pair<int, int> > *sorted_tags = new lem::MCollect< std::pair<int, int> >(tags);
-    std::sort(sorted_tags->begin(), sorted_tags->end(), [](auto &a, auto &b)
+    std::sort(sorted_tags->begin(), sorted_tags->end(), [](const std::pair<int,int> &a, const std::pair<int,int> &b)
     {
         return a.first > b.first;
     });

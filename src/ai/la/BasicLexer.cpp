@@ -158,7 +158,7 @@ void BasicLexer::FetchN(const LexerTextPos *current_token, int n, lem::MCollect<
 void BasicLexer::SortTokensByScoreDesc(lem::MCollect<const LexerTextPos*> & tokens) const
 {
     if (tokens.size() > 1)
-        std::sort(tokens.begin(), tokens.end(), [](auto a, auto b)
+        std::sort(tokens.begin(), tokens.end(), [](const LexerTextPos* a, const LexerTextPos* b)
     {
         auto sa = a->GetScore() + a->GetWordform()->GetMaxScore();
         auto sb = b->GetScore() + b->GetWordform()->GetMaxScore();

@@ -11,7 +11,7 @@
   class LS_ResultSet : lem::NonCopyable
   {
    protected:
-    std::auto_ptr<TransactionGuard> read_tx;
+    std::unique_ptr<TransactionGuard> read_tx;
 
    public:
     LS_ResultSet( TransactionGuard *tx ) : read_tx(tx) {}

@@ -208,9 +208,12 @@ lem::UFString lem::from_utf8( const lem::FString &src )
 
  #if LEM_WCHAR_T==4
 
- dest.reserve(sl);
- const int ucslen = lem::utf8_to_ucs4( (const unsigned char*)src.c_str(), sl, (lem::uint32_t*)dest.ptr() );
- dest.ptr()[ ucslen ] = 0;
+ wchar_t * dest_str = new wchar_t[sl+1];
+ std::unique_ptr<wchar_t> g_dest_str(dest_str);
+ const int ucslen = lem::utf8_to_ucs4( (const unsigned char*)src.c_str(), sl, (lem::uint32_t*)dest_str );
+ dest_str[ ucslen ] = 0;
+ dest = dest_str;
+
 
  #elif LEM_WCHAR_T==2 && defined LEM_WINDOWS
 

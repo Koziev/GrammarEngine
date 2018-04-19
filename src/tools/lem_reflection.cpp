@@ -179,11 +179,10 @@ static void InitStartupPath(void)
         if( c==EOF || c==0 )
          break;
 
-        buf.Add_Dirty(c);
+        buf += c;
        }
 
       fclose(f);
-      buf.calc_hash();
       prog_name = lem::Path(buf);
       lem::Reflection::SetStartupFilename(prog_name);
      }

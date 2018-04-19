@@ -144,7 +144,7 @@ void SynPatternResult::Print(lem::OFormatter &out, SynGram &sg) const
     }
 
     // Отсортируем в порядке возрастания позиции, чтобы визуально они были в нормальной последовательности.
-    std::sort(wordforms.begin(), wordforms.end(), [](auto x, auto y)
+    std::sort(wordforms.begin(), wordforms.end(), [](const Word_Form* x, const Word_Form* y)
     {
         return x->GetOriginPos() < y->GetOriginPos();
     });

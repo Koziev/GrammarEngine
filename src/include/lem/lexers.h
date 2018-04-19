@@ -592,7 +592,7 @@ namespace lem
 
         // Таблица токенов и ускорительные поля.
         std::vector< str_type > tokens;
-        std::auto_ptr<SrcLookUpTable> look_up_table; // Ускорительная таблица поиска токенов.
+        std::unique_ptr<SrcLookUpTable> look_up_table; // Ускорительная таблица поиска токенов.
 
         // Поля для организации отката считывания.
         int prev_line, prev_pos;
@@ -782,7 +782,7 @@ namespace lem
         SetDelim(SOURCE_DELIMS);
         SetComplDelims(SOURCE_COMPL_DELIMS);
 
-        look_up_table = std::auto_ptr<SrcLookUpTable>(new SrcLookUpTable());
+        look_up_table = std::unique_ptr<SrcLookUpTable>(new SrcLookUpTable());
 
         return;
     }

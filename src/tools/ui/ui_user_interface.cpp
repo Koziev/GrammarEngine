@@ -240,7 +240,7 @@ User_Interface::User_Interface(void)
    if( lang.length()>2 )
     lang = left( lang, 2 );
     
-   lang.to_lower(); 
+   lang = lem::to_lower(lang); 
   }
  
  curr_lang = lang.c_str();
