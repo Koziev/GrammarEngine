@@ -102,9 +102,6 @@
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_laguage_filter.cpp">
       <Filter>Source Files\Lem\IO\WideStream</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_translit_reader.cpp">
-      <Filter>Source Files\Lem\IO\WideStream</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp">
       <Filter>Source Files\Lem\IO\WideStream</Filter>
     </ClCompile>

@@ -5,29 +5,29 @@
 
 using namespace Solarix;
 
-WordSetEnumerator::WordSetEnumerator( LS_ResultSet *RS, WordEntrySet *Sets )
- : rs(RS), sets(Sets)
+WordSetEnumerator::WordSetEnumerator(LS_ResultSet *RS, WordEntrySet *Sets)
+    : rs(RS), sets(Sets)
 {
 }
 
-WordSetEnumerator::~WordSetEnumerator(void)
+WordSetEnumerator::~WordSetEnumerator()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
 
-bool WordSetEnumerator::Fetch(void)
+bool WordSetEnumerator::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int WordSetEnumerator::GetId(void)
+int WordSetEnumerator::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-const WordSetItem& WordSetEnumerator::GetItem(void)
+const WordSetItem& WordSetEnumerator::GetItem()
 {
- int id = rs->GetInt(0);
- return sets->GetWordSet(id);
+    int id = rs->GetInt(0);
+    return sets->GetWordSet(id);
 }

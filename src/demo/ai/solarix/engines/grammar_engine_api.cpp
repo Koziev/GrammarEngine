@@ -5721,7 +5721,7 @@ GREN_API(HLINKSINFO) sol_ListLinksTxt(
 
             for (lem::Container::size_type i = 0; i < tl_id.size(); ++i)
             {
-                lem::Ptr<SG_ComplexLink> lnk = th.GetComplexLink(tl_id[i]);
+                std::unique_ptr<SG_ComplexLink> lnk(th.GetComplexLink(tl_id[i]));
 
                 SG_Phrase frz;
                 sg.GetStorage().GetPhrase(te_id[i], frz);

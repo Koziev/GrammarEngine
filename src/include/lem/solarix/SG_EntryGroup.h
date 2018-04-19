@@ -1,133 +1,138 @@
 #if !defined SG_EntryGroup__H
- #define SG_EntryGroup__H
+#define SG_EntryGroup__H
 
- #include <lem/containers.h>
- #include <lem/tuple.h>
+#include <lem/containers.h>
+#include <tuple>
 
- namespace lem
- {
-  class OFormatter;
- }
+namespace lem
+{
+    class OFormatter;
+}
 
- namespace Solarix
- {
-  // *********************************************************************
-  // *       Детальки для алгоритма быстрого поиска словоформы           *
-  // * Структура хранит информацию о тех статьях, у которых словоформы   *
-  // * или имена (ежели словоформ нету) начинаются с определенной буквы. *
-  // *********************************************************************
+namespace Solarix
+{
+    // *********************************************************************
+    // *       Р”РµС‚Р°Р»СЊРєРё РґР»СЏ Р°Р»РіРѕСЂРёС‚РјР° Р±С‹СЃС‚СЂРѕРіРѕ РїРѕРёСЃРєР° СЃР»РѕРІРѕС„РѕСЂРјС‹           *
+    // * РЎС‚СЂСѓРєС‚СѓСЂР° С…СЂР°РЅРёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С‚РµС… СЃС‚Р°С‚СЊСЏС…, Сѓ РєРѕС‚РѕСЂС‹С… СЃР»РѕРІРѕС„РѕСЂРјС‹   *
+    // * РёР»Рё РёРјРµРЅР° (РµР¶РµР»Рё СЃР»РѕРІРѕС„РѕСЂРј РЅРµС‚Сѓ) РЅР°С‡РёРЅР°СЋС‚СЃСЏ СЃ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ Р±СѓРєРІС‹. *
+    // *********************************************************************
 
-  struct SG_Interval
-  {
-   int from, n;
-
-   SG_Interval(void) { from=UNKNOWN; n=0; }
-
-   inline void clear(void) { from=UNKNOWN; n=0; }
-
-   inline lem::Container::size_type size(void) const { return n; }
-
-   inline bool empty(void) const { return !n; }
-
-   inline int operator[]( lem::Container::size_type i ) const
-   { LEM_CHECKIT_Z( from!=UNKNOWN && i < static_cast<lem::Container::size_type>(n) ); return CastSizeToInt(from+i); }
-  };
-
-  class SG_EntryGroup
-  {
-   public:
-    typedef lem::triple<wchar_t,wchar_t,wchar_t> KEY;
-
-   private:
-    KEY key;
-
-    lem::IntCollect ientry; // Индексы словоформ, которые идут настолько вразброс,
-                            // что не могут быть представлены как диапазон ОТ-ДО.
-
-    #if defined SOL_COMPILER
-    void Compress( const lem::IntCollect& indeces );
-
-    void Compress_Interval_1( lem::IntCollect& indeces );
-    void Compress_Interval_2( lem::IntCollect& indeces );
-    void Compress_Interval( lem::IntCollect& indeces, SG_Interval &range );
-    #endif
-
-   protected:
-    SG_Interval int1, int2;
-
-   public:
-    SG_EntryGroup(void);
-    SG_EntryGroup( const KEY & k );
-    SG_EntryGroup( const KEY & k, int from, int n );
-
-    #if defined SOL_COMPILER
-    SG_EntryGroup( const KEY & k, const lem::IntCollect& indeces );
-    #endif
-
-    SG_EntryGroup( const SG_EntryGroup& eg );
-
-    #if defined SOL_LOADBIN 
-    SG_EntryGroup( lem::Stream& bin );
-    #endif
- 
-    void operator=( const SG_EntryGroup& eg );
-
-    void clear(void);
-
-    #if defined SOL_SAVEBIN
-    void SaveBin( lem::Stream& bin ) const; 
-    #endif
-
-    #if defined SOL_LOADBIN 
-    void LoadBin( lem::Stream& bin );
-    #endif
-
-    inline const KEY& GetKey(void) const { return key; }
-    static KEY BuildKey( const lem::UCString &str );
-
-    /***********************************************************************
-     Возвращаем общее число хранимых индексов, с учетом возможного сжатого
-     формата хранения.
-    ************************************************************************/
-    inline lem::IntCollect::size_type size(void) const
-    { return ientry.size() + int1.size() + int2.size(); }
-
-    /**************************************************************************
-     Так как хранящаяся информация может быть представлена и диапазоном,
-     и вектором одновременно, то поступаем так: сначала извлекаются элементы
-     вектора ientry, а потом возвращаются числа из хранящегося диапазона.
-    ***************************************************************************/
-    inline int operator[]( lem::IntCollect::size_type i ) const
+    struct SG_Interval
     {
-     return i>=ientry.size() ?
-                              (
-                               (i-ientry.size())>=int1.size() ?
-                                int2[i-int1.size()-ientry.size()]
-                                                                :
-                                int1[i-ientry.size()]
-                              )
-                                                              :
-                              (int)ientry[i];
-    }
+        int from, n;
 
-    void Print( lem::OFormatter &txtfile ) const;
+        SG_Interval() { from = UNKNOWN; n = 0; }
 
-    #if defined SOL_LOADTXT
-    void AddEntry( int ie ) { ientry.push_back(ie); }
-    #endif
+        inline void clear() { from = UNKNOWN; n = 0; }
 
-    int GetUnpackedListLength(void) const { return CastSizeToInt( ientry.size() ); }
-    int GetPackedListLength(void) const   { return CastSizeToInt(int1.size() + int2.size()); }
-  };
+        inline lem::Container::size_type size() const { return n; }
 
-  class SG_DummyEntryGroup : public SG_EntryGroup
-  {
-   public:
-    SG_DummyEntryGroup(void):SG_EntryGroup( KEY(0,0,0), 0, 0 ) {};
+        inline bool empty() const { return !n; }
 
-    inline void Build( int nEntry ) { int1.from=0; int1.n=nEntry; }
-   };
- 
- }
+        inline int operator[](lem::Container::size_type i) const
+        {
+            LEM_CHECKIT_Z(from != UNKNOWN && i < static_cast<lem::Container::size_type>(n)); return CastSizeToInt(from + i);
+        }
+    };
+
+    class SG_EntryGroup
+    {
+    public:
+        //typedef lem::triple<wchar_t, wchar_t, wchar_t> KEY;
+        using KEY = std::tuple<wchar_t, wchar_t, wchar_t>;
+
+    private:
+        KEY key;
+
+        lem::IntCollect ientry; // РРЅРґРµРєСЃС‹ СЃР»РѕРІРѕС„РѕСЂРј, РєРѕС‚РѕСЂС‹Рµ РёРґСѓС‚ РЅР°СЃС‚РѕР»СЊРєРѕ РІСЂР°Р·Р±СЂРѕСЃ,
+                                // С‡С‚Рѕ РЅРµ РјРѕРіСѓС‚ Р±С‹С‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅС‹ РєР°Рє РґРёР°РїР°Р·РѕРЅ РћРў-Р”Рћ.
+
+#if defined SOL_COMPILER
+        void Compress(const lem::IntCollect& indeces);
+
+        void Compress_Interval_1(lem::IntCollect& indeces);
+        void Compress_Interval_2(lem::IntCollect& indeces);
+        void Compress_Interval(lem::IntCollect& indeces, SG_Interval &range);
+#endif
+
+    protected:
+        SG_Interval int1, int2;
+
+    public:
+        SG_EntryGroup();
+        SG_EntryGroup(const KEY & k);
+        SG_EntryGroup(const KEY & k, int from, int n);
+
+#if defined SOL_COMPILER
+        SG_EntryGroup(const KEY & k, const lem::IntCollect& indeces);
+#endif
+
+        SG_EntryGroup(const SG_EntryGroup& eg);
+
+#if defined SOL_LOADBIN 
+        SG_EntryGroup(lem::Stream& bin);
+#endif
+
+        void operator=(const SG_EntryGroup& eg);
+
+        void clear();
+
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream& bin) const;
+#endif
+
+#if defined SOL_LOADBIN 
+        void LoadBin(lem::Stream& bin);
+#endif
+
+        inline const KEY& GetKey() const { return key; }
+        static KEY BuildKey(const lem::UCString &str);
+
+        /***********************************************************************
+         Р’РѕР·РІСЂР°С‰Р°РµРј РѕР±С‰РµРµ С‡РёСЃР»Рѕ С…СЂР°РЅРёРјС‹С… РёРЅРґРµРєСЃРѕРІ, СЃ СѓС‡РµС‚РѕРј РІРѕР·РјРѕР¶РЅРѕРіРѕ СЃР¶Р°С‚РѕРіРѕ
+         С„РѕСЂРјР°С‚Р° С…СЂР°РЅРµРЅРёСЏ.
+        ************************************************************************/
+        inline lem::IntCollect::size_type size() const
+        {
+            return ientry.size() + int1.size() + int2.size();
+        }
+
+        /**************************************************************************
+         РўР°Рє РєР°Рє С…СЂР°РЅСЏС‰Р°СЏСЃСЏ РёРЅС„РѕСЂРјР°С†РёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅР° Рё РґРёР°РїР°Р·РѕРЅРѕРј,
+         Рё РІРµРєС‚РѕСЂРѕРј РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ, С‚Рѕ РїРѕСЃС‚СѓРїР°РµРј С‚Р°Рє: СЃРЅР°С‡Р°Р»Р° РёР·РІР»РµРєР°СЋС‚СЃСЏ СЌР»РµРјРµРЅС‚С‹
+         РІРµРєС‚РѕСЂР° ientry, Р° РїРѕС‚РѕРј РІРѕР·РІСЂР°С‰Р°СЋС‚СЃСЏ С‡РёСЃР»Р° РёР· С…СЂР°РЅСЏС‰РµРіРѕСЃСЏ РґРёР°РїР°Р·РѕРЅР°.
+        ***************************************************************************/
+        inline int operator[](lem::IntCollect::size_type i) const
+        {
+            return i >= ientry.size() ?
+                (
+                (i - ientry.size()) >= int1.size() ?
+                    int2[i - int1.size() - ientry.size()]
+                    :
+                    int1[i - ientry.size()]
+                    )
+                :
+                (int)ientry[i];
+        }
+
+        void Print(lem::OFormatter &txtfile) const;
+
+#if defined SOL_LOADTXT
+        void AddEntry(int ie) { ientry.push_back(ie); }
+#endif
+
+        int GetUnpackedListLength() const { return CastSizeToInt(ientry.size()); }
+        int GetPackedListLength() const { return CastSizeToInt(int1.size() + int2.size()); }
+    };
+
+    class SG_DummyEntryGroup : public SG_EntryGroup
+    {
+    public:
+        SG_DummyEntryGroup() :SG_EntryGroup(KEY(0, 0, 0), 0, 0) {}
+
+        inline void Build(int nEntry) { int1.from = 0; int1.n = nEntry; }
+    };
+
+}
 
 #endif

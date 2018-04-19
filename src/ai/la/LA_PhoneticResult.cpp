@@ -4,21 +4,19 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
 //
 // You must not eliminate, delete or supress these copyright strings
 // from the file!
 //
 // Content:
-// LEM C++ library  http://www.solarix.ru
-// Класс LA_PhoneticResult - результатная часть правила фонетической продукции для
-// Фонетического Алеф-Автомата. Выполняет некоторые модификации контекста в
-// случае успешной проверки соответствия условной части фонетического правила
-// и входного контекста.
+// РљР»Р°СЃСЃ LA_PhoneticResult - СЂРµР·СѓР»СЊС‚Р°С‚РЅР°СЏ С‡Р°СЃС‚СЊ РїСЂР°РІРёР»Р° С„РѕРЅРµС‚РёС‡РµСЃРєРѕР№ РїСЂРѕРґСѓРєС†РёРё РґР»СЏ
+// Р¤РѕРЅРµС‚РёС‡РµСЃРєРѕРіРѕ РђР»РµС„-РђРІС‚РѕРјР°С‚Р°. Р’С‹РїРѕР»РЅСЏРµС‚ РЅРµРєРѕС‚РѕСЂС‹Рµ РјРѕРґРёС„РёРєР°С†РёРё РєРѕРЅС‚РµРєСЃС‚Р° РІ
+// СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ РїСЂРѕРІРµСЂРєРё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ СѓСЃР»РѕРІРЅРѕР№ С‡Р°СЃС‚Рё С„РѕРЅРµС‚РёС‡РµСЃРєРѕРіРѕ РїСЂР°РІРёР»Р°
+// Рё РІС…РѕРґРЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р°.
 // -----------------------------------------------------------------------------
 //
 // CD->26.02.1997
-// LC->30.05.2011
+// LC->17.04.2018
 // --------------
 
 #include <lem/macro_parser.h>
@@ -31,46 +29,50 @@ using namespace lem;
 using namespace Solarix;
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-LA_PhoneticResult::LA_PhoneticResult( Macro_Parser &txtfile, GraphGram &gram )
-{ LoadTxt(txtfile,gram); }
+LA_PhoneticResult::LA_PhoneticResult(Macro_Parser &txtfile, GraphGram &gram)
+{
+    LoadTxt(txtfile, gram);
+}
 #endif
 
 
-LA_PhoneticResult::LA_PhoneticResult( const UCString &str ) : context(str)
+LA_PhoneticResult::LA_PhoneticResult(const UCString &str) : context(str)
 {}
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void LA_PhoneticResult::LoadTxt( Macro_Parser &txtfile, GraphGram &gram )
+void LA_PhoneticResult::LoadTxt(Macro_Parser &txtfile, GraphGram &gram)
 {
- txtfile.read_it(B_CONTEXT);
- const BethToken t = txtfile.read();
- UCString Context = t.string();
+    txtfile.read_it(B_CONTEXT);
+    const BethToken t = txtfile.read();
+    UCString Context = t.string();
 
- // Проверим, правильно ли задана строка результатного контекста.
- // Прежде всего, она должна быть в двойных кавычках.
- if( !in_quotes(Context) )
-  {
-   lem::Iridium::Print_Error( t, txtfile );
-   gram.GetIO().merr().printf(
-                              "Строка результатного контекста [%us] в фонетическом правиле должна "
-                              "быть в двойных кавычках\n"
-                              , Context.c_str()
-                             );
-   LEM_STOPIT;
-  }
+    // РџСЂРѕРІРµСЂРёРј, РїСЂР°РІРёР»СЊРЅРѕ Р»Рё Р·Р°РґР°РЅР° СЃС‚СЂРѕРєР° СЂРµР·СѓР»СЊС‚Р°С‚РЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р°.
+    // РџСЂРµР¶РґРµ РІСЃРµРіРѕ, РѕРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РІ РґРІРѕР№РЅС‹С… РєР°РІС‹С‡РєР°С….
+    if (!in_quotes(Context))
+    {
+        lem::Iridium::Print_Error(t, txtfile);
+        gram.GetIO().merr().printf(
+            "РЎС‚СЂРѕРєР° СЂРµР·СѓР»СЊС‚Р°С‚РЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р° [%us] РІ С„РѕРЅРµС‚РёС‡РµСЃРєРѕРј РїСЂР°РІРёР»Рµ РґРѕР»Р¶РЅР° "
+            "Р±С‹С‚СЊ РІ РґРІРѕР№РЅС‹С… РєР°РІС‹С‡РєР°С…\n"
+            , Context.c_str()
+        );
+        LEM_STOPIT;
+    }
 
- Context.strip_quotes();
- context = Context;
+    Context.strip_quotes();
+    context = Context;
 
- context.Translate(gram);
- return;
+    context.Translate(gram);
+    return;
 }
 #endif
 
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-bool LA_PhoneticResult::operator==( const LA_PhoneticResult& x ) const
-{ return context==x.context; }
+bool LA_PhoneticResult::operator==(const LA_PhoneticResult& x) const
+{
+    return context == x.context;
+}
 #endif

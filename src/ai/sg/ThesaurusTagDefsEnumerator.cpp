@@ -3,36 +3,36 @@
 
 using namespace Solarix;
 
-ThesaurusTagDefsEnumerator::ThesaurusTagDefsEnumerator( ThesaurusTagDefs *x ) : defs(x), rs(NULL)
+ThesaurusTagDefsEnumerator::ThesaurusTagDefsEnumerator(ThesaurusTagDefs *x) : defs(x), rs(nullptr)
 {
 }
 
 
-ThesaurusTagDefsEnumerator::~ThesaurusTagDefsEnumerator(void)
+ThesaurusTagDefsEnumerator::~ThesaurusTagDefsEnumerator()
 {
- lem_rub_off(rs);
- return;
+    lem_rub_off(rs);
+    return;
 }
 
 
-bool ThesaurusTagDefsEnumerator::Fetch(void)
+bool ThesaurusTagDefsEnumerator::Fetch()
 {
- if( rs==NULL )
-  {
-   rs = defs->db->ListTagDefs();
-  }
+    if (rs == nullptr)
+    {
+        rs = defs->db->ListTagDefs();
+    }
 
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
-int ThesaurusTagDefsEnumerator::GetId(void) const
+int ThesaurusTagDefsEnumerator::GetId() const
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-lem::UCString ThesaurusTagDefsEnumerator::GetName(void) const
+lem::UCString ThesaurusTagDefsEnumerator::GetName() const
 {
- return rs->GetUCString(1);
+    return rs->GetUCString(1);
 }
 

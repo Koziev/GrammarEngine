@@ -7,11 +7,10 @@
 #include <lem/solarix/TreeMatchingExperience.h>
 #include <lem/solarix/SynPattern.h>
 
-
 using namespace Solarix;
 
-KB_Checker::KB_Checker( const KB_Checker & x )
-    : id_facts( x.id_facts ), backref_name( x.backref_name ), node_name( x.node_name )
+KB_Checker::KB_Checker(const KB_Checker & x)
+    : id_facts(x.id_facts), backref_name(x.backref_name), node_name(x.node_name)
 {
 }
 
@@ -27,62 +26,62 @@ void KB_Checker::operator=(const KB_Checker & x)
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void KB_Checker::LoadTxt( 
+void KB_Checker::LoadTxt(
     Dictionary &dict,
     lem::Iridium::Macro_Parser & txtfile,
     SynPatternCompilation & compilation_context
-    )
+)
 {
     lem::Iridium::BethToken t_fact = txtfile.read();
-    id_facts = dict.GetLexAuto().GetKnowledgeBase().FindFacts( t_fact.string() );
+    id_facts = dict.GetLexAuto().GetKnowledgeBase().FindFacts(t_fact.string());
 
-    if( id_facts==UNKNOWN )
+    if (id_facts == UNKNOWN)
     {
-        dict.GetIO().merr().printf( "Unknown fact name [%us]\n", t_fact.string().c_str() );
-        lem::Iridium::Print_Error(t_fact,txtfile);
+        dict.GetIO().merr().printf("Unknown fact name [%us]\n", t_fact.string().c_str());
+        lem::Iridium::Print_Error(t_fact, txtfile);
         throw lem::E_BaseException();
     }
 
-    const KB_Facts & facts = dict.GetLexAuto().GetKnowledgeBase().GetFacts( id_facts );
+    const KB_Facts & facts = dict.GetLexAuto().GetKnowledgeBase().GetFacts(id_facts);
 
-    // Считываем фактические аргументы вызова
-    txtfile.read_it( B_OROUNDPAREN );
-    while(!txtfile.eof())
+    // РЎС‡РёС‚С‹РІР°РµРј С„Р°РєС‚РёС‡РµСЃРєРёРµ Р°СЂРіСѓРјРµРЅС‚С‹ РІС‹Р·РѕРІР°
+    txtfile.read_it(B_OROUNDPAREN);
+    while (!txtfile.eof())
     {
-        if( txtfile.probe(B_CROUNDPAREN) )
+        if (txtfile.probe(B_CROUNDPAREN))
             break;
 
-        if( !backref_name.empty() )
-            txtfile.read_it( B_COMMA );
+        if (!backref_name.empty())
+            txtfile.read_it(B_COMMA);
 
         lem::Iridium::BethToken t_backref = txtfile.read();
         lem::UCString backref = t_backref.string();
         backref.to_upper();
-        if( backref!=L'_' )
+        if (backref != L'_')
         {
-            if( compilation_context.Find(backref)==UNKNOWN )
+            if (compilation_context.Find(backref) == UNKNOWN)
             {
-                dict.GetIO().merr().printf( "Unknown variable name [%us]\n", t_backref.string().c_str() );
-                lem::Iridium::Print_Error(t_backref,txtfile);
+                dict.GetIO().merr().printf("Unknown variable name [%us]\n", t_backref.string().c_str());
+                lem::Iridium::Print_Error(t_backref, txtfile);
                 throw lem::E_BaseException();
             }
         }
 
         lem::UCString node;
-        if( txtfile.probe(B_DOT) )
+        if (txtfile.probe(B_DOT))
         {
             node = txtfile.read().string();
             node.to_upper();
         }
 
-        backref_name.push_back( backref );
-        node_name.push_back( node );
+        backref_name.push_back(backref);
+        node_name.push_back(node);
     }
 
-    if( backref_name.size() != facts.CountOfArg() )
+    if (backref_name.size() != facts.CountOfArg())
     {
-        dict.GetIO().merr().printf( "Mismatching number of arguments for fact [%us]: %d required, %d defined\n", t_fact.string().c_str(), facts.CountOfArg(), CastSizeToInt(backref_name.size()) );
-        lem::Iridium::Print_Error(t_fact,txtfile);
+        dict.GetIO().merr().printf("Mismatching number of arguments for fact [%us]: %d required, %d defined\n", t_fact.string().c_str(), facts.CountOfArg(), CastSizeToInt(backref_name.size()));
+        lem::Iridium::Print_Error(t_fact, txtfile);
         throw lem::E_BaseException();
     }
 
@@ -92,16 +91,20 @@ void KB_Checker::LoadTxt(
 
 bool KB_Checker::operator==(const KB_Checker & x) const
 {
-    if(id_facts != x.id_facts)
+    if (id_facts != x.id_facts)
         return false;
 
-    if(backref_name.size() != x.backref_name.size())
+    if (backref_name.size() != x.backref_name.size())
         return false;
 
-    for(lem::Container::size_type i = 0; i < backref_name.size(); ++i)
-        if(backref_name[i] != x.backref_name[i] ||
+    for (lem::Container::size_type i = 0; i < backref_name.size(); ++i)
+    {
+        if (backref_name[i] != x.backref_name[i] ||
             node_name[i] != x.node_name[i])
+        {
             return false;
+        }
+    }
 
     return true;
 }
@@ -113,21 +116,21 @@ bool KB_Checker::operator!=(const KB_Checker & x) const
 }
 
 #if defined SOL_SAVEBIN
-void KB_Checker::SaveBin( lem::Stream& bin ) const
+void KB_Checker::SaveBin(lem::Stream& bin) const
 {
-    bin.write_int( id_facts );
-    backref_name.SaveBin( bin );
-    node_name.SaveBin( bin );
+    bin.write_int(id_facts);
+    backref_name.SaveBin(bin);
+    node_name.SaveBin(bin);
     return;
 }
 #endif
 
 #if defined SOL_LOADBIN 
-void KB_Checker::LoadBin( lem::Stream& bin )
+void KB_Checker::LoadBin(lem::Stream& bin)
 {
     id_facts = bin.read_int();
-    backref_name.LoadBin( bin );
-    node_name.LoadBin( bin );
+    backref_name.LoadBin(bin);
+    node_name.LoadBin(bin);
     return;
 }
 #endif
@@ -141,93 +144,93 @@ KB_CheckerReturn KB_Checker::Check(
     const Solarix::Word_Form * this_wordform,
     KnowledgeBase & kbase,
     TreeMatchingExperience &experience
-    ) const
+) const
 {
     KB_CheckerReturn ret;
 
-    // Соберем фактические значения для формальных аргументов вызова предиката в базе знаний
+    // РЎРѕР±РµСЂРµРј С„Р°РєС‚РёС‡РµСЃРєРёРµ Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ С„РѕСЂРјР°Р»СЊРЅС‹С… Р°СЂРіСѓРјРµРЅС‚РѕРІ РІС‹Р·РѕРІР° РїСЂРµРґРёРєР°С‚Р° РІ Р±Р°Р·Рµ Р·РЅР°РЅРёР№
     lem::MCollect< const Solarix::Word_Form * > arg_values;
-    for(lem::Container::size_type i = 0; i < backref_name.size(); ++i)
+    for (lem::Container::size_type i = 0; i < backref_name.size(); ++i)
     {
         const lem::UCString & mark = backref_name[i];
         const lem::UCString & var = node_name[i];
-        if(mark == L'_')
+        if (mark == L'_')
         {
-            const Word_Form * this_node = this_wordform == NULL ? cur_result->FindExportNode( var ) : this_wordform;
+            const Word_Form * this_node = this_wordform == NULL ? cur_result->FindExportNode(var) : this_wordform;
 
-            if(this_node == NULL)
+            if (this_node == NULL)
             {
-                this_node = cur_result->FindExportNode( L"ROOT_NODE" );
+                this_node = cur_result->FindExportNode(L"ROOT_NODE");
 
-                if(this_node == NULL)
+                if (this_node == NULL)
                 {
                     lem::MemFormatter mem;
-                    mem.printf( "Can not find exported node %us.%us", mark.c_str(), var.c_str() );
-                    throw lem::E_BaseException( mem.string() );
+                    mem.printf("Can not find exported node %us.%us", mark.c_str(), var.c_str());
+                    throw lem::E_BaseException(mem.string());
                 }
             }
 
-            if(this_node == NULL)
+            if (this_node == NULL)
             {
                 ret.success = true;
                 return ret;
             }
 
-            arg_values.push_back( this_node );
+            arg_values.push_back(this_node);
         }
         else
         {
-            const BackTraceItem & mark_data = *parent_trace->Get( PatternSequenceNumber, mark );
+            const BackTraceItem & mark_data = *parent_trace->Get(PatternSequenceNumber, mark);
 
-            if(var.empty())
+            if (var.empty())
             {
                 const Word_Form * mark_node = mark_data.GetWordform();
 
-                if(mark_node == NULL)
+                if (mark_node == NULL)
                 {
-                    mark_node = mark_data.FindNode( L"ROOT_NODE" );
-                    if(mark_node == NULL)
+                    mark_node = mark_data.FindNode(L"ROOT_NODE");
+                    if (mark_node == NULL)
                     {
                         lem::MemFormatter mem;
-                        mem.printf( "Can not find exported node %us", mark.c_str() );
-                        throw lem::E_BaseException( mem.string() );
+                        mem.printf("Can not find exported node %us", mark.c_str());
+                        throw lem::E_BaseException(mem.string());
                     }
                 }
 
-                arg_values.push_back( mark_node );
+                arg_values.push_back(mark_node);
             }
             else
             {
-                const Word_Form * mark_node = mark_data.FindNode( var );
-                if(mark_node == NULL)
+                const Word_Form * mark_node = mark_data.FindNode(var);
+                if (mark_node == NULL)
                 {
                     lem::MemFormatter mem;
-                    mem.printf( "Can not find exported node %us.%us", mark.c_str(), var.c_str() );
-                    throw lem::E_BaseException( mem.string() );
+                    mem.printf("Can not find exported node %us.%us", mark.c_str(), var.c_str());
+                    throw lem::E_BaseException(mem.string());
                 }
 
-                arg_values.push_back( mark_node );
+                arg_values.push_back(mark_node);
             }
         }
     }
 
-    LEM_CHECKIT_Z( arg_values.size() > 0 );
+    LEM_CHECKIT_Z(arg_values.size() > 0);
 
     KB_CheckingResult res;
 
-    if(!experience.FindKBCheckerMatching( id_facts, arg_values, &res ))
+    if (!experience.FindKBCheckerMatching(id_facts, arg_values, &res))
     {
-        res = kbase.Prove( id_facts, arg_values );
-        experience.AddKBCheckerMatching( id_facts, arg_values, res );
+        res = kbase.Prove(id_facts, arg_values);
+        experience.AddKBCheckerMatching(id_facts, arg_values, res);
     }
 
-    if(res.IsMatched())
+    if (res.IsMatched())
     {
-        if(res.GetBool() == 0)
+        if (res.GetBool() == 0)
         {
-            if(res.GetFalseScore() != 0)
+            if (res.GetFalseScore() != 0)
             {
-                // мягкое нарушение - считаем успехом со штрафом
+                // РјСЏРіРєРѕРµ РЅР°СЂСѓС€РµРЅРёРµ - СЃС‡РёС‚Р°РµРј СѓСЃРїРµС…РѕРј СЃРѕ С€С‚СЂР°С„РѕРј
                 ret.success = true;
                 ret.false_score = res.GetFalseScore();
             }

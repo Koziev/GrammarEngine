@@ -4,53 +4,53 @@
 
 using namespace Solarix;
 
-WordFormEnumeratorListing_File::WordFormEnumeratorListing_File( WordEntries_File * _entries )
- : entries(_entries)
+WordFormEnumeratorListing_File::WordFormEnumeratorListing_File(WordEntries_File * _entries)
+    : entries(_entries)
 {
- started=false;
- finished=false;
- icur=-1;
- return;
+    started = false;
+    finished = false;
+    icur = -1;
+    return;
 }
 
-bool WordFormEnumeratorListing_File::Fetch(void)
+bool WordFormEnumeratorListing_File::Fetch()
 {
- if( !started )
-  {
-   Prefetch();
-   started=true;
-  }
+    if (!started)
+    {
+        Prefetch();
+        started = true;
+    }
 
- if( !finished )
-  {
-   icur++;
-   finished = icur>=CastSizeToInt( hits.size() );
-  }
+    if (!finished)
+    {
+        icur++;
+        finished = icur >= CastSizeToInt(hits.size());
+    }
 
- return !finished;
+    return !finished;
 }
 
-int WordFormEnumeratorListing_File::GetEntryKey(void)
+int WordFormEnumeratorListing_File::GetEntryKey()
 {
- return hits[icur].ekey;
+    return hits[icur].ekey;
 }
 
-int WordFormEnumeratorListing_File::GetFormIndex(void)
+int WordFormEnumeratorListing_File::GetFormIndex()
 {
- return hits[icur].iform;
+    return hits[icur].iform;
 }
 
-float WordFormEnumeratorListing_File::GetValue(void)
+float WordFormEnumeratorListing_File::GetValue()
 {
- return hits[icur].val;
+    return hits[icur].val;
 }
 
-int WordFormEnumeratorListing_File::GetMatchedWordIndex(void)
+int WordFormEnumeratorListing_File::GetMatchedWordIndex()
 {
- return 0;
+    return 0;
 }
 
-bool WordFormEnumeratorListing_File::HitsComparator( const Hit &a, const Hit &b )
+bool WordFormEnumeratorListing_File::HitsComparator(const Hit &a, const Hit &b)
 {
- return a.val > b.val;
+    return a.val > b.val;
 }

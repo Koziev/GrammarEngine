@@ -4,67 +4,79 @@
 using namespace Solarix;
 
 
-PatternOptionalPoints::PatternOptionalPoints( const PatternOptionalPoints & x )
+PatternOptionalPoints::PatternOptionalPoints(const PatternOptionalPoints & x)
 {
- for( lem::Container::size_type i=0; i<x.points.size(); ++i )
-  points.push_back( new SynPatternPoint( * x.points[i] ) );
+    for (auto p : x.points)
+    {
+        points.push_back(new SynPatternPoint(*p));
+    }
 }
 
 
-void PatternOptionalPoints::operator=( const PatternOptionalPoints & x )
+void PatternOptionalPoints::operator=(const PatternOptionalPoints & x)
 {
- for( lem::Container::size_type i=0; i<points.size(); ++i )
-  delete points[i];
- points.clear();
- 
- for( lem::Container::size_type i=0; i<x.points.size(); ++i )
-  points.push_back( new SynPatternPoint( * x.points[i] ) );
+    for (auto point : points)
+    {
+        delete point;
+    }
+    points.clear();
 
- return;
+    for (auto point : x.points)
+    {
+        points.push_back(new SynPatternPoint(*point));
+    }
+
+    return;
 }
 
 
 
 PatternOptionalPoints::~PatternOptionalPoints()
 {
- for( lem::Container::size_type i=0; i<points.size(); ++i )
-  delete points[i];
+    for (auto point : points)
+    {
+        delete point;
+    }
 }
 
 
-bool PatternOptionalPoints::operator!=( const PatternOptionalPoints & x ) const
+bool PatternOptionalPoints::operator!=(const PatternOptionalPoints & x) const
 {
- if( points.size()!=x.points.size() )
-  return false;
- 
- for( lem::Container::size_type i=0; i<points.size(); ++i )
-  if( !points[i]->Equal( *x.points[i] ) )
-   return false;
+    if (points.size() != x.points.size())
+        return false;
 
- return true;
+    for (lem::Container::size_type i = 0; i < points.size(); ++i)
+    {
+        if (!points[i]->Equal(*x.points[i]))
+            return false;
+    }
+
+    return true;
 }
 
 
-void PatternOptionalPoints::SaveBin( lem::Stream & bin ) const
+void PatternOptionalPoints::SaveBin(lem::Stream & bin) const
 {
- #if defined SOL_SAVEBIN
- bin.write_int( points.size() );
- for( lem::Container::size_type i=0; i<points.size(); ++i )
-  points[i]->SaveBin(bin);
- #endif
- return;
+#if defined SOL_SAVEBIN
+    bin.write_int(points.size());
+    for (auto point : points)
+    {
+        point->SaveBin(bin);
+    }
+#endif
+    return;
 }
 
 
-void PatternOptionalPoints::LoadBin( lem::Stream & bin )
+void PatternOptionalPoints::LoadBin(lem::Stream & bin)
 {
- int n = bin.read_int();
- for( int i=0; i<n; ++i )
-  {
-   SynPatternPoint * p = new SynPatternPoint();
-   p->LoadBin(bin);
-   points.push_back(p);
-  }
+    int n = bin.read_int();
+    for (int i = 0; i < n; ++i)
+    {
+        SynPatternPoint * p = new SynPatternPoint();
+        p->LoadBin(bin);
+        points.push_back(p);
+    }
 
- return;
+    return;
 }

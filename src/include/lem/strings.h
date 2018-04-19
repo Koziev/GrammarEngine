@@ -768,7 +768,7 @@
 
     const size_t d2 = levinshtein_distance( s1, s2 );
 
-    const int p = 100 - (100*lem::_min(d1,d2))/lem::_min(s1.length(),s2.length());
+    const int p = 100 - (100*lem::_min(d1,d2))/CastSizeToInt(lem::_min(s1.length(),s2.length()));
 
     return p;
    }

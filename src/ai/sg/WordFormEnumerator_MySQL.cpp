@@ -7,58 +7,58 @@
 
 using namespace Solarix;
 
-WordFormEnumerator_MySQL::WordFormEnumerator_MySQL( LS_ResultSet_MySQL *_rs, WordEntries_MySQL *_entries )
- : rs(_rs), entries(_entries)
+WordFormEnumerator_MySQL::WordFormEnumerator_MySQL(LS_ResultSet_MySQL *_rs, WordEntries_MySQL *_entries)
+    : rs(_rs), entries(_entries)
 {
 }
 
 WordFormEnumerator_MySQL::WordFormEnumerator_MySQL(
-                                                   LS_ResultSet_MySQL *_rs,
-                                                   WordEntries_MySQL *_entries,
-                                                   const lem::MCollect<lem::UCString> &_forms
-                                                  )
- : rs(_rs), entries(_entries), forms(_forms)
+    LS_ResultSet_MySQL *_rs,
+    WordEntries_MySQL *_entries,
+    const lem::MCollect<lem::UCString> &_forms
+)
+    : rs(_rs), entries(_entries), forms(_forms)
 {
 }
 
 
 
-WordFormEnumerator_MySQL::~WordFormEnumerator_MySQL(void)
+WordFormEnumerator_MySQL::~WordFormEnumerator_MySQL()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
-bool WordFormEnumerator_MySQL::Fetch(void)
+bool WordFormEnumerator_MySQL::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int WordFormEnumerator_MySQL::GetEntryKey(void)
+int WordFormEnumerator_MySQL::GetEntryKey()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-int WordFormEnumerator_MySQL::GetFormIndex(void)
+int WordFormEnumerator_MySQL::GetFormIndex()
 {
- return rs->GetInt(1);
+    return rs->GetInt(1);
 }
 
-float WordFormEnumerator_MySQL::GetValue(void)
+float WordFormEnumerator_MySQL::GetValue()
 {
- return 1.0F;
+    return 1.0F;
 }
 
-int WordFormEnumerator_MySQL::GetMatchedWordIndex(void)
+int WordFormEnumerator_MySQL::GetMatchedWordIndex()
 {
- if( forms.size()>1 )
-  {
-   lem::UCString matched_word = rs->GetUCString(2);
-   return forms.find(matched_word);
-  }
- else
-  {
-   return 0;
-  }
+    if (forms.size() > 1)
+    {
+        lem::UCString matched_word = rs->GetUCString(2);
+        return forms.find(matched_word);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 

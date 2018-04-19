@@ -4,15 +4,15 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Класс SG_EntryGroup. Структура для внутреннего использования. Применяется в
-// алгоритме быстрого поиска статьи в Синтаксической Грамматике. Хранит индексы
-// статей Лексикона, начинающиеся с одной и той же буквы. Благодаря специальному
-// подходу может хранить последовательность индексов в сжатом виде (начальный
-// индекс + количество индексов) и в произвольном (вектор индексов).
+// РљР»Р°СЃСЃ SG_EntryGroup. РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ. РџСЂРёРјРµРЅСЏРµС‚СЃСЏ РІ
+// Р°Р»РіРѕСЂРёС‚РјРµ Р±С‹СЃС‚СЂРѕРіРѕ РїРѕРёСЃРєР° СЃС‚Р°С‚СЊРё РІ РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕР№ Р“СЂР°РјРјР°С‚РёРєРµ. РҐСЂР°РЅРёС‚ РёРЅРґРµРєСЃС‹
+// СЃС‚Р°С‚РµР№ Р›РµРєСЃРёРєРѕРЅР°, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ РѕРґРЅРѕР№ Рё С‚РѕР№ Р¶Рµ Р±СѓРєРІС‹. Р‘Р»Р°РіРѕРґР°СЂСЏ СЃРїРµС†РёР°Р»СЊРЅРѕРјСѓ
+// РїРѕРґС…РѕРґСѓ РјРѕР¶РµС‚ С…СЂР°РЅРёС‚СЊ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ РёРЅРґРµРєСЃРѕРІ РІ СЃР¶Р°С‚РѕРј РІРёРґРµ (РЅР°С‡Р°Р»СЊРЅС‹Р№
+// РёРЅРґРµРєСЃ + РєРѕР»РёС‡РµСЃС‚РІРѕ РёРЅРґРµРєСЃРѕРІ) Рё РІ РїСЂРѕРёР·РІРѕР»СЊРЅРѕРј (РІРµРєС‚РѕСЂ РёРЅРґРµРєСЃРѕРІ).
 // -----------------------------------------------------------------------------
 //
 // CD->15.03.1996
-// LC->01.10.2011
+// LC->16.04.2018
 // --------------
 
 #include <lem/solarix/dictionary.h>
@@ -22,232 +22,233 @@
 using namespace lem;
 using namespace Solarix;
 
-SG_EntryGroup::SG_EntryGroup( const KEY & k ) : key(k)
+SG_EntryGroup::SG_EntryGroup(const KEY & k) : key(k)
 {
 }
 
 
 #if defined SOL_COMPILER
-SG_EntryGroup::SG_EntryGroup( const KEY & k, const IntCollect& indeces ) : key(k)
+SG_EntryGroup::SG_EntryGroup(const KEY & k, const IntCollect& indeces) : key(k)
 {
- Compress(indeces);
- return;
+    Compress(indeces);
+    return;
 }
 #endif
 
 
-SG_EntryGroup::SG_EntryGroup(void)
- : key(0,0,0)
+SG_EntryGroup::SG_EntryGroup()
+    : key(0, 0, 0)
 {
- return;
 }
 
 
-SG_EntryGroup::SG_EntryGroup( const KEY & k, int from, int n ) : key(k)
+SG_EntryGroup::SG_EntryGroup(const KEY & k, int from, int n) : key(k)
 {
- int1.from = from;
- int1.n = n;
- return;
+    int1.from = from;
+    int1.n = n;
+    return;
 }
 
 
-SG_EntryGroup::SG_EntryGroup( const SG_EntryGroup& eg )
-: key(eg.key), ientry(eg.ientry), int1(eg.int1), int2(eg.int2)
+SG_EntryGroup::SG_EntryGroup(const SG_EntryGroup& eg)
+    : key(eg.key), ientry(eg.ientry), int1(eg.int1), int2(eg.int2)
 {}
 
 #if defined SOL_LOADBIN 
-SG_EntryGroup::SG_EntryGroup( lem::Stream& bin )
+SG_EntryGroup::SG_EntryGroup(lem::Stream& bin)
 {
- LoadBin(bin);
+    LoadBin(bin);
 }
 #endif
 
-void SG_EntryGroup::operator=( const SG_EntryGroup& eg )
+void SG_EntryGroup::operator=(const SG_EntryGroup& eg)
 {
- key    = eg.key;
- int1   = eg.int1;
- int2   = eg.int2;
- ientry = eg.ientry;
+    key = eg.key;
+    int1 = eg.int1;
+    int2 = eg.int2;
+    ientry = eg.ientry;
 
- return;
+    return;
 }
 
 
-void SG_EntryGroup::clear(void)
-{ key=KEY(0,0,0); int1.clear(); int2.clear(); ientry.clear(); }
+void SG_EntryGroup::clear()
+{
+    key = KEY(0, 0, 0); int1.clear(); int2.clear(); ientry.clear();
+}
 
 
 #if defined SOL_COMPILER
 /**********************************************************************
-   Упаковка входного списка индексов indeces для экономного внутреннего
- представления.
+   РЈРїР°РєРѕРІРєР° РІС…РѕРґРЅРѕРіРѕ СЃРїРёСЃРєР° РёРЅРґРµРєСЃРѕРІ indeces РґР»СЏ СЌРєРѕРЅРѕРјРЅРѕРіРѕ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ
+ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.
 
-   Если возникает ситуация, что индексы словоформ суть непрерывный ряд
- начиная с некоторого, то будем хранить не список, а лишь два числа -
- индекс первого и число последовательных. Если хранящиеся символы
- разбросаны слишком случайным образом, хранение в виде диапазона не
- используется. Может случиться, что хранимые индексы отчасти представляют
- из себя компактифицирующийся диапазон плюс случайный "шум": тогда пол
- int1 и ientry хранят информацию одновременно. Нередко можно выделить два
- диапазона.
+   Р•СЃР»Рё РІРѕР·РЅРёРєР°РµС‚ СЃРёС‚СѓР°С†РёСЏ, С‡С‚Рѕ РёРЅРґРµРєСЃС‹ СЃР»РѕРІРѕС„РѕСЂРј СЃСѓС‚СЊ РЅРµРїСЂРµСЂС‹РІРЅС‹Р№ СЂСЏРґ
+ РЅР°С‡РёРЅР°СЏ СЃ РЅРµРєРѕС‚РѕСЂРѕРіРѕ, С‚Рѕ Р±СѓРґРµРј С…СЂР°РЅРёС‚СЊ РЅРµ СЃРїРёСЃРѕРє, Р° Р»РёС€СЊ РґРІР° С‡РёСЃР»Р° -
+ РёРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ Рё С‡РёСЃР»Рѕ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅС‹С…. Р•СЃР»Рё С…СЂР°РЅСЏС‰РёРµСЃСЏ СЃРёРјРІРѕР»С‹
+ СЂР°Р·Р±СЂРѕСЃР°РЅС‹ СЃР»РёС€РєРѕРј СЃР»СѓС‡Р°Р№РЅС‹Рј РѕР±СЂР°Р·РѕРј, С…СЂР°РЅРµРЅРёРµ РІ РІРёРґРµ РґРёР°РїР°Р·РѕРЅР° РЅРµ
+ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ. РњРѕР¶РµС‚ СЃР»СѓС‡РёС‚СЊСЃСЏ, С‡С‚Рѕ С…СЂР°РЅРёРјС‹Рµ РёРЅРґРµРєСЃС‹ РѕС‚С‡Р°СЃС‚Рё РїСЂРµРґСЃС‚Р°РІР»СЏСЋС‚
+ РёР· СЃРµР±СЏ РєРѕРјРїР°РєС‚РёС„РёС†РёСЂСѓСЋС‰РёР№СЃСЏ РґРёР°РїР°Р·РѕРЅ РїР»СЋСЃ СЃР»СѓС‡Р°Р№РЅС‹Р№ "С€СѓРј": С‚РѕРіРґР° РїРѕР»
+ int1 Рё ientry С…СЂР°РЅСЏС‚ РёРЅС„РѕСЂРјР°С†РёСЋ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ. РќРµСЂРµРґРєРѕ РјРѕР¶РЅРѕ РІС‹РґРµР»РёС‚СЊ РґРІР°
+ РґРёР°РїР°Р·РѕРЅР°.
 
-   Допустим, что входной вектор indeces содержит:
+   Р”РѕРїСѓСЃС‚РёРј, С‡С‚Рѕ РІС…РѕРґРЅРѕР№ РІРµРєС‚РѕСЂ indeces СЃРѕРґРµСЂР¶РёС‚:
 
                     1 5 7 8 9 10 11 15
 
- Тогда внутреннее представление этого списка будет содержать две части:
- один диапазон [7,11] и список дискретных {1,5,15}.
+ РўРѕРіРґР° РІРЅСѓС‚СЂРµРЅРЅРµРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЌС‚РѕРіРѕ СЃРїРёСЃРєР° Р±СѓРґРµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ РґРІРµ С‡Р°СЃС‚Рё:
+ РѕРґРёРЅ РґРёР°РїР°Р·РѕРЅ [7,11] Рё СЃРїРёСЃРѕРє РґРёСЃРєСЂРµС‚РЅС‹С… {1,5,15}.
 
 **********************************************************************/
-void SG_EntryGroup::Compress( const IntCollect& indeces )
+void SG_EntryGroup::Compress(const IntCollect& indeces)
 {
- ientry = indeces;
+    ientry = indeces;
 
- Compress_Interval_1( ientry );
+    Compress_Interval_1(ientry);
 
- if( !ientry.empty() )
-  Compress_Interval_2( ientry );
+    if (!ientry.empty())
+        Compress_Interval_2(ientry);
 
- return;
+    return;
 }
 
-void SG_EntryGroup::Compress_Interval_1( IntCollect& indeces )
+void SG_EntryGroup::Compress_Interval_1(IntCollect& indeces)
 {
- Compress_Interval( indeces, int1 );
- return;
-}
-
-
-void SG_EntryGroup::Compress_Interval_2( IntCollect& indeces )
-{
- Compress_Interval( indeces, int2 );
- return;
+    Compress_Interval(indeces, int1);
+    return;
 }
 
 
-void SG_EntryGroup::Compress_Interval( IntCollect& indeces, SG_Interval &range )
+void SG_EntryGroup::Compress_Interval_2(IntCollect& indeces)
 {
- int i,j;
- const int n=indeces.size();
+    Compress_Interval(indeces, int2);
+    return;
+}
 
- // Шаг 1.
- // Найдем самый длинный диапазон индексов, который будет компактно
- // представлен двумя числами n_from и n_sequent.
- int n_from_max=0, n_sequent_max=0;
- for( i=0; i<n; i++ )
-  {
-   // Определяем длину последовательно идущих индексов, начиная с i.
-   int nn=1, iprev=indeces[i], inew;
-   for( j=i+1; j<n; j++, nn++ )
-    if( (inew=indeces[j])!=iprev+1 )
-     break;
-    else
-     iprev=inew;
 
-   if( n_sequent_max<nn )
+void SG_EntryGroup::Compress_Interval(IntCollect& indeces, SG_Interval &range)
+{
+    int i, j;
+    const int n = indeces.size();
+
+    // РЁР°Рі 1.
+    // РќР°Р№РґРµРј СЃР°РјС‹Р№ РґР»РёРЅРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ РёРЅРґРµРєСЃРѕРІ, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РєРѕРјРїР°РєС‚РЅРѕ
+    // РїСЂРµРґСЃС‚Р°РІР»РµРЅ РґРІСѓРјСЏ С‡РёСЃР»Р°РјРё n_from Рё n_sequent.
+    int n_from_max = 0, n_sequent_max = 0;
+    for (i = 0; i < n; i++)
     {
-     n_from_max = i;
-     n_sequent_max = nn;
+        // РћРїСЂРµРґРµР»СЏРµРј РґР»РёРЅСѓ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕ РёРґСѓС‰РёС… РёРЅРґРµРєСЃРѕРІ, РЅР°С‡РёРЅР°СЏ СЃ i.
+        int nn = 1, iprev = indeces[i], inew;
+        for (j = i + 1; j < n; j++, nn++)
+            if ((inew = indeces[j]) != iprev + 1)
+                break;
+            else
+                iprev = inew;
+
+        if (n_sequent_max < nn)
+        {
+            n_from_max = i;
+            n_sequent_max = nn;
+        }
     }
-  }
 
- // Если найденный максимальный диапазон охватывает больше 2 индексов, или
- // он охватывает все индексы списка (когда их <=2), то сохраняем этот
- // диапазон в полях n_from и n_sequent.
- if( n_sequent_max>2 || (n_from_max==0 && n_sequent_max==n) )
-  {
-   range.from = indeces[n_from_max];
-   range.n    = n_sequent_max;
+    // Р•СЃР»Рё РЅР°Р№РґРµРЅРЅС‹Р№ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ РѕС…РІР°С‚С‹РІР°РµС‚ Р±РѕР»СЊС€Рµ 2 РёРЅРґРµРєСЃРѕРІ, РёР»Рё
+    // РѕРЅ РѕС…РІР°С‚С‹РІР°РµС‚ РІСЃРµ РёРЅРґРµРєСЃС‹ СЃРїРёСЃРєР° (РєРѕРіРґР° РёС… <=2), С‚Рѕ СЃРѕС…СЂР°РЅСЏРµРј СЌС‚РѕС‚
+    // РґРёР°РїР°Р·РѕРЅ РІ РїРѕР»СЏС… n_from Рё n_sequent.
+    if (n_sequent_max > 2 || (n_from_max == 0 && n_sequent_max == n))
+    {
+        range.from = indeces[n_from_max];
+        range.n = n_sequent_max;
 
-   // Теперь индексы из списка indeces, вошедшие в сохраненный диапазон,
-   // исключаем.
-   IntCollect tmp;
-   tmp.reserve(indeces.size());
+        // РўРµРїРµСЂСЊ РёРЅРґРµРєСЃС‹ РёР· СЃРїРёСЃРєР° indeces, РІРѕС€РµРґС€РёРµ РІ СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ,
+        // РёСЃРєР»СЋС‡Р°РµРј.
+        IntCollect tmp;
+        tmp.reserve(indeces.size());
 
-   const int n_to=range.from+range.n;
-   int ii;
-   if( range.from!=0 || range.n!=n )
-    for( i=0; i<n; i++ )
-     {
-      ii = indeces[i];
+        const int n_to = range.from + range.n;
+        int ii;
+        if (range.from != 0 || range.n != n)
+            for (i = 0; i < n; i++)
+            {
+                ii = indeces[i];
 
-      if( ii<range.from || ii>n_to )
-       tmp.push_back( ii );
-     }
+                if (ii<range.from || ii>n_to)
+                    tmp.push_back(ii);
+            }
 
-   indeces = tmp;
-  }
+        indeces = tmp;
+    }
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADBIN
-void SG_EntryGroup::LoadBin( Stream &bin )
+void SG_EntryGroup::LoadBin(Stream &bin)
 {
- ientry.LoadBin(bin);
- bin.read( &int1, sizeof(int1)  );
- bin.read( &int2, sizeof(int2)  );
- bin.read( &key,  sizeof(key) );
+    ientry.LoadBin(bin);
+    bin.read(&int1, sizeof(int1));
+    bin.read(&int2, sizeof(int2));
+    bin.read(&key, sizeof(key));
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_SAVEBIN
-void SG_EntryGroup::SaveBin( Stream &bin ) const
+void SG_EntryGroup::SaveBin(Stream &bin) const
 {
- ientry.SaveBin(bin);
- bin.write( &int1, sizeof(int1)  );
- bin.write( &int2, sizeof(int2)  );
- bin.write( &key,  sizeof(key) );
- return;
+    ientry.SaveBin(bin);
+    bin.write(&int1, sizeof(int1));
+    bin.write(&int2, sizeof(int2));
+    bin.write(&key, sizeof(key));
+    return;
 }
 #endif
 
 // ********************************************************************
-// Распечатка карты: краткая информация для прочтения программистом в
-// отладочных целях.
+// Р Р°СЃРїРµС‡Р°С‚РєР° РєР°СЂС‚С‹: РєСЂР°С‚РєР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ РїСЂРѕС‡С‚РµРЅРёСЏ РїСЂРѕРіСЂР°РјРјРёСЃС‚РѕРј РІ
+// РѕС‚Р»Р°РґРѕС‡РЅС‹С… С†РµР»СЏС….
 // ********************************************************************
-void SG_EntryGroup::Print( OFormatter &out ) const
+void SG_EntryGroup::Print(OFormatter &out) const
 {
- if( key.second==0 )
-  out.printf( "%uc -> ", key.first );
- else if( key.third==0 )
-  out.printf( "%uc%uc -> ", key.first, key.second );
- else
-  out.printf( "%uc%uc%uc -> ", key.first, key.second, key.third );
+    if (std::get<1>(key) == 0)
+        out.printf("%uc -> ", std::get<0>(key));
+    else if (std::get<2>(key) == 0)
+        out.printf("%uc%uc -> ", std::get<0>(key), std::get<1>(key));
+    else
+        out.printf("%uc%uc%uc -> ", std::get<0>(key), std::get<1>(key), std::get<2>(key));
 
- const int n=CastSizeToInt(size());
- out.printf( "%d item(s), ", n );
+    const int n = CastSizeToInt(size());
+    out.printf("%d item(s), ", n);
 
- if( !int1.empty() )
-  out.printf( "[%d...%d] ", int1.from, int1.from+int1.n-1 );
+    if (!int1.empty())
+        out.printf("[%d...%d] ", int1.from, int1.from + int1.n - 1);
 
- if( !int2.empty() )
-  out.printf( "[%d...%d] ", int2.from, int2.from+int2.n-1 );
+    if (!int2.empty())
+        out.printf("[%d...%d] ", int2.from, int2.from + int2.n - 1);
 
- if( !ientry.empty() )
-  {
-   out.printf( "{ " );
+    if (!ientry.empty())
+    {
+        out.printf("{ ");
 
-   for( Container::size_type i=0; i<ientry.size(); i++ )
-    out.printf( "%d ", ientry[i] );
+        for (Container::size_type i = 0; i < ientry.size(); i++)
+            out.printf("%d ", ientry[i]);
 
-   out.printf( "}" );
-  }
+        out.printf("}");
+    }
 
- return;
+    return;
 }
 
 
-SG_EntryGroup::KEY SG_EntryGroup::BuildKey( const lem::UCString &str )
+SG_EntryGroup::KEY SG_EntryGroup::BuildKey(const lem::UCString &str)
 {
- switch( str.length() )
- {
-  case 1: return KEY( str.front(), 0, 0 );
-  case 2: return KEY( str.front(), str[1], 0 );
-  default: return KEY( str.front(), str[1], str[2] );
- }
+    switch (str.length())
+    {
+    case 1: return KEY(str.front(), 0, 0);
+    case 2: return KEY(str.front(), str[1], 0);
+    default: return KEY(str.front(), str[1], str[2]);
+    }
 }

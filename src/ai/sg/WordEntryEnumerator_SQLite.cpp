@@ -9,32 +9,32 @@
 
 using namespace Solarix;
 
-WordEntryEnumerator_SQLite::WordEntryEnumerator_SQLite( LS_ResultSet_SQLITE *_rs, WordEntries_SQLite *_entries )
- : rs(_rs), entries(_entries)
+WordEntryEnumerator_SQLite::WordEntryEnumerator_SQLite(LS_ResultSet_SQLITE *_rs, WordEntries_SQLite *_entries)
+    : rs(_rs), entries(_entries)
 {
 }
 
 
-WordEntryEnumerator_SQLite::~WordEntryEnumerator_SQLite(void)
+WordEntryEnumerator_SQLite::~WordEntryEnumerator_SQLite()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
 
-bool WordEntryEnumerator_SQLite::Fetch(void)
+bool WordEntryEnumerator_SQLite::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
-int WordEntryEnumerator_SQLite::GetId(void)
+int WordEntryEnumerator_SQLite::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
 
-const SG_Entry& WordEntryEnumerator_SQLite::GetItem(void)
+const SG_Entry& WordEntryEnumerator_SQLite::GetItem()
 {
- const int ekey = GetId();
- return entries->GetEntry(ekey);
+    const int ekey = GetId();
+    return entries->GetEntry(ekey);
 }

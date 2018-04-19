@@ -10,44 +10,44 @@ using namespace lem;
 using namespace Solarix;
 
 SynPatternPointCall::SynPatternPointCall(
-                                         int mark,
-                                         const lem::MCollect<int> & Location,
-                                         const SynPatternPoint * p,
-                                         const LexerTextPos * _token,
-                                         const BackTrace * _markers
-                                        )
- : TrTraceActor(mark,Location), point(p), token(_token), markers(_markers)
+    int mark,
+    const lem::MCollect<int> & Location,
+    const SynPatternPoint * p,
+    const LexerTextPos * _token,
+    const BackTrace * _markers
+)
+    : TrTraceActor(mark, Location), point(p), token(_token), markers(_markers)
 {
- return;
+    return;
 }
 
-void SynPatternPointCall::Print( Dictionary &dict, OFormatter &out, const TrTraceActor *opening )
+void SynPatternPointCall::Print(Dictionary &dict, OFormatter &out, const TrTraceActor *opening)
 {
- PrintContext(dict,out);
- return;
+    PrintContext(dict, out);
+    return;
 }
 
-void SynPatternPointCall::PrintCurrentToken( Solarix::Dictionary &dict, lem::OFormatter &out ) const
+void SynPatternPointCall::PrintCurrentToken(Solarix::Dictionary &dict, lem::OFormatter &out) const
 {
- out.printf( "\nCurrent token: index=%d wordform=", token->GetWordIndex() );
- token->GetWordform()->Print( out, &dict.GetSynGram(), true );
- out.eol();
- return;
+    out.printf("\nCurrent token: index=%d wordform=", token->GetWordIndex());
+    token->GetWordform()->Print(out, &dict.GetSynGram(), true);
+    out.eol();
+    return;
 }
 
-void SynPatternPointCall::PrintContext( Solarix::Dictionary &dict, lem::OFormatter &out ) const
+void SynPatternPointCall::PrintContext(Solarix::Dictionary &dict, lem::OFormatter &out) const
 {
- out.printf( "\nCurrent token: index=%d wordform=", token->GetWordIndex() );
- token->GetWordform()->Print( out, &dict.GetSynGram(), true );
- out.eol();
+    out.printf("\nCurrent token: index=%d wordform=", token->GetWordIndex());
+    token->GetWordform()->Print(out, &dict.GetSynGram(), true);
+    out.eol();
 
- if( !markers->Empty() )
-  {
-   out.printf( "\n%vf6Back markers:%vn\n" );
-   markers->Print( out, dict.GetSynGram(), true );
-  }
+    if (!markers->Empty())
+    {
+        out.printf("\n%vf6Back markers:%vn\n");
+        markers->Print(out, dict.GetSynGram(), true);
+    }
 
- return;
+    return;
 }
 
 #endif

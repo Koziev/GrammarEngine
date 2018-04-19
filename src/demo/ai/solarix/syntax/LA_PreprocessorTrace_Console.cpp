@@ -1,24 +1,24 @@
 #if defined SOL_DEBUGGING
 
 // CD->28.07.2009
-// LC->06.09.2017
+// LC->05.04.2018
 
 #include <lem/keyboard.h>
-#include <lem/solarix/variator.h>
+//#include <lem/solarix/variator.h>
 #include <lem/solarix/la_autom.h>
 #include <lem/solarix/TrMorphologyTracer.h>
-#include <lem/solarix/LA_CropRule.h>
-#include <lem/solarix/LA_RecognitionRule.h>
-#include <lem/solarix/WordEntry.h>
-#include <lem/solarix/PartOfSpeech.h>
-#include <lem/solarix/LA_PhoneticRule.h>
-#include <lem/solarix/LA_PreprocessorTokRule.h>
-#include <lem/solarix/SourceFilenameEnumerator.h>
-#include <lem/solarix/res_pack.h>
+//#include <lem/solarix/LA_CropRule.h>
+//#include <lem/solarix/LA_RecognitionRule.h>
+//#include <lem/solarix/WordEntry.h>
+//#include <lem/solarix/PartOfSpeech.h>
+//#include <lem/solarix/LA_PhoneticRule.h>
+//#include <lem/solarix/LA_PreprocessorTokRule.h>
+//#include <lem/solarix/SourceFilenameEnumerator.h>
+//#include <lem/solarix/res_pack.h>
 #include <lem/solarix/SynPatternResult.h>
 #include <lem/solarix/SynPattern.h>
-#include <lem/solarix/CoordList.h>
-#include <lem/solarix/LexerTextPos.h>
+//#include <lem/solarix/CoordList.h>
+//#include <lem/solarix/LexerTextPos.h>
 
 #include "LA_PreprocessorTrace_Console.h"
 

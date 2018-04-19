@@ -30,7 +30,7 @@ using namespace Solarix;
 SG_ComplexLink::SG_ComplexLink()
 {
     tl_id = UNKNOWN;
-    tags = NULL;
+    tags = nullptr;
     return;
 }
 

@@ -6,69 +6,71 @@
 
 using namespace Solarix;
 
-LA_PreprocessorRules::~LA_PreprocessorRules(void)
+LA_PreprocessorRules::~LA_PreprocessorRules()
 {
- for( lem::Container::size_type i=0; i<crop_rules.size(); ++i )
-  delete crop_rules[i];
+    for (auto rule : crop_rules)
+    {
+        delete rule;
+    }
 
- return;
+    return;
 }
 
 
 bool LA_PreprocessorRules::Crop(
-                                const lem::UCString &word,
-                                lem::MCollect<lem::UCString> &results,
-                                lem::MCollect<lem::Real1> &rels,
-                                LA_RecognitionTrace *trace
-                               ) const
+    const lem::UCString &word,
+    lem::MCollect<lem::UCString> &results,
+    lem::MCollect<lem::Real1> &rels,
+    LA_RecognitionTrace *trace
+) const
 {
- bool applied=false;
+    bool applied = false;
 
- if( !crop_rules.empty() )
-  {
-   // сначала применяем префиксные правила
-   typedef CROP_RULES::const_iterator IT;
-
-   LA_CropRule::HashType prefix_hash = LA_CropRule::CalcHash( word.c_str(), true, false );
-   std::pair<IT,IT> pp = prefix_crop_rules.equal_range(prefix_hash);
-
-   lem::UCString result;
-
-   for( IT it=pp.first; it!=pp.second; ++it )
+    if (!crop_rules.empty())
     {
-     const LA_CropRule *r = it->second;
-     if( r->Apply(word,result) )
-      {
-       applied=true;
-       results.push_back(result);
-       rels.push_back( r->GetRel() );
-       if( trace!=NULL )
+        // сначала применяем префиксные правила
+        typedef CROP_RULES::const_iterator IT;
+
+        LA_CropRule::HashType prefix_hash = LA_CropRule::CalcHash(word.c_str(), true, false);
+        std::pair<IT, IT> pp = prefix_crop_rules.equal_range(prefix_hash);
+
+        lem::UCString result;
+
+        for (auto it = pp.first; it != pp.second; ++it)
         {
-         trace->CropRuleApplied( word, result, r );
+            const LA_CropRule *r = it->second;
+            if (r->Apply(word, result))
+            {
+                applied = true;
+                results.push_back(result);
+                rels.push_back(r->GetRel());
+                if (trace != nullptr)
+                {
+                    trace->CropRuleApplied(word, result, r);
+                }
+            }
         }
-      }
-    }
-  
-   // теперь отсекаем аффикс
 
-   LA_CropRule::HashType affix_hash = LA_CropRule::CalcHash( word.c_str(), false, true );
-   pp = affix_crop_rules.equal_range(affix_hash);
+        // теперь отсекаем аффикс
 
-   for( IT it=pp.first; it!=pp.second; ++it )
-    {
-     const LA_CropRule *r = it->second;
-     if( r->Apply(word,result) )
-      {
-       applied = true;
-       results.push_back(result);
-       rels.push_back( r->GetRel() );
-       if( trace!=NULL )
+        LA_CropRule::HashType affix_hash = LA_CropRule::CalcHash(word.c_str(), false, true);
+        pp = affix_crop_rules.equal_range(affix_hash);
+
+        for (auto it = pp.first; it != pp.second; ++it)
         {
-         trace->CropRuleApplied( word, result, r );
+            const LA_CropRule *r = it->second;
+            if (r->Apply(word, result))
+            {
+                applied = true;
+                results.push_back(result);
+                rels.push_back(r->GetRel());
+                if (trace != nullptr)
+                {
+                    trace->CropRuleApplied(word, result, r);
+                }
+            }
         }
-      }
     }
-  }
 
- return applied;
+    return applied;
 }

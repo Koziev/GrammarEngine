@@ -1,34 +1,34 @@
 #if !defined LexemDictionary__H
- #define LexemDictionary__H
+#define LexemDictionary__H
 
- #include <lem/solarix/SolidRef.h>
+#include <lem/solarix/SolidRef.h>
 
- namespace Solarix
- {
-  class SynGram;
-  class LexicalAutomat;
-  class LD_Seeker;
+namespace Solarix
+{
+    class SynGram;
+    class LexicalAutomat;
+    class LD_Seeker;
 
- class LexemDictionary : public SolidRef<Lexem>
- {
-  public:
-   LexemDictionary( int Reserve=0 );
-   ~LexemDictionary(void);
+    class LexemDictionary : public SolidRef<Lexem>
+    {
+    public:
+        LexemDictionary(int Reserve = 0);
+        ~LexemDictionary();
 
-   #if defined SOL_SAVEBIN
-   void SaveBin( lem::Stream &bin ) const;
-   #endif
+#if defined SOL_SAVEBIN
+        void SaveBin(lem::Stream &bin) const;
+#endif
 
-   #if defined SOL_LOADBIN 
-   void LoadBin( lem::Stream &bin );
-   #endif
+#if defined SOL_LOADBIN 
+        void LoadBin(lem::Stream &bin);
+#endif
 
-   LD_Seeker* Get_Seeker( SynGram &sg, LexicalAutomat *La );
+        LD_Seeker* Get_Seeker(SynGram &sg, LexicalAutomat *La);
 
-   #if defined SOL_LOADBIN
-   LD_Seeker* Load_Seeker( lem::Stream &bin, LexicalAutomat *La );
-   #endif
- };
+#if defined SOL_LOADBIN
+        LD_Seeker* Load_Seeker(lem::Stream &bin, LexicalAutomat *La);
+#endif
+    };
 
 }
 

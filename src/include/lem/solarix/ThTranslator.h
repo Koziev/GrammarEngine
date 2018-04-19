@@ -15,8 +15,8 @@
     struct sqlite3* hdb;
 
    public:
-    TranslatorThesaurus(void);
-    ~TranslatorThesaurus(void);
+    TranslatorThesaurus();
+    ~TranslatorThesaurus();
     void Open( const lem::Path &p );
     void Translate( const lem::UFString &in, lem::PtrCollect<lem::UFString> &outs );
     void GetTags( lem::PtrCollect<lem::UFString> &tags );

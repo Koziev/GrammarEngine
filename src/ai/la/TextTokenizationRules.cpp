@@ -29,294 +29,294 @@ L"\t\r\n";
 
 
 
-TextTokenizationRules::TextTokenizationRules( const lem::MCollect<int> & langs, SentenceTokenizer * _tokenizer )
- : id_language(langs), tokenizer(_tokenizer)
+TextTokenizationRules::TextTokenizationRules(const lem::MCollect<int> & langs, SentenceTokenizer * _tokenizer)
+    : id_language(langs), tokenizer(_tokenizer)
 {
- LEM_CHECKIT_Z( _tokenizer!=NULL );
- segmentation_flag=Whitespace;
- return;
+    LEM_CHECKIT_Z(_tokenizer != nullptr);
+    segmentation_flag = Whitespace;
+    return;
 }
 
 
 
-void TextTokenizationRules::AddSpaceCharacters( const wchar_t * whitespace )
+void TextTokenizationRules::AddSpaceCharacters(const wchar_t * whitespace)
 {
- int i=0;
- while( 0!=whitespace[i] )
-  {
-   if( spaces.find(whitespace[i])==UNKNOWN )
-    spaces.push_back( whitespace[i] );
+    int i = 0;
+    while (0 != whitespace[i])
+    {
+        if (spaces.find(whitespace[i]) == UNKNOWN)
+            spaces.push_back(whitespace[i]);
 
-   i++;
-  }
+        i++;
+    }
 
- AddDelimiterCharacters(whitespace);
+    AddDelimiterCharacters(whitespace);
 
- return;
+    return;
 }
 
 
-void TextTokenizationRules::AddDelimiterCharacters( const wchar_t * delimiter_chars )
+void TextTokenizationRules::AddDelimiterCharacters(const wchar_t * delimiter_chars)
 {
- int i=0;
- while( 0!=delimiter_chars[i] )
-  {
-   if( delimiters.find(delimiter_chars[i])==UNKNOWN )
-    delimiters.push_back(delimiter_chars[i]);
+    int i = 0;
+    while (0 != delimiter_chars[i])
+    {
+        if (delimiters.find(delimiter_chars[i]) == UNKNOWN)
+            delimiters.push_back(delimiter_chars[i]);
 
-   i++;
-  }
+        i++;
+    }
 
- return;
+    return;
 }
 
 
 
 
-// Пропускаем все пробельные символы с текущей позиции.
-// Возвращает позицию первого не-пробельного символа.
-int TextTokenizationRules::SkipSpace( const lem::UFString & Text, int pos ) const
+// РџСЂРѕРїСѓСЃРєР°РµРј РІСЃРµ РїСЂРѕР±РµР»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹ СЃ С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ РїРµСЂРІРѕРіРѕ РЅРµ-РїСЂРѕР±РµР»СЊРЅРѕРіРѕ СЃРёРјРІРѕР»Р°.
+int TextTokenizationRules::SkipSpace(const lem::UFString & Text, int pos) const
 {
- while( pos<Text.length() )
- {
-  // Если текущий символ - пробел, то сдвигаемся вправо.
-  if( spaces.find(Text[pos])==UNKNOWN )
-   break;
+    while (pos < Text.length())
+    {
+        // Р•СЃР»Рё С‚РµРєСѓС‰РёР№ СЃРёРјРІРѕР» - РїСЂРѕР±РµР», С‚Рѕ СЃРґРІРёРіР°РµРјСЃСЏ РІРїСЂР°РІРѕ.
+        if (spaces.find(Text[pos]) == UNKNOWN)
+            break;
 
-  pos++;
- }
+        pos++;
+    }
 
- return pos;
+    return pos;
 }
 
 
 // ********************************************************************************************
-// В тексте, который начинается в Text, ищем альтернативные варианты выделения слов.
-// Все варианты возвращаем через список words.
-// Результат работы - указатель на начало слов, то есть первый символ после пропуска пробелов.
+// Р’ С‚РµРєСЃС‚Рµ, РєРѕС‚РѕСЂС‹Р№ РЅР°С‡РёРЅР°РµС‚СЃСЏ РІ Text, РёС‰РµРј Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ РІР°СЂРёР°РЅС‚С‹ РІС‹РґРµР»РµРЅРёСЏ СЃР»РѕРІ.
+// Р’СЃРµ РІР°СЂРёР°РЅС‚С‹ РІРѕР·РІСЂР°С‰Р°РµРј С‡РµСЂРµР· СЃРїРёСЃРѕРє words.
+// Р РµР·СѓР»СЊС‚Р°С‚ СЂР°Р±РѕС‚С‹ - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ СЃР»РѕРІ, С‚Рѕ РµСЃС‚СЊ РїРµСЂРІС‹Р№ СЃРёРјРІРѕР» РїРѕСЃР»Рµ РїСЂРѕРїСѓСЃРєР° РїСЂРѕР±РµР»РѕРІ.
 // ********************************************************************************************
 int TextTokenizationRules::Extract(
-                                   Solarix::Dictionary & dict,
-                                   const lem::UFString &Text,
-                                   int CurrentPosition,
-                                   lem::MCollect<int> & WordLengths,
-                                   bool * is_unbreakable_token
-                                  )
+    Solarix::Dictionary & dict,
+    const lem::UFString &Text,
+    int CurrentPosition,
+    lem::MCollect<int> & WordLengths,
+    bool * is_unbreakable_token
+)
 {
- WordLengths.clear();
+    WordLengths.clear();
 
- if( segmentation_flag==Whitespace )
-  {
-   // пропускаем пробельные символы.
-   const int NewStartPos = SkipSpace(Text,CurrentPosition);
-
-   if( NewStartPos<Text.length() )
+    if (segmentation_flag == Whitespace)
     {
+        // РїСЂРѕРїСѓСЃРєР°РµРј РїСЂРѕР±РµР»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹.
+        const int NewStartPos = SkipSpace(Text, CurrentPosition);
 
-/*
-     *is_unbreakable_token=false;
-     int WordLen=0, Pos=NewStartPos;
-     if( delimiters.find(Text[Pos])!=UNKNOWN )
-      {
-       WordLen=1;
-      }
-     else
-      {
-       while( Pos<Text.length() )
-       {
-        wchar_t c = Text[Pos];
-        if( delimiters.find(c)!=UNKNOWN )
-         break;
-
-        WordLen++;
-        Pos++;
-       }
-      }
-
-     if( NewStartPos+WordLen+1 < Text.length() )
-      {
-       // найденный участок текста, начиная с NewStartPos длиной WordLen+1, является началом специального случая?
-       lem::UCString probe( Text.c_str()+NewStartPos, Text.c_str()+NewStartPos+WordLen+1 );
-       probe.to_upper();
-
-       #if defined LEM_THREADS
-       lem::Process::RWU_ReaderGuard rlock(cs_unbreakable_begginnings);
-       #endif
-       std::set<lem::UCString>::const_iterator it = not_unbreakable_begginnings.find(probe);
-       if( it==not_unbreakable_begginnings.end() )
+        if (NewStartPos < Text.length())
         {
-         #if defined LEM_THREADS
-         lem::Process::RWU_WriterGuard wlock(rlock);
-         #endif
 
-         // тут теоретически надо сделать вторую проверку на вхождение к кэш, но так как невхождение в кэш просто немного
-         // замедлит работу, то не будем этого делать.
+            /*
+                 *is_unbreakable_token=false;
+                 int WordLen=0, Pos=NewStartPos;
+                 if( delimiters.find(Text[Pos])!=UNKNOWN )
+                  {
+                   WordLen=1;
+                  }
+                 else
+                  {
+                   while( Pos<Text.length() )
+                   {
+                    wchar_t c = Text[Pos];
+                    if( delimiters.find(c)!=UNKNOWN )
+                     break;
 
-         if( tokenizer->IsUnbreakableFront( probe ) )
-          {
-           if( tokenizer->MatchAllLens( Text, NewStartPos, WordLengths ) )
+                    WordLen++;
+                    Pos++;
+                   }
+                  }
+
+                 if( NewStartPos+WordLen+1 < Text.length() )
+                  {
+                   // РЅР°Р№РґРµРЅРЅС‹Р№ СѓС‡Р°СЃС‚РѕРє С‚РµРєСЃС‚Р°, РЅР°С‡РёРЅР°СЏ СЃ NewStartPos РґР»РёРЅРѕР№ WordLen+1, СЏРІР»СЏРµС‚СЃСЏ РЅР°С‡Р°Р»РѕРј СЃРїРµС†РёР°Р»СЊРЅРѕРіРѕ СЃР»СѓС‡Р°СЏ?
+                   lem::UCString probe( Text.c_str()+NewStartPos, Text.c_str()+NewStartPos+WordLen+1 );
+                   probe.to_upper();
+
+                   #if defined LEM_THREADS
+                   lem::Process::RWU_ReaderGuard rlock(cs_unbreakable_begginnings);
+                   #endif
+                   std::set<lem::UCString>::const_iterator it = not_unbreakable_begginnings.find(probe);
+                   if( it==not_unbreakable_begginnings.end() )
+                    {
+                     #if defined LEM_THREADS
+                     lem::Process::RWU_WriterGuard wlock(rlock);
+                     #endif
+
+                     // С‚СѓС‚ С‚РµРѕСЂРµС‚РёС‡РµСЃРєРё РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ РІС‚РѕСЂСѓСЋ РїСЂРѕРІРµСЂРєСѓ РЅР° РІС…РѕР¶РґРµРЅРёРµ Рє РєСЌС€, РЅРѕ С‚Р°Рє РєР°Рє РЅРµРІС…РѕР¶РґРµРЅРёРµ РІ РєСЌС€ РїСЂРѕСЃС‚Рѕ РЅРµРјРЅРѕРіРѕ
+                     // Р·Р°РјРµРґР»РёС‚ СЂР°Р±РѕС‚Сѓ, С‚Рѕ РЅРµ Р±СѓРґРµРј СЌС‚РѕРіРѕ РґРµР»Р°С‚СЊ.
+
+                     if( tokenizer->IsUnbreakableFront( probe ) )
+                      {
+                       if( tokenizer->MatchAllLens( Text, NewStartPos, WordLengths ) )
+                        {
+                         *is_unbreakable_token=true;
+                        }
+                      }
+                     else
+                      {
+                       not_unbreakable_begginnings.insert(probe);
+                      }
+                    }
+                  }
+                 else if( NewStartPos+WordLen == Text.length()-1 )
+                  {
+                   // РР·РІР»РµС‡РµРЅРЅС‹Р№ С‚РѕРєРµРЅ Рё СЃРёРјРІРѕР»-СЂР°Р·РґРµР»РёС‚РµР»СЊ РїРѕСЃР»Рµ РЅРµРіРѕ СЏРІР»СЏСЋС‚СЃСЏ РїРѕСЃР»РµРґРЅРёРјРё РІ СЃС‚СЂРѕРєРµ.
+                   lem::UCString probe( Text.c_str()+NewStartPos, Text.c_str()+NewStartPos+WordLen+1 );
+
+                   #if defined LEM_THREADS
+                   lem::Process::RWU_ReaderGuard rlock(cs_not_unbreakable);
+                   #endif
+                   std::set<lem::UCString>::const_iterator it = not_unbreakable.find(probe);
+                   if( it==not_unbreakable.end() )
+                    {
+                     #if defined LEM_THREADS
+                     lem::Process::RWU_WriterGuard wlock(rlock);
+                     #endif
+
+                     // С‚СѓС‚ С‚РµРѕСЂРµС‚РёС‡РµСЃРєРё РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ РІС‚РѕСЂСѓСЋ РїСЂРѕРІРµСЂРєСѓ РЅР° РІС…РѕР¶РґРµРЅРёРµ РІ not_unbreakable, РЅРѕ С‚Р°Рє РєР°Рє РЅРµРІС…РѕР¶РґРµРЅРёРµ РІ РєСЌС€ РїСЂРѕСЃС‚Рѕ РЅРµРјРЅРѕРіРѕ
+                     // Р·Р°РјРµРґР»РёС‚ СЂР°Р±РѕС‚Сѓ, С‚Рѕ РЅРµ Р±СѓРґРµРј СЌС‚РѕРіРѕ РґРµР»Р°С‚СЊ.
+                     if( tokenizer->IsMatched( probe ) )
+                      {
+                       // РёР·РІР»РµС‡РµРЅРЅС‹Р№ С‚РѕРєРµРЅ Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ РїРѕСЃР»Рµ РЅРµРіРѕ РѕР±СЂР°Р·СѓСЋС‚ РЅРµСЂР°Р·СЂС‹РІРЅС‹Р№ СЃРїРµС†С‚РѕРєРµРЅ!
+                       *is_unbreakable_token=true;
+                       WordLengths.push_back( WordLen+1 );
+                      }
+                     else
+                      {
+                       not_unbreakable.insert( probe );
+                      }
+                    }
+                  }
+
+                 if( !*is_unbreakable_token )
+                  WordLengths.push_back(WordLen);
+            */
+
+            if (tokenizer->MatchAllLens(Text, NewStartPos, WordLengths))
             {
-             *is_unbreakable_token=true;
+                *is_unbreakable_token = true;
             }
-          }
-         else
-          {
-           not_unbreakable_begginnings.insert(probe);
-          }
-        }
-      }
-     else if( NewStartPos+WordLen == Text.length()-1 )
-      {
-       // Извлеченный токен и символ-разделитель после него являются последними в строке.
-       lem::UCString probe( Text.c_str()+NewStartPos, Text.c_str()+NewStartPos+WordLen+1 );
+            else
+            {
+                // СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃР»СѓС‡Р°РµРІ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРѕ, РїРѕСЌС‚РѕРјСѓ РІС‹Р±РµСЂРµРј РёР· С‚РµРєСЃС‚Р° С†РµРїРѕС‡РєСѓ СЃРёРјРІРѕР»РѕРІ РґРѕ РїСЂРѕР±РµР»Р° РёР»Рё РґРѕ СЂР°Р·РґРµР»РёС‚РµР»СЏ.
+                *is_unbreakable_token = false;
+                int WordLen = 0, Pos = NewStartPos;
+                if (delimiters.find(Text[Pos]) != UNKNOWN)
+                {
+                    WordLen = 1;
+                }
+                else
+                {
+                    while (Pos < Text.length())
+                    {
+                        wchar_t c = Text[Pos];
+                        if (delimiters.find(c) != UNKNOWN)
+                            break;
 
-       #if defined LEM_THREADS
-       lem::Process::RWU_ReaderGuard rlock(cs_not_unbreakable);
-       #endif
-       std::set<lem::UCString>::const_iterator it = not_unbreakable.find(probe);
-       if( it==not_unbreakable.end() )
-        {
-         #if defined LEM_THREADS
-         lem::Process::RWU_WriterGuard wlock(rlock);
-         #endif
+                        WordLen++;
+                        Pos++;
+                    }
+                }
 
-         // тут теоретически надо сделать вторую проверку на вхождение в not_unbreakable, но так как невхождение в кэш просто немного
-         // замедлит работу, то не будем этого делать.
-         if( tokenizer->IsMatched( probe ) )
-          {
-           // извлеченный токен и разделитель после него образуют неразрывный спецтокен!
-           *is_unbreakable_token=true;
-           WordLengths.push_back( WordLen+1 );
-          }
-         else
-          {
-           not_unbreakable.insert( probe );
-          }
-        }
-      }
-
-     if( !*is_unbreakable_token )
-      WordLengths.push_back(WordLen);
-*/
-
-     if( tokenizer->MatchAllLens( Text, NewStartPos, WordLengths ) )
-      {
-       *is_unbreakable_token=true;
-      }
-     else
-      {
-       // специальных случаев не обнаружено, поэтому выберем из текста цепочку символов до пробела или до разделителя.
-       *is_unbreakable_token=false;
-       int WordLen=0, Pos=NewStartPos;
-       if( delimiters.find(Text[Pos])!=UNKNOWN )
-        {
-         WordLen=1;
-        }
-       else
-        {
-         while( Pos<Text.length() )
-         {
-          wchar_t c = Text[Pos];
-          if( delimiters.find(c)!=UNKNOWN )
-           break;
-
-          WordLen++;
-          Pos++;
-         }
+                WordLengths.push_back(WordLen);
+            }
         }
 
-       WordLengths.push_back(WordLen);
-      }
+        return NewStartPos;
     }
-
-   return NewStartPos;
-  }
- else if( segmentation_flag==Streaming )
-  {
-   if( CurrentPosition < Text.length() )
+    else if (segmentation_flag == Streaming)
     {
-     // для языков типа китайского - явных разделителей нет, вместо этого
-     // надо использовать информацию о том, какие префиксы валидны (использовать PrefixEntrySearcher::IsValidPrefix)
-     // и какие лексемы есть в языке (IsWordForm).
-     // Наращиваем длину излекаемых слов до тех пор, пока они являются валидными префиксами, и фиксируем
-     // длину тех вариантов, которые являются известными лексемами.
-  
+        if (CurrentPosition < Text.length())
+        {
+            // РґР»СЏ СЏР·С‹РєРѕРІ С‚РёРїР° РєРёС‚Р°Р№СЃРєРѕРіРѕ - СЏРІРЅС‹С… СЂР°Р·РґРµР»РёС‚РµР»РµР№ РЅРµС‚, РІРјРµСЃС‚Рѕ СЌС‚РѕРіРѕ
+            // РЅР°РґРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С‚РѕРј, РєР°РєРёРµ РїСЂРµС„РёРєСЃС‹ РІР°Р»РёРґРЅС‹ (РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ PrefixEntrySearcher::IsValidPrefix)
+            // Рё РєР°РєРёРµ Р»РµРєСЃРµРјС‹ РµСЃС‚СЊ РІ СЏР·С‹РєРµ (IsWordForm).
+            // РќР°СЂР°С‰РёРІР°РµРј РґР»РёРЅСѓ РёР·Р»РµРєР°РµРјС‹С… СЃР»РѕРІ РґРѕ С‚РµС… РїРѕСЂ, РїРѕРєР° РѕРЅРё СЏРІР»СЏСЋС‚СЃСЏ РІР°Р»РёРґРЅС‹РјРё РїСЂРµС„РёРєСЃР°РјРё, Рё С„РёРєСЃРёСЂСѓРµРј
+            // РґР»РёРЅСѓ С‚РµС… РІР°СЂРёР°РЅС‚РѕРІ, РєРѕС‚РѕСЂС‹Рµ СЏРІР»СЏСЋС‚СЃСЏ РёР·РІРµСЃС‚РЅС‹РјРё Р»РµРєСЃРµРјР°РјРё.
 
-     // Максимальная длина валидного префикса.  
-     const int max_prefix_len = prefix_lookup->FindMaxPrefixLen( Text.c_str()+CurrentPosition );
 
-     // теперь будет искать лексемы разной длины вплоть до максимального префикса.
-   
-     Solarix::Lexem prefix;
- 
-     for( int prefix_len=1; prefix_len<=max_prefix_len; ++prefix_len )
-     {
-      prefix += Text[CurrentPosition+prefix_len-1];
-      
-      // Это известная лексема?
-      if( dict.GetSynGram().IsWordForm(prefix) )
-       {
-        // да - добавляем длину в список найденных слов.
-        WordLengths.push_back( prefix_len );
-       }
-     }
+            // РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° РІР°Р»РёРґРЅРѕРіРѕ РїСЂРµС„РёРєСЃР°.  
+            const int max_prefix_len = prefix_lookup->FindMaxPrefixLen(Text.c_str() + CurrentPosition);
+
+            // С‚РµРїРµСЂСЊ Р±СѓРґРµС‚ РёСЃРєР°С‚СЊ Р»РµРєСЃРµРјС‹ СЂР°Р·РЅРѕР№ РґР»РёРЅС‹ РІРїР»РѕС‚СЊ РґРѕ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РїСЂРµС„РёРєСЃР°.
+
+            Solarix::Lexem prefix;
+
+            for (int prefix_len = 1; prefix_len <= max_prefix_len; ++prefix_len)
+            {
+                prefix += Text[CurrentPosition + prefix_len - 1];
+
+                // Р­С‚Рѕ РёР·РІРµСЃС‚РЅР°СЏ Р»РµРєСЃРµРјР°?
+                if (dict.GetSynGram().IsWordForm(prefix))
+                {
+                    // РґР° - РґРѕР±Р°РІР»СЏРµРј РґР»РёРЅСѓ РІ СЃРїРёСЃРѕРє РЅР°Р№РґРµРЅРЅС‹С… СЃР»РѕРІ.
+                    WordLengths.push_back(prefix_len);
+                }
+            }
+        }
+
+        return CurrentPosition;
     }
 
-   return CurrentPosition;
-  }
-
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
 
-// Используется для поиска мультилексем.
-// С указанной позиции выделяет максимум NumberToExtract слов и возвращает их список через extracted.
+// РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРѕРёСЃРєР° РјСѓР»СЊС‚РёР»РµРєСЃРµРј.
+// РЎ СѓРєР°Р·Р°РЅРЅРѕР№ РїРѕР·РёС†РёРё РІС‹РґРµР»СЏРµС‚ РјР°РєСЃРёРјСѓРј NumberToExtract СЃР»РѕРІ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РёС… СЃРїРёСЃРѕРє С‡РµСЂРµР· extracted.
 void TextTokenizationRules::ExtractNextWords(
-                                             Solarix::Dictionary & dict,
-                                             const lem::UFString & Text,
-                                             int CurrentPosition,
-                                             int NumberToExtract,
-                                             lem::MCollect<TextTokenizationItem> & extracted
-                                            ) const
+    Solarix::Dictionary & dict,
+    const lem::UFString & Text,
+    int CurrentPosition,
+    int NumberToExtract,
+    lem::MCollect<TextTokenizationItem> & extracted
+) const
 {
- extracted.clear();
+    extracted.clear();
 
- int Pos=CurrentPosition;
- while( CastSizeToInt(extracted.size()) < NumberToExtract && Pos<Text.length() )
- {
-  Pos = SkipSpace(Text,Pos);
-  int NewStartPos=Pos;
-  
-  int WordLen=0;
-  if( delimiters.find(Text[Pos])!=UNKNOWN )
-   {
-    WordLen=1;
-    Pos++;
-   }
-  else
-   {
-    while( Pos<Text.length() )
+    int Pos = CurrentPosition;
+    while (CastSizeToInt(extracted.size()) < NumberToExtract && Pos < Text.length())
     {
-     wchar_t c = Text[Pos];
-     if( delimiters.find(c)!=UNKNOWN )
-      break;
+        Pos = SkipSpace(Text, Pos);
+        int NewStartPos = Pos;
 
-     WordLen++;
-     Pos++;
+        int WordLen = 0;
+        if (delimiters.find(Text[Pos]) != UNKNOWN)
+        {
+            WordLen = 1;
+            Pos++;
+        }
+        else
+        {
+            while (Pos < Text.length())
+            {
+                wchar_t c = Text[Pos];
+                if (delimiters.find(c) != UNKNOWN)
+                    break;
+
+                WordLen++;
+                Pos++;
+            }
+        }
+
+        if (WordLen > 0)
+        {
+            TextTokenizationItem w;
+            w.len = WordLen;
+            w.start_pos = NewStartPos;
+            w.word = lem::mid(Text, NewStartPos, WordLen).c_str();
+            extracted.push_back(w);
+        }
     }
-   }
 
-  if( WordLen>0 )
-   {
-    TextTokenizationItem w;
-    w.len = WordLen;
-    w.start_pos = NewStartPos;
-    w.word = lem::mid(Text,NewStartPos,WordLen).c_str();
-    extracted.push_back(w);
-   }
- }
-
- return;
+    return;
 }
 

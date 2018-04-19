@@ -4,22 +4,21 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
 //
 // Content:
 //
-// Часть кода Лексического Автомата, то есть реализация части методов класса
-// LexicalAutomat. Здесь - все, что касается подготовки фразоблока к работе в
-// AA и PA. В частности - проекция мультилексем на Лексикон и микширование
-// вариаторов.
+// Р§Р°СЃС‚СЊ РєРѕРґР° Р›РµРєСЃРёС‡РµСЃРєРѕРіРѕ РђРІС‚РѕРјР°С‚Р°, С‚Рѕ РµСЃС‚СЊ СЂРµР°Р»РёР·Р°С†РёСЏ С‡Р°СЃС‚Рё РјРµС‚РѕРґРѕРІ РєР»Р°СЃСЃР°
+// LexicalAutomat. Р—РґРµСЃСЊ - РІСЃРµ, С‡С‚Рѕ РєР°СЃР°РµС‚СЃСЏ РїРѕРґРіРѕС‚РѕРІРєРё С„СЂР°Р·РѕР±Р»РѕРєР° Рє СЂР°Р±РѕС‚Рµ РІ
+// AA Рё PA. Р’ С‡Р°СЃС‚РЅРѕСЃС‚Рё - РїСЂРѕРµРєС†РёСЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРј РЅР° Р›РµРєСЃРёРєРѕРЅ Рё РјРёРєС€РёСЂРѕРІР°РЅРёРµ
+// РІР°СЂРёР°С‚РѕСЂРѕРІ.
 //
-// 04.09.2009 - доработан алгоритм догадки языка предложения - после проекции
-//              делается вторая попытка, что позволяет воспользоваться
-//              результатами нечеткой проекции.
+// 04.09.2009 - РґРѕСЂР°Р±РѕС‚Р°РЅ Р°Р»РіРѕСЂРёС‚Рј РґРѕРіР°РґРєРё СЏР·С‹РєР° РїСЂРµРґР»РѕР¶РµРЅРёСЏ - РїРѕСЃР»Рµ РїСЂРѕРµРєС†РёРё
+//              РґРµР»Р°РµС‚СЃСЏ РІС‚РѕСЂР°СЏ РїРѕРїС‹С‚РєР°, С‡С‚Рѕ РїРѕР·РІРѕР»СЏРµС‚ РІРѕСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ
+//              СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё РЅРµС‡РµС‚РєРѕР№ РїСЂРѕРµРєС†РёРё.
 // -----------------------------------------------------------------------------
 //
 // CD->01.09.1997
-// LC->05.09.2014
+// LC->17.04.2018
 // --------------
 
 #include <lem/math/integer_math.h>
@@ -62,13 +61,13 @@
 using namespace lem;
 using namespace Solarix;
 
-// Константы для указания стратегии проецирования заданий - комментарии ниже.
+// РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ СѓРєР°Р·Р°РЅРёСЏ СЃС‚СЂР°С‚РµРіРёРё РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ Р·Р°РґР°РЅРёР№ - РєРѕРјРјРµРЅС‚Р°СЂРёРё РЅРёР¶Рµ.
 namespace Solarix
 {
- enum {
-       SOL_LA_MAKE_DEEPER,
-       SOL_LA_JUST_PROJECT
-      };
+    enum {
+        SOL_LA_MAKE_DEEPER,
+        SOL_LA_JUST_PROJECT
+    };
 }
 
 static const wchar_t UNKNOWN_ENTRY_NAME[] = L"UNKNOWNENTRY";
@@ -79,35 +78,37 @@ static const wchar_t UNKNOWN_ENTRY_NAME[] = L"UNKNOWNENTRY";
 
 #if defined SOL_CAA
 Solarix::Word_Form* LexicalAutomat::ProjectWord(
-                                                const lem::UCString &word,
-                                                int WordIndex,
-                                                int WordParts,
-                                                const TokenizationTags * tags,
-                                                const TextRecognitionParameters & params,
-                                                LA_RecognitionTrace *trace
-                                               )
+    const lem::UCString &word,
+    int WordIndex,
+    int WordParts,
+    const TokenizationTags * tags,
+    const TextRecognitionParameters & params,
+    LA_RecognitionTrace *trace
+)
 {
- RC_Lexem normalized( new Lexem(word) );
- TranslateLexem( *normalized, true, params.language_ids.front() );
+    RC_Lexem normalized(new Lexem(word));
+    TranslateLexem(*normalized, true, params.language_ids.front());
 
- MLProjList proj( normalized, word, WordIndex, WordParts ); 
+    MLProjList proj(normalized, word, WordIndex, WordParts);
 
- if( params.AllowPrimaryFuzzyWordRecog )
-  proj.set_Allow_Fuzzy(true);
+    if (params.AllowPrimaryFuzzyWordRecog)
+    {
+        proj.set_Allow_Fuzzy(true);
+    }
 
- proj.set_Dynforms(params.AllowDynform);
+    proj.set_Dynforms(params.AllowDynform);
 
- if( tags!=NULL )
-  {
-   lem::Ptr<TokenizationTags> t( const_cast<TokenizationTags*>(tags),null_deleter() );
-   proj.set_Tags(t);
-  }
+    if (tags != nullptr)
+    {
+        lem::Ptr<TokenizationTags> t(const_cast<TokenizationTags*>(tags), null_deleter());
+        proj.set_Tags(t);
+    }
 
- ProjectJob( proj, params.language_ids.front(), true, trace );
+    ProjectJob(proj, params.language_ids.front(), true, trace);
 
- Word_Form * wordform = proj.GetVersionedForm();
+    Word_Form * wordform = proj.GetVersionedForm();
 
- return wordform;
+    return wordform;
 }
 #endif
 
@@ -115,304 +116,304 @@ Solarix::Word_Form* LexicalAutomat::ProjectWord(
 
 
 #if defined SOL_CAA
-void LexicalAutomat::FindParameters(void)
+void LexicalAutomat::FindParameters()
 {
- // Параметр определяет, на сколько букв может отличаться проецируемое
- // слово и лексема в Лексиконе, чтобы признать несовпадение случайной
- // ошибкой.
- if( NMISSMAX == -1 )
-  {
-   NMISSMAX = 1;
-   const int icr=params().Find(L"NMISSMAX");
-   if( icr!=UNKNOWN )
-    NMISSMAX = params()[icr].GetInt();
-  }
+    // РџР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚, РЅР° СЃРєРѕР»СЊРєРѕ Р±СѓРєРІ РјРѕР¶РµС‚ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ РїСЂРѕРµС†РёСЂСѓРµРјРѕРµ
+    // СЃР»РѕРІРѕ Рё Р»РµРєСЃРµРјР° РІ Р›РµРєСЃРёРєРѕРЅРµ, С‡С‚РѕР±С‹ РїСЂРёР·РЅР°С‚СЊ РЅРµСЃРѕРІРїР°РґРµРЅРёРµ СЃР»СѓС‡Р°Р№РЅРѕР№
+    // РѕС€РёР±РєРѕР№.
+    if (NMISSMAX == -1)
+    {
+        NMISSMAX = 1;
+        const int icr = params().Find(L"NMISSMAX");
+        if (icr != UNKNOWN)
+            NMISSMAX = params()[icr].GetInt();
+    }
 
- if( MIN_PROJ_SCORE == 0 )
-  {
-   MIN_PROJ_SCORE = -50.0f;
-   const int icr=params().Find(L"MIN_PROJ_SCORE");
-   if( icr!=UNKNOWN )
-    MIN_PROJ_SCORE = params()[icr].GetInt();
-  }
+    if (MIN_PROJ_SCORE == 0)
+    {
+        MIN_PROJ_SCORE = -50.0f;
+        const int icr = params().Find(L"MIN_PROJ_SCORE");
+        if (icr != UNKNOWN)
+            MIN_PROJ_SCORE = params()[icr].GetInt();
+    }
 
- return;
+    return;
 }
 #endif // endif defined SOL_CAA
 
 
 
-static inline float Real1ToScore( lem::Real1 fp1 )
+static inline float Real1ToScore(lem::Real1 fp1)
 {
- if( fp1.GetInt()==100 )
-  return 0.0f;
+    if (fp1.GetInt() == 100)
+        return 0.0f;
 
- return -(1.0f-fp1.GetFloat())*10.0f;
+    return -(1.0f - fp1.GetFloat())*10.0f;
 }
 
 
 
 #if defined SOL_CAA
-bool LexicalAutomat::ProjectJob( MLProjList &proj, int id_lang, bool allow_unknown_entries, LA_RecognitionTrace *trace )
+bool LexicalAutomat::ProjectJob(MLProjList &proj, int id_lang, bool allow_unknown_entries, LA_RecognitionTrace *trace)
 {
- // Нам нужно засечь факт изменения задания...
- proj.ClearChange();
+    // РќР°Рј РЅСѓР¶РЅРѕ Р·Р°СЃРµС‡СЊ С„Р°РєС‚ РёР·РјРµРЅРµРЅРёСЏ Р·Р°РґР°РЅРёСЏ...
+    proj.ClearChange();
 
- lem::MCollect<Word_Coord> prj_found_list;
- lem::MCollect<ProjScore> prj_val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    lem::MCollect<Word_Coord> prj_found_list;
+    lem::MCollect<ProjScore> prj_val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- const RC_Lexem &word = proj.GetContent();
+    const RC_Lexem &word = proj.GetContent();
 
- if( !proj.get_Group().empty() )
-  { 
-   // Слово описано через грамматические категории, поэтому как таковая проекция
-   // сводится к поиску по описанию. Причем возможна только одна проекция.
-   Project_1(
-             word,
-             *proj.GetOrgWord(),
-             0.0f,
-             prj_found_list,
-             prj_val_list,
-             prj_extra_inf, 
-             false,
-             proj.get_Allow_Fuzzy(),
-             true,
-             id_lang,
-             trace
-            );
-
-   LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-   LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-   LEM_CHECKIT_Z( !prj_found_list.empty() );
-   AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-  } 
- else
-  {
-   bool added=false;
-
-/*
-   // 1. Через кэш
-   if( word_proj->Project(
-                          word,
-                          prj_found_list,
-                          prj_val_list,
-                          prj_extra_inf,
-                          id_lang,
-                          trace
-                         ) )
+    if (!proj.get_Group().empty())
     {
-     LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-     LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-     added = AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
+        // РЎР»РѕРІРѕ РѕРїРёСЃР°РЅРѕ С‡РµСЂРµР· РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёРµ РєР°С‚РµРіРѕСЂРёРё, РїРѕСЌС‚РѕРјСѓ РєР°Рє С‚Р°РєРѕРІР°СЏ РїСЂРѕРµРєС†РёСЏ
+        // СЃРІРѕРґРёС‚СЃСЏ Рє РїРѕРёСЃРєСѓ РїРѕ РѕРїРёСЃР°РЅРёСЋ. РџСЂРёС‡РµРј РІРѕР·РјРѕР¶РЅР° С‚РѕР»СЊРєРѕ РѕРґРЅР° РїСЂРѕРµРєС†РёСЏ.
+        Project_1(
+            word,
+            *proj.GetOrgWord(),
+            0.0f,
+            prj_found_list,
+            prj_val_list,
+            prj_extra_inf,
+            false,
+            proj.get_Allow_Fuzzy(),
+            true,
+            id_lang,
+            trace
+        );
+
+        LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+        LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+        LEM_CHECKIT_Z(!prj_found_list.empty());
+        AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
     }
-   else*/
-
+    else
     {
-     // проекция исходного слова как оно пришло на вход.
+        bool added = false;
 
-     if( Project_1(
-                   word,
-                   *proj.GetOrgWord(),
-                   0.0f,
-                   prj_found_list,
-                   prj_val_list,
-                   prj_extra_inf,
-                   do_update_cache,
-                   proj.get_Allow_Fuzzy(),
-                   true,
-                   id_lang,
-                   trace
-                  ) )
-      {
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-       added = AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-      }
-     else
-      {
-       bool all_dynforms_are_precise=true;
-
-       if( proj.get_Allow_Fuzzy() )
-        {
-         // может это известная опечатка?
-         lem::MCollect<lem::UCString> corrected_word;
-         if( FindMisspeltWord( *word, corrected_word, id_lang ) )
-          {
-           // да, пробуем теперь проекцию скорректированного слова
-           for( lem::Container::size_type i2=0; i2<corrected_word.size(); ++i2 )
+        /*
+           // 1. Р§РµСЂРµР· РєСЌС€
+           if( word_proj->Project(
+                                  word,
+                                  prj_found_list,
+                                  prj_val_list,
+                                  prj_extra_inf,
+                                  id_lang,
+                                  trace
+                                 ) )
             {
-             RC_Lexem word2( new Lexem( corrected_word[i2] ) );
-
-             if( Project_1(
-                           word2,
-                           *proj.GetOrgWord(),
-                           0.0f,
-                           prj_found_list,
-                           prj_val_list,
-                           prj_extra_inf,
-                           do_update_cache,
-                           false,
-                           true,
-                           id_lang,
-                           trace
-                           ) )
-              {
-               added = AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-              }
+             LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+             LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+             added = AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
             }
-          }
-        }
+           else*/
 
-       if( !added && proj.get_Dynforms() )
         {
-         // отсекаем продуктивные приставки и окончания, пытаемся найти слово после усечения.
-         lem::MCollect<UCString> dynforms;
-         lem::MCollect<lem::Real1> dynform_rels;
-         dynforms.reserve(16);
-         if( Produce_Dynforms( *word, dynforms, dynform_rels, id_lang, trace ) )
-          {
-/*
-         #if LEM_DEBUGGING==1
-         mout->printf( "n_pi=%d\n", dynforms.size() );
-         for( int i=0; i<dynforms.size(); i++ )
-          {
-           mout->printf( "[%vfE%us%vn]", dynforms[i].c_str() );
-          }
-         #endif
-*/
+            // РїСЂРѕРµРєС†РёСЏ РёСЃС…РѕРґРЅРѕРіРѕ СЃР»РѕРІР° РєР°Рє РѕРЅРѕ РїСЂРёС€Р»Рѕ РЅР° РІС…РѕРґ.
 
-           for( Container::size_type i=0; i<dynforms.size(); i++ )
+            if (Project_1(
+                word,
+                *proj.GetOrgWord(),
+                0.0f,
+                prj_found_list,
+                prj_val_list,
+                prj_extra_inf,
+                do_update_cache,
+                proj.get_Allow_Fuzzy(),
+                true,
+                id_lang,
+                trace
+            ))
             {
-             Lexem *dynform_str = new Lexem(dynforms[i]);
-             TranslateLexem( *dynform_str, true, id_lang ); 
-             RC_Lexem dynform( dynform_str );
-             if( Project_1(
-                           dynform,
-                           *dynform_str,
-                           Real1ToScore( dynform_rels[i] ),
-                           prj_found_list,
-                           prj_val_list,
-                           prj_extra_inf,
-                           do_update_cache,
-                           proj.get_Allow_Fuzzy(),
-                           false,
-                           id_lang,
-                           trace
-                          ) )
-              { 
-               added = added || AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-               if( dynform_rels[i]!=Real1(100) )
-                all_dynforms_are_precise = false;
-              }
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+                added = AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
             }
+            else
+            {
+                bool all_dynforms_are_precise = true;
 
-           LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-           LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-          }
+                if (proj.get_Allow_Fuzzy())
+                {
+                    // РјРѕР¶РµС‚ СЌС‚Рѕ РёР·РІРµСЃС‚РЅР°СЏ РѕРїРµС‡Р°С‚РєР°?
+                    lem::MCollect<lem::UCString> corrected_word;
+                    if (FindMisspeltWord(*word, corrected_word, id_lang))
+                    {
+                        // РґР°, РїСЂРѕР±СѓРµРј С‚РµРїРµСЂСЊ РїСЂРѕРµРєС†РёСЋ СЃРєРѕСЂСЂРµРєС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ СЃР»РѕРІР°
+                        for (lem::Container::size_type i2 = 0; i2 < corrected_word.size(); ++i2)
+                        {
+                            RC_Lexem word2(new Lexem(corrected_word[i2]));
+
+                            if (Project_1(
+                                word2,
+                                *proj.GetOrgWord(),
+                                0.0f,
+                                prj_found_list,
+                                prj_val_list,
+                                prj_extra_inf,
+                                do_update_cache,
+                                false,
+                                true,
+                                id_lang,
+                                trace
+                            ))
+                            {
+                                added = AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
+                            }
+                        }
+                    }
+                }
+
+                if (!added && proj.get_Dynforms())
+                {
+                    // РѕС‚СЃРµРєР°РµРј РїСЂРѕРґСѓРєС‚РёРІРЅС‹Рµ РїСЂРёСЃС‚Р°РІРєРё Рё РѕРєРѕРЅС‡Р°РЅРёСЏ, РїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё СЃР»РѕРІРѕ РїРѕСЃР»Рµ СѓСЃРµС‡РµРЅРёСЏ.
+                    lem::MCollect<UCString> dynforms;
+                    lem::MCollect<lem::Real1> dynform_rels;
+                    dynforms.reserve(16);
+                    if (Produce_Dynforms(*word, dynforms, dynform_rels, id_lang, trace))
+                    {
+                        /*
+                                 #if LEM_DEBUGGING==1
+                                 mout->printf( "n_pi=%d\n", dynforms.size() );
+                                 for( int i=0; i<dynforms.size(); i++ )
+                                  {
+                                   mout->printf( "[%vfE%us%vn]", dynforms[i].c_str() );
+                                  }
+                                 #endif
+                        */
+
+                        for (Container::size_type i = 0; i < dynforms.size(); i++)
+                        {
+                            Lexem *dynform_str = new Lexem(dynforms[i]);
+                            TranslateLexem(*dynform_str, true, id_lang);
+                            RC_Lexem dynform(dynform_str);
+                            if (Project_1(
+                                dynform,
+                                *dynform_str,
+                                Real1ToScore(dynform_rels[i]),
+                                prj_found_list,
+                                prj_val_list,
+                                prj_extra_inf,
+                                do_update_cache,
+                                proj.get_Allow_Fuzzy(),
+                                false,
+                                id_lang,
+                                trace
+                            ))
+                            {
+                                added = added || AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
+                                if (dynform_rels[i] != Real1(100))
+                                    all_dynforms_are_precise = false;
+                            }
+                        }
+
+                        LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                        LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+                    }
+                }
+
+                if ((!added || !all_dynforms_are_precise) && proj.get_Allow_Fuzzy())
+                {
+                    // РЅРµС‡РµС‚РєР°СЏ РїСЂРѕРµРєС†РёСЏ.
+                    if (Project_3(
+                        word,
+                        *proj.GetOrgWord(),
+                        0.0f,
+                        prj_found_list,
+                        prj_val_list,
+                        prj_extra_inf,
+                        id_lang,
+                        trace
+                    ))
+                    {
+                        LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                        LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+                        added = AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
+                    }
+                }
+            }
         }
 
-       if( (!added || !all_dynforms_are_precise) && proj.get_Allow_Fuzzy() )
+        if (!added && allow_unknown_entries)
         {
-         // нечеткая проекция.
-         if( Project_3(
-                       word,
-                       *proj.GetOrgWord(),
-                       0.0f,
-                       prj_found_list,
-                       prj_val_list,
-                       prj_extra_inf,
-                       id_lang,
-                       trace
-                      ) )
-          {
-           LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-           LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-           added = AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-          }
+            const int iue = GetUnknownEntryKey();
+
+            if (iue != UNKNOWN)
+            {
+                prj_found_list.push_back(Word_Coord(iue, 0));
+                prj_val_list.push_back(ProjScore(0.0f));
+                prj_extra_inf.push_back(nullptr);
+                AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
+            }
         }
-      }
     }
 
-   if( !added && allow_unknown_entries )
-    {
-     const int iue = GetUnknownEntryKey();
-   
-     if( iue!=UNKNOWN )
-      {
-       prj_found_list.push_back( Word_Coord(iue,0) );
-       prj_val_list.push_back( ProjScore( 0.0f ) );
-       prj_extra_inf.push_back(NULL);
-       AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
-      }
-    }
-  }
+    LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+    LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
 
- LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
- LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+    // РћС‚СЃРѕСЂС‚РёСЂСѓРµРј РїСЂРѕРµРєС†РёРё СЃРѕРіР»Р°СЃРЅРѕ С‡Р°СЃС‚РѕС‚Р°Рј.
+    proj.SortByFrequency(GetDict());
+    proj.Projected();
 
- // Отсортируем проекции согласно частотам.
- proj.SortByFrequency( GetDict() );
- proj.Projected();
-
- return proj.IsChanged();
+    return proj.IsChanged();
 }
 #endif // defined SOL_CAA
 
 
-int LexicalAutomat::GetUnknownEntryKey(void)
+int LexicalAutomat::GetUnknownEntryKey()
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_unknown_entry_key);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_unknown_entry_key);
+#endif
 
- if( unknown_entry_key==UNKNOWN )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
-
-   if( unknown_entry_key==UNKNOWN )
+    if (unknown_entry_key == UNKNOWN)
     {
-     unknown_entry_key = GetDict().GetSynGram().GetEntries().GetUnknownEntryKey(); // GetDict().GetSynGram().FindEntry( UNKNOWN_ENTRY_NAME, ANY_STATE, true );
-    }
-  }
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
- return unknown_entry_key;
+        if (unknown_entry_key == UNKNOWN)
+        {
+            unknown_entry_key = GetDict().GetSynGram().GetEntries().GetUnknownEntryKey(); // GetDict().GetSynGram().FindEntry( UNKNOWN_ENTRY_NAME, ANY_STATE, true );
+        }
+    }
+
+    return unknown_entry_key;
 }
 
 
 
-int LexicalAutomat::GetWordformFrequency( int id_entry, int iform )
+int LexicalAutomat::GetWordformFrequency(int id_entry, int iform)
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_wordform_frequency);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_wordform_frequency);
+#endif
 
- std::pair<int,int> key(id_entry,iform);
- WORDFORM_FREQUENCY::const_iterator it = wordform_frequency.find( key );
- if( it==wordform_frequency.end() )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
+    std::pair<int, int> key(id_entry, iform);
+    auto it = wordform_frequency.find(key);
+    if (it == wordform_frequency.end())
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-   it = wordform_frequency.find( key );
-   if( it==wordform_frequency.end() )
-    {
-     std::pair<bool,int> freq = GetStorage().GetWordformFrequency( id_entry, iform );
-     wordform_frequency.insert( std::make_pair( key, freq.second ) );
-     return freq.second;
+        it = wordform_frequency.find(key);
+        if (it == wordform_frequency.end())
+        {
+            std::pair<bool, int> freq = GetStorage().GetWordformFrequency(id_entry, iform);
+            wordform_frequency.insert(std::make_pair(key, freq.second));
+            return freq.second;
+        }
+        else
+        {
+            return it->second;
+        }
     }
-   else
+    else
     {
-     return it->second;
+        return it->second;
     }
-  }
- else
-  {
-   return it->second;
-  }
 }
 
 
@@ -420,45 +421,49 @@ int LexicalAutomat::GetWordformFrequency( int id_entry, int iform )
 
 #if defined SOL_CAA
 // ********************************************************************
-// Генерируем динамические формы - убираем и добавляем к оригинальной
-// мультилексеме приставки и суффиксы на основе правил словаря. Обычно
-// генерируются нормальные формы слов.
+// Р“РµРЅРµСЂРёСЂСѓРµРј РґРёРЅР°РјРёС‡РµСЃРєРёРµ С„РѕСЂРјС‹ - СѓР±РёСЂР°РµРј Рё РґРѕР±Р°РІР»СЏРµРј Рє РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№
+// РјСѓР»СЊС‚РёР»РµРєСЃРµРјРµ РїСЂРёСЃС‚Р°РІРєРё Рё СЃСѓС„С„РёРєСЃС‹ РЅР° РѕСЃРЅРѕРІРµ РїСЂР°РІРёР» СЃР»РѕРІР°СЂСЏ. РћР±С‹С‡РЅРѕ
+// РіРµРЅРµСЂРёСЂСѓСЋС‚СЃСЏ РЅРѕСЂРјР°Р»СЊРЅС‹Рµ С„РѕСЂРјС‹ СЃР»РѕРІ.
 // ********************************************************************
 bool LexicalAutomat::Produce_Dynforms(
-                                      const UCString &lex, // оригинальное слово
-                                      lem::MCollect<UCString> &list,
-                                      lem::MCollect<lem::Real1> &dynform_rels,
-                                      int id_language,
-                                      LA_RecognitionTrace *trace
-                                     )
+    const UCString &lex, // РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРµ СЃР»РѕРІРѕ
+    lem::MCollect<UCString> &list,
+    lem::MCollect<lem::Real1> &dynform_rels,
+    int id_language,
+    LA_RecognitionTrace *trace
+)
 {
- return preprocessor->Crop( lex, list, dynform_rels, id_language, trace );
+    return preprocessor->Crop(lex, list, dynform_rels, id_language, trace);
 }
 
 
 
 
 // **************************************************************************************
-// Пробует формировать динамические формы и проецировать их на справочник лексем. Если
-// будет успех, то вернет ientry проекции.
+// РџСЂРѕР±СѓРµС‚ С„РѕСЂРјРёСЂРѕРІР°С‚СЊ РґРёРЅР°РјРёС‡РµСЃРєРёРµ С„РѕСЂРјС‹ Рё РїСЂРѕРµС†РёСЂРѕРІР°С‚СЊ РёС… РЅР° СЃРїСЂР°РІРѕС‡РЅРёРє Р»РµРєСЃРµРј. Р•СЃР»Рё
+// Р±СѓРґРµС‚ СѓСЃРїРµС…, С‚Рѕ РІРµСЂРЅРµС‚ ientry РїСЂРѕРµРєС†РёРё.
 // **************************************************************************************
 int LexicalAutomat::Project_Dynforms(
-                                     const UCString &lex,  // оригинальное слово
-                                     int id_language,
-                                     const LD_Seeker &seeker
-                                    ) const
+    const UCString &lex,  // РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРµ СЃР»РѕРІРѕ
+    int id_language,
+    const LD_Seeker &seeker
+) const
 {
- lem::MCollect<UCString> list;
- lem::MCollect<lem::Real1> rels;
- if( preprocessor->Crop( lex, list, rels, id_language, NULL ) )
-  {
-   int ientry=UNKNOWN;
-   for( lem::Container::size_type i=0; i<list.size(); ++i )
-    if( (ientry=seeker.Find( list[i], false ) )!=UNKNOWN )
-     return ientry;
-  }
+    lem::MCollect<UCString> list;
+    lem::MCollect<lem::Real1> rels;
+    if (preprocessor->Crop(lex, list, rels, id_language, nullptr))
+    {
+        int ientry = UNKNOWN;
+        for (lem::Container::size_type i = 0; i < list.size(); ++i)
+        {
+            if ((ientry = seeker.Find(list[i], false)) != UNKNOWN)
+            {
+                return ientry;
+            }
+        }
+    }
 
- return UNKNOWN;
+    return UNKNOWN;
 }
 
 
@@ -466,40 +471,42 @@ int LexicalAutomat::Project_Dynforms(
 
 
 // *************************************************************************
-// По заданной нормальной (базовой) форме генерируем всевозможные
-// производные (склонение, спряжение) на основе специальных правил-парадигм.
+// РџРѕ Р·Р°РґР°РЅРЅРѕР№ РЅРѕСЂРјР°Р»СЊРЅРѕР№ (Р±Р°Р·РѕРІРѕР№) С„РѕСЂРјРµ РіРµРЅРµСЂРёСЂСѓРµРј РІСЃРµРІРѕР·РјРѕР¶РЅС‹Рµ
+// РїСЂРѕРёР·РІРѕРґРЅС‹Рµ (СЃРєР»РѕРЅРµРЅРёРµ, СЃРїСЂСЏР¶РµРЅРёРµ) РЅР° РѕСЃРЅРѕРІРµ СЃРїРµС†РёР°Р»СЊРЅС‹С… РїСЂР°РІРёР»-РїР°СЂР°РґРёРіРј.
 // *************************************************************************
 bool LexicalAutomat::Generate_Forms_From_Normal(
-                                                const UCString &word,
-                                                lem::MCollect<UCString> &list
-                                               )
+    const UCString &word,
+    lem::MCollect<UCString> &list
+)
 {
- SG_DeclensionAutomat& dsa = GetSynGram().Get_DSA();
+    SG_DeclensionAutomat& dsa = GetSynGram().Get_DSA();
 
- // Попробуем найти парадигму.
- lem::MCollect<int> idecl;
- dsa.FindDecl( word, idecl );
+    // РџРѕРїСЂРѕР±СѓРµРј РЅР°Р№С‚Рё РїР°СЂР°РґРёРіРјСѓ.
+    lem::MCollect<int> idecl;
+    dsa.FindDecl(word, idecl);
 
- if( !idecl.empty() ) 
-  {
-   Lexem lex(word);
-   TranslateLexem( lex, false );
-
-   MCollect<Lexem> res;
-
-   for( lem::Container::size_type i=0; i<idecl.size(); i++ )
+    if (!idecl.empty())
     {
-     res.clear();
-     dsa.GetDecl(idecl[i]).GenerateForms( lex, res, GetSynGram(), dsa );
+        Lexem lex(word);
+        TranslateLexem(lex, false);
 
-     for( lem::Container::size_type j=0; j<res.size(); j++ )
-      list.push_back( res[j] );
+        MCollect<Lexem> res;
+
+        for (lem::Container::size_type i = 0; i < idecl.size(); i++)
+        {
+            res.clear();
+            dsa.GetDecl(idecl[i]).GenerateForms(lex, res, GetSynGram(), dsa);
+
+            for (lem::Container::size_type j = 0; j < res.size(); j++)
+            {
+                list.push_back(res[j]);
+            }
+        }
+
+        return true;
     }
 
-   return true;
-  }
-
- return false;
+    return false;
 }
 
 #endif
@@ -508,809 +515,809 @@ bool LexicalAutomat::Generate_Forms_From_Normal(
 
 #if defined SOL_CAA
 /*****************************************************************
- Делаем попытку спроецировать мультилексему из задания proj на
- Лексикон методом типа method. Входной параметр use_original
- равен true, если проецируем ИСХОДНОЕ представление мультилексемы,
- иначе - проецируем фонетические инварианты.
+ Р”РµР»Р°РµРј РїРѕРїС‹С‚РєСѓ СЃРїСЂРѕРµС†РёСЂРѕРІР°С‚СЊ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ РёР· Р·Р°РґР°РЅРёСЏ proj РЅР°
+ Р›РµРєСЃРёРєРѕРЅ РјРµС‚РѕРґРѕРј С‚РёРїР° method. Р’С…РѕРґРЅРѕР№ РїР°СЂР°РјРµС‚СЂ use_original
+ СЂР°РІРµРЅ true, РµСЃР»Рё РїСЂРѕРµС†РёСЂСѓРµРј РРЎРҐРћР”РќРћР• РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹,
+ РёРЅР°С‡Рµ - РїСЂРѕРµС†РёСЂСѓРµРј С„РѕРЅРµС‚РёС‡РµСЃРєРёРµ РёРЅРІР°СЂРёР°РЅС‚С‹.
 ******************************************************************/
 void LexicalAutomat::Project(
-                             MLProjList &proj,
-                             int method,
-                             bool use_original,
-                             int id_lang,
-                             LA_RecognitionTrace *trace
-                            )
+    MLProjList &proj,
+    int method,
+    bool use_original,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- lem::MCollect<Word_Coord> prj_found_list;
- lem::MCollect<ProjScore> prj_val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    lem::MCollect<Word_Coord> prj_found_list;
+    lem::MCollect<ProjScore> prj_val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- if( !proj.get_Group().empty() )
-  { 
-   // Слово описано через грамматические категории, поэтому как таковая проекция
-   // сводится к поиску по описанию. Причем возможна только одна проекция.
-   if( proj.GetStadia()>0 )
-    return;
-
-   proj.NextStadia();
-
-   const RC_Lexem &word = proj.GetContent();
-
-   Project_1(
-             word,
-             *proj.GetOrgWord(),
-             0.0f,
-             prj_found_list,
-             prj_val_list,
-             prj_extra_inf, 
-             false,
-             false,
-             true,
-             id_lang,
-             trace
-            );
-
-   LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-   LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-   LEM_CHECKIT_Z( !prj_found_list.empty() );
-  } 
- else if( use_original )
-  {
-   // В число оригиналов входят и "ломанные"
-   int n_org = 1 + CastSizeToInt(proj.get_Broken().size());
-
-   for( int iorg=0; iorg<n_org; iorg++ )
+    if (!proj.get_Group().empty())
     {
-     // Для исходной мультилексемы.
-     const RC_Lexem &word = !iorg ?
-                                   proj.GetContent() :
-                                   proj.get_Broken()[iorg-1];
+        // РЎР»РѕРІРѕ РѕРїРёСЃР°РЅРѕ С‡РµСЂРµР· РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёРµ РєР°С‚РµРіРѕСЂРёРё, РїРѕСЌС‚РѕРјСѓ РєР°Рє С‚Р°РєРѕРІР°СЏ РїСЂРѕРµРєС†РёСЏ
+        // СЃРІРѕРґРёС‚СЃСЏ Рє РїРѕРёСЃРєСѓ РїРѕ РѕРїРёСЃР°РЅРёСЋ. РџСЂРёС‡РµРј РІРѕР·РјРѕР¶РЅР° С‚РѕР»СЊРєРѕ РѕРґРЅР° РїСЂРѕРµРєС†РёСЏ.
+        if (proj.GetStadia() > 0)
+            return;
 
-     switch(method)
-     {
-      case 0:
-       {
-        word_proj->Project(
-                           word,
-                           prj_found_list,
-                           prj_val_list,
-                           prj_extra_inf,
-                           id_lang,
-                           trace
-                          );
- 
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+        proj.NextStadia();
 
-        break;
-       }
+        const RC_Lexem &word = proj.GetContent();
 
-      case 1:
-       Project_1(
-                 word,
-                 *proj.GetOrgWord(),
-                 0.0f,
-                 prj_found_list,
-                 prj_val_list,
-                 prj_extra_inf,
-                 do_update_cache,
-                 proj.get_Allow_Fuzzy(),
-                 true,
-                 id_lang,
-                 trace
-                );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-       break;
-
-/*
-      case 2:
-       Project_2(
-                 word,
-                 proj.get_Miss_Parameter(),
-                 prj_found_list,
-                 prj_val_list,
-                 prj_extra_inf,
-                 id_lang,
-                 trace
-                );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-       break;
-*/
-
-      #if defined SOL_CAA
-      case 3:
-       Project_3(
-                 word,
-                 *proj.GetOrgWord(),
-                 0.0f,
-                 prj_found_list,
-                 prj_val_list,
-                 prj_extra_inf,
-                 id_lang,
-                 trace
-                );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-       LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-       break;
-      #else
-      case 3:
-       break;
-      #endif
-
-      default: LEM_STOPIT;
-     }
-    }
-  }
- else
-  {
-/*
-   // Для фонетических инвариантов.
-
-   const int nfi = proj.GetnPhonInv();
-   for( int pi=0; pi<nfi; pi++ )
-    {
-     // Каждый фонетический инвариант имеет свою степень недостоверности,
-     // возникающую во время его получения. Поэтому возвращаемый список
-     // достоверностей проекций мы домножаем на достоверность самого ф.и.
-     const RC_Lexem &word = proj.GetPhonInv(pi);
-
-     LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-     LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-     const lem::Container::size_type ibegin = prj_found_list.size();
-
-     switch(method)
-     {
-      case 0:
-       {
-        word_proj->Project(
-                           word,
-                           prj_found_list,
-                           prj_val_list,
-                           prj_extra_inf,
-                           id_lang,
-                           trace
-                          );
-      
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-      
-        break;
-       }
-
-      case 1:
-       {
         Project_1(
-                  word,
-                  prj_found_list,
-                  prj_val_list,
-                  prj_extra_inf,
-                  do_update_cache,
-                  id_lang,
-                  trace
-                 );
+            word,
+            *proj.GetOrgWord(),
+            0.0f,
+            prj_found_list,
+            prj_val_list,
+            prj_extra_inf,
+            false,
+            false,
+            true,
+            id_lang,
+            trace
+        );
 
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-
-        break;
-       }
-
-      case 2:
-       {
-        Project_2(
-                  word,
-                  proj.get_Miss_Parameter(),
-                  prj_found_list,
-                  prj_val_list,
-                  prj_extra_inf,
-                  id_lang,
-                  trace
-                 );
-
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
-        LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
-
-        break;
-       }
-
-      default: LEM_STOPIT;
-     }
-
-     const Real1 pi_val = proj.GetPhonInvVal(pi);
-     if( pi_val!=lem::Real1(100) )
-      {
-       for( Container::size_type i=ibegin; i<prj_val_list.size(); i++ )
-        prj_val_list[i] = prj_val_list[i]*pi_val;
-      }
+        LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+        LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+        LEM_CHECKIT_Z(!prj_found_list.empty());
     }
-*/
-  }
+    else if (use_original)
+    {
+        // Р’ С‡РёСЃР»Рѕ РѕСЂРёРіРёРЅР°Р»РѕРІ РІС…РѕРґСЏС‚ Рё "Р»РѕРјР°РЅРЅС‹Рµ"
+        int n_org = 1 + CastSizeToInt(proj.get_Broken().size());
 
- AddResults( proj, prj_found_list, prj_val_list, prj_extra_inf );
+        for (int iorg = 0; iorg < n_org; iorg++)
+        {
+            // Р”Р»СЏ РёСЃС…РѕРґРЅРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹.
+            const RC_Lexem &word = !iorg ?
+                proj.GetContent() :
+                proj.get_Broken()[iorg - 1];
 
- LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
- LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+            switch (method)
+            {
+            case 0:
+            {
+                word_proj->Project(
+                    word,
+                    prj_found_list,
+                    prj_val_list,
+                    prj_extra_inf,
+                    id_lang,
+                    trace
+                );
 
- return;
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+
+                break;
+            }
+
+            case 1:
+                Project_1(
+                    word,
+                    *proj.GetOrgWord(),
+                    0.0f,
+                    prj_found_list,
+                    prj_val_list,
+                    prj_extra_inf,
+                    do_update_cache,
+                    proj.get_Allow_Fuzzy(),
+                    true,
+                    id_lang,
+                    trace
+                );
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+                break;
+
+                /*
+                      case 2:
+                       Project_2(
+                                 word,
+                                 proj.get_Miss_Parameter(),
+                                 prj_found_list,
+                                 prj_val_list,
+                                 prj_extra_inf,
+                                 id_lang,
+                                 trace
+                                );
+                       LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+                       LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+                       break;
+                */
+
+#if defined SOL_CAA
+            case 3:
+                Project_3(
+                    word,
+                    *proj.GetOrgWord(),
+                    0.0f,
+                    prj_found_list,
+                    prj_val_list,
+                    prj_extra_inf,
+                    id_lang,
+                    trace
+                );
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+                LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+                break;
+#else
+            case 3:
+                break;
+#endif
+
+            default: LEM_STOPIT;
+            }
+        }
+    }
+    else
+    {
+        /*
+           // Р”Р»СЏ С„РѕРЅРµС‚РёС‡РµСЃРєРёС… РёРЅРІР°СЂРёР°РЅС‚РѕРІ.
+
+           const int nfi = proj.GetnPhonInv();
+           for( int pi=0; pi<nfi; pi++ )
+            {
+             // РљР°Р¶РґС‹Р№ С„РѕРЅРµС‚РёС‡РµСЃРєРёР№ РёРЅРІР°СЂРёР°РЅС‚ РёРјРµРµС‚ СЃРІРѕСЋ СЃС‚РµРїРµРЅСЊ РЅРµРґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё,
+             // РІРѕР·РЅРёРєР°СЋС‰СѓСЋ РІРѕ РІСЂРµРјСЏ РµРіРѕ РїРѕР»СѓС‡РµРЅРёСЏ. РџРѕСЌС‚РѕРјСѓ РІРѕР·РІСЂР°С‰Р°РµРјС‹Р№ СЃРїРёСЃРѕРє
+             // РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚РµР№ РїСЂРѕРµРєС†РёР№ РјС‹ РґРѕРјРЅРѕР¶Р°РµРј РЅР° РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ СЃР°РјРѕРіРѕ С„.Рё.
+             const RC_Lexem &word = proj.GetPhonInv(pi);
+
+             LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+             LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+             const lem::Container::size_type ibegin = prj_found_list.size();
+
+             switch(method)
+             {
+              case 0:
+               {
+                word_proj->Project(
+                                   word,
+                                   prj_found_list,
+                                   prj_val_list,
+                                   prj_extra_inf,
+                                   id_lang,
+                                   trace
+                                  );
+
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+
+                break;
+               }
+
+              case 1:
+               {
+                Project_1(
+                          word,
+                          prj_found_list,
+                          prj_val_list,
+                          prj_extra_inf,
+                          do_update_cache,
+                          id_lang,
+                          trace
+                         );
+
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+
+                break;
+               }
+
+              case 2:
+               {
+                Project_2(
+                          word,
+                          proj.get_Miss_Parameter(),
+                          prj_found_list,
+                          prj_val_list,
+                          prj_extra_inf,
+                          id_lang,
+                          trace
+                         );
+
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_val_list.size() );
+                LEM_CHECKIT_Z( prj_found_list.size()==prj_extra_inf.size() );
+
+                break;
+               }
+
+              default: LEM_STOPIT;
+             }
+
+             const Real1 pi_val = proj.GetPhonInvVal(pi);
+             if( pi_val!=lem::Real1(100) )
+              {
+               for( Container::size_type i=ibegin; i<prj_val_list.size(); i++ )
+                prj_val_list[i] = prj_val_list[i]*pi_val;
+              }
+            }
+        */
+    }
+
+    AddResults(proj, prj_found_list, prj_val_list, prj_extra_inf);
+
+    LEM_CHECKIT_Z(prj_found_list.size() == prj_val_list.size());
+    LEM_CHECKIT_Z(prj_found_list.size() == prj_extra_inf.size());
+
+    return;
 }
 #endif // defined SOL_CAA
 
 
 
-bool LexicalAutomat::IsLanguageWithOptionalDiaktiriks( int id_language )
+bool LexicalAutomat::IsLanguageWithOptionalDiaktiriks(int id_language)
 {
- if( id_language!=UNKNOWN )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_ReaderGuard rlock(cs_lang_optional_diacritics);
-   #endif
-
-   std::map<int,int>::const_iterator it = id_language_with_optional_diacritics.find(id_language);
-
-   if( it==id_language_with_optional_diacritics.end() )
+    if (id_language != UNKNOWN)
     {
-     #if defined LEM_THREADS
-     lem::Process::RWU_WriterGuard wlock(rlock);
-     #endif
+#if defined LEM_THREADS
+        lem::Process::RWU_ReaderGuard rlock(cs_lang_optional_diacritics);
+#endif
 
-     it = id_language_with_optional_diacritics.find(id_language);
+        auto it = id_language_with_optional_diacritics.find(id_language);
 
-     if( it==id_language_with_optional_diacritics.end() )
-      {
-       SynGram &sg = GetSynGram();
-
-       const SG_Language &lang = sg.languages()[id_language];
-       const int iparam = lang.FindParam(L"HasOptionalDiacritics");
-       if( iparam!=UNKNOWN )
+        if (it == id_language_with_optional_diacritics.end())
         {
-         const SG_LanguageParam & param = lang.GetParam(iparam);
-         const bool x = param.GetValue().eqi(L"true");
-         id_language_with_optional_diacritics.insert( std::make_pair(id_language,x ? 1 : 0) );
-         if(x)
-          {
-           const int iparam2 = lang.FindParam(L"CharsWithOptionalDiacritics");
-           lem::UFString chars = lang.GetParam(iparam2).GetValue();
-           chars.strip_quotes();
-           optional_diacritics_for_languages.insert( std::make_pair( id_language, chars ) );
+#if defined LEM_THREADS
+            lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-           const int iparam3 = lang.FindParam(L"AuxTypeForDiacritics");
-           lem::UCString aux_type_name = lang.GetParam(iparam3).GetValue().c_str();
-           aux_type_name.strip_quotes();
-           const int aux_type_id = sg.GetAuxFormTypes()[aux_type_name];
+            it = id_language_with_optional_diacritics.find(id_language);
 
-           optional_diacritics_aux_type.insert( std::make_pair(id_language,aux_type_id) );
-          }
+            if (it == id_language_with_optional_diacritics.end())
+            {
+                SynGram &sg = GetSynGram();
 
-         return x;
+                const SG_Language &lang = sg.languages()[id_language];
+                const int iparam = lang.FindParam(L"HasOptionalDiacritics");
+                if (iparam != UNKNOWN)
+                {
+                    const SG_LanguageParam & param = lang.GetParam(iparam);
+                    const bool x = param.GetValue().eqi(L"true");
+                    id_language_with_optional_diacritics.insert(std::make_pair(id_language, x ? 1 : 0));
+                    if (x)
+                    {
+                        const int iparam2 = lang.FindParam(L"CharsWithOptionalDiacritics");
+                        lem::UFString chars = lang.GetParam(iparam2).GetValue();
+                        chars.strip_quotes();
+                        optional_diacritics_for_languages.insert(std::make_pair(id_language, chars));
+
+                        const int iparam3 = lang.FindParam(L"AuxTypeForDiacritics");
+                        lem::UCString aux_type_name = lang.GetParam(iparam3).GetValue().c_str();
+                        aux_type_name.strip_quotes();
+                        const int aux_type_id = sg.GetAuxFormTypes()[aux_type_name];
+
+                        optional_diacritics_aux_type.insert(std::make_pair(id_language, aux_type_id));
+                    }
+
+                    return x;
+                }
+                else
+                {
+                    id_language_with_optional_diacritics.insert(std::make_pair(id_language, 0));
+                    return false;
+                }
+            }
+            else
+            {
+                return it->second == 1;
+            }
         }
-       else
+        else
         {
-         id_language_with_optional_diacritics.insert( std::make_pair(id_language,0) );
-         return false;
+            return it->second == 1;
         }
-      }
-     else
-      {
-       return it->second==1;
-      }
     }
-   else
-    {
-     return it->second==1;
-    }
-  }
 
- return false;
+    return false;
 }
 
 
-static bool MatchWithoutSpaces( const wchar_t * str1, const wchar_t * str2 )
+static bool MatchWithoutSpaces(const wchar_t * str1, const wchar_t * str2)
 {
- while( (*str1)!=0 && (*str2)!=0 )
- {
-  if( *str1 == L' ' ) { str1++; continue; }
-  if( *str2 == L' ' ) { str2++; continue; }
-  if( *str1==*str2 )
-   {
-    str1++;
-    str2++;
-    continue;
-   }
+    while ((*str1) != 0 && (*str2) != 0)
+    {
+        if (*str1 == L' ') { str1++; continue; }
+        if (*str2 == L' ') { str2++; continue; }
+        if (*str1 == *str2)
+        {
+            str1++;
+            str2++;
+            continue;
+        }
 
-  return false;
- }
+        return false;
+    }
 
- return *str1 == *str2;
+    return *str1 == *str2;
 }
 
 
 
 
 /****************************************************************************
-    Алгоритм быстрого точного проецирования мультилексемы на Лексикон.
+    РђР»РіРѕСЂРёС‚Рј Р±С‹СЃС‚СЂРѕРіРѕ С‚РѕС‡РЅРѕРіРѕ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РЅР° Р›РµРєСЃРёРєРѕРЅ.
 
- Так как большинство словарных статей не хранят в развернутом виде свои
- словоформы, а только указывают на индекс таблицы склонения, то мы не можем
- просто просмотреть все словоформы всех статей: потребуется распаковка,
- огромное засорение динамической памяти при выделении и освобождении большого
- числа блочков и так далее. Впрочем, нам и не нужно этим заниматься, так как
- значительная часть сравнений словоформ и мультилексемы исключается благодаря
- нескольким эффективным критериям (хешам): по диапазону символьной длины, по
- сигнатуре присутствия букв, по хеш-функции H(x), по обязательной сигнатуре,
- по числу лексем в мультилексеме. Таким образом, большинство проверок
- заключается лишь в извлечении из словарных статей ряда хеш-полей и сравнении
- их со значениями параметров для проецируемой мультилексемы. Только если все
- критерии дают положительный результат, необходимо распаковать словоформы
- (когда это нужно) и сравнивать мультилексему с каждой из них.
+ РўР°Рє РєР°Рє Р±РѕР»СЊС€РёРЅСЃС‚РІРѕ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ РЅРµ С…СЂР°РЅСЏС‚ РІ СЂР°Р·РІРµСЂРЅСѓС‚РѕРј РІРёРґРµ СЃРІРѕРё
+ СЃР»РѕРІРѕС„РѕСЂРјС‹, Р° С‚РѕР»СЊРєРѕ СѓРєР°Р·С‹РІР°СЋС‚ РЅР° РёРЅРґРµРєСЃ С‚Р°Р±Р»РёС†С‹ СЃРєР»РѕРЅРµРЅРёСЏ, С‚Рѕ РјС‹ РЅРµ РјРѕР¶РµРј
+ РїСЂРѕСЃС‚Рѕ РїСЂРѕСЃРјРѕС‚СЂРµС‚СЊ РІСЃРµ СЃР»РѕРІРѕС„РѕСЂРјС‹ РІСЃРµС… СЃС‚Р°С‚РµР№: РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ СЂР°СЃРїР°РєРѕРІРєР°,
+ РѕРіСЂРѕРјРЅРѕРµ Р·Р°СЃРѕСЂРµРЅРёРµ РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё РїСЂРё РІС‹РґРµР»РµРЅРёРё Рё РѕСЃРІРѕР±РѕР¶РґРµРЅРёРё Р±РѕР»СЊС€РѕРіРѕ
+ С‡РёСЃР»Р° Р±Р»РѕС‡РєРѕРІ Рё С‚Р°Рє РґР°Р»РµРµ. Р’РїСЂРѕС‡РµРј, РЅР°Рј Рё РЅРµ РЅСѓР¶РЅРѕ СЌС‚РёРј Р·Р°РЅРёРјР°С‚СЊСЃСЏ, С‚Р°Рє РєР°Рє
+ Р·РЅР°С‡РёС‚РµР»СЊРЅР°СЏ С‡Р°СЃС‚СЊ СЃСЂР°РІРЅРµРЅРёР№ СЃР»РѕРІРѕС„РѕСЂРј Рё РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РёСЃРєР»СЋС‡Р°РµС‚СЃСЏ Р±Р»Р°РіРѕРґР°СЂСЏ
+ РЅРµСЃРєРѕР»СЊРєРёРј СЌС„С„РµРєС‚РёРІРЅС‹Рј РєСЂРёС‚РµСЂРёСЏРј (С…РµС€Р°Рј): РїРѕ РґРёР°РїР°Р·РѕРЅСѓ СЃРёРјРІРѕР»СЊРЅРѕР№ РґР»РёРЅС‹, РїРѕ
+ СЃРёРіРЅР°С‚СѓСЂРµ РїСЂРёСЃСѓС‚СЃС‚РІРёСЏ Р±СѓРєРІ, РїРѕ С…РµС€-С„СѓРЅРєС†РёРё H(x), РїРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕР№ СЃРёРіРЅР°С‚СѓСЂРµ,
+ РїРѕ С‡РёСЃР»Сѓ Р»РµРєСЃРµРј РІ РјСѓР»СЊС‚РёР»РµРєСЃРµРјРµ. РўР°РєРёРј РѕР±СЂР°Р·РѕРј, Р±РѕР»СЊС€РёРЅСЃС‚РІРѕ РїСЂРѕРІРµСЂРѕРє
+ Р·Р°РєР»СЋС‡Р°РµС‚СЃСЏ Р»РёС€СЊ РІ РёР·РІР»РµС‡РµРЅРёРё РёР· СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ СЂСЏРґР° С…РµС€-РїРѕР»РµР№ Рё СЃСЂР°РІРЅРµРЅРёРё
+ РёС… СЃРѕ Р·РЅР°С‡РµРЅРёСЏРјРё РїР°СЂР°РјРµС‚СЂРѕРІ РґР»СЏ РїСЂРѕРµС†РёСЂСѓРµРјРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹. РўРѕР»СЊРєРѕ РµСЃР»Рё РІСЃРµ
+ РєСЂРёС‚РµСЂРёРё РґР°СЋС‚ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚, РЅРµРѕР±С…РѕРґРёРјРѕ СЂР°СЃРїР°РєРѕРІР°С‚СЊ СЃР»РѕРІРѕС„РѕСЂРјС‹
+ (РєРѕРіРґР° СЌС‚Рѕ РЅСѓР¶РЅРѕ) Рё СЃСЂР°РІРЅРёРІР°С‚СЊ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ СЃ РєР°Р¶РґРѕР№ РёР· РЅРёС….
 
-   Эта процедура отлично приспособлена и для автономного использования (в случае
- необходимости) "извне Системы". Итак, если требуется спроецировать
- мультилексему A, и получить список (в общем случае) проекций, то есть индексов
- словарных статей и словоформ, то вызывается данная процедура. Чтобы отключить
- обновление кэша проекций (но не его использование!), достаточно установить
- do_register=false. Это снимет проблему побочных эффектов, хотя отключит
- механизм динамического обучения. Если же не отключать обновление кэша проекций
- (как это происходит при внутреннем использовании процедуры), то возможно
- переполнение кэша, что потребует проведения операции сборки мусора - лишняя
- головная боль для вызвавшей программы.
+   Р­С‚Р° РїСЂРѕС†РµРґСѓСЂР° РѕС‚Р»РёС‡РЅРѕ РїСЂРёСЃРїРѕСЃРѕР±Р»РµРЅР° Рё РґР»СЏ Р°РІС‚РѕРЅРѕРјРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ (РІ СЃР»СѓС‡Р°Рµ
+ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё) "РёР·РІРЅРµ РЎРёСЃС‚РµРјС‹". РС‚Р°Рє, РµСЃР»Рё С‚СЂРµР±СѓРµС‚СЃСЏ СЃРїСЂРѕРµС†РёСЂРѕРІР°С‚СЊ
+ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ A, Рё РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє (РІ РѕР±С‰РµРј СЃР»СѓС‡Р°Рµ) РїСЂРѕРµРєС†РёР№, С‚Рѕ РµСЃС‚СЊ РёРЅРґРµРєСЃРѕРІ
+ СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№ Рё СЃР»РѕРІРѕС„РѕСЂРј, С‚Рѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ РґР°РЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР°. Р§С‚РѕР±С‹ РѕС‚РєР»СЋС‡РёС‚СЊ
+ РѕР±РЅРѕРІР»РµРЅРёРµ РєСЌС€Р° РїСЂРѕРµРєС†РёР№ (РЅРѕ РЅРµ РµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ!), РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ
+ do_register=false. Р­С‚Рѕ СЃРЅРёРјРµС‚ РїСЂРѕР±Р»РµРјСѓ РїРѕР±РѕС‡РЅС‹С… СЌС„С„РµРєС‚РѕРІ, С…РѕС‚СЏ РѕС‚РєР»СЋС‡РёС‚
+ РјРµС…Р°РЅРёР·Рј РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ РѕР±СѓС‡РµРЅРёСЏ. Р•СЃР»Рё Р¶Рµ РЅРµ РѕС‚РєР»СЋС‡Р°С‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ РєСЌС€Р° РїСЂРѕРµРєС†РёР№
+ (РєР°Рє СЌС‚Рѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РїСЂРё РІРЅСѓС‚СЂРµРЅРЅРµРј РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё РїСЂРѕС†РµРґСѓСЂС‹), С‚Рѕ РІРѕР·РјРѕР¶РЅРѕ
+ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ РєСЌС€Р°, С‡С‚Рѕ РїРѕС‚СЂРµР±СѓРµС‚ РїСЂРѕРІРµРґРµРЅРёСЏ РѕРїРµСЂР°С†РёРё СЃР±РѕСЂРєРё РјСѓСЃРѕСЂР° - Р»РёС€РЅСЏСЏ
+ РіРѕР»РѕРІРЅР°СЏ Р±РѕР»СЊ РґР»СЏ РІС‹Р·РІР°РІС€РµР№ РїСЂРѕРіСЂР°РјРјС‹.
 *********************************************************************************/
 bool LexicalAutomat::Project_1(
-                               const RC_Lexem &A,
-                               const lem::UCString &original_word,
-                               float scoreA,
-                               MCollect<Word_Coord> &found_list,
-                               MCollect<ProjScore> &val_list,
-                               PtrCollect<LA_ProjectInfo> &inf_list,
-                               bool refresh_cache,
-                               bool allow_fuzzy,
-                               bool use_recognition_rules,
-                               int id_lang,
-                               LA_RecognitionTrace *trace
-                              )
+    const RC_Lexem &A,
+    const lem::UCString &original_word,
+    float scoreA,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo> &inf_list,
+    bool refresh_cache,
+    bool allow_fuzzy,
+    bool use_recognition_rules,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- SynGram &s_gram = GetSynGram();
+    SynGram &s_gram = GetSynGram();
 
- const wchar_t *As = A->c_str();
+    const wchar_t *As = A->c_str();
 
- // Пробуем распознать как число.
- lem::zbool it_is_number;
+    // РџСЂРѕР±СѓРµРј СЂР°СЃРїРѕР·РЅР°С‚СЊ РєР°Рє С‡РёСЃР»Рѕ.
+    lem::zbool it_is_number;
 
- if( A->Count_Lexems()==1 )
-  {
-   LEM_CHECKIT_Z( !A->empty() );
-
-   double dummy;
-
-   if( As[ A->length()-1 ]==L'%' || As[ A->length()-1 ]==L'$' )
+    if (A->Count_Lexems() == 1)
     {
-     UCString b;
-     for( int i=0; i<A->length()-1; ++i )
-      b += As[i];
+        LEM_CHECKIT_Z(!A->empty());
 
-     it_is_number = to_real( b.c_str(), &dummy );
-    }
-   else if( to_real( As, &dummy ) )
-    {
-     it_is_number = true;
-    } 
+        double dummy;
 
-   if( it_is_number )
-    {
-     static int i_number=UNKNOWN;
-
-     if( i_number==UNKNOWN )
-      i_number = GetDict().GetSynGram().FindEntry( UCString(L"number_"), ANY_STATE, false );
-
-     found_list.push_back( Word_Coord( i_number, 0 ) );
-     val_list.push_back( scoreA );
-     inf_list.push_back(NULL);
-     return true;
-    }
-  }
-
- bool ret_hit=false;
- bool precise_search_succeeded=false;
-
-/*
- if( s_gram.GetEntries().PreferPrefixSearch() )
-  {
-   const int A_len = A->length();
-
-   bool prefix_lookup_used=false;
-
-   if( lazy_load && GetDict().IsPrefixEntrySearcherAvailable() )
-    {
-     bool chars_ok=true;
-     for( int k=A->length()-1; k>=0; --k )
-      {
-       wchar_t c = (*A)[k];
-       if( c==L' ' )
+        if (As[A->length() - 1] == L'%' || As[A->length() - 1] == L'$')
         {
-         chars_ok=false;
-         break;
+            UCString b;
+            for (int i = 0; i < A->length() - 1; ++i)
+                b += As[i];
+
+            it_is_number = to_real(b.c_str(), &dummy);
         }
-      }
-      
-     if( chars_ok )
-      {
-       prefix_lookup_used=true;
-       lem::Ptr<PrefixEntrySearcher> prefix_searcher( GetDict().GetPrefixEntrySearcher( lem::int_max ) );
-       
-       lem::MCollect<int> ies;
-       prefix_searcher->Search( A->c_str(), ies );
-    
-       for( lem::Container::size_type i=0; i<ies.size(); ++i )
+        else if (to_real(As, &dummy))
         {
-         const int id_entry = ies[i];
-         const SG_Entry &E = s_gram.GetEntry(id_entry);
-    
-         if( A_len<E.GetMinLen() || A_len>E.GetMaxLen() )
-          continue;
-    
-         if( !E.GetRoot().empty() && lem_find( As, E.GetRoot().c_str() )==UNKNOWN )
-          continue;
-    
-         // Сравниваем A с лексическим содержимым словоформ.
-         const int nform = CastSizeToInt(E.forms().size());
-    
-         for( int iform=0; iform<nform; iform++ )
+            it_is_number = true;
+        }
+
+        if (it_is_number)
+        {
+            static int i_number = UNKNOWN;
+
+            if (i_number == UNKNOWN)
+                i_number = GetDict().GetSynGram().FindEntry(UCString(L"number_"), ANY_STATE, false);
+
+            found_list.push_back(Word_Coord(i_number, 0));
+            val_list.push_back(scoreA);
+            inf_list.push_back(nullptr);
+            return true;
+        }
+    }
+
+    bool ret_hit = false;
+    bool precise_search_succeeded = false;
+
+    /*
+     if( s_gram.GetEntries().PreferPrefixSearch() )
+      {
+       const int A_len = A->length();
+
+       bool prefix_lookup_used=false;
+
+       if( lazy_load && GetDict().IsPrefixEntrySearcherAvailable() )
+        {
+         bool chars_ok=true;
+         for( int k=A->length()-1; k>=0; --k )
           {
-           if( *A==E.forms()[iform].name() )
+           wchar_t c = (*A)[k];
+           if( c==L' ' )
             {
-             found_list.push_back( Word_Coord(id_entry,iform) );
-             val_list.push_back( relA );
-             inf_list.push_back(NULL);
-             ret_hit=true;
-             precise_search_succeeded=true;
+             chars_ok=false;
+             break;
             }
           }
-        }
-      }
-    }
 
-   if( !prefix_lookup_used )
-    {
-     // Берем первый символ A и отыскиваем в Таблице Быстрого Поиска соответствующий
-     // элемент, который содержит список индексов статей, лексическое содержимое
-     // словоформ которых начинается с той же буквы.
-     lem::Ptr<WordEntryEnumerator> wenum( s_gram.GetEntries().ListEntries( SG_EntryGroup::BuildKey(*A) ) );
-  
-     while( wenum->Fetch() )
-      {
-       const int ientry = wenum->GetId();
-  
-       const SG_Entry &E = wenum->GetItem();
-  
-       // Проверяем второй критерий: длина мультилексемы A должна попасть
-       // в диапазон для словоформ статьи.
-       if( A_len<E.GetMinLen() || A_len>E.GetMaxLen() )
-        continue;
-  
-       // Если корень статьи есть, то он должен присутствовать в лексеме.
-       if( !E.GetRoot().empty() && lem_find( As, E.GetRoot().c_str() )==UNKNOWN )
-        continue;
-  
-       // Сравниваем A с лексическим содержимым словоформ.
-       const int nform = CastSizeToInt(E.forms().size());
-  
-       for( int iform=0; iform<nform; iform++ )
-        {
-         if( *A==E.forms()[iform].name() )
+         if( chars_ok )
           {
-           found_list.push_back( Word_Coord(ientry,iform) );
-           val_list.push_back( relA );
-           inf_list.push_back(NULL);
-           ret_hit=true;
-           precise_search_succeeded=true;
-          }
-        }
-      }
-    }
-  }
- else*/
-  {
-   lem::Ptr<WordFormEnumerator> fenum( s_gram.GetEntries().ListWordForms( *A, false ) );
+           prefix_lookup_used=true;
+           lem::Ptr<PrefixEntrySearcher> prefix_searcher( GetDict().GetPrefixEntrySearcher( lem::int_max ) );
 
-   while( fenum->Fetch() )
-    {
-     const int ientry = fenum->GetEntryKey();
-     const int iform = fenum->GetFormIndex();
+           lem::MCollect<int> ies;
+           prefix_searcher->Search( A->c_str(), ies );
 
-     found_list.push_back( Word_Coord(ientry,iform) );
-     val_list.push_back( scoreA );
-     inf_list.push_back(NULL);
-     ret_hit=true;
-     precise_search_succeeded=true;
-    }
-  }
-
-
- if( ret_hit && use_recognition_rules)
-  {
-   // применим только особую группу ОБЯЗАТЕЛЬНЫХ правил.
-   recognizer->Apply( *A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, true, trace );
-  }
-
- if( !ret_hit && use_recognition_rules )
-  {
-   // найти ничего не удалось.
-
-   #if defined SOL_CAA
-   // может это известная опечатка?
-   lem::MCollect<lem::UCString> corrected_word;
-   if( FindMisspeltWord( *A, corrected_word, id_lang ) )
-    {
-     // да, пробуем теперь проекцию скорректированного слова
-     for( lem::Container::size_type i2=0; i2<corrected_word.size(); ++i2 )
-      {
-       RC_Lexem word2( new Lexem( corrected_word[i2] ) );
-
-       if( Project_1(
-                     word2,
-                     original_word,
-                     0.0f,
-                     found_list,
-                     val_list,
-                     inf_list,
-                     do_update_cache,
-                     false,
-                     false,
-                     id_lang,
-                     trace
-                     ) )
-        {
-         ret_hit=true;
-         precise_search_succeeded=true;
-        }
-      }
-    }
-   #endif
-
-   bool recognizer_applied=false;
-   if( !ret_hit )
-    {
-     // пробуем применить точные правила распознавания, например для слов типа "123-е"
-     ret_hit = recognizer_applied = recognizer->Apply( *A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, false, trace );
-     LEM_CHECKIT_Z( found_list.size()==val_list.size() );
-     LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
-    }
-
-   #if defined SOL_CAA
-   if( (recognizer_applied || !ret_hit) && allow_fuzzy )
-    {
-     // нечеткая проекция разрешена, можем попробовать найти слова с опечатками, взяв суперпозицию.
-   
-     MCollect<Word_Coord> found_list2;
-     MCollect<ProjScore> val_list2;
-     PtrCollect<LA_ProjectInfo> inf_list2;
-
-     if( Project_3( A, original_word, scoreA, found_list2, val_list2, inf_list2, id_lang, trace ) )
-      {
-       #if LEM_DEBUGGING==1
-       for( int q=0; q<found_list2.size(); ++q )
-       {
-        const SG_Entry & eq = s_gram.GetEntry( found_list2[q].GetEntry() );
-        lem::mout->printf( "#%d --> %us\n", q, eq.GetName().c_str() );
-       }
-       #endif
-
-       lem::MCollect<int> quantor_deletion_flag;
-       quantor_deletion_flag.resize( found_list.size() );
-       quantor_deletion_flag.Nullify();
-       bool delete_quantors=false;
-
-       for( lem::Container::size_type k=0; k<found_list.size(); ++k )
-        {
-         if( inf_list[k]!=NULL )
-          {
-           const int ekey1 = found_list[k].GetEntry();
-           const SG_Entry &e1 = s_gram.GetEntry( ekey1 );
-           const int id_class1 = e1.GetClass();
-        
-           const CP_Array & coords1 = inf_list[k]->coords;
-
-           for( lem::Container::size_type l=0; l<found_list2.size(); ++l )
+           for( lem::Container::size_type i=0; i<ies.size(); ++i )
             {
-             const int ekey2 = found_list2[l].GetEntry();
-             if( ekey1!=ekey2 )
-              {
-               if( inf_list2[l]==NULL )
-                {
-                 const SG_Entry &e2 = s_gram.GetEntry( ekey2 );
-                 const int id_class2 = e2.GetClass();
-        
-                 if( id_class1==id_class2 )
-                  {
-                   // сопоставим грамматические координатные пары.
-                   const SG_EntryForm &f2 = e2.forms()[ found_list2[l].GetForm() ];
+             const int id_entry = ies[i];
+             const SG_Entry &E = s_gram.GetEntry(id_entry);
 
-                   if( f2.coords().size() == coords1.size() )
-                    {
-                     if( f2.does_match( coords1 ) )
-                      {
-                       // если кванторный результат распознавания полностью соответствует по координатным парам
-                       // найденному реальному слову, то квантор можем выкинуть.
-                       quantor_deletion_flag[k]=1;
-                       delete_quantors = true;
-                      }
-                    }
-                  }       
+             if( A_len<E.GetMinLen() || A_len>E.GetMaxLen() )
+              continue;
+
+             if( !E.GetRoot().empty() && lem_find( As, E.GetRoot().c_str() )==UNKNOWN )
+              continue;
+
+             // РЎСЂР°РІРЅРёРІР°РµРј A СЃ Р»РµРєСЃРёС‡РµСЃРєРёРј СЃРѕРґРµСЂР¶РёРјС‹Рј СЃР»РѕРІРѕС„РѕСЂРј.
+             const int nform = CastSizeToInt(E.forms().size());
+
+             for( int iform=0; iform<nform; iform++ )
+              {
+               if( *A==E.forms()[iform].name() )
+                {
+                 found_list.push_back( Word_Coord(id_entry,iform) );
+                 val_list.push_back( relA );
+                 inf_list.push_back(NULL);
+                 ret_hit=true;
+                 precise_search_succeeded=true;
                 }
               }
             }
           }
         }
 
-       if( delete_quantors )
+       if( !prefix_lookup_used )
         {
-         for( int k=CastSizeToInt(found_list.size())-1; k>=0; --k )
-          if( quantor_deletion_flag[k]==1 )
-           {
-            quantor_deletion_flag.Remove(k);
-            found_list.Remove(k);
-            val_list.Remove(k);
-            inf_list.Remove(k);
-           }
-        }
+         // Р‘РµСЂРµРј РїРµСЂРІС‹Р№ СЃРёРјРІРѕР» A Рё РѕС‚С‹СЃРєРёРІР°РµРј РІ РўР°Р±Р»РёС†Рµ Р‘С‹СЃС‚СЂРѕРіРѕ РџРѕРёСЃРєР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№
+         // СЌР»РµРјРµРЅС‚, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ СЃРїРёСЃРѕРє РёРЅРґРµРєСЃРѕРІ СЃС‚Р°С‚РµР№, Р»РµРєСЃРёС‡РµСЃРєРѕРµ СЃРѕРґРµСЂР¶РёРјРѕРµ
+         // СЃР»РѕРІРѕС„РѕСЂРј РєРѕС‚РѕСЂС‹С… РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ С‚РѕР№ Р¶Рµ Р±СѓРєРІС‹.
+         lem::Ptr<WordEntryEnumerator> wenum( s_gram.GetEntries().ListEntries( SG_EntryGroup::BuildKey(*A) ) );
 
-       for( lem::Container::size_type k=0; k<found_list2.size(); ++k )
-        {
-         if( found_list.empty() )
+         while( wenum->Fetch() )
           {
-           found_list.push_back( found_list2[k] );
-           val_list.push_back( val_list2[k] );
-           inf_list.push_back( inf_list2[k] );
-           inf_list2[k] = NULL;
-          }
-         else
-          {
-           found_list.Insert( 0, found_list2[k] );
-           val_list.Insert( 0, val_list2[k] );
-           inf_list.Insert( 0, inf_list2[k] );
-           inf_list2[k] = NULL;
-          }
-        }
-      }
-    }
-   #endif
-  }
+           const int ientry = wenum->GetId();
 
+           const SG_Entry &E = wenum->GetItem();
 
- if( ret_hit )
-  {
-   if( precise_search_succeeded && found_list.size()>1 )
-    {
-     int id_language_found=id_lang;
-     int n_lang=0;
+           // РџСЂРѕРІРµСЂСЏРµРј РІС‚РѕСЂРѕР№ РєСЂРёС‚РµСЂРёР№: РґР»РёРЅР° РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ A РґРѕР»Р¶РЅР° РїРѕРїР°СЃС‚СЊ
+           // РІ РґРёР°РїР°Р·РѕРЅ РґР»СЏ СЃР»РѕРІРѕС„РѕСЂРј СЃС‚Р°С‚СЊРё.
+           if( A_len<E.GetMinLen() || A_len>E.GetMaxLen() )
+            continue;
 
-     if( id_language_found==UNKNOWN )
-      {
-       SynGram &sg = GetSynGram();
+           // Р•СЃР»Рё РєРѕСЂРµРЅСЊ СЃС‚Р°С‚СЊРё РµСЃС‚СЊ, С‚Рѕ РѕРЅ РґРѕР»Р¶РµРЅ РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ РІ Р»РµРєСЃРµРјРµ.
+           if( !E.GetRoot().empty() && lem_find( As, E.GetRoot().c_str() )==UNKNOWN )
+            continue;
 
-       for( lem::Container::size_type i=0; i<found_list.size(); ++i )
-        {
-         const SG_Entry &e = sg.GetEntry(found_list[i].GetEntry());
-         const int id_class = e.GetClass();
-         const int class_lang = sg.GetClass(id_class).GetLanguage();
-         if( class_lang!=UNKNOWN )
-          {
-           if( id_language_found==UNKNOWN )
+           // РЎСЂР°РІРЅРёРІР°РµРј A СЃ Р»РµРєСЃРёС‡РµСЃРєРёРј СЃРѕРґРµСЂР¶РёРјС‹Рј СЃР»РѕРІРѕС„РѕСЂРј.
+           const int nform = CastSizeToInt(E.forms().size());
+
+           for( int iform=0; iform<nform; iform++ )
             {
-             n_lang=1;
-             id_language_found=class_lang;
-            }
-           else
-            {
-             if( id_language_found!=class_lang )
+             if( *A==E.forms()[iform].name() )
               {
-               n_lang++;
-               break;
+               found_list.push_back( Word_Coord(ientry,iform) );
+               val_list.push_back( relA );
+               inf_list.push_back(NULL);
+               ret_hit=true;
+               precise_search_succeeded=true;
               }
             }
           }
         }
       }
-     else
-      {
-       n_lang=1;
-      }
+     else*/
+    {
+        std::unique_ptr<WordFormEnumerator> fenum(s_gram.GetEntries().ListWordForms(*A, false));
 
-     if( n_lang==1 && IsLanguageWithOptionalDiaktiriks(id_language_found) )
-      {
-       // просмотрим ёфикацию и попробуем отфильтровать
-     
-       #if defined LEM_THREADS
-       lem::Process::RWU_ReaderGuard rlock(cs_lang_optional_diacritics);
-       #endif
-     
-       const lem::UFString & chars = optional_diacritics_for_languages.find(id_language_found)->second;
-       const int aux_type_id = optional_diacritics_aux_type.find(id_language_found)->second;
-     
-       // хоть один из перечисленных в chars символов есть в исходном слове?
-       bool has_trigger_chars=false;
-       for( int i=0; i<chars.size(); ++i )
-        if( original_word.find( chars[i] ) )
-         {
-          has_trigger_chars=true;
-          break;
-         }
-     
-       if( has_trigger_chars )
+        while (fenum->Fetch())
         {
-         int n_diacritic_hits=0;
-         lem::MCollect<int> form_matching;
-     
-         lem::UFString aux_form;
-         SynGram &sg = GetSynGram();
-         for( lem::Container::size_type i=0; i<found_list.size(); ++i )
-          {
-           form_matching.push_back( 0 );
-     
-           if( sg.GetAuxForm( found_list[i].GetEntry(), found_list[i].GetForm(), aux_type_id, aux_form ) )
-            {
-             const bool match = MatchWithoutSpaces( aux_form.c_str(), original_word.c_str() );
-             if( match )
-              {
-               n_diacritic_hits++;
-               form_matching.back()=1;
-              }
-            }
-          }
-     
-         // если есть хотя бы одно совпадение с aux-формой, то оставляем только совпадающие формы.
-         if( n_diacritic_hits>0 )
-          {
-           for( int k=CastSizeToInt(found_list.size())-1; k>=0; --k )
-            {
-             if( form_matching[k]==0 )
-              {
-               found_list.Remove(k);
-               val_list.Remove(k);
-               inf_list.Remove(k);
-              }
-            }
-          }
+            const int ientry = fenum->GetEntryKey();
+            const int iform = fenum->GetFormIndex();
+
+            found_list.push_back(Word_Coord(ientry, iform));
+            val_list.push_back(scoreA);
+            inf_list.push_back(nullptr);
+            ret_hit = true;
+            precise_search_succeeded = true;
         }
-      }
     }
 
-   if( refresh_cache )
-    {
-     // Обновляем кэш осуществленных проекций.
-     #if defined LEM_THREADS
-     lem::Process::CritSecLocker locker(&cs); 
-     #endif
 
-     if( !found_list.empty() )
-      word_proj->Add( LA_WordProjection( A, found_list, val_list, 1 ) );
+    if (ret_hit && use_recognition_rules)
+    {
+        // РїСЂРёРјРµРЅРёРј С‚РѕР»СЊРєРѕ РѕСЃРѕР±СѓСЋ РіСЂСѓРїРїСѓ РћР‘РЇР—РђРўР•Р›Р¬РќР«РҐ РїСЂР°РІРёР».
+        recognizer->Apply(*A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, true, trace);
     }
-  }
 
- LEM_CHECKIT_Z( found_list.size()==val_list.size() );
- LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
-
-
- /*
- #if LEM_DEBUGGING==1
- for( int i=0; i<inf_list.size(); ++i )
-  {
-   lem::mout->printf( "proj #%d :-> val=%s coords=", i, lem::to_str(val_list[i].val).c_str() );
-   if( inf_list[i]!=NULL )
+    if (!ret_hit && use_recognition_rules)
     {
-     for( int j=0; j<inf_list[i]->coords.size(); ++j )
+        // РЅР°Р№С‚Рё РЅРёС‡РµРіРѕ РЅРµ СѓРґР°Р»РѕСЃСЊ.
+
+#if defined SOL_CAA
+// РјРѕР¶РµС‚ СЌС‚Рѕ РёР·РІРµСЃС‚РЅР°СЏ РѕРїРµС‡Р°С‚РєР°?
+        lem::MCollect<lem::UCString> corrected_word;
+        if (FindMisspeltWord(*A, corrected_word, id_lang))
+        {
+            // РґР°, РїСЂРѕР±СѓРµРј С‚РµРїРµСЂСЊ РїСЂРѕРµРєС†РёСЋ СЃРєРѕСЂСЂРµРєС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ СЃР»РѕРІР°
+            for (lem::Container::size_type i2 = 0; i2 < corrected_word.size(); ++i2)
+            {
+                RC_Lexem word2(new Lexem(corrected_word[i2]));
+
+                if (Project_1(
+                    word2,
+                    original_word,
+                    0.0f,
+                    found_list,
+                    val_list,
+                    inf_list,
+                    do_update_cache,
+                    false,
+                    false,
+                    id_lang,
+                    trace
+                ))
+                {
+                    ret_hit = true;
+                    precise_search_succeeded = true;
+                }
+            }
+        }
+#endif
+
+        bool recognizer_applied = false;
+        if (!ret_hit)
+        {
+            // РїСЂРѕР±СѓРµРј РїСЂРёРјРµРЅРёС‚СЊ С‚РѕС‡РЅС‹Рµ РїСЂР°РІРёР»Р° СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ, РЅР°РїСЂРёРјРµСЂ РґР»СЏ СЃР»РѕРІ С‚РёРїР° "123-Рµ"
+            ret_hit = recognizer_applied = recognizer->Apply(*A, original_word, scoreA, 0.0f, found_list, val_list, inf_list, id_lang, false, trace);
+            LEM_CHECKIT_Z(found_list.size() == val_list.size());
+            LEM_CHECKIT_Z(found_list.size() == inf_list.size());
+        }
+
+#if defined SOL_CAA
+        if ((recognizer_applied || !ret_hit) && allow_fuzzy)
+        {
+            // РЅРµС‡РµС‚РєР°СЏ РїСЂРѕРµРєС†РёСЏ СЂР°Р·СЂРµС€РµРЅР°, РјРѕР¶РµРј РїРѕРїСЂРѕР±РѕРІР°С‚СЊ РЅР°Р№С‚Рё СЃР»РѕРІР° СЃ РѕРїРµС‡Р°С‚РєР°РјРё, РІР·СЏРІ СЃСѓРїРµСЂРїРѕР·РёС†РёСЋ.
+
+            MCollect<Word_Coord> found_list2;
+            MCollect<ProjScore> val_list2;
+            PtrCollect<LA_ProjectInfo> inf_list2;
+
+            if (Project_3(A, original_word, scoreA, found_list2, val_list2, inf_list2, id_lang, trace))
+            {
+#if LEM_DEBUGGING==1
+                for (int q = 0; q < found_list2.size(); ++q)
+                {
+                    const SG_Entry & eq = s_gram.GetEntry(found_list2[q].GetEntry());
+                    lem::mout->printf("#%d --> %us\n", q, eq.GetName().c_str());
+                }
+#endif
+
+                lem::MCollect<int> quantor_deletion_flag;
+                quantor_deletion_flag.resize(found_list.size());
+                quantor_deletion_flag.Nullify();
+                bool delete_quantors = false;
+
+                for (lem::Container::size_type k = 0; k < found_list.size(); ++k)
+                {
+                    if (inf_list[k] != nullptr)
+                    {
+                        const int ekey1 = found_list[k].GetEntry();
+                        const SG_Entry &e1 = s_gram.GetEntry(ekey1);
+                        const int id_class1 = e1.GetClass();
+
+                        const CP_Array & coords1 = inf_list[k]->coords;
+
+                        for (lem::Container::size_type l = 0; l < found_list2.size(); ++l)
+                        {
+                            const int ekey2 = found_list2[l].GetEntry();
+                            if (ekey1 != ekey2)
+                            {
+                                if (inf_list2[l] == nullptr)
+                                {
+                                    const SG_Entry &e2 = s_gram.GetEntry(ekey2);
+                                    const int id_class2 = e2.GetClass();
+
+                                    if (id_class1 == id_class2)
+                                    {
+                                        // СЃРѕРїРѕСЃС‚Р°РІРёРј РіСЂР°РјРјР°С‚РёС‡РµСЃРєРёРµ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рµ РїР°СЂС‹.
+                                        const SG_EntryForm &f2 = e2.forms()[found_list2[l].GetForm()];
+
+                                        if (f2.coords().size() == coords1.size())
+                                        {
+                                            if (f2.does_match(coords1))
+                                            {
+                                                // РµСЃР»Рё РєРІР°РЅС‚РѕСЂРЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ РїРѕР»РЅРѕСЃС‚СЊСЋ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рј РїР°СЂР°Рј
+                                                // РЅР°Р№РґРµРЅРЅРѕРјСѓ СЂРµР°Р»СЊРЅРѕРјСѓ СЃР»РѕРІСѓ, С‚Рѕ РєРІР°РЅС‚РѕСЂ РјРѕР¶РµРј РІС‹РєРёРЅСѓС‚СЊ.
+                                                quantor_deletion_flag[k] = 1;
+                                                delete_quantors = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (delete_quantors)
+                {
+                    for (int k = CastSizeToInt(found_list.size()) - 1; k >= 0; --k)
+                        if (quantor_deletion_flag[k] == 1)
+                        {
+                            quantor_deletion_flag.Remove(k);
+                            found_list.Remove(k);
+                            val_list.Remove(k);
+                            inf_list.Remove(k);
+                        }
+                }
+
+                for (lem::Container::size_type k = 0; k < found_list2.size(); ++k)
+                {
+                    if (found_list.empty())
+                    {
+                        found_list.push_back(found_list2[k]);
+                        val_list.push_back(val_list2[k]);
+                        inf_list.push_back(inf_list2[k]);
+                        inf_list2[k] = nullptr;
+                    }
+                    else
+                    {
+                        found_list.Insert(0, found_list2[k]);
+                        val_list.Insert(0, val_list2[k]);
+                        inf_list.Insert(0, inf_list2[k]);
+                        inf_list2[k] = nullptr;
+                    }
+                }
+            }
+        }
+#endif
+    }
+
+
+    if (ret_hit)
+    {
+        if (precise_search_succeeded && found_list.size() > 1)
+        {
+            int id_language_found = id_lang;
+            int n_lang = 0;
+
+            if (id_language_found == UNKNOWN)
+            {
+                SynGram &sg = GetSynGram();
+
+                for (lem::Container::size_type i = 0; i < found_list.size(); ++i)
+                {
+                    const SG_Entry &e = sg.GetEntry(found_list[i].GetEntry());
+                    const int id_class = e.GetClass();
+                    const int class_lang = sg.GetClass(id_class).GetLanguage();
+                    if (class_lang != UNKNOWN)
+                    {
+                        if (id_language_found == UNKNOWN)
+                        {
+                            n_lang = 1;
+                            id_language_found = class_lang;
+                        }
+                        else
+                        {
+                            if (id_language_found != class_lang)
+                            {
+                                n_lang++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                n_lang = 1;
+            }
+
+            if (n_lang == 1 && IsLanguageWithOptionalDiaktiriks(id_language_found))
+            {
+                // РїСЂРѕСЃРјРѕС‚СЂРёРј С‘С„РёРєР°С†РёСЋ Рё РїРѕРїСЂРѕР±СѓРµРј РѕС‚С„РёР»СЊС‚СЂРѕРІР°С‚СЊ
+
+#if defined LEM_THREADS
+                lem::Process::RWU_ReaderGuard rlock(cs_lang_optional_diacritics);
+#endif
+
+                const lem::UFString & chars = optional_diacritics_for_languages.find(id_language_found)->second;
+                const int aux_type_id = optional_diacritics_aux_type.find(id_language_found)->second;
+
+                // С…РѕС‚СЊ РѕРґРёРЅ РёР· РїРµСЂРµС‡РёСЃР»РµРЅРЅС‹С… РІ chars СЃРёРјРІРѕР»РѕРІ РµСЃС‚СЊ РІ РёСЃС…РѕРґРЅРѕРј СЃР»РѕРІРµ?
+                bool has_trigger_chars = false;
+                for (int i = 0; i < chars.size(); ++i)
+                    if (original_word.find(chars[i]))
+                    {
+                        has_trigger_chars = true;
+                        break;
+                    }
+
+                if (has_trigger_chars)
+                {
+                    int n_diacritic_hits = 0;
+                    lem::MCollect<int> form_matching;
+
+                    lem::UFString aux_form;
+                    SynGram &sg = GetSynGram();
+                    for (lem::Container::size_type i = 0; i < found_list.size(); ++i)
+                    {
+                        form_matching.push_back(0);
+
+                        if (sg.GetAuxForm(found_list[i].GetEntry(), found_list[i].GetForm(), aux_type_id, aux_form))
+                        {
+                            const bool match = MatchWithoutSpaces(aux_form.c_str(), original_word.c_str());
+                            if (match)
+                            {
+                                n_diacritic_hits++;
+                                form_matching.back() = 1;
+                            }
+                        }
+                    }
+
+                    // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ СЃРѕРІРїР°РґРµРЅРёРµ СЃ aux-С„РѕСЂРјРѕР№, С‚Рѕ РѕСЃС‚Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ СЃРѕРІРїР°РґР°СЋС‰РёРµ С„РѕСЂРјС‹.
+                    if (n_diacritic_hits > 0)
+                    {
+                        for (int k = CastSizeToInt(found_list.size()) - 1; k >= 0; --k)
+                        {
+                            if (form_matching[k] == 0)
+                            {
+                                found_list.Remove(k);
+                                val_list.Remove(k);
+                                inf_list.Remove(k);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (refresh_cache)
+        {
+            // РћР±РЅРѕРІР»СЏРµРј РєСЌС€ РѕСЃСѓС‰РµСЃС‚РІР»РµРЅРЅС‹С… РїСЂРѕРµРєС†РёР№.
+#if defined LEM_THREADS
+            lem::Process::CritSecLocker locker(&cs);
+#endif
+
+            if (!found_list.empty())
+                word_proj->Add(LA_WordProjection(A, found_list, val_list, 1));
+        }
+    }
+
+    LEM_CHECKIT_Z(found_list.size() == val_list.size());
+    LEM_CHECKIT_Z(found_list.size() == inf_list.size());
+
+
+    /*
+    #if LEM_DEBUGGING==1
+    for( int i=0; i<inf_list.size(); ++i )
      {
-      lem::mout->printf( " %d:%d", inf_list[i]->coords[j].GetCoord().GetIndex(), inf_list[i]->coords[j].GetState() );
+      lem::mout->printf( "proj #%d :-> val=%s coords=", i, lem::to_str(val_list[i].val).c_str() );
+      if( inf_list[i]!=NULL )
+       {
+        for( int j=0; j<inf_list[i]->coords.size(); ++j )
+        {
+         lem::mout->printf( " %d:%d", inf_list[i]->coords[j].GetCoord().GetIndex(), inf_list[i]->coords[j].GetState() );
+        }
+       }
+
+      lem::mout->printf("\n");
      }
-    }
+    #endif
+    */
 
-   lem::mout->printf("\n");
-  }
- #endif
- */
-
- return ret_hit;
+    return ret_hit;
 }
 
 
@@ -1320,324 +1327,324 @@ bool LexicalAutomat::Project_1(
 #if defined SOL_CAA
 /************************************************************************
 
-             Нечеткая проекция мультилексемы A на Лексикон.
+             РќРµС‡РµС‚РєР°СЏ РїСЂРѕРµРєС†РёСЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ A РЅР° Р›РµРєСЃРёРєРѕРЅ.
 
- В этой процедуре мы, к сожалению, не имеем возможности использовать
- Таблицу Быстрого Поиска, так как и первая буква может быть пропущена или
- искажена. Однако продолжают быть полезными некоторые критерии алгоритма
- быстрого проецирования.
+ Р’ СЌС‚РѕР№ РїСЂРѕС†РµРґСѓСЂРµ РјС‹, Рє СЃРѕР¶Р°Р»РµРЅРёСЋ, РЅРµ РёРјРµРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+ РўР°Р±Р»РёС†Сѓ Р‘С‹СЃС‚СЂРѕРіРѕ РџРѕРёСЃРєР°, С‚Р°Рє РєР°Рє Рё РїРµСЂРІР°СЏ Р±СѓРєРІР° РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРѕРїСѓС‰РµРЅР° РёР»Рё
+ РёСЃРєР°Р¶РµРЅР°. РћРґРЅР°РєРѕ РїСЂРѕРґРѕР»Р¶Р°СЋС‚ Р±С‹С‚СЊ РїРѕР»РµР·РЅС‹РјРё РЅРµРєРѕС‚РѕСЂС‹Рµ РєСЂРёС‚РµСЂРёРё Р°Р»РіРѕСЂРёС‚РјР°
+ Р±С‹СЃС‚СЂРѕРіРѕ РїСЂРѕРµС†РёСЂРѕРІР°РЅРёСЏ.
 
- A - проецируемая мультилексема.
+ A - РїСЂРѕРµС†РёСЂСѓРµРјР°СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјР°.
 
- nmissmax - Параметр определяет, на сколько букв может отличаться
-            проецируемое слово и лексема в Лексиконе, чтобы признать
-            несовпадение случайной ошибкой.
+ nmissmax - РџР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚, РЅР° СЃРєРѕР»СЊРєРѕ Р±СѓРєРІ РјРѕР¶РµС‚ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ
+            РїСЂРѕРµС†РёСЂСѓРµРјРѕРµ СЃР»РѕРІРѕ Рё Р»РµРєСЃРµРјР° РІ Р›РµРєСЃРёРєРѕРЅРµ, С‡С‚РѕР±С‹ РїСЂРёР·РЅР°С‚СЊ
+            РЅРµСЃРѕРІРїР°РґРµРЅРёРµ СЃР»СѓС‡Р°Р№РЅРѕР№ РѕС€РёР±РєРѕР№.
 
- Списки found_list и val_list являются результатом работы и содержат
- соответственно координаты словоформ в Лексиконе и оценки достоверности
- проекции.
+ РЎРїРёСЃРєРё found_list Рё val_list СЏРІР»СЏСЋС‚СЃСЏ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј СЂР°Р±РѕС‚С‹ Рё СЃРѕРґРµСЂР¶Р°С‚
+ СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃР»РѕРІРѕС„РѕСЂРј РІ Р›РµРєСЃРёРєРѕРЅРµ Рё РѕС†РµРЅРєРё РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё
+ РїСЂРѕРµРєС†РёРё.
 **************************************************************************/
 void LexicalAutomat::Project_2(
-                               const RC_Lexem &A,
-                               int nmissmax,
-                               MCollect<Word_Coord> &found_list,
-                               MCollect<ProjScore> &val_list,
-                               PtrCollect<LA_ProjectInfo> &inf_list,
-                               int id_lang,
-                               LA_RecognitionTrace *trace
-                              )
+    const RC_Lexem &A,
+    int nmissmax,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo> &inf_list,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
-/*
-MultyLexem a,b;
-a.push_back( L"САБАКА" );
-b.push_back( L"СКЛАДА" );
-int rtm = CompareThem( a, b, 1 );
-*/
+    /*
+    MultyLexem a,b;
+    a.push_back( L"РЎРђР‘РђРљРђ" );
+    b.push_back( L"РЎРљР›РђР”Рђ" );
+    int rtm = CompareThem( a, b, 1 );
+    */
 
- LEM_CHECKIT_Z( found_list.size()==val_list.size() );
- LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
+    LEM_CHECKIT_Z(found_list.size() == val_list.size());
+    LEM_CHECKIT_Z(found_list.size() == inf_list.size());
 
- SynGram& s_gram = GetSynGram();
-// GraphGram& g_gram = GetGraphGram();
+    SynGram& s_gram = GetSynGram();
+    // GraphGram& g_gram = GetGraphGram();
 
- bool was_projection = false;
+    bool was_projection = false;
 
- const int A_len = A->length();
+    const int A_len = A->length();
 
- const wchar_t A_first = A->front(); // Первый символ первой лексемы
- const wchar_t A_last  = A->back(); // Последний символ последней лексемы
+    const wchar_t A_first = A->front(); // РџРµСЂРІС‹Р№ СЃРёРјРІРѕР» РїРµСЂРІРѕР№ Р»РµРєСЃРµРјС‹
+    const wchar_t A_last = A->back(); // РџРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» РїРѕСЃР»РµРґРЅРµР№ Р»РµРєСЃРµРјС‹
 
- std::set<wchar_t> Achars;
- for( int j=0; j<A->length(); j++ ) 
-  Achars.insert( (*A)[j] );
+    std::set<wchar_t> Achars;
+    for (int j = 0; j < A->length(); j++)
+        Achars.insert((*A)[j]);
 
- // Просматриваем все словарные статьи синтаксической грамматики в поиске
- // тех словоформ, длина лексического значения которых отличается от A_len
- // не более чем на NMISSMAX символов.
- lem::Ptr<WordEntryEnumerator> wenum( s_gram.GetEntries().ListEntries() ); 
- while( wenum->Fetch() )
-  {
-   const int ientry = wenum->GetId();
-   const SG_Entry &e = wenum->GetItem();
-
-   // Второй критерий: общая длина A не должна выходить за границы диапазона
-   // длин словоформ статьи более чем на nmissmax.
-   if( A_len<e.GetMinLen() && lem::Math::iabs( e.GetMinLen()-A_len ) > nmissmax )
-    continue;
-
-   if( A_len>e.GetMaxLen() && lem::Math::iabs( e.GetMaxLen()-A_len ) > nmissmax )
-    continue;
-
-   // Все буквы корня должны быть в искомой лексеме
-   const UCString &rt = e.GetRoot(); 
-   int nmiss1=0;
-   for( int j=0; j<rt.length() && nmiss1<=nmissmax; j++ )
-    if( Achars.find( rt[j] )==Achars.end() )
-     nmiss1++;
-
-   if( nmiss1>nmissmax )
-    continue;
-
-//mout.printf( "Entry: %us root=%us nmiss=%d\n", e.GetName().c_str(), e.GetRoot().c_str(), nmiss1 );
-
-   const int nform = CastSizeToInt(e.forms().size());
-
-   for( int iform=0; iform<nform; iform++ )
+    // РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј РІСЃРµ СЃР»РѕРІР°СЂРЅС‹Рµ СЃС‚Р°С‚СЊРё СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕР№ РіСЂР°РјРјР°С‚РёРєРё РІ РїРѕРёСЃРєРµ
+    // С‚РµС… СЃР»РѕРІРѕС„РѕСЂРј, РґР»РёРЅР° Р»РµРєСЃРёС‡РµСЃРєРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РєРѕС‚РѕСЂС‹С… РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ A_len
+    // РЅРµ Р±РѕР»РµРµ С‡РµРј РЅР° NMISSMAX СЃРёРјРІРѕР»РѕРІ.
+    std::unique_ptr<WordEntryEnumerator> wenum(s_gram.GetEntries().ListEntries());
+    while (wenum->Fetch())
     {
-     const Lexem &B = e.forms()[iform].name();
-     const int B_len = B.length();
+        const int ientry = wenum->GetId();
+        const SG_Entry &e = wenum->GetItem();
 
-     if( lem::Math::iabs(A_len-B_len)>nmissmax )
-      continue;
+        // Р’С‚РѕСЂРѕР№ РєСЂРёС‚РµСЂРёР№: РѕР±С‰Р°СЏ РґР»РёРЅР° A РЅРµ РґРѕР»Р¶РЅР° РІС‹С…РѕРґРёС‚СЊ Р·Р° РіСЂР°РЅРёС†С‹ РґРёР°РїР°Р·РѕРЅР°
+        // РґР»РёРЅ СЃР»РѕРІРѕС„РѕСЂРј СЃС‚Р°С‚СЊРё Р±РѕР»РµРµ С‡РµРј РЅР° nmissmax.
+        if (A_len<e.GetMinLen() && lem::Math::iabs(e.GetMinLen() - A_len) > nmissmax)
+            continue;
 
-     bool does_match=false;
-     Real1 value(0);
+        if (A_len > e.GetMaxLen() && lem::Math::iabs(e.GetMaxLen() - A_len) > nmissmax)
+            continue;
 
-     int ntotmiss=0;
-     Real1 equality(0);
+        // Р’СЃРµ Р±СѓРєРІС‹ РєРѕСЂРЅСЏ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ РёСЃРєРѕРјРѕР№ Р»РµРєСЃРµРјРµ
+        const UCString &rt = e.GetRoot();
+        int nmiss1 = 0;
+        for (int j = 0; j < rt.length() && nmiss1 <= nmissmax; j++)
+            if (Achars.find(rt[j]) == Achars.end())
+                nmiss1++;
 
-     // Проверяем особый случай: как известно, при чтении текста человеком
-     // он прежде всего распознает слова по первой и последней букве, а срединка
-     // может быть полностью перемешана (но при этом все буквы присутствуют).
-     // Так что и мы проверяем, совпадают ли граничные буквы, и если да -
-     // проверяем серединку.
-     // Для упрощения работы - только для однолексем.
-/*
-     if(
-        A.size()==1 && B.size()==1   &&
-        A_first == B.front().front() &&
-        A_last  == B.back().back()
-       )
-      {
-       bool go_compare=true;
+        if (nmiss1 > nmissmax)
+            continue;
 
-       // Все буквы из A должны присутствовать в B.
-       // первую и последнюю мы уже проверили, они совпадают. Проверим
-       // серединку.
+        //mout.printf( "Entry: %us root=%us nmiss=%d\n", e.GetName().c_str(), e.GetRoot().c_str(), nmiss1 );
 
-       const Lexem& LA = A->front();
+        const int nform = CastSizeToInt(e.forms().size());
 
-       // Если есть разница в длинах...
-       ntotmiss = lem_iabs(LA.length()-B.front().length());
-
-       for( int i=1; i<LA.length()-1 && go_compare; i++ )
+        for (int iform = 0; iform < nform; iform++)
         {
-         const wchar_t ch_A = LA[i];
-         bool ch_found=false;
+            const Lexem &B = e.forms()[iform].name();
+            const int B_len = B.length();
 
-         const Lexem& LB = B.front();
+            if (lem::Math::iabs(A_len - B_len) > nmissmax)
+                continue;
 
-         for( int j=1; j<LB.length()-1; j++ )
-          if( LB[j] == ch_A )
-           {
-            ch_found=true;
-            break;
-           }
+            bool does_match = false;
+            Real1 value(0);
 
-         if( !ch_found )
-          {
-           // еще один символ из A не найден. Вообще говоря, тут надо бы
-           // учитывать частоты символов - редкие символы более заметны,
-           // так что их отсутствие более весомо. Но пока ограничимся
-           // простоым алгоритмом.
-           ntotmiss++;
+            int ntotmiss = 0;
+            Real1 equality(0);
 
-           if( ntotmiss>nmissmax )
+            // РџСЂРѕРІРµСЂСЏРµРј РѕСЃРѕР±С‹Р№ СЃР»СѓС‡Р°Р№: РєР°Рє РёР·РІРµСЃС‚РЅРѕ, РїСЂРё С‡С‚РµРЅРёРё С‚РµРєСЃС‚Р° С‡РµР»РѕРІРµРєРѕРј
+            // РѕРЅ РїСЂРµР¶РґРµ РІСЃРµРіРѕ СЂР°СЃРїРѕР·РЅР°РµС‚ СЃР»РѕРІР° РїРѕ РїРµСЂРІРѕР№ Рё РїРѕСЃР»РµРґРЅРµР№ Р±СѓРєРІРµ, Р° СЃСЂРµРґРёРЅРєР°
+            // РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕР»РЅРѕСЃС‚СЊСЋ РїРµСЂРµРјРµС€Р°РЅР° (РЅРѕ РїСЂРё СЌС‚РѕРј РІСЃРµ Р±СѓРєРІС‹ РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‚).
+            // РўР°Рє С‡С‚Рѕ Рё РјС‹ РїСЂРѕРІРµСЂСЏРµРј, СЃРѕРІРїР°РґР°СЋС‚ Р»Рё РіСЂР°РЅРёС‡РЅС‹Рµ Р±СѓРєРІС‹, Рё РµСЃР»Рё РґР° -
+            // РїСЂРѕРІРµСЂСЏРµРј СЃРµСЂРµРґРёРЅРєСѓ.
+            // Р”Р»СЏ СѓРїСЂРѕС‰РµРЅРёСЏ СЂР°Р±РѕС‚С‹ - С‚РѕР»СЊРєРѕ РґР»СЏ РѕРґРЅРѕР»РµРєСЃРµРј.
+       /*
+            if(
+               A.size()==1 && B.size()==1   &&
+               A_first == B.front().front() &&
+               A_last  == B.back().back()
+              )
+             {
+              bool go_compare=true;
+
+              // Р’СЃРµ Р±СѓРєРІС‹ РёР· A РґРѕР»Р¶РЅС‹ РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ РІ B.
+              // РїРµСЂРІСѓСЋ Рё РїРѕСЃР»РµРґРЅСЋСЋ РјС‹ СѓР¶Рµ РїСЂРѕРІРµСЂРёР»Рё, РѕРЅРё СЃРѕРІРїР°РґР°СЋС‚. РџСЂРѕРІРµСЂРёРј
+              // СЃРµСЂРµРґРёРЅРєСѓ.
+
+              const Lexem& LA = A->front();
+
+              // Р•СЃР»Рё РµСЃС‚СЊ СЂР°Р·РЅРёС†Р° РІ РґР»РёРЅР°С…...
+              ntotmiss = lem_iabs(LA.length()-B.front().length());
+
+              for( int i=1; i<LA.length()-1 && go_compare; i++ )
+               {
+                const wchar_t ch_A = LA[i];
+                bool ch_found=false;
+
+                const Lexem& LB = B.front();
+
+                for( int j=1; j<LB.length()-1; j++ )
+                 if( LB[j] == ch_A )
+                  {
+                   ch_found=true;
+                   break;
+                  }
+
+                if( !ch_found )
+                 {
+                  // РµС‰Рµ РѕРґРёРЅ СЃРёРјРІРѕР» РёР· A РЅРµ РЅР°Р№РґРµРЅ. Р’РѕРѕР±С‰Рµ РіРѕРІРѕСЂСЏ, С‚СѓС‚ РЅР°РґРѕ Р±С‹
+                  // СѓС‡РёС‚С‹РІР°С‚СЊ С‡Р°СЃС‚РѕС‚С‹ СЃРёРјРІРѕР»РѕРІ - СЂРµРґРєРёРµ СЃРёРјРІРѕР»С‹ Р±РѕР»РµРµ Р·Р°РјРµС‚РЅС‹,
+                  // С‚Р°Рє С‡С‚Рѕ РёС… РѕС‚СЃСѓС‚СЃС‚РІРёРµ Р±РѕР»РµРµ РІРµСЃРѕРјРѕ. РќРѕ РїРѕРєР° РѕРіСЂР°РЅРёС‡РёРјСЃСЏ
+                  // РїСЂРѕСЃС‚РѕС‹Рј Р°Р»РіРѕСЂРёС‚РјРѕРј.
+                  ntotmiss++;
+
+                  if( ntotmiss>nmissmax )
+                   {
+                    does_match = false;
+                    go_compare = false;
+                    break;
+                   }
+                 }
+               }
+
+              if( ntotmiss<=nmissmax )
+               {
+                // РћС‚Р»РёС‡РёРµ СЃР»РѕРІ РІ РїСЂРµРґРµР»Р°С… РґРѕРїСѓСЃС‚РёРјРѕРіРѕ
+                does_match = true;
+               }
+             }
+            else
+       */
             {
-             does_match = false;
-             go_compare = false;
-             break;
+                // РЈРјРЅР°СЏ РїСЂРѕРІРµСЂРєР° РЅРµ РїСЂРѕС€Р»Р°. Р’С‹РїРѕР»РЅСЏРµРј РјРµС…Р°РЅРёС‡РµСЃРєСѓСЋ РїСЂРѕРІРµСЂРєСѓ, РЅРµ РёРјРµСЋС‰СѓСЋ
+                // РїСЃРёС…РѕР»РѕРіРёС‡РµСЃРєРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ, РЅРѕ РєРѕСЂСЂРµРєС‚РЅСѓСЋ РІ С„РѕСЂРјР°Р»СЊРЅРѕ-РјР°С‚РµРјР°С‚РёС‡РµСЃРєРѕРј
+                // СЃРјС‹СЃР»Рµ.
+                ntotmiss = CompareThem(*A, B, id_lang, nmissmax, &equality);
+                does_match = ntotmiss <= nmissmax;
             }
-          }
-        }
 
-       if( ntotmiss<=nmissmax )
+            // Р”РѕР±Р°РІР»СЏРµРј СЃР»РѕРІРѕС„РѕСЂРјСѓ Рє СЃРїРёСЃРєСѓ РЅР°Р№РґРµРЅРЅС‹С….
+            if (does_match)
+            {
+
+                //mout.printf( "[%us] -> [%us] miss=%d\n", A->string().c_str(), B.string().c_str(), ntotmiss );
+                // --------------------------------------------------------------------------
+                // Р Р°СЃС‡РёС‚С‹РІР°РµРј РѕС†РµРЅРєСѓ РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё РЅРµС‡РµС‚РєРѕР№ РїСЂРѕРµРєС†РёРё:
+                //
+                //          РґР»РёРЅР°_СЃР»РѕРІР° - С‡РёСЃР»Рѕ_РѕС‚Р»РёС‡РёР№   min(РґР»РёРЅР°_СЃР»РѕРІР°,РґР»РёРЅР°_СЃР»РѕРІРѕС„РѕСЂРјС‹)
+                // РѕС†РµРЅРєР°=  --------------------------- * -----------------------------------
+                //                  РґР»РёРЅР°_СЃР»РѕРІР°           max(РґР»РёРЅР°_СЃР»РѕРІР°,РґР»РёРЅР°_СЃР»РѕРІРѕС„РѕСЂРјС‹)
+                //
+                // --------------------------------------------------------------------------
+                const Real1 value1 = ntotmiss > A_len ?
+                    Real1(0) :
+                    (
+                        equality != 0 ?
+                        equality :
+                        Real1((A_len - ntotmiss) * 100 / A_len)
+                        );
+
+                const Real1 value2(lem::min(A_len, B_len) * 100 / lem::max(A_len, B_len));
+
+                value = value1*value2; // РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ РїСЂРѕРµРєС†РёРё
+
+                // РѕС‚СЃРµРІ РІР°СЂРёР°РЅС‚РѕРІ РїСЂРѕРµРєС†РёРё РїРѕ РіСЂР°РЅРёС‡РЅРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё.
+                //if( value < MIN_PROJ_R )
+                // continue;
+
+                const Word_Coord WC(ientry, iform);
+
+                bool already = false;
+                const int nfl = CastSizeToInt(found_list.size());
+                for (int ii = 0; ii < nfl && !already; ii++)
+                    already = found_list[ii] == WC;
+
+                if (already)
+                    continue;
+
+                /*
+                       if( GetDebugLevel()>=3 )
+                       {
+                        if( !found_list.size() )
+                         lem::LogFile::logfile->eol();
+
+                        lem::LogFile::logfile->printf(
+                                                 "Fuzzy projection [%us] as [%us] value=%us int=%d ientry=%d\n"
+                                                 , A->c_str()
+                                                 , B.c_str()
+                                                 , to_ustr( value ).c_str()
+                                                 , ientry
+                                                 , iform
+                                                );
+                       }
+                */
+
+                found_list.push_back(WC);
+                val_list.push_back(Real1ToScore(value));
+                inf_list.push_back(nullptr);
+                was_projection = true;
+            } // end if
+        } // end for( iform ...
+    } // end for( ientry ...
+
+
+    if (was_projection)
+    {
+#if defined LEM_THREADS
+        lem::Process::CritSecLocker locker(&cs);
+#endif
+
+        word_proj->Add(LA_WordProjection(A, found_list, val_list, 1));
+    }
+
+    LEM_CHECKIT_Z(found_list.size() == val_list.size());
+    LEM_CHECKIT_Z(found_list.size() == inf_list.size());
+
+    return;
+}
+#endif
+
+#if defined SOL_CAA
+const EndingStat & LexicalAutomat::GetEndingStat(int id_lang)
+{
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_endings);
+#endif
+
+    int i = ending_stat_lang.find(id_lang);
+    if (i == UNKNOWN)
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
+
+        i = ending_stat_lang.find(id_lang);
+        if (i == UNKNOWN)
         {
-         // Отличие слов в пределах допустимого
-         does_match = true;
+            EndingStat stat;
+            SynGram &sg = GetDict().GetSynGram();
+            sg.GetStorage().GetEndingStat(id_lang, stat);
+            ending_stat_lang.push_back(id_lang);
+            ending_stat_data.push_back(stat);
+            return ending_stat_data.back();
         }
-      }
-     else
-*/
-      {
-       // Умная проверка не прошла. Выполняем механическую проверку, не имеющую
-       // психологического соответствия, но корректную в формально-математическом
-       // смысле.
-       ntotmiss = CompareThem( *A, B, id_lang, nmissmax, &equality );
-       does_match = ntotmiss<=nmissmax;
-      }
-
-     // Добавляем словоформу к списку найденных.
-     if( does_match )
-      {
-
-//mout.printf( "[%us] -> [%us] miss=%d\n", A->string().c_str(), B.string().c_str(), ntotmiss );
-// --------------------------------------------------------------------------
-// Расчитываем оценку достоверности нечеткой проекции:
-//
-//          длина_слова - число_отличий   min(длина_слова,длина_словоформы)
-// оценка=  --------------------------- * -----------------------------------
-//                  длина_слова           max(длина_слова,длина_словоформы)
-//
-// --------------------------------------------------------------------------
-       const Real1 value1 = ntotmiss>A_len ?
-                             Real1(0) :
-                             (
-                              equality!=0 ?
-                               equality :
-                               Real1((A_len-ntotmiss)*100/A_len)
-                             );
-
-       const Real1 value2( lem::min(A_len,B_len)*100/lem::max(A_len,B_len) );
-
-       value = value1*value2; // достоверность проекции
-
-       // отсев вариантов проекции по граничному значению достоверности.
-       //if( value < MIN_PROJ_R )
-       // continue;
-
-       const Word_Coord WC(ientry,iform);
-
-       bool already = false;
-       const int nfl = CastSizeToInt(found_list.size());
-       for( int ii=0; ii<nfl && !already; ii++ )
-        already = found_list[ii]==WC;
-
-       if( already )
-        continue;
-
-/*
-       if( GetDebugLevel()>=3 )
-       {
-        if( !found_list.size() )
-         lem::LogFile::logfile->eol();
-
-        lem::LogFile::logfile->printf(
-                                 "Fuzzy projection [%us] as [%us] value=%us int=%d ientry=%d\n"
-                                 , A->c_str()
-                                 , B.c_str() 
-                                 , to_ustr( value ).c_str()
-                                 , ientry
-                                 , iform
-                                );
-       }
-*/
-
-       found_list.push_back( WC );
-       val_list.push_back( Real1ToScore( value ) );
-       inf_list.push_back(NULL);
-       was_projection=true;
-      } // end if
-    } // end for( iform ...
-  } // end for( ientry ...
-
-
- if( was_projection )
-  {
-   #if defined LEM_THREADS
-   lem::Process::CritSecLocker locker(&cs); 
-   #endif
-
-   word_proj->Add( LA_WordProjection( A, found_list, val_list, 1 ) );
-  }
-
- LEM_CHECKIT_Z( found_list.size()==val_list.size() );
- LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
-
- return;
-}
-#endif
-
-#if defined SOL_CAA
-const EndingStat & LexicalAutomat::GetEndingStat( int id_lang )
-{
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_endings);
- #endif
-
- int i = ending_stat_lang.find(id_lang);
- if( i==UNKNOWN )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
-
-   i = ending_stat_lang.find(id_lang);
-   if( i==UNKNOWN )
-    {
-     EndingStat stat;
-     SynGram &sg = GetDict().GetSynGram();
-     sg.GetStorage().GetEndingStat( id_lang, stat );
-     ending_stat_lang.push_back( id_lang );
-     ending_stat_data.push_back( stat );
-     return ending_stat_data.back();
+        else
+        {
+            return ending_stat_data[i];
+        }
     }
-   else
+    else
     {
-     return ending_stat_data[i];
+        return ending_stat_data[i];
     }
-  }
- else
-  {
-   return ending_stat_data[i];
-  }
 }
 #endif
 
 
 
 #if defined SOL_CAA
-bool LexicalAutomat::GetEnding( int id_lang, const lem::UCString &ending, int &nform, int &sumfreq )
+bool LexicalAutomat::GetEnding(int id_lang, const lem::UCString &ending, int &nform, int &sumfreq)
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_endings);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_endings);
+#endif
 
- EndingKey key( ending, id_lang );
- const std::map< EndingKey, EndingInfo >::const_iterator it = ending_info.find( key );
- if( it == ending_info.end() )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
+    EndingKey key(ending, id_lang);
+    const std::map< EndingKey, EndingInfo >::const_iterator it = ending_info.find(key);
+    if (it == ending_info.end())
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-   EndingInfo info;
+        EndingInfo info;
 
-   SynGram &sg = GetSynGram();
-   info.found = sg.GetStorage().FindEnding( id_lang, ending, info.nform, info.sumfreq );
-   ending_info.insert( std::make_pair(key, info) );
+        SynGram &sg = GetSynGram();
+        info.found = sg.GetStorage().FindEnding(id_lang, ending, info.nform, info.sumfreq);
+        ending_info.insert(std::make_pair(key, info));
 
-   nform = info.nform;
-   sumfreq = info.sumfreq;
+        nform = info.nform;
+        sumfreq = info.sumfreq;
 
-   return info.found;
-  }
- else
-  {
-   nform = it->second.nform;
-   sumfreq = it->second.sumfreq;
-   return it->second.found;
-  }
+        return info.found;
+    }
+    else
+    {
+        nform = it->second.nform;
+        sumfreq = it->second.sumfreq;
+        return it->second.found;
+    }
 }
 #endif
 
@@ -1645,618 +1652,618 @@ bool LexicalAutomat::GetEnding( int id_lang, const lem::UCString &ending, int &n
 
 #if defined SOL_CAA
 // *******************************************************************
-// Проекция неизвестного слова на основе "правил догадки" по аффиксу
+// РџСЂРѕРµРєС†РёСЏ РЅРµРёР·РІРµСЃС‚РЅРѕРіРѕ СЃР»РѕРІР° РЅР° РѕСЃРЅРѕРІРµ "РїСЂР°РІРёР» РґРѕРіР°РґРєРё" РїРѕ Р°С„С„РёРєСЃСѓ
 // *******************************************************************
 bool LexicalAutomat::Project_3(
-                               const RC_Lexem &A,
-                               const lem::UCString & original_word,
-                               float scoreA,
-                               MCollect<Word_Coord> &found_list,
-                               MCollect<ProjScore> &val_list,
-                               PtrCollect<LA_ProjectInfo> &inf_list,
-                               int _id_lang,
-                               LA_RecognitionTrace *trace
-                              )
+    const RC_Lexem &A,
+    const lem::UCString & original_word,
+    float scoreA,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo> &inf_list,
+    int _id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- const lem::UCString & word = *A;
- int id_lang = _id_lang;
- if( id_lang==UNKNOWN )
-  {
-   id_lang = GuessLanguage( word.c_str() );
-  }
-
- SynGram &sg = GetSynGram();
-
- bool ret_hit=false;
-
- // 1. Ищем среди известных опечаток
- lem::MCollect<lem::UCString> rewritten_words;
- if( recognizer->RewriteMisspeltWord( id_lang, word, rewritten_words ) )
-  {
-   for( lem::Container::size_type i=0; i<rewritten_words.size(); ++i )
+    const lem::UCString & word = *A;
+    int id_lang = _id_lang;
+    if (id_lang == UNKNOWN)
     {
-     const lem::UCString & rewritten_word = rewritten_words[i];
-     RC_Lexem lex( new Lexem(rewritten_word) );
-
-     bool hit = Project_1(
-                          lex,
-                          rewritten_word,
-                          scoreA,
-                          found_list,
-                          val_list,
-                          inf_list,
-                          false,
-                          false,
-                          false,
-                          id_lang,
-                          trace
-                         );
-
-     if( hit )
-      ret_hit=true;
-    }
-  }
-
- if( ret_hit )
-  return true;
-
-
- // 2. попробуем нечеткую проекцию для корня слова, с сохранением окончания.
- bool found_by_root=false;
-
- // определяем максимальную длину окончания для языка
- if( id_lang!=UNKNOWN )
-  {
-   bool ending_found=false;
-   UCString stem;
-   UCString ending;
-
-   const EndingStat & info = GetEndingStat( id_lang );
-   if( info.max_len>0 )
-    {
-     int MIN_STEM_LEN = 3;
-     const SG_Language & lang = sg.languages()[id_lang];
-     int iparam = lang.FindParam( L"MIN_STEM_LEN" );
-     if( iparam!=UNKNOWN )
-      MIN_STEM_LEN = lem::to_int(lang.GetParam(iparam).GetValue());
-
-     lem::MCollect<lem::UCString> stems2;
-     lem::MCollect<lem::Real1> rels2;
-
-     for( int end_len=std::min( info.max_len, word.length()-MIN_STEM_LEN ); end_len>=1; --end_len )
-      {
-       if( end_len+MIN_STEM_LEN <= word.length() )
-        {
-         ending = lem::right( word, end_len );
-         ending.to_upper();
-      
-         int nform=0, sumfreq=0;
-         if( GetEnding( id_lang, ending, nform, sumfreq ) )
-          {
-           // нашли такое окончание.
-           if( nform>10 || sumfreq>1000 )
-            {
-             ending_found=true;
-
-             stem = lem::left( word, word.length()-end_len );
-
-             // теперь из основы генерируем фонетические инварианты.
-             stems2.clear();
-             rels2.clear();
-             ProducePhonInv( stem, id_lang, stems2, rels2, trace );
-             if( !stems2.empty() )
-              {
-/*
-#if LEM_DEBUGGING==1
-for( int k=0; k<stems2.size(); ++k )
- {
-  lem::mout->printf( "stem=%us\n", stems2[k].c_str() );
- }
-#endif
-/**/
-               // теперь к каждой искаженной основе прикрепляем обратно окончание и пытаемся найти такое слово.
-               for( lem::Container::size_type j=0; j<stems2.size(); ++j )
-                {
-                 lem::UCString word2 = stems2[j]+ending;
-
-                 if( word2==word )
-                  continue;
-
-                 RC_Lexem lex2( new Lexem(word2) );
-
-                 bool hit = Project_1(
-                                      lex2,
-                                      word2,
-                                      Real1ToScore(rels2[j]) + scoreA,
-                                      found_list,
-                                      val_list,
-                                      inf_list,
-                                      false,
-                                      false,
-                                      false,
-                                      id_lang,
-                                      trace
-                                     );
-
-                 if( hit )
-                  {
-                   found_by_root=true;
-                  }
-                }
-              }
-
-             break;
-            }
-          }
-        }
-      }
+        id_lang = GuessLanguage(word.c_str());
     }
 
+    SynGram &sg = GetSynGram();
 
+    bool ret_hit = false;
 
-
-   if( !ending_found && !found_by_root )
+    // 1. РС‰РµРј СЃСЂРµРґРё РёР·РІРµСЃС‚РЅС‹С… РѕРїРµС‡Р°С‚РѕРє
+    lem::MCollect<lem::UCString> rewritten_words;
+    if (recognizer->RewriteMisspeltWord(id_lang, word, rewritten_words))
     {
-     // Окончание не нашли. Поэтому работаем с полным словом.
-
-     lem::MCollect<lem::UCString> words2;
-     lem::MCollect<lem::Real1> rels2;
-
-     ProducePhonInv( word, id_lang, words2, rels2, trace );
-     if( !words2.empty() )
-      {
-/*
-#if LEM_DEBUGGING==1
-for( int k=0; k<stems2.size(); ++k )
- {
-  lem::mout->printf( "stem=%us\n", stems2[k].c_str() );
- }
-#endif
-/**/
-       // теперь к каждой искаженной основе прикрепляем обратно окончание и пытаемся найти такое слово.
-       for( lem::Container::size_type j=0; j<words2.size(); ++j )
+        for (lem::Container::size_type i = 0; i < rewritten_words.size(); ++i)
         {
-         if( words2[j]==word )
-          continue;
+            const lem::UCString & rewritten_word = rewritten_words[i];
+            RC_Lexem lex(new Lexem(rewritten_word));
 
-         RC_Lexem lex2( new Lexem(words2[j]) );
+            bool hit = Project_1(
+                lex,
+                rewritten_word,
+                scoreA,
+                found_list,
+                val_list,
+                inf_list,
+                false,
+                false,
+                false,
+                id_lang,
+                trace
+            );
 
-         bool hit = Project_1(
-                              lex2,
-                              words2[j],
-                              Real1ToScore(rels2[j]) + scoreA,
-                              found_list,
-                              val_list,
-                              inf_list,
-                              false,
-                              false,
-                              false,
-                              id_lang,
-                              trace
-                             );
-
-         if( hit )
-          {
-           found_by_root=true;
-          }
+            if (hit)
+                ret_hit = true;
         }
-      }
     }
 
+    if (ret_hit)
+        return true;
 
 
+    // 2. РїРѕРїСЂРѕР±СѓРµРј РЅРµС‡РµС‚РєСѓСЋ РїСЂРѕРµРєС†РёСЋ РґР»СЏ РєРѕСЂРЅСЏ СЃР»РѕРІР°, СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РѕРєРѕРЅС‡Р°РЅРёСЏ.
+    bool found_by_root = false;
 
-   if( !found_by_root )
+    // РѕРїСЂРµРґРµР»СЏРµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ РѕРєРѕРЅС‡Р°РЅРёСЏ РґР»СЏ СЏР·С‹РєР°
+    if (id_lang != UNKNOWN)
     {
-     // попробуем считать, что в слове пропущена, искажена или ошибочно добавлена буква.
-     // для эффективной работы потребуется префиксное поисковое дерево.
-     lem::Ptr<PrefixEntrySearcher> ps = GetDict().GetPrefixEntrySearcher( lem::int_max );
-     if( ps.NotNull() )
-      {
-       // префиксное дерево есть.
-       lem::MCollect< lem::uint32_t > chars;
+        bool ending_found = false;
+        UCString stem;
+        UCString ending;
 
-       // локальный кэш.
-       typedef std::map< std::pair<int,lem::uint32_t>, const std::set<int>* > CHARPOS2ENTRIES;
-       CHARPOS2ENTRIES charpos2entries;
-       lem::PtrCollect< std::set<int> > id_entries;
-
-       // Попробуем с перестановками соседних букв, не считая границы
-       // XY -> YZ
-       // XYZ -> ZYX
-
-       WideStringUcs4 cenum_word_core( word.c_str() );
-       lem::uint32_t c;
-       while( (c=cenum_word_core.Fetch())!=0 )
+        const EndingStat & info = GetEndingStat(id_lang);
+        if (info.max_len > 0)
         {
-         chars.push_back(c);
-        }
+            int MIN_STEM_LEN = 3;
+            const SG_Language & lang = sg.languages()[id_lang];
+            int iparam = lang.FindParam(L"MIN_STEM_LEN");
+            if (iparam != UNKNOWN)
+                MIN_STEM_LEN = lem::to_int(lang.GetParam(iparam).GetValue());
 
-       const int c4_len = CastSizeToInt(chars.size());
-       lem::MCollect<lem::uint32_t> probe_ch4;
+            lem::MCollect<lem::UCString> stems2;
+            lem::MCollect<lem::Real1> rels2;
 
-       for( int swap_strategy=0; swap_strategy<2; ++swap_strategy )
-        {
-         // swap_strategy==0 перестановка соседних букв  XY  --> YX
-         // swap_strategy==1 перестановка букв через 1   XYZ --> ZYX
-
-         const float rel = float(c4_len-0.5F*(1+swap_strategy))/float(c4_len);
-         Real1 miss_rel( rel );
-      
-         for( int ipos=1; ipos<c4_len-2-swap_strategy; ++ipos )
-          {
-           lem::Ucs4ToUCString trial_form;
-           probe_ch4.clear();
-      
-           if( swap_strategy==0 )
+            for (int end_len = std::min(info.max_len, word.length() - MIN_STEM_LEN); end_len >= 1; --end_len)
             {
-             for( int jpos=0; jpos<c4_len; ++jpos )
-              {
-               if( jpos<ipos || jpos>ipos+1 )
+                if (end_len + MIN_STEM_LEN <= word.length())
                 {
-                 probe_ch4.push_back( chars[jpos] );
-                 trial_form.Add( chars[jpos] );
-                }
-               else
-                {
-                 probe_ch4.push_back( chars[jpos+1] );
-                 probe_ch4.push_back( chars[jpos] );
-          
-                 trial_form.Add( chars[jpos+1] );
-                 trial_form.Add( chars[jpos] );
-          
-                 jpos++;
-                }
-              }
-            }
-           else if( swap_strategy==1 )
-            {
-             for( int jpos=0; jpos<c4_len; ++jpos )
-              {
-               if( jpos<ipos || jpos>ipos+2 )
-                {
-                 probe_ch4.push_back( chars[jpos] );
-                 trial_form.Add( chars[jpos] );
-                }
-               else
-                {
-                 probe_ch4.push_back( chars[jpos+2] );
-                 probe_ch4.push_back( chars[jpos+1] );
-                 probe_ch4.push_back( chars[jpos] );
-          
-                 trial_form.Add( chars[jpos+2] );
-                 trial_form.Add( chars[jpos+1] );
-                 trial_form.Add( chars[jpos] );
-          
-                 jpos+=2;
-                }
-              }
-            }
-      
-           std::set<int> * tot_ids = NULL;
-           int first=true;
-      
-           for( int iprobe=0; iprobe<probe_ch4.size(); ++iprobe )
-            {
-             lem::uint32_t ucs4 = probe_ch4[iprobe];
-      
-             const std::set<int> * ids = NULL;
-              
-             std::pair<int,lem::uint32_t> charpos( iprobe, ucs4 );
-             CHARPOS2ENTRIES::const_iterator it = charpos2entries.find(charpos);
-             if( it==charpos2entries.end() )
-              {
-               std::set<int> *ids2 = new std::set<int>();
-               ps->GetEntriesForCharPos( iprobe, ucs4, *ids2 );
-             
-               id_entries.push_back( ids2 );
-               charpos2entries.insert( std::make_pair( charpos, ids2 ) );
-               
-               ids = ids2;
-              }
-             else
-              {
-               ids = it->second;
-              }
-             
-             if( ids->empty() )
-              {
-               if( tot_ids!=NULL )
-                tot_ids->clear();
-              }
-             
-             if( first )
-              {
-               first = false;
-               tot_ids = new std::set<int>(*ids);
-              }
-             else
-              {
-               // делаем суперпозицию
-               std::set<int> * res_ids = new std::set<int>();
-              
-               for( std::set<int>::const_iterator it2 = tot_ids->begin(); it2!=tot_ids->end(); ++it2 )
-                if( ids->find( *it2 )!=ids->end() )
-                 res_ids->insert( *it2 );
-             
-               delete tot_ids;
-               tot_ids = res_ids;
-             
-               if( tot_ids->empty() )
-                break;
-              }
-            }
-      
-           if( tot_ids!=NULL && !tot_ids->empty() )
-            {
-             // нашли подходящие словарные статьи.
-      
-             // ищем в них формы и добавляем в результаты
-             lem::UCString form_to_find( trial_form.ToString().c_str() );
-           
-             for( std::set<int>::const_iterator it3 = tot_ids->begin(); it3!=tot_ids->end(); ++it3 )
-              {
-               const int id_entry = *it3;
-               const SG_Entry &e = sg.GetEntry(id_entry);
-           
-               for( lem::Container::size_type iform=0; iform<e.forms().size(); ++iform )
-                {
-                 const lem::UCString &eform = e.forms()[iform].name();
-               
-                 if( eform==form_to_find )
-                  {
-                   // нашли.
-               
-                   found_list.push_back( Word_Coord( id_entry, CastSizeToInt(iform) ) );
-                   val_list.push_back( scoreA + Real1ToScore(miss_rel) );
-                   inf_list.push_back(NULL);
-               
-                   found_by_root = true;
-                  }
-                }
-              }
-            }
-      
-           lem_rub_off( tot_ids );
-          }
-        }
+                    ending = lem::right(word, end_len);
+                    ending.to_upper();
 
-       // -------
-
-       chars.clear();
-       WideStringUcs4 cenum_stem( stem.empty() ? word.c_str() : stem.c_str() );
-       while( (c=cenum_stem.Fetch())!=0 )
-        {
-         chars.push_back(c);
-        }
-
-       const int stem_len_ucs4 = CastSizeToInt(chars.size());
-
-       WideStringUcs4 cenum_ending(ending.c_str());
-       while( (c=cenum_ending.Fetch())!=0 )
-        {
-         chars.push_back(c);
-        }
-
-       const int word_len_ucs4 = CastSizeToInt(chars.size());
-
-       for( int imisspos=1; imisspos<=stem_len_ucs4; ++imisspos )
-        {
-         // в этом заходе считаем, что пропущен символ в позиции imisspos.
-
-         for( int strategy=0; strategy<3; ++strategy )
-          {
-           // strategy==0 считаем, что пропущена буква
-           // strategy==1 считаем, что буква искажена
-           // strategy==2 считаем, что добавлена лишняя буква
-
-           float rel = float(word_len_ucs4-1)/float(word_len_ucs4);
-           Real1 miss_rel( rel );
-
-           lem::Ucs4ToUCString trial_form;
-         
-           std::set<int> * tot_ids = NULL;
-           int first=true;
-           lem::uint32_t ucs4=0;
-
-           for( int ipos0=0; ipos0<word_len_ucs4; ++ipos0 )
-            {
-             int ipos1=-1;
-             bool do_char=true;
-
-             if( strategy==0 )
-              {
-               ipos1 = ipos0>=imisspos ? ipos0+1 : ipos0; // символы после проверочной позиции сдвигаем на 1 вправо
-         
-               if( ipos0==imisspos )
-                trial_form.Add( L'#' );
-    
-               ucs4 = chars[ipos0];
-               trial_form.Add( ucs4 );
-              }
-             else if( strategy==1 )
-              {
-               // неверная буква, пропускаем ее
-               if( ipos0==imisspos )
-                {
-                 do_char=false;
-                 trial_form.Add( L'#' );
-                }
-               else
-                {
-                 ipos1 = ipos0;
-                 ucs4 = chars[ipos0];
-                 trial_form.Add( ucs4 );
-                }
-              }
-             else if( strategy==2 )
-              {
-               // лишняя буква
-               if( ipos0==imisspos )
-                do_char=false;
-               else
-                {
-                 if( ipos0>imisspos )
-                  ipos1 = ipos0-1;
-                 else
-                  ipos1 = ipos0;
-
-                 ucs4 = chars[ipos0];
-                 trial_form.Add( ucs4 );
-                }
-              }
-            
-             if( do_char )
-              {
-               const std::set<int> * ids = NULL;
-            
-               std::pair<int,lem::uint32_t> charpos( ipos1, ucs4 );
-               CHARPOS2ENTRIES::const_iterator it = charpos2entries.find(charpos);
-               if( it==charpos2entries.end() )
-                {
-                 std::set<int> *ids2 = new std::set<int>();
-                 ps->GetEntriesForCharPos( ipos1, ucs4, *ids2 );
-            
-                 id_entries.push_back( ids2 );
-                 charpos2entries.insert( std::make_pair( charpos, ids2 ) );
-                 
-                 ids = ids2;
-                }
-               else
-                {
-                 ids = it->second;
-                }
-            
-               if( ids->empty() )
-                {
-                 if( tot_ids!=NULL )
-                  tot_ids->clear();
-                }
-            
-               if( first )
-                {
-                 first = false;
-                 tot_ids = new std::set<int>(*ids);
-                }
-               else
-                {
-                 // делаем суперпозицию
-                 std::set<int> * res_ids = new std::set<int>();
-                
-                 for( std::set<int>::const_iterator it2 = tot_ids->begin(); it2!=tot_ids->end(); ++it2 )
-                  if( ids->find( *it2 )!=ids->end() )
-                   res_ids->insert( *it2 );
-            
-                 delete tot_ids;
-                 tot_ids = res_ids;
-            
-                 if( tot_ids->empty() )
-                  break;
-                }
-              }
-            }
-         
-           if( tot_ids!=NULL && !tot_ids->empty() )
-            {
-             // нашли подходящие статьи
-             // ищем в них формы с учетом пропуска и добавляем в результаты
-             lem::UCString form_to_find( trial_form.ToString().c_str() );
-         
-             for( std::set<int>::const_iterator it3 = tot_ids->begin(); it3!=tot_ids->end(); ++it3 )
-              {
-               const int id_entry = *it3;
-               const SG_Entry &e = sg.GetEntry(id_entry);
-         
-               // нам известны макс. и мин. длины форм в этой статье
-               if( e.GetMinLen()<=form_to_find.length() && e.GetMaxLen()>=form_to_find.length() )
-                {
-                 for( lem::Container::size_type iform=0; iform<e.forms().size(); ++iform )
-                  {
-                   const lem::UCString &eform = e.forms()[iform].name();
-                   if( eform.length() == form_to_find.length() )
+                    int nform = 0, sumfreq = 0;
+                    if (GetEnding(id_lang, ending, nform, sumfreq))
                     {
-                     bool matches=true;
+                        // РЅР°С€Р»Рё С‚Р°РєРѕРµ РѕРєРѕРЅС‡Р°РЅРёРµ.
+                        if (nform > 10 || sumfreq > 1000)
+                        {
+                            ending_found = true;
 
-                     if( strategy==0 )
-                      {
-                       // вариант с пропущенной буквой
-                       for( int k=0; k<eform.length(); ++k )
-                        if( k!=imisspos && eform[k]!=form_to_find[k] )
-                         {
-                          matches=false;
-                          break;
-                         }
-                      }
-                     else if( strategy==1 )
-                      {
-                       // вариант с искаженной буквой
-                       for( int k=0; k<eform.length(); ++k )
-                        if( k!=imisspos && eform[k]!=form_to_find[k] )
-                         {
-                          matches=false;
-                          break;
-                         }
-                      }
-                     else if( strategy==2 )
-                      {
-                       // вариант с добавленной буквой
-                       matches = eform==form_to_find;
-                      }
-               
-                     if( matches )
-                      {
-                       // нашли.
-               
-                       found_list.push_back( Word_Coord( id_entry, CastSizeToInt(iform) ) );
-                       val_list.push_back( scoreA + Real1ToScore(miss_rel) );
-                       inf_list.push_back(NULL);
-               
-                       found_by_root = true;
-                      }
+                            stem = lem::left(word, word.length() - end_len);
+
+                            // С‚РµРїРµСЂСЊ РёР· РѕСЃРЅРѕРІС‹ РіРµРЅРµСЂРёСЂСѓРµРј С„РѕРЅРµС‚РёС‡РµСЃРєРёРµ РёРЅРІР°СЂРёР°РЅС‚С‹.
+                            stems2.clear();
+                            rels2.clear();
+                            ProducePhonInv(stem, id_lang, stems2, rels2, trace);
+                            if (!stems2.empty())
+                            {
+                                /*
+                                #if LEM_DEBUGGING==1
+                                for( int k=0; k<stems2.size(); ++k )
+                                 {
+                                  lem::mout->printf( "stem=%us\n", stems2[k].c_str() );
+                                 }
+                                #endif
+                                /**/
+                                // С‚РµРїРµСЂСЊ Рє РєР°Р¶РґРѕР№ РёСЃРєР°Р¶РµРЅРЅРѕР№ РѕСЃРЅРѕРІРµ РїСЂРёРєСЂРµРїР»СЏРµРј РѕР±СЂР°С‚РЅРѕ РѕРєРѕРЅС‡Р°РЅРёРµ Рё РїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё С‚Р°РєРѕРµ СЃР»РѕРІРѕ.
+                                for (lem::Container::size_type j = 0; j < stems2.size(); ++j)
+                                {
+                                    lem::UCString word2 = stems2[j] + ending;
+
+                                    if (word2 == word)
+                                        continue;
+
+                                    RC_Lexem lex2(new Lexem(word2));
+
+                                    bool hit = Project_1(
+                                        lex2,
+                                        word2,
+                                        Real1ToScore(rels2[j]) + scoreA,
+                                        found_list,
+                                        val_list,
+                                        inf_list,
+                                        false,
+                                        false,
+                                        false,
+                                        id_lang,
+                                        trace
+                                    );
+
+                                    if (hit)
+                                    {
+                                        found_by_root = true;
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
                     }
-                  }
                 }
-              }
             }
-         
-           delete tot_ids;
-          }
         }
-      }
+
+
+
+
+        if (!ending_found && !found_by_root)
+        {
+            // РћРєРѕРЅС‡Р°РЅРёРµ РЅРµ РЅР°С€Р»Рё. РџРѕСЌС‚РѕРјСѓ СЂР°Р±РѕС‚Р°РµРј СЃ РїРѕР»РЅС‹Рј СЃР»РѕРІРѕРј.
+
+            lem::MCollect<lem::UCString> words2;
+            lem::MCollect<lem::Real1> rels2;
+
+            ProducePhonInv(word, id_lang, words2, rels2, trace);
+            if (!words2.empty())
+            {
+                /*
+                #if LEM_DEBUGGING==1
+                for( int k=0; k<stems2.size(); ++k )
+                 {
+                  lem::mout->printf( "stem=%us\n", stems2[k].c_str() );
+                 }
+                #endif
+                /**/
+                // С‚РµРїРµСЂСЊ Рє РєР°Р¶РґРѕР№ РёСЃРєР°Р¶РµРЅРЅРѕР№ РѕСЃРЅРѕРІРµ РїСЂРёРєСЂРµРїР»СЏРµРј РѕР±СЂР°С‚РЅРѕ РѕРєРѕРЅС‡Р°РЅРёРµ Рё РїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё С‚Р°РєРѕРµ СЃР»РѕРІРѕ.
+                for (lem::Container::size_type j = 0; j < words2.size(); ++j)
+                {
+                    if (words2[j] == word)
+                        continue;
+
+                    RC_Lexem lex2(new Lexem(words2[j]));
+
+                    bool hit = Project_1(
+                        lex2,
+                        words2[j],
+                        Real1ToScore(rels2[j]) + scoreA,
+                        found_list,
+                        val_list,
+                        inf_list,
+                        false,
+                        false,
+                        false,
+                        id_lang,
+                        trace
+                    );
+
+                    if (hit)
+                    {
+                        found_by_root = true;
+                    }
+                }
+            }
+        }
+
+
+
+
+        if (!found_by_root)
+        {
+            // РїРѕРїСЂРѕР±СѓРµРј СЃС‡РёС‚Р°С‚СЊ, С‡С‚Рѕ РІ СЃР»РѕРІРµ РїСЂРѕРїСѓС‰РµРЅР°, РёСЃРєР°Р¶РµРЅР° РёР»Рё РѕС€РёР±РѕС‡РЅРѕ РґРѕР±Р°РІР»РµРЅР° Р±СѓРєРІР°.
+            // РґР»СЏ СЌС„С„РµРєС‚РёРІРЅРѕР№ СЂР°Р±РѕС‚С‹ РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РїСЂРµС„РёРєСЃРЅРѕРµ РїРѕРёСЃРєРѕРІРѕРµ РґРµСЂРµРІРѕ.
+            lem::Ptr<PrefixEntrySearcher> ps = GetDict().GetPrefixEntrySearcher(lem::int_max);
+            if (ps.NotNull())
+            {
+                // РїСЂРµС„РёРєСЃРЅРѕРµ РґРµСЂРµРІРѕ РµСЃС‚СЊ.
+                lem::MCollect< lem::uint32_t > chars;
+
+                // Р»РѕРєР°Р»СЊРЅС‹Р№ РєСЌС€.
+                typedef std::map< std::pair<int, lem::uint32_t>, const std::set<int>* > CHARPOS2ENTRIES;
+                CHARPOS2ENTRIES charpos2entries;
+                lem::PtrCollect< std::set<int> > id_entries;
+
+                // РџРѕРїСЂРѕР±СѓРµРј СЃ РїРµСЂРµСЃС‚Р°РЅРѕРІРєР°РјРё СЃРѕСЃРµРґРЅРёС… Р±СѓРєРІ, РЅРµ СЃС‡РёС‚Р°СЏ РіСЂР°РЅРёС†С‹
+                // XY -> YZ
+                // XYZ -> ZYX
+
+                WideStringUcs4 cenum_word_core(word.c_str());
+                lem::uint32_t c;
+                while ((c = cenum_word_core.Fetch()) != 0)
+                {
+                    chars.push_back(c);
+                }
+
+                const int c4_len = CastSizeToInt(chars.size());
+                lem::MCollect<lem::uint32_t> probe_ch4;
+
+                for (int swap_strategy = 0; swap_strategy < 2; ++swap_strategy)
+                {
+                    // swap_strategy==0 РїРµСЂРµСЃС‚Р°РЅРѕРІРєР° СЃРѕСЃРµРґРЅРёС… Р±СѓРєРІ  XY  --> YX
+                    // swap_strategy==1 РїРµСЂРµСЃС‚Р°РЅРѕРІРєР° Р±СѓРєРІ С‡РµСЂРµР· 1   XYZ --> ZYX
+
+                    const float rel = float(c4_len - 0.5F*(1 + swap_strategy)) / float(c4_len);
+                    Real1 miss_rel(rel);
+
+                    for (int ipos = 1; ipos < c4_len - 2 - swap_strategy; ++ipos)
+                    {
+                        lem::Ucs4ToUCString trial_form;
+                        probe_ch4.clear();
+
+                        if (swap_strategy == 0)
+                        {
+                            for (int jpos = 0; jpos < c4_len; ++jpos)
+                            {
+                                if (jpos<ipos || jpos>ipos + 1)
+                                {
+                                    probe_ch4.push_back(chars[jpos]);
+                                    trial_form.Add(chars[jpos]);
+                                }
+                                else
+                                {
+                                    probe_ch4.push_back(chars[jpos + 1]);
+                                    probe_ch4.push_back(chars[jpos]);
+
+                                    trial_form.Add(chars[jpos + 1]);
+                                    trial_form.Add(chars[jpos]);
+
+                                    jpos++;
+                                }
+                            }
+                        }
+                        else if (swap_strategy == 1)
+                        {
+                            for (int jpos = 0; jpos < c4_len; ++jpos)
+                            {
+                                if (jpos<ipos || jpos>ipos + 2)
+                                {
+                                    probe_ch4.push_back(chars[jpos]);
+                                    trial_form.Add(chars[jpos]);
+                                }
+                                else
+                                {
+                                    probe_ch4.push_back(chars[jpos + 2]);
+                                    probe_ch4.push_back(chars[jpos + 1]);
+                                    probe_ch4.push_back(chars[jpos]);
+
+                                    trial_form.Add(chars[jpos + 2]);
+                                    trial_form.Add(chars[jpos + 1]);
+                                    trial_form.Add(chars[jpos]);
+
+                                    jpos += 2;
+                                }
+                            }
+                        }
+
+                        std::set<int> * tot_ids = nullptr;
+                        int first = true;
+
+                        for (int iprobe = 0; iprobe < probe_ch4.size(); ++iprobe)
+                        {
+                            lem::uint32_t ucs4 = probe_ch4[iprobe];
+
+                            const std::set<int> * ids = nullptr;
+
+                            std::pair<int, lem::uint32_t> charpos(iprobe, ucs4);
+                            CHARPOS2ENTRIES::const_iterator it = charpos2entries.find(charpos);
+                            if (it == charpos2entries.end())
+                            {
+                                std::set<int> *ids2 = new std::set<int>();
+                                ps->GetEntriesForCharPos(iprobe, ucs4, *ids2);
+
+                                id_entries.push_back(ids2);
+                                charpos2entries.insert(std::make_pair(charpos, ids2));
+
+                                ids = ids2;
+                            }
+                            else
+                            {
+                                ids = it->second;
+                            }
+
+                            if (ids->empty())
+                            {
+                                if (tot_ids != nullptr)
+                                    tot_ids->clear();
+                            }
+
+                            if (first)
+                            {
+                                first = false;
+                                tot_ids = new std::set<int>(*ids);
+                            }
+                            else
+                            {
+                                // РґРµР»Р°РµРј СЃСѓРїРµСЂРїРѕР·РёС†РёСЋ
+                                std::set<int> * res_ids = new std::set<int>();
+
+                                for (std::set<int>::const_iterator it2 = tot_ids->begin(); it2 != tot_ids->end(); ++it2)
+                                    if (ids->find(*it2) != ids->end())
+                                        res_ids->insert(*it2);
+
+                                delete tot_ids;
+                                tot_ids = res_ids;
+
+                                if (tot_ids->empty())
+                                    break;
+                            }
+                        }
+
+                        if (tot_ids != nullptr && !tot_ids->empty())
+                        {
+                            // РЅР°С€Р»Рё РїРѕРґС…РѕРґСЏС‰РёРµ СЃР»РѕРІР°СЂРЅС‹Рµ СЃС‚Р°С‚СЊРё.
+
+                            // РёС‰РµРј РІ РЅРёС… С„РѕСЂРјС‹ Рё РґРѕР±Р°РІР»СЏРµРј РІ СЂРµР·СѓР»СЊС‚Р°С‚С‹
+                            lem::UCString form_to_find(trial_form.ToString().c_str());
+
+                            for (std::set<int>::const_iterator it3 = tot_ids->begin(); it3 != tot_ids->end(); ++it3)
+                            {
+                                const int id_entry = *it3;
+                                const SG_Entry &e = sg.GetEntry(id_entry);
+
+                                for (lem::Container::size_type iform = 0; iform < e.forms().size(); ++iform)
+                                {
+                                    const lem::UCString &eform = e.forms()[iform].name();
+
+                                    if (eform == form_to_find)
+                                    {
+                                        // РЅР°С€Р»Рё.
+
+                                        found_list.push_back(Word_Coord(id_entry, CastSizeToInt(iform)));
+                                        val_list.push_back(scoreA + Real1ToScore(miss_rel));
+                                        inf_list.push_back(nullptr);
+
+                                        found_by_root = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        lem_rub_off(tot_ids);
+                    }
+                }
+
+                // -------
+
+                chars.clear();
+                WideStringUcs4 cenum_stem(stem.empty() ? word.c_str() : stem.c_str());
+                while ((c = cenum_stem.Fetch()) != 0)
+                {
+                    chars.push_back(c);
+                }
+
+                const int stem_len_ucs4 = CastSizeToInt(chars.size());
+
+                WideStringUcs4 cenum_ending(ending.c_str());
+                while ((c = cenum_ending.Fetch()) != 0)
+                {
+                    chars.push_back(c);
+                }
+
+                const int word_len_ucs4 = CastSizeToInt(chars.size());
+
+                for (int imisspos = 1; imisspos <= stem_len_ucs4; ++imisspos)
+                {
+                    // РІ СЌС‚РѕРј Р·Р°С…РѕРґРµ СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РїСЂРѕРїСѓС‰РµРЅ СЃРёРјРІРѕР» РІ РїРѕР·РёС†РёРё imisspos.
+
+                    for (int strategy = 0; strategy < 3; ++strategy)
+                    {
+                        // strategy==0 СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РїСЂРѕРїСѓС‰РµРЅР° Р±СѓРєРІР°
+                        // strategy==1 СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ Р±СѓРєРІР° РёСЃРєР°Р¶РµРЅР°
+                        // strategy==2 СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РґРѕР±Р°РІР»РµРЅР° Р»РёС€РЅСЏСЏ Р±СѓРєРІР°
+
+                        float rel = float(word_len_ucs4 - 1) / float(word_len_ucs4);
+                        Real1 miss_rel(rel);
+
+                        lem::Ucs4ToUCString trial_form;
+
+                        std::set<int> * tot_ids = nullptr;
+                        int first = true;
+                        lem::uint32_t ucs4 = 0;
+
+                        for (int ipos0 = 0; ipos0 < word_len_ucs4; ++ipos0)
+                        {
+                            int ipos1 = -1;
+                            bool do_char = true;
+
+                            if (strategy == 0)
+                            {
+                                ipos1 = ipos0 >= imisspos ? ipos0 + 1 : ipos0; // СЃРёРјРІРѕР»С‹ РїРѕСЃР»Рµ РїСЂРѕРІРµСЂРѕС‡РЅРѕР№ РїРѕР·РёС†РёРё СЃРґРІРёРіР°РµРј РЅР° 1 РІРїСЂР°РІРѕ
+
+                                if (ipos0 == imisspos)
+                                    trial_form.Add(L'#');
+
+                                ucs4 = chars[ipos0];
+                                trial_form.Add(ucs4);
+                            }
+                            else if (strategy == 1)
+                            {
+                                // РЅРµРІРµСЂРЅР°СЏ Р±СѓРєРІР°, РїСЂРѕРїСѓСЃРєР°РµРј РµРµ
+                                if (ipos0 == imisspos)
+                                {
+                                    do_char = false;
+                                    trial_form.Add(L'#');
+                                }
+                                else
+                                {
+                                    ipos1 = ipos0;
+                                    ucs4 = chars[ipos0];
+                                    trial_form.Add(ucs4);
+                                }
+                            }
+                            else if (strategy == 2)
+                            {
+                                // Р»РёС€РЅСЏСЏ Р±СѓРєРІР°
+                                if (ipos0 == imisspos)
+                                    do_char = false;
+                                else
+                                {
+                                    if (ipos0 > imisspos)
+                                        ipos1 = ipos0 - 1;
+                                    else
+                                        ipos1 = ipos0;
+
+                                    ucs4 = chars[ipos0];
+                                    trial_form.Add(ucs4);
+                                }
+                            }
+
+                            if (do_char)
+                            {
+                                const std::set<int> * ids = nullptr;
+
+                                std::pair<int, lem::uint32_t> charpos(ipos1, ucs4);
+                                CHARPOS2ENTRIES::const_iterator it = charpos2entries.find(charpos);
+                                if (it == charpos2entries.end())
+                                {
+                                    std::set<int> *ids2 = new std::set<int>();
+                                    ps->GetEntriesForCharPos(ipos1, ucs4, *ids2);
+
+                                    id_entries.push_back(ids2);
+                                    charpos2entries.insert(std::make_pair(charpos, ids2));
+
+                                    ids = ids2;
+                                }
+                                else
+                                {
+                                    ids = it->second;
+                                }
+
+                                if (ids->empty())
+                                {
+                                    if (tot_ids != nullptr)
+                                        tot_ids->clear();
+                                }
+
+                                if (first)
+                                {
+                                    first = false;
+                                    tot_ids = new std::set<int>(*ids);
+                                }
+                                else
+                                {
+                                    // РґРµР»Р°РµРј СЃСѓРїРµСЂРїРѕР·РёС†РёСЋ
+                                    std::set<int> * res_ids = new std::set<int>();
+
+                                    for (std::set<int>::const_iterator it2 = tot_ids->begin(); it2 != tot_ids->end(); ++it2)
+                                        if (ids->find(*it2) != ids->end())
+                                            res_ids->insert(*it2);
+
+                                    delete tot_ids;
+                                    tot_ids = res_ids;
+
+                                    if (tot_ids->empty())
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (tot_ids != nullptr && !tot_ids->empty())
+                        {
+                            // РЅР°С€Р»Рё РїРѕРґС…РѕРґСЏС‰РёРµ СЃС‚Р°С‚СЊРё
+                            // РёС‰РµРј РІ РЅРёС… С„РѕСЂРјС‹ СЃ СѓС‡РµС‚РѕРј РїСЂРѕРїСѓСЃРєР° Рё РґРѕР±Р°РІР»СЏРµРј РІ СЂРµР·СѓР»СЊС‚Р°С‚С‹
+                            lem::UCString form_to_find(trial_form.ToString().c_str());
+
+                            for (std::set<int>::const_iterator it3 = tot_ids->begin(); it3 != tot_ids->end(); ++it3)
+                            {
+                                const int id_entry = *it3;
+                                const SG_Entry &e = sg.GetEntry(id_entry);
+
+                                // РЅР°Рј РёР·РІРµСЃС‚РЅС‹ РјР°РєСЃ. Рё РјРёРЅ. РґР»РёРЅС‹ С„РѕСЂРј РІ СЌС‚РѕР№ СЃС‚Р°С‚СЊРµ
+                                if (e.GetMinLen() <= form_to_find.length() && e.GetMaxLen() >= form_to_find.length())
+                                {
+                                    for (lem::Container::size_type iform = 0; iform < e.forms().size(); ++iform)
+                                    {
+                                        const lem::UCString &eform = e.forms()[iform].name();
+                                        if (eform.length() == form_to_find.length())
+                                        {
+                                            bool matches = true;
+
+                                            if (strategy == 0)
+                                            {
+                                                // РІР°СЂРёР°РЅС‚ СЃ РїСЂРѕРїСѓС‰РµРЅРЅРѕР№ Р±СѓРєРІРѕР№
+                                                for (int k = 0; k < eform.length(); ++k)
+                                                    if (k != imisspos && eform[k] != form_to_find[k])
+                                                    {
+                                                        matches = false;
+                                                        break;
+                                                    }
+                                            }
+                                            else if (strategy == 1)
+                                            {
+                                                // РІР°СЂРёР°РЅС‚ СЃ РёСЃРєР°Р¶РµРЅРЅРѕР№ Р±СѓРєРІРѕР№
+                                                for (int k = 0; k < eform.length(); ++k)
+                                                    if (k != imisspos && eform[k] != form_to_find[k])
+                                                    {
+                                                        matches = false;
+                                                        break;
+                                                    }
+                                            }
+                                            else if (strategy == 2)
+                                            {
+                                                // РІР°СЂРёР°РЅС‚ СЃ РґРѕР±Р°РІР»РµРЅРЅРѕР№ Р±СѓРєРІРѕР№
+                                                matches = eform == form_to_find;
+                                            }
+
+                                            if (matches)
+                                            {
+                                                // РЅР°С€Р»Рё.
+
+                                                found_list.push_back(Word_Coord(id_entry, CastSizeToInt(iform)));
+                                                val_list.push_back(scoreA + Real1ToScore(miss_rel));
+                                                inf_list.push_back(nullptr);
+
+                                                found_by_root = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        delete tot_ids;
+                    }
+                }
+            }
+        }
+
+
+        ret_hit = found_by_root;
     }
 
 
-   ret_hit = found_by_root;
-  }
- 
-
- if( !found_by_root )
-  {
-   // 3. попробуем проекцию на основе только окончания
-   // Делаем разбивку на слоги
-   lem::MCollect<lem::UCString> slb_list;
-   GetDict().GetGraphGram().FindSyllabs( *A, id_lang, false, slb_list, trace );
-  
-   if( trace!=NULL )
+    if (!found_by_root)
     {
-     trace->WordSyllabs( *A, slb_list );
+        // 3. РїРѕРїСЂРѕР±СѓРµРј РїСЂРѕРµРєС†РёСЋ РЅР° РѕСЃРЅРѕРІРµ С‚РѕР»СЊРєРѕ РѕРєРѕРЅС‡Р°РЅРёСЏ
+        // Р”РµР»Р°РµРј СЂР°Р·Р±РёРІРєСѓ РЅР° СЃР»РѕРіРё
+        lem::MCollect<lem::UCString> slb_list;
+        GetDict().GetGraphGram().FindSyllabs(*A, id_lang, false, slb_list, trace);
+
+        if (trace != nullptr)
+        {
+            trace->WordSyllabs(*A, slb_list);
+        }
+
+        if (slb_list.size() > 1)
+        {
+            ret_hit = recognizer->ApplyForSyllabs(*A, scoreA, slb_list, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, trace);
+        }
+
+        if (!ret_hit)
+        {
+            ret_hit = recognizer->Apply(*A, original_word, scoreA, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, false, trace);
+        }
+
+        LEM_CHECKIT_Z(found_list.size() == val_list.size());
+        LEM_CHECKIT_Z(found_list.size() == inf_list.size());
     }
 
-   if( slb_list.size()>1 )
-    {
-     ret_hit = recognizer->ApplyForSyllabs( *A, scoreA, slb_list, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, trace );
-    }
- 
-   if( !ret_hit )
-    {
-     ret_hit = recognizer->Apply( *A, original_word, scoreA, GetMinProjectionScore(), found_list, val_list, inf_list, id_lang, false, trace );
-    }
-
-   LEM_CHECKIT_Z( found_list.size()==val_list.size() );
-   LEM_CHECKIT_Z( found_list.size()==inf_list.size() );
-  }
-
- return ret_hit;
+    return ret_hit;
 }
 #endif
 
@@ -2264,271 +2271,271 @@ for( int k=0; k<stems2.size(); ++k )
 
 #if defined SOL_CAA
 /************************************************************************
- Для мультилексемы из задания proj была успешно осуществлена проекция на
- Лексикон и теперь необходимо результаты проекции запомнить во внутренних
- списках proj.
+ Р”Р»СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РёР· Р·Р°РґР°РЅРёСЏ proj Р±С‹Р»Р° СѓСЃРїРµС€РЅРѕ РѕСЃСѓС‰РµСЃС‚РІР»РµРЅР° РїСЂРѕРµРєС†РёСЏ РЅР°
+ Р›РµРєСЃРёРєРѕРЅ Рё С‚РµРїРµСЂСЊ РЅРµРѕР±С…РѕРґРёРјРѕ СЂРµР·СѓР»СЊС‚Р°С‚С‹ РїСЂРѕРµРєС†РёРё Р·Р°РїРѕРјРЅРёС‚СЊ РІРѕ РІРЅСѓС‚СЂРµРЅРЅРёС…
+ СЃРїРёСЃРєР°С… proj.
 *************************************************************************/
 bool LexicalAutomat::AddResults(
-                                MLProjList &proj,
-                                const MCollect<Word_Coord> &coords,
-                                const MCollect<ProjScore> &vals,
-                                const PtrCollect<LA_ProjectInfo> &inf_list
-                               )
+    MLProjList &proj,
+    const MCollect<Word_Coord> &coords,
+    const MCollect<ProjScore> &vals,
+    const PtrCollect<LA_ProjectInfo> &inf_list
+)
 {
- bool added=false;
+    bool added = false;
 
- LEM_CHECKIT_Z( coords.size() == vals.size() );
- LEM_CHECKIT_Z( inf_list.size() == coords.size() );
+    LEM_CHECKIT_Z(coords.size() == vals.size());
+    LEM_CHECKIT_Z(inf_list.size() == coords.size());
 
- SynGram& s_gram = GetSynGram();
- const int n=CastSizeToInt(coords.size()); // Число проекций (0 - нет).
+    SynGram& s_gram = GetSynGram();
+    const int n = CastSizeToInt(coords.size()); // Р§РёСЃР»Рѕ РїСЂРѕРµРєС†РёР№ (0 - РЅРµС‚).
 
- const TokenizationTags *tags = proj.get_Tags();
+    const TokenizationTags *tags = proj.get_Tags();
 
- const int id_unknown_entry = GetUnknownEntryKey();
+    const int id_unknown_entry = GetUnknownEntryKey();
 
- Word_Form *wf=NULL;
+    Word_Form *wf = nullptr;
 
- for( int i=0; i<n; i++ )
-  if( proj.CanAdd( coords[i], inf_list[i] ) )
-   {
-    const Word_Coord& wc = coords[i];
-    const SG_Entry &e = s_gram.GetEntry(wc.GetEntry());
-    const int entry_key = e.GetKey();
+    for (int i = 0; i < n; i++)
+        if (proj.CanAdd(coords[i], inf_list[i]))
+        {
+            const Word_Coord& wc = coords[i];
+            const SG_Entry &e = s_gram.GetEntry(wc.GetEntry());
+            const int entry_key = e.GetKey();
 
-    if( wc.GetEntry()==I_NUMWORD )
-     {
-      // Статья для представления чисел в действительности не имеет форм,
-      // хотя поле индекса формы в wc проинициализировано.
-      wf = new Word_Form(
-                         proj.GetContent(),
-                         proj.GetContent(),
-                         entry_key,
-                         vals[i].score
-                        );
-     }
-    else
-     {
-      const SG_EntryForm form = s_gram.GetEntry(wc.GetEntry()).forms()[wc.GetForm()];
-      wf = new Word_Form(
-                         proj.GetOrgWord(),
-                         proj.GetContent(),
-                         entry_key,
-                         form.coords(),
-                         vals[i].score
-                        );
-     }
+            if (wc.GetEntry() == I_NUMWORD)
+            {
+                // РЎС‚Р°С‚СЊСЏ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ С‡РёСЃРµР» РІ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚Рё РЅРµ РёРјРµРµС‚ С„РѕСЂРј,
+                // С…РѕС‚СЏ РїРѕР»Рµ РёРЅРґРµРєСЃР° С„РѕСЂРјС‹ РІ wc РїСЂРѕРёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРѕ.
+                wf = new Word_Form(
+                    proj.GetContent(),
+                    proj.GetContent(),
+                    entry_key,
+                    vals[i].score
+                );
+            }
+            else
+            {
+                const SG_EntryForm form = s_gram.GetEntry(wc.GetEntry()).forms()[wc.GetForm()];
+                wf = new Word_Form(
+                    proj.GetOrgWord(),
+                    proj.GetContent(),
+                    entry_key,
+                    form.coords(),
+                    vals[i].score
+                );
+            }
 
-    if( inf_list[i]!=NULL )
-     {
-      // Явно указан список координатных пар, которые надо установить
-      // для проекции.
-      const LA_ProjectInfo &inf = *inf_list[i];
+            if (inf_list[i] != nullptr)
+            {
+                // РЇРІРЅРѕ СѓРєР°Р·Р°РЅ СЃРїРёСЃРѕРє РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ, РєРѕС‚РѕСЂС‹Рµ РЅР°РґРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ
+                // РґР»СЏ РїСЂРѕРµРєС†РёРё.
+                const LA_ProjectInfo &inf = *inf_list[i];
 
-      // Чтобы не было помех, удаляем возможные координатные пары
-      // для добавляемой координаты.
-      for( Container::size_type ie=0; ie<inf.coords.size(); ie++ )
-       {
-        wf->Remove_Coord_States( inf.coords[ie].GetCoord() );
-       }
+                // Р§С‚РѕР±С‹ РЅРµ Р±С‹Р»Рѕ РїРѕРјРµС…, СѓРґР°Р»СЏРµРј РІРѕР·РјРѕР¶РЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рµ РїР°СЂС‹
+                // РґР»СЏ РґРѕР±Р°РІР»СЏРµРјРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+                for (Container::size_type ie = 0; ie < inf.coords.size(); ie++)
+                {
+                    wf->Remove_Coord_States(inf.coords[ie].GetCoord());
+                }
 
-      // Добавляем координатную пару.
-      for( Container::size_type ie=0; ie<inf.coords.size(); ie++ )
-       {
-        wf->pairs().push_back( inf.coords[ie] );
-       }
-     }
+                // Р”РѕР±Р°РІР»СЏРµРј РєРѕРѕСЂРґРёРЅР°С‚РЅСѓСЋ РїР°СЂСѓ.
+                for (Container::size_type ie = 0; ie < inf.coords.size(); ie++)
+                {
+                    wf->pairs().push_back(inf.coords[ie]);
+                }
+            }
 
-    int filter_score=0;
-    if( tags!=NULL )
-     {
-      filter_score = tags->Score(*wf,GetDict());
+            int filter_score = 0;
+            if (tags != nullptr)
+            {
+                filter_score = tags->Score(*wf, GetDict());
 
-      ProjScore v = ProjScore( vals[i].score + filter_score );
+                ProjScore v = ProjScore(vals[i].score + filter_score);
 
-      if( proj.Add( coords[i], v, inf_list[i] ) )
-       {
-        proj.Add( wf );
-        added = true;
-        wf = NULL;
-       }
-     }
-    else
-     {
-      if( proj.Add( coords[i], vals[i].score, inf_list[i] ) )
-       {
-        proj.Add( wf );
-        added = true;
-        wf = NULL;
-       }
-     }
-   }
+                if (proj.Add(coords[i], v, inf_list[i]))
+                {
+                    proj.Add(wf);
+                    added = true;
+                    wf = nullptr;
+                }
+            }
+            else
+            {
+                if (proj.Add(coords[i], vals[i].score, inf_list[i]))
+                {
+                    proj.Add(wf);
+                    added = true;
+                    wf = nullptr;
+                }
+            }
+        }
 
- return added;
+    return added;
 }
 #endif // defined SOL_CAA
 
 
 /******************************************************************
- Вспомогательная процедура проекции мультилексемы на Лексикон без
- навороченных методов (с реискажениями и так далее). Используется
- внешними программами типа Argon.
+ Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РїСЂРѕРµРєС†РёРё РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РЅР° Р›РµРєСЃРёРєРѕРЅ Р±РµР·
+ РЅР°РІРѕСЂРѕС‡РµРЅРЅС‹С… РјРµС‚РѕРґРѕРІ (СЃ СЂРµРёСЃРєР°Р¶РµРЅРёСЏРјРё Рё С‚Р°Рє РґР°Р»РµРµ). РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
+ РІРЅРµС€РЅРёРјРё РїСЂРѕРіСЂР°РјРјР°РјРё С‚РёРїР° Argon.
 *******************************************************************/
 void LexicalAutomat::ProjectWord(
-                                 const UCString &A,
-                                 MCollect<Word_Coord> &found_list,
-                                 MCollect<ProjScore> &val_list,
-                                 lem::PtrCollect<LA_ProjectInfo> &prj_extra_inf,
-                                 DynformsMode allow_dynforms,  
-                                 int nmissmax,
-                                 int id_lang,
-                                 LA_RecognitionTrace *trace
-                                )
+    const UCString &A,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    lem::PtrCollect<LA_ProjectInfo> &prj_extra_inf,
+    DynformsMode allow_dynforms,
+    int nmissmax,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- Lexem lex(A);
- TranslateLexem( lex, true );
- RC_Lexem rc( &lex, null_deleter() );
- ProjectWord( rc, found_list, val_list, prj_extra_inf, allow_dynforms, nmissmax, id_lang, trace );
- return;
+    Lexem lex(A);
+    TranslateLexem(lex, true);
+    RC_Lexem rc(&lex, null_deleter());
+    ProjectWord(rc, found_list, val_list, prj_extra_inf, allow_dynforms, nmissmax, id_lang, trace);
+    return;
 }
 
 void LexicalAutomat::ProjectWord(
-                                 const RC_Lexem &A,
-                                 MCollect<Word_Coord> &found_list,
-                                 MCollect<ProjScore> &val_list,
-                                 lem::PtrCollect<LA_ProjectInfo> &prj_extra_inf,
-                                 DynformsMode allow_dynforms,  
-                                 int nmissmax,
-                                 int id_lang,
-                                 LA_RecognitionTrace *trace
-                                )
+    const RC_Lexem &A,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    lem::PtrCollect<LA_ProjectInfo> &prj_extra_inf,
+    DynformsMode allow_dynforms,
+    int nmissmax,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- if( allow_dynforms==/*DynformsMode::*/Wordforms && !nmissmax )
-  {
-   #if defined SOL_CAA
-   word_proj->Project( A, found_list, val_list, prj_extra_inf, id_lang, trace );
-
-   if( found_list.empty() )
-   #endif
+    if (allow_dynforms ==/*DynformsMode::*/Wordforms && !nmissmax)
     {
-     Project_1( A, *A, 0.0f, found_list, val_list, prj_extra_inf, false, false, false, id_lang, trace );
+#if defined SOL_CAA
+        word_proj->Project(A, found_list, val_list, prj_extra_inf, id_lang, trace);
+
+        if (found_list.empty())
+#endif
+        {
+            Project_1(A, *A, 0.0f, found_list, val_list, prj_extra_inf, false, false, false, id_lang, trace);
+        }
     }
-  }
- else
-  {
-   #if defined SOL_CAA
-   // Создаем задание на проекцию
-   MLProjList ml_job( A, UNKNOWN, UNKNOWN );
-   ml_job.set_Miss_Parameter( nmissmax );
-   ml_job.set_Allow_Fuzzy( nmissmax>0 );
-   ml_job.set_Dynforms( allow_dynforms!=/*DynformsMode::*/Wordforms );
+    else
+    {
+#if defined SOL_CAA
+        // РЎРѕР·РґР°РµРј Р·Р°РґР°РЅРёРµ РЅР° РїСЂРѕРµРєС†РёСЋ
+        MLProjList ml_job(A, UNKNOWN, UNKNOWN);
+        ml_job.set_Miss_Parameter(nmissmax);
+        ml_job.set_Allow_Fuzzy(nmissmax > 0);
+        ml_job.set_Dynforms(allow_dynforms !=/*DynformsMode::*/Wordforms);
 
-   ProjectJob( ml_job, id_lang, true, trace );
+        ProjectJob(ml_job, id_lang, true, trace);
 
-   found_list    = ml_job.GetCoordList();
-   val_list      = ml_job.GetCoordValList();
-   prj_extra_inf = ml_job.GetExtraInf();
+        found_list = ml_job.GetCoordList();
+        val_list = ml_job.GetCoordValList();
+        prj_extra_inf = ml_job.GetExtraInf();
 
-   #else
-   LEM_STOPIT;
-   #endif
-  }
+#else
+        LEM_STOPIT;
+#endif
+    }
 
- return;
+    return;
 }
 
 
 
 #if defined SOL_CAA
 void LexicalAutomat::ProjectUnknown(
-                                    const RC_Lexem &A,
-                                    const lem::UCString & original_word,
-                                    MCollect<Word_Coord> &found_list,
-                                    MCollect<ProjScore> &val_list,
-                                    PtrCollect<LA_ProjectInfo> &inf_list,
-                                    int id_language,
-                                    bool refresh_cache
-                                   )
+    const RC_Lexem &A,
+    const lem::UCString & original_word,
+    MCollect<Word_Coord> &found_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo> &inf_list,
+    int id_language,
+    bool refresh_cache
+)
 {
- SynGram &sg = GetDict().GetSynGram();
+    SynGram &sg = GetDict().GetSynGram();
 
- recognizer->Apply( *A, original_word, 0.0f, GetMinProjectionScore(), found_list, val_list, inf_list, id_language, false, NULL );
+    recognizer->Apply(*A, original_word, 0.0f, GetMinProjectionScore(), found_list, val_list, inf_list, id_language, false, nullptr);
 
- // Обновляем кэш осуществленных проекций.
- #if defined LEM_THREADS
- lem::Process::CritSecLocker locker(&cs); 
- #endif
+    // РћР±РЅРѕРІР»СЏРµРј РєСЌС€ РѕСЃСѓС‰РµСЃС‚РІР»РµРЅРЅС‹С… РїСЂРѕРµРєС†РёР№.
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker locker(&cs);
+#endif
 
- if( !found_list.empty() && refresh_cache )
-  word_proj->Add( LA_WordProjection( A, found_list, val_list, 1 ) );
+    if (!found_list.empty() && refresh_cache)
+        word_proj->Add(LA_WordProjection(A, found_list, val_list, 1));
 
- return;
+    return;
 }
 #endif
 
 
 
 #if defined SOL_CAA
-int LexicalAutomat::GuessLanguage( const Sentence & phrase )
+int LexicalAutomat::GuessLanguage(const Sentence & phrase)
 {
- const int nlang = CastSizeToInt(GetDict().GetSynGram().languages().Count());
+    const int nlang = CastSizeToInt(GetDict().GetSynGram().languages().Count());
 
- lem::MCollect<float> lang_points;
- lang_points.resize(nlang);
- lang_points.fill(0.F);
+    lem::MCollect<float> lang_points;
+    lang_points.resize(nlang);
+    lang_points.fill(0.F);
 
- MCollect<Word_Coord> res;
- MCollect<ProjScore> val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    MCollect<Word_Coord> res;
+    MCollect<ProjScore> val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- for( lem::Container::size_type i=0; i<phrase.size(); ++i )
-  {
-   const UCString &word = phrase.GetWord(i);
- 
-   if( word.length()<2 ) 
-    // пропускаем всякие пунктуаторы и даже односложные слова типа 'I', 'у'
-    continue;
-
-   const Lexem & sl = phrase.GetNormalizedWord(i);
-
-   RC_Lexem ml( (Lexem*)&sl, null_deleter() );
-   res.clear();
-   val_list.clear();
-   prj_extra_inf.clear();
-
-   ProjectWord( ml, res, val_list, prj_extra_inf, LexicalAutomat::Wordforms, 0, UNKNOWN, NULL );
-
-   for( lem::Container::size_type j=0; j<res.size(); ++j )   
+    for (lem::Container::size_type i = 0; i < phrase.size(); ++i)
     {
-     const int ientry = res[j].GetEntry();
-     if( ientry!=UNKNOWN )
-      {
-       const SG_Entry &e = GetDict().GetSynGram().GetEntry(ientry);
-       const int iclass = e.GetClass();
-       const int id_lang = GetDict().GetSynGram().GetClass(iclass).GetLanguage();
+        const UCString &word = phrase.GetWord(CastSizeToInt(i));
 
-       if( id_lang!=UNKNOWN )
+        if (word.length() < 2)
+            // РїСЂРѕРїСѓСЃРєР°РµРј РІСЃСЏРєРёРµ РїСѓРЅРєС‚СѓР°С‚РѕСЂС‹ Рё РґР°Р¶Рµ РѕРґРЅРѕСЃР»РѕР¶РЅС‹Рµ СЃР»РѕРІР° С‚РёРїР° 'I', 'Сѓ'
+            continue;
+
+        const Lexem & sl = phrase.GetNormalizedWord(CastSizeToInt(i));
+
+        RC_Lexem ml((Lexem*)&sl, null_deleter());
+        res.clear();
+        val_list.clear();
+        prj_extra_inf.clear();
+
+        ProjectWord(ml, res, val_list, prj_extra_inf, LexicalAutomat::Wordforms, 0, UNKNOWN, nullptr);
+
+        for (lem::Container::size_type j = 0; j < res.size(); ++j)
         {
-         lang_points[ id_lang ] += val_list[j].score;
-        } 
-      }
-    }
-  }
- 
- // Выбираем язык с максимальными баллами
- int imaxlang=UNKNOWN;
- float maxpoint=0.F;
+            const int ientry = res[j].GetEntry();
+            if (ientry != UNKNOWN)
+            {
+                const SG_Entry &e = GetDict().GetSynGram().GetEntry(ientry);
+                const int iclass = e.GetClass();
+                const int id_lang = GetDict().GetSynGram().GetClass(iclass).GetLanguage();
 
- for( int i=0; i<nlang; i++ )
-  {
-   if( lang_points[i]>maxpoint )
+                if (id_lang != UNKNOWN)
+                {
+                    lang_points[id_lang] += val_list[j].score;
+                }
+            }
+        }
+    }
+
+    // Р’С‹Р±РёСЂР°РµРј СЏР·С‹Рє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р±Р°Р»Р»Р°РјРё
+    int imaxlang = UNKNOWN;
+    float maxpoint = 0.F;
+
+    for (int i = 0; i < nlang; i++)
     {
-     maxpoint = lang_points[i];
-     imaxlang = i;
+        if (lang_points[i] > maxpoint)
+        {
+            maxpoint = lang_points[i];
+            imaxlang = i;
+        }
     }
-  }
 
- return imaxlang;
+    return imaxlang;
 }
 
 
@@ -2548,9 +2555,9 @@ int LexicalAutomat::GuessLanguage( const lem::MCollect<UCString> &phrase )
  for( lem::Container::size_type i=0; i<phrase.size(); ++i )
   {
    const UCString &word = phrase[i];
- 
-   if( word.length()<2 ) 
-    // пропускаем всякие пунктуаторы и даже односложные слова типа 'I', 'у'
+
+   if( word.length()<2 )
+    // РїСЂРѕРїСѓСЃРєР°РµРј РІСЃСЏРєРёРµ РїСѓРЅРєС‚СѓР°С‚РѕСЂС‹ Рё РґР°Р¶Рµ РѕРґРЅРѕСЃР»РѕР¶РЅС‹Рµ СЃР»РѕРІР° С‚РёРїР° 'I', 'Сѓ'
     continue;
 
    Lexem sl(word);
@@ -2561,9 +2568,9 @@ int LexicalAutomat::GuessLanguage( const lem::MCollect<UCString> &phrase )
    val_list.clear();
    prj_extra_inf.clear();
 
-   ProjectWord( ml, res, val_list, prj_extra_inf, LexicalAutomat::Wordforms, 0, UNKNOWN, NULL );
+   ProjectWord( ml, res, val_list, prj_extra_inf, LexicalAutomat::Wordforms, 0, UNKNOWN, nullptr );
 
-   for( lem::Container::size_type j=0; j<res.size(); ++j )   
+   for( lem::Container::size_type j=0; j<res.size(); ++j )
     {
      const int ientry = res[j].GetEntry();
      if( ientry!=UNKNOWN )
@@ -2575,12 +2582,12 @@ int LexicalAutomat::GuessLanguage( const lem::MCollect<UCString> &phrase )
        if( id_lang!=UNKNOWN )
         {
          lang_points[ id_lang ] += val_list[j].GetFloat();
-        } 
+        }
       }
     }
   }
- 
- // Выбираем язык с максимальными баллами
+
+ // Р’С‹Р±РёСЂР°РµРј СЏР·С‹Рє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р±Р°Р»Р»Р°РјРё
  int imaxlang=UNKNOWN;
  float maxpoint=0.F;
 
@@ -2601,9 +2608,9 @@ int LexicalAutomat::GuessLanguage( const lem::MCollect<UCString> &phrase )
 
 
 // ****************************************************************
-// Определение языка на основе выполненных проекций слов.
-// В отличие от предыдущего метода, данный может опереться
-// на сложные методы нечеткой проекции.
+// РћРїСЂРµРґРµР»РµРЅРёРµ СЏР·С‹РєР° РЅР° РѕСЃРЅРѕРІРµ РІС‹РїРѕР»РЅРµРЅРЅС‹С… РїСЂРѕРµРєС†РёР№ СЃР»РѕРІ.
+// Р’ РѕС‚Р»РёС‡РёРµ РѕС‚ РїСЂРµРґС‹РґСѓС‰РµРіРѕ РјРµС‚РѕРґР°, РґР°РЅРЅС‹Р№ РјРѕР¶РµС‚ РѕРїРµСЂРµС‚СЊСЃСЏ
+// РЅР° СЃР»РѕР¶РЅС‹Рµ РјРµС‚РѕРґС‹ РЅРµС‡РµС‚РєРѕР№ РїСЂРѕРµРєС†РёРё.
 // ****************************************************************
 /*
 int LexicalAutomat::GuessLanguage( const Solarix::PhrasoBlock &phrase ) const
@@ -2624,7 +2631,7 @@ int LexicalAutomat::GuessLanguage( const Solarix::PhrasoBlock &phrase ) const
    const MLProjList& proj = phrase.GetProj(i);
 
    const int nalt = CastSizeToInt(proj.GetCoordList().size());
-  
+
    for( int j=0; j<nalt; ++j )
     {
      const int ientry = proj.GetCoordList()[j].GetEntry();
@@ -2639,12 +2646,12 @@ int LexicalAutomat::GuessLanguage( const Solarix::PhrasoBlock &phrase ) const
         {
          const float ef = proj.GetCoordValList()[j].GetFloat();
          lang_points[ id_lang ] += ef;
-        } 
+        }
       }
     }
   }
- 
- // Выбираем язык с максимальными баллами
+
+ // Р’С‹Р±РёСЂР°РµРј СЏР·С‹Рє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р±Р°Р»Р»Р°РјРё
  int imaxlang=UNKNOWN;
  float maxpoint=0.F;
 
@@ -2665,294 +2672,296 @@ int LexicalAutomat::GuessLanguage( const Solarix::PhrasoBlock &phrase ) const
 
 
 // *************************************************************************
-// Данный метод пытается определить язык на основе буквенной статистики.
+// Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РїС‹С‚Р°РµС‚СЃСЏ РѕРїСЂРµРґРµР»РёС‚СЊ СЏР·С‹Рє РЅР° РѕСЃРЅРѕРІРµ Р±СѓРєРІРµРЅРЅРѕР№ СЃС‚Р°С‚РёСЃС‚РёРєРё.
 // *************************************************************************
-int LexicalAutomat::GuessLanguage( const lem::UFString &str ) const
+int LexicalAutomat::GuessLanguage(const lem::UFString &str) const
 {
- const SynGram &sg = GetDict().GetSynGram();
- const GraphGram &gg = GetDict().GetGraphGram();
+    const SynGram &sg = GetDict().GetSynGram();
+    const GraphGram &gg = GetDict().GetGraphGram();
 
- lem::MCollect<int> lang_scores;
- lem::MCollect<int> lang_id;
+    lem::MCollect<int> lang_scores;
+    lem::MCollect<int> lang_id;
 
- // Если список языков, для которых в лексиконе есть слова, известен,
- // то будем анализировать только эти языки.
- GetDict().GetLanguages( lang_id );
+    // Р•СЃР»Рё СЃРїРёСЃРѕРє СЏР·С‹РєРѕРІ, РґР»СЏ РєРѕС‚РѕСЂС‹С… РІ Р»РµРєСЃРёРєРѕРЅРµ РµСЃС‚СЊ СЃР»РѕРІР°, РёР·РІРµСЃС‚РµРЅ,
+    // С‚Рѕ Р±СѓРґРµРј Р°РЅР°Р»РёР·РёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ СЌС‚Рё СЏР·С‹РєРё.
+    GetDict().GetLanguages(lang_id);
 
- if( lang_id.size()==1 )
-  return lang_id.front();
- else if( lang_id.empty() )
-  {
-   // Иначе - статанализ по всем языкам.
-   lem::Ptr<LanguageEnumerator> lenum( sg.languages().Enumerate() );
-   while( lenum->Fetch() )
+    if (lang_id.size() == 1)
     {
-     const int id_lang = lenum->GetId();
-     lang_id.push_back(id_lang);
+        return lang_id.front();
     }
-   lenum.Delete();
-  }
-
- lang_scores.resize( lang_id.size() );
- lang_scores.fill(0);
-
- const int nlang = CastSizeToInt(lang_id.size());
-
- MCollect<Word_Coord> projs;
- for( int i=0; i<str.length(); ++i )
-  {
-   const wchar_t c = str[i];
-   if( !lem::is_uspace(c) && !lem::is_udigit(c) && !lem::is_upunct(c) )
+    else if (lang_id.empty())
     {
-     projs.clear();
-     gg.FindSymbol( c, projs );
-
-     for( lem::Container::size_type j=0; j<projs.size(); ++j )
-      {
-       const int isymbol = projs[j].GetEntry();
-       const GG_Entry &symbol = gg.entries()[isymbol];
-       const int id_alphabet = symbol.GetAlphabet();
-       if( id_alphabet!=UNKNOWN )
+        // РРЅР°С‡Рµ - СЃС‚Р°С‚Р°РЅР°Р»РёР· РїРѕ РІСЃРµРј СЏР·С‹РєР°Рј.
+        std::unique_ptr<LanguageEnumerator> lenum(sg.languages().Enumerate());
+        while (lenum->Fetch())
         {
-         lem::Ptr<LanguageEnumerator> lenum( sg.languages().Enumerate() );
-         while( lenum->Fetch() )
-          {
-           const int id_lang = lenum->GetId();
-           const SG_Language &lang = lenum->GetItem(); 
-           if( lang.IsMainAlphabet(id_alphabet) ) // проверяем только главные алфавиты, так как латиница может быть вторичным алфавитом для нескольких языков.
+            const int id_lang = lenum->GetId();
+            lang_id.push_back(id_lang);
+        }
+        lenum.reset();
+    }
+
+    lang_scores.resize(lang_id.size());
+    lang_scores.fill(0);
+
+    const int nlang = CastSizeToInt(lang_id.size());
+
+    MCollect<Word_Coord> projs;
+    for (int i = 0; i < str.length(); ++i)
+    {
+        const wchar_t c = str[i];
+        if (!lem::is_uspace(c) && !lem::is_udigit(c) && !lem::is_upunct(c))
+        {
+            projs.clear();
+            gg.FindSymbol(c, projs);
+
+            for (lem::Container::size_type j = 0; j < projs.size(); ++j)
             {
-             const int ilang = lang_id.find(id_lang);
-             if( ilang!=UNKNOWN )
-              lang_scores[ilang]+=2;
+                const int isymbol = projs[j].GetEntry();
+                const GG_Entry &symbol = gg.entries()[isymbol];
+                const int id_alphabet = symbol.GetAlphabet();
+                if (id_alphabet != UNKNOWN)
+                {
+                    std::unique_ptr<LanguageEnumerator> lenum(sg.languages().Enumerate());
+                    while (lenum->Fetch())
+                    {
+                        const int id_lang = lenum->GetId();
+                        const SG_Language &lang = lenum->GetItem();
+                        if (lang.IsMainAlphabet(id_alphabet)) // РїСЂРѕРІРµСЂСЏРµРј С‚РѕР»СЊРєРѕ РіР»Р°РІРЅС‹Рµ Р°Р»С„Р°РІРёС‚С‹, С‚Р°Рє РєР°Рє Р»Р°С‚РёРЅРёС†Р° РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‚РѕСЂРёС‡РЅС‹Рј Р°Р»С„Р°РІРёС‚РѕРј РґР»СЏ РЅРµСЃРєРѕР»СЊРєРёС… СЏР·С‹РєРѕРІ.
+                        {
+                            const int ilang = lang_id.find(id_lang);
+                            if (ilang != UNKNOWN)
+                                lang_scores[ilang] += 2;
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
 
- // Выбираем язык с максимальными баллами
- int imaxlang=UNKNOWN;
- int maxpoint=0;
+    // Р’С‹Р±РёСЂР°РµРј СЏР·С‹Рє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р±Р°Р»Р»Р°РјРё
+    int imaxlang = UNKNOWN;
+    int maxpoint = 0;
 
- for( int i=0; i<nlang; i++ )
-  {
-   if( lang_scores[i]>maxpoint )
+    for (int i = 0; i < nlang; i++)
     {
-     maxpoint = lang_scores[i];
-     imaxlang = i;
-    }
-  }
-
- if( maxpoint>10 )
-  { 
-   // Проверим, что другие варианты распознавания достаточно малодостоверны.
-   int min_dw = lem::int_max;
-   for( int i=0; i<nlang; i++ )
-    {
-     if( i!=imaxlang )
-      {
-       const int dw = maxpoint-lang_scores[i];
-       if( dw < min_dw )
+        if (lang_scores[i] > maxpoint)
         {
-         min_dw = dw;
-         if( min_dw==0 )
-          break;
+            maxpoint = lang_scores[i];
+            imaxlang = i;
         }
-      }
     }
- 
-   if( float(min_dw)/float(maxpoint) < 0.1 )
+
+    if (maxpoint > 10)
     {
-     // Разница выбранного победителя и серебрянного призера слишком
-     // мала для достоверного выбора.
-     // Применим более сложный алгоритм - с проекцией слов.
-     if( GetDict().seeker.NotNull() )
-      {
-       lem::Collect<UFString> words;
-       lem::parse( str, words, L" \r\n\t,.:;'\"?!()*&-+=[{]}|<>", false );
-
-       lang_scores.Nullify();
-
-       for( lem::Container::size_type i=0; i<words.size(); ++i )
+        // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ РґСЂСѓРіРёРµ РІР°СЂРёР°РЅС‚С‹ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РјР°Р»РѕРґРѕСЃС‚РѕРІРµСЂРЅС‹.
+        int min_dw = lem::int_max;
+        for (int i = 0; i < nlang; i++)
         {
-         UCString word( words[i].c_str() );
-         word.to_upper();
-          
-         const int ie = GetDict().seeker->Find( word, true );
-         if( ie!=UNKNOWN )
-          {
-           const SG_Entry &e = GetDict().GetSynGram().GetEntry(ie);
-           const int iclass = e.GetClass();
-           if( !lem::is_quantor(iclass) )
-            {  
-             const SG_Class &cls = GetDict().GetSynGram().GetClass(iclass);
-             const int id_lang = cls.GetLanguage();
-             if( id_lang!=UNKNOWN )
-              {
-               const int ilang = lang_id.find(id_lang);
-               if( ilang!=UNKNOWN )
-                lang_scores[ilang]++;
-              }
+            if (i != imaxlang)
+            {
+                const int dw = maxpoint - lang_scores[i];
+                if (dw < min_dw)
+                {
+                    min_dw = dw;
+                    if (min_dw == 0)
+                        break;
+                }
             }
-          }
         }
-      }
 
-     imaxlang=UNKNOWN;
-     maxpoint=0;
-
-     for( int i=0; i<nlang; i++ )
-      {
-       if( lang_scores[i]>maxpoint )
+        if (float(min_dw) / float(maxpoint) < 0.1)
         {
-         maxpoint = lang_scores[i];
-         imaxlang = i;
-        }
-      }
-    }
-  }
+            // Р Р°Р·РЅРёС†Р° РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїРѕР±РµРґРёС‚РµР»СЏ Рё СЃРµСЂРµР±СЂСЏРЅРЅРѕРіРѕ РїСЂРёР·РµСЂР° СЃР»РёС€РєРѕРј
+            // РјР°Р»Р° РґР»СЏ РґРѕСЃС‚РѕРІРµСЂРЅРѕРіРѕ РІС‹Р±РѕСЂР°.
+            // РџСЂРёРјРµРЅРёРј Р±РѕР»РµРµ СЃР»РѕР¶РЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј - СЃ РїСЂРѕРµРєС†РёРµР№ СЃР»РѕРІ.
+            if (GetDict().seeker.NotNull())
+            {
+                lem::Collect<UFString> words;
+                lem::parse(str, words, L" \r\n\t,.:;'\"?!()*&-+=[{]}|<>", false);
 
- return imaxlang==UNKNOWN ? UNKNOWN : lang_id[imaxlang];
+                lang_scores.Nullify();
+
+                for (lem::Container::size_type i = 0; i < words.size(); ++i)
+                {
+                    UCString word(words[i].c_str());
+                    word.to_upper();
+
+                    const int ie = GetDict().seeker->Find(word, true);
+                    if (ie != UNKNOWN)
+                    {
+                        const SG_Entry &e = GetDict().GetSynGram().GetEntry(ie);
+                        const int iclass = e.GetClass();
+                        if (!lem::is_quantor(iclass))
+                        {
+                            const SG_Class &cls = GetDict().GetSynGram().GetClass(iclass);
+                            const int id_lang = cls.GetLanguage();
+                            if (id_lang != UNKNOWN)
+                            {
+                                const int ilang = lang_id.find(id_lang);
+                                if (ilang != UNKNOWN)
+                                    lang_scores[ilang]++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            imaxlang = UNKNOWN;
+            maxpoint = 0;
+
+            for (int i = 0; i < nlang; i++)
+            {
+                if (lang_scores[i] > maxpoint)
+                {
+                    maxpoint = lang_scores[i];
+                    imaxlang = i;
+                }
+            }
+        }
+    }
+
+    return imaxlang == UNKNOWN ? UNKNOWN : lang_id[imaxlang];
 }
 
 
 
-int LexicalAutomat::GuessLanguage( const Solarix::Variator &phrase ) const
+int LexicalAutomat::GuessLanguage(const Solarix::Variator &phrase) const
 {
- const int nlang = CastSizeToInt(GetDict().GetSynGram().languages().Count());
+    const int nlang = CastSizeToInt(GetDict().GetSynGram().languages().Count());
 
- lem::MCollect<float> lang_points;
- lang_points.resize(nlang);
- lang_points.fill(0.F);
+    lem::MCollect<float> lang_points;
+    lang_points.resize(nlang);
+    lang_points.fill(0.F);
 
- SynGram &sg = GetDict().GetSynGram();
+    SynGram &sg = GetDict().GetSynGram();
 
- lem::MCollect<int> lang_id;
- lem::Ptr<LanguageEnumerator> lenum( sg.languages().Enumerate() );
- while( lenum->Fetch() )
-  {
-   const int id_lang = lenum->GetId();
-   lang_id.push_back(id_lang);
-  }
- lenum.Delete();
-
-
- MCollect<Word_Coord> res;
- MCollect<Real1> val_list;
-
- int nprojected=0;
-
- for( int i=1; i<phrase.size()-1; ++i )
-  {
-   const Tree_Node & root = * phrase[i];
-
-   const int nalt = 1+CastSizeToInt(root.GetNode().GetAlts().size());
-
-   for( int ialt=0; ialt<nalt; ++ialt )
+    lem::MCollect<int> lang_id;
+    std::unique_ptr<LanguageEnumerator> lenum(sg.languages().Enumerate());
+    while (lenum->Fetch())
     {
-     const Solarix::Word_Form &wf = ialt==0 ? root.GetNode() : *root.GetNode().GetAlts()[ialt-1];
+        const int id_lang = lenum->GetId();
+        lang_id.push_back(id_lang);
+    }
+    lenum.reset();
 
-     const int ekey = wf.GetEntryKey();
 
-     if( ekey!=UNKNOWN )
-      {
-       const SG_Entry &e = sg.GetEntry(ekey);
-       const int iclass = e.GetClass();
-       const int id_lang = GetDict().GetSynGram().GetClass(iclass).GetLanguage();
+    MCollect<Word_Coord> res;
+    MCollect<Real1> val_list;
 
-       if( id_lang!=UNKNOWN )
+    int nprojected = 0;
+
+    for (int i = 1; i < phrase.size() - 1; ++i)
+    {
+        const Tree_Node & root = *phrase[i];
+
+        const int nalt = 1 + CastSizeToInt(root.GetNode().GetAlts().size());
+
+        for (int ialt = 0; ialt < nalt; ++ialt)
         {
-         nprojected++;
-         const int ilang = lang_id.find(id_lang);  
-         lang_points[ ilang ] += 1.F/float(nalt);
+            const Solarix::Word_Form &wf = ialt == 0 ? root.GetNode() : *root.GetNode().GetAlts()[ialt - 1];
+
+            const int ekey = wf.GetEntryKey();
+
+            if (ekey != UNKNOWN)
+            {
+                const SG_Entry &e = sg.GetEntry(ekey);
+                const int iclass = e.GetClass();
+                const int id_lang = GetDict().GetSynGram().GetClass(iclass).GetLanguage();
+
+                if (id_lang != UNKNOWN)
+                {
+                    nprojected++;
+                    const int ilang = lang_id.find(id_lang);
+                    lang_points[ilang] += 1.F / float(nalt);
+                }
+            }
         }
-      }
     }
-  }
- 
- if( !nprojected )
-  {
-   // по результатам проекции определить язык невозможно, будем использовать статистику по буквам
-   UFString str;
-   for( int i=1; i<phrase.size()-1; ++i )
+
+    if (!nprojected)
     {
-     const Tree_Node & root = * phrase[i];
-     const Word_Form & wf = root.GetNode();
+        // РїРѕ СЂРµР·СѓР»СЊС‚Р°С‚Р°Рј РїСЂРѕРµРєС†РёРё РѕРїСЂРµРґРµР»РёС‚СЊ СЏР·С‹Рє РЅРµРІРѕР·РјРѕР¶РЅРѕ, Р±СѓРґРµРј РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїРѕ Р±СѓРєРІР°Рј
+        UFString str;
+        for (int i = 1; i < phrase.size() - 1; ++i)
+        {
+            const Tree_Node & root = *phrase[i];
+            const Word_Form & wf = root.GetNode();
 
-     if( !str.empty() )
-      str += L' ';
- 
-     str += wf.GetName()->c_str();
+            if (!str.empty())
+                str += L' ';
+
+            str += wf.GetName()->c_str();
+        }
+
+        return GuessLanguage(str);
     }
 
-   return GuessLanguage(str); 
-  }
+    // Р’С‹Р±РёСЂР°РµРј СЏР·С‹Рє СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹РјРё Р±Р°Р»Р»Р°РјРё
+    int imaxlang = UNKNOWN;
+    float maxpoint = 0.F;
 
- // Выбираем язык с максимальными баллами
- int imaxlang=UNKNOWN;
- float maxpoint=0.F;
-
- {
- for( int i=0; i<nlang; i++ )
-  {
-   if( lang_points[i]>maxpoint )
     {
-     maxpoint = lang_points[i];
-     imaxlang = i;
+        for (int i = 0; i < nlang; i++)
+        {
+            if (lang_points[i] > maxpoint)
+            {
+                maxpoint = lang_points[i];
+                imaxlang = i;
+            }
+        }
     }
-  }
- }
 
- return lang_id[imaxlang];
+    return lang_id[imaxlang];
 }
 
 
 
 #if defined SOL_CAA
-void LexicalAutomat::GetBaseForm( lem::UCString &word, bool allow_dynforms ) const
+void LexicalAutomat::GetBaseForm(lem::UCString &word, bool allow_dynforms) const
 {
- word.to_upper();
+    word.to_upper();
 
- if( GetDict().seeker.NotNull() )
-  {
-   const int ie = GetDict().seeker->Find(word,allow_dynforms);
+    if (GetDict().seeker.NotNull())
+    {
+        const int ie = GetDict().seeker->Find(word, allow_dynforms);
 
-   if( ie!=UNKNOWN ) 
-    word = GetDict().GetSynGram().GetEntry(ie).GetName();
-  } 
+        if (ie != UNKNOWN)
+            word = GetDict().GetSynGram().GetEntry(ie).GetName();
+    }
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_CAA
 void LexicalAutomat::GetAllProjections(
-                                       const lem::UCString &word,
-                                       bool allow_dynforms,
-                                       lem::MCollect<int> &ies
-                                      )
+    const lem::UCString &word,
+    bool allow_dynforms,
+    lem::MCollect<int> &ies
+)
 {
- Lexem sl(word);
- TranslateLexem( sl, true );
+    Lexem sl(word);
+    TranslateLexem(sl, true);
 
- RC_Lexem ml( &sl, null_deleter() );
+    RC_Lexem ml(&sl, null_deleter());
 
- MCollect<Word_Coord> res;
- MCollect<ProjScore> val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    MCollect<Word_Coord> res;
+    MCollect<ProjScore> val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- ProjectWord( ml, res, val_list, prj_extra_inf, allow_dynforms ? LexicalAutomat::Dynforms_Last_Chance : LexicalAutomat::Wordforms, 0, UNKNOWN, NULL );
+    ProjectWord(ml, res, val_list, prj_extra_inf, allow_dynforms ? LexicalAutomat::Dynforms_Last_Chance : LexicalAutomat::Wordforms, 0, UNKNOWN, nullptr);
 
- for( lem::Container::size_type j=0; j<res.size(); ++j )   
-  {
-   const int ientry = res[j].GetEntry();
-   if( ientry!=UNKNOWN && ies.find(ientry)==UNKNOWN )
-    ies.push_back(ientry);
-  }
+    for (lem::Container::size_type j = 0; j < res.size(); ++j)
+    {
+        const int ientry = res[j].GetEntry();
+        if (ientry != UNKNOWN && ies.find(ientry) == UNKNOWN)
+            ies.push_back(ientry);
+    }
 
- return;
+    return;
 }
 #endif
 
@@ -2975,11 +2984,11 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
 
    if( ml_len>1 )
     {
-     // если первая лексема также может быть самостоятельной формой какого-либо
-     // слова, то выбор - сливать или не сливать мультилексему - сейчас не может быть
-     // сделан.
-     // С другой стороны, если для 2-лексемы второе слово не может являться
-     // самостоятельной грамматической формой, то можно смело сливать.
+     // РµСЃР»Рё РїРµСЂРІР°СЏ Р»РµРєСЃРµРјР° С‚Р°РєР¶Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕР№ С„РѕСЂРјРѕР№ РєР°РєРѕРіРѕ-Р»РёР±Рѕ
+     // СЃР»РѕРІР°, С‚Рѕ РІС‹Р±РѕСЂ - СЃР»РёРІР°С‚СЊ РёР»Рё РЅРµ СЃР»РёРІР°С‚СЊ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ - СЃРµР№С‡Р°СЃ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ
+     // СЃРґРµР»Р°РЅ.
+     // РЎ РґСЂСѓРіРѕР№ СЃС‚РѕСЂРѕРЅС‹, РµСЃР»Рё РґР»СЏ 2-Р»РµРєСЃРµРјС‹ РІС‚РѕСЂРѕРµ СЃР»РѕРІРѕ РЅРµ РјРѕР¶РµС‚ СЏРІР»СЏС‚СЊСЃСЏ
+     // СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕР№ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕР№ С„РѕСЂРјРѕР№, С‚Рѕ РјРѕР¶РЅРѕ СЃРјРµР»Рѕ СЃР»РёРІР°С‚СЊ.
 
      if( CastSizeToInt(i)<CastSizeToInt(words.size())-1 )
       {
@@ -2988,7 +2997,7 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
          any_ml = true;
          break;
         }
-     
+
        const int tail_size = CastSizeToInt(words.size())-CastSizeToInt(i);
 
        if( ml_len>=2 )
@@ -2999,24 +3008,24 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
 
            if( !sg.IsWordForm(l2) )
             {
-             // второе слово не может быть отдельной грамматической формой.
+             // РІС‚РѕСЂРѕРµ СЃР»РѕРІРѕ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚РґРµР»СЊРЅРѕР№ РіСЂР°РјРјР°С‚РёС‡РµСЃРєРѕР№ С„РѕСЂРјРѕР№.
              any_ml = true;
              break;
             }
 
            if( ml_len>=3 )
             {
-             // третье слово не может быть отдельной формой
+             // С‚СЂРµС‚СЊРµ СЃР»РѕРІРѕ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚РґРµР»СЊРЅРѕР№ С„РѕСЂРјРѕР№
              if( tail_size>=3 )
               {
                const Lexem & l3 = words[i+2]->normalized_word;
 
                if( !sg.IsWordForm(l3) )
                 {
-                 // убедимся, что второе и третье слово не образуют форму...
+                 // СѓР±РµРґРёРјСЃСЏ, С‡С‚Рѕ РІС‚РѕСЂРѕРµ Рё С‚СЂРµС‚СЊРµ СЃР»РѕРІРѕ РЅРµ РѕР±СЂР°Р·СѓСЋС‚ С„РѕСЂРјСѓ...
                  Lexem l23 = words[i+1]->normalized_word;
                  l23.Add(l3);
-            
+
                  if( !sg.IsWordForm(l23) )
                   {
                    any_ml = true;
@@ -3031,17 +3040,17 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
     }
   }
 
- // Нужно проводить более тщательный анализ и слияние?
+ // РќСѓР¶РЅРѕ РїСЂРѕРІРѕРґРёС‚СЊ Р±РѕР»РµРµ С‚С‰Р°С‚РµР»СЊРЅС‹Р№ Р°РЅР°Р»РёР· Рё СЃР»РёСЏРЅРёРµ?
  if( any_ml )
   {
-   // Да
+   // Р”Р°
 
    lem::zbool changed;
    lem::PtrCollect< SentenceWord > merged_words;
 
    int icur=0;
    while( icur<CastSizeToInt(words.size()) )
-    {  
+    {
      SentenceWord * cur_word = words[icur];
 
      const Lexem & wl = cur_word->normalized_word;
@@ -3064,15 +3073,15 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
 
        bool found=false;
 
-       // Попытаемся собрать максимально длинную мультилексему.
+       // РџРѕРїС‹С‚Р°РµРјСЃСЏ СЃРѕР±СЂР°С‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РґР»РёРЅРЅСѓСЋ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ.
        for( int j=ml_len; j>1; j-- )
         {
          if( (icur+j) > CastSizeToInt(words.size()) )
-          // У нас столько слов уже нету в правой части.
+          // РЈ РЅР°СЃ СЃС‚РѕР»СЊРєРѕ СЃР»РѕРІ СѓР¶Рµ РЅРµС‚Сѓ РІ РїСЂР°РІРѕР№ С‡Р°СЃС‚Рё.
           continue;
 
          Lexem probe_lex(wl);
-       
+
          bool do_probe=true;
          for( int k=1; k<j; ++k )
           {
@@ -3080,7 +3089,7 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
 
            if( headword_is_wordform )
             {
-             // Если хоть одна лексема может быть отдельным словом, то сливать нельзя.
+             // Р•СЃР»Рё С…РѕС‚СЊ РѕРґРЅР° Р»РµРєСЃРµРјР° РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚РґРµР»СЊРЅС‹Рј СЃР»РѕРІРѕРј, С‚Рѕ СЃР»РёРІР°С‚СЊ РЅРµР»СЊР·СЏ.
 
              if( sg.IsWordForm(wl2) )
               {
@@ -3105,14 +3114,14 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
          if( !do_probe )
           continue;
 
-         // Проецируем эту мультилексему...
+         // РџСЂРѕРµС†РёСЂСѓРµРј СЌС‚Сѓ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ...
          const bool is_ml = sg.IsMultiLexem( probe_lex );
 
-         // Получилось?
+         // РџРѕР»СѓС‡РёР»РѕСЃСЊ?
          if( is_ml )
           {
-           // Да.
-           // Таким образом, собрали мультилексему.
+           // Р”Р°.
+           // РўР°РєРёРј РѕР±СЂР°Р·РѕРј, СЃРѕР±СЂР°Р»Рё РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ.
            UCString ml_word( cur_word->word );
 
            for( int k=1; k<j; k++ )
@@ -3122,15 +3131,15 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
              #endif
 
              if( words[icur+k]->word==L'-' || words[icur+k-1]->word==L'-' )
-              { 
-               // Дефис не нуждается в пробелах слева и справа. 
-               // "КТО-ТО"
+              {
+               // Р”РµС„РёСЃ РЅРµ РЅСѓР¶РґР°РµС‚СЃСЏ РІ РїСЂРѕР±РµР»Р°С… СЃР»РµРІР° Рё СЃРїСЂР°РІР°.
+               // "РљРўРћ-РўРћ"
               }
              else if( words[icur+k]->word==L',' )
-              {  
-               // Перед запятой пробел не нужен!
-               // ПОСТОЛЬКУ, ПОСКОЛЬКУ
-              }              
+              {
+               // РџРµСЂРµРґ Р·Р°РїСЏС‚РѕР№ РїСЂРѕР±РµР» РЅРµ РЅСѓР¶РµРЅ!
+               // РџРћРЎРўРћР›Р¬РљРЈ, РџРћРЎРљРћР›Р¬РљРЈ
+              }
              else
               {
                ml_word += Lexem::DelimiterChar;
@@ -3144,11 +3153,11 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
            merged_word->normalized_word = probe_lex;
            merged_words.push_back( merged_word );
 
-           changed=true; 
+           changed=true;
            icur+=j;
            found=true;
            break;
-          } 
+          }
         }
 
        if( !found )
@@ -3156,7 +3165,7 @@ void LexicalAutomat::Segmentation( lem::PtrCollect<SentenceWord> & words, int La
          merged_words.push_back( cur_word );
          words[icur] = NULL;
          icur++;
-        } 
+        }
       }
     }
 
@@ -3202,7 +3211,7 @@ void LexicalAutomat::ConservativeSegmentation( Solarix::Phrasema &f )
 
  if( any_ml )
   {
- 
+
   }
 
  return;
@@ -3212,23 +3221,23 @@ void LexicalAutomat::ConservativeSegmentation( Solarix::Phrasema &f )
 #endif
 
 
-int LexicalAutomat::Find_Quantor_Entry( int iclass )
+int LexicalAutomat::Find_Quantor_Entry(int iclass)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker locker(&cs); 
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker locker(&cs);
+#endif
 
- std::map<int,int>::const_iterator it = unknown_entries.find(iclass);
- if( it==unknown_entries.end() )
-  {
-   int res = GetDict().GetSynGram().Find_Quantor_Entry(iclass);
-   unknown_entries.insert( std::make_pair( iclass, res ) );
-   return res;
-  }
- else
-  {
-   return it->second;
-  }
+    auto it = unknown_entries.find(iclass);
+    if (it == unknown_entries.end())
+    {
+        int res = GetDict().GetSynGram().Find_Quantor_Entry(iclass);
+        unknown_entries.insert(std::make_pair(iclass, res));
+        return res;
+    }
+    else
+    {
+        return it->second;
+    }
 }
 
 #endif
@@ -3236,85 +3245,85 @@ int LexicalAutomat::Find_Quantor_Entry( int iclass )
 
 
 #if defined SOL_CAA
-CasingCoder& LexicalAutomat::GetCasingCoder(void)
+CasingCoder& LexicalAutomat::GetCasingCoder()
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_casing_coder);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_casing_coder);
+#endif
 
- if( casing_coder==NULL )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
+    if (casing_coder == nullptr)
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-   casing_coder = new CasingCoder( GetSynGram() );
-   return *casing_coder;
-  }
- else
-  {
-   return *casing_coder;
-  }
+        casing_coder = new CasingCoder(GetSynGram());
+        return *casing_coder;
+    }
+    else
+    {
+        return *casing_coder;
+    }
 }
 #endif
 
 
 #if defined SOL_CAA
-Solarix::Word_Form* LexicalAutomat::ProjectWord2Wordform( const lem::UCString &word, int LanguageID )
+Solarix::Word_Form* LexicalAutomat::ProjectWord2Wordform(const lem::UCString &word, int LanguageID)
 {
- Solarix::Lexem *word2 = new Solarix::Lexem(word);
- this->TranslateLexem(*word2,true,LanguageID);
- RC_Lexem lex( word2 );
+    Solarix::Lexem *word2 = new Solarix::Lexem(word);
+    this->TranslateLexem(*word2, true, LanguageID);
+    RC_Lexem lex(word2);
 
- MCollect<Word_Coord> found_list;
- MCollect<ProjScore> val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    MCollect<Word_Coord> found_list;
+    MCollect<ProjScore> val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- this->ProjectWord( lex, found_list, val_list, prj_extra_inf, /*DynformsMode::*/Wordforms, 0, LanguageID, NULL );
+    this->ProjectWord(lex, found_list, val_list, prj_extra_inf, /*DynformsMode::*/Wordforms, 0, LanguageID, nullptr);
 
- Solarix::Word_Form *wf = NULL;
+    Solarix::Word_Form *wf = nullptr;
 
- for( lem::Container::size_type i=0; i<found_list.size(); ++i )
-  {
-   const int ekey = found_list[i].GetEntry();
-   const Solarix::SG_Entry &e = GetDict().GetSynGram().GetEntry(ekey);
-   CP_Array coords( e.forms()[ found_list[i].GetForm() ].coords() );
-   if( prj_extra_inf[i]!=NULL )
+    for (lem::Container::size_type i = 0; i < found_list.size(); ++i)
     {
-     std::copy( prj_extra_inf[i]->coords.begin(), prj_extra_inf[i]->coords.end(), std::back_inserter(coords) );
+        const int ekey = found_list[i].GetEntry();
+        const Solarix::SG_Entry &e = GetDict().GetSynGram().GetEntry(ekey);
+        CP_Array coords(e.forms()[found_list[i].GetForm()].coords());
+        if (prj_extra_inf[i] != nullptr)
+        {
+            std::copy(prj_extra_inf[i]->coords.begin(), prj_extra_inf[i]->coords.end(), std::back_inserter(coords));
+        }
+
+        if (i == 0)
+        {
+            wf = new Solarix::Word_Form(lex, lex, ekey, coords, 0 /*Real1(100)*/);
+        }
+        else
+        {
+            Solarix::Word_Form *alt = new Solarix::Word_Form(lex, lex, ekey, coords, 0 /*Real1(100)*/);
+            wf->AddAlt(alt);
+        }
     }
 
-   if(i==0)
-    { 
-     wf = new Solarix::Word_Form( lex, lex, ekey, coords, 0 /*Real1(100)*/ );
-    }
-   else
-    {
-     Solarix::Word_Form *alt = new Solarix::Word_Form( lex, lex, ekey, coords, 0 /*Real1(100)*/ );
-     wf->AddAlt(alt);
-    }
-  }
-
- return wf; 
+    return wf;
 }
 #endif
 
 
 void LexicalAutomat::ProjectWord(
-                                 const lem::UCString &word,
-                                 MCollect<Word_Coord> &found_list,
-                                 int LanguageID
-                                )
+    const lem::UCString &word,
+    MCollect<Word_Coord> &found_list,
+    int LanguageID
+)
 {
- Solarix::Lexem *word2 = new Solarix::Lexem(word);
- this->TranslateLexem(*word2,true,LanguageID);
- RC_Lexem lex( word2 );
+    Solarix::Lexem *word2 = new Solarix::Lexem(word);
+    this->TranslateLexem(*word2, true, LanguageID);
+    RC_Lexem lex(word2);
 
- MCollect<ProjScore> val_list;
- lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
+    MCollect<ProjScore> val_list;
+    lem::PtrCollect<LA_ProjectInfo> prj_extra_inf;
 
- ProjectWord( lex, found_list, val_list, prj_extra_inf, /*DynformsMode::*/Wordforms, 0, LanguageID, NULL );
- return; 
+    ProjectWord(lex, found_list, val_list, prj_extra_inf, /*DynformsMode::*/Wordforms, 0, LanguageID, nullptr);
+    return;
 }
 
 
@@ -3324,43 +3333,43 @@ void LexicalAutomat::ProjectWord(
 
 #if defined SOL_CAA
 bool LexicalAutomat::FindMisspeltWord(
-                                      const lem::UCString &word,
-                                      MCollect<lem::UCString> &corrected_word,
-                                      int id_lang
-                                     )
+    const lem::UCString &word,
+    MCollect<lem::UCString> &corrected_word,
+    int id_lang
+)
 {
- return recognizer->RewriteMisspeltWord( id_lang, word, corrected_word );
+    return recognizer->RewriteMisspeltWord(id_lang, word, corrected_word);
 }
 #endif
 
 
 #if defined SOL_CAA
-void LexicalAutomat::ListAssociationsForEntry( int id_entry, lem::MCollect<int> & ids )
+void LexicalAutomat::ListAssociationsForEntry(int id_entry, lem::MCollect<int> & ids)
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_word_assoc);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_word_assoc);
+#endif
 
- std::set<int>::const_iterator it = unassociated_words.find(id_entry);
- if( it==unassociated_words.end() )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
+    auto it = unassociated_words.find(id_entry);
+    if (it == unassociated_words.end())
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-   ids.clear();
+        ids.clear();
 
-   lem::Ptr<LS_ResultSet> rs( GetStorage().ListAssociationsForEntry( id_entry ) );
-   while( rs->Fetch() )
-   {
-    ids.push_back( rs->GetInt(0) );
-   }
-   rs.Delete();
+        std::unique_ptr<LS_ResultSet> rs(GetStorage().ListAssociationsForEntry(id_entry));
+        while (rs->Fetch())
+        {
+            ids.push_back(rs->GetInt(0));
+        }
+        rs.reset();
 
-   if( ids.empty() )
-    unassociated_words.insert( id_entry);
-  }
+        if (ids.empty())
+            unassociated_words.insert(id_entry);
+    }
 
- return;
+    return;
 }
 #endif

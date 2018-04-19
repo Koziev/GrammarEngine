@@ -11,16 +11,16 @@
 //
 // Content:
 // LEM C++ library  http://www.solarix.ru
-// Фонетический Алеф-Автомат - часть кода Лексического Автомата, то есть
-// реализации класса LexicalAutomat. Занимается продукцией фонетических
-// инвариантов для мультилексем, что позволяет распознавать слова с ошибками
-// (either хромает орфография, or пользователь слишком спешит давить на
-// keyboard, либо звуковой драйвер не дает качественного распознавания фонем,
+// Р¤РѕРЅРµС‚РёС‡РµСЃРєРёР№ РђР»РµС„-РђРІС‚РѕРјР°С‚ - С‡Р°СЃС‚СЊ РєРѕРґР° Р›РµРєСЃРёС‡РµСЃРєРѕРіРѕ РђРІС‚РѕРјР°С‚Р°, С‚Рѕ РµСЃС‚СЊ
+// СЂРµР°Р»РёР·Р°С†РёРё РєР»Р°СЃСЃР° LexicalAutomat. Р—Р°РЅРёРјР°РµС‚СЃСЏ РїСЂРѕРґСѓРєС†РёРµР№ С„РѕРЅРµС‚РёС‡РµСЃРєРёС…
+// РёРЅРІР°СЂРёР°РЅС‚РѕРІ РґР»СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРј, С‡С‚Рѕ РїРѕР·РІРѕР»СЏРµС‚ СЂР°СЃРїРѕР·РЅР°РІР°С‚СЊ СЃР»РѕРІР° СЃ РѕС€РёР±РєР°РјРё
+// (either С…СЂРѕРјР°РµС‚ РѕСЂС„РѕРіСЂР°С„РёСЏ, or РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃР»РёС€РєРѕРј СЃРїРµС€РёС‚ РґР°РІРёС‚СЊ РЅР°
+// keyboard, Р»РёР±Рѕ Р·РІСѓРєРѕРІРѕР№ РґСЂР°Р№РІРµСЂ РЅРµ РґР°РµС‚ РєР°С‡РµСЃС‚РІРµРЅРЅРѕРіРѕ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ С„РѕРЅРµРј,
 // and so forth).
 // -----------------------------------------------------------------------------
 //
 // CD->01.09.1997
-// LC->09.06.2011
+// LC->17.04.2018
 // --------------
 
 #if defined SOL_CAA
@@ -38,320 +38,311 @@ using namespace Solarix;
 
 namespace Solarix
 {
- struct LA_AA_item : public Lexem
- {
-  Real1 val;
+    struct LA_AA_item : public Lexem
+    {
+        Real1 val;
 
-  LA_AA_item(void):Lexem(){};
-  LA_AA_item( const Lexem &l, Real1 Val ):Lexem(l) { val=Val; }
- };
+        LA_AA_item() :Lexem() {};
+        LA_AA_item(const Lexem &l, Real1 Val) :Lexem(l) { val = Val; }
+    };
 }
 
 typedef MCollect<LA_AA_item> LA_AA_list;
 
 /*****************************************************************************
 
-                         ФОНЕТИЧЕСКИЙ АЛЕФ-АВТОМАТ.
+                         Р¤РћРќР•РўРР§Р•РЎРљРР™ РђР›Р•Р¤-РђР’РўРћРњРђРў.
 
-  Именно его деятельность привносит в Систему особый шик распознавания слов,
-  написанных НЕ СОВСЕМ верно, к примеру, с орфографическими ошибками.
+  РРјРµРЅРЅРѕ РµРіРѕ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРёРІРЅРѕСЃРёС‚ РІ РЎРёСЃС‚РµРјСѓ РѕСЃРѕР±С‹Р№ С€РёРє СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ СЃР»РѕРІ,
+  РЅР°РїРёСЃР°РЅРЅС‹С… РќР• РЎРћР’РЎР•Рњ РІРµСЂРЅРѕ, Рє РїСЂРёРјРµСЂСѓ, СЃ РѕСЂС„РѕРіСЂР°С„РёС‡РµСЃРєРёРјРё РѕС€РёР±РєР°РјРё.
 
-  ВХОДНЫЕ ПАРАМЕТРЫ;
+  Р’РҐРћР”РќР«Р• РџРђР РђРњР•РўР Р«;
 
-   proj - задание на проекцию, содержит мультилексему, реально присутствующую
-          в исходном предложении.
+   proj - Р·Р°РґР°РЅРёРµ РЅР° РїСЂРѕРµРєС†РёСЋ, СЃРѕРґРµСЂР¶РёС‚ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ, СЂРµР°Р»СЊРЅРѕ РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‰СѓСЋ
+          РІ РёСЃС…РѕРґРЅРѕРј РїСЂРµРґР»РѕР¶РµРЅРёРё.
 
-  ВОЗВРАЩАЕМЫЙ РЕЗУЛЬТАТ:
+  Р’РћР—Р’Р РђР©РђР•РњР«Р™ Р Р•Р—РЈР›Р¬РўРђРў:
 
-   Через параметр proj возвращается список фонетических инвариантов дл
-   слова-аргумента.
+   Р§РµСЂРµР· РїР°СЂР°РјРµС‚СЂ proj РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРїРёСЃРѕРє С„РѕРЅРµС‚РёС‡РµСЃРєРёС… РёРЅРІР°СЂРёР°РЅС‚РѕРІ РґР»
+   СЃР»РѕРІР°-Р°СЂРіСѓРјРµРЅС‚Р°.
 *****************************************************************************/
-void LexicalAutomat::ProducePhonInv( MLProjList &proj, int id_language, LA_RecognitionTrace *trace )
+void LexicalAutomat::ProducePhonInv(MLProjList &proj, int id_language, LA_RecognitionTrace *trace)
 {
- // В число оригиналов входят и "ломанные"
- int n_org = 1 + CastSizeToInt(proj.get_Broken().size());
+    // Р’ С‡РёСЃР»Рѕ РѕСЂРёРіРёРЅР°Р»РѕРІ РІС…РѕРґСЏС‚ Рё "Р»РѕРјР°РЅРЅС‹Рµ"
+    int n_org = 1 + CastSizeToInt(proj.get_Broken().size());
 
- std::set<lem::UCString> created_phonetic_variants;
+    std::set<lem::UCString> created_phonetic_variants;
 
- for( int iorg=0; iorg<n_org; iorg++ )
-  {
-   const RC_Lexem &word = !iorg ?
-                                 proj.GetContent() :
-                                 proj.get_Broken()[iorg-1];
-
-   const Lexem &mlex = *word;
-
-   // Сама исходная, неискаженная лексема также примет участие в микшировании.
-   // Для однолексем брать оригинал не имеет смысла - его и так спроецировали.
-   if( created_phonetic_variants.find(mlex)==created_phonetic_variants.end() )
+    for (int iorg = 0; iorg < n_org; iorg++)
     {
-     created_phonetic_variants.insert(mlex);
+        const RC_Lexem &word = !iorg ?
+            proj.GetContent() :
+            proj.get_Broken()[iorg - 1];
 
-     // Получим списки фонетических инвариантов для каждой из nlex лексем,
-     // входящий в мультилексему.
-     MCollect<LA_AA_list*> packs;
-     LA_AA_list *list = new LA_AA_list;
-     list->reserve(16);
-     list->push_back( LA_AA_item( mlex, Real1(100) ) );
+        const Lexem &mlex = *word;
 
-     // Теперь мутированные варианты.
-     LA_Pack *pack = AlephAuto( id_language, mlex, proj.get_Miss_Parameter(), trace );
-
-     for( Container::size_type j=0; j<pack->size(); j++ )
-      {
-       const Solarix::Lexem &ph_lex = *(pack->get(j));
-
-       if( created_phonetic_variants.find(ph_lex)==created_phonetic_variants.end() )
+        // РЎР°РјР° РёСЃС…РѕРґРЅР°СЏ, РЅРµРёСЃРєР°Р¶РµРЅРЅР°СЏ Р»РµРєСЃРµРјР° С‚Р°РєР¶Рµ РїСЂРёРјРµС‚ СѓС‡Р°СЃС‚РёРµ РІ РјРёРєС€РёСЂРѕРІР°РЅРёРё.
+        // Р”Р»СЏ РѕРґРЅРѕР»РµРєСЃРµРј Р±СЂР°С‚СЊ РѕСЂРёРіРёРЅР°Р» РЅРµ РёРјРµРµС‚ СЃРјС‹СЃР»Р° - РµРіРѕ Рё С‚Р°Рє СЃРїСЂРѕРµС†РёСЂРѕРІР°Р»Рё.
+        if (created_phonetic_variants.find(mlex) == created_phonetic_variants.end())
         {
-         created_phonetic_variants.insert(ph_lex);
-         list->push_back( LA_AA_item( ph_lex, pack->get(j)->get_Val() ) );
-        }
-      }
+            created_phonetic_variants.insert(mlex);
 
-     delete pack;
+            // РџРѕР»СѓС‡РёРј СЃРїРёСЃРєРё С„РѕРЅРµС‚РёС‡РµСЃРєРёС… РёРЅРІР°СЂРёР°РЅС‚РѕРІ РґР»СЏ РєР°Р¶РґРѕР№ РёР· nlex Р»РµРєСЃРµРј,
+            // РІС…РѕРґСЏС‰РёР№ РІ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ.
+            MCollect<LA_AA_list*> packs;
+            LA_AA_list *list = new LA_AA_list;
+            list->reserve(16);
+            list->push_back(LA_AA_item(mlex, Real1(100)));
 
-     packs.push_back( list );
+            // РўРµРїРµСЂСЊ РјСѓС‚РёСЂРѕРІР°РЅРЅС‹Рµ РІР°СЂРёР°РЅС‚С‹.
+            LA_Pack *pack = AlephAuto(id_language, mlex, proj.get_Miss_Parameter(), trace);
 
-     const int NTOT = CastSizeToInt(packs.front()->size());
-
-     // Пропускаем начальную немутированную лексему
-     for( int i=1; i<NTOT; i++ )
-      {
-       const LA_AA_item &x = packs.front()->get(i);
-       Lexem *mutated = new Lexem(x);
-
-       proj.AddPhonInv( RC_Lexem( mutated ), x.val );
-      }
-
-     // Удаляем ненужные далее списки фонетических инвариантов для однолексем.
-     ZAP_A(packs);
-
-     // Отсортируем мутации по убыванию достоверности.
-     proj.SortPhonInv();
-
-/*
-     // Можем журнализовать результат.
-     const int ninv=proj.GetnPhonInv();
-     if( ninv && GetDebugLevel()>=2 )
-      {
-       lem::LogFile::logfile->printf( "LA: Phonetic invariants production: %d item(s)\n", ninv );
-
-       for( int i=0; i<ninv; i++ )
-        {
-         lem::LogFile::logfile->printf( "#%d ", i );
-         const RC_Lexem &ml = proj.GetPhonInv(i);
-         lem::LogFile::logfile->printf( "%us\n", ml->c_str() );
-        }
-
-       lem::LogFile::logfile->eol();
-      }
-*/
-    }
-  } // for - цикл по оригиналам
-
- return;
-}
-
-
-// Генерация слов, фонетически близких к заданному word.
-// Возвращается список вариантов, включая исходное слово, и список их достоверностей.
-void LexicalAutomat::ProducePhonInv(
-                                    const lem::UCString &word,
-                                    int id_language,
-                                    lem::MCollect<lem::UCString> &res,
-                                    lem::MCollect<lem::Real1> &rels,
-                                    LA_RecognitionTrace *trace
-                                   )
-{
- MCollect<LA_AA_list*> packs;
- LA_AA_list *list = new LA_AA_list;
- list->reserve(16);
- list->push_back( LA_AA_item( word, Real1(100) ) );
-
- // Теперь мутированные варианты.
- LA_Pack *pack = AlephAuto( id_language, word, 1, trace );
-
- for( Container::size_type j=0; j<pack->size(); j++ )
-  {
-   const Solarix::Lexem &ph_lex = *(pack->get(j));
-   if( res.find( ph_lex )==UNKNOWN )
-    {
-     Real1 r = pack->get(j)->get_Val();
-     rels.push_back(r);
-     res.push_back( ph_lex );
-    }
-  }
-
- return;
-}
-
-
-
-
-// ***********************************************************************
-// Алгоритм мутаций: для исходной лесемы lex создает и возвращает список
-// мутированных вариантов.
-//
-// n_max_tran - максимальное количество замен в исходной лексеме.
-// ***********************************************************************
-LA_Pack* LexicalAutomat::AlephAuto( int id_language, const Lexem &lex, int n_max_tran, LA_RecognitionTrace *trace )
-{
- // Берем набор фонетических правил для целевого языка.
- const LA_PhoneticMatcherForLanguage *matcher = phonetic_matcher->GetMatcherForLanguage(id_language);
-
- // Возвращаемая пачка результатов.
- LA_Pack *to_ret = new LA_Pack(lex);
-
- bool changed=false;
- wchar_t context[LEM_CSTRING_LEN1];
-
- wchar_t Created_e[LEM_CSTRING_LEN1]; // Имена графических статей
-
- int nmaxpass=1, ipass=0;
-
- do
-  {
-   // Будем применять только к поступившим на вход вариаторам,
-   // поэтому добавленные в ходе данной итерации новые вариаторы
-   // учитываться не будут.
-   const int was_variators = CastSizeToInt(to_ret->size());
-
-   // *** Цикл по всем вариаторам Пачки Решений ***
-   for( int ivariator=0; ivariator<was_variators; ivariator++ )
-    {
-     // С этим контекстом будем работать
-     const LA_Variator &variator = *(to_ret->get(ivariator));
-
-     if( variator.IsFrozen() )
-      continue;
-
-     const int vl = variator.length();
-
-     // Сдвигаемся по контексту вправо по 1 символу
-     for( int ipos=0; ipos<vl; ipos++ )
-      {
-       // Для текущей позиции можно применить правила с определенным набором длин опорных участков
-       const int min_len = matcher->GetMinContext();
-       const int max_len = std::min( matcher->GetMaxContext(), vl-ipos );
-
-       for( int clen=min_len; clen<=max_len; ++clen )
-        {
-         // будем применять все правила с длиной опорного контекста = clen
-         const LA_PhoneticRuleGroup &group = matcher->GetGroup(clen);
-         if( group.empty() )
-          continue; // в группе нет правил
-
-         // Готовим контекст длиной clen
-         for( int ii=0; ii<clen; ii++ )
-          context[ii] = variator[ipos+ii];
-
-         context[clen] = 0;
-
-         int ntran=0; // сколько трансформаций сделано с вариатором
-
-         const lem::MCollect<const LA_PhoneticRule*> &grules = group.rules;
-         for( Container::size_type irule=0; irule<grules.size() && (variator.get_Tran()+ntran)<=n_max_tran; irule++ )
-          {
-           const LA_PhoneticRule &rule = *grules[irule];
-/*
-#if LEM_DEBUGGING==1
- if( wcscmp( context, L"ТС" )==0 && rule.GetName()==L"ТСТ-ТС" )
-  {
-   printf("");
-  }
-#endif
-*/
-
-           if( rule.GetCondition().DoesMatch(context) )
+            for (Container::size_type j = 0; j < pack->size(); j++)
             {
-             /*---------------------------------------------------------------
-              ДА!
-              Осуществляем фонетическую продукцию.
+                const Solarix::Lexem &ph_lex = *(pack->get(j));
 
-
-                +---+---+---+-...-+---+---+-...-+
-                |   |   |###|#####|###|   |     |
-                +---+---+---+-...-+---+---+-...-+
-                          |           |
-                          ipos        ipos+clen
-
-
-              ### - часть лексемы, пошедшая на изготовление контекста.
-             -----------------------------------------------------------------*/
-
-             ntran++;
-
-             int ii,ito;
-             const Lexem& res_part = rule.GetResult().GetContext();
-
-             // Пересылаем в Created_x информацию из variator, начиная с 0
-             // и до ipos (не включая).
-             for( ito=0; ito<ipos; ito++ )
-              {
-               Created_e[ito] = variator[ito];
-              }
-
-             // Добавляем результатную часть правила
-             const int res_len = res_part.length();
-             for( ii=0; ii<res_len; ii++, ito++ )
-              {
-               Created_e[ito] = res_part[ii];
-              }
-
-             // Добавляем хвост variator, начинающийся сразу после
-             // символов, пошедших на строительство опорного контекста.
-             for( ii=ipos+clen; ii<vl; ii++, ito++ )
-              {
-               Created_e[ito] = variator[ii];
-              }
-
-             Created_e[ito] = 0;
-
-             // Собираем лексему из трех списков: имен статей, индексов
-             // форм и флагов ударности.
-             Lexem clex(Created_e);
-             LA_Variator *created = new LA_Variator(clex);
-
-             // Продукция должна быть уникальна. Просматриваем список уже
-             // существующих вариаторов.
-             bool found=false;
-             for( ii=0; ii<CastSizeToInt(to_ret->size()) && !found; ii++ )
-              found = (*created)==(*to_ret->get(ii));
-
-             if( !found )
-              {
-               // Новый вариатор уникален - добавляем в текущий список.
-
-               created->set_Tran( variator.get_Tran()+ntran );
-               created->set_Val( variator.get_Val() * rule.GetVal() );
-               to_ret->push_back( created );
-               (*to_ret)[ivariator]->Froze();
-
-               if( trace!=NULL )
+                if (created_phonetic_variants.find(ph_lex) == created_phonetic_variants.end())
                 {
-                 trace->PhoneticRuleProduction( lex, clex, created->get_Val(), &rule );
+                    created_phonetic_variants.insert(ph_lex);
+                    list->push_back(LA_AA_item(ph_lex, pack->get(j)->get_Val()));
                 }
-              }
-             else
-              delete created;
             }
-          }
+
+            delete pack;
+
+            packs.push_back(list);
+
+            const int NTOT = CastSizeToInt(packs.front()->size());
+
+            // РџСЂРѕРїСѓСЃРєР°РµРј РЅР°С‡Р°Р»СЊРЅСѓСЋ РЅРµРјСѓС‚РёСЂРѕРІР°РЅРЅСѓСЋ Р»РµРєСЃРµРјСѓ
+            for (int i = 1; i < NTOT; i++)
+            {
+                const LA_AA_item &x = packs.front()->get(i);
+                Lexem *mutated = new Lexem(x);
+
+                proj.AddPhonInv(RC_Lexem(mutated), x.val);
+            }
+
+            // РЈРґР°Р»СЏРµРј РЅРµРЅСѓР¶РЅС‹Рµ РґР°Р»РµРµ СЃРїРёСЃРєРё С„РѕРЅРµС‚РёС‡РµСЃРєРёС… РёРЅРІР°СЂРёР°РЅС‚РѕРІ РґР»СЏ РѕРґРЅРѕР»РµРєСЃРµРј.
+            ZAP_A(packs);
+
+            // РћС‚СЃРѕСЂС‚РёСЂСѓРµРј РјСѓС‚Р°С†РёРё РїРѕ СѓР±С‹РІР°РЅРёСЋ РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё.
+            proj.SortPhonInv();
+
+            /*
+                 // РњРѕР¶РµРј Р¶СѓСЂРЅР°Р»РёР·РѕРІР°С‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚.
+                 const int ninv=proj.GetnPhonInv();
+                 if( ninv && GetDebugLevel()>=2 )
+                  {
+                   lem::LogFile::logfile->printf( "LA: Phonetic invariants production: %d item(s)\n", ninv );
+
+                   for( int i=0; i<ninv; i++ )
+                    {
+                     lem::LogFile::logfile->printf( "#%d ", i );
+                     const RC_Lexem &ml = proj.GetPhonInv(i);
+                     lem::LogFile::logfile->printf( "%us\n", ml->c_str() );
+                    }
+
+                   lem::LogFile::logfile->eol();
+                  }
+            */
         }
-      }
+    } // for - С†РёРєР» РїРѕ РѕСЂРёРіРёРЅР°Р»Р°Рј
+
+    return;
+}
+
+
+// Р“РµРЅРµСЂР°С†РёСЏ СЃР»РѕРІ, С„РѕРЅРµС‚РёС‡РµСЃРєРё Р±Р»РёР·РєРёС… Рє Р·Р°РґР°РЅРЅРѕРјСѓ word.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРїРёСЃРѕРє РІР°СЂРёР°РЅС‚РѕРІ, РІРєР»СЋС‡Р°СЏ РёСЃС…РѕРґРЅРѕРµ СЃР»РѕРІРѕ, Рё СЃРїРёСЃРѕРє РёС… РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚РµР№.
+void LexicalAutomat::ProducePhonInv(
+    const lem::UCString &word,
+    int id_language,
+    lem::MCollect<lem::UCString> &res,
+    lem::MCollect<lem::Real1> &rels,
+    LA_RecognitionTrace *trace
+)
+{
+    MCollect<LA_AA_list*> packs;
+    LA_AA_list *list = new LA_AA_list;
+    list->reserve(16);
+    list->push_back(LA_AA_item(word, Real1(100)));
+
+    // РўРµРїРµСЂСЊ РјСѓС‚РёСЂРѕРІР°РЅРЅС‹Рµ РІР°СЂРёР°РЅС‚С‹.
+    LA_Pack *pack = AlephAuto(id_language, word, 1, trace);
+
+    for (Container::size_type j = 0; j < pack->size(); j++)
+    {
+        const Solarix::Lexem &ph_lex = *(pack->get(j));
+        if (res.find(ph_lex) == UNKNOWN)
+        {
+            Real1 r = pack->get(j)->get_Val();
+            rels.push_back(r);
+            res.push_back(ph_lex);
+        }
     }
 
-   // Хоть один новый результат создан?
-   const int now_variators = CastSizeToInt(to_ret->size());
-   changed = now_variators>was_variators;
-  }
- while(changed && ++ipass<nmaxpass );
+    return;
+}
 
- for( Container::size_type i=0; i<to_ret->size(); i++ )
-  {
-   TranslateLexem( *(*to_ret)[i], true );
-  }
 
- return to_ret;
+
+
+// ***********************************************************************
+// РђР»РіРѕСЂРёС‚Рј РјСѓС‚Р°С†РёР№: РґР»СЏ РёСЃС…РѕРґРЅРѕР№ Р»РµСЃРµРјС‹ lex СЃРѕР·РґР°РµС‚ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє
+// РјСѓС‚РёСЂРѕРІР°РЅРЅС‹С… РІР°СЂРёР°РЅС‚РѕРІ.
+//
+// n_max_tran - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РјРµРЅ РІ РёСЃС…РѕРґРЅРѕР№ Р»РµРєСЃРµРјРµ.
+// ***********************************************************************
+LA_Pack* LexicalAutomat::AlephAuto(int id_language, const Lexem &lex, int n_max_tran, LA_RecognitionTrace *trace)
+{
+    // Р‘РµСЂРµРј РЅР°Р±РѕСЂ С„РѕРЅРµС‚РёС‡РµСЃРєРёС… РїСЂР°РІРёР» РґР»СЏ С†РµР»РµРІРѕРіРѕ СЏР·С‹РєР°.
+    const LA_PhoneticMatcherForLanguage *matcher = phonetic_matcher->GetMatcherForLanguage(id_language);
+
+    // Р’РѕР·РІСЂР°С‰Р°РµРјР°СЏ РїР°С‡РєР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ.
+    LA_Pack *to_ret = new LA_Pack(lex);
+
+    bool changed = false;
+    wchar_t context[LEM_CSTRING_LEN1];
+
+    wchar_t Created_e[LEM_CSTRING_LEN1]; // РРјРµРЅР° РіСЂР°С„РёС‡РµСЃРєРёС… СЃС‚Р°С‚РµР№
+
+    int nmaxpass = 1, ipass = 0;
+
+    do
+    {
+        // Р‘СѓРґРµРј РїСЂРёРјРµРЅСЏС‚СЊ С‚РѕР»СЊРєРѕ Рє РїРѕСЃС‚СѓРїРёРІС€РёРј РЅР° РІС…РѕРґ РІР°СЂРёР°С‚РѕСЂР°Рј,
+        // РїРѕСЌС‚РѕРјСѓ РґРѕР±Р°РІР»РµРЅРЅС‹Рµ РІ С…РѕРґРµ РґР°РЅРЅРѕР№ РёС‚РµСЂР°С†РёРё РЅРѕРІС‹Рµ РІР°СЂРёР°С‚РѕСЂС‹
+        // СѓС‡РёС‚С‹РІР°С‚СЊСЃСЏ РЅРµ Р±СѓРґСѓС‚.
+        const int was_variators = CastSizeToInt(to_ret->size());
+
+        // *** Р¦РёРєР» РїРѕ РІСЃРµРј РІР°СЂРёР°С‚РѕСЂР°Рј РџР°С‡РєРё Р РµС€РµРЅРёР№ ***
+        for (int ivariator = 0; ivariator < was_variators; ivariator++)
+        {
+            // РЎ СЌС‚РёРј РєРѕРЅС‚РµРєСЃС‚РѕРј Р±СѓРґРµРј СЂР°Р±РѕС‚Р°С‚СЊ
+            const LA_Variator &variator = *(to_ret->get(ivariator));
+
+            if (variator.IsFrozen())
+                continue;
+
+            const int vl = variator.length();
+
+            // РЎРґРІРёРіР°РµРјСЃСЏ РїРѕ РєРѕРЅС‚РµРєСЃС‚Сѓ РІРїСЂР°РІРѕ РїРѕ 1 СЃРёРјРІРѕР»Сѓ
+            for (int ipos = 0; ipos < vl; ipos++)
+            {
+                // Р”Р»СЏ С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё РјРѕР¶РЅРѕ РїСЂРёРјРµРЅРёС‚СЊ РїСЂР°РІРёР»Р° СЃ РѕРїСЂРµРґРµР»РµРЅРЅС‹Рј РЅР°Р±РѕСЂРѕРј РґР»РёРЅ РѕРїРѕСЂРЅС‹С… СѓС‡Р°СЃС‚РєРѕРІ
+                const int min_len = matcher->GetMinContext();
+                const int max_len = std::min(matcher->GetMaxContext(), vl - ipos);
+
+                for (int clen = min_len; clen <= max_len; ++clen)
+                {
+                    // Р±СѓРґРµРј РїСЂРёРјРµРЅСЏС‚СЊ РІСЃРµ РїСЂР°РІРёР»Р° СЃ РґР»РёРЅРѕР№ РѕРїРѕСЂРЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р° = clen
+                    const LA_PhoneticRuleGroup &group = matcher->GetGroup(clen);
+                    if (group.empty())
+                        continue; // РІ РіСЂСѓРїРїРµ РЅРµС‚ РїСЂР°РІРёР»
+
+                       // Р“РѕС‚РѕРІРёРј РєРѕРЅС‚РµРєСЃС‚ РґР»РёРЅРѕР№ clen
+                    for (int ii = 0; ii < clen; ii++)
+                        context[ii] = variator[ipos + ii];
+
+                    context[clen] = 0;
+
+                    int ntran = 0; // СЃРєРѕР»СЊРєРѕ С‚СЂР°РЅСЃС„РѕСЂРјР°С†РёР№ СЃРґРµР»Р°РЅРѕ СЃ РІР°СЂРёР°С‚РѕСЂРѕРј
+
+                    const lem::MCollect<const LA_PhoneticRule*> &grules = group.rules;
+                    for (Container::size_type irule = 0; irule < grules.size() && (variator.get_Tran() + ntran) <= n_max_tran; irule++)
+                    {
+                        const LA_PhoneticRule &rule = *grules[irule];
+
+                        if (rule.GetCondition().DoesMatch(context))
+                        {
+                            /*---------------------------------------------------------------
+                             Р”Рђ!
+                             РћСЃСѓС‰РµСЃС‚РІР»СЏРµРј С„РѕРЅРµС‚РёС‡РµСЃРєСѓСЋ РїСЂРѕРґСѓРєС†РёСЋ.
+
+
+                               +---+---+---+-...-+---+---+-...-+
+                               |   |   |###|#####|###|   |     |
+                               +---+---+---+-...-+---+---+-...-+
+                                         |           |
+                                         ipos        ipos+clen
+
+
+                             ### - С‡Р°СЃС‚СЊ Р»РµРєСЃРµРјС‹, РїРѕС€РµРґС€Р°СЏ РЅР° РёР·РіРѕС‚РѕРІР»РµРЅРёРµ РєРѕРЅС‚РµРєСЃС‚Р°.
+                            -----------------------------------------------------------------*/
+
+                            ntran++;
+
+                            int ii, ito;
+                            const Lexem& res_part = rule.GetResult().GetContext();
+
+                            // РџРµСЂРµСЃС‹Р»Р°РµРј РІ Created_x РёРЅС„РѕСЂРјР°С†РёСЋ РёР· variator, РЅР°С‡РёРЅР°СЏ СЃ 0
+                            // Рё РґРѕ ipos (РЅРµ РІРєР»СЋС‡Р°СЏ).
+                            for (ito = 0; ito < ipos; ito++)
+                            {
+                                Created_e[ito] = variator[ito];
+                            }
+
+                            // Р”РѕР±Р°РІР»СЏРµРј СЂРµР·СѓР»СЊС‚Р°С‚РЅСѓСЋ С‡Р°СЃС‚СЊ РїСЂР°РІРёР»Р°
+                            const int res_len = res_part.length();
+                            for (ii = 0; ii < res_len; ii++, ito++)
+                            {
+                                Created_e[ito] = res_part[ii];
+                            }
+
+                            // Р”РѕР±Р°РІР»СЏРµРј С…РІРѕСЃС‚ variator, РЅР°С‡РёРЅР°СЋС‰РёР№СЃСЏ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ
+                            // СЃРёРјРІРѕР»РѕРІ, РїРѕС€РµРґС€РёС… РЅР° СЃС‚СЂРѕРёС‚РµР»СЊСЃС‚РІРѕ РѕРїРѕСЂРЅРѕРіРѕ РєРѕРЅС‚РµРєСЃС‚Р°.
+                            for (ii = ipos + clen; ii < vl; ii++, ito++)
+                            {
+                                Created_e[ito] = variator[ii];
+                            }
+
+                            Created_e[ito] = 0;
+
+                            // РЎРѕР±РёСЂР°РµРј Р»РµРєСЃРµРјСѓ РёР· С‚СЂРµС… СЃРїРёСЃРєРѕРІ: РёРјРµРЅ СЃС‚Р°С‚РµР№, РёРЅРґРµРєСЃРѕРІ
+                            // С„РѕСЂРј Рё С„Р»Р°РіРѕРІ СѓРґР°СЂРЅРѕСЃС‚Рё.
+                            Lexem clex(Created_e);
+                            LA_Variator *created = new LA_Variator(clex);
+
+                            // РџСЂРѕРґСѓРєС†РёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ СѓРЅРёРєР°Р»СЊРЅР°. РџСЂРѕСЃРјР°С‚СЂРёРІР°РµРј СЃРїРёСЃРѕРє СѓР¶Рµ
+                            // СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… РІР°СЂРёР°С‚РѕСЂРѕРІ.
+                            bool found = false;
+                            for (ii = 0; ii < CastSizeToInt(to_ret->size()) && !found; ii++)
+                                found = (*created) == (*to_ret->get(ii));
+
+                            if (!found)
+                            {
+                                // РќРѕРІС‹Р№ РІР°СЂРёР°С‚РѕСЂ СѓРЅРёРєР°Р»РµРЅ - РґРѕР±Р°РІР»СЏРµРј РІ С‚РµРєСѓС‰РёР№ СЃРїРёСЃРѕРє.
+
+                                created->set_Tran(variator.get_Tran() + ntran);
+                                created->set_Val(variator.get_Val() * rule.GetVal());
+                                to_ret->push_back(created);
+                                (*to_ret)[ivariator]->Froze();
+
+                                if (trace != NULL)
+                                {
+                                    trace->PhoneticRuleProduction(lex, clex, created->get_Val(), &rule);
+                                }
+                            }
+                            else
+                                delete created;
+                        }
+                    }
+                }
+            }
+        }
+
+        // РҐРѕС‚СЊ РѕРґРёРЅ РЅРѕРІС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ СЃРѕР·РґР°РЅ?
+        const int now_variators = CastSizeToInt(to_ret->size());
+        changed = now_variators > was_variators;
+    } while (changed && ++ipass < nmaxpass);
+
+    for (Container::size_type i = 0; i < to_ret->size(); i++)
+    {
+        TranslateLexem(*(*to_ret)[i], true);
+    }
+
+    return to_ret;
 }
 
 #endif // defined SOL_CAA

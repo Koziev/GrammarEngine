@@ -22,172 +22,172 @@
 using namespace Solarix;
 
 
-TextAnalysisSession::TextAnalysisSession( Solarix::Dictionary * _dict, TrTrace * _trace )
- : dict(_dict), trace(_trace), lexer(NULL), pack(NULL)
+TextAnalysisSession::TextAnalysisSession(Solarix::Dictionary * _dict, TrTrace * _trace)
+    : dict(_dict), trace(_trace), lexer(nullptr), pack(nullptr)
 {
- FindFacts = false;
- rules = & dict->GetLexAuto().GetSynPatternTrees();
- return;
+    FindFacts = false;
+    rules = &dict->GetLexAuto().GetSynPatternTrees();
+    return;
 }
 
 
 TextAnalysisSession::~TextAnalysisSession()
 {
- lem_rub_off(lexer);
- lem_rub_off(pack);
+    lem_rub_off(lexer);
+    lem_rub_off(pack);
 }
 
 
 
-void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const ElapsedTimeConstraint &constraints )
+void TextAnalysisSession::Analyze(bool ApplyPatterns, bool DoSyntaxLinks, const ElapsedTimeConstraint &constraints)
 {
- lem_rub_off(pack);
+    lem_rub_off(pack);
 
- // Лексер уже должен быть создан и сохранен в lexer.
+    // Лексер уже должен быть создан и сохранен в lexer.
 
- #if defined SOL_DEBUGGING
- // Начинаем разбор графа токенизации.
- if( trace!=NULL )
-  {
-   trace->MorphologicalAnalysisStarts(*lexer);
-  }
- #endif
-
- if( params.ApplyModel )
-  {
-   if( dict->GetLexAuto().GetModel().GetSequenceLabeler().IsAvailable() )
+#if defined SOL_DEBUGGING
+// Начинаем разбор графа токенизации.
+    if (trace != nullptr)
     {
-     SequenceLabelerModel & model = dict->GetLexAuto().GetModel().GetSequenceLabeler();
-     model.Apply( *lexer, *dict, constraints, false );
-
-     #if defined SOL_DEBUGGING
-     if( trace!=NULL )
-      {
-       // покажем в отладчике результаты применения модели
-       trace->AfterModelApplication(*lexer);
-      }
-     #endif
+        trace->MorphologicalAnalysisStarts(*lexer);
     }
-  }
+#endif
 
- lem::Ptr<SynPatternTreeNodeMatchingResults> results;
-
- bool UseDefaultScheme=true;
- if( ApplyPatterns )
-  {
-   // Готовим workflow - применяемые последовательно, до успеха, алгоритмы.
-   enum { UseTopDown, UseIncompleteTopDown };
-   lem::MCollect<int> scheduled_algorithms;
-
-   if( params.UseTopDownThenSparse )
+    if (params.ApplyModel)
     {
-     scheduled_algorithms.push_back( UseTopDown );
-     scheduled_algorithms.push_back( UseIncompleteTopDown );
-    }
-   else if( params.CompleteAnalysisOnly )
-    {
-     scheduled_algorithms.push_back( UseTopDown );
-    }
-   else    
-    {
-     scheduled_algorithms.push_back( UseIncompleteTopDown );
-    }
-
-   TreeMatchingExperience experience;
-
-   for( lem::Container::size_type step=0; step<scheduled_algorithms.size(); ++step )
-    {
-     int algorithm = scheduled_algorithms[step];
-
-     if( algorithm==UseTopDown )
-      {
-       // Точный нисходящий анализ без каких-либо компромисов.
-       results = TopDownParsing( ApplyPatterns, DoSyntaxLinks, experience, constraints );
-
-       if( results.NotNull() && !results->empty() )
+        if (dict->GetLexAuto().GetModel().GetSequenceLabeler().IsAvailable())
         {
-         #if LEM_DEBUGGING==1
-         //results->Print( *dict, *lem::mout );
-         #endif
+            SequenceLabelerModel & model = dict->GetLexAuto().GetModel().GetSequenceLabeler();
+            model.Apply(*lexer, *dict, constraints, false);
 
-         UseDefaultScheme=false;
-         results->ApplyTokenScores();
-         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, constraints, trace );
-
-         #if LEM_DEBUGGING==1
-         //pack->Print( *lem::mout, dict->GetSynGram(), true );
-         #endif
-
-         break;
+#if defined SOL_DEBUGGING
+            if (trace != nullptr)
+            {
+                // покажем в отладчике результаты применения модели
+                trace->AfterModelApplication(*lexer);
+            }
+#endif
         }
-      }
-     else if( algorithm==UseIncompleteTopDown )
-      {
-       // Неполный анализ, если полный не сработал.
-       lexer->ChangeParams().SkipInnerTokens = false;
-       lexer->ChangeParams().SkipOuterToken = true;
-       lexer->ChangeParams().CompleteAnalysisOnly = false;
+    }
 
-       if( lexer->ChangeParams().MaxSkipToken==0 )
-        lexer->ChangeParams().ConfigureSkipToken();
+    lem::Ptr<SynPatternTreeNodeMatchingResults> results;
 
-       experience.ClearPatternMatchings();
+    bool UseDefaultScheme = true;
+    if (ApplyPatterns)
+    {
+        // Готовим workflow - применяемые последовательно, до успеха, алгоритмы.
+        enum { UseTopDown, UseIncompleteTopDown };
+        lem::MCollect<int> scheduled_algorithms;
 
-       results = TopDownParsing( ApplyPatterns, DoSyntaxLinks, experience, constraints );
-
-       if( (results.IsNull() || results->empty()) && !constraints.Exceeded(0) )
+        if (params.UseTopDownThenSparse)
         {
-         const SynPatternTreeNode & filter = rules->GetIncompleteFilter( params.GetLanguageID() );
-      
-         if( !filter.Empty() )
-          {
-           results = filter.IncompleteAnalysis(
-                                               dict->GetLexAuto(),
-                                               dict->GetSynGram(),
-                                               *rules,
-                                               dict->GetLexAuto().GetWordEntrySet(),
-                                               *lexer,
-                                               params.GetLanguageID(),
-                                               experience,
-                                               constraints,
-                                               trace
-                                              );
-          }
+            scheduled_algorithms.push_back(UseTopDown);
+            scheduled_algorithms.push_back(UseIncompleteTopDown);
+        }
+        else if (params.CompleteAnalysisOnly)
+        {
+            scheduled_algorithms.push_back(UseTopDown);
+        }
+        else
+        {
+            scheduled_algorithms.push_back(UseIncompleteTopDown);
         }
 
-       if( results.NotNull() && !results->empty() )
+        TreeMatchingExperience experience;
+
+        for (lem::Container::size_type step = 0; step < scheduled_algorithms.size(); ++step)
         {
-         #if LEM_DEBUGGING==1
-         //results->Print( *dict, *lem::mout );
-         #endif
-       
-         UseDefaultScheme=false;
-       
-         results->ApplyTokenScores();
-         pack = results->BuildGrafs( *dict, *lexer, DoSyntaxLinks, false, constraints, trace );
-         break;
+            int algorithm = scheduled_algorithms[step];
+
+            if (algorithm == UseTopDown)
+            {
+                // Точный нисходящий анализ без каких-либо компромисов.
+                results = TopDownParsing(ApplyPatterns, DoSyntaxLinks, experience, constraints);
+
+                if (results.NotNull() && !results->empty())
+                {
+#if LEM_DEBUGGING==1
+                    //results->Print( *dict, *lem::mout );
+#endif
+
+                    UseDefaultScheme = false;
+                    results->ApplyTokenScores();
+                    pack = results->BuildGrafs(*dict, *lexer, DoSyntaxLinks, false, constraints, trace);
+
+#if LEM_DEBUGGING==1
+                    //pack->Print( *lem::mout, dict->GetSynGram(), true );
+#endif
+
+                    break;
+                }
+            }
+            else if (algorithm == UseIncompleteTopDown)
+            {
+                // Неполный анализ, если полный не сработал.
+                lexer->ChangeParams().SkipInnerTokens = false;
+                lexer->ChangeParams().SkipOuterToken = true;
+                lexer->ChangeParams().CompleteAnalysisOnly = false;
+
+                if (lexer->ChangeParams().MaxSkipToken == 0)
+                    lexer->ChangeParams().ConfigureSkipToken();
+
+                experience.ClearPatternMatchings();
+
+                results = TopDownParsing(ApplyPatterns, DoSyntaxLinks, experience, constraints);
+
+                if ((results.IsNull() || results->empty()) && !constraints.Exceeded(0))
+                {
+                    const SynPatternTreeNode & filter = rules->GetIncompleteFilter(params.GetLanguageID());
+
+                    if (!filter.Empty())
+                    {
+                        results = filter.IncompleteAnalysis(
+                            dict->GetLexAuto(),
+                            dict->GetSynGram(),
+                            *rules,
+                            dict->GetLexAuto().GetWordEntrySet(),
+                            *lexer,
+                            params.GetLanguageID(),
+                            experience,
+                            constraints,
+                            trace
+                        );
+                    }
+                }
+
+                if (results.NotNull() && !results->empty())
+                {
+#if LEM_DEBUGGING==1
+                    //results->Print( *dict, *lem::mout );
+#endif
+
+                    UseDefaultScheme = false;
+
+                    results->ApplyTokenScores();
+                    pack = results->BuildGrafs(*dict, *lexer, DoSyntaxLinks, false, constraints, trace);
+                    break;
+                }
+            }
+
+            if (constraints.Exceeded(0))
+                break; // исчерпан лимит времени, отведенный на анализ.
         }
-      }
-
-     if( constraints.Exceeded(0) )
-      break; // исчерпан лимит времени, отведенный на анализ.
     }
-  }
 
- if( UseDefaultScheme )
-  {
-   // Правила анализа не заданы или отключены, поэтому просто сгенерируем вариаторы из путей токенизации с применением
-   // всех возможных фильтров.
-   SynPatternTreeNodeMatchingResults empty;
-   pack = empty.BuildGrafs( *dict, *lexer, false, params.CompleteAnalysisOnly, constraints, trace );
-  }
+    if (UseDefaultScheme)
+    {
+        // Правила анализа не заданы или отключены, поэтому просто сгенерируем вариаторы из путей токенизации с применением
+        // всех возможных фильтров.
+        SynPatternTreeNodeMatchingResults empty;
+        pack = empty.BuildGrafs(*dict, *lexer, false, params.CompleteAnalysisOnly, constraints, trace);
+    }
 
- #if defined SOL_DEBUGGING
- if( trace!=NULL )
-  trace->MorphologicalAnalysisFinishes( * pack );
- #endif
+#if defined SOL_DEBUGGING
+    if (trace != nullptr)
+        trace->MorphologicalAnalysisFinishes(*pack);
+#endif
 
- return;
+    return;
 }
 
 
@@ -196,30 +196,30 @@ void TextAnalysisSession::Analyze( bool ApplyPatterns, bool DoSyntaxLinks, const
 
 
 SynPatternTreeNodeMatchingResults* TextAnalysisSession::TopDownParsing(
-                                                                       bool ApplyPatterns,
-                                                                       bool DoSyntaxLinks,
-                                                                       TreeMatchingExperience & experience,
-                                                                       const ElapsedTimeConstraint & constraints
-                                                                      )
+    bool ApplyPatterns,
+    bool DoSyntaxLinks,
+    TreeMatchingExperience & experience,
+    const ElapsedTimeConstraint & constraints
+)
 {
- const SynPatternTreeNode & filter = rules->GetDefaultFilter( params.GetLanguageID() );
+    const SynPatternTreeNode & filter = rules->GetDefaultFilter(params.GetLanguageID());
 
- SynPatternTreeNodeMatchingResults * results = NULL;
+    SynPatternTreeNodeMatchingResults * results = nullptr;
 
- if( !filter.Empty() )
-  {
-   results = filter.CompleteAnalysis(
-                                     dict->GetLexAuto(),
-                                     dict->GetSynGram(),
-                                     *rules,
-                                     dict->GetLexAuto().GetWordEntrySet(),
-                                     *lexer,
-                                     params.GetLanguageID(),
-                                     experience,
-                                     constraints,
-                                     trace
-                                    );
-  }
+    if (!filter.Empty())
+    {
+        results = filter.CompleteAnalysis(
+            dict->GetLexAuto(),
+            dict->GetSynGram(),
+            *rules,
+            dict->GetLexAuto().GetWordEntrySet(),
+            *lexer,
+            params.GetLanguageID(),
+            experience,
+            constraints,
+            trace
+        );
+    }
 
- return results;
+    return results;
 }

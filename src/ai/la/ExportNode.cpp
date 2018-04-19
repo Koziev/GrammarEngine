@@ -2,8 +2,8 @@
 
 using namespace Solarix;
 
-void ExportNode::NormalizeCharCase(void)
+void ExportNode::NormalizeCharCase()
 {
- node_name.to_upper();
- as_name.to_upper();
+    node_name.to_upper();
+    as_name.to_upper();
 }

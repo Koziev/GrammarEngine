@@ -4,14 +4,14 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Класс SG_EntryForm. Грамматические формы описываются как комбинации лексема+
-// список_состояний_координат. Класс SG_EntryForm хранит как текстовое
-// представление словоформы статьи, так и вектор состояний. Парадигма слова -
-// это список словарных статей.
+// РљР»Р°СЃСЃ SG_EntryForm. Р“СЂР°РјРјР°С‚РёС‡РµСЃРєРёРµ С„РѕСЂРјС‹ РѕРїРёСЃС‹РІР°СЋС‚СЃСЏ РєР°Рє РєРѕРјР±РёРЅР°С†РёРё Р»РµРєСЃРµРјР°+
+// СЃРїРёСЃРѕРє_СЃРѕСЃС‚РѕСЏРЅРёР№_РєРѕРѕСЂРґРёРЅР°С‚. РљР»Р°СЃСЃ SG_EntryForm С…СЂР°РЅРёС‚ РєР°Рє С‚РµРєСЃС‚РѕРІРѕРµ
+// РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃР»РѕРІРѕС„РѕСЂРјС‹ СЃС‚Р°С‚СЊРё, С‚Р°Рє Рё РІРµРєС‚РѕСЂ СЃРѕСЃС‚РѕСЏРЅРёР№. РџР°СЂР°РґРёРіРјР° СЃР»РѕРІР° -
+// СЌС‚Рѕ СЃРїРёСЃРѕРє СЃР»РѕРІР°СЂРЅС‹С… СЃС‚Р°С‚РµР№.
 // -----------------------------------------------------------------------------
 //
 // CD->12.10.1995
-// LC->20.11.2010
+// LC->16.04.2018
 // --------------
 
 #include <lem/solarix/tokens.h>
@@ -27,216 +27,216 @@ using namespace Solarix;
 
 
 /*******************************************************************
- Если список измерений Dim содержит те же состояния координат, что
- и список словоформы, то возвращает true. При этом порядок координат
- в Dim роли не играет.
+ Р•СЃР»Рё СЃРїРёСЃРѕРє РёР·РјРµСЂРµРЅРёР№ Dim СЃРѕРґРµСЂР¶РёС‚ С‚Рµ Р¶Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚, С‡С‚Рѕ
+ Рё СЃРїРёСЃРѕРє СЃР»РѕРІРѕС„РѕСЂРјС‹, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚ true. РџСЂРё СЌС‚РѕРј РїРѕСЂСЏРґРѕРє РєРѕРѕСЂРґРёРЅР°С‚
+ РІ Dim СЂРѕР»Рё РЅРµ РёРіСЂР°РµС‚.
 ********************************************************************/
-bool SG_EntryForm::is_equal_detailed( const CP_Array& Dim ) const
+bool SG_EntryForm::is_equal_detailed(const CP_Array& Dim) const
 {
- const int ndim=CastSizeToInt(Dim.size());
+    const int ndim = CastSizeToInt(Dim.size());
 
- for( int i=0; i<ndim; i++ )
-  {
-   const GramCoordPair Pair = Dim[i];
-   const GramCoordAdr a1 = Pair.GetCoord();
-
-   bool fixed=false;
-   for( Container::size_type j=0; j<dim->size(); j++ )
+    for (int i = 0; i < ndim; i++)
     {
-     const GramCoordPair pair = (*dim)[j];
-     const GramCoordAdr a2 = pair.GetCoord();
+        const GramCoordPair Pair = Dim[i];
+        const GramCoordAdr a1 = Pair.GetCoord();
 
-     if( a1==a2 )
-      {
-       if( pair.GetState()==ANY_STATE || Pair.GetState()==ANY_STATE )
+        bool fixed = false;
+        for (Container::size_type j = 0; j < dim->size(); j++)
         {
-         fixed=true;
-         break;
+            const GramCoordPair pair = (*dim)[j];
+            const GramCoordAdr a2 = pair.GetCoord();
+
+            if (a1 == a2)
+            {
+                if (pair.GetState() == ANY_STATE || Pair.GetState() == ANY_STATE)
+                {
+                    fixed = true;
+                    break;
+                }
+
+                if (pair.GetState() == Pair.GetState())
+                {
+                    fixed = true;
+                    break;
+                }
+            }
         }
 
-       if( pair.GetState()==Pair.GetState() )
-        {
-         fixed=true;
-         break;
-        }
-      }
+        if (!fixed)
+            return false;
     }
 
-   if( !fixed )
-    return false;
-  }
-
- return true;
+    return true;
 }
 
 
 
-bool SG_EntryForm::does_match( const CP_Array& Dim ) const
+bool SG_EntryForm::does_match(const CP_Array& Dim) const
 {
- const int ndim=CastSizeToInt(Dim.size());
+    const int ndim = CastSizeToInt(Dim.size());
 
- for( int i=0; i<ndim; i++ )
-  {
-   const GramCoordPair Pair = Dim[i];
-   const GramCoordAdr a1 = Pair.GetCoord();
-
-   bool fixed=false;
-   for( Container::size_type j=0; j<dim->size(); j++ )
+    for (int i = 0; i < ndim; i++)
     {
-     const GramCoordPair pair = (*dim)[j];
-     const GramCoordAdr a2 = pair.GetCoord();
+        const GramCoordPair Pair = Dim[i];
+        const GramCoordAdr a1 = Pair.GetCoord();
 
-     if( a1==a2 )
-      {
-       if( pair.GetState()==ANY_STATE || Pair.GetState()==ANY_STATE )
+        bool fixed = false;
+        for (Container::size_type j = 0; j < dim->size(); j++)
         {
-         fixed=true;
-         break;
+            const GramCoordPair pair = (*dim)[j];
+            const GramCoordAdr a2 = pair.GetCoord();
+
+            if (a1 == a2)
+            {
+                if (pair.GetState() == ANY_STATE || Pair.GetState() == ANY_STATE)
+                {
+                    fixed = true;
+                    break;
+                }
+
+                if (pair.GetState() == Pair.GetState())
+                {
+                    fixed = true;
+                    break;
+                }
+            }
         }
 
-       if( pair.GetState()==Pair.GetState() )
-        {
-         fixed=true;
-         break;
-        }
-      }
+        if (!fixed)
+            return false;
     }
 
-   if( !fixed )
-    return false;
-  }
-
- return true;
+    return true;
 }
 
 
-int SG_EntryForm::count_matches( const CP_Array& Dim ) const
+int SG_EntryForm::count_matches(const CP_Array& Dim) const
 {
- int count=0;
+    int count = 0;
 
- const int ndim=CastSizeToInt(Dim.size());
+    const int ndim = CastSizeToInt(Dim.size());
 
- for( int i=0; i<ndim; i++ )
-  {
-   const GramCoordPair Pair = Dim[i];
-   const GramCoordAdr a1 = Pair.GetCoord();
-
-   bool fixed=false;
-   for( Container::size_type j=0; j<dim->size(); j++ )
+    for (int i = 0; i < ndim; i++)
     {
-     const GramCoordPair pair = (*dim)[j];
-     const GramCoordAdr a2 = pair.GetCoord();
+        const GramCoordPair Pair = Dim[i];
+        const GramCoordAdr a1 = Pair.GetCoord();
 
-     if( a1==a2 )
-      {
-       if( pair.GetState()==ANY_STATE || Pair.GetState()==ANY_STATE )
+        bool fixed = false;
+        for (Container::size_type j = 0; j < dim->size(); j++)
         {
-         fixed=true;
-         break;
+            const GramCoordPair pair = (*dim)[j];
+            const GramCoordAdr a2 = pair.GetCoord();
+
+            if (a1 == a2)
+            {
+                if (pair.GetState() == ANY_STATE || Pair.GetState() == ANY_STATE)
+                {
+                    fixed = true;
+                    break;
+                }
+
+                if (pair.GetState() == Pair.GetState())
+                {
+                    fixed = true;
+                    break;
+                }
+            }
         }
 
-       if( pair.GetState()==Pair.GetState() )
-        {
-         fixed=true;
-         break;
-        }
-      }
+        if (fixed)
+            count++;
     }
 
-   if( fixed )
-    count++;
-  }
-
- return count;
+    return count;
 }
 
 
 // ****************************************************************************
-// С учетом весов координат, возвращается суммарный вес соответствующих пар
+// РЎ СѓС‡РµС‚РѕРј РІРµСЃРѕРІ РєРѕРѕСЂРґРёРЅР°С‚, РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃСѓРјРјР°СЂРЅС‹Р№ РІРµСЃ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РїР°СЂ
 // ****************************************************************************
-int SG_EntryForm::count_matches( const CP_Array& Dim, const lem::MCollect<int>& weight ) const
+int SG_EntryForm::count_matches(const CP_Array& Dim, const lem::MCollect<int>& weight) const
 {
- int count=0;
+    int count = 0;
 
- const int ndim=CastSizeToInt(Dim.size());
+    const int ndim = CastSizeToInt(Dim.size());
 
- for( int i=0; i<ndim; i++ )
-  {
-   const GramCoordPair Pair = Dim[i];
-   const GramCoordAdr a1 = Pair.GetCoord();
-
-   bool fixed=false;
-   for( Container::size_type j=0; j<dim->size(); j++ )
+    for (int i = 0; i < ndim; i++)
     {
-     const GramCoordPair pair = (*dim)[j];
-     const GramCoordAdr a2 = pair.GetCoord();
+        const GramCoordPair Pair = Dim[i];
+        const GramCoordAdr a1 = Pair.GetCoord();
 
-     if( a1==a2 )
-      {
-       if( pair.GetState()==ANY_STATE || Pair.GetState()==ANY_STATE )
+        bool fixed = false;
+        for (Container::size_type j = 0; j < dim->size(); j++)
         {
-         fixed=true;
-         break;
+            const GramCoordPair pair = (*dim)[j];
+            const GramCoordAdr a2 = pair.GetCoord();
+
+            if (a1 == a2)
+            {
+                if (pair.GetState() == ANY_STATE || Pair.GetState() == ANY_STATE)
+                {
+                    fixed = true;
+                    break;
+                }
+
+                if (pair.GetState() == Pair.GetState())
+                {
+                    fixed = true;
+                    break;
+                }
+            }
         }
 
-       if( pair.GetState()==Pair.GetState() )
-        {
-         fixed=true;
-         break;
-        }
-      }
+        if (fixed)
+            count += weight[i];
     }
 
-   if( fixed )
-    count+=weight[i];
-  }
-
- return count;
+    return count;
 }
 
 
 // *****************************************************************************
-// Возвращает число координатных пар, совпадающих у списка формы и Dim.
-// Если у списков есть координаты с несовпадающими состояниями, то возвращается
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ С‡РёСЃР»Рѕ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹С… РїР°СЂ, СЃРѕРІРїР°РґР°СЋС‰РёС… Сѓ СЃРїРёСЃРєР° С„РѕСЂРјС‹ Рё Dim.
+// Р•СЃР»Рё Сѓ СЃРїРёСЃРєРѕРІ РµСЃС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃ РЅРµСЃРѕРІРїР°РґР°СЋС‰РёРјРё СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ
 // 0.
 // *****************************************************************************
-int SG_EntryForm::get_equal_coords( const CP_Array& Dim ) const
+int SG_EntryForm::get_equal_coords(const CP_Array& Dim) const
 {
- int n=0;
+    int n = 0;
 
- const Container::size_type ndim=Dim.size();
+    const Container::size_type ndim = Dim.size();
 
- for( Container::size_type i=0; i<ndim; i++ )
-  {
-   const GramCoordPair Pair = Dim[i];
-   const GramCoordAdr a1 = Pair.GetCoord();
-
-   for( Container::size_type j=0; j<dim->size(); j++ )
+    for (Container::size_type i = 0; i < ndim; i++)
     {
-     const GramCoordPair pair = (*dim)[j];
-     const GramCoordAdr a2 = pair.GetCoord();
+        const GramCoordPair Pair = Dim[i];
+        const GramCoordAdr a1 = Pair.GetCoord();
 
-     if( a1==a2 )
-      {
-       if( pair.GetState()==ANY_STATE || Pair.GetState()==ANY_STATE )
-        break;
+        for (Container::size_type j = 0; j < dim->size(); j++)
+        {
+            const GramCoordPair pair = (*dim)[j];
+            const GramCoordAdr a2 = pair.GetCoord();
 
-/*
-       if( pair.GetState()!=Pair.GetState() )
-        // Первое же несовпадение портит весь результат...
-        return 0;
-       n++; 
-*/
-       // 15.01.2009 - из-за наличия "многоохватных" координат типа падежа для
-       // глаголов или предлогов, будем искать именно совпадения. Несовпадение еще
-       // не означает провал поиска.
-       if( pair.GetState()==Pair.GetState() )
-        n++;
-      }
+            if (a1 == a2)
+            {
+                if (pair.GetState() == ANY_STATE || Pair.GetState() == ANY_STATE)
+                    break;
+
+                /*
+                       if( pair.GetState()!=Pair.GetState() )
+                        // РџРµСЂРІРѕРµ Р¶Рµ РЅРµСЃРѕРІРїР°РґРµРЅРёРµ РїРѕСЂС‚РёС‚ РІРµСЃСЊ СЂРµР·СѓР»СЊС‚Р°С‚...
+                        return 0;
+                       n++;
+                */
+                // 15.01.2009 - РёР·-Р·Р° РЅР°Р»РёС‡РёСЏ "РјРЅРѕРіРѕРѕС…РІР°С‚РЅС‹С…" РєРѕРѕСЂРґРёРЅР°С‚ С‚РёРїР° РїР°РґРµР¶Р° РґР»СЏ
+                // РіР»Р°РіРѕР»РѕРІ РёР»Рё РїСЂРµРґР»РѕРіРѕРІ, Р±СѓРґРµРј РёСЃРєР°С‚СЊ РёРјРµРЅРЅРѕ СЃРѕРІРїР°РґРµРЅРёСЏ. РќРµСЃРѕРІРїР°РґРµРЅРёРµ РµС‰Рµ
+                // РЅРµ РѕР·РЅР°С‡Р°РµС‚ РїСЂРѕРІР°Р» РїРѕРёСЃРєР°.
+                if (pair.GetState() == Pair.GetState())
+                    n++;
+            }
+        }
     }
-  }
 
- return n;
+    return n;
 }
 
 
@@ -244,74 +244,74 @@ int SG_EntryForm::get_equal_coords( const CP_Array& Dim ) const
 
 #if defined SOL_SAVETXT
 void SG_EntryForm::SaveTxt(
-                           OFormatter& txtfile,
-                           Grammar &gram,
-                           const SG_Entry &entry
-                          ) const
+    OFormatter& txtfile,
+    Grammar &gram,
+    const SG_Entry &entry
+) const
 {
- const GramClass &c = gram.classes()[ entry.GetClass() ];
- txtfile.printf( "  " );
+    const GramClass &c = gram.classes()[entry.GetClass()];
+    txtfile.printf("  ");
 
- for( Container::size_type i=0; i<coords().size(); i++ )
-  {
-   const GramCoordPair cp = coords()[i];
-
-   if( find( c.attrs(), cp.GetCoord() )!=UNKNOWN )
-    continue;
-
-   const GramCoord& c = gram.coords()[cp.GetCoord().GetIndex()];
-   const UCString& dim_name = c.GetName()[cp.GetCoord().GetVar()];
-
-   if( !c.states().empty() )
+    for (Container::size_type i = 0; i < coords().size(); i++)
     {
-     const UCString &state_name = c.GetStateName(cp.GetState());
+        const GramCoordPair cp = coords()[i];
 
-     if( c.IsDefState(cp.GetState()) && c.IsHeadState(cp.GetState() ) )
-      txtfile.printf(
-                     "%us%us%us%us%us ",
-                     dim_name.c_str(),
-                     sol_get_token(B_COLON).c_str(),
-                     sol_get_token(B_OROUNDPAREN).c_str(),
-                     state_name.c_str(),
-                     sol_get_token(B_CROUNDPAREN).c_str()
-                    );
-     else
-      txtfile.printf(
-                     "%us%us%us ",
-                     dim_name.c_str(),
-                     sol_get_token(B_COLON).c_str(),
-                     state_name.c_str()
-                    );
+        if (find(c.attrs(), cp.GetCoord()) != UNKNOWN)
+            continue;
+
+        const GramCoord& c = gram.coords()[cp.GetCoord().GetIndex()];
+        const UCString& dim_name = c.GetName()[cp.GetCoord().GetVar()];
+
+        if (!c.states().empty())
+        {
+            const UCString &state_name = c.GetStateName(cp.GetState());
+
+            if (c.IsDefState(cp.GetState()) && c.IsHeadState(cp.GetState()))
+                txtfile.printf(
+                    "%us%us%us%us%us ",
+                    dim_name.c_str(),
+                    sol_get_token(B_COLON).c_str(),
+                    sol_get_token(B_OROUNDPAREN).c_str(),
+                    state_name.c_str(),
+                    sol_get_token(B_CROUNDPAREN).c_str()
+                );
+            else
+                txtfile.printf(
+                    "%us%us%us ",
+                    dim_name.c_str(),
+                    sol_get_token(B_COLON).c_str(),
+                    state_name.c_str()
+                );
+        }
+        else
+        {
+            UCString prefix;
+
+            if (!cp.GetState())
+                prefix = sol_get_token(B_NEGATIVE);
+
+            txtfile.printf("%us%us ", prefix.c_str(), dim_name.c_str());
+        }
     }
-   else
-    {
-     UCString prefix;
 
-     if(!cp.GetState())
-      prefix=sol_get_token(B_NEGATIVE);
-
-     txtfile.printf( "%us%us ", prefix.c_str(), dim_name.c_str() );
-    }
-  }
-
- txtfile.printf(
-                " %us %us %us\n",
-                sol_get_token(B_OFIGPAREN).c_str(),
-                content->c_str(),
-                sol_get_token(B_CFIGPAREN).c_str()
-               );
- return;
+    txtfile.printf(
+        " %us %us %us\n",
+        sol_get_token(B_OFIGPAREN).c_str(),
+        content->c_str(),
+        sol_get_token(B_CFIGPAREN).c_str()
+    );
+    return;
 }
 #endif
 
 
-void SG_EntryForm::Reattach_To_Refs( SynGram &sg )
+void SG_EntryForm::Reattach_To_Refs(SynGram &sg)
 {
- // Название формы.
- content = sg.GetEntries().ReattachLexeme(content);
+    // РќР°Р·РІР°РЅРёРµ С„РѕСЂРјС‹.
+    content = sg.GetEntries().ReattachLexeme(content);
 
- // Координаты
- dim = sg.GetEntries().ReattachCoordPairs(dim);
+    // РљРѕРѕСЂРґРёРЅР°С‚С‹
+    dim = sg.GetEntries().ReattachCoordPairs(dim);
 
- return;
+    return;
 }

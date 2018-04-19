@@ -1,26 +1,26 @@
 #if !defined WordEntrySetEnumerator__H
- #define WordEntrySetEnumerator__H
+#define WordEntrySetEnumerator__H
 
- namespace Solarix
- {
-  class LS_ResultSet;
-  class WordEntrySet;
-  struct WordEntrySetItem;
+namespace Solarix
+{
+    class LS_ResultSet;
+    class WordEntrySet;
+    struct WordEntrySetItem;
 
-  class WordEntrySetEnumerator
-  {
-   private:
-    LS_ResultSet *rs;
-    WordEntrySet *sets;
+    class WordEntrySetEnumerator
+    {
+    private:
+        LS_ResultSet *rs;
+        WordEntrySet *sets;
 
-   public:
-    WordEntrySetEnumerator( LS_ResultSet *RS, WordEntrySet *Sets );
-    ~WordEntrySetEnumerator(void);
+    public:
+        WordEntrySetEnumerator(LS_ResultSet *RS, WordEntrySet *Sets);
+        ~WordEntrySetEnumerator();
 
-    bool Fetch(void);
-    int GetId(void);
-    const WordEntrySetItem& GetItem(void);   
-  };
- }
+        bool Fetch();
+        int GetId();
+        const WordEntrySetItem& GetItem();
+    };
+}
 
 #endif

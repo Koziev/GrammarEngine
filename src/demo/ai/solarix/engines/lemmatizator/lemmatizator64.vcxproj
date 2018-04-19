@@ -190,7 +190,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\..\include;$(BOOST_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -238,7 +238,6 @@
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_html_decoder.cpp" />
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_icu_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_laguage_filter.cpp" />
-    <ClCompile Include="..\..\..\..\..\io\char_reader\chr_translit_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_utf16_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\io\char_reader\chr_utf8_reader.cpp" />
     <ClCompile Include="..\..\..\..\..\tools\lem_application.cpp" />

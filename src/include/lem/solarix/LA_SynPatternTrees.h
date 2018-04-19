@@ -1,59 +1,59 @@
 #if !defined LA_SynPatternTrees__H
- #define LA_SynPatternTrees__H
+#define LA_SynPatternTrees__H
 
- #include <lem/process.h>
- #include <lem/RWULock.h>
- #include <lem/containers.h>
- 
- 
- namespace Solarix
- {
-  class SynPatternTreeNode;
-  class LexiconStorage;
-  class Dictionary;
+#include <lem/process.h>
+#include <lem/RWULock.h>
+#include <lem/containers.h>
 
-  class LA_SynPatternTrees
-  {
-   public:
-    enum { SOLID_PATTERN, NAMED_PATTERN, INCOMPLETE_PATTERN };
 
-   private:
-    Solarix::Dictionary *dict;
-    Solarix::LexiconStorage *storage;
+namespace Solarix
+{
+    class SynPatternTreeNode;
+    class LexiconStorage;
+    class Dictionary;
 
-    #if defined LEM_THREADS
-    lem::Process::CriticalSection cs_init;
-    lem::Process::RWU_Lock cs_default_filter, cs_default_sorter, cs_named, cs_sparse_patterns;
-    #endif
+    class LA_SynPatternTrees
+    {
+    public:
+        enum { SOLID_PATTERN, NAMED_PATTERN, INCOMPLETE_PATTERN };
 
-    void Delete(void);
+    private:
+        Solarix::Dictionary *dict;
+        Solarix::LexiconStorage *storage;
 
-    // для каждого языка храним отдельное решающее дерево
+#if defined LEM_THREADS
+        lem::Process::CriticalSection cs_init;
+        lem::Process::RWU_Lock cs_default_filter, cs_default_sorter, cs_named, cs_sparse_patterns;
+#endif
 
-    // префиксное дерево для выполнения полной и точной фильтрации паттернами
-    lem::MCollect< std::pair<int,SynPatternTreeNode*> > pattern_tree;
+        void Delete(void);
 
-    // деревья для неполного анализа
-    lem::MCollect< std::pair<int,SynPatternTreeNode*> > incomplete_pattern_tree;
+        // РґР»СЏ РєР°Р¶РґРѕРіРѕ СЏР·С‹РєР° С…СЂР°РЅРёРј РѕС‚РґРµР»СЊРЅРѕРµ СЂРµС€Р°СЋС‰РµРµ РґРµСЂРµРІРѕ
 
-    lem::MCollect<SynPatternTreeNode*> named_filter_trees;
-    std::map< int, const SynPatternTreeNode* > id2filter;
-    std::map< int, lem::UCString > id2name;
+        // РїСЂРµС„РёРєСЃРЅРѕРµ РґРµСЂРµРІРѕ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РїРѕР»РЅРѕР№ Рё С‚РѕС‡РЅРѕР№ С„РёР»СЊС‚СЂР°С†РёРё РїР°С‚С‚РµСЂРЅР°РјРё
+        lem::MCollect< std::pair<int, SynPatternTreeNode*> > pattern_tree;
 
-   public:
-    LA_SynPatternTrees( Solarix::Dictionary *Dict );
-    ~LA_SynPatternTrees(void);
+        // РґРµСЂРµРІСЊСЏ РґР»СЏ РЅРµРїРѕР»РЅРѕРіРѕ Р°РЅР°Р»РёР·Р°
+        lem::MCollect< std::pair<int, SynPatternTreeNode*> > incomplete_pattern_tree;
 
-    void Connect( LexiconStorage *Storage );
+        lem::MCollect<SynPatternTreeNode*> named_filter_trees;
+        std::map< int, const SynPatternTreeNode* > id2filter;
+        std::map< int, lem::UCString > id2name;
 
-    const SynPatternTreeNode& GetDefaultFilter( int id_language );
-    const SynPatternTreeNode& GetIncompleteFilter( int id_language );
-    const SynPatternTreeNode& GetNamedFilter( int id_tree );
+    public:
+        LA_SynPatternTrees(Solarix::Dictionary *Dict);
+        ~LA_SynPatternTrees();
 
-    const lem::UCString & GetPatternName( int id_tree );
+        void Connect(LexiconStorage *Storage);
 
-    void StoreFilterTree( int id, const lem::UCString &name, SynPatternTreeNode *tree, int id_language, int pattern_type );
-  };
- }
+        const SynPatternTreeNode& GetDefaultFilter(int id_language);
+        const SynPatternTreeNode& GetIncompleteFilter(int id_language);
+        const SynPatternTreeNode& GetNamedFilter(int id_tree);
+
+        const lem::UCString & GetPatternName(int id_tree);
+
+        void StoreFilterTree(int id, const lem::UCString &name, SynPatternTreeNode *tree, int id_language, int pattern_type);
+    };
+}
 
 #endif

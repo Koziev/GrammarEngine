@@ -10,638 +10,642 @@ using namespace lem;
 using namespace Solarix;
 
 
-BackTraceItem::BackTraceItem( const BackTraceItem &x )
- : wf(x.wf), use_export(x.use_export), export_coords(x.export_coords), export_nodes(x.export_nodes),
-   beg_token(x.beg_token), end_token(x.end_token)
+BackTraceItem::BackTraceItem(const BackTraceItem &x)
+    : wf(x.wf), use_export(x.use_export), export_coords(x.export_coords), export_nodes(x.export_nodes),
+    beg_token(x.beg_token), end_token(x.end_token)
 {
 }
 
 
-void BackTraceItem::operator=( const BackTraceItem &x )
+void BackTraceItem::operator=(const BackTraceItem &x)
 {
- wf = x.wf;
- use_export = x.use_export;
- export_coords = x.export_coords;
- export_nodes = x.export_nodes;
- beg_token = x.beg_token;
- end_token = x.end_token;
- return;
+    wf = x.wf;
+    use_export = x.use_export;
+    export_coords = x.export_coords;
+    export_nodes = x.export_nodes;
+    beg_token = x.beg_token;
+    end_token = x.end_token;
+    return;
 }
 
 
-BackTraceItem::BackTraceItem( const Solarix::Word_Form * _wordform )
- : wf(_wordform), beg_token(NULL), end_token(NULL)
+BackTraceItem::BackTraceItem(const Solarix::Word_Form * _wordform)
+    : wf(_wordform), beg_token(nullptr), end_token(nullptr)
 {}
 
 
-BackTraceItem::BackTraceItem( const Solarix::Word_Form * _wordform, const CP_Array & _exported )
- : wf(_wordform), use_export(true), export_coords(_exported), beg_token(NULL), end_token(NULL)
+BackTraceItem::BackTraceItem(const Solarix::Word_Form * _wordform, const CP_Array & _exported)
+    : wf(_wordform), use_export(true), export_coords(_exported), beg_token(nullptr), end_token(nullptr)
 {}
 
 
-BackTraceItem::BackTraceItem( const CP_Array & _exported )
- : wf(NULL), use_export(true), export_coords(_exported), beg_token(NULL), end_token(NULL)
+BackTraceItem::BackTraceItem(const CP_Array & _exported)
+    : wf(nullptr), use_export(true), export_coords(_exported), beg_token(nullptr), end_token(nullptr)
 {}
 
 
 
-void BackTraceItem::SetExportedNodes( const lem::MCollect< std::pair<const lem::UCString*,const Word_Form*> > & nodes )
+void BackTraceItem::SetExportedNodes(const lem::MCollect< std::pair<const lem::UCString*, const Word_Form*> > & nodes)
 {
- export_nodes = nodes;
- return;
+    export_nodes = nodes;
+    return;
 }
 
 
 
-void BackTraceItem::SetRange( const LexerTextPos * _begin, const LexerTextPos * _end )
+void BackTraceItem::SetRange(const LexerTextPos * _begin, const LexerTextPos * _end)
 {
- LEM_CHECKIT_Z( _begin!=NULL );
- LEM_CHECKIT_Z( _end!=NULL );
- LEM_CHECKIT_Z( _begin->GetWordIndex()<=_end->GetWordIndex() );
+    LEM_CHECKIT_Z(_begin != nullptr);
+    LEM_CHECKIT_Z(_end != nullptr);
+    LEM_CHECKIT_Z(_begin->GetWordIndex() <= _end->GetWordIndex());
 
- beg_token = _begin;
- end_token = _end;
- return;
+    beg_token = _begin;
+    end_token = _end;
+    return;
 }
 
 
 
-void BackTraceItem::Print( lem::OFormatter &to, SynGram &sg, bool detailed ) const
+void BackTraceItem::Print(lem::OFormatter &to, SynGram &sg, bool detailed) const
 {
- if( wf!=NULL )
-  {
-   Solarix::Word_Form dummy( *wf, false );
-   wf->Print( to, &sg, detailed );
-  }
-
- if( !export_coords.empty() )
-  {
-   to.printf( " export_coords:=%vf6(%vn" );
- 
-   for( lem::Container::size_type i=0; i<export_coords.size(); ++i )
+    if (wf != nullptr)
     {
-     const int id_coord = export_coords[i].GetCoord().GetIndex();
-     const int id_state = export_coords[i].GetState();
- 
-     const GramCoord &c = sg.coords()[id_coord];
-     if( c.IsBistable() )
-      {
-       if( id_state==1 )
+        Solarix::Word_Form dummy(*wf, false);
+        wf->Print(to, &sg, detailed);
+    }
+
+    if (!export_coords.empty())
+    {
+        to.printf(" export_coords:=%vf6(%vn");
+
+        for (lem::Container::size_type i = 0; i < export_coords.size(); ++i)
         {
-         to.printf( " %us", c.GetName().string().c_str() );
+            const int id_coord = export_coords[i].GetCoord().GetIndex();
+            const int id_state = export_coords[i].GetState();
+
+            const GramCoord &c = sg.coords()[id_coord];
+            if (c.IsBistable())
+            {
+                if (id_state == 1)
+                {
+                    to.printf(" %us", c.GetName().string().c_str());
+                }
+                else
+                {
+                    to.printf(" ~%us", c.GetName().string().c_str());
+                }
+            }
+            else
+            {
+                to.printf(" %us:%us", c.GetName().string().c_str(), c.GetStateName(id_state).c_str());
+            }
         }
-       else
+
+        to.printf(" %vf6)%vn");
+    }
+
+
+    if (!export_nodes.empty())
+    {
+        to.printf(" export_nodes:=");
+        for (lem::Container::size_type i = 0; i < export_nodes.size(); ++i)
         {
-         to.printf( " ~%us", c.GetName().string().c_str() );
+            to.printf(" %us=", export_nodes[i].first->c_str());
+            export_nodes[i].second->Print(to, &sg, true);
         }
-      }
-     else
-      {
-       to.printf( " %us:%us", c.GetName().string().c_str(), c.GetStateName(id_state).c_str() );
-      }
-    }
- 
-   to.printf( " %vf6)%vn" );
-  }
- 
 
- if( !export_nodes.empty() )
-  {
-   to.printf( " export_nodes:=" );
-   for( lem::Container::size_type i=0; i<export_nodes.size(); ++i )
+        to.eol();
+    }
+
+    return;
+}
+
+
+int BackTraceItem::GetCoordState(int id_coord) const
+{
+    if (use_export)
     {
-     to.printf( " %us=", export_nodes[i].first->c_str() );
-     export_nodes[i].second->Print( to, &sg, true );
+        return export_coords.GetState(id_coord);
     }
-
-   to.eol();
-  }
-
- return;
-}
-
-
-int BackTraceItem::GetCoordState( int id_coord ) const
-{
- if( use_export )
-  {
-   return export_coords.GetState(id_coord);
-  }
- else
-  {
-   return GetWordform()->GetState( Solarix::GramCoordAdr(id_coord) );
-  }
-}
-
-
-void BackTraceItem::GetCoordStates( int id_coord, lem::MCollect<int> & states ) const
-{
- if( use_export )
-  {
-   for( lem::Container::size_type i=0; i<export_coords.size(); ++i )
+    else
     {
-     if( export_coords[i].GetCoord().GetIndex()==id_coord )
-      states.push_back( export_coords[i].GetState() );
+        return GetWordform()->GetState(Solarix::GramCoordAdr(id_coord));
     }
-  }
- else
-  {
-   states = GetWordform()->GetStates( Solarix::GramCoordAdr(id_coord) );
-  }
-
- return;
 }
 
 
-
-void BackTraceItem::GetCoorPairs( CP_Array &dst ) const
+void BackTraceItem::GetCoordStates(int id_coord, lem::MCollect<int> & states) const
 {
- if( use_export )
-  {
-   dst = export_coords;
-  }
- else
-  {
-   const CPE_Array &src0 = GetWordform()->pairs();
-   for( lem::Container::size_type i=0; i<src0.size(); ++i )
-    dst.push_back( src0[i] );
-  }
+    if (use_export)
+    {
+        for (lem::Container::size_type i = 0; i < export_coords.size(); ++i)
+        {
+            if (export_coords[i].GetCoord().GetIndex() == id_coord)
+                states.push_back(export_coords[i].GetState());
+        }
+    }
+    else
+    {
+        states = GetWordform()->GetStates(Solarix::GramCoordAdr(id_coord));
+    }
 
- return;
+    return;
 }
 
 
 
-bool BackTraceItem::Check( SynGram &sg, const BackRefCorrel & condition, const Solarix::Word_Form & alt ) const
+void BackTraceItem::GetCoorPairs(CP_Array &dst) const
 {
- const int id_coord0 = condition.id_coord0; // состояние этой координаты в alt
-                                            // должно соответствовать
- const int id_coord1 = condition.id_coord1; // состоянию этой координаты в нашем объекте
-
- const CPE_Array & alt_pairs = alt.pairs();
- const lem::Container::size_type n1 = alt_pairs.size();
-
- if( condition.affirmative )
-  {
-   bool alt_has_coord=false, b_has_coord=false;
-
-   if( use_export )
+    if (use_export)
     {
-     for( lem::Container::size_type i=0; i<n1; ++i )
-      {
-       if( id_coord0 == alt_pairs[i].GetCoord().GetIndex() )
-        {
-         alt_has_coord=true;
-         const int alt_state = alt_pairs[i].GetState();
-
-         if( condition.for_group )
-          {
-           // проверим через сопоставление групп, например РОДИТЕЛЬНЫЙ и ПАРТИТИВ для падежа дадут совпадение
-           const GramCoord &c = sg.coords()[ id_coord0 ];
-           const int alt_state_group = c.GetSubgroup(alt_state);
-
-           const lem::Container::size_type n2 = this->export_coords.size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
-              {
-               const int state2_group = c.GetSubgroup(this->export_coords[j].GetState());
-               
-               b_has_coord = true;
-
-               if( alt_state_group==state2_group )
-                {
-                 // нашли соответствие подгрупп.
-                 return true;
-                }
-              }
-            }
-          }
-         else
-          {
-           // Ищем такое состояние...
-           const lem::Container::size_type n2 = this->export_coords.size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
-              {
-               b_has_coord=true;
-               if( this->export_coords[j].GetState()==alt_state )
-                {
-                 // нашли соответствие.
-                 return true;
-                }
-              }
-            }
-          }
-        }
-      }
+        dst = export_coords;
     }
-   else
+    else
     {
-     for( lem::Container::size_type i=0; i<n1; ++i )
-      {
-       if( id_coord0 == alt_pairs[i].GetCoord().GetIndex() )
-        {
-         alt_has_coord=true;
-         const int alt_state = alt_pairs[i].GetState();
-
-         if( condition.for_group )
-          {
-           const GramCoord &c = sg.coords()[ id_coord0 ];
-           const int alt_state_group = c.GetSubgroup(alt_state);
-           
-           const lem::Container::size_type n2 = this->wf->pairs().size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-              {
-               b_has_coord=true;
-
-               const int state2_group = c.GetSubgroup(this->wf->pairs()[j].GetState());
-
-               if( state2_group==alt_state_group )
-                {
-                 return true;
-                }
-              }
-            }
-          }
-         else
-          {
-           // Ищем такое состояние...
-           const lem::Container::size_type n2 = this->wf->pairs().size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-              {
-               b_has_coord=true;
-               if( this->wf->pairs()[j].GetState()==alt_state )
-                {
-                 return true;
-                }
-              }
-            }
-          }
-        }
-      }
+        const CPE_Array &src0 = GetWordform()->pairs();
+        for (lem::Container::size_type i = 0; i < src0.size(); ++i)
+            dst.push_back(src0[i]);
     }
 
-   return !alt_has_coord || !b_has_coord;
-  }
- else
-  {
-   if( use_export )
+    return;
+}
+
+
+
+bool BackTraceItem::Check(SynGram &sg, const BackRefCorrel & condition, const Solarix::Word_Form & alt) const
+{
+    const int id_coord0 = condition.id_coord0; // СЃРѕСЃС‚РѕСЏРЅРёРµ СЌС‚РѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ alt
+                                               // РґРѕР»Р¶РЅРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ
+    const int id_coord1 = condition.id_coord1; // СЃРѕСЃС‚РѕСЏРЅРёСЋ СЌС‚РѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ РЅР°С€РµРј РѕР±СЉРµРєС‚Рµ
+
+    const CPE_Array & alt_pairs = alt.pairs();
+    const lem::Container::size_type n1 = alt_pairs.size();
+
+    if (condition.affirmative)
     {
-     for( lem::Container::size_type i=0; i<n1; ++i )
-      {
-       if( id_coord0 == alt_pairs[i].GetCoord().GetIndex() )
-        {
-         const int alt_state = alt_pairs[i].GetState();
-         
-         if( condition.for_group )
-          {
-           const GramCoord &c = sg.coords()[ id_coord0 ];
-           const int alt_state_group = c.GetSubgroup(alt_state);
-           
-           const lem::Container::size_type n2 = export_coords.size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == export_coords[j].GetCoord().GetIndex() )
-              {
-               const int state2_group = c.GetSubgroup(export_coords[j].GetState());
+        bool alt_has_coord = false, b_has_coord = false;
 
-               if( state2_group==alt_state_group )
-                {
-                 return false;
-                }
-              }
-            }
-          }
-         else
-          {
-           // Ищем такое состояние...
-           const lem::Container::size_type n2 = export_coords.size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
+        if (use_export)
+        {
+            for (lem::Container::size_type i = 0; i < n1; ++i)
             {
-             if( id_coord1 == export_coords[j].GetCoord().GetIndex() )
-              {
-               if( export_coords[j].GetState()==alt_state )
+                if (id_coord0 == alt_pairs[i].GetCoord().GetIndex())
                 {
-                 return false;
+                    alt_has_coord = true;
+                    const int alt_state = alt_pairs[i].GetState();
+
+                    if (condition.for_group)
+                    {
+                        // РїСЂРѕРІРµСЂРёРј С‡РµСЂРµР· СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёРµ РіСЂСѓРїРї, РЅР°РїСЂРёРјРµСЂ Р РћР”РРўР•Р›Р¬РќР«Р™ Рё РџРђР РўРРўРР’ РґР»СЏ РїР°РґРµР¶Р° РґР°РґСѓС‚ СЃРѕРІРїР°РґРµРЅРёРµ
+                        const GramCoord &c = sg.coords()[id_coord0];
+                        const int alt_state_group = c.GetSubgroup(alt_state);
+
+                        const lem::Container::size_type n2 = this->export_coords.size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                            {
+                                const int state2_group = c.GetSubgroup(this->export_coords[j].GetState());
+
+                                b_has_coord = true;
+
+                                if (alt_state_group == state2_group)
+                                {
+                                    // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ РїРѕРґРіСЂСѓРїРї.
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                        const lem::Container::size_type n2 = this->export_coords.size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                            {
+                                b_has_coord = true;
+                                if (this->export_coords[j].GetState() == alt_state)
+                                {
+                                    // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ.
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-      }
+        else
+        {
+            for (lem::Container::size_type i = 0; i < n1; ++i)
+            {
+                if (id_coord0 == alt_pairs[i].GetCoord().GetIndex())
+                {
+                    alt_has_coord = true;
+                    const int alt_state = alt_pairs[i].GetState();
+
+                    if (condition.for_group)
+                    {
+                        const GramCoord &c = sg.coords()[id_coord0];
+                        const int alt_state_group = c.GetSubgroup(alt_state);
+
+                        const lem::Container::size_type n2 = this->wf->pairs().size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                            {
+                                b_has_coord = true;
+
+                                const int state2_group = c.GetSubgroup(this->wf->pairs()[j].GetState());
+
+                                if (state2_group == alt_state_group)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                        const lem::Container::size_type n2 = this->wf->pairs().size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                            {
+                                b_has_coord = true;
+                                if (this->wf->pairs()[j].GetState() == alt_state)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return !alt_has_coord || !b_has_coord;
     }
-   else
+    else
     {
-     for( lem::Container::size_type i=0; i<n1; ++i )
-      {
-       if( id_coord0 == alt_pairs[i].GetCoord().GetIndex() )
+        if (use_export)
         {
-         const int alt_state = alt_pairs[i].GetState();
-         
-         if( condition.for_group )
-          {
-           const GramCoord &c = sg.coords()[ id_coord0 ];
-           const int alt_state_group = c.GetSubgroup(alt_state);
-
-           const lem::Container::size_type n2 = this->wf->pairs().size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
+            for (lem::Container::size_type i = 0; i < n1; ++i)
             {
-             if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-              {
-               const int state2_group = c.GetSubgroup(this->wf->pairs()[j].GetCoord().GetIndex());
+                if (id_coord0 == alt_pairs[i].GetCoord().GetIndex())
+                {
+                    const int alt_state = alt_pairs[i].GetState();
 
-               if( state2_group==alt_state_group )
-                {
-                 return false;
+                    if (condition.for_group)
+                    {
+                        const GramCoord &c = sg.coords()[id_coord0];
+                        const int alt_state_group = c.GetSubgroup(alt_state);
+
+                        const lem::Container::size_type n2 = export_coords.size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == export_coords[j].GetCoord().GetIndex())
+                            {
+                                const int state2_group = c.GetSubgroup(export_coords[j].GetState());
+
+                                if (state2_group == alt_state_group)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                        const lem::Container::size_type n2 = export_coords.size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == export_coords[j].GetCoord().GetIndex())
+                            {
+                                if (export_coords[j].GetState() == alt_state)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
-         else
-          {
-           // Ищем такое состояние...
-           const lem::Container::size_type n2 = this->wf->pairs().size();
-           for( lem::Container::size_type j=0; j<n2; ++j )
-            {
-             if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-              {
-               if( this->wf->pairs()[j].GetState()==alt_state )
-                {
-                 return false;
-                }
-              }
-            }
-          }
         }
-      }
+        else
+        {
+            for (lem::Container::size_type i = 0; i < n1; ++i)
+            {
+                if (id_coord0 == alt_pairs[i].GetCoord().GetIndex())
+                {
+                    const int alt_state = alt_pairs[i].GetState();
+
+                    if (condition.for_group)
+                    {
+                        const GramCoord &c = sg.coords()[id_coord0];
+                        const int alt_state_group = c.GetSubgroup(alt_state);
+
+                        const lem::Container::size_type n2 = this->wf->pairs().size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                            {
+                                const int state2_group = c.GetSubgroup(this->wf->pairs()[j].GetCoord().GetIndex());
+
+                                if (state2_group == alt_state_group)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                        const lem::Container::size_type n2 = this->wf->pairs().size();
+                        for (lem::Container::size_type j = 0; j < n2; ++j)
+                        {
+                            if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                            {
+                                if (this->wf->pairs()[j].GetState() == alt_state)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
-   return true;
-  }
-
- return false;
+    return false;
 }
 
 
 
 
-bool BackTraceItem::Check( SynGram &sg, const BackRefCorrel & condition, const std::multimap<int,int> & alt_coords ) const
+bool BackTraceItem::Check(SynGram &sg, const BackRefCorrel & condition, const std::multimap<int, int> & alt_coords) const
 {
- const int id_coord0 = condition.id_coord0; // состояние этой координаты в alt_coords
-                                            // должно соответствовать
- const int id_coord1 = condition.id_coord1; // состоянию этой координаты в нашем объекте
+    const int id_coord0 = condition.id_coord0; // СЃРѕСЃС‚РѕСЏРЅРёРµ СЌС‚РѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ alt_coords
+                                               // РґРѕР»Р¶РЅРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ
+    const int id_coord1 = condition.id_coord1; // СЃРѕСЃС‚РѕСЏРЅРёСЋ СЌС‚РѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ РЅР°С€РµРј РѕР±СЉРµРєС‚Рµ
 
- typedef std::multimap<int,int>::const_iterator II4;
+    typedef std::multimap<int, int>::const_iterator II4;
 
- if( condition.affirmative )
-  {
-   bool alt_has_coord=false, b_has_coord=false;
-
-   if( use_export )
+    if (condition.affirmative)
     {
-     std::pair<II4,II4> p4 = alt_coords.equal_range(id_coord0);
+        bool alt_has_coord = false, b_has_coord = false;
 
-     if( condition.for_group )
-      {
-       const GramCoord &co = sg.coords()[ id_coord0 ];
-
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
+        if (use_export)
         {
-         alt_has_coord=true;
-         const int alt_state = it4->second;
-         const int alt_state_group = co.GetSubgroup(alt_state);
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->export_coords.size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
+            std::pair<II4, II4> p4 = alt_coords.equal_range(id_coord0);
+
+            if (condition.for_group)
             {
-             b_has_coord=true;
+                const GramCoord &co = sg.coords()[id_coord0];
 
-             const int export_state_group = co.GetSubgroup( this->export_coords[j].GetState() );
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    alt_has_coord = true;
+                    const int alt_state = it4->second;
+                    const int alt_state_group = co.GetSubgroup(alt_state);
 
-             if( export_state_group==alt_state_group )
-              {
-               // нашли соответствие.
-               return true;
-              }
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->export_coords.size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                        {
+                            b_has_coord = true;
+
+                            const int export_state_group = co.GetSubgroup(this->export_coords[j].GetState());
+
+                            if (export_state_group == alt_state_group)
+                            {
+                                // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ.
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
-          }
+            else
+            {
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    alt_has_coord = true;
+                    const int alt_state = it4->second;
+
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->export_coords.size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                        {
+                            b_has_coord = true;
+                            if (this->export_coords[j].GetState() == alt_state)
+                            {
+                                // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ.
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
-     else
-      {
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
+        else
         {
-         alt_has_coord=true;
-         const int alt_state = it4->second;
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->export_coords.size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
+            std::pair<II4, II4> p4 = alt_coords.equal_range(id_coord0);
+
+            if (condition.for_group)
             {
-             b_has_coord=true;
-             if( this->export_coords[j].GetState()==alt_state )
-              {
-               // нашли соответствие.
-               return true;
-              }
+                const GramCoord &co = sg.coords()[id_coord0];
+
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    alt_has_coord = true;
+                    const int alt_state = it4->second;
+                    const int alt_state_group = co.GetSubgroup(alt_state);
+
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->wf->pairs().size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                        {
+                            b_has_coord = true;
+
+                            const int state2 = this->wf->pairs()[j].GetState();
+                            const int state2_grp = co.GetSubgroup(state2);
+
+                            if (state2_grp == alt_state_group)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
-          }
+            else
+            {
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    alt_has_coord = true;
+                    const int alt_state = it4->second;
+
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->wf->pairs().size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                        {
+                            b_has_coord = true;
+                            if (this->wf->pairs()[j].GetState() == alt_state)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
+
+        return !alt_has_coord || !b_has_coord;
     }
-   else
+    else
     {
-     std::pair<II4,II4> p4 = alt_coords.equal_range(id_coord0);
-
-     if( condition.for_group )
-      {
-       const GramCoord &co = sg.coords()[ id_coord0 ];
-
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
+        if (use_export)
         {
-         alt_has_coord=true;
-         const int alt_state = it4->second;
-         const int alt_state_group = co.GetSubgroup( alt_state );
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->wf->pairs().size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
+            std::pair<II4, II4> p4 = alt_coords.equal_range(id_coord0);
+
+            if (condition.for_group)
             {
-             b_has_coord=true;
+                const GramCoord &c = sg.coords()[id_coord0];
 
-             const int state2 = this->wf->pairs()[j].GetState();
-             const int state2_grp = co.GetSubgroup(state2);
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    const int alt_state = it4->second;
+                    const int alt_state_group = c.GetSubgroup(alt_state);
 
-             if( state2_grp==alt_state_group )
-              {
-               return true;
-              }
+                    const lem::Container::size_type n2 = this->export_coords.size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                        {
+                            const int state2 = this->export_coords[j].GetState();
+                            const int state2_grp = c.GetSubgroup(state2);
+
+                            if (state2_grp == alt_state_group)
+                            {
+                                // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ.
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
-          }
+            else
+            {
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    const int alt_state = it4->second;
+
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->export_coords.size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->export_coords[j].GetCoord().GetIndex())
+                        {
+                            if (this->export_coords[j].GetState() == alt_state)
+                            {
+                                // РЅР°С€Р»Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ.
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
-     else
-      {
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
+        else
         {
-         alt_has_coord=true;
-         const int alt_state = it4->second;
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->wf->pairs().size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
+            std::pair<II4, II4> p4 = alt_coords.equal_range(id_coord0);
+
+            if (condition.for_group)
             {
-             b_has_coord=true;
-             if( this->wf->pairs()[j].GetState()==alt_state )
-              {
-               return true;
-              }
+                const GramCoord &c = sg.coords()[id_coord0];
+
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    const int alt_state = it4->second;
+                    const int alt_state_group = c.GetSubgroup(alt_state);
+
+                    const lem::Container::size_type n2 = this->wf->pairs().size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                        {
+                            const int state2_grp = c.GetSubgroup(this->wf->pairs()[j].GetState());
+                            if (state2_grp == alt_state_group)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
-          }
+            else
+            {
+                for (II4 it4 = p4.first; it4 != p4.second; ++it4)
+                {
+                    const int alt_state = it4->second;
+
+                    // РС‰РµРј С‚Р°РєРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ...
+                    const lem::Container::size_type n2 = this->wf->pairs().size();
+                    for (lem::Container::size_type j = 0; j < n2; ++j)
+                    {
+                        if (id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex())
+                        {
+                            if (this->wf->pairs()[j].GetState() == alt_state)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
+
+        return true;
     }
 
-   return !alt_has_coord || !b_has_coord;
-  }
- else
-  {
-   if( use_export )
-    {
-     std::pair<II4,II4> p4 = alt_coords.equal_range(id_coord0);
-
-     if( condition.for_group )
-      {
-       const GramCoord &c = sg.coords()[ id_coord0 ];
-
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
-        {
-         const int alt_state = it4->second;
-         const int alt_state_group = c.GetSubgroup(alt_state);
-    
-         const lem::Container::size_type n2 = this->export_coords.size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
-            {
-             const int state2 = this->export_coords[j].GetState();
-             const int state2_grp = c.GetSubgroup(state2);
-
-             if( state2_grp==alt_state_group )
-              {
-               // нашли соответствие.
-               return false;
-              }
-            }
-          }
-        }
-      }
-     else
-      {
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
-        {
-         const int alt_state = it4->second;
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->export_coords.size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->export_coords[j].GetCoord().GetIndex() )
-            {
-             if( this->export_coords[j].GetState()==alt_state )
-              {
-               // нашли соответствие.
-               return false;
-              }
-            }
-          }
-        }
-      }
-    }
-   else
-    {
-     std::pair<II4,II4> p4 = alt_coords.equal_range(id_coord0);
-
-     if( condition.for_group )
-      {
-       const GramCoord &c = sg.coords()[ id_coord0 ];
-
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
-        {
-         const int alt_state = it4->second;
-         const int alt_state_group = c.GetSubgroup(alt_state);
-    
-         const lem::Container::size_type n2 = this->wf->pairs().size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-            {
-             const int state2_grp = c.GetSubgroup(this->wf->pairs()[j].GetState());
-             if( state2_grp==alt_state_group )
-              {
-               return false;
-              }
-            }
-          }
-        }
-      }
-     else
-      {
-       for( II4 it4=p4.first; it4!=p4.second; ++it4 )
-        {
-         const int alt_state = it4->second;
-    
-         // Ищем такое состояние...
-         const lem::Container::size_type n2 = this->wf->pairs().size();
-         for( lem::Container::size_type j=0; j<n2; ++j )
-          {
-           if( id_coord1 == this->wf->pairs()[j].GetCoord().GetIndex() )
-            {
-             if( this->wf->pairs()[j].GetState()==alt_state )
-              {
-               return false;
-              }
-            }
-          }
-        }
-      }
-    }
-
-   return true;
-  }
-
- return false;
+    return false;
 }
 
 
-const Solarix::Word_Form* BackTraceItem::FindNode( const lem::UCString & name ) const
+const Solarix::Word_Form* BackTraceItem::FindNode(const lem::UCString & name) const
 {
- for( lem::Container::size_type i=0; i<export_nodes.size(); ++i )
-  if( name == * export_nodes[i].first )
-   return export_nodes[i].second;
+    for (lem::Container::size_type i = 0; i < export_nodes.size(); ++i)
+    {
+        if (name == *export_nodes[i].first)
+        {
+            return export_nodes[i].second;
+        }
+    }
 
- return NULL;
+    return nullptr;
 }
 
 
 const Solarix::Word_Form* BackTraceItem::GetSingleRootNode() const
 {
- LEM_CHECKIT_Z( beg_token==end_token );
+    LEM_CHECKIT_Z(beg_token == end_token);
 
- return wf==NULL ? beg_token->GetWordform() : wf;
+    return wf == nullptr ? beg_token->GetWordform() : wf;
 }

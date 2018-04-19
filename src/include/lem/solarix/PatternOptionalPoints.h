@@ -5,27 +5,27 @@
 
 namespace Solarix
 {
- class SynPatternPoint;
- class PatternOptionalPoints
- {
-  private:
-   lem::MCollect<SynPatternPoint*> points;
+    class SynPatternPoint;
+    class PatternOptionalPoints
+    {
+    private:
+        lem::MCollect<SynPatternPoint*> points;
 
-  public:
-   PatternOptionalPoints() {}
-   PatternOptionalPoints( const PatternOptionalPoints & x );
-   ~PatternOptionalPoints();
+    public:
+        PatternOptionalPoints() {}
+        PatternOptionalPoints(const PatternOptionalPoints & x);
+        ~PatternOptionalPoints();
 
-   void operator=( const PatternOptionalPoints & x );
+        void operator=(const PatternOptionalPoints & x);
 
-   bool operator!=( const PatternOptionalPoints & x ) const;
-  
-   void add( SynPatternPoint * x ) { points.push_back(x); }
-   bool empty() const { return points.empty(); }
+        bool operator!=(const PatternOptionalPoints & x) const;
 
-   void SaveBin( lem::Stream & bin ) const;
-   void LoadBin( lem::Stream & bin );
- };
+        void add(SynPatternPoint * x) { points.push_back(x); }
+        bool empty() const { return points.empty(); }
+
+        void SaveBin(lem::Stream & bin) const;
+        void LoadBin(lem::Stream & bin);
+    };
 }
 
 #endif

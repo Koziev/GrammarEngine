@@ -1,34 +1,34 @@
 #if !defined SOL_MULTIWORD_MERGER__H
- #define SOL_MULTIWORD_MERGER__H
+#define SOL_MULTIWORD_MERGER__H
 
- namespace Solarix
- {
-  class LexicalAutomat;
+namespace Solarix
+{
+    class LexicalAutomat;
 
-  class MultiwordMerger
-  {
-   private:
-    Solarix::LexicalAutomat *la;
+    class MultiwordMerger
+    {
+    private:
+        Solarix::LexicalAutomat *la;
 
-    lem::MCollect<lem::UCString> words;
-    Solarix::Lexem multiword;
+        lem::MCollect<lem::UCString> words;
+        Solarix::Lexem multiword;
 
-    lem::MCollect<lem::UCString> ready_words;
+        lem::MCollect<lem::UCString> ready_words;
 
-    int n_max_expecting; // какая максимальная длина
+        int n_max_expecting; // какая максимальная длина
 
-    void Purge(void);
+        void Purge();
 
-   public:
-    MultiwordMerger( Solarix::LexicalAutomat *_la );
+    public:
+        MultiwordMerger(Solarix::LexicalAutomat *_la);
 
-    void Push( const lem::UCString &word );
+        void Push(const lem::UCString &word);
 
-    void ForceReady(void);
-    bool IsReady(void) const;
-    lem::UCString Pop(void);
-  };
+        void ForceReady();
+        bool IsReady() const;
+        lem::UCString Pop();
+    };
 
- }
+}
 
 #endif

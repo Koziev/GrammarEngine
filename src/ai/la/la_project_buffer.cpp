@@ -10,12 +10,12 @@
 // from the file!
 //
 // Content:
-// Класс LA_WordProjBuffer - контейнер-кэш для Лексического Автомата, хранящий
-// списки осуществленных проекций мультилексем на Лексикон. Экономит
-// процессорное время и снижает пиковую загрузку оперативной памяти за счет
-// неповторения попыток проекции часто встречающихся слов. Как нетрудно опытным
-// путем установить, всего примерно 100 слов (предлоги, связки, союзы) дают не
-// менее 60..70% всего числа поступающих на проекцию.
+// РљР»Р°СЃСЃ LA_WordProjBuffer - РєРѕРЅС‚РµР№РЅРµСЂ-РєСЌС€ РґР»СЏ Р›РµРєСЃРёС‡РµСЃРєРѕРіРѕ РђРІС‚РѕРјР°С‚Р°, С…СЂР°РЅСЏС‰РёР№
+// СЃРїРёСЃРєРё РѕСЃСѓС‰РµСЃС‚РІР»РµРЅРЅС‹С… РїСЂРѕРµРєС†РёР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРј РЅР° Р›РµРєСЃРёРєРѕРЅ. Р­РєРѕРЅРѕРјРёС‚
+// РїСЂРѕС†РµСЃСЃРѕСЂРЅРѕРµ РІСЂРµРјСЏ Рё СЃРЅРёР¶Р°РµС‚ РїРёРєРѕРІСѓСЋ Р·Р°РіСЂСѓР·РєСѓ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё Р·Р° СЃС‡РµС‚
+// РЅРµРїРѕРІС‚РѕСЂРµРЅРёСЏ РїРѕРїС‹С‚РѕРє РїСЂРѕРµРєС†РёРё С‡Р°СЃС‚Рѕ РІСЃС‚СЂРµС‡Р°СЋС‰РёС…СЃСЏ СЃР»РѕРІ. РљР°Рє РЅРµС‚СЂСѓРґРЅРѕ РѕРїС‹С‚РЅС‹Рј
+// РїСѓС‚РµРј СѓСЃС‚Р°РЅРѕРІРёС‚СЊ, РІСЃРµРіРѕ РїСЂРёРјРµСЂРЅРѕ 100 СЃР»РѕРІ (РїСЂРµРґР»РѕРіРё, СЃРІСЏР·РєРё, СЃРѕСЋР·С‹) РґР°СЋС‚ РЅРµ
+// РјРµРЅРµРµ 60..70% РІСЃРµРіРѕ С‡РёСЃР»Р° РїРѕСЃС‚СѓРїР°СЋС‰РёС… РЅР° РїСЂРѕРµРєС†РёСЋ.
 // -----------------------------------------------------------------------------
 //
 // CD->04.05.1997
@@ -37,332 +37,350 @@
 using namespace lem;
 using namespace Solarix;
 
-LA_WordProjBuffer::LA_WordProjBuffer(void)
+LA_WordProjBuffer::LA_WordProjBuffer()
 {
- nmaxproj=NTOT=0;
- n_calls=n_succ=n_succ_prim=0;
+    nmaxproj = NTOT = 0;
+    n_calls = n_succ = n_succ_prim = 0;
 
- use_compiled=false;
- update_list=true;
+    use_compiled = false;
+    update_list = true;
 
- #if defined SOL_LOADTXT && defined SOL_COMPILER
- optimized = false;
- #endif
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+    optimized = false;
+#endif
 
- return;
+    return;
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 /********************************************************************
- Подготавливаем кэш для работы: выделяем необходимую память для
- списка списков проекций. Эта процедура должна вызываться уже
- п_о_с_л_е загрузки графической грамматики, так как нам нужно узнать
- число символов в алфавите gram. Запомненные списки сейчас пусты, так
- как осуществленных проекций еще не было.
+ РџРѕРґРіРѕС‚Р°РІР»РёРІР°РµРј РєСЌС€ РґР»СЏ СЂР°Р±РѕС‚С‹: РІС‹РґРµР»СЏРµРј РЅРµРѕР±С…РѕРґРёРјСѓСЋ РїР°РјСЏС‚СЊ РґР»СЏ
+ СЃРїРёСЃРєР° СЃРїРёСЃРєРѕРІ РїСЂРѕРµРєС†РёР№. Р­С‚Р° РїСЂРѕС†РµРґСѓСЂР° РґРѕР»Р¶РЅР° РІС‹Р·С‹РІР°С‚СЊСЃСЏ СѓР¶Рµ
+ Рї_Рѕ_СЃ_Р»_Рµ Р·Р°РіСЂСѓР·РєРё РіСЂР°С„РёС‡РµСЃРєРѕР№ РіСЂР°РјРјР°С‚РёРєРё, С‚Р°Рє РєР°Рє РЅР°Рј РЅСѓР¶РЅРѕ СѓР·РЅР°С‚СЊ
+ С‡РёСЃР»Рѕ СЃРёРјРІРѕР»РѕРІ РІ Р°Р»С„Р°РІРёС‚Рµ gram. Р—Р°РїРѕРјРЅРµРЅРЅС‹Рµ СЃРїРёСЃРєРё СЃРµР№С‡Р°СЃ РїСѓСЃС‚С‹, С‚Р°Рє
+ РєР°Рє РѕСЃСѓС‰РµСЃС‚РІР»РµРЅРЅС‹С… РїСЂРѕРµРєС†РёР№ РµС‰Рµ РЅРµ Р±С‹Р»Рѕ.
 *********************************************************************/
-void LA_WordProjBuffer::Adjust( const GraphGram &gram )
+void LA_WordProjBuffer::Adjust(const GraphGram &gram)
 {
- // Число символов в алфавите (не считая буквоформ)
- NTOT=0;
- const int nchar = CastSizeToInt(gram.entries().Count());
- list.reserve(nchar);
- int i;
+    // Р§РёСЃР»Рѕ СЃРёРјРІРѕР»РѕРІ РІ Р°Р»С„Р°РІРёС‚Рµ (РЅРµ СЃС‡РёС‚Р°СЏ Р±СѓРєРІРѕС„РѕСЂРј)
+    NTOT = 0;
+    const int nchar = CastSizeToInt(gram.entries().Count());
+    list.reserve(nchar);
+    int i;
 
- // Будем поддерживать nchar списков списков проекций, каждый список хранит
- // начинающиеся с одной и той же буквы проекции мультилексем.
- lem::Ptr<SymbolEnumerator> senum( gram.entries().Enumerate() );
- while( senum->Fetch() )
-  {
-   list.push_back( LA_ProjList( senum->GetItem().GetName() ) );
-  }
-
- // Отсортируем список списков по возрастанию параметра КОД СИМВОЛА,
- // чтобы была возможность реализовать быстрый поиск нужного списка
- // методом дихотомии.
- int gap, j;
- const int N=nchar;
- for( gap=N/2; gap>0; gap/=2 )
-  for( i=gap; i<N; i++ )
-   for( j=i-gap; j>=0; j-=gap )
+    // Р‘СѓРґРµРј РїРѕРґРґРµСЂР¶РёРІР°С‚СЊ nchar СЃРїРёСЃРєРѕРІ СЃРїРёСЃРєРѕРІ РїСЂРѕРµРєС†РёР№, РєР°Р¶РґС‹Р№ СЃРїРёСЃРѕРє С…СЂР°РЅРёС‚
+    // РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ РѕРґРЅРѕР№ Рё С‚РѕР№ Р¶Рµ Р±СѓРєРІС‹ РїСЂРѕРµРєС†РёРё РјСѓР»СЊС‚РёР»РµРєСЃРµРј.
+    std::unique_ptr<SymbolEnumerator> senum(gram.entries().Enumerate());
+    while (senum->Fetch())
     {
-     if( list[j+gap].Char > list[j].Char )
-      break;
-
-     std::swap( list[j], list[j+gap] );
+        list.push_back(LA_ProjList(senum->GetItem().GetName()));
     }
 
- return;
+    // РћС‚СЃРѕСЂС‚РёСЂСѓРµРј СЃРїРёСЃРѕРє СЃРїРёСЃРєРѕРІ РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ РїР°СЂР°РјРµС‚СЂР° РљРћР” РЎРРњР’РћР›Рђ,
+    // С‡С‚РѕР±С‹ Р±С‹Р»Р° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СЂРµР°Р»РёР·РѕРІР°С‚СЊ Р±С‹СЃС‚СЂС‹Р№ РїРѕРёСЃРє РЅСѓР¶РЅРѕРіРѕ СЃРїРёСЃРєР°
+    // РјРµС‚РѕРґРѕРј РґРёС…РѕС‚РѕРјРёРё.
+    int gap, j;
+    const int N = nchar;
+    for (gap = N / 2; gap > 0; gap /= 2)
+    {
+        for (i = gap; i < N; i++)
+        {
+            for (j = i - gap; j >= 0; j -= gap)
+            {
+                if (list[j + gap].Char > list[j].Char)
+                    break;
+
+                std::swap(list[j], list[j + gap]);
+            }
+        }
+    }
+
+    return;
 }
 #endif
 
 /*********************************************************************
- Устанавливаем максимальный размер кэша. При этом пиковая загрузка
- кэша может достигать n*SOL_CACHE_OVERLOAD/100. Только после операции
- Resort кэш урезается до указанного размера в n элементов, но
- при работе Лексического Автомата снова будет расти.
+ РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РєСЌС€Р°. РџСЂРё СЌС‚РѕРј РїРёРєРѕРІР°СЏ Р·Р°РіСЂСѓР·РєР°
+ РєСЌС€Р° РјРѕР¶РµС‚ РґРѕСЃС‚РёРіР°С‚СЊ n*SOL_CACHE_OVERLOAD/100. РўРѕР»СЊРєРѕ РїРѕСЃР»Рµ РѕРїРµСЂР°С†РёРё
+ Resort РєСЌС€ СѓСЂРµР·Р°РµС‚СЃСЏ РґРѕ СѓРєР°Р·Р°РЅРЅРѕРіРѕ СЂР°Р·РјРµСЂР° РІ n СЌР»РµРјРµРЅС‚РѕРІ, РЅРѕ
+ РїСЂРё СЂР°Р±РѕС‚Рµ Р›РµРєСЃРёС‡РµСЃРєРѕРіРѕ РђРІС‚РѕРјР°С‚Р° СЃРЅРѕРІР° Р±СѓРґРµС‚ СЂР°СЃС‚Рё.
 **********************************************************************/
-void LA_WordProjBuffer::SetMaxSize( int n )
-{ nmaxproj=n; }
+void LA_WordProjBuffer::SetMaxSize(int n)
+{
+    nmaxproj = n;
+}
 
 
 #if defined SOL_LOADBIN 
-void LA_WordProjBuffer::LoadBin( lem::Stream &bin )
+void LA_WordProjBuffer::LoadBin(lem::Stream &bin)
 {
- buffer.LoadBin(bin);
- list.LoadBin(bin);
- bin.read( &nmaxproj,    sizeof(nmaxproj)    );
- bin.read( &n_calls,     sizeof(n_calls)     );
- bin.read( &n_succ,      sizeof(n_succ)      );
- bin.read( &n_succ_prim, sizeof(n_succ_prim) );
- bin.read( &NTOT,        sizeof(NTOT)        );
+    buffer.LoadBin(bin);
+    list.LoadBin(bin);
+    bin.read(&nmaxproj, sizeof(nmaxproj));
+    bin.read(&n_calls, sizeof(n_calls));
+    bin.read(&n_succ, sizeof(n_succ));
+    bin.read(&n_succ_prim, sizeof(n_succ_prim));
+    bin.read(&NTOT, sizeof(NTOT));
 
- bin.read( &use_compiled, sizeof(use_compiled) );
- bin.read( &update_list, sizeof(update_list) );
+    bin.read(&use_compiled, sizeof(use_compiled));
+    bin.read(&update_list, sizeof(update_list));
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_SAVEBIN
-void LA_WordProjBuffer::SaveBin( lem::Stream &bin ) const
+void LA_WordProjBuffer::SaveBin(lem::Stream &bin) const
 {
- buffer.SaveBin(bin);
- list.SaveBin(bin);
- bin.write( &nmaxproj,    sizeof(nmaxproj)    );
- bin.write( &n_calls,     sizeof(n_calls)     );
- bin.write( &n_succ,      sizeof(n_succ)      );
- bin.write( &n_succ_prim, sizeof(n_succ_prim) );
- bin.write( &NTOT,        sizeof(NTOT)        );
+    buffer.SaveBin(bin);
+    list.SaveBin(bin);
+    bin.write(&nmaxproj, sizeof(nmaxproj));
+    bin.write(&n_calls, sizeof(n_calls));
+    bin.write(&n_succ, sizeof(n_succ));
+    bin.write(&n_succ_prim, sizeof(n_succ_prim));
+    bin.write(&NTOT, sizeof(NTOT));
 
- bin.write( &use_compiled, sizeof(use_compiled) );
- bin.write( &update_list, sizeof(update_list) );
+    bin.write(&use_compiled, sizeof(use_compiled));
+    bin.write(&update_list, sizeof(update_list));
 
- return;
+    return;
 }
 #endif
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void LA_WordProjBuffer::Optimize(void)
+void LA_WordProjBuffer::Optimize()
 {
- optimized = true;
+    optimized = true;
 }
 #endif
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void LA_WordProjBuffer::Compile( const lem::Path &outdir )
+void LA_WordProjBuffer::Compile(const lem::Path &outdir)
 {
- OFormatter cpp_out;
- lem::Path p(outdir);
- p.ConcateLeaf( lem::Path("_la_find.cpp") );
- cpp_out.Open( p );
- cpp_out.SetOutCP( &lem::UI::get_UI().GetSessionCp() );
+    OFormatter cpp_out;
+    lem::Path p(outdir);
+    p.ConcateLeaf(lem::Path("_la_find.cpp"));
+    cpp_out.Open(p);
+    cpp_out.SetOutCP(&lem::UI::get_UI().GetSessionCp());
 
- cpp_out.printf(
-                "// Generated by YGRES compiler ver. %s [%us]\n"
-                "// This file contains the results of LA_WordProjBuffer::Compile()\n"
-                "// compilation.\n"
-                "// Do not edit it!\n\n"
-                "#if defined SOL_CAA\n\n"
-                "#include <lem/solarix/la_autom.h>\n\n"
-                "using namespace std;\n"
-                "using namespace lem;\n\n"
-                "using namespace Solarix;\n\n"
-                "\n"
-                , sol_get_version().c_str()
-                , timestamp().c_str()
-               );
-
-
- cpp_out.printf(
-                "bool LA_WordProjBuffer::Find_In_Compiled_Cache(\n"
-                "                                               const RC_Lexem &to_be_found,\n"
-                "                                               MCollect<Word_Coord> &coord_list,\n"
-                "                                               MCollect<Real1> &val_list\n"
-                "                                              )\n"
-                "{\n"
-               );
-
- if( !optimized )
-  {
-   cpp_out.printf(
-                  " return false;\n"
-                  "}\n"
-                  "#endif\n"
-                 );
-   use_compiled = false;
-   return;   
-  }
+    cpp_out.printf(
+        "// Generated by YGRES compiler ver. %s [%us]\n"
+        "// This file contains the results of LA_WordProjBuffer::Compile()\n"
+        "// compilation.\n"
+        "// Do not edit it!\n\n"
+        "#if defined SOL_CAA\n\n"
+        "#include <lem/solarix/la_autom.h>\n\n"
+        "using namespace std;\n"
+        "using namespace lem;\n\n"
+        "using namespace Solarix;\n\n"
+        "\n"
+        , sol_get_version().c_str()
+        , timestamp().c_str()
+    );
 
 
- cpp_out.printf(
-                " // Cache contains %d projection sublist(s), total %d projections\n"
-                , list.size()
-                , GetN()
-               );
+    cpp_out.printf(
+        "bool LA_WordProjBuffer::Find_In_Compiled_Cache(\n"
+        "                                               const RC_Lexem &to_be_found,\n"
+        "                                               MCollect<Word_Coord> &coord_list,\n"
+        "                                               MCollect<Real1> &val_list\n"
+        "                                              )\n"
+        "{\n"
+    );
 
- if( !list.empty() )
-  {
-   cpp_out.printf(
-                  " const wchar_t first_ch = to_be_found->front();\n"
-                  " const int l = to_be_found->length();\n\n"
-                 );
-
-   // Естественные языки обладают интересным свойством: чаще всего встречаютс
-   // очень короткие слова, в частности - знаки препинания и односимвольные
-   // союзы, артикли и так далее. Поэтому односимвольные слова проверяем
-   // отдельным быстрым алгоритмом.
-   cpp_out.printf(
-                  " if( l==1 )\n"
-                  "  {\n"
-                 );
+    if (!optimized)
+    {
+        cpp_out.printf(
+            " return false;\n"
+            "}\n"
+            "#endif\n"
+        );
+        use_compiled = false;
+        return;
+    }
 
 
-   cpp_out.printf(
-                  "   // Here comes the fast algorithm for 1-char length lexems\n"
-                  "   switch( first_ch )\n"
-                  "   {\n"
-                 );
+    cpp_out.printf(
+        " // Cache contains %d projection sublist(s), total %d projections\n"
+        , list.size()
+        , GetN()
+    );
 
-   int j=0;
-   for( Collect<LA_ProjList>::const_iterator i=list.begin(); i!=list.end(); i++, j++ )
-    if( !i->empty() )
-     {
-      for( Container::size_type k=0; k<i->size(); k++ )
-       if( (*i)[k].GetContent()->length()==1 )
+    if (!list.empty())
+    {
+        cpp_out.printf(
+            " const wchar_t first_ch = to_be_found->front();\n"
+            " const int l = to_be_found->length();\n\n"
+        );
+
+        // Р•СЃС‚РµСЃС‚РІРµРЅРЅС‹Рµ СЏР·С‹РєРё РѕР±Р»Р°РґР°СЋС‚ РёРЅС‚РµСЂРµСЃРЅС‹Рј СЃРІРѕР№СЃС‚РІРѕРј: С‡Р°С‰Рµ РІСЃРµРіРѕ РІСЃС‚СЂРµС‡Р°СЋС‚СЃ
+        // РѕС‡РµРЅСЊ РєРѕСЂРѕС‚РєРёРµ СЃР»РѕРІР°, РІ С‡Р°СЃС‚РЅРѕСЃС‚Рё - Р·РЅР°РєРё РїСЂРµРїРёРЅР°РЅРёСЏ Рё РѕРґРЅРѕСЃРёРјРІРѕР»СЊРЅС‹Рµ
+        // СЃРѕСЋР·С‹, Р°СЂС‚РёРєР»Рё Рё С‚Р°Рє РґР°Р»РµРµ. РџРѕСЌС‚РѕРјСѓ РѕРґРЅРѕСЃРёРјРІРѕР»СЊРЅС‹Рµ СЃР»РѕРІР° РїСЂРѕРІРµСЂСЏРµРј
+        // РѕС‚РґРµР»СЊРЅС‹Рј Р±С‹СЃС‚СЂС‹Рј Р°Р»РіРѕСЂРёС‚РјРѕРј.
+        cpp_out.printf(
+            " if( l==1 )\n"
+            "  {\n"
+        );
+
+
+        cpp_out.printf(
+            "   // Here comes the fast algorithm for 1-char length lexems\n"
+            "   switch( first_ch )\n"
+            "   {\n"
+        );
+
+        int j = 0;
+        for (auto i = list.begin(); i != list.end(); i++, j++)
         {
-         cpp_out.printf(
-                        "    case %d: /* %uc */\n"
-                        "     Pick_Projection( &list[%d], %d, coord_list, val_list );\n"
-                        "     return true;\n\n"
-                        , static_cast<unsigned>(i->Char)
-                        , i->Char
-                        , j
-                        , k
-                       );
-        }
-     }
-
-   cpp_out.printf(
-                  "   } // end switch()\n\n"
-                  "   return false;\n"
-                  "  } // end if\n\n\n"
-                 );
-
-
-   int max_len=0;
-
-   for( Collect<LA_ProjList>::const_iterator i2=list.begin(); i2!=list.end(); i2++, j++ )
-    for( Container::size_type k=0; k<i2->size(); k++ )
-     {
-      int l = (*i2)[k].GetContent()->length();
-      max_len = std::max( max_len, l );
-     }
-
-   cpp_out.printf(
-                  " if( l>%d )\n"
-                  "  return false;\n\n"
-                  , max_len
-                 );
-
-   cpp_out.printf( " lem::uint8_t h = to_be_found->GetHash();\n" );
-
-   // Теперь общий алгоритм - для более длинных слов.
-   cpp_out.printf(
-                  " switch(first_ch)\n"
-                  " {\n"
-                 );
-
-   j=0;
-   for( Collect<LA_ProjList>::const_iterator i3=list.begin(); i3!=list.end(); i3++, j++ )
-    if( !i3->empty() )
-     {
-      // В этом подсписке есть слова длиной более 1?
-      bool has_longer_1=false;
-      for( Container::size_type k=0; k<i3->size(); k++ )
-       if( (*i3)[k].GetContent()->length()>1 )
-        {
-         has_longer_1 = true;
-         break;
+            if (!i->empty())
+            {
+                for (Container::size_type k = 0; k < i->size(); k++)
+                {
+                    if ((*i)[k].GetContent()->length() == 1)
+                    {
+                        cpp_out.printf(
+                            "    case %d: /* %uc */\n"
+                            "     Pick_Projection( &list[%d], %d, coord_list, val_list );\n"
+                            "     return true;\n\n"
+                            , static_cast<unsigned>(i->Char)
+                            , i->Char
+                            , j
+                            , k
+                        );
+                    }
+                }
+            }
         }
 
+        cpp_out.printf(
+            "   } // end switch()\n\n"
+            "   return false;\n"
+            "  } // end if\n\n\n"
+        );
 
-      if( !has_longer_1 )
-       continue;
 
-      cpp_out.printf(
-                     "  case %ud: /* %uc */\n"
-                     "   {\n"
-                     , static_cast<unsigned>(i3->Char)
-                     , i3->Char
-                    );
+        int max_len = 0;
 
-      cpp_out.printf(
-                     "    // Sublist contains %d items\n"
-                     , i3->size()
-                    );
-
-      for( Container::size_type k3=0; k3<i3->size(); k3++ )
-       if( (*i3)[k3].GetContent()->length()>1 )
+        for (auto i2 = list.begin(); i2 != list.end(); i2++, j++)
         {
-         cpp_out.printf(
-                        "    // %us\n"
-                        "    if( h == %ud &&\n"
-                        "        l == %d &&\n"
-                        "        lem_eq( to_be_found->c_str()+1, L\"%us\" ) )\n"
-                        "     {\n"
-                        "      Pick_Projection( &list[%d], %d, coord_list, val_list );\n"
-                        "      return true;\n"
-                        "     }\n\n"
-                        , (*i3)[k3].GetContent()->c_str()
-                        , (*i3)[k3].GetContent()->GetHash()
-                        , (*i3)[k3].GetContent()->length()
-                        , (*i3)[k3].GetContent()->c_str()+1
-                        , j
-                        , k3
-                        , k3
-                       );
+            for (Container::size_type k = 0; k < i2->size(); k++)
+            {
+                int l = (*i2)[k].GetContent()->length();
+                max_len = std::max(max_len, l);
+            }
         }
 
-      cpp_out.printf(
-                     "    break;\n"
-                     "   }\n\n"
-                    );
-     }
+        cpp_out.printf(
+            " if( l>%d )\n"
+            "  return false;\n\n"
+            , max_len
+        );
 
-   cpp_out.printf( " }\n\n" );
-  }
+        cpp_out.printf(" lem::uint8_t h = to_be_found->GetHash();\n");
 
- cpp_out.printf(
-                "\n return false;\n}\n\n"
-                "#endif\n"
-               );
+        // РўРµРїРµСЂСЊ РѕР±С‰РёР№ Р°Р»РіРѕСЂРёС‚Рј - РґР»СЏ Р±РѕР»РµРµ РґР»РёРЅРЅС‹С… СЃР»РѕРІ.
+        cpp_out.printf(
+            " switch(first_ch)\n"
+            " {\n"
+        );
 
- cpp_out.GetStream()->close();
+        j = 0;
+        for (auto i3 = list.begin(); i3 != list.end(); i3++, j++)
+        {
+            if (!i3->empty())
+            {
+                // Р’ СЌС‚РѕРј РїРѕРґСЃРїРёСЃРєРµ РµСЃС‚СЊ СЃР»РѕРІР° РґР»РёРЅРѕР№ Р±РѕР»РµРµ 1?
+                bool has_longer_1 = false;
+                for (Container::size_type k = 0; k < i3->size(); k++)
+                {
+                    if ((*i3)[k].GetContent()->length() > 1)
+                    {
+                        has_longer_1 = true;
+                        break;
+                    }
+                }
 
- use_compiled = true;
- update_list = false;
 
- return;
+                if (!has_longer_1)
+                    continue;
+
+                cpp_out.printf(
+                    "  case %ud: /* %uc */\n"
+                    "   {\n"
+                    , static_cast<unsigned>(i3->Char)
+                    , i3->Char
+                );
+
+                cpp_out.printf(
+                    "    // Sublist contains %d items\n"
+                    , i3->size()
+                );
+
+                for (Container::size_type k3 = 0; k3 < i3->size(); k3++)
+                {
+                    if ((*i3)[k3].GetContent()->length() > 1)
+                    {
+                        cpp_out.printf(
+                            "    // %us\n"
+                            "    if( h == %ud &&\n"
+                            "        l == %d &&\n"
+                            "        lem_eq( to_be_found->c_str()+1, L\"%us\" ) )\n"
+                            "     {\n"
+                            "      Pick_Projection( &list[%d], %d, coord_list, val_list );\n"
+                            "      return true;\n"
+                            "     }\n\n"
+                            , (*i3)[k3].GetContent()->c_str()
+                            , (*i3)[k3].GetContent()->GetHash()
+                            , (*i3)[k3].GetContent()->length()
+                            , (*i3)[k3].GetContent()->c_str() + 1
+                            , j
+                            , k3
+                            , k3
+                        );
+                    }
+                }
+
+                cpp_out.printf(
+                    "    break;\n"
+                    "   }\n\n"
+                );
+            }
+        }
+
+        cpp_out.printf(" }\n\n");
+    }
+
+    cpp_out.printf(
+        "\n return false;\n}\n\n"
+        "#endif\n"
+    );
+
+    cpp_out.GetStream()->close();
+
+    use_compiled = true;
+    update_list = false;
+
+    return;
 }
 #endif
 
 #if defined SOL_CAA
 /***************************************************************
- Пытаемся найти проекцию мультилексемы среди хранящихся списков.
- В случае успеха заполняем выходные поля coord_list и val_list.
+ РџС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё РїСЂРѕРµРєС†РёСЋ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ СЃСЂРµРґРё С…СЂР°РЅСЏС‰РёС…СЃСЏ СЃРїРёСЃРєРѕРІ.
+ Р’ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС…Р° Р·Р°РїРѕР»РЅСЏРµРј РІС‹С…РѕРґРЅС‹Рµ РїРѕР»СЏ coord_list Рё val_list.
 ****************************************************************/
 bool LA_WordProjBuffer::Project(
-                                const RC_Lexem &to_be_found,
-                                MCollect<Word_Coord> &coord_list,
-                                MCollect<ProjScore> &val_list,
-                                PtrCollect<LA_ProjectInfo>& prj_extra_inf,
-                                int id_lang,
-                                LA_RecognitionTrace *trace
-                               )
+    const RC_Lexem &to_be_found,
+    MCollect<Word_Coord> &coord_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo>& prj_extra_inf,
+    int id_lang,
+    LA_RecognitionTrace *trace
+)
 {
- return Find_In_Live_Cache( to_be_found, coord_list, val_list, prj_extra_inf );
+    return Find_In_Live_Cache(to_be_found, coord_list, val_list, prj_extra_inf);
 }
 #endif
 
@@ -370,322 +388,325 @@ bool LA_WordProjBuffer::Project(
 
 #if defined SOL_CAA
 bool LA_WordProjBuffer::Find_In_Live_Cache(
-                                           const RC_Lexem &to_be_found,
-                                           MCollect<Word_Coord> &coord_list,
-                                           MCollect<ProjScore> &val_list,
-                                           PtrCollect<LA_ProjectInfo>& prj_extra_inf
-                                          )
-
+    const RC_Lexem &to_be_found,
+    MCollect<Word_Coord> &coord_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo>& prj_extra_inf
+)
 {
- if( list.empty() )
-  return false;
+    if (list.empty())
+        return false;
 
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs);
- #endif
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs);
+#endif
 
- bool found=false;
+    bool found = false;
 
- // Ищем подсписок по первой букве.
- const int i_sublist = LocateSublist(to_be_found);
+    // РС‰РµРј РїРѕРґСЃРїРёСЃРѕРє РїРѕ РїРµСЂРІРѕР№ Р±СѓРєРІРµ.
+    const int i_sublist = LocateSublist(to_be_found);
 
- if( i_sublist!=UNKNOWN )
-  {
-   // Нашли нужный список проекций. Теперь проходим по этому списку.
-   LA_ProjList &sublist = list[i_sublist];
+    if (i_sublist != UNKNOWN)
+    {
+        // РќР°С€Р»Рё РЅСѓР¶РЅС‹Р№ СЃРїРёСЃРѕРє РїСЂРѕРµРєС†РёР№. РўРµРїРµСЂСЊ РїСЂРѕС…РѕРґРёРј РїРѕ СЌС‚РѕРјСѓ СЃРїРёСЃРєСѓ.
+        LA_ProjList &sublist = list[i_sublist];
 
-   const int n = CastSizeToInt(sublist.size());
+        const int n = CastSizeToInt(sublist.size());
 
-   for( int i=0; i<n; i++ )
-    if( sublist[i].GetContent() == to_be_found )
-     {
-      // Нашли проекцию для данной мультилексемы!
-      Pick_Projection( &sublist, i, coord_list, val_list, prj_extra_inf );
-      found=true;
-      break;
-     }
-  }
+        for (int i = 0; i < n; i++)
+        {
+            if (sublist[i].GetContent() == to_be_found)
+            {
+                // РќР°С€Р»Рё РїСЂРѕРµРєС†РёСЋ РґР»СЏ РґР°РЅРЅРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹!
+                Pick_Projection(&sublist, i, coord_list, val_list, prj_extra_inf);
+                found = true;
+                break;
+            }
+        }
+    }
 
- return found;
+    return found;
 }
 #endif
 
 
 #if defined SOL_CAA
 void LA_WordProjBuffer::Pick_Projection(
-                                        LA_ProjList *sublist,
-                                        int i_proj,
-                                        MCollect<Word_Coord> &coord_list,
-                                        MCollect<ProjScore> &val_list,
-                                        PtrCollect<LA_ProjectInfo>& prj_extra_inf
-                                       )
+    LA_ProjList *sublist,
+    int i_proj,
+    MCollect<Word_Coord> &coord_list,
+    MCollect<ProjScore> &val_list,
+    PtrCollect<LA_ProjectInfo>& prj_extra_inf
+)
 {
- // Нашли проекцию для данной мультилексемы!
- n_succ++;
+    // РќР°С€Р»Рё РїСЂРѕРµРєС†РёСЋ РґР»СЏ РґР°РЅРЅРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹!
+    n_succ++;
 
- const MCollect<Word_Coord> &coords_to_copy = (*sublist)[i_proj].GetCoord();
- const MCollect<ProjScore> &vals_to_copy = (*sublist)[i_proj].GetVal();
+    const MCollect<Word_Coord> &coords_to_copy = (*sublist)[i_proj].GetCoord();
+    const MCollect<ProjScore> &vals_to_copy = (*sublist)[i_proj].GetVal();
 
- for( Container::size_type j=0; j<coords_to_copy.size(); j++ )
-  {
-   coord_list.push_back( coords_to_copy[j] );
-   val_list.push_back( vals_to_copy[j] );
-   prj_extra_inf.push_back(NULL);
-  }
+    for (Container::size_type j = 0; j < coords_to_copy.size(); j++)
+    {
+        coord_list.push_back(coords_to_copy[j]);
+        val_list.push_back(vals_to_copy[j]);
+        prj_extra_inf.push_back(NULL);
+    }
 
- (*sublist)[i_proj].Used();
- return;
+    (*sublist)[i_proj].Used();
+    return;
 }
 #endif
 
 /************************************************************************
- Найдем список проекций для мультилексемы, начинающейся с той же буквы,
- как и наш аргумент to_be_found. Если список не удается обнаружить,
- то возвращаем UNKNOWN, это - сигнал неблагополучия (где-то что-то не
- так, как должно быть).
+ РќР°Р№РґРµРј СЃРїРёСЃРѕРє РїСЂРѕРµРєС†РёР№ РґР»СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹, РЅР°С‡РёРЅР°СЋС‰РµР№СЃСЏ СЃ С‚РѕР№ Р¶Рµ Р±СѓРєРІС‹,
+ РєР°Рє Рё РЅР°С€ Р°СЂРіСѓРјРµРЅС‚ to_be_found. Р•СЃР»Рё СЃРїРёСЃРѕРє РЅРµ СѓРґР°РµС‚СЃСЏ РѕР±РЅР°СЂСѓР¶РёС‚СЊ,
+ С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј UNKNOWN, СЌС‚Рѕ - СЃРёРіРЅР°Р» РЅРµР±Р»Р°РіРѕРїРѕР»СѓС‡РёСЏ (РіРґРµ-С‚Рѕ С‡С‚Рѕ-С‚Рѕ РЅРµ
+ С‚Р°Рє, РєР°Рє РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ).
 *************************************************************************/
-int LA_WordProjBuffer::LocateSublist( const RC_Lexem &to_be_found ) const
+int LA_WordProjBuffer::LocateSublist(const RC_Lexem &to_be_found) const
 {
- const wchar_t first_char=to_be_found->front();
- int i_left=0, i_right=CastSizeToInt(list.size())-1, i_middle=UNKNOWN;
- wchar_t c_middle;
+    const wchar_t first_char = to_be_found->front();
+    int i_left = 0, i_right = CastSizeToInt(list.size()) - 1, i_middle = UNKNOWN;
+    wchar_t c_middle;
 
- FOREVER
-  {
-   if( (i_right-i_left)<4 )
+    FOREVER
     {
-     for( i_middle=i_left; i_middle<=i_right; i_middle++ )
-      if( list[i_middle].Char == first_char )
-       return i_middle;
+     if ((i_right - i_left) < 4)
+      {
+       for (i_middle = i_left; i_middle <= i_right; i_middle++)
+        if (list[i_middle].Char == first_char)
+         return i_middle;
 
-     return UNKNOWN;
+       return UNKNOWN;
+      }
+
+     i_middle = (i_right + i_left) / 2;
+     c_middle = list[i_middle].Char;
+
+     if (c_middle == first_char)
+      return i_middle;
+
+     if (c_middle > first_char)
+      {
+       i_right = i_middle;
+       continue;
+      }
+
+     if (c_middle < first_char)
+      {
+       i_left = i_middle;
+       continue;
+      }
     }
 
-   i_middle = (i_right+i_left)/2;
-   c_middle = list[i_middle].Char;
-
-   if( c_middle == first_char )
-    return i_middle;
-
-   if( c_middle > first_char )
-    {
-     i_right = i_middle;
-     continue;
-    }
-
-   if( c_middle < first_char )
-    {
-     i_left = i_middle;
-     continue;
-    }
-  }
-
- #if defined LEM_BORLAND
- #pragma warn-rch
- #endif
- return UNKNOWN;
- #if defined LEM_BORLAND
- #pragma warn+rch
- #endif
+#if defined LEM_BORLAND
+#pragma warn-rch
+#endif
+    return UNKNOWN;
+#if defined LEM_BORLAND
+#pragma warn+rch
+#endif
 }
 
 
 /****************************************************************************
- Была осуществлена успешная проекция мультилексемы на Лексикон, причем не
- средствами нашего кэша. Запоминаем информацию, связанную с этим событием,
- дабы в дальнейшем производить проекции быстрее, без поиска в Лексиконе.
- Если число хранящихся проекций слишком велико (критерий nmaxproj*
- SOL_CACHE_OVERLOAD%), то запоминания не произойдет.
+ Р‘С‹Р»Р° РѕСЃСѓС‰РµСЃС‚РІР»РµРЅР° СѓСЃРїРµС€РЅР°СЏ РїСЂРѕРµРєС†РёСЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РЅР° Р›РµРєСЃРёРєРѕРЅ, РїСЂРёС‡РµРј РЅРµ
+ СЃСЂРµРґСЃС‚РІР°РјРё РЅР°С€РµРіРѕ РєСЌС€Р°. Р—Р°РїРѕРјРёРЅР°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ, СЃРІСЏР·Р°РЅРЅСѓСЋ СЃ СЌС‚РёРј СЃРѕР±С‹С‚РёРµРј,
+ РґР°Р±С‹ РІ РґР°Р»СЊРЅРµР№С€РµРј РїСЂРѕРёР·РІРѕРґРёС‚СЊ РїСЂРѕРµРєС†РёРё Р±С‹СЃС‚СЂРµРµ, Р±РµР· РїРѕРёСЃРєР° РІ Р›РµРєСЃРёРєРѕРЅРµ.
+ Р•СЃР»Рё С‡РёСЃР»Рѕ С…СЂР°РЅСЏС‰РёС…СЃСЏ РїСЂРѕРµРєС†РёР№ СЃР»РёС€РєРѕРј РІРµР»РёРєРѕ (РєСЂРёС‚РµСЂРёР№ nmaxproj*
+ SOL_CACHE_OVERLOAD%), С‚Рѕ Р·Р°РїРѕРјРёРЅР°РЅРёСЏ РЅРµ РїСЂРѕРёР·РѕР№РґРµС‚.
 *****************************************************************************/
-void LA_WordProjBuffer::Add( const LA_WordProjection &WP )
+void LA_WordProjBuffer::Add(const LA_WordProjection &WP)
 {
- if( !update_list )
-  return;
-  
- #if defined LEM_THREADS && defined SOL_CAA
- lem::Process::RWU_ReaderGuard rlock(cs);
- lem::Process::RWU_WriterGuard wlock(rlock);
- #endif
+    if (!update_list)
+        return;
 
- // Новую информацию вталкиваем в предварительный буфер. Если этот буфер уже
- // достиг максимального размера, то из его головы выталкиваем один элемент и
- // направляем на запоминание во вторичный буфер.
- if( CastSizeToInt(buffer.size())>=SOL_LA_MAX_PRECACHE )
-  {
-   const LA_WordProjection &PICKED = buffer.front();
+#if defined LEM_THREADS && defined SOL_CAA
+    lem::Process::RWU_ReaderGuard rlock(cs);
+    lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
-   if( update_list )
+    // РќРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ РІС‚Р°Р»РєРёРІР°РµРј РІ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Р№ Р±СѓС„РµСЂ. Р•СЃР»Рё СЌС‚РѕС‚ Р±СѓС„РµСЂ СѓР¶Рµ
+    // РґРѕСЃС‚РёРі РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ СЂР°Р·РјРµСЂР°, С‚Рѕ РёР· РµРіРѕ РіРѕР»РѕРІС‹ РІС‹С‚Р°Р»РєРёРІР°РµРј РѕРґРёРЅ СЌР»РµРјРµРЅС‚ Рё
+    // РЅР°РїСЂР°РІР»СЏРµРј РЅР° Р·Р°РїРѕРјРёРЅР°РЅРёРµ РІРѕ РІС‚РѕСЂРёС‡РЅС‹Р№ Р±СѓС„РµСЂ.
+    if (CastSizeToInt(buffer.size()) >= SOL_LA_MAX_PRECACHE)
     {
-     if( list.empty() )
-      return;
+        const LA_WordProjection &PICKED = buffer.front();
 
-     // В каком списке будем размещать.
-     const int i_sublist = LocateSublist( PICKED.GetContent() );
-
-     if( i_sublist==UNKNOWN )
-      return;
-
-     Collect<LA_WordProjection> &sublist=list[i_sublist];
-
-     const int n = CastSizeToInt(sublist.size());
-     const RC_Lexem &mlex=PICKED.GetContent();
-
-     // Может случиться, что мы уже храним проекции для данной мультилексемы.
-     // Тогда нужно добавить новые проекции к уже хранящимся.
-     bool found=false;
-     for( int i=0; i<n; i++ )
-      if( sublist[i].GetContent() == mlex )
-       {
-        // Добавляем.
-        sublist[i].Add( PICKED );
-        found=true;
-        break;
-       }
-
-     // Добавляем новую проекцию.
-     if(!found)
-      {
-       if( NTOT <= nmaxproj*2 )
+        if (update_list)
         {
-         sublist.push_back( PICKED );
-         NTOT++;
-        } // Если кэш переполнен, то запоминать нельзя.
-      }
+            if (list.empty())
+                return;
 
-     buffer.pop();
+            // Р’ РєР°РєРѕРј СЃРїРёСЃРєРµ Р±СѓРґРµРј СЂР°Р·РјРµС‰Р°С‚СЊ.
+            const int i_sublist = LocateSublist(PICKED.GetContent());
+
+            if (i_sublist == UNKNOWN)
+                return;
+
+            Collect<LA_WordProjection> &sublist = list[i_sublist];
+
+            const int n = CastSizeToInt(sublist.size());
+            const RC_Lexem &mlex = PICKED.GetContent();
+
+            // РњРѕР¶РµС‚ СЃР»СѓС‡РёС‚СЊСЃСЏ, С‡С‚Рѕ РјС‹ СѓР¶Рµ С…СЂР°РЅРёРј РїСЂРѕРµРєС†РёРё РґР»СЏ РґР°РЅРЅРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹.
+            // РўРѕРіРґР° РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Рµ РїСЂРѕРµРєС†РёРё Рє СѓР¶Рµ С…СЂР°РЅСЏС‰РёРјСЃСЏ.
+            bool found = false;
+            for (int i = 0; i < n; i++)
+            {
+                if (sublist[i].GetContent() == mlex)
+                {
+                    // Р”РѕР±Р°РІР»СЏРµРј.
+                    sublist[i].Add(PICKED);
+                    found = true;
+                    break;
+                }
+            }
+
+            // Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІСѓСЋ РїСЂРѕРµРєС†РёСЋ.
+            if (!found)
+            {
+                if (NTOT <= nmaxproj * 2)
+                {
+                    sublist.push_back(PICKED);
+                    NTOT++;
+                } // Р•СЃР»Рё РєСЌС€ РїРµСЂРµРїРѕР»РЅРµРЅ, С‚Рѕ Р·Р°РїРѕРјРёРЅР°С‚СЊ РЅРµР»СЊР·СЏ.
+            }
+
+            buffer.pop();
+        }
     }
-  }
 
- // Проекцию WP без разговоров вталкиваем в хвост предварительного буфера.
- buffer.push_back( WP );
+    // РџСЂРѕРµРєС†РёСЋ WP Р±РµР· СЂР°Р·РіРѕРІРѕСЂРѕРІ РІС‚Р°Р»РєРёРІР°РµРј РІ С…РІРѕСЃС‚ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРіРѕ Р±СѓС„РµСЂР°.
+    buffer.push_back(WP);
 
- return;
+    return;
 }
 
 /***********************************************************
- Определяем общее число хранимых в кэше проекций. Для этого
- проходим по всем спискам!
+ РћРїСЂРµРґРµР»СЏРµРј РѕР±С‰РµРµ С‡РёСЃР»Рѕ С…СЂР°РЅРёРјС‹С… РІ РєСЌС€Рµ РїСЂРѕРµРєС†РёР№. Р”Р»СЏ СЌС‚РѕРіРѕ
+ РїСЂРѕС…РѕРґРёРј РїРѕ РІСЃРµРј СЃРїРёСЃРєР°Рј!
 ************************************************************/
-int LA_WordProjBuffer::GetN(void) const
+int LA_WordProjBuffer::GetN() const
 {
- int N = 0;
- for( Container::size_type i=0; i<list.size(); i++ )
-  N += CastSizeToInt(list[i].size());
+    int N = 0;
+    for (Container::size_type i = 0; i < list.size(); i++)
+        N += CastSizeToInt(list[i].size());
 
- return N;
+    return N;
 }
 
 
 /************************************************************************
- Производим пересортировку содержимого кэша и отсекаем избыточные
- элементы. Так как мы храним не просто список проекций, а список списков
- проекций, то отсечение избыточных элементов производится не совсем
- просто.
+ РџСЂРѕРёР·РІРѕРґРёРј РїРµСЂРµСЃРѕСЂС‚РёСЂРѕРІРєСѓ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РєСЌС€Р° Рё РѕС‚СЃРµРєР°РµРј РёР·Р±С‹С‚РѕС‡РЅС‹Рµ
+ СЌР»РµРјРµРЅС‚С‹. РўР°Рє РєР°Рє РјС‹ С…СЂР°РЅРёРј РЅРµ РїСЂРѕСЃС‚Рѕ СЃРїРёСЃРѕРє РїСЂРѕРµРєС†РёР№, Р° СЃРїРёСЃРѕРє СЃРїРёСЃРєРѕРІ
+ РїСЂРѕРµРєС†РёР№, С‚Рѕ РѕС‚СЃРµС‡РµРЅРёРµ РёР·Р±С‹С‚РѕС‡РЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РЅРµ СЃРѕРІСЃРµРј
+ РїСЂРѕСЃС‚Рѕ.
 *************************************************************************/
-void LA_WordProjBuffer::Resort(void)
+void LA_WordProjBuffer::Resort()
 {
- if( !update_list )
-  return;
+    if (!update_list)
+        return;
 
- #if defined LEM_THREADS && defined SOL_CAS
- lem::Process::RWU_ReaderGuard rlock(cs);
- lem::Process::RWU_WriterGuard wlock(rlock);
- #endif
+#if defined LEM_THREADS && defined SOL_CAS
+    lem::Process::RWU_ReaderGuard rlock(cs);
+    lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
- // Посмотрим, не превысили ли мы максимальное число элементов,
- // хранимых в кэше.
- int n_tot=0;
- for( Container::size_type i=0; i<list.size(); i++ )
-  n_tot += CastSizeToInt(list[i].size());
+    // РџРѕСЃРјРѕС‚СЂРёРј, РЅРµ РїСЂРµРІС‹СЃРёР»Рё Р»Рё РјС‹ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ СЌР»РµРјРµРЅС‚РѕРІ,
+    // С…СЂР°РЅРёРјС‹С… РІ РєСЌС€Рµ.
+    int n_tot = 0;
+    for (Container::size_type i = 0; i < list.size(); i++)
+        n_tot += CastSizeToInt(list[i].size());
 
- if( n_tot > nmaxproj )
-  {
-   // Приступаем к удалению лишней информации из списка проекций.
-
-   // Вычисляем число избыточных элементов.
-   const int nexceed = n_tot - nmaxproj;
-
-   for( Container::size_type i1=0; i1<list.size(); i1++ )
+    if (n_tot > nmaxproj)
     {
-     const int nitem = CastSizeToInt(list[i1].size());
+        // РџСЂРёСЃС‚СѓРїР°РµРј Рє СѓРґР°Р»РµРЅРёСЋ Р»РёС€РЅРµР№ РёРЅС„РѕСЂРјР°С†РёРё РёР· СЃРїРёСЃРєР° РїСЂРѕРµРєС†РёР№.
 
-     // Вычисляем число отсекаемых элементов.
-     const int nreduce = nexceed*(nitem/nmaxproj);
+        // Р’С‹С‡РёСЃР»СЏРµРј С‡РёСЃР»Рѕ РёР·Р±С‹С‚РѕС‡РЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ.
+        const int nexceed = n_tot - nmaxproj;
 
-     // Сокращаем список проекций пропорционально его текущему размеру.
-     list[i1].ReduceTo(nitem-nreduce);
+        for (Container::size_type i1 = 0; i1 < list.size(); i1++)
+        {
+            const int nitem = CastSizeToInt(list[i1].size());
+
+            // Р’С‹С‡РёСЃР»СЏРµРј С‡РёСЃР»Рѕ РѕС‚СЃРµРєР°РµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ.
+            const int nreduce = nexceed*(nitem / nmaxproj);
+
+            // РЎРѕРєСЂР°С‰Р°РµРј СЃРїРёСЃРѕРє РїСЂРѕРµРєС†РёР№ РїСЂРѕРїРѕСЂС†РёРѕРЅР°Р»СЊРЅРѕ РµРіРѕ С‚РµРєСѓС‰РµРјСѓ СЂР°Р·РјРµСЂСѓ.
+            list[i1].ReduceTo(nitem - nreduce);
+        }
     }
-  }
 
- // Теперь каждый подсписок проекций пересортируем.
- for( Container::size_type i2=0; i2<list.size(); i2++ )
-  list[i2].ReSort();
+    // РўРµРїРµСЂСЊ РєР°Р¶РґС‹Р№ РїРѕРґСЃРїРёСЃРѕРє РїСЂРѕРµРєС†РёР№ РїРµСЂРµСЃРѕСЂС‚РёСЂСѓРµРј.
+    for (Container::size_type i2 = 0; i2 < list.size(); i2++)
+        list[i2].ReSort();
 
- // Обновим содержимое поля общего числа элементов в кэше.
- NTOT = GetN();
+    // РћР±РЅРѕРІРёРј СЃРѕРґРµСЂР¶РёРјРѕРµ РїРѕР»СЏ РѕР±С‰РµРіРѕ С‡РёСЃР»Р° СЌР»РµРјРµРЅС‚РѕРІ РІ РєСЌС€Рµ.
+    NTOT = GetN();
 
- return;
+    return;
 }
 
 
 #if defined SOL_REPORT
 /**************************************************
- Распечатка краткой справки о состоянии кэша.
+ Р Р°СЃРїРµС‡Р°С‚РєР° РєСЂР°С‚РєРѕР№ СЃРїСЂР°РІРєРё Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё РєСЌС€Р°.
 ***************************************************/
 void LA_WordProjBuffer::Report(
-                               OFormatter &s,
-                               const LexicalAutomat &la
-                              ) const
+    OFormatter &s,
+    const LexicalAutomat &la
+) const
 {
- const int n=NTOT;
+    const int n = NTOT;
 
- const int perc     = int(n_succ*100l/(n_calls ? n_calls : 1));
- const int stor_use = int((n*100l)/(nmaxproj ? nmaxproj : 1));
- const int pus      = int( n_succ_prim*100l/(n_succ ? n_succ : 1));
+    const int perc = int(n_succ * 100l / (n_calls ? n_calls : 1));
+    const int stor_use = int((n * 100l) / (nmaxproj ? nmaxproj : 1));
+    const int pus = int(n_succ_prim * 100l / (n_succ ? n_succ : 1));
 
- s.printf(
-          "Word Projection Cache:\n"
-          "%23h primary buffer contains %d items\n"
-          "%23h this buffer successfully does %d%% of all projections through cache\n"
-          "%23h secondary buffer contains %d items (%d%%)\n"
-          "%23h maximum capacity of the secondary buffer is %d items\n"
-          "%23h there were %d cache call(s)\n"
-          "%23h there were %d successful cache hit(s) (%d%%)\n\n"
-          , buffer.size()
-          , pus
-          , n
-          , stor_use
-          , nmaxproj
-          , n_calls
-          , n_succ
-          , perc
-         );
+    s.printf(
+        "Word Projection Cache:\n"
+        "%23h primary buffer contains %d items\n"
+        "%23h this buffer successfully does %d%% of all projections through cache\n"
+        "%23h secondary buffer contains %d items (%d%%)\n"
+        "%23h maximum capacity of the secondary buffer is %d items\n"
+        "%23h there were %d cache call(s)\n"
+        "%23h there were %d successful cache hit(s) (%d%%)\n\n"
+        , buffer.size()
+        , pus
+        , n
+        , stor_use
+        , nmaxproj
+        , n_calls
+        , n_succ
+        , perc
+    );
 
- return;
+    return;
 }
 #endif
 
 
 #if defined SOL_REPORT
 void LA_WordProjBuffer::PrintMap(
-                                 OFormatter &txtfile,
-                                 SynGram &gram
-                                ) const
+    OFormatter &txtfile,
+    SynGram &gram
+) const
 {
- Report(txtfile,gram.GetDict().GetLexAuto());
+    Report(txtfile, gram.GetDict().GetLexAuto());
 
- txtfile.printf(
-                "There are %d item(s) in word projection cache:\n",
-                list.size()
-               );
+    txtfile.printf(
+        "There are %d item(s) in word projection cache:\n",
+        list.size()
+    );
 
- for( Container::size_type i=0; i<list.size(); i++ )
-  {
-   list[i].PrintInfo(txtfile,gram);
-  }
+    for (Container::size_type i = 0; i < list.size(); i++)
+    {
+        list[i].PrintInfo(txtfile, gram);
+    }
 
- txtfile.printf( "The end of word projection cache map.\n" );
+    txtfile.printf("The end of word projection cache map.\n");
 
- return;
+    return;
 }
 #endif

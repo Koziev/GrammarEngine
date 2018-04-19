@@ -6,13 +6,13 @@ LA_PhoneticRuleEnumerator_MCollect::LA_PhoneticRuleEnumerator_MCollect( const le
   : rules(Rules), icur(-1)
 {}
 
-bool LA_PhoneticRuleEnumerator_MCollect::Fetch(void)
+bool LA_PhoneticRuleEnumerator_MCollect::Fetch()
 {
  icur++;
  return icur<CastSizeToInt(rules.size());
 }
 
-const LA_PhoneticRule& LA_PhoneticRuleEnumerator_MCollect::Get(void)
+const LA_PhoneticRule& LA_PhoneticRuleEnumerator_MCollect::Get()
 {
  return *rules[icur];
 }

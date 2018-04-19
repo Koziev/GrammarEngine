@@ -5,137 +5,143 @@
 
 using namespace Solarix;
 
-KB_Fact::KB_Fact(void) : id_group(UNKNOWN), bool_return(UNKNOWN), false_score(0), int_return(UNKNOWN)
+KB_Fact::KB_Fact() : id_group(UNKNOWN), bool_return(UNKNOWN), false_score(0), int_return(UNKNOWN)
 {
 }
 
-KB_Fact::~KB_Fact(void)
+KB_Fact::~KB_Fact()
 {
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  delete args[i];
+    for (auto a : args)
+    {
+        delete a;
+    }
 
- return;
+    return;
 }
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void KB_Fact::LoadTxt( KnowledgeBase &kb, Solarix::Dictionary &dict, lem::Iridium::Macro_Parser &txtfile )
+void KB_Fact::LoadTxt(KnowledgeBase &kb, Solarix::Dictionary &dict, lem::Iridium::Macro_Parser &txtfile)
 {
- lem::Iridium::BethToken t_groupname = txtfile.read();
- id_group = kb.FindFacts( t_groupname.string() );
- if( id_group==UNKNOWN )
-  {
-   lem::Iridium::Print_Error(t_groupname,txtfile);
-   dict.GetIO().merr().printf( "Unknown facts group name %us\n", t_groupname.string().c_str() );
-   throw lem::E_BaseException();
-  }
-
- const KB_Facts & facts = kb.GetFacts(id_group);
-
- txtfile.read_it( B_OFIGPAREN );
- 
- txtfile.read_it( B_IF );
- txtfile.read_it( B_CONTEXT );
- txtfile.read_it( B_OFIGPAREN );
-
- while( !txtfile.eof() )
-  {
-   if( txtfile.probe(B_CFIGPAREN) )
-    break;
-
-   KB_Argument * point = new KB_Argument();
-   point->LoadTxt( facts, dict, txtfile );
-
-   args.push_back(point);
-  }
-
- if( args.size() != facts.CountOfArg() )
-  {
-   lem::Iridium::Print_Error(t_groupname,txtfile);
-   dict.GetIO().merr().printf( "Incorrect number of arguments: %d extected, %d got\n", facts.CountOfArg(), CastSizeToInt(args.size()) );
-   throw lem::E_BaseException();
-  }
-
- txtfile.read_it( B_THEN );
- txtfile.read_it( L"return" );
-  
- if( facts.DoesReturnBoolean() )
-  {
-   lem::Iridium::BethToken t_ret = txtfile.read();
-
-   if( t_ret.string().eqi( L"true" ) )
-    bool_return=1;
-   else if( t_ret.string().eqi( L"false" ) )
-    bool_return=0;
-   else
+    lem::Iridium::BethToken t_groupname = txtfile.read();
+    id_group = kb.FindFacts(t_groupname.string());
+    if (id_group == UNKNOWN)
     {
-     lem::Iridium::Print_Error(t_groupname,txtfile);
-     dict.GetIO().merr().printf( "Invalid return value %us\n", t_ret.string().c_str() );
-     throw lem::E_BaseException();
+        lem::Iridium::Print_Error(t_groupname, txtfile);
+        dict.GetIO().merr().printf("Unknown facts group name %us\n", t_groupname.string().c_str());
+        throw lem::E_BaseException();
     }
 
-   if( txtfile.probe( B_COMMA ) )
-    {
-     // ÓÔˆËÓÌ‡Î¸ÌÓ - ¯Ú‡Ù Á‡ false (ÔÂ‰ÔÓÎ‡„‡ÂÚÒˇ, ˜ÚÓ ÓÌ ‚ÒÂ„‰‡ ÓÚËˆ‡ÚÂÎ¸Ì˚È).
-     txtfile.read_it( B_SUB );
-     false_score = -txtfile.read_int();
-    }
-   else
-    {
-     false_score = facts.violation_score;
-    }
-  }
- else if( facts.DoesReturnInteger() )
-  {
-   // ƒÓÔÛÒÍ‡ÂÏ ÓÚËˆ‡ÚÂÎ¸Ì˚Â ÁÌ‡˜ÂÌËˇ, ÔÓ˝ÚÓÏÛ ÒÌ‡˜‡Î‡ Ô˚Ú‡ÂÏÒˇ ÔÓ˜ËÚ‡Ú¸ "-"
-   if( txtfile.probe( L"-" ) )
-    int_return = -txtfile.read_int();
-   else
-    int_return = txtfile.read_int();
-  }
- else
-  {
-   LEM_STOPIT;
-  }
+    const KB_Facts & facts = kb.GetFacts(id_group);
 
- txtfile.read_it( B_CFIGPAREN );
+    txtfile.read_it(B_OFIGPAREN);
 
- return;
+    txtfile.read_it(B_IF);
+    txtfile.read_it(B_CONTEXT);
+    txtfile.read_it(B_OFIGPAREN);
+
+    while (!txtfile.eof())
+    {
+        if (txtfile.probe(B_CFIGPAREN))
+            break;
+
+        KB_Argument * point = new KB_Argument();
+        point->LoadTxt(facts, dict, txtfile);
+
+        args.push_back(point);
+    }
+
+    if (args.size() != facts.CountOfArg())
+    {
+        lem::Iridium::Print_Error(t_groupname, txtfile);
+        dict.GetIO().merr().printf("Incorrect number of arguments: %d extected, %d got\n", facts.CountOfArg(), CastSizeToInt(args.size()));
+        throw lem::E_BaseException();
+    }
+
+    txtfile.read_it(B_THEN);
+    txtfile.read_it(L"return");
+
+    if (facts.DoesReturnBoolean())
+    {
+        lem::Iridium::BethToken t_ret = txtfile.read();
+
+        if (t_ret.string().eqi(L"true"))
+            bool_return = 1;
+        else if (t_ret.string().eqi(L"false"))
+            bool_return = 0;
+        else
+        {
+            lem::Iridium::Print_Error(t_groupname, txtfile);
+            dict.GetIO().merr().printf("Invalid return value %us\n", t_ret.string().c_str());
+            throw lem::E_BaseException();
+        }
+
+        if (txtfile.probe(B_COMMA))
+        {
+            // –æ–ø—Ü–∏–æ–Ω–∞–ª—å–Ω–æ - —à—Ç—Ä–∞—Ñ –∑–∞ false (–ø—Ä–µ–¥–ø–æ–ª–∞–≥–∞–µ—Ç—Å—è, —á—Ç–æ –æ–Ω –≤—Å–µ–≥–¥–∞ –æ—Ç—Ä–∏—Ü–∞—Ç–µ–ª—å–Ω—ã–π).
+            txtfile.read_it(B_SUB);
+            false_score = -txtfile.read_int();
+        }
+        else
+        {
+            false_score = facts.violation_score;
+        }
+    }
+    else if (facts.DoesReturnInteger())
+    {
+        // –î–æ–ø—É—Å–∫–∞–µ–º –æ—Ç—Ä–∏—Ü–∞—Ç–µ–ª—å–Ω—ã–µ –∑–Ω–∞—á–µ–Ω–∏—è, –ø–æ—ç—Ç–æ–º—É —Å–Ω–∞—á–∞–ª–∞ –ø—ã—Ç–∞–µ–º—Å—è –ø—Ä–æ—á–∏—Ç–∞—Ç—å "-"
+        if (txtfile.probe(L"-"))
+            int_return = -txtfile.read_int();
+        else
+            int_return = txtfile.read_int();
+    }
+    else
+    {
+        LEM_STOPIT;
+    }
+
+    txtfile.read_it(B_CFIGPAREN);
+
+    return;
 }
 #endif
 
 
 #if defined SOL_CAA
-KB_CheckingResult KB_Fact::Match( Solarix::Dictionary *dict, const KB_Facts & facts, const lem::MCollect<const Solarix::Word_Form*> & values ) const
+KB_CheckingResult KB_Fact::Match(Solarix::Dictionary *dict, const KB_Facts & facts, const lem::MCollect<const Solarix::Word_Form*> & values) const
 {
- LEM_CHECKIT_Z( dict!=NULL );
- LEM_CHECKIT_Z( args.size() == values.size() );
+    LEM_CHECKIT_Z(dict != NULL);
+    LEM_CHECKIT_Z(args.size() == values.size());
 
- bool args_ok=true;
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  {
-   if( ! args[i]->Match( dict, * values[i] ) )
+    bool args_ok = true;
+    for (lem::Container::size_type i = 0; i < args.size(); ++i)
     {
-     args_ok=false;
-     break;
+        if (!args[i]->Match(dict, *values[i]))
+        {
+            args_ok = false;
+            break;
+        }
     }
-  }
 
- if( args_ok )
-  {
-   if( facts.DoesReturnBoolean() )
-    return KB_BoolResult( GetBooleanReturn(), GetFalseScore() );
-   else if( facts.DoesReturnInteger() )
-    return KB_IntResult( GetIntegerReturn() );
-   else
+    if (args_ok)
     {
-     LEM_STOPIT;
-     return KB_NotMatchedResult();
+        if (facts.DoesReturnBoolean())
+        {
+            return KB_BoolResult(GetBooleanReturn(), GetFalseScore());
+        }
+        else if (facts.DoesReturnInteger())
+        {
+            return KB_IntResult(GetIntegerReturn());
+        }
+        else
+        {
+            LEM_STOPIT;
+            return KB_NotMatchedResult();
+        }
     }
-  }
- else
-  {
-   return KB_NotMatchedResult();
-  }
+    else
+    {
+        return KB_NotMatchedResult();
+    }
 }
 #endif
 
@@ -143,40 +149,56 @@ KB_CheckingResult KB_Fact::Match( Solarix::Dictionary *dict, const KB_Facts & fa
 
 bool KB_Fact::IsQueryableByEntries(void) const
 {
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  if( !args[i]->IsQueryableByEntry() )
-   return false;
+    for (auto a : args)
+    {
+        if (!a->IsQueryableByEntry())
+        {
+            return false;
+        }
+    }
 
- return true;
+    return true;
 }
 
 
 bool KB_Fact::IsQueryableByWords(void) const
 {
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  if( !args[i]->IsQueryableByWord() )
-   return false;
+    for (auto a : args)
+    {
+        if (!a->IsQueryableByWord())
+        {
+            return false;
+        }
+    }
 
- return true;
+    return true;
 }
 
 
 bool KB_Fact::NeedsFeatureCheck() const
 {
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  if( args[i]->NeedsFeatureCheck() )
-   return true;
+    for (auto a : args)
+    {
+        if (a->NeedsFeatureCheck())
+        {
+            return true;
+        }
+    }
 
- return false;
+    return false;
 }
 
 bool KB_Fact::IsMultiIndexed() const
 {
- for( lem::Container::size_type i=0; i<args.size(); ++i )
-  if( args[i]->IsMetaEntry() )
-   return true;
+    for (auto a : args)
+    {
+        if (a->IsMetaEntry())
+        {
+            return true;
+        }
+    }
 
- return false;
+    return false;
 }
 
 

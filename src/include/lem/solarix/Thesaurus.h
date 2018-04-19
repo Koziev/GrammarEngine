@@ -11,8 +11,8 @@
  namespace Solarix
  {
   // ************************************************************* 
-  // Тезаурус, или семантическая сеть. Хранит список связей между
-  // отдельными словарными статьями или целыми контекстами.
+  // РўРµР·Р°СѓСЂСѓСЃ, РёР»Рё СЃРµРјР°РЅС‚РёС‡РµСЃРєР°СЏ СЃРµС‚СЊ. РҐСЂР°РЅРёС‚ СЃРїРёСЃРѕРє СЃРІСЏР·РµР№ РјРµР¶РґСѓ
+  // РѕС‚РґРµР»СЊРЅС‹РјРё СЃР»РѕРІР°СЂРЅС‹РјРё СЃС‚Р°С‚СЊСЏРјРё РёР»Рё С†РµР»С‹РјРё РєРѕРЅС‚РµРєСЃС‚Р°РјРё.
   // ************************************************************* 
   class SynGram;
   class TagSets;
@@ -29,13 +29,13 @@
   class SG_Net
   {
    private:
-    ThesaurusTagDefs *tag_defs; // доступ к справочнику объявлений тегов
+    ThesaurusTagDefs *tag_defs; // РґРѕСЃС‚СѓРї Рє СЃРїСЂР°РІРѕС‡РЅРёРєСѓ РѕР±СЉСЏРІР»РµРЅРёР№ С‚РµРіРѕРІ
 
    public:
     SynGram *sg;
     ThesaurusStorage *db;
     bool do_delete_storage;
-    TagSets *tag_sets; // справочник наборов тегов
+    TagSets *tag_sets; // СЃРїСЂР°РІРѕС‡РЅРёРє РЅР°Р±РѕСЂРѕРІ С‚РµРіРѕРІ
 
     enum { DefaultSegmentationDelimiter=L' ' };
 
@@ -43,17 +43,17 @@
     lem::zint internal_offset_buffer;
 
     #if defined SOL_COMPILER && defined SOL_LOADTXT 
-     // Список объявленных связок для последующего разрешения - формируется
-     // и обрабатывается при компиляции словаря.
+     // РЎРїРёСЃРѕРє РѕР±СЉСЏРІР»РµРЅРЅС‹С… СЃРІСЏР·РѕРє РґР»СЏ РїРѕСЃР»РµРґСѓСЋС‰РµРіРѕ СЂР°Р·СЂРµС€РµРЅРёСЏ - С„РѕСЂРјРёСЂСѓРµС‚СЃСЏ
+     // Рё РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ РїСЂРё РєРѕРјРїРёР»СЏС†РёРё СЃР»РѕРІР°СЂСЏ.
 
      typedef lem::foursome<
-                           std::pair<UCString,UCString>, // ИЗ класс:статья
-                           Tree_Link,                    // связка
-                           std::pair<UCString,UCString>, // В класс:статья
-                           int                           // id списка тэгов
+                           std::pair<UCString,UCString>, // РР— РєР»Р°СЃСЃ:СЃС‚Р°С‚СЊСЏ
+                           Tree_Link,                    // СЃРІСЏР·РєР°
+                           std::pair<UCString,UCString>, // Р’ РєР»Р°СЃСЃ:СЃС‚Р°С‚СЊСЏ
+                           int                           // id СЃРїРёСЃРєР° С‚СЌРіРѕРІ
                           > RawRecord;
 
-     lem::Ptr<lem::BinaryFile> raw;
+     std::unique_ptr<lem::BinaryFile> raw;
      int raw_count;
 
      std::map< std::pair< int /*entry key*/, Tree_Link >, std::pair<int/*entry key*/, int /*itags*/> > raw_links2;
@@ -67,14 +67,14 @@
 
    public:
     SG_Net( const Dictionary_Config &cfg );
-    ~SG_Net(void);
+    ~SG_Net();
 
     inline void StoreSG( SynGram *SG ) { sg=SG; }
 
     void SetStorage( ThesaurusStorage *_db, bool _do_delete );
-    ThesaurusStorage& GetStorage(void) { return *db; }
+    ThesaurusStorage& GetStorage() { return *db; }
 
-    ThesaurusTagDefs& GetTagDefs(void) { return *tag_defs; }
+    ThesaurusTagDefs& GetTagDefs() { return *tag_defs; }
 
     #if defined SOL_REPORT
     void Save_SQL( lem::OFormatter &out, const SQL_Production &sql_version, int min_entry_freq );
@@ -95,7 +95,7 @@
                           const Binarization_Options &options
                          );
 
-    void Compile(void);
+    void Compile();
 
     void LoadTxt(
                  Macro_Parser &txt,
@@ -117,49 +117,49 @@
     SG_TagsList GetWordLinkTags( int id_tags, int id_link );
     SG_TagsList GetPhraseLinkTags( int id_tags, int id_link );
 
-    // Поиск исходящих связок
+    // РџРѕРёСЃРє РёСЃС…РѕРґСЏС‰РёС… СЃРІСЏР·РѕРє
 
     #if defined SOL_CAA
-    // Возвращается список ключей связанных (исходящими связками) статей
+    // Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРїРёСЃРѕРє РєР»СЋС‡РµР№ СЃРІСЏР·Р°РЅРЅС‹С… (РёСЃС…РѕРґСЏС‰РёРјРё СЃРІСЏР·РєР°РјРё) СЃС‚Р°С‚РµР№
     void Find_Linked_Entries(
                              int EntryKey0, 
                              const Tree_Link& ilink,
                              lem::IntCollect &list,
-                             const SG_TagFilter *filter=NULL
+                             const SG_TagFilter *filter=nullptr
                             );
 
-    lem::Ptr<SG_ComplexLink> GetComplexLink( int id_link );
+    std::unique_ptr<SG_ComplexLink> GetComplexLink( int id_link );
     #endif
  
-    WordLinkEnumerator* EnumerateWordLinks(void); 
+    WordLinkEnumerator* EnumerateWordLinks(); 
     WordLinkEnumerator* EnumerateWordLinks( int ekey0 ); 
     WordLinkEnumerator* EnumerateWordLinks( int ekey0, int link_type ); 
 
-    PhraseLinkEnumerator* EnumeratePhraseLinks(void); 
+    PhraseLinkEnumerator* EnumeratePhraseLinks(); 
     PhraseLinkEnumerator* EnumeratePhraseLinks( int id_phrase1 ); 
     PhraseLinkEnumerator* EnumeratePhraseLinks( int id_phrase1, int link_type ); 
     PhraseLinkEnumerator* EnumeratePhraseLinks( int id_phrase1, const lem::MCollect<int> &link_types ); 
 
-    // Дополнительно к предыдущему методу рекурсивно вызывает
-    // поиск связанных статей с глубиной рекурсии depth.
+    // Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕ Рє РїСЂРµРґС‹РґСѓС‰РµРјСѓ РјРµС‚РѕРґСѓ СЂРµРєСѓСЂСЃРёРІРЅРѕ РІС‹Р·С‹РІР°РµС‚
+    // РїРѕРёСЃРє СЃРІСЏР·Р°РЅРЅС‹С… СЃС‚Р°С‚РµР№ СЃ РіР»СѓР±РёРЅРѕР№ СЂРµРєСѓСЂСЃРёРё depth.
     void Find_Linked_Entries(
                              int EntryKey0, 
                              float depth, 
                              std::set<int> &list,
                              bool incoming=true,
                              bool outgoing=true,
-                             const lem::MCollect< Tree_Link > *allowed = NULL,
-                             const SG_TagFilter *filter=NULL
+                             const lem::MCollect< Tree_Link > *allowed = nullptr,
+                             const SG_TagFilter *filter=nullptr
                             );
 
     #if defined SOL_CAA
-    // Есть хоть одна связка ilink для статьи EntryKey0?
+    // Р•СЃС‚СЊ С…РѕС‚СЊ РѕРґРЅР° СЃРІСЏР·РєР° ilink РґР»СЏ СЃС‚Р°С‚СЊРё EntryKey0?
     bool Is_Any_Linked(
                        int EntryKey0, 
                        const Tree_Link& ilink,
                        bool outgoing=true,
                        bool incoming=false,
-                       const SG_TagFilter *filter=NULL
+                       const SG_TagFilter *filter=nullptr
                       );
 
     int Find_Linked_Entry( int id_entry1, const Tree_Link& ilink, int id_entry2 );
@@ -168,20 +168,20 @@
                                const lem::UCString &word,
                                const lem::MCollect< Solarix::Tree_Link >& links,
                                lem::Collect<lem::UFString> &linked,
-                               const SG_TagFilter *filter=NULL
+                               const SG_TagFilter *filter=nullptr
                               );
 
     void Find_Linked_DbEntries(
                                const lem::UCString &word,
                                lem::Collect<lem::UFString> &linked,
-                               const SG_TagFilter *filter=NULL
+                               const SG_TagFilter *filter=nullptr
                               );
 
     void Find_Linked_DbEntries(
                                int tentry_id,
                                int link_type,
                                lem::MCollect<int> &linked_te_id,
-                               const SG_TagFilter *filter=NULL
+                               const SG_TagFilter *filter=nullptr
                               );
 
     void FindComplexLinks(
@@ -189,14 +189,14 @@
                           int link_type,
                           lem::MCollect<int> &tl_id,
                           lem::MCollect<int> &te_id,
-                          const SG_TagFilter *filter=NULL
+                          const SG_TagFilter *filter=nullptr
                          );
 
     #endif
 
-    // Сколько связок заданного типа зарегистрировано в тезаурусе
+    // РЎРєРѕР»СЊРєРѕ СЃРІСЏР·РѕРє Р·Р°РґР°РЅРЅРѕРіРѕ С‚РёРїР° Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРѕ РІ С‚РµР·Р°СѓСЂСѓСЃРµ
     int CountLinks( Tree_Link x ) const;
-    int CountAllLinks(void) const;
+    int CountAllLinks() const;
 
     // Extract the list of all flags associated with a complex link
     void GetLinkFlags( int tl_id, lem::PtrCollect<SG_LinkFlag> & list ) const;
@@ -208,8 +208,8 @@
     void SetComplexLinkTags( int id_link, Solarix::SG_TagsList tags );
     void SetComplexLinkTags( int id_link, int id_tags );
 
-    void BeginTx(void);
-    void CommitTx(void);
+    void BeginTx();
+    void CommitTx();
 
     void RemoveComplexLink( int LinkID );
     void RemoveWordsLink( int LinkID );
@@ -224,7 +224,7 @@
     std::pair<int,int> FindTagValue( const lem::UCString &tag_name, const lem::UCString &tag_value ) const;
     int FindTagValue( int TagID, const lem::UCString &tag_value ) const;
 
-    lem::Ptr<SG_TagFilter> CompileTags( const lem::Collect< std::pair<lem::UCString,lem::UCString> > &tags ) const;
+    std::unique_ptr<SG_TagFilter> CompileTags( const lem::Collect< std::pair<lem::UCString,lem::UCString> > &tags ) const;
 
     int LoadTags( const lem::UFString &stags );
   };

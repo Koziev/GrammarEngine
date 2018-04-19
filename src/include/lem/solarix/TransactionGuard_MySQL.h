@@ -15,9 +15,9 @@
 
    public:
     TransactionGuard_MySQL( StorageConnection_MySQL *_cnx );
-    virtual ~TransactionGuard_MySQL(void);
-    virtual void Begin(void);
-    virtual void Commit(void);
+    virtual ~TransactionGuard_MySQL();
+    virtual void Begin() override;
+    virtual void Commit() override;
   };
 
   class ReadTransactionGuard_MySQL : public TransactionGuard
@@ -28,9 +28,9 @@
 
    public:
     ReadTransactionGuard_MySQL( StorageConnection_MySQL *_cnx );
-    virtual ~ReadTransactionGuard_MySQL(void);
-    virtual void Begin(void);
-    virtual void Commit(void);
+    virtual ~ReadTransactionGuard_MySQL();
+    virtual void Begin() override;
+    virtual void Commit() override;
   };
 
  }

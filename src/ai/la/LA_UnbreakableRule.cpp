@@ -5,7 +5,7 @@
 
 using namespace Solarix;
 
-LA_UnbreakableRule::LA_UnbreakableRule(void)
+LA_UnbreakableRule::LA_UnbreakableRule()
  : id_language(UNKNOWN), src_location(UNKNOWN)
 {
 }

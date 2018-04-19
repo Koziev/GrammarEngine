@@ -8,205 +8,204 @@
 #include <lem/solarix/LA_CropRule.h>
 #include <lem/solarix/LA_PreprocessorTrace.h>
 #include <lem/solarix/LA_RecognitionTrace.h>
-//#include <lem/solarix/WordSplitResults.h>
-//#include <lem/solarix/TokenSplitterRx.h>
 #include <lem/solarix/LA_Preprocessor.h>
 
 using namespace Solarix;
 
 
-LA_Preprocessor::LA_Preprocessor( Solarix::Dictionary *Dict )
+LA_Preprocessor::LA_Preprocessor(Solarix::Dictionary *Dict)
 {
- dict = Dict;
- storage = NULL;
- return;
+    dict = Dict;
+    storage = nullptr;
+    return;
 }
 
-void LA_Preprocessor::Connect( LexiconStorage *Storage )
+void LA_Preprocessor::Connect(LexiconStorage *Storage)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs_init); 
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs_init);
+#endif
 
- storage = Storage;
- DeleteRules();
- return;
+    storage = Storage;
+    DeleteRules();
+    return;
 }
 
-LA_Preprocessor::~LA_Preprocessor(void)
+LA_Preprocessor::~LA_Preprocessor()
 {
- DeleteRules();
- return;
-}
-
-
-void LA_Preprocessor::DeleteRules(void)
-{
- for( lem::Container::size_type i=0; i<rules.size(); ++i )
-  {
-   delete rules[i];
-  }
-
- rules.clear();
- id_langs.clear();
- all_langs.clear();
-
- return;
+    DeleteRules();
+    return;
 }
 
 
-void LA_Preprocessor::LoadRulesFromStorage( int id_language )
+void LA_Preprocessor::DeleteRules()
 {
- LA_PreprocessorRules *lang_rules = new LA_PreprocessorRules();
- 
- // Для ускорения применения правил усечения мы их разделим на 2 группы - префиксы и аффиксы,
- // и выстроим индекс по коду символа, первого для префиксов и последнего для аффиксов.
- lem::Ptr<LS_ResultSet> rs3 = storage->ListCropRules(id_language);
- while( rs3->Fetch() )
-  {
-   const int id = rs3->GetInt(0);
-   LA_CropRule *rule = storage->GetPreprocessorCropRule(id);
-   if( rule->IsPrefix() )
+    for (auto rule : rules)
     {
-     lang_rules->prefix_crop_rules.insert( std::make_pair( rule->GetHash(), rule ) );
+        delete rule;
     }
-   else if( rule->IsAffix() )
-    {
-     lang_rules->affix_crop_rules.insert( std::make_pair( rule->GetHash(), rule ) );
-    }
-   else
-    LEM_STOPIT;
 
-   lang_rules->crop_rules.push_back(rule);
-  }
+    rules.clear();
+    id_langs.clear();
+    all_langs.clear();
 
- 
- id_langs.push_back(id_language);
- rules.push_back(lang_rules);
-
- return;
+    return;
 }
 
 
-void LA_Preprocessor::LoadRules( int id_language )
+void LA_Preprocessor::LoadRulesFromStorage(int id_language)
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs);
- #endif
+    LA_PreprocessorRules *lang_rules = new LA_PreprocessorRules();
 
- const int idx = id_langs.find(id_language);
- if( idx==UNKNOWN )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
-
-   LoadRulesFromStorage(id_language);
-
-   // Правила для языка с кодом -1 применяются всегда, поэтому проверим и их в рамках текущей блокировки
-   const int idxu = id_langs.find(UNKNOWN);
-   if( idxu==UNKNOWN )
+    // Р”Р»СЏ СѓСЃРєРѕСЂРµРЅРёСЏ РїСЂРёРјРµРЅРµРЅРёСЏ РїСЂР°РІРёР» СѓСЃРµС‡РµРЅРёСЏ РјС‹ РёС… СЂР°Р·РґРµР»РёРј РЅР° 2 РіСЂСѓРїРїС‹ - РїСЂРµС„РёРєСЃС‹ Рё Р°С„С„РёРєСЃС‹,
+    // Рё РІС‹СЃС‚СЂРѕРёРј РёРЅРґРµРєСЃ РїРѕ РєРѕРґСѓ СЃРёРјРІРѕР»Р°, РїРµСЂРІРѕРіРѕ РґР»СЏ РїСЂРµС„РёРєСЃРѕРІ Рё РїРѕСЃР»РµРґРЅРµРіРѕ РґР»СЏ Р°С„С„РёРєСЃРѕРІ.
+    lem::Ptr<LS_ResultSet> rs3 = storage->ListCropRules(id_language);
+    while (rs3->Fetch())
     {
-     LoadRulesFromStorage(UNKNOWN);
-    }
-  }
+        const int id = rs3->GetInt(0);
+        LA_CropRule *rule = storage->GetPreprocessorCropRule(id);
+        if (rule->IsPrefix())
+        {
+            lang_rules->prefix_crop_rules.insert(std::make_pair(rule->GetHash(), rule));
+        }
+        else if (rule->IsAffix())
+        {
+            lang_rules->affix_crop_rules.insert(std::make_pair(rule->GetHash(), rule));
+        }
+        else
+        {
+            LEM_STOPIT;
+        }
 
- return;
+        lang_rules->crop_rules.push_back(rule);
+    }
+
+
+    id_langs.push_back(id_language);
+    rules.push_back(lang_rules);
+
+    return;
 }
 
 
-const LA_PreprocessorRules* LA_Preprocessor::GetRules( int id_language ) const
+void LA_Preprocessor::LoadRules(int id_language)
 {
- const int idx = id_langs.find(id_language);
- if( idx==UNKNOWN )
-  {
-   lem::MemFormatter mem;
-   mem.printf( "Could not find the preprocessor rules for id_language=%d", id_language );
-   throw lem::E_BaseException(mem.string());
-  }
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs);
+#endif
 
- return rules[idx]; 
+    const int idx = id_langs.find(id_language);
+    if (idx == UNKNOWN)
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
+
+        LoadRulesFromStorage(id_language);
+
+        // РџСЂР°РІРёР»Р° РґР»СЏ СЏР·С‹РєР° СЃ РєРѕРґРѕРј -1 РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ РІСЃРµРіРґР°, РїРѕСЌС‚РѕРјСѓ РїСЂРѕРІРµСЂРёРј Рё РёС… РІ СЂР°РјРєР°С… С‚РµРєСѓС‰РµР№ Р±Р»РѕРєРёСЂРѕРІРєРё
+        const int idxu = id_langs.find(UNKNOWN);
+        if (idxu == UNKNOWN)
+        {
+            LoadRulesFromStorage(UNKNOWN);
+        }
+    }
+
+    return;
+}
+
+
+const LA_PreprocessorRules* LA_Preprocessor::GetRules(int id_language) const
+{
+    const int idx = id_langs.find(id_language);
+    if (idx == UNKNOWN)
+    {
+        lem::MemFormatter mem;
+        mem.printf("Could not find the preprocessor rules for id_language=%d", id_language);
+        throw lem::E_BaseException(mem.string());
+    }
+
+    return rules[idx];
 }
 
 
 // **************************************************************
-// Загрузим ID всех языков и правила для этих языков.
-// Это необходимо в случае, когда выполняется обработка текста
-// с указанием ID языка=-1.
+// Р—Р°РіСЂСѓР·РёРј ID РІСЃРµС… СЏР·С‹РєРѕРІ Рё РїСЂР°РІРёР»Р° РґР»СЏ СЌС‚РёС… СЏР·С‹РєРѕРІ.
+// Р­С‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ РІ СЃР»СѓС‡Р°Рµ, РєРѕРіРґР° РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РѕР±СЂР°Р±РѕС‚РєР° С‚РµРєСЃС‚Р°
+// СЃ СѓРєР°Р·Р°РЅРёРµРј ID СЏР·С‹РєР°=-1.
 // **************************************************************
-void LA_Preprocessor::LoadAllLangs(void)
+void LA_Preprocessor::LoadAllLangs()
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs_langs);
- #endif
- if( all_langs.empty() )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
-   
-   Solarix::Languages &langs = dict->GetSynGram().languages();
-   lem::Ptr<LanguageEnumerator> e( langs.Enumerate() );
-   while( e->Fetch() )
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs_langs);
+#endif
+    if (all_langs.empty())
     {
-     all_langs.push_back( e->GetId() );
-     LoadRules( e->GetId() );
-    }
-  }
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
 
- return;
+        Solarix::Languages &langs = dict->GetSynGram().languages();
+        lem::Ptr<LanguageEnumerator> e(langs.Enumerate());
+        while (e->Fetch())
+        {
+            all_langs.push_back(e->GetId());
+            LoadRules(e->GetId());
+        }
+    }
+
+    return;
 }
 
 
 bool LA_Preprocessor::Crop(
-                           const lem::UCString &word,
-                           lem::MCollect<lem::UCString> &results,
-                           lem::MCollect<lem::Real1> &rels,
-                           int id_language,
-                           LA_RecognitionTrace *trace
-                          )
+    const lem::UCString &word,
+    lem::MCollect<lem::UCString> &results,
+    lem::MCollect<lem::Real1> &rels,
+    int id_language,
+    LA_RecognitionTrace *trace
+)
 {
- bool res=false;
+    bool res = false;
 
- if( lem::is_quantor(id_language) )
-  {
-   LoadAllLangs();
-
-   // Apply all rules.
-   for( lem::Container::size_type j=0; j<rules.size(); ++j )
+    if (lem::is_quantor(id_language))
     {
-     const LA_PreprocessorRules *r = rules[j];
-     if( r->Crop(word,results,rels,trace) )
-      {
-       res=true;
-       break;
-      }
+        LoadAllLangs();
+
+        // Apply all rules.
+        for (auto rule : rules)
+        {
+            if (rule->Crop(word, results, rels, trace))
+            {
+                res = true;
+                break;
+            }
+        }
     }
-  }
- else
-  {
-   LoadRules(id_language);
-
-   #if defined LEM_THREADS
-   lem::Process::RWU_ReaderGuard rlock(cs);
-   #endif
-
-   const LA_PreprocessorRules *rules1 = GetRules(id_language);
-   if( !rules1->Crop(word,results,rels,trace) )
+    else
     {
-     const LA_PreprocessorRules *rules2 = GetRules(UNKNOWN);
-     if( rules2->Crop(word,results,rels,trace) )
-      {
-       res=true;
-      }
-    }
-   else
-    {
-     res=true;
-    }
-  }
+        LoadRules(id_language);
 
- return res;
+#if defined LEM_THREADS
+        lem::Process::RWU_ReaderGuard rlock(cs);
+#endif
+
+        const LA_PreprocessorRules *rules1 = GetRules(id_language);
+        if (!rules1->Crop(word, results, rels, trace))
+        {
+            const LA_PreprocessorRules *rules2 = GetRules(UNKNOWN);
+            if (rules2->Crop(word, results, rels, trace))
+            {
+                res = true;
+            }
+        }
+        else
+        {
+            res = true;
+        }
+    }
+
+    return res;
 }
 
 
@@ -215,26 +214,26 @@ bool LA_Preprocessor::Crop(
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 void LA_Preprocessor::LoadTxt(
-                              const lem::Iridium::BethToken &head_token,
-                              lem::Iridium::Macro_Parser &txtfile,
-                              Dictionary &dict
-                             )
+    const lem::Iridium::BethToken &head_token,
+    lem::Iridium::Macro_Parser &txtfile,
+    Dictionary &dict
+)
 {
- if( head_token.string().eqi(L"crop") )
-  {
-   LA_CropRule* r = new LA_CropRule();
-   r->LoadTxt( txtfile, dict );
-
-   if( !r->GetName().empty() && storage->FindCropRule(r->GetName())!=UNKNOWN )
+    if (head_token.string().eqi(L"crop"))
     {
-     lem::Iridium::Print_Error( head_token, txtfile );
-     dict.GetIO().merr().printf( "Rule [%us] redefinition\n", r->GetName().c_str() );
-     throw E_ParserError();
+        LA_CropRule* r = new LA_CropRule();
+        r->LoadTxt(txtfile, dict);
+
+        if (!r->GetName().empty() && storage->FindCropRule(r->GetName()) != UNKNOWN)
+        {
+            lem::Iridium::Print_Error(head_token, txtfile);
+            dict.GetIO().merr().printf("Rule [%us] redefinition\n", r->GetName().c_str());
+            throw E_ParserError();
+        }
+
+        storage->StorePreprocessorCropRule(r);
     }
 
-   storage->StorePreprocessorCropRule(r);
-  }
- 
- return;
+    return;
 }
 #endif

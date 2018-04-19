@@ -7,28 +7,28 @@
 using namespace Solarix;
 
 
-PatternConstraints::PatternConstraints(void)
+PatternConstraints::PatternConstraints()
 {
 }
 
 
-PatternConstraints::PatternConstraints( const PatternConstraints & x )
- : constraints(x.constraints)
+PatternConstraints::PatternConstraints(const PatternConstraints & x)
+    : constraints(x.constraints)
 {
 }
 
 
 
-void PatternConstraints::operator=( const PatternConstraints &x )
+void PatternConstraints::operator=(const PatternConstraints &x)
 {
- constraints = x.constraints;
- return;
+    constraints = x.constraints;
+    return;
 }
 
 
-bool PatternConstraints::operator!=( const PatternConstraints &x ) const
+bool PatternConstraints::operator!=(const PatternConstraints &x) const
 {
- return constraints != x.constraints;
+    return constraints != x.constraints;
 }
 
 
@@ -36,63 +36,63 @@ bool PatternConstraints::operator!=( const PatternConstraints &x ) const
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void PatternConstraints::LoadTxt( 
-                                 Dictionary &dict,
-                                 lem::Iridium::Macro_Parser & txtfile,
-                                 SynPatternCompilation & compilation_context
-                                )
+void PatternConstraints::LoadTxt(
+    Dictionary &dict,
+    lem::Iridium::Macro_Parser & txtfile,
+    SynPatternCompilation & compilation_context
+)
 {
- txtfile.read_it( B_OFIGPAREN ); 
+    txtfile.read_it(B_OFIGPAREN);
 
- lem::Iridium::BSourceState beg = txtfile.tellp();
+    lem::Iridium::BSourceState beg = txtfile.tellp();
 
- while( !txtfile.eof() )
- {
-  if( txtfile.probe( B_CFIGPAREN ) )
-   break;
+    while (!txtfile.eof())
+    {
+        if (txtfile.probe(B_CFIGPAREN))
+            break;
 
-  PatternConstraint * c = new PatternConstraint();
-  c->LoadTxt( dict, txtfile, compilation_context );
-  constraints.push_back(c);
- }
+        PatternConstraint * c = new PatternConstraint();
+        c->LoadTxt(dict, txtfile, compilation_context);
+        constraints.push_back(c);
+    }
 
- return;
+    return;
 }
 #endif    
 
 
-void PatternConstraints::SaveBin( lem::Stream &bin ) const
+void PatternConstraints::SaveBin(lem::Stream &bin) const
 {
- constraints.SaveBin(bin);
- return;
+    constraints.SaveBin(bin);
+    return;
 }
 
-void PatternConstraints::LoadBin( lem::Stream &bin )
+void PatternConstraints::LoadBin(lem::Stream &bin)
 {
- constraints.LoadBin(bin);
- return;
+    constraints.LoadBin(bin);
+    return;
 }
 
 
 
 #if defined SOL_CAA
 PatternConstraintResult PatternConstraints::Check(
-                                                  const LexicalAutomat & la,
-                                                  const BackTrace * parent_trace,
-                                                  const lem::MCollect<int> & PatternSequenceNumber,
-                                                  const SynPatternResult * cur_result
-                                                 ) const
+    const LexicalAutomat & la,
+    const BackTrace * parent_trace,
+    const lem::MCollect<int> & PatternSequenceNumber,
+    const SynPatternResult * cur_result
+) const
 {
- PatternConstraintResult res;
- res.success = true;
+    PatternConstraintResult res;
+    res.success = true;
 
- for( lem::Container::size_type i=0; i<constraints.size(); ++i )
-  {
-   res.Union( constraints[i]->Check( la, parent_trace, PatternSequenceNumber, cur_result ) );
-   if( !res.success )
-    break;
-  }
+    for (lem::Container::size_type i = 0; i < constraints.size(); ++i)
+    {
+        res.Union(constraints[i]->Check(la, parent_trace, PatternSequenceNumber, cur_result));
+        if (!res.success)
+            break;
+    }
 
- return res;
+    return res;
 }
 #endif

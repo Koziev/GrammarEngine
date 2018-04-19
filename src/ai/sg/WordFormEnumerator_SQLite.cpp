@@ -7,56 +7,56 @@
 
 using namespace Solarix;
 
-WordFormEnumerator_SQLite::WordFormEnumerator_SQLite( LS_ResultSet_SQLITE *_rs, WordEntries_SQLite *_entries )
- : rs(_rs), entries(_entries)
+WordFormEnumerator_SQLite::WordFormEnumerator_SQLite(LS_ResultSet_SQLITE *_rs, WordEntries_SQLite *_entries)
+    : rs(_rs), entries(_entries)
 {
 }
 
 WordFormEnumerator_SQLite::WordFormEnumerator_SQLite(
-                                                     LS_ResultSet_SQLITE *_rs,
-                                                     WordEntries_SQLite *_entries,
-                                                     const lem::MCollect<lem::UCString> &_forms
-                                                    )
- : rs(_rs), entries(_entries), forms(_forms)
+    LS_ResultSet_SQLITE *_rs,
+    WordEntries_SQLite *_entries,
+    const lem::MCollect<lem::UCString> &_forms
+)
+    : rs(_rs), entries(_entries), forms(_forms)
 {
 }
 
 
 
-WordFormEnumerator_SQLite::~WordFormEnumerator_SQLite(void)
+WordFormEnumerator_SQLite::~WordFormEnumerator_SQLite()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
-bool WordFormEnumerator_SQLite::Fetch(void)
+bool WordFormEnumerator_SQLite::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
-int WordFormEnumerator_SQLite::GetEntryKey(void)
+int WordFormEnumerator_SQLite::GetEntryKey()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
-int WordFormEnumerator_SQLite::GetFormIndex(void)
+int WordFormEnumerator_SQLite::GetFormIndex()
 {
- return rs->GetInt(1);
+    return rs->GetInt(1);
 }
 
-float WordFormEnumerator_SQLite::GetValue(void)
+float WordFormEnumerator_SQLite::GetValue()
 {
- return 1.0F;
+    return 1.0F;
 }
 
-int WordFormEnumerator_SQLite::GetMatchedWordIndex(void)
+int WordFormEnumerator_SQLite::GetMatchedWordIndex()
 {
- if( forms.size()>1 )
-  {
-   lem::UCString matched_word = rs->GetUCString(2);
-   return forms.find(matched_word);
-  }
- else
-  {
-   return 0;
-  }
+    if (forms.size() > 1)
+    {
+        lem::UCString matched_word = rs->GetUCString(2);
+        return forms.find(matched_word);
+    }
+    else
+    {
+        return 0;
+    }
 }

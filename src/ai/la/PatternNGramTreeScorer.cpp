@@ -14,12 +14,12 @@
 using namespace Solarix;
 
 
-PatternNGramTreeScorer::PatternNGramTreeScorer( void ) : missing_score( 0 ), id_group( UNKNOWN )
+PatternNGramTreeScorer::PatternNGramTreeScorer() : missing_score(0), id_group(UNKNOWN)
 {
 }
 
-PatternNGramTreeScorer::PatternNGramTreeScorer( const PatternNGramTreeScorer & x )
-    : root_marker( x.root_marker ), group_name( x.group_name ), id_group( x.id_group ), missing_score( x.missing_score )
+PatternNGramTreeScorer::PatternNGramTreeScorer(const PatternNGramTreeScorer & x)
+    : root_marker(x.root_marker), group_name(x.group_name), id_group(x.id_group), missing_score(x.missing_score)
 {
 }
 
@@ -43,36 +43,36 @@ void PatternNGramTreeScorer::LoadTxt(
     Dictionary &dict,
     lem::Iridium::Macro_Parser & txtfile,
     VariableChecker & compilation_context
-    )
+)
 {
     lem::Iridium::BSourceState beg = txtfile.tellp();
 
-    if(id_group0 == UNKNOWN)
-        txtfile.read_it( L"tree_score" );
+    if (id_group0 == UNKNOWN)
+        txtfile.read_it(L"tree_score");
 
-    txtfile.read_it( B_OROUNDPAREN );
+    txtfile.read_it(B_OROUNDPAREN);
 
     root_marker = txtfile.read().string();
     root_marker.to_upper();
-    if(compilation_context.Find( root_marker ) == UNKNOWN)
+    if (compilation_context.Find(root_marker) == UNKNOWN)
     {
-        dict.GetIO().merr().printf( "Variable [%us] is not declared", root_marker.c_str() );
-        lem::Iridium::Print_Error( beg, txtfile );
+        dict.GetIO().merr().printf("Variable [%us] is not declared", root_marker.c_str());
+        lem::Iridium::Print_Error(beg, txtfile);
         throw lem::E_BaseException();
     }
 
-    if(id_group0 == UNKNOWN)
+    if (id_group0 == UNKNOWN)
     {
-        txtfile.read_it( B_COMMA );
+        txtfile.read_it(B_COMMA);
 
         group_name = txtfile.read().string();
         group_name.to_upper();
 
-        id_group = dict.GetLexAuto().GetTreeScorers().FindGroup( group_name, true );
-        if(id_group == UNKNOWN)
+        id_group = dict.GetLexAuto().GetTreeScorers().FindGroup(group_name, true);
+        if (id_group == UNKNOWN)
         {
-            dict.GetIO().merr().printf( "Tree scorer group [%us] not found", group_name.c_str() );
-            lem::Iridium::Print_Error( beg, txtfile );
+            dict.GetIO().merr().printf("Tree scorer group [%us] not found", group_name.c_str());
+            lem::Iridium::Print_Error(beg, txtfile);
             throw lem::E_BaseException();
         }
     }
@@ -81,33 +81,33 @@ void PatternNGramTreeScorer::LoadTxt(
         id_group = id_group0;
     }
 
-    if(txtfile.probe( B_COMMA ))
+    if (txtfile.probe(B_COMMA))
     {
-        txtfile.read_it( B_SUB );
+        txtfile.read_it(B_SUB);
         missing_score = -txtfile.read_int();
     }
 
-    txtfile.probe( B_CROUNDPAREN );
+    txtfile.probe(B_CROUNDPAREN);
 
 
     return;
 }
 #endif    
 
-void PatternNGramTreeScorer::SaveBin( lem::Stream &bin ) const
+void PatternNGramTreeScorer::SaveBin(lem::Stream &bin) const
 {
-    bin.write( &root_marker, sizeof( root_marker ) );
-    bin.write( &group_name, sizeof( group_name ) );
-    bin.write_int( id_group );
-    bin.write_int( missing_score );
+    bin.write(&root_marker, sizeof(root_marker));
+    bin.write(&group_name, sizeof(group_name));
+    bin.write_int(id_group);
+    bin.write_int(missing_score);
 
     return;
 }
 
-void PatternNGramTreeScorer::LoadBin( lem::Stream &bin )
+void PatternNGramTreeScorer::LoadBin(lem::Stream &bin)
 {
-    bin.read( &root_marker, sizeof( root_marker ) );
-    bin.read( &group_name, sizeof( group_name ) );
+    bin.read(&root_marker, sizeof(root_marker));
+    bin.read(&group_name, sizeof(group_name));
     id_group = bin.read_int();
     missing_score = bin.read_int();
 
@@ -121,34 +121,34 @@ const Solarix::Word_Form* PatternNGramTreeScorer::GetRootNode(
     Dictionary & dict,
     const lem::MCollect<int> & PatternSequenceNumber,
     const SynPatternResult * cur_result
-    ) const
+) const
 {
-    if(!cur_result->trace.Contains( PatternSequenceNumber, root_marker ))
+    if (!cur_result->trace.Contains(PatternSequenceNumber, root_marker))
     {
         lem::MemFormatter mem;
-        mem.printf( "Can not find root node marker [%us]", root_marker.c_str() );
-        throw lem::E_BaseException( mem.string() );
+        mem.printf("Can not find root node marker [%us]", root_marker.c_str());
+        throw lem::E_BaseException(mem.string());
         return 0;
     }
 
-    const BackTraceItem & mark_data = *cur_result->trace.Get(PatternSequenceNumber,root_marker);
+    const BackTraceItem & mark_data = *cur_result->trace.Get(PatternSequenceNumber, root_marker);
 
-    if( mark_data.IsSingleWord() )
+    if (mark_data.IsSingleWord())
     {
         const Word_Form * root_node = mark_data.GetSingleRootNode();
         return root_node;
     }
     else
     {
-        // ÒÌ‡˜‡Î‡ ÔÓ·ÛÂÏ Ì‡ÈÚË ÚÓÍÂÌ Ò ÔÓÏÂÚÍÓÈ root_node.
-        const Word_Form * root_node0 = mark_data.FindNode( * dict.GetLexAuto().GetRootNodeName() );
-        if( root_node0!=NULL )
+        // —Å–Ω–∞—á–∞–ª–∞ –ø—Ä–æ–±—É–µ–º –Ω–∞–π—Ç–∏ —Ç–æ–∫–µ–Ω —Å –ø–æ–º–µ—Ç–∫–æ–π root_node.
+        const Word_Form * root_node0 = mark_data.FindNode(*dict.GetLexAuto().GetRootNodeName());
+        if (root_node0 != nullptr)
         {
             return root_node0;
         }
         else
         {
-            // ¬ Í‡˜ÂÒÚ‚Â ˆÂÌÚ‡Î¸ÌÓ„Ó ·ÂÂÏ ÔÂ‚˚È ÚÓÍÂÌ.
+            // –í –∫–∞—á–µ—Å—Ç–≤–µ —Ü–µ–Ω—Ç—Ä–∞–ª—å–Ω–æ–≥–æ –±–µ—Ä–µ–º –ø–µ—Ä–≤—ã–π —Ç–æ–∫–µ–Ω.
             const LexerTextPos * token = mark_data.GetBeginToken();
             const Solarix::Word_Form * root_node = token->GetWordform();
             return root_node;
@@ -156,7 +156,7 @@ const Solarix::Word_Form* PatternNGramTreeScorer::GetRootNode(
     }
 
     LEM_STOPIT;
-    return NULL;
+    return nullptr;
 }
 #endif
 
@@ -171,7 +171,7 @@ int PatternNGramTreeScorer::Match(
     TreeMatchingExperience &experience,
     const ElapsedTimeConstraint & constraints,
     TrTrace *trace_log
-    ) const
+) const
 {
     /*
      #if LEM_DEBUGGING==1
@@ -197,17 +197,17 @@ int PatternNGramTreeScorer::Match(
      #endif
      */
 
-    // Ë˘ÂÏ ÍÓÂÌ¸ Ë ‰ÂÎ‡ÂÏ ÓˆÂÌÍÛ ÓÚ ÌÂ„Ó Ò ÔÓÏÓ˘¸˛ Á‡‰‡ÌÌÓÈ „ÛÔÔ˚ ÓˆÂÌ˘ËÍÓ‚.
-    const Solarix::Word_Form * root_wf = GetRootNode( dict, PatternSequenceNumber, cur_result );
+     // –∏—â–µ–º –∫–æ—Ä–µ–Ω—å –∏ –¥–µ–ª–∞–µ–º –æ—Ü–µ–Ω–∫—É –æ—Ç –Ω–µ–≥–æ —Å –ø–æ–º–æ—â—å—é –∑–∞–¥–∞–Ω–Ω–æ–π –≥—Ä—É–ø–ø—ã –æ—Ü–µ–Ω—â–∏–∫–æ–≤.
+    const Solarix::Word_Form * root_wf = GetRootNode(dict, PatternSequenceNumber, cur_result);
 
     TreeScorerMatcher_Result matching_result;
-    TreeScorerMatcher::MatchRootByGroup( root_wf, id_group, dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, matching_result, constraints, trace_log );
+    TreeScorerMatcher::MatchRootByGroup(root_wf, id_group, dict, PatternSequenceNumber, x_result, cur_result, kbase, experience, matching_result, constraints, trace_log);
 
-    if( matching_result.matched )
+    if (matching_result.matched)
         return matching_result.score;
     else
     {
-        if( matching_result.rule_count>0 ) // ·˚ÎË ÎË Ì‡È‰ÂÌ˚ Ô‡‚ËÎ‡, ÔÓ‚Âˇ˛˘ËÂ ‰‡ÌÌÓÂ ‰ÂÂ‚Ó?
+        if (matching_result.rule_count > 0) // –±—ã–ª–∏ –ª–∏ –Ω–∞–π–¥–µ–Ω—ã –ø—Ä–∞–≤–∏–ª–∞, –ø—Ä–æ–≤–µ—Ä—è—é—â–∏–µ –¥–∞–Ω–Ω–æ–µ –¥–µ—Ä–µ–≤–æ?
             return missing_score;
         else
             return 0;

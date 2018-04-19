@@ -4,72 +4,72 @@
 using namespace Solarix;
 
 
-LA_PhoneticMatcher::LA_PhoneticMatcher( Solarix::Dictionary *Dict )
+LA_PhoneticMatcher::LA_PhoneticMatcher(Solarix::Dictionary *Dict)
 {
- dict = Dict;
- storage = NULL;
- return;
+    dict = Dict;
+    storage = nullptr;
+    return;
 }
 
-void LA_PhoneticMatcher::Connect( LexiconStorage *Storage )
+void LA_PhoneticMatcher::Connect(LexiconStorage *Storage)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs_init); 
- #endif
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs_init);
+#endif
 
- storage = Storage;
- DeleteRules();
- return;
-}
-
-
-LA_PhoneticMatcher::~LA_PhoneticMatcher(void)
-{
- DeleteRules();
- return;
+    storage = Storage;
+    DeleteRules();
+    return;
 }
 
 
-void LA_PhoneticMatcher::DeleteRules(void)
+LA_PhoneticMatcher::~LA_PhoneticMatcher()
 {
- for( lem::Container::size_type i=0; i<matcher.size(); ++i )
-  {
-   delete matcher[i];
-  }
-
- matcher.clear();
- id_langs.clear();
-
- return;
+    DeleteRules();
+    return;
 }
 
 
-const LA_PhoneticMatcherForLanguage* LA_PhoneticMatcher::GetMatcherForLanguage( int id_language )
+void LA_PhoneticMatcher::DeleteRules()
 {
- #if defined LEM_THREADS
- lem::Process::RWU_ReaderGuard rlock(cs);
- #endif
+    for (auto m : matcher)
+    {
+        delete m;
+    }
 
- const int i = id_langs.find(id_language);
- if( i==UNKNOWN )
-  {
-   #if defined LEM_THREADS
-   lem::Process::RWU_WriterGuard wlock(rlock);
-   #endif
+    matcher.clear();
+    id_langs.clear();
 
-   return LoadRules(id_language);
-  }
- else
-  {
-   return matcher[i];
-  }
+    return;
 }
 
-const LA_PhoneticMatcherForLanguage* LA_PhoneticMatcher::LoadRules( int id_language )
+
+const LA_PhoneticMatcherForLanguage* LA_PhoneticMatcher::GetMatcherForLanguage(int id_language)
 {
- LA_PhoneticMatcherForLanguage *m = new LA_PhoneticMatcherForLanguage(id_language);
- m->Load( dict, storage );
- matcher.push_back(m);
- id_langs.push_back(id_language);
- return m;
+#if defined LEM_THREADS
+    lem::Process::RWU_ReaderGuard rlock(cs);
+#endif
+
+    const int i = id_langs.find(id_language);
+    if (i == UNKNOWN)
+    {
+#if defined LEM_THREADS
+        lem::Process::RWU_WriterGuard wlock(rlock);
+#endif
+
+        return LoadRules(id_language);
+    }
+    else
+    {
+        return matcher[i];
+    }
+}
+
+const LA_PhoneticMatcherForLanguage* LA_PhoneticMatcher::LoadRules(int id_language)
+{
+    LA_PhoneticMatcherForLanguage *m = new LA_PhoneticMatcherForLanguage(id_language);
+    m->Load(dict, storage);
+    matcher.push_back(m);
+    id_langs.push_back(id_language);
+    return m;
 }

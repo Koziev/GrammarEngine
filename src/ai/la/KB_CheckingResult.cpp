@@ -3,50 +3,50 @@
 using namespace Solarix;
 
 
-KB_CheckingResult::KB_CheckingResult(void)
- : type(UNKNOWN), retbool(UNKNOWN), false_score(0), retint(UNKNOWN)
+KB_CheckingResult::KB_CheckingResult()
+    : type(UNKNOWN), retbool(UNKNOWN), false_score(0), retint(UNKNOWN)
 {
 }
 
-int KB_CheckingResult::GetBool(void) const
+int KB_CheckingResult::GetBool() const
 {
- if( type!=0 )
-  throw lem::E_BaseException( "Can not convert KB_CheckingResult object to bool" );
+    if (type != 0)
+        throw lem::E_BaseException("Can not convert KB_CheckingResult object to bool");
 
- return retbool;
+    return retbool;
 }
 
 
 
-int KB_CheckingResult::GetInt(void) const
+int KB_CheckingResult::GetInt() const
 {
- if( type!=1 )
-  throw lem::E_BaseException( "Can not convert KB_CheckingResult object to int" );
+    if (type != 1)
+        throw lem::E_BaseException("Can not convert KB_CheckingResult object to int");
 
- return retint;
+    return retint;
 }
 
 
-KB_BoolResult::KB_BoolResult( int bool_val, int false_fine )
- : KB_CheckingResult()
+KB_BoolResult::KB_BoolResult(int bool_val, int false_fine)
+    : KB_CheckingResult()
 {
- type=0;
- retbool=bool_val;
- false_score = false_fine;
+    type = 0;
+    retbool = bool_val;
+    false_score = false_fine;
 }
 
 
-KB_IntResult::KB_IntResult( int int_val )
- : KB_CheckingResult()
+KB_IntResult::KB_IntResult(int int_val)
+    : KB_CheckingResult()
 {
- type=1;
- retint=int_val;
+    type = 1;
+    retint = int_val;
 }
 
 
-KB_NotMatchedResult::KB_NotMatchedResult(void)
- : KB_CheckingResult()
+KB_NotMatchedResult::KB_NotMatchedResult()
+    : KB_CheckingResult()
 {
- type=UNKNOWN; 
+    type = UNKNOWN;
 }
 

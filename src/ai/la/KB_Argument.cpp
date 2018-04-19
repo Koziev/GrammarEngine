@@ -16,7 +16,7 @@ using namespace Solarix;
 
 
 KB_Argument::KB_Argument(void) : id_entry(UNKNOWN), id_class(UNKNOWN), id_metaentry(UNKNOWN), is_regex(false), case_sensitive(false),
-                                 ThesaurusCheck_Link(UNKNOWN), ThesaurusCheck_Entry(UNKNOWN)
+ThesaurusCheck_Link(UNKNOWN), ThesaurusCheck_Entry(UNKNOWN)
 {
 }
 
@@ -24,18 +24,18 @@ KB_Argument::KB_Argument(void) : id_entry(UNKNOWN), id_class(UNKNOWN), id_metaen
 
 void KB_Argument::InitRegularExpression()
 {
- if( case_sensitive )
-  {
-   // с точным учетом регистра
-   rx = boost::wregex( regex_str.c_str() );
-  }
- else
-  {
-   // с игнорированием регистра
-   rx = boost::wregex( regex_str.c_str(), boost::regex_constants::icase );
-  }
+    if (case_sensitive)
+    {
+        // СЃ С‚РѕС‡РЅС‹Рј СѓС‡РµС‚РѕРј СЂРµРіРёСЃС‚СЂР°
+        rx = boost::wregex(regex_str.c_str());
+    }
+    else
+    {
+        // СЃ РёРіРЅРѕСЂРёСЂРѕРІР°РЅРёРµРј СЂРµРіРёСЃС‚СЂР°
+        rx = boost::wregex(regex_str.c_str(), boost::regex_constants::icase);
+    }
 
- return;
+    return;
 }
 
 
@@ -43,261 +43,265 @@ void KB_Argument::InitRegularExpression()
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void KB_Argument::LoadTxt( const KB_Facts & facts, Solarix::Dictionary &dict, lem::Iridium::Macro_Parser &txtfile )
+void KB_Argument::LoadTxt(const KB_Facts & facts, Solarix::Dictionary &dict, lem::Iridium::Macro_Parser &txtfile)
 {
- lem::Iridium::BethToken t1 = txtfile.read();
+    lem::Iridium::BethToken t1 = txtfile.read();
 
- is_positive = true;
+    is_positive = true;
 
- if( t1.GetToken()==B_TILDA )
-  {
-   is_positive=false;
-   t1 = txtfile.read();
-  }
-
- if( t1.string()==L'@' )
-  {
-   // Пока реализовано только задание регулярного выражения.
-
-   t1 = txtfile.read();
-   if( t1.string().eqi(L"regex") )
+    if (t1.GetToken() == B_TILDA)
     {
-     is_regex=true;
-    }
-   else if( t1.string().eqi(L"regex_strict") )
-    {
-     is_regex=case_sensitive=true;
-    }
-   else
-    {
-     lem::Iridium::Print_Error(t1,txtfile);
-     dict.GetIO().merr().printf( "Unknown function %us\n", t1.string().c_str() );
-     throw lem::E_BaseException();
+        is_positive = false;
+        t1 = txtfile.read();
     }
 
-   txtfile.read_it( B_OROUNDPAREN );
-   regex_str = txtfile.read().GetFullStr();
-
-   if( regex_str.front()==L'"' && regex_str.back()==L'"' )
-    regex_str.strip_quotes();
-   else if( regex_str.front()==L'\'' && regex_str.back()==L'\'' )
-    regex_str.strip_apostrophes();
-   else
+    if (t1.string() == L'@')
     {
-     lem::Iridium::Print_Error(t1,txtfile);
-     dict.GetIO().merr().printf( "\" or ' are exected for argument %us\n", regex_str.c_str() );
-     throw lem::E_BaseException();
-    }
+        // РџРѕРєР° СЂРµР°Р»РёР·РѕРІР°РЅРѕ С‚РѕР»СЊРєРѕ Р·Р°РґР°РЅРёРµ СЂРµРіСѓР»СЏСЂРЅРѕРіРѕ РІС‹СЂР°Р¶РµРЅРёСЏ.
 
-   txtfile.read_it( B_CROUNDPAREN );
-
-   if( txtfile.probe(B_OFIGPAREN) )
-    {
-     Solarix::ExactWordEntryLocator omonym_resolver;
-     LoadPreciser( dict, txtfile, omonym_resolver );
-    }
-
-   return;
-  }
-
- WordEntrySet & sets = dict.GetLexAuto().GetWordEntrySet();
-
- if( lem::in_quotes(t1.string()) )
-  {
-   Lexem lex( t1.string().strip_quotes() );
-
-   dict.GetLexAuto().TranslateLexem( lex, true, facts.GetLanguage() );
-   word = lex;
-
-   if( txtfile.probe(B_OFIGPAREN) )
-    {
-     Solarix::ExactWordEntryLocator omonym_resolver;
-     LoadPreciser( dict, txtfile, omonym_resolver );
-    }
-  }
- else if( lem::in_apostrophes(t1.string()) )
-  {
-   Lexem lex( t1.string().strip_apostrophes() );
-
-   dict.GetLexAuto().TranslateLexem( lex, true, facts.GetLanguage() );
-   word = lex;
-
-   if( txtfile.probe(B_OFIGPAREN) )
-    {
-     Solarix::ExactWordEntryLocator omonym_resolver;
-     LoadPreciser( dict, txtfile, omonym_resolver );
-    }
-  }
- else if( t1.GetToken()==B_ANY )
-  {
-   id_entry=ANY_STATE;
-   // может встретится конструкция *:*
-   if( txtfile.probe( B_COLON ) )
-    {
-     txtfile.read_it( B_ANY );
-     txtfile.read_it(B_OFIGPAREN);
-
-     Solarix::ExactWordEntryLocator omonym_resolver;
-     LoadPreciser( dict, txtfile, omonym_resolver );
-    }
-   else
-    {
-     if( txtfile.probe(B_OFIGPAREN) )
-      {
-       Solarix::ExactWordEntryLocator omonym_resolver;
-       LoadPreciser( dict, txtfile, omonym_resolver );
-      }
-    }
-  }
- else
-  {
-   lem::UCString class_name(t1.string());
-
-   if( sets.IsWordEntrySetName(class_name) )
-    {
-     wordentryset_name = class_name;
-     if( txtfile.probe(B_OFIGPAREN) )
-      {
-       Solarix::ExactWordEntryLocator omonym_resolver;
-       LoadPreciser( dict, txtfile, omonym_resolver );
-      }
-    }
-   else if( sets.IsWordSetName(class_name) )
-    {
-     wordset_name = class_name;
-     if( txtfile.probe(B_OFIGPAREN) )
-      {
-       Solarix::ExactWordEntryLocator omonym_resolver;
-       LoadPreciser( dict, txtfile, omonym_resolver );
-      }
-    }
-   else
-    {
-     id_class = dict.GetSynGram().FindClass(class_name);
-     if( id_class==UNKNOWN )
-      {
-       lem::Iridium::Print_Error(t1,txtfile);
-       dict.GetIO().merr().printf( "Unknown class %us\n", class_name.c_str() );
-       throw lem::E_BaseException();
-      }
-
-     if( txtfile.probe( B_COLON ) )
-      {
-       lem::Iridium::BSourceState ebeg = txtfile.tellp();
-       const UCString mname=sol_read_multyname( dict.GetIO(), txtfile, B_OFIGPAREN );
-
-       Solarix::Lexem lex_name(mname);
-       dict.GetLexAuto().TranslateLexem(lex_name,true,facts.GetLanguage());
-
-       Solarix::ExactWordEntryLocator omonym_resolver;
-       
-       // Имеем пару класс:имя_статьи
-       LoadPreciser( dict, txtfile, omonym_resolver );
-       
-       // Пытаемся найти статью.
-       if( mname.front()!=sol_get_token(B_ANY) )
+        t1 = txtfile.read();
+        if (t1.string().eqi(L"regex"))
         {
-         // Считан НЕ квантор всеобщности, так что это должно
-         // быть имя статьи.
-         // Попытаемся найти статью среди уже загруженных, причем
-         // ищем с критерием принадлежности определенному синтаксическому
-         // классу.
-
-
-         if( dict.GetSynGram().IsOmonym( id_class, lex_name ) )
-          {
-           const SG_Class & pos = dict.GetSynGram().GetClass(id_class);
-           for( lem::Container::size_type i=0; i<coords.size(); ++i )
-            {
-             if( pos.attrs().find( coords[i].GetCoord() )!=UNKNOWN || pos.tags().find( coords[i].GetCoord() )!=UNKNOWN )
-              {
-               omonym_resolver.pairs.push_back( coords[i] );
-               // вообще говоря, атрибут или тег можно убрать из списка coords...
-              }
-             else if( pos.dims().find( coords[i].GetCoord() )!=UNKNOWN )
-              {
-              }
-             else
-              {
-               const GramCoord & c = dict.GetSynGram().coords()[coords[i].GetCoord().GetIndex()];
-               lem::Iridium::Print_Error(ebeg,txtfile);
-               dict.GetIO().merr().printf( "Part of speech [%us] does not have coordinate [%us]\n", class_name.c_str(), c.GetName().string().c_str() );
-               throw lem::E_BaseException();
-              }
-            }
-
-
-           lem::MCollect<int> ies;
-
-           dict.GetSynGram().FindEntries( lex_name, ies );
-           
-           int icur=0;
-           while( icur<CastSizeToInt(ies.size()) )
-            {
-             const int ekey = ies[icur];
-             const SG_Entry &e = dict.GetSynGram().GetEntry(ekey);
-             if( e.GetClass()!=id_class )
-              {
-               ies.Remove(icur);
-               continue; 
-              }
-             else
-              {
-               bool match = omonym_resolver.Check( e, dict.GetSynGram() );
-           
-               if( !match )
-                {
-                 ies.Remove(icur);
-                 continue; 
-                }
-               else
-                {
-                 icur++;
-                } 
-              }
-            }
-
-           if( ies.size()==1 )
-            id_entry = ies.front();
-          }
-         else
-          {
-           const int found_id_entry = dict.GetSynGram().FindEntry2( lex_name, id_class );
-
-           if( found_id_entry!=UNKNOWN )
-            {
-             if( omonym_resolver.Empty() )
-              id_entry = found_id_entry;
-             else
-              {
-               const SG_Entry &e = dict.GetSynGram().GetEntry(found_id_entry);
-               if( omonym_resolver.Check( e, dict.GetSynGram() ) )
-                id_entry = found_id_entry;
-              }
-            }
-          }
-
-         // Нашли ?
-         if( id_entry==UNKNOWN )
-          {
-           // сделаем попытку найти метастатью
-           id_metaentry=dict.GetSynGram().FindMetaEntry(mname,id_class);
-
-           if( id_metaentry==UNKNOWN )
-            {
-             // Нет! Выводим сообщение об неверном имени словарной статьи.
-             lem::Iridium::Print_Error(ebeg,txtfile);
-             dict.GetIO().merr().printf( "The entry [%vfE%us%vn] is not previously declared in grammar\n", mname.c_str() );
-             throw lem::E_BaseException();
-            }
-          }
+            is_regex = true;
         }
-      }
+        else if (t1.string().eqi(L"regex_strict"))
+        {
+            is_regex = case_sensitive = true;
+        }
+        else
+        {
+            lem::Iridium::Print_Error(t1, txtfile);
+            dict.GetIO().merr().printf("Unknown function %us\n", t1.string().c_str());
+            throw lem::E_BaseException();
+        }
+
+        txtfile.read_it(B_OROUNDPAREN);
+        regex_str = txtfile.read().GetFullStr();
+
+        if (regex_str.front() == L'"' && regex_str.back() == L'"')
+        {
+            regex_str.strip_quotes();
+        }
+        else if (regex_str.front() == L'\'' && regex_str.back() == L'\'')
+        {
+            regex_str.strip_apostrophes();
+        }
+        else
+        {
+            lem::Iridium::Print_Error(t1, txtfile);
+            dict.GetIO().merr().printf("\" or ' are exected for argument %us\n", regex_str.c_str());
+            throw lem::E_BaseException();
+        }
+
+        txtfile.read_it(B_CROUNDPAREN);
+
+        if (txtfile.probe(B_OFIGPAREN))
+        {
+            Solarix::ExactWordEntryLocator omonym_resolver;
+            LoadPreciser(dict, txtfile, omonym_resolver);
+        }
+
+        return;
     }
-  }
+
+    WordEntrySet & sets = dict.GetLexAuto().GetWordEntrySet();
+
+    if (lem::in_quotes(t1.string()))
+    {
+        Lexem lex(t1.string().strip_quotes());
+
+        dict.GetLexAuto().TranslateLexem(lex, true, facts.GetLanguage());
+        word = lex;
+
+        if (txtfile.probe(B_OFIGPAREN))
+        {
+            Solarix::ExactWordEntryLocator omonym_resolver;
+            LoadPreciser(dict, txtfile, omonym_resolver);
+        }
+    }
+    else if (lem::in_apostrophes(t1.string()))
+    {
+        Lexem lex(t1.string().strip_apostrophes());
+
+        dict.GetLexAuto().TranslateLexem(lex, true, facts.GetLanguage());
+        word = lex;
+
+        if (txtfile.probe(B_OFIGPAREN))
+        {
+            Solarix::ExactWordEntryLocator omonym_resolver;
+            LoadPreciser(dict, txtfile, omonym_resolver);
+        }
+    }
+    else if (t1.GetToken() == B_ANY)
+    {
+        id_entry = ANY_STATE;
+        // РјРѕР¶РµС‚ РІСЃС‚СЂРµС‚РёС‚СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС†РёСЏ *:*
+        if (txtfile.probe(B_COLON))
+        {
+            txtfile.read_it(B_ANY);
+            txtfile.read_it(B_OFIGPAREN);
+
+            Solarix::ExactWordEntryLocator omonym_resolver;
+            LoadPreciser(dict, txtfile, omonym_resolver);
+        }
+        else
+        {
+            if (txtfile.probe(B_OFIGPAREN))
+            {
+                Solarix::ExactWordEntryLocator omonym_resolver;
+                LoadPreciser(dict, txtfile, omonym_resolver);
+            }
+        }
+    }
+    else
+    {
+        lem::UCString class_name(t1.string());
+
+        if (sets.IsWordEntrySetName(class_name))
+        {
+            wordentryset_name = class_name;
+            if (txtfile.probe(B_OFIGPAREN))
+            {
+                Solarix::ExactWordEntryLocator omonym_resolver;
+                LoadPreciser(dict, txtfile, omonym_resolver);
+            }
+        }
+        else if (sets.IsWordSetName(class_name))
+        {
+            wordset_name = class_name;
+            if (txtfile.probe(B_OFIGPAREN))
+            {
+                Solarix::ExactWordEntryLocator omonym_resolver;
+                LoadPreciser(dict, txtfile, omonym_resolver);
+            }
+        }
+        else
+        {
+            id_class = dict.GetSynGram().FindClass(class_name);
+            if (id_class == UNKNOWN)
+            {
+                lem::Iridium::Print_Error(t1, txtfile);
+                dict.GetIO().merr().printf("Unknown class %us\n", class_name.c_str());
+                throw lem::E_BaseException();
+            }
+
+            if (txtfile.probe(B_COLON))
+            {
+                lem::Iridium::BSourceState ebeg = txtfile.tellp();
+                const UCString mname = sol_read_multyname(dict.GetIO(), txtfile, B_OFIGPAREN);
+
+                Solarix::Lexem lex_name(mname);
+                dict.GetLexAuto().TranslateLexem(lex_name, true, facts.GetLanguage());
+
+                Solarix::ExactWordEntryLocator omonym_resolver;
+
+                // РРјРµРµРј РїР°СЂСѓ РєР»Р°СЃСЃ:РёРјСЏ_СЃС‚Р°С‚СЊРё
+                LoadPreciser(dict, txtfile, omonym_resolver);
+
+                // РџС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё СЃС‚Р°С‚СЊСЋ.
+                if (mname.front() != sol_get_token(B_ANY))
+                {
+                    // РЎС‡РёС‚Р°РЅ РќР• РєРІР°РЅС‚РѕСЂ РІСЃРµРѕР±С‰РЅРѕСЃС‚Рё, С‚Р°Рє С‡С‚Рѕ СЌС‚Рѕ РґРѕР»Р¶РЅРѕ
+                    // Р±С‹С‚СЊ РёРјСЏ СЃС‚Р°С‚СЊРё.
+                    // РџРѕРїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё СЃС‚Р°С‚СЊСЋ СЃСЂРµРґРё СѓР¶Рµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С…, РїСЂРёС‡РµРј
+                    // РёС‰РµРј СЃ РєСЂРёС‚РµСЂРёРµРј РїСЂРёРЅР°РґР»РµР¶РЅРѕСЃС‚Рё РѕРїСЂРµРґРµР»РµРЅРЅРѕРјСѓ СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєРѕРјСѓ
+                    // РєР»Р°СЃСЃСѓ.
 
 
- return;
+                    if (dict.GetSynGram().IsOmonym(id_class, lex_name))
+                    {
+                        const SG_Class & pos = dict.GetSynGram().GetClass(id_class);
+                        for (lem::Container::size_type i = 0; i < coords.size(); ++i)
+                        {
+                            if (pos.attrs().find(coords[i].GetCoord()) != UNKNOWN || pos.tags().find(coords[i].GetCoord()) != UNKNOWN)
+                            {
+                                omonym_resolver.pairs.push_back(coords[i]);
+                                // РІРѕРѕР±С‰Рµ РіРѕРІРѕСЂСЏ, Р°С‚СЂРёР±СѓС‚ РёР»Рё С‚РµРі РјРѕР¶РЅРѕ СѓР±СЂР°С‚СЊ РёР· СЃРїРёСЃРєР° coords...
+                            }
+                            else if (pos.dims().find(coords[i].GetCoord()) != UNKNOWN)
+                            {
+                            }
+                            else
+                            {
+                                const GramCoord & c = dict.GetSynGram().coords()[coords[i].GetCoord().GetIndex()];
+                                lem::Iridium::Print_Error(ebeg, txtfile);
+                                dict.GetIO().merr().printf("Part of speech [%us] does not have coordinate [%us]\n", class_name.c_str(), c.GetName().string().c_str());
+                                throw lem::E_BaseException();
+                            }
+                        }
+
+
+                        lem::MCollect<int> ies;
+
+                        dict.GetSynGram().FindEntries(lex_name, ies);
+
+                        int icur = 0;
+                        while (icur < CastSizeToInt(ies.size()))
+                        {
+                            const int ekey = ies[icur];
+                            const SG_Entry &e = dict.GetSynGram().GetEntry(ekey);
+                            if (e.GetClass() != id_class)
+                            {
+                                ies.Remove(icur);
+                                continue;
+                            }
+                            else
+                            {
+                                bool match = omonym_resolver.Check(e, dict.GetSynGram());
+
+                                if (!match)
+                                {
+                                    ies.Remove(icur);
+                                    continue;
+                                }
+                                else
+                                {
+                                    icur++;
+                                }
+                            }
+                        }
+
+                        if (ies.size() == 1)
+                            id_entry = ies.front();
+                    }
+                    else
+                    {
+                        const int found_id_entry = dict.GetSynGram().FindEntry2(lex_name, id_class);
+
+                        if (found_id_entry != UNKNOWN)
+                        {
+                            if (omonym_resolver.Empty())
+                                id_entry = found_id_entry;
+                            else
+                            {
+                                const SG_Entry &e = dict.GetSynGram().GetEntry(found_id_entry);
+                                if (omonym_resolver.Check(e, dict.GetSynGram()))
+                                    id_entry = found_id_entry;
+                            }
+                        }
+                    }
+
+                    // РќР°С€Р»Рё ?
+                    if (id_entry == UNKNOWN)
+                    {
+                        // СЃРґРµР»Р°РµРј РїРѕРїС‹С‚РєСѓ РЅР°Р№С‚Рё РјРµС‚Р°СЃС‚Р°С‚СЊСЋ
+                        id_metaentry = dict.GetSynGram().FindMetaEntry(mname, id_class);
+
+                        if (id_metaentry == UNKNOWN)
+                        {
+                            // РќРµС‚! Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РЅРµРІРµСЂРЅРѕРј РёРјРµРЅРё СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
+                            lem::Iridium::Print_Error(ebeg, txtfile);
+                            dict.GetIO().merr().printf("The entry [%vfE%us%vn] is not previously declared in grammar\n", mname.c_str());
+                            throw lem::E_BaseException();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    return;
 }
 #endif
 
@@ -306,252 +310,246 @@ void KB_Argument::LoadTxt( const KB_Facts & facts, Solarix::Dictionary &dict, le
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
 void KB_Argument::LoadPreciser(
-                               Dictionary & dict,
-                               lem::Iridium::Macro_Parser & txtfile,
-                               Solarix::ExactWordEntryLocator & locator
-                              )
+    Dictionary & dict,
+    lem::Iridium::Macro_Parser & txtfile,
+    Solarix::ExactWordEntryLocator & locator
+)
 {
- SynGram &sg = dict.GetSynGram();
+    SynGram &sg = dict.GetSynGram();
 
- while( !txtfile.eof() )
-  {
-   if( txtfile.pick().GetToken()==B_CFIGPAREN )
+    while (!txtfile.eof())
     {
-     txtfile.read();
-     break;
+        if (txtfile.pick().GetToken() == B_CFIGPAREN)
+        {
+            txtfile.read();
+            break;
+        }
+
+        if (txtfile.probe(L"aux"))
+        {
+            locator.LoadAuxSelector(txtfile, dict.GetSynGram());
+            continue;
+        }
+
+        // РјРѕР¶РµС‚ Р±С‹С‚СЊ Р·Р°РґР°РЅРёРµ РїСЂРѕСЃС‚РѕР№ РїСЂРѕРІРµСЂРєРё РЅР° СЃРІСЏР·СЊ РІ С‚РµР·Р°СѓСЂСѓСЃРµ
+        if (txtfile.pick().GetToken() == B_OTRIPAREN)
+        {
+            if (ThesaurusCheck_Link != UNKNOWN)
+            {
+                dict.GetIO().merr().printf("Only one thesaurus check is allowed\n");
+                lem::Iridium::Print_Error(txtfile);
+                throw lem::E_BaseException();
+            }
+
+            Solarix::Tree_Link link(txtfile, sg);
+            ThesaurusCheck_Link = link.GetState();
+
+            // РґР°Р»РµРµ РёРґРµС‚ СЃРїРµС†РёС„РёРєР°С†РёСЏ СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
+            lem::Iridium::BethToken class_name = txtfile.read();
+            const int iclass = sg.FindClass(class_name.string());
+            if (iclass == UNKNOWN)
+            {
+                sg.GetIO().merr().printf("Unknown class name [%us]\n", class_name.string().c_str());
+                lem::Iridium::Print_Error(txtfile);
+                throw lem::E_BaseException();
+            }
+
+            txtfile.read_it(B_COLON);
+
+            lem::Iridium::BSourceState ebeg = txtfile.tellp();
+            const UCString mname = sol_read_multyname(sg.GetIO(), txtfile, B_OFIGPAREN);
+            txtfile.read_it(B_CFIGPAREN);
+
+            // РРјРµРµРј РїР°СЂСѓ РєР»Р°СЃСЃ:РёРјСЏ_СЃС‚Р°С‚СЊРё
+            ThesaurusCheck_Entry = sg.FindEntry(mname, iclass, false);
+
+            // РќР°С€Р»Рё ?
+            if (ThesaurusCheck_Entry == UNKNOWN)
+            {
+                // РќРµС‚! Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РЅРµРІРµСЂРЅРѕРј РёРјРµРЅРё СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё.
+                lem::Iridium::Print_Error(ebeg, txtfile);
+                sg.GetIO().merr().printf("The entry [%us:%vfE%us%vn] is not previously declared in grammar\n", class_name.string().c_str(), mname.c_str());
+                throw lem::E_BaseException();
+            }
+
+            continue;
+        }
+
+        // РґР»СЏ РѕР±С‹С‡РЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°:СЃРѕСЃС‚РѕСЏРЅРёРµ
+        // РґР»СЏ Р±РёСЃС‚Р°Р±РёР»СЊРЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°
+        // РґР»СЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё РІ РёРјРµРЅРѕРІР°РЅРЅС‹С… С‚РѕС‡РєР°С… СЃР»РµРІР° =РёРјСЏ_С‚РѕС‡РєРё:РєРѕРѕСЂРґРёРЅР°С‚Р°
+        // СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ С„РѕСЂРјР°С‚ РѕРїРёСЃР°РЅРёСЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ РёРјРµРЅРѕРІР°РЅРЅС‹РјРё С‚РѕС‡РєР°РјРё =РёРјСЏ_РєРѕРѕСЂРґ->РёРјСЏ_С‚РѕС‡РєРё:РёРјСЏ_РєРѕРѕСЂРґ
+        lem::Iridium::BethToken coord_name = txtfile.read();
+
+        bool AFFIRM = true;
+
+        if (coord_name.GetToken() == B_NEGATIVE)
+        {
+            // РћРїРµСЂР°С‚РѕСЂ РѕС‚СЂРёС†Р°РЅРёСЏ РїРµСЂРµРґ РѕРїСЂРµРґРµР»РµРЅРёРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹!
+            AFFIRM = false;
+            coord_name = txtfile.read();
+        }
+
+        const GramCoordAdr iglob_coord = sg.FindCoord(coord_name.string());
+
+        if (!iglob_coord.IsDefined())
+        {
+            sg.GetIO().merr().printf("Unknown coordinate %us\n", coord_name.c_str());
+            lem::Iridium::Print_Error(coord_name, txtfile);
+            throw lem::E_BaseException();
+        }
+
+        if (sg.coords()[iglob_coord.GetIndex()].IsBistable())
+        {
+            // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅРѕ.
+            coords.push_back(GramCoordPair(iglob_coord, AFFIRM));
+        }
+        else
+        {
+            // РџРѕСЃР»Рµ РґРІРѕРµС‚РѕС‡РёСЏ РґРѕР»Р¶РЅРѕ РёРґС‚Рё РёРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+            txtfile.read_it(B_COLON);
+
+            // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ.
+            BethToken state_name = txtfile.read();
+
+            // РџРѕР»СѓС‡РёРј РёРЅРґРµРєСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+            const int istate = sg.coords()[iglob_coord.GetIndex()]
+                .FindState(state_name.string());
+            if (istate == UNKNOWN)
+            {
+                // РќРµС‚ С‚Р°РєРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ СЌС‚РѕРіРѕ РёР·РјРµСЂРµРЅРёСЏ.
+                lem::Iridium::Print_Error(state_name, txtfile);
+                sg.GetIO().merr().printf(
+                    "State [%vfE%us%vn] is not declared for coordinate [%vfE%us%vn]\n"
+                    , state_name.c_str(), coord_name.c_str()
+                );
+                throw E_ParserError();
+            }
+
+            coords.push_back(GramCoordEx(iglob_coord, istate, AFFIRM));
+        }
     }
 
-   if( txtfile.probe( L"aux" ) )
-    {
-     locator.LoadAuxSelector( txtfile, dict.GetSynGram() );
-     continue;
-    }
-
-   // может быть задание простой проверки на связь в тезаурусе
-   if( txtfile.pick().GetToken()==B_OTRIPAREN )
-    {
-     if( ThesaurusCheck_Link!=UNKNOWN )
-      {
-       dict.GetIO().merr().printf( "Only one thesaurus check is allowed\n" );
-       lem::Iridium::Print_Error(txtfile);
-       throw lem::E_BaseException();
-      }
-
-     Solarix::Tree_Link link( txtfile, sg );
-     ThesaurusCheck_Link = link.GetState();
-     
-     // далее идет спецификация словарной статьи.
-     lem::Iridium::BethToken class_name = txtfile.read();
-     const int iclass=sg.FindClass(class_name.string());
-     if( iclass==UNKNOWN )
-      {
-       sg.GetIO().merr().printf( "Unknown class name [%us]\n", class_name.string().c_str() );
-       lem::Iridium::Print_Error(txtfile);
-       throw lem::E_BaseException();
-      }
-
-     txtfile.read_it( B_COLON );
-
-     lem::Iridium::BSourceState ebeg = txtfile.tellp();
-     const UCString mname=sol_read_multyname( sg.GetIO(), txtfile, B_OFIGPAREN );
-     txtfile.read_it( B_CFIGPAREN );
-     
-     // Имеем пару класс:имя_статьи
-     ThesaurusCheck_Entry=sg.FindEntry(mname,iclass,false);
-     
-     // Нашли ?
-     if( ThesaurusCheck_Entry==UNKNOWN )
-      {
-       // Нет! Выводим сообщение об неверном имени словарной статьи.
-       lem::Iridium::Print_Error(ebeg,txtfile);
-       sg.GetIO().merr().printf( "The entry [%us:%vfE%us%vn] is not previously declared in grammar\n", class_name.string().c_str(), mname.c_str() );
-       throw lem::E_BaseException();
-      }
-
-     continue;
-    }
-
-   // для обычных: координата:состояние
-   // для бистабильных: координата
-   // для согласования с координатами в именованных точках слева =имя_точки:координата
-   // расширенный формат описания согласования с именованными точками =имя_коорд->имя_точки:имя_коорд
-   lem::Iridium::BethToken coord_name = txtfile.read();
-
-   bool AFFIRM=true;
-
-   if( coord_name.GetToken()==B_NEGATIVE )
-    {
-     // Оператор отрицания перед определением координаты!
-     AFFIRM=false;
-     coord_name = txtfile.read();
-    }
-
-   const GramCoordAdr iglob_coord = sg.FindCoord(coord_name.string());
-  
-   if( !iglob_coord.IsDefined() )
-    {
-     sg.GetIO().merr().printf( "Unknown coordinate %us\n", coord_name.c_str() );
-     lem::Iridium::Print_Error(coord_name,txtfile);
-     throw lem::E_BaseException();
-    }
-  
-   if( sg.coords()[iglob_coord.GetIndex()].IsBistable() )
-    {
-     // Имя состояния не может быть указано.
-     coords.push_back(GramCoordPair(iglob_coord,AFFIRM));
-    }
-   else
-    {
-     // После двоеточия должно идти имя состояния для координаты.
-     txtfile.read_it(B_COLON);
-  
-     // Имя состояния.
-     BethToken state_name = txtfile.read();
-  
-     // Получим индекс состояния для определенной координаты.
-     const int istate = sg.coords()[iglob_coord.GetIndex()]
-                            .FindState(state_name.string());
-     if( istate==UNKNOWN )
-      {
-       // Нет такого состояния для этого измерения.
-       lem::Iridium::Print_Error(state_name,txtfile);
-       sg.GetIO().merr().printf(
-                                "State [%vfE%us%vn] is not declared for coordinate [%vfE%us%vn]\n"
-                                , state_name.c_str(),coord_name.c_str()
-                               );
-       throw E_ParserError();
-      }
-  
-     coords.push_back( GramCoordEx(iglob_coord,istate,AFFIRM) );
-    }
-  }
-
- return;
+    return;
 }
 #endif
 
 
 
 #if defined SOL_CAA
-bool KB_Argument::Match( Solarix::Dictionary *dict, const Solarix::Word_Form &val ) const
+bool KB_Argument::Match(Solarix::Dictionary *dict, const Solarix::Word_Form &val) const
 {
-/*
-#if LEM_DEBUGGING==1
-if( val.GetName()->eqi(L"подвалы") )
- {
-  lem::mout->printf("");
- }
-#endif
-*/
- if( is_regex )
-  {
-   const lem::UCString & word = * val.GetName();
-   bool r = boost::regex_match( word.c_str(), rx );
-   if( !r )   
-    return Positive(false);
-  }
- else if( !word.empty() )
-  {
-   if( word != * val.GetNormalized() )
-    return Positive(false);
-  }
-
- if( id_metaentry!=UNKNOWN )
-  {
-   return dict->GetSynGram().GetStorage().DoesMetaEntryContains( id_metaentry, val.GetEntryKey() );
-  }
- else if( id_entry!=UNKNOWN )
-  {
-   if( id_entry!=ANY_STATE && id_entry!=val.GetEntryKey() )
-    return Positive(false);
-  }
- else if( id_class!=UNKNOWN && id_class!=dict->GetSynGram().GetEntry(val.GetEntryKey()).GetClass() )
-  return Positive(false);
- 
- if( !wordentryset_name.empty() )
-  {
-   LexicalAutomat &la = dict->GetLexAuto();
-   const bool set_contains = la.GetWordEntrySet().FindWordEntrySet( wordentryset_name, val.GetEntryKey() );
-   if( !set_contains )
-    return Positive(false);
-  }
- else if( !wordset_name.empty() )
-  {
-   LexicalAutomat &la = dict->GetLexAuto();
-   const bool set_contains = la.GetWordEntrySet().FindWordSet( wordset_name, *val.GetName() );
-   if( !set_contains )
-    return Positive(false);
-  }
-
-
- for( lem::Container::size_type i=0; i<coords.size(); ++i )
-  {
-   if( coords[i].GetAffirm() )
+    if (is_regex)
     {
-     if( val.GetPairs().FindOnce( coords[i] )==UNKNOWN )
-      {
-       return Positive(false);
-      }
+        const lem::UCString & word = *val.GetName();
+        bool r = boost::regex_match(word.c_str(), rx);
+        if (!r)
+            return Positive(false);
     }
-   else
+    else if (!word.empty())
     {
-     if( val.GetPairs().FindOnce( coords[i] )!=UNKNOWN )
-      {
-       return Positive(false);
-      }
-     else
-      {
-       // такой координатной пары нет.
-       // для бистабильных необходима дополнительная проверка, так как отсутствие и состояние 0 равносильны.
-       if( dict->GetSynGram().coords()[ coords[i].GetCoord().GetIndex() ].IsBistable() )
-        if( coords[i].GetState()!=0 )
-         {
-          return Positive(false);
-         }
-      }
+        if (word != *val.GetNormalized())
+            return Positive(false);
     }
-  }
 
- if( ThesaurusCheck_Link!=UNKNOWN )
-  {
-   // проверяем, что данная статья связана в тезаурусе в указанной статьей заданным типом связи
-   int id_link = dict->GetSynGram().Get_Net().Find_Linked_Entry( val.GetEntryKey(), ThesaurusCheck_Link, ThesaurusCheck_Entry );
-   if( id_link==UNKNOWN )
-    return Positive(false);
-  }
+    if (id_metaentry != UNKNOWN)
+    {
+        return dict->GetSynGram().GetStorage().DoesMetaEntryContains(id_metaentry, val.GetEntryKey());
+    }
+    else if (id_entry != UNKNOWN)
+    {
+        if (id_entry != ANY_STATE && id_entry != val.GetEntryKey())
+            return Positive(false);
+    }
+    else if (id_class != UNKNOWN && id_class != dict->GetSynGram().GetEntry(val.GetEntryKey()).GetClass())
+        return Positive(false);
 
- return Positive(true);
+    if (!wordentryset_name.empty())
+    {
+        LexicalAutomat &la = dict->GetLexAuto();
+        const bool set_contains = la.GetWordEntrySet().FindWordEntrySet(wordentryset_name, val.GetEntryKey());
+        if (!set_contains)
+            return Positive(false);
+    }
+    else if (!wordset_name.empty())
+    {
+        LexicalAutomat &la = dict->GetLexAuto();
+        const bool set_contains = la.GetWordEntrySet().FindWordSet(wordset_name, *val.GetName());
+        if (!set_contains)
+            return Positive(false);
+    }
+
+
+    for (lem::Container::size_type i = 0; i < coords.size(); ++i)
+    {
+        if (coords[i].GetAffirm())
+        {
+            if (val.GetPairs().FindOnce(coords[i]) == UNKNOWN)
+            {
+                return Positive(false);
+            }
+        }
+        else
+        {
+            if (val.GetPairs().FindOnce(coords[i]) != UNKNOWN)
+            {
+                return Positive(false);
+            }
+            else
+            {
+                // С‚Р°РєРѕР№ РєРѕРѕСЂРґРёРЅР°С‚РЅРѕР№ РїР°СЂС‹ РЅРµС‚.
+                // РґР»СЏ Р±РёСЃС‚Р°Р±РёР»СЊРЅС‹С… РЅРµРѕР±С…РѕРґРёРјР° РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РїСЂРѕРІРµСЂРєР°, С‚Р°Рє РєР°Рє РѕС‚СЃСѓС‚СЃС‚РІРёРµ Рё СЃРѕСЃС‚РѕСЏРЅРёРµ 0 СЂР°РІРЅРѕСЃРёР»СЊРЅС‹.
+                if (dict->GetSynGram().coords()[coords[i].GetCoord().GetIndex()].IsBistable())
+                {
+                    if (coords[i].GetState() != 0)
+                    {
+                        return Positive(false);
+                    }
+                }
+            }
+        }
+    }
+
+    if (ThesaurusCheck_Link != UNKNOWN)
+    {
+        // РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РґР°РЅРЅР°СЏ СЃС‚Р°С‚СЊСЏ СЃРІСЏР·Р°РЅР° РІ С‚РµР·Р°СѓСЂСѓСЃРµ РІ СѓРєР°Р·Р°РЅРЅРѕР№ СЃС‚Р°С‚СЊРµР№ Р·Р°РґР°РЅРЅС‹Рј С‚РёРїРѕРј СЃРІСЏР·Рё
+        int id_link = dict->GetSynGram().Get_Net().Find_Linked_Entry(val.GetEntryKey(), ThesaurusCheck_Link, ThesaurusCheck_Entry);
+        if (id_link == UNKNOWN)
+            return Positive(false);
+    }
+
+    return Positive(true);
 }
 #endif
 
 
 #if defined SOL_CAA
-bool KB_Argument::Positive( bool f ) const
+bool KB_Argument::Positive(bool f) const
 {
- return is_positive ? f : !f;
+    return is_positive ? f : !f;
 }
 #endif
 
 
-bool KB_Argument::IsQueryableByEntry(void) const
+bool KB_Argument::IsQueryableByEntry() const
 {
- return (!lem::is_quantor(id_entry) || id_metaentry!=UNKNOWN) && is_positive;
+    return (!lem::is_quantor(id_entry) || id_metaentry != UNKNOWN) && is_positive;
 }
 
 
-bool KB_Argument::IsQueryableByWord(void) const
+bool KB_Argument::IsQueryableByWord() const
 {
- return !word.empty() && is_positive;
+    return !word.empty() && is_positive;
 }
 
 
 bool KB_Argument::NeedsFeatureCheck() const
 {
- return !coords.empty();
+    return !coords.empty();
 }
 
 
 bool KB_Argument::IsMetaEntry() const
 {
- return id_metaentry!=UNKNOWN;
+    return id_metaentry != UNKNOWN;
 }

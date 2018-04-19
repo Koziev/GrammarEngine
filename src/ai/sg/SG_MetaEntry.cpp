@@ -15,251 +15,251 @@ using namespace Solarix;
 MetaEntry::MetaEntry() : id(UNKNOWN), id_class(UNKNOWN)
 {}
 
-MetaEntry::MetaEntry( int _id, int _id_class, const lem::UCString &_name, lem::MCollect<int> & _entries )
-: id(_id), id_class(_id_class), name(_name), entries(_entries)
+MetaEntry::MetaEntry(int _id, int _id_class, const lem::UCString &_name, lem::MCollect<int> & _entries)
+    : id(_id), id_class(_id_class), name(_name), entries(_entries)
 {
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void MetaEntry::LoadTxt( SynGram & sg, lem::Iridium::Macro_Parser & txtfile )
+void MetaEntry::LoadTxt(SynGram & sg, lem::Iridium::Macro_Parser & txtfile)
 {
- /* Общий формат объявления группы:
+    /* РћР±С‰РёР№ С„РѕСЂРјР°С‚ РѕР±СЉСЏРІР»РµРЅРёСЏ РіСЂСѓРїРїС‹:
 
-    entry_group имя_группы : класс
+       entry_group РёРјСЏ_РіСЂСѓРїРїС‹ : РєР»Р°СЃСЃ
+       {
+        С‡Р°СЃС‚СЊ_СЂРµС‡Рё:РёРјСЏ_СЃС‚Р°С‚СЊРё1{}
+        С‡Р°СЃС‚СЊ_СЂРµС‡Рё:РёРјСЏ_СЃС‚Р°С‚СЊРё2{}
+        ...
+       }
+    */
+
+
+    Solarix::Lexem lname = Solarix::sol_read_multyname(sg.GetIO(), txtfile, B_COLON);
+
+
+    lem::Iridium::BethToken t_pos = txtfile.read();
+    id_class = sg.FindClass(t_pos.string().c_str());
+    if (id_class == UNKNOWN)
     {
-     часть_речи:имя_статьи1{}
-     часть_речи:имя_статьи2{}
-     ...
-    }
- */
-
-
- Solarix::Lexem lname = Solarix::sol_read_multyname( sg.GetIO(), txtfile, B_COLON );
-
-
- lem::Iridium::BethToken t_pos = txtfile.read();
- id_class=sg.FindClass(t_pos.string().c_str());
- if( id_class==UNKNOWN )
-  {
-   lem::Iridium::Print_Error(t_pos,txtfile);
-   sg.GetIO().merr().printf(
-                              "Part of speech [%vfE%us%vn] is not previously declared in grammar\n"
-                              , t_pos.string().c_str()
-                             );
-   throw lem::E_ParserError();
-  }
- 
- 
- txtfile.read_it( B_OFIGPAREN ); 
-
- const int id_language = sg.GetClass(id_class).GetLanguage();
- sg.GetDict().GetLexAuto().TranslateLexem( lname, true, id_language );
- name = lname;
-
- while( !txtfile.eof() )
- {
-  if( txtfile.probe( B_CFIGPAREN ) )
-   break;
-
-  lem::Iridium::BethToken t_pos2 = txtfile.read();
-  const int id_class2=sg.FindClass(t_pos2.string());
-  if( (id_class2)==UNKNOWN )
-   {
-    lem::Iridium::Print_Error(t_pos2,txtfile);
-  
-    sg.GetIO().merr().printf(
-                               "Part of speech [%vfE%us%vn] is not previously declared in grammar\n"
-                               , t_pos2.string().c_str()
-                              );
-
-    throw lem::E_ParserError();
-   }
-
-  txtfile.read_it( B_COLON );
-  lem::Iridium::BSourceState ebeg = txtfile.tellp();
-  Solarix::Lexem ename=sol_read_multyname( sg.GetIO(), txtfile, B_OFIGPAREN );
-  CP_Array coords;
-
-  // Считываем список уточняющих координат
-  while( !txtfile.eof() )
-   {
-    if( txtfile.pick().GetToken()==B_CFIGPAREN )
-     {
-      txtfile.read();
-      break;
-     }
-  
-    // для обычных: координата:состояние
-    // для бистабильных: координата
-    // для согласования с координатами в именованных точках слева =имя_точки:координата
-    lem::Iridium::BethToken coord_name = txtfile.read();
-  
-    const GramCoordAdr iglob_coord = sg.FindCoord(coord_name.string());
-  
-    if( !iglob_coord.IsDefined() )
-     {
-      sg.GetIO().merr().printf( "Unknown coordinate %us\n", coord_name.c_str() );
-      lem::Iridium::Print_Error(coord_name,txtfile);
-      throw lem::E_BaseException();
-     }
-  
-    if( sg.coords()[iglob_coord.GetIndex()].IsBistable() )
-     {
-      // Имя состояния не может быть указано.
-      coords.push_back(GramCoordPair(iglob_coord,1));
-     }
-    else
-     {
-      // После двоеточия должно идти имя состояния для координаты.
-      txtfile.read_it(B_COLON);
-  
-      // Имя состояния.
-      BethToken state_name = txtfile.read();
-  
-      // Получим индекс состояния для определенной координаты.
-      const int istate = sg.coords()[iglob_coord.GetIndex()]
-                             .FindState(state_name.string());
-      if( istate==UNKNOWN )
-       {
-        // Нет такого состояния для этого измерения.
-        lem::Iridium::Print_Error(state_name,txtfile);
+        lem::Iridium::Print_Error(t_pos, txtfile);
         sg.GetIO().merr().printf(
-                                 "State [%vfE%us%vn] is not declared for coordinate [%vfE%us%vn]\n"
-                                 , state_name.c_str(),coord_name.c_str()
-                                );
-        throw E_ParserError();
-       }
-  
-      coords.push_back( GramCoordPair(iglob_coord,istate) );
-     }
-   }
-    
-  
-  sg.GetDict().GetLexAuto().TranslateLexem( ename, true, id_language );
+            "Part of speech [%vfE%us%vn] is not previously declared in grammar\n"
+            , t_pos.string().c_str()
+        );
+        throw lem::E_ParserError();
+    }
 
-  int ekey=UNKNOWN;
 
-  if( sg.IsOmonym( id_class2, ename ) )
-   {
-    // есть омонимы, поэтому надо тщательно проверять.
-    lem::MCollect<int> ies;
-    sg.FindEntries( ename, ies );
- 
-    int icur=0;
-    while( icur<CastSizeToInt(ies.size()) )
-     {
-      const int ekey = ies[icur];
-      const SG_Entry &e = sg.GetEntry(ekey);
-      if( e.GetClass()!=id_class2 )
-       {
-        ies.Remove(icur);
-        continue; 
-       }
-      else
-       {
-        bool match=true;
-        for( lem::Container::size_type k=0; k<coords.size(); ++k )
-         {
-          if( e.attrs().FindOnce( coords[k] )==UNKNOWN )
-           {
-            match=false;
+    txtfile.read_it(B_OFIGPAREN);
+
+    const int id_language = sg.GetClass(id_class).GetLanguage();
+    sg.GetDict().GetLexAuto().TranslateLexem(lname, true, id_language);
+    name = lname;
+
+    while (!txtfile.eof())
+    {
+        if (txtfile.probe(B_CFIGPAREN))
             break;
-           }
-         }
- 
-        if( !match )
-         {
-          ies.Remove(icur);
-          continue; 
-         }
+
+        lem::Iridium::BethToken t_pos2 = txtfile.read();
+        const int id_class2 = sg.FindClass(t_pos2.string());
+        if ((id_class2) == UNKNOWN)
+        {
+            lem::Iridium::Print_Error(t_pos2, txtfile);
+
+            sg.GetIO().merr().printf(
+                "Part of speech [%vfE%us%vn] is not previously declared in grammar\n"
+                , t_pos2.string().c_str()
+            );
+
+            throw lem::E_ParserError();
+        }
+
+        txtfile.read_it(B_COLON);
+        lem::Iridium::BSourceState ebeg = txtfile.tellp();
+        Solarix::Lexem ename = sol_read_multyname(sg.GetIO(), txtfile, B_OFIGPAREN);
+        CP_Array coords;
+
+        // РЎС‡РёС‚С‹РІР°РµРј СЃРїРёСЃРѕРє СѓС‚РѕС‡РЅСЏСЋС‰РёС… РєРѕРѕСЂРґРёРЅР°С‚
+        while (!txtfile.eof())
+        {
+            if (txtfile.pick().GetToken() == B_CFIGPAREN)
+            {
+                txtfile.read();
+                break;
+            }
+
+            // РґР»СЏ РѕР±С‹С‡РЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°:СЃРѕСЃС‚РѕСЏРЅРёРµ
+            // РґР»СЏ Р±РёСЃС‚Р°Р±РёР»СЊРЅС‹С…: РєРѕРѕСЂРґРёРЅР°С‚Р°
+            // РґР»СЏ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё РІ РёРјРµРЅРѕРІР°РЅРЅС‹С… С‚РѕС‡РєР°С… СЃР»РµРІР° =РёРјСЏ_С‚РѕС‡РєРё:РєРѕРѕСЂРґРёРЅР°С‚Р°
+            lem::Iridium::BethToken coord_name = txtfile.read();
+
+            const GramCoordAdr iglob_coord = sg.FindCoord(coord_name.string());
+
+            if (!iglob_coord.IsDefined())
+            {
+                sg.GetIO().merr().printf("Unknown coordinate %us\n", coord_name.c_str());
+                lem::Iridium::Print_Error(coord_name, txtfile);
+                throw lem::E_BaseException();
+            }
+
+            if (sg.coords()[iglob_coord.GetIndex()].IsBistable())
+            {
+                // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅРѕ.
+                coords.push_back(GramCoordPair(iglob_coord, 1));
+            }
+            else
+            {
+                // РџРѕСЃР»Рµ РґРІРѕРµС‚РѕС‡РёСЏ РґРѕР»Р¶РЅРѕ РёРґС‚Рё РёРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+                txtfile.read_it(B_COLON);
+
+                // РРјСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ.
+                BethToken state_name = txtfile.read();
+
+                // РџРѕР»СѓС‡РёРј РёРЅРґРµРєСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РєРѕРѕСЂРґРёРЅР°С‚С‹.
+                const int istate = sg.coords()[iglob_coord.GetIndex()]
+                    .FindState(state_name.string());
+                if (istate == UNKNOWN)
+                {
+                    // РќРµС‚ С‚Р°РєРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ РґР»СЏ СЌС‚РѕРіРѕ РёР·РјРµСЂРµРЅРёСЏ.
+                    lem::Iridium::Print_Error(state_name, txtfile);
+                    sg.GetIO().merr().printf(
+                        "State [%vfE%us%vn] is not declared for coordinate [%vfE%us%vn]\n"
+                        , state_name.c_str(), coord_name.c_str()
+                    );
+                    throw E_ParserError();
+                }
+
+                coords.push_back(GramCoordPair(iglob_coord, istate));
+            }
+        }
+
+
+        sg.GetDict().GetLexAuto().TranslateLexem(ename, true, id_language);
+
+        int ekey = UNKNOWN;
+
+        if (sg.IsOmonym(id_class2, ename))
+        {
+            // РµСЃС‚СЊ РѕРјРѕРЅРёРјС‹, РїРѕСЌС‚РѕРјСѓ РЅР°РґРѕ С‚С‰Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏС‚СЊ.
+            lem::MCollect<int> ies;
+            sg.FindEntries(ename, ies);
+
+            int icur = 0;
+            while (icur < CastSizeToInt(ies.size()))
+            {
+                const int ekey = ies[icur];
+                const SG_Entry &e = sg.GetEntry(ekey);
+                if (e.GetClass() != id_class2)
+                {
+                    ies.Remove(icur);
+                    continue;
+                }
+                else
+                {
+                    bool match = true;
+                    for (lem::Container::size_type k = 0; k < coords.size(); ++k)
+                    {
+                        if (e.attrs().FindOnce(coords[k]) == UNKNOWN)
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (!match)
+                    {
+                        ies.Remove(icur);
+                        continue;
+                    }
+                    else
+                    {
+                        icur++;
+                    }
+                }
+            }
+
+            if (ies.empty())
+            {
+                lem::Iridium::Print_Error(t_pos2, txtfile);
+                sg.GetIO().merr().printf("There is no entry matching the specification %us:%us\n", t_pos2.string().c_str(), ename.c_str());
+                throw lem::E_BaseException();
+            }
+
+            if (ies.size() > 1)
+            {
+                lem::Iridium::Print_Error(t_pos2, txtfile);
+                sg.GetIO().merr().printf("There are %d alternatives for word entry %us:%us\n", CastSizeToInt(ies.size()), t_pos2.string().c_str(), ename.c_str());
+                throw lem::E_BaseException();
+            }
+
+            ekey = ies.front();
+        }
         else
-         {
-          icur++;
-         } 
-       }
-     }
- 
-    if( ies.empty() )
-     {
-      lem::Iridium::Print_Error(t_pos2,txtfile);
-      sg.GetIO().merr().printf( "There is no entry matching the specification %us:%us\n", t_pos2.string().c_str(), ename.c_str() );
-      throw lem::E_BaseException();
-     }
- 
-    if( ies.size()>1 )
-     {
-      lem::Iridium::Print_Error(t_pos2,txtfile);
-      sg.GetIO().merr().printf( "There are %d alternatives for word entry %us:%us\n", CastSizeToInt(ies.size()), t_pos2.string().c_str(), ename.c_str() );
-      throw lem::E_BaseException();
-     }
- 
-    ekey = ies.front();
-   }
-  else
-   {
-    // так как омонимов нет, то можем использовать быстрый поиск словарной статьи по имени и части речи.
-    ekey = sg.FindEntry( ename, id_class2, false );
+        {
+            // С‚Р°Рє РєР°Рє РѕРјРѕРЅРёРјРѕРІ РЅРµС‚, С‚Рѕ РјРѕР¶РµРј РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р±С‹СЃС‚СЂС‹Р№ РїРѕРёСЃРє СЃР»РѕРІР°СЂРЅРѕР№ СЃС‚Р°С‚СЊРё РїРѕ РёРјРµРЅРё Рё С‡Р°СЃС‚Рё СЂРµС‡Рё.
+            ekey = sg.FindEntry(ename, id_class2, false);
 
-    if( lem::is_quantor(ekey) )
-     {
-      lem::Iridium::Print_Error(t_pos2,txtfile);
-      sg.GetIO().merr().printf( "Word entry %us:%us is not found\n", t_pos2.string().c_str(), ename.c_str() );
-      throw lem::E_BaseException();
-     }
-   }
+            if (lem::is_quantor(ekey))
+            {
+                lem::Iridium::Print_Error(t_pos2, txtfile);
+                sg.GetIO().merr().printf("Word entry %us:%us is not found\n", t_pos2.string().c_str(), ename.c_str());
+                throw lem::E_BaseException();
+            }
+        }
 
-  if( entries.find(ekey)!=UNKNOWN )
-   {
-    lem::Iridium::Print_Error(t_pos2,txtfile);
-    sg.GetIO().merr().printf( "Entry %us:%us (%d) is already added to metaentry [%us]:", t_pos2.string().c_str(), ename.c_str(), ekey, name.c_str() );
+        if (entries.find(ekey) != UNKNOWN)
+        {
+            lem::Iridium::Print_Error(t_pos2, txtfile);
+            sg.GetIO().merr().printf("Entry %us:%us (%d) is already added to metaentry [%us]:", t_pos2.string().c_str(), ename.c_str(), ekey, name.c_str());
 
-    for( lem::Container::size_type i=0; i<entries.size(); ++i )
-     {
-      const SG_Entry & e = sg.GetEntry( entries[i] );
-      sg.GetIO().merr().printf( " [%us](%d)", e.GetName().c_str(), entries[i] );
-     }
+            for (lem::Container::size_type i = 0; i < entries.size(); ++i)
+            {
+                const SG_Entry & e = sg.GetEntry(entries[i]);
+                sg.GetIO().merr().printf(" [%us](%d)", e.GetName().c_str(), entries[i]);
+            }
 
-    sg.GetIO().merr().eol();
+            sg.GetIO().merr().eol();
 
-    throw lem::E_BaseException();
-   }
+            throw lem::E_BaseException();
+        }
 
-  entries.push_back( ekey );
- }
+        entries.push_back(ekey);
+    }
 
- return;
+    return;
 }
 #endif
 
 
-void MetaEntry::Store( LexiconStorage * storage ) const
+void MetaEntry::Store(LexiconStorage * storage) const
 {
- if( storage->FindMetaEntry( name, id_class )!=UNKNOWN )
-  {
-   lem::MemFormatter msg;
-   msg.printf( "Meta entry %us is already added\n", name.c_str() );
-   throw lem::E_BaseException( msg.string() );
-  }
+    if (storage->FindMetaEntry(name, id_class) != UNKNOWN)
+    {
+        lem::MemFormatter msg;
+        msg.printf("Meta entry %us is already added\n", name.c_str());
+        throw lem::E_BaseException(msg.string());
+    }
 
- storage->StoreMetaEntry( name, id_class, entries );
- return;
+    storage->StoreMetaEntry(name, id_class, entries);
+    return;
 }
 
 
 #if defined SOL_REPORT
-void MetaEntry::SaveSQL( int * metaentry_item_id, lem::OFormatter & out, const SQL_Production &sql_version ) const
+void MetaEntry::SaveSQL(int * metaentry_item_id, lem::OFormatter & out, const SQL_Production &sql_version) const
 {
- UFString name_str = sql_version.SqlStr( name );
+    UFString name_str = sql_version.SqlStr(name);
 
- out.printf( "INSERT INTO metaentry( id, id_class, name ) VALUES ( %d, %d, '%us' );\n",
-   id, id_class, name_str.c_str() );
+    out.printf("INSERT INTO metaentry( id, id_class, name ) VALUES ( %d, %d, '%us' );\n",
+        id, id_class, name_str.c_str());
 
- for( lem::Container::size_type i=0; i<entries.size(); ++i )
-  {
-   out.printf( "INSERT INTO metaentry_item( id, id_metaentry, id_entry ) VALUES (%d,%d,%d);\n", (*metaentry_item_id)++, id, entries[i] );
-  }
+    for (lem::Container::size_type i = 0; i < entries.size(); ++i)
+    {
+        out.printf("INSERT INTO metaentry_item( id, id_metaentry, id_entry ) VALUES (%d,%d,%d);\n", (*metaentry_item_id)++, id, entries[i]);
+    }
 
- return;
+    return;
 }
 #endif

@@ -6,32 +6,32 @@
 
 using namespace Solarix;
 
-void TF_ClassFilter::AddClass( int iclass )
+void TF_ClassFilter::AddClass(int iclass)
 {
- if( iclass!=UNKNOWN )
-  allowed_classes.push_back(iclass);
+    if (iclass != UNKNOWN)
+        allowed_classes.push_back(iclass);
 
- return;
+    return;
 }
 
-int TF_ClassFilter::Score( const Word_Form &wf, const Dictionary &dict ) const
+int TF_ClassFilter::Score(const Word_Form &wf, const Dictionary &dict) const
 {
- if( allowed_classes.empty() )
-  return 0;
+    if (allowed_classes.empty())
+        return 0;
 
- const int ekey = wf.GetEntryKey();
- if( lem::is_quantor(ekey) )
-  return 0;
+    const int ekey = wf.GetEntryKey();
+    if (lem::is_quantor(ekey))
+        return 0;
 
- const int iclass = dict.GetSynGram().GetEntry(ekey).GetClass();
+    const int iclass = dict.GetSynGram().GetEntry(ekey).GetClass();
 
- return (iclass==UNKNOWN || allowed_classes.find(iclass)!=UNKNOWN) ? 0 : -100;
+    return (iclass == UNKNOWN || allowed_classes.find(iclass) != UNKNOWN) ? 0 : -100;
 }
 
-TokenizationTags* TF_ClassFilter::clone(void) const
+TokenizationTags* TF_ClassFilter::clone() const
 {
- TF_ClassFilter *x = new TF_ClassFilter;
- x->allowed_classes = allowed_classes;
- return x;
+    TF_ClassFilter *x = new TF_ClassFilter;
+    x->allowed_classes = allowed_classes;
+    return x;
 }
 

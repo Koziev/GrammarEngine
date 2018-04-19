@@ -6,11 +6,11 @@
 // Content:
 // SOLARIX Intellectronix Project  http://www.solarix.ru
 //
-// Класс LexemDictionary - справочник лексем для Словаря.
+// РљР»Р°СЃСЃ LexemDictionary - СЃРїСЂР°РІРѕС‡РЅРёРє Р»РµРєСЃРµРј РґР»СЏ РЎР»РѕРІР°СЂСЏ.
 // -----------------------------------------------------------------------------
 //
 // CD->06.08.2005
-// LC->24.11.2010
+// LC->16.04.2018
 // --------------
 
 #include <lem/solarix/dictionary.h>
@@ -22,156 +22,156 @@ using namespace lem;
 using namespace Solarix;
 
 
-LexemDictionary::LexemDictionary( int Reserve ):SolidRef<Lexem>(Reserve)
+LexemDictionary::LexemDictionary(int Reserve) :SolidRef<Lexem>(Reserve)
 {}
 
-LexemDictionary::~LexemDictionary(void)
+LexemDictionary::~LexemDictionary()
 {}
 
 
-LD_Seeker* LexemDictionary::Get_Seeker( SynGram &sg, LexicalAutomat *la )
+LD_Seeker* LexemDictionary::Get_Seeker(SynGram &sg, LexicalAutomat *la)
 {
- return new LD_Seeker(this,la,sg);
+    return new LD_Seeker(this, la, sg);
 }
 
 
 #if defined SOL_LOADBIN
-LD_Seeker* LexemDictionary::Load_Seeker( lem::Stream &bin, LexicalAutomat *La )
+LD_Seeker* LexemDictionary::Load_Seeker(lem::Stream &bin, LexicalAutomat *La)
 {
- LD_Seeker * seeker = new LD_Seeker( this, La );
- seeker->LoadBin(bin);
- return seeker;
+    LD_Seeker * seeker = new LD_Seeker(this, La);
+    seeker->LoadBin(bin);
+    return seeker;
 }
 #endif
 
 #if defined SOL_SAVEBIN
 // *******************************************************************
-// Сохранение словаря лексем в бинарном потоке - с реализацией
-// сжатия. Это сжатие эффективно для всех языков, использующих
-// флексии - когда многочисленные словоформы образуются изменением
-// флексий (в конце слов). Таким образом, в этом словаре образуются
-// многочисленные ПОСЛЕДОВАТЕЛЬНЫЕ записи типа РЫБА-РЫБЫ-РЫБОЙ-...
+// РЎРѕС…СЂР°РЅРµРЅРёРµ СЃР»РѕРІР°СЂСЏ Р»РµРєСЃРµРј РІ Р±РёРЅР°СЂРЅРѕРј РїРѕС‚РѕРєРµ - СЃ СЂРµР°Р»РёР·Р°С†РёРµР№
+// СЃР¶Р°С‚РёСЏ. Р­С‚Рѕ СЃР¶Р°С‚РёРµ СЌС„С„РµРєС‚РёРІРЅРѕ РґР»СЏ РІСЃРµС… СЏР·С‹РєРѕРІ, РёСЃРїРѕР»СЊР·СѓСЋС‰РёС…
+// С„Р»РµРєСЃРёРё - РєРѕРіРґР° РјРЅРѕРіРѕС‡РёСЃР»РµРЅРЅС‹Рµ СЃР»РѕРІРѕС„РѕСЂРјС‹ РѕР±СЂР°Р·СѓСЋС‚СЃСЏ РёР·РјРµРЅРµРЅРёРµРј
+// С„Р»РµРєСЃРёР№ (РІ РєРѕРЅС†Рµ СЃР»РѕРІ). РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РІ СЌС‚РѕРј СЃР»РѕРІР°СЂРµ РѕР±СЂР°Р·СѓСЋС‚СЃСЏ
+// РјРЅРѕРіРѕС‡РёСЃР»РµРЅРЅС‹Рµ РџРћРЎР›Р•Р”РћР’РђРўР•Р›Р¬РќР«Р• Р·Р°РїРёСЃРё С‚РёРїР° Р Р«Р‘Рђ-Р Р«Р‘Р«-Р Р«Р‘РћР™-...
 // *******************************************************************
-void LexemDictionary::SaveBin( lem::Stream &bin ) const
+void LexemDictionary::SaveBin(lem::Stream &bin) const
 {
- const Lexem *first = &*list.begin();
- bin.write( &first, sizeof(first) );
+    const Lexem *first = &*list.begin();
+    bin.write(&first, sizeof(first));
 
- int n=list.size();
- bin.write( &n, sizeof(n) );
+    int n = CastSizeToInt(list.size());
+    bin.write(&n, sizeof(n));
 
- for( Container::size_type i=0; i<list.size(); i++ )
-  {
-   const Lexem& l = list[i];
-
-   uint8_t packed=0, pack_flags=0;
-
-   // Проверим, можно ли сжимать текущую мультилексему.
-
-   if(
-      i &&                  // Это не должна быть самая первая мультилексема
-                            // - надо ведь с чем-то ее сравнивать.
-
-      l.Can_Be_Packed( list[i-1], &pack_flags ) // должна быть
-                                         // выгода от сжатия - если у лексем
-                                         // нет общей части, то сжимать
-                                         // бессмысленно.
-     )
-    packed = pack_flags;
-
-   bin.write( &packed, sizeof(packed) );
-
-   if( packed )
+    for (Container::size_type i = 0; i < list.size(); i++)
     {
-     // Сохраняем со сжатием
-     l.SaveBin_Packed( bin, list[i-1], pack_flags );
-    }
-   else
-    {
-     // Сохраняем без сжатия
-     l.SaveBin(bin);
-    }
-  }
+        const Lexem& l = list[i];
 
- // Для контроля целостности словаря
- lem::Stream::pos_type pos = bin.tellp();
- bin.write( &pos, sizeof(pos) );
+        uint8_t packed = 0, pack_flags = 0;
 
- return;
+        // РџСЂРѕРІРµСЂРёРј, РјРѕР¶РЅРѕ Р»Рё СЃР¶РёРјР°С‚СЊ С‚РµРєСѓС‰СѓСЋ РјСѓР»СЊС‚РёР»РµРєСЃРµРјСѓ.
+
+        if (
+            i &&                  // Р­С‚Рѕ РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ СЃР°РјР°СЏ РїРµСЂРІР°СЏ РјСѓР»СЊС‚РёР»РµРєСЃРµРјР°
+                                  // - РЅР°РґРѕ РІРµРґСЊ СЃ С‡РµРј-С‚Рѕ РµРµ СЃСЂР°РІРЅРёРІР°С‚СЊ.
+
+            l.Can_Be_Packed(list[i - 1], &pack_flags) // РґРѕР»Р¶РЅР° Р±С‹С‚СЊ
+                                               // РІС‹РіРѕРґР° РѕС‚ СЃР¶Р°С‚РёСЏ - РµСЃР»Рё Сѓ Р»РµРєСЃРµРј
+                                               // РЅРµС‚ РѕР±С‰РµР№ С‡Р°СЃС‚Рё, С‚Рѕ СЃР¶РёРјР°С‚СЊ
+                                               // Р±РµСЃСЃРјС‹СЃР»РµРЅРЅРѕ.
+            )
+            packed = pack_flags;
+
+        bin.write(&packed, sizeof(packed));
+
+        if (packed)
+        {
+            // РЎРѕС…СЂР°РЅСЏРµРј СЃРѕ СЃР¶Р°С‚РёРµРј
+            l.SaveBin_Packed(bin, list[i - 1], pack_flags);
+        }
+        else
+        {
+            // РЎРѕС…СЂР°РЅСЏРµРј Р±РµР· СЃР¶Р°С‚РёСЏ
+            l.SaveBin(bin);
+        }
+    }
+
+    // Р”Р»СЏ РєРѕРЅС‚СЂРѕР»СЏ С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё СЃР»РѕРІР°СЂСЏ
+    lem::Stream::pos_type pos = bin.tellp();
+    bin.write(&pos, sizeof(pos));
+
+    return;
 }
 #endif
 
 
 #if defined SOL_LOADBIN
-void LexemDictionary::LoadBin( lem::Stream &bin )
+void LexemDictionary::LoadBin(lem::Stream &bin)
 {
- bin.read( &old_first_item, sizeof(old_first_item) );
+    bin.read(&old_first_item, sizeof(old_first_item));
 
- lem::Stream::pos_type beg_is = bin.tellp();
+    lem::Stream::pos_type beg_is = bin.tellp();
 
- int n=0;
- bin.read( &n, sizeof(n) );
+    int n = 0;
+    bin.read(&n, sizeof(n));
 
- const int cap = CastSizeToInt(list.capacity());
- list.clear();
+    const int cap = CastSizeToInt(list.capacity());
+    list.clear();
 
- #if defined SOL_LOADTXT && defined SOL_COMPILER
- Lexem prior;
+#if defined SOL_LOADTXT && defined SOL_COMPILER
+    Lexem prior;
 
- for( int i=0; i<n; i++ )
-  {
-   Lexem add;
+    for (int i = 0; i < n; i++)
+    {
+        Lexem add;
 
-   uint8_t pack_flags;
-   bin.read( &pack_flags, sizeof(pack_flags) );
-   if( !pack_flags )
-    add.LoadBin(bin);
-   else
-    add.LoadBin_Packed( bin, prior, pack_flags );
+        uint8_t pack_flags;
+        bin.read(&pack_flags, sizeof(pack_flags));
+        if (!pack_flags)
+            add.LoadBin(bin);
+        else
+            add.LoadBin_Packed(bin, prior, pack_flags);
 
-   const int iSublist = unsigned( get_hash(add) ) & 0x00ffU;
-   MCollect<int> &sl = sublist[iSublist];
-   sl.push_back( CastSizeToInt(list.size()) );
+        const int iSublist = unsigned(get_hash(add)) & 0x00ffU;
+        MCollect<int> &sl = sublist[iSublist];
+        sl.push_back(CastSizeToInt(list.size()));
 
-   list.push_back(add);
-   prior = add;
-  }
- #else
+        list.push_back(add);
+        prior = add;
+    }
+#else
 
- list.resize(n);
+    list.resize(n);
 
- if( cap>n )
-  list.reserve( cap );
+    if (cap > n)
+        list.reserve(cap);
 
- #if LEM_DEBUGGING==1
- const int cap2 = CastSizeToInt(list.capacity());
- #endif
+#if LEM_DEBUGGING==1
+    const int cap2 = CastSizeToInt(list.capacity());
+#endif
 
- const Lexem * prior = NULL;
+    const Lexem * prior = nullptr;
 
- for( int i=0; i<n; i++ )
-  {
-   Lexem & add = list[i];
+    for (int i = 0; i < n; i++)
+    {
+        Lexem & add = list[i];
 
-   uint8_t pack_flags;
-   bin.read( &pack_flags, sizeof(pack_flags) );
-   if( !pack_flags )
-    add.LoadBin(bin);
-   else
-    add.LoadBin_Packed( bin, *prior, pack_flags );
+        uint8_t pack_flags;
+        bin.read(&pack_flags, sizeof(pack_flags));
+        if (!pack_flags)
+            add.LoadBin(bin);
+        else
+            add.LoadBin_Packed(bin, *prior, pack_flags);
 
-   prior = &add;
-  }
+        prior = &add;
+    }
 
- #endif
+#endif
 
- lem::Stream::pos_type pos_is = bin.tellp();
+    lem::Stream::pos_type pos_is = bin.tellp();
 
- lem::Stream::pos_type pos;
- bin.read( &pos, sizeof(pos) );
+    lem::Stream::pos_type pos;
+    bin.read(&pos, sizeof(pos));
 
- LEM_CHECKIT_Z( pos==pos_is );
+    LEM_CHECKIT_Z(pos == pos_is);
 
- return;
+    return;
 }
 #endif

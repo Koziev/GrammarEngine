@@ -9,34 +9,34 @@
 
 using namespace Solarix;
 
-WordEntryEnumerator_MySQL::WordEntryEnumerator_MySQL( LS_ResultSet_MySQL *_rs, WordEntries_MySQL *_entries )
- : rs(_rs), entries(_entries)
+WordEntryEnumerator_MySQL::WordEntryEnumerator_MySQL(LS_ResultSet_MySQL *_rs, WordEntries_MySQL *_entries)
+    : rs(_rs), entries(_entries)
 {
 }
 
 
-WordEntryEnumerator_MySQL::~WordEntryEnumerator_MySQL(void)
+WordEntryEnumerator_MySQL::~WordEntryEnumerator_MySQL()
 {
- lem_rub_off(rs);
+    lem_rub_off(rs);
 }
 
 
-bool WordEntryEnumerator_MySQL::Fetch(void)
+bool WordEntryEnumerator_MySQL::Fetch()
 {
- return rs->Fetch();
+    return rs->Fetch();
 }
 
 
-int WordEntryEnumerator_MySQL::GetId(void)
+int WordEntryEnumerator_MySQL::GetId()
 {
- return rs->GetInt(0);
+    return rs->GetInt(0);
 }
 
 
-const SG_Entry& WordEntryEnumerator_MySQL::GetItem(void)
+const SG_Entry& WordEntryEnumerator_MySQL::GetItem()
 {
- const int ekey = GetId();
- return entries->GetEntry(ekey);
+    const int ekey = GetId();
+    return entries->GetEntry(ekey);
 }
 
 #endif

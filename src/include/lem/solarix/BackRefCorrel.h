@@ -2,53 +2,57 @@
 #define BACK_REF_CORREL__H
 #pragma once
 
- #include <lem/quantors.h>
- #include <lem/solarix/ViolationHandler.h>
+#include <lem/quantors.h>
+#include <lem/solarix/ViolationHandler.h>
 
 
- namespace lem
- {
-  class OFormatter;
- }
+namespace lem
+{
+    class OFormatter;
+}
 
- namespace Solarix
- {
-  class SynGram;
+namespace Solarix
+{
+    class SynGram;
 
-  struct BackRefCorrel
-  {
-   bool affirmative;
-   int id_coord0; // согласуемая координата слева, у проверяемого узла
+    struct BackRefCorrel
+    {
+        bool affirmative;
+        int id_coord0; // СЃРѕРіР»Р°СЃСѓРµРјР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° СЃР»РµРІР°, Сѓ РїСЂРѕРІРµСЂСЏРµРјРѕРіРѕ СѓР·Р»Р°
 
-   lem::UCString name; // имя маркировки
-   int id_coord1; // координата у маркировки
-   bool for_group; // например для падежа - РОДИТЕЛЬНЫЙ и ПАРТИТИВ считать равными, так как они в одной группе
+        lem::UCString name; // РёРјСЏ РјР°СЂРєРёСЂРѕРІРєРё
+        int id_coord1; // РєРѕРѕСЂРґРёРЅР°С‚Р° Сѓ РјР°СЂРєРёСЂРѕРІРєРё
+        bool for_group; // РЅР°РїСЂРёРјРµСЂ РґР»СЏ РїР°РґРµР¶Р° - Р РћР”РРўР•Р›Р¬РќР«Р™ Рё РџРђР РўРРўРР’ СЃС‡РёС‚Р°С‚СЊ СЂР°РІРЅС‹РјРё, С‚Р°Рє РєР°Рє РѕРЅРё РІ РѕРґРЅРѕР№ РіСЂСѓРїРїРµ
 
-   ViolationHandler violation_handler; // штраф за нарушение согласования
+        ViolationHandler violation_handler; // С€С‚СЂР°С„ Р·Р° РЅР°СЂСѓС€РµРЅРёРµ СЃРѕРіР»Р°СЃРѕРІР°РЅРёСЏ
 
-   BackRefCorrel(void) : affirmative(true), id_coord0(UNKNOWN), id_coord1(-1), for_group(false) {}
+        BackRefCorrel() : affirmative(true), id_coord0(UNKNOWN), id_coord1(-1), for_group(false) {}
 
-   bool operator==( const BackRefCorrel &x ) const
-   { return affirmative==x.affirmative &&
-            name==x.name &&
-            id_coord0==x.id_coord0 &&
-            id_coord1==x.id_coord1 &&
-            for_group==x.for_group &&
-            violation_handler==x.violation_handler; }
+        bool operator==(const BackRefCorrel &x) const
+        {
+            return affirmative == x.affirmative &&
+                name == x.name &&
+                id_coord0 == x.id_coord0 &&
+                id_coord1 == x.id_coord1 &&
+                for_group == x.for_group &&
+                violation_handler == x.violation_handler;
+        }
 
-   bool operator!=( const BackRefCorrel &x ) const
-   { return affirmative!=x.affirmative ||
-            name!=x.name ||
-            id_coord0!=x.id_coord0 ||
-            id_coord0!=x.id_coord0 ||
-            for_group!=x.for_group ||
-            violation_handler!=x.violation_handler; }
+        bool operator!=(const BackRefCorrel &x) const
+        {
+            return affirmative != x.affirmative ||
+                name != x.name ||
+                id_coord0 != x.id_coord0 ||
+                id_coord0 != x.id_coord0 ||
+                for_group != x.for_group ||
+                violation_handler != x.violation_handler;
+        }
 
-   void SaveTxt( lem::OFormatter &txt, SynGram &sg ) const;
+        void SaveTxt(lem::OFormatter &txt, SynGram &sg) const;
 
-   const ViolationHandler& GetViolationHandler() const { return violation_handler; }
-  };
+        const ViolationHandler& GetViolationHandler() const { return violation_handler; }
+    };
 
- }
+}
 
 #endif

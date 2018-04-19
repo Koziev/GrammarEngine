@@ -5,54 +5,54 @@ using namespace std;
 using namespace lem;
 using namespace Solarix;
 
-CharNode::~CharNode(void)
-{ 
- for( std::map< wchar_t, CharNode* >::iterator k=leafs.begin(); k!=leafs.end(); k++ )
-  delete k->second;
+CharNode::~CharNode()
+{
+    for (auto k = leafs.begin(); k != leafs.end(); k++)
+        delete k->second;
 
- return;
+    return;
 }
 
-CharNode* CharNode::find( wchar_t c, bool add )
+CharNode* CharNode::find(wchar_t c, bool add)
 {
- std::map< wchar_t, CharNode* >::iterator k=leafs.find(c);
- if( k==leafs.end() )
-  {
-   if( add )
+    auto k = leafs.find(c);
+    if (k == leafs.end())
     {
-     CharNode* leaf = new CharNode;
-     leafs.insert( std::make_pair(c, leaf) );  
-     return leaf;
+        if (add)
+        {
+            CharNode* leaf = new CharNode;
+            leafs.insert(std::make_pair(c, leaf));
+            return leaf;
+        }
+        else
+        {
+            return nullptr;
+        }
     }
-   else
+    else
     {
-     return NULL;
-    } 
-  }
- else
-  { 
-   return k->second;
-  }
+        return k->second;
+    }
 }
 
-const CharNode* CharNode::probe( wchar_t c ) const
+const CharNode* CharNode::probe(wchar_t c) const
 {
- std::map< wchar_t, CharNode* >::const_iterator k=leafs.find(c);
- return k==leafs.end() ? NULL : k->second;
+    auto k = leafs.find(c);
+    return k == leafs.end() ? nullptr : k->second;
 }
 
 
-bool CharNode::match( const UCString &str ) const
+bool CharNode::match(const UCString &str) const
 {
- const CharNode *n = this;
- int icur=0;
+    const CharNode *n = this;
+    int icur = 0;
 
- while( n!=NULL && icur<str.length() )
-  {
-   n = n->probe( lem::to_uupper(str[icur++]) );
-  }
+    while (n != nullptr && icur < str.length())
+    {
+        n = n->probe(lem::to_uupper(str[icur++]));
+    }
 
- return n!=NULL;
+    return n != nullptr;
 }
 
 
@@ -60,26 +60,26 @@ bool CharNode::match( const UCString &str ) const
 // Вернет максимальную длину лексемы, которую можно найти с начала строки str,
 // и такую что в лексиконе есть такая словоформа.
 // ****************************************************************************
-int CharNode::match_len( const wchar_t * str ) const
+int CharNode::match_len(const wchar_t * str) const
 {
- const CharNode *n = this;
- int icur=0;
+    const CharNode *n = this;
+    int icur = 0;
 
- int lexem_len=0;
+    int lexem_len = 0;
 
- while( n!=NULL && str[icur]!=0 )
-  {
-   const wchar_t c = lem::to_uupper(str[icur]);
-   n = n->probe( c );
-   if( n==NULL )
-    break;
+    while (n != nullptr && str[icur] != 0)
+    {
+        const wchar_t c = lem::to_uupper(str[icur]);
+        n = n->probe(c);
+        if (n == nullptr)
+            break;
 
-   icur++;
+        icur++;
 
-   if( !n->entries.empty() )
-    lexem_len = icur;
-  }
+        if (!n->entries.empty())
+            lexem_len = icur;
+    }
 
- return lexem_len;
+    return lexem_len;
 }
 

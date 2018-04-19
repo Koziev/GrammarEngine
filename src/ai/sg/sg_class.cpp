@@ -33,13 +33,12 @@ using namespace lem;
 using namespace Solarix;
 
 
-SG_Class::SG_Class(void)
+SG_Class::SG_Class()
     : GramClass()
 {
     id_lang = UNKNOWN;
     value = 10;
     closed_class = false;
-    return;
 }
 
 

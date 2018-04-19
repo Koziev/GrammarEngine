@@ -49,7 +49,7 @@ namespace Solarix
         // Информация для алгоритма быстрого поиска.
         WordEntries_LookUp lookup_table;
 
-        void ClearGroups(void);
+        void ClearGroups();
 
         lem::PtrCollect<SG_Entry> entry;   // Список словарных статей.
         lem::IntCollect           ientry;

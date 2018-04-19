@@ -12,8 +12,8 @@
 //
 // Content:
 // LEM C++ library  http://www.solarix.ru
-// Часть кода Лексического Автомата, то есть реализация части методов класса
-// LexicalAutomat. Реализация процедуры определения похожести двух мультилексем.
+// Р§Р°СЃС‚СЊ РєРѕРґР° Р›РµРєСЃРёС‡РµСЃРєРѕРіРѕ РђРІС‚РѕРјР°С‚Р°, С‚Рѕ РµСЃС‚СЊ СЂРµР°Р»РёР·Р°С†РёСЏ С‡Р°СЃС‚Рё РјРµС‚РѕРґРѕРІ РєР»Р°СЃСЃР°
+// LexicalAutomat. Р РµР°Р»РёР·Р°С†РёСЏ РїСЂРѕС†РµРґСѓСЂС‹ РѕРїСЂРµРґРµР»РµРЅРёСЏ РїРѕС…РѕР¶РµСЃС‚Рё РґРІСѓС… РјСѓР»СЊС‚РёР»РµРєСЃРµРј.
 // -----------------------------------------------------------------------------
 //
 // CD->01.09.1997
@@ -34,175 +34,175 @@ using namespace lem;
 using namespace Solarix;
 
 /******************************************************************
- Алгоритм определения похожести двух мультилексем A и B c учетом
- возможных пропусков и/или искажений букв. Процедура вызывается
- при нечетком проецировании мультилексемы на Лексикон.
+ РђР»РіРѕСЂРёС‚Рј РѕРїСЂРµРґРµР»РµРЅРёСЏ РїРѕС…РѕР¶РµСЃС‚Рё РґРІСѓС… РјСѓР»СЊС‚РёР»РµРєСЃРµРј A Рё B c СѓС‡РµС‚РѕРј
+ РІРѕР·РјРѕР¶РЅС‹С… РїСЂРѕРїСѓСЃРєРѕРІ Рё/РёР»Рё РёСЃРєР°Р¶РµРЅРёР№ Р±СѓРєРІ. РџСЂРѕС†РµРґСѓСЂР° РІС‹Р·С‹РІР°РµС‚СЃСЏ
+ РїСЂРё РЅРµС‡РµС‚РєРѕРј РїСЂРѕРµС†РёСЂРѕРІР°РЅРёРё РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ РЅР° Р›РµРєСЃРёРєРѕРЅ.
 ******************************************************************/
 enum { ml_passive, ml_active, ml_delete };
 
 struct ml_cur {
-               int flag; // флаг состояния альтернативного варианта сопоставления
-               int nmiss; // сколько ошибок уже допущено
-               int equality; // накопленная достоверность совпадения лексем
-               int a_cur,b_cur; // позиции сопоставления
+    int flag; // С„Р»Р°Рі СЃРѕСЃС‚РѕСЏРЅРёСЏ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРѕРіРѕ РІР°СЂРёР°РЅС‚Р° СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
+    int nmiss; // СЃРєРѕР»СЊРєРѕ РѕС€РёР±РѕРє СѓР¶Рµ РґРѕРїСѓС‰РµРЅРѕ
+    int equality; // РЅР°РєРѕРїР»РµРЅРЅР°СЏ РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ СЃРѕРІРїР°РґРµРЅРёСЏ Р»РµРєСЃРµРј
+    int a_cur, b_cur; // РїРѕР·РёС†РёРё СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
 
-               ml_cur(void) { equality=0; flag=nmiss=a_cur=b_cur=UNKNOWN; }
+    ml_cur() { equality = 0; flag = nmiss = a_cur = b_cur = UNKNOWN; }
 
-               ml_cur( int Equality, int nMiss, int A_Cur, int B_Cur )
-               {
-                equality = Equality; 
-                flag = ml_active;
-                nmiss=nMiss; a_cur=A_Cur; b_cur=B_Cur;
-               }
-              };
+    ml_cur(int Equality, int nMiss, int A_Cur, int B_Cur)
+    {
+        equality = Equality;
+        flag = ml_active;
+        nmiss = nMiss; a_cur = A_Cur; b_cur = B_Cur;
+    }
+};
 
 
 // ********************************************************************
-// В поле Equality возвращается степень совпадения.
+// Р’ РїРѕР»Рµ Equality РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃС‚РµРїРµРЅСЊ СЃРѕРІРїР°РґРµРЅРёСЏ.
 // ********************************************************************
 int LexicalAutomat::CompareThem(
-                                const Lexem &A,
-                                const Lexem &B,
-                                int id_language,
-                                int NMISSMAX,
-                                Real1 *Equality 
-                               ) const
+    const Lexem &A,
+    const Lexem &B,
+    int id_language,
+    int NMISSMAX,
+    Real1 *Equality
+) const
 {
- LEM_CHECKIT_Z( !A.empty() );
- LEM_CHECKIT_Z( !B.empty() );
- LEM_CHECKIT_Z( NMISSMAX>=0 );
- LEM_CHECKIT_Z( Equality!=0 );
+    LEM_CHECKIT_Z(!A.empty());
+    LEM_CHECKIT_Z(!B.empty());
+    LEM_CHECKIT_Z(NMISSMAX >= 0);
+    LEM_CHECKIT_Z(Equality != 0);
 
- int i;
- const int Alen=A.length();
- const int Blen=B.length();
+    int i;
+    const int Alen = A.length();
+    const int Blen = B.length();
 
- wchar_t *a_buf = new wchar_t[Alen+1];
- wchar_t *b_buf = new wchar_t[Blen+1];
+    wchar_t *a_buf = new wchar_t[Alen + 1];
+    wchar_t *b_buf = new wchar_t[Blen + 1];
 
- a_buf[0]=b_buf[0]=0;
+    a_buf[0] = b_buf[0] = 0;
 
- // Сначала из каждой мультилексемы сделаем одну строку без разрывов.
- lem_strcpy( a_buf, A.c_str() );
- lem_strcpy( b_buf, B.c_str() );
+    // РЎРЅР°С‡Р°Р»Р° РёР· РєР°Р¶РґРѕР№ РјСѓР»СЊС‚РёР»РµРєСЃРµРјС‹ СЃРґРµР»Р°РµРј РѕРґРЅСѓ СЃС‚СЂРѕРєСѓ Р±РµР· СЂР°Р·СЂС‹РІРѕРІ.
+    lem_strcpy(a_buf, A.c_str());
+    lem_strcpy(b_buf, B.c_str());
 
- MCollect<ml_cur> variant;
- variant.reserve(16);
- variant.push_back( ml_cur(0,0,0,0) );
+    MCollect<ml_cur> variant;
+    variant.reserve(16);
+    variant.push_back(ml_cur(0, 0, 0, 0));
 
- bool cont=true;
- while( cont )
-  {
-   cont=false;
-   int n=CastSizeToInt(variant.size());
-
-   for( i=0; i<n; i++ )
+    bool cont = true;
+    while (cont)
     {
-     ml_cur &Cursor = variant[i];
-     if( Cursor.flag==ml_passive )
-      continue;
+        cont = false;
+        int n = CastSizeToInt(variant.size());
 
-     cont = true;
+        for (i = 0; i < n; i++)
+        {
+            ml_cur &Cursor = variant[i];
+            if (Cursor.flag == ml_passive)
+                continue;
 
-     const wchar_t cha = a_buf[Cursor.a_cur];
-     const wchar_t chb = b_buf[Cursor.b_cur];
+            cont = true;
 
-     // Символы в позициях Cursor.a_cur и Cursor.b_cur совпадают?
-     if( !cha && !chb )
-      {
-       // Обе строки закончились одновременно.
-       Cursor.flag = ml_passive;
-       continue;
-      }
+            const wchar_t cha = a_buf[Cursor.a_cur];
+            const wchar_t chb = b_buf[Cursor.b_cur];
 
-     if( cha==0 )
-      {
-       // Строка a_buf оказалась короче.
-       Cursor.nmiss += lem::lem_strlen( b_buf+Cursor.b_cur );
-       Cursor.flag = ml_passive;
-       continue;
-      }
+            // РЎРёРјРІРѕР»С‹ РІ РїРѕР·РёС†РёСЏС… Cursor.a_cur Рё Cursor.b_cur СЃРѕРІРїР°РґР°СЋС‚?
+            if (!cha && !chb)
+            {
+                // РћР±Рµ СЃС‚СЂРѕРєРё Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ.
+                Cursor.flag = ml_passive;
+                continue;
+            }
 
-     if( chb==0 )
-      {
-       // Строка b_buf оказалась короче.
-       Cursor.nmiss += lem::lem_strlen( a_buf+Cursor.a_cur );
-       Cursor.flag = ml_passive;
-       continue;
-      }
+            if (cha == 0)
+            {
+                // РЎС‚СЂРѕРєР° a_buf РѕРєР°Р·Р°Р»Р°СЃСЊ РєРѕСЂРѕС‡Рµ.
+                Cursor.nmiss += lem::lem_strlen(b_buf + Cursor.b_cur);
+                Cursor.flag = ml_passive;
+                continue;
+            }
 
-     if( cha == chb )
-      {
-       Cursor.equality += 100; 
-       Cursor.a_cur++;
-       Cursor.b_cur++;
-       continue;
-      }
+            if (chb == 0)
+            {
+                // РЎС‚СЂРѕРєР° b_buf РѕРєР°Р·Р°Р»Р°СЃСЊ РєРѕСЂРѕС‡Рµ.
+                Cursor.nmiss += lem::lem_strlen(a_buf + Cursor.a_cur);
+                Cursor.flag = ml_passive;
+                continue;
+            }
 
-     // Какова недостоверность замены буквы сha на chb? Если найти правило не
-     // получится, то - достоверность нулевая.
-     lem::Real1 v = phonetic_matcher->GetMatcherForLanguage(id_language)->MatchRule11( Rule_1_to_1( cha, chb ) );
-     Cursor.equality += v.GetInt();
+            if (cha == chb)
+            {
+                Cursor.equality += 100;
+                Cursor.a_cur++;
+                Cursor.b_cur++;
+                continue;
+            }
 
-     Cursor.nmiss++;
+            // РљР°РєРѕРІР° РЅРµРґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ Р·Р°РјРµРЅС‹ Р±СѓРєРІС‹ СЃha РЅР° chb? Р•СЃР»Рё РЅР°Р№С‚Рё РїСЂР°РІРёР»Рѕ РЅРµ
+            // РїРѕР»СѓС‡РёС‚СЃСЏ, С‚Рѕ - РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚СЊ РЅСѓР»РµРІР°СЏ.
+            lem::Real1 v = phonetic_matcher->GetMatcherForLanguage(id_language)->MatchRule11(Rule_1_to_1(cha, chb));
+            Cursor.equality += v.GetInt();
 
-     if( Cursor.nmiss>NMISSMAX )
-      {
-       // Дальше вести это решение нет смысла - отличие уже слишком велико.
-       Cursor.flag=ml_delete;
-       continue;
-      }
+            Cursor.nmiss++;
 
-     // Символы не совпадают. Производим расщепление решения.
+            if (Cursor.nmiss > NMISSMAX)
+            {
+                // Р”Р°Р»СЊС€Рµ РІРµСЃС‚Рё СЌС‚Рѕ СЂРµС€РµРЅРёРµ РЅРµС‚ СЃРјС‹СЃР»Р° - РѕС‚Р»РёС‡РёРµ СѓР¶Рµ СЃР»РёС€РєРѕРј РІРµР»РёРєРѕ.
+                Cursor.flag = ml_delete;
+                continue;
+            }
 
-     if( Cursor.nmiss<=1 )
-      {
-       // Во втором варианте считаем, что в строке 'a' присутствует лишний символ,
-       // поэтому курсор 'a' продвигаем вперед, а курсор 'b' оставляем в преждей
-       // позиции.
-       ml_cur var2( Cursor.equality, Cursor.nmiss, Cursor.a_cur+1, Cursor.b_cur );
-       variant.push_back( var2 );
+            // РЎРёРјРІРѕР»С‹ РЅРµ СЃРѕРІРїР°РґР°СЋС‚. РџСЂРѕРёР·РІРѕРґРёРј СЂР°СЃС‰РµРїР»РµРЅРёРµ СЂРµС€РµРЅРёСЏ.
 
-       // В третьем варианте считаем, что в строке 'b' присутствует лишний символ,
-       // поэтому курсор 'b' продвигаем вперед, а курсор 'a' оставляем в прежней
-       // позиции.
-       ml_cur var3( Cursor.equality, Cursor.nmiss, Cursor.a_cur, Cursor.b_cur+1 );
-       variant.push_back( var3 );
-      }
+            if (Cursor.nmiss <= 1)
+            {
+                // Р’Рѕ РІС‚РѕСЂРѕРј РІР°СЂРёР°РЅС‚Рµ СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РІ СЃС‚СЂРѕРєРµ 'a' РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ Р»РёС€РЅРёР№ СЃРёРјРІРѕР»,
+                // РїРѕСЌС‚РѕРјСѓ РєСѓСЂСЃРѕСЂ 'a' РїСЂРѕРґРІРёРіР°РµРј РІРїРµСЂРµРґ, Р° РєСѓСЂСЃРѕСЂ 'b' РѕСЃС‚Р°РІР»СЏРµРј РІ РїСЂРµР¶РґРµР№
+                // РїРѕР·РёС†РёРё.
+                ml_cur var2(Cursor.equality, Cursor.nmiss, Cursor.a_cur + 1, Cursor.b_cur);
+                variant.push_back(var2);
 
-     // В основном варианте предполагаем, что имеет место быть локальное
-     // искажение одного символа, и дальше символы снова начнут совпадать.
-     Cursor.a_cur++;
-     Cursor.b_cur++;
+                // Р’ С‚СЂРµС‚СЊРµРј РІР°СЂРёР°РЅС‚Рµ СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РІ СЃС‚СЂРѕРєРµ 'b' РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ Р»РёС€РЅРёР№ СЃРёРјРІРѕР»,
+                // РїРѕСЌС‚РѕРјСѓ РєСѓСЂСЃРѕСЂ 'b' РїСЂРѕРґРІРёРіР°РµРј РІРїРµСЂРµРґ, Р° РєСѓСЂСЃРѕСЂ 'a' РѕСЃС‚Р°РІР»СЏРµРј РІ РїСЂРµР¶РЅРµР№
+                // РїРѕР·РёС†РёРё.
+                ml_cur var3(Cursor.equality, Cursor.nmiss, Cursor.a_cur, Cursor.b_cur + 1);
+                variant.push_back(var3);
+            }
+
+            // Р’ РѕСЃРЅРѕРІРЅРѕРј РІР°СЂРёР°РЅС‚Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј, С‡С‚Рѕ РёРјРµРµС‚ РјРµСЃС‚Рѕ Р±С‹С‚СЊ Р»РѕРєР°Р»СЊРЅРѕРµ
+            // РёСЃРєР°Р¶РµРЅРёРµ РѕРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°, Рё РґР°Р»СЊС€Рµ СЃРёРјРІРѕР»С‹ СЃРЅРѕРІР° РЅР°С‡РЅСѓС‚ СЃРѕРІРїР°РґР°С‚СЊ.
+            Cursor.a_cur++;
+            Cursor.b_cur++;
+        }
+
+        i = 0;
+        while (i < n)
+            if (variant[i].flag == ml_delete)
+            {
+                n--;
+                variant.Remove(i);
+                //      variant.erase( variant.begin()+i );
+            }
+            else
+                i++;
     }
 
-   i=0;
-   while( i<n )
-    if( variant[i].flag == ml_delete )
-     {
-      n--;
-      variant.Remove( i );
-//      variant.erase( variant.begin()+i );
-     }
-    else
-     i++;
-  }
+    delete[] a_buf;
+    delete[] b_buf;
 
- delete[] a_buf;
- delete[] b_buf;
+    int max_eq = 0;
+    int min_miss = INT_MAX;
 
- int max_eq=0;
- int min_miss=INT_MAX;
+    for (Container::size_type i2 = 0; i2 < variant.size(); i2++)
+    {
+        max_eq = std::max(max_eq, variant[i2].equality);
+        min_miss = std::min(min_miss, variant[i2].nmiss);
+    }
 
- for( Container::size_type i2=0; i2<variant.size(); i2++ )
-  {
-   max_eq = std::max( max_eq, variant[i2].equality );
-   min_miss = std::min( min_miss, variant[i2].nmiss );
-  }
+    *Equality = Real1(max_eq / A.length());
 
- *Equality = Real1( max_eq / A.length() );
-
- return min_miss;
+    return min_miss;
 }
 
 #endif

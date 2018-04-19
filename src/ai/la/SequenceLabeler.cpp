@@ -15,10 +15,10 @@ using namespace Solarix;
 SequenceLabelerModel::SequenceLabelerModel() : BasicModel()
 {
 #if defined SOL_CRF_MODEL
-    model = NULL;
-    attrs = NULL;
-    labels = NULL;
-    tagger = NULL;
+    model = nullptr;
+    attrs = nullptr;
+    labels = nullptr;
+    tagger = nullptr;
 #endif
 
     CONTEXT_SIZE = -1;
@@ -92,7 +92,7 @@ bool SequenceLabelerModel::Load()
 
             }
 
-            available = codebook != NULL;
+            available = codebook != nullptr;
             loaded = true;
         }
     }
@@ -106,9 +106,9 @@ bool SequenceLabelerModel::Load()
 
 
 void SequenceLabelerModel::Apply(BasicLexer & lexer,
-                                 Dictionary & dict,
-                                 const ElapsedTimeConstraint & constraints,
-                                 bool remove_incorrect_alts)
+    Dictionary & dict,
+    const ElapsedTimeConstraint & constraints,
+    bool remove_incorrect_alts)
 {
 #if defined SOL_CRF_MODEL && defined SOL_CAA
     lem::Process::CritSecLocker cs_locker(&crf_critsect); // #9
@@ -118,9 +118,9 @@ void SequenceLabelerModel::Apply(BasicLexer & lexer,
 
 
 void SequenceLabelerModel::Apply_CRFSuite(BasicLexer & lexer,
-                                          Dictionary & dict,
-                                          const ElapsedTimeConstraint & constraints,
-                                          bool remove_incorrect_alts)
+    Dictionary & dict,
+    const ElapsedTimeConstraint & constraints,
+    bool remove_incorrect_alts)
 {
 #if defined SOL_CRF_MODEL && defined SOL_CAA
 
@@ -496,7 +496,9 @@ void SequenceLabelerModel::SelectRecognition(BasicLexer & lexer, const LexerText
     lem::MCollect<const LexerTextPos*> next;
     lexer.Fetch(token, next);
     for (lem::Container::size_type i = 0; i < next.size(); ++i)
+    {
         SelectRecognition(lexer, next[i], token2selection, remove_incorrect_alts);
+    }
 
 #endif
 

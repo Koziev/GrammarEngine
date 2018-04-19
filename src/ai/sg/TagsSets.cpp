@@ -4,146 +4,143 @@
 
 using namespace Solarix;
 
-TagSets::TagSets(void):db(NULL)
+TagSets::TagSets(void) :db(nullptr)
+{}
+
+
+void TagSets::Connect(ThesaurusStorage *_db)
 {
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs);
+#endif
+
+    tag_ptr.clear();
+    id2tags.clear();
+
+    lem::MCollect< std::pair<int, int> > * empty_set = new lem::MCollect< std::pair<int, int> >();
+    tag_ptr.push_back(empty_set);
+    tagset_id.push_back(0);
+    id2tags.insert(std::make_pair(0, empty_set));
+
+    db = _db;
+
+    return;
 }
 
-
-void TagSets::Connect( ThesaurusStorage *_db )
+int TagSets::operator[](SG_TagsList tags)
 {
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs); 
- #endif
+    if (tags == nullptr)
+        return 0;
 
- tag_ptr.clear();
- id2tags.clear();
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs);
+#endif
 
- lem::MCollect< std::pair<int,int> > * empty_set = new lem::MCollect< std::pair<int,int> >();
- tag_ptr.push_back(empty_set);
- tagset_id.push_back(0);
- id2tags.insert( std::make_pair( 0, empty_set ) );
-
- db = _db;
-
- return;
-}
-
-
-static bool tags_sorter( const std::pair<int,int> &a, const std::pair<int,int> &b )
-{
- return a.first>b.first;
-}
-
-
-int TagSets::operator[]( SG_TagsList tags )
-{
- if( tags==NULL )
-  return 0;
-
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs); 
- #endif
-
- for( lem::Container::size_type i=0; i<tag_ptr.size(); ++i )
-  if( tag_ptr[i]==tags )
-   return tagset_id[i];
-
- return UNKNOWN;
-}
-
-
-// Ищем в справочнике набор тегов, заданный списком tags. При необходимости
-// вносим в БД новую запись. Возвращается ID найденной или созданной записи.
-int TagSets::Register( const lem::MCollect< std::pair<int,int> > &tags )
-{
- if( tags.empty() )
-  {
-   return 0;
-  }
-
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs); 
- #endif
-
- // Для устранения вариантов записи одного и того же набора тегов отсортируем элементы по id_tag.
- lem::MCollect< std::pair<int,int> > *sorted_tags = new lem::MCollect< std::pair<int,int> >(tags);
- std::sort( sorted_tags->begin(), sorted_tags->end(), tags_sorter );
-
- // Такой кортеж есть?
- const int i = tag_ptr.find(*sorted_tags);
- 
- if( i==UNKNOWN )
-  { 
-   // Нет.
-   // Поищем в БД.
-   lem::UFString s;
-   if( tags.size()==1 )
+    for (lem::Container::size_type i = 0; i < tag_ptr.size(); ++i)
     {
-     s = lem::format_str( L"%d %d", tags.front().first, tags.front().second );
-    }
-   else if( tags.size()==2 )
-    {
-     s = lem::format_str( L"%d %d %d %d", sorted_tags->get(0).first, sorted_tags->get(0).second, sorted_tags->get(1).first, sorted_tags->get(1).second );
-    }
-   else
-    {
-     for( lem::Container::size_type i=0; i<sorted_tags->size(); ++i )
-      {
-       if(i>0) s += L' ';
-       s += lem::format_str( L"%d %d", sorted_tags->get(i).first, sorted_tags->get(i).second );
-      }
-    }
-   
-   const int id = db->AddTagSet(s);
-
-   id2tags.insert( std::make_pair(id,sorted_tags) );
-   tag_ptr.push_back( sorted_tags );
-   tagset_id.push_back(id);
-
-   return id;
-  }
- else
-  {
-   delete sorted_tags;
-   return tagset_id[i];
-  }
-}
-
-
-
-
-SG_TagsList TagSets::operator[]( int id )
-{
- if( id==0 )
-  return NULL;
-
- #if defined LEM_THREADS
- lem::Process::CritSecLocker lock(&cs); 
- #endif
-
- std::map<int,SG_TagsList>::const_iterator it = id2tags.find(id);
- if( it==id2tags.end() )
-  {
-   lem::UFString s;
-   db->GetTagSet(id,s);
-   
-   lem::Collect<lem::UFString> vals;
-   lem::parse( s, vals, L" " );
-   lem::MCollect< std::pair<int,int> > *lst = new lem::MCollect< std::pair<int,int> >();
-   for( lem::Container::size_type i=0; i<vals.size(); i+=2 )
-    {
-     const int id_tag = lem::to_int(vals[i]);
-     const int ivalue = lem::to_int(vals[i+1]);
-     lst->push_back( std::make_pair(id_tag,ivalue) );
+        if (tag_ptr[i] == tags)
+            return tagset_id[i];
     }
 
-   tag_ptr.push_back(lst);
-   tagset_id.push_back(id);
-   id2tags.insert( std::make_pair( id, lst ) );
-   return lst; 
-  }
- else
-  {
-   return it->second;
-  } 
+    return UNKNOWN;
+}
+
+
+// РС‰РµРј РІ СЃРїСЂР°РІРѕС‡РЅРёРєРµ РЅР°Р±РѕСЂ С‚РµРіРѕРІ, Р·Р°РґР°РЅРЅС‹Р№ СЃРїРёСЃРєРѕРј tags. РџСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
+// РІРЅРѕСЃРёРј РІ Р‘Р” РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ. Р’РѕР·РІСЂР°С‰Р°РµС‚СЃСЏ ID РЅР°Р№РґРµРЅРЅРѕР№ РёР»Рё СЃРѕР·РґР°РЅРЅРѕР№ Р·Р°РїРёСЃРё.
+int TagSets::Register(const lem::MCollect< std::pair<int, int> > &tags)
+{
+    if (tags.empty())
+    {
+        return 0;
+    }
+
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs);
+#endif
+
+    // Р”Р»СЏ СѓСЃС‚СЂР°РЅРµРЅРёСЏ РІР°СЂРёР°РЅС‚РѕРІ Р·Р°РїРёСЃРё РѕРґРЅРѕРіРѕ Рё С‚РѕРіРѕ Р¶Рµ РЅР°Р±РѕСЂР° С‚РµРіРѕРІ РѕС‚СЃРѕСЂС‚РёСЂСѓРµРј СЌР»РµРјРµРЅС‚С‹ РїРѕ id_tag.
+    lem::MCollect< std::pair<int, int> > *sorted_tags = new lem::MCollect< std::pair<int, int> >(tags);
+    std::sort(sorted_tags->begin(), sorted_tags->end(), [](auto &a, auto &b)
+    {
+        return a.first > b.first;
+    });
+
+    // РўР°РєРѕР№ РєРѕСЂС‚РµР¶ РµСЃС‚СЊ?
+    const int i = tag_ptr.find(*sorted_tags);
+
+    if (i == UNKNOWN)
+    {
+        // РќРµС‚.
+        // РџРѕРёС‰РµРј РІ Р‘Р”.
+        lem::UFString s;
+        if (tags.size() == 1)
+        {
+            s = lem::format_str(L"%d %d", tags.front().first, tags.front().second);
+        }
+        else if (tags.size() == 2)
+        {
+            s = lem::format_str(L"%d %d %d %d", sorted_tags->get(0).first, sorted_tags->get(0).second, sorted_tags->get(1).first, sorted_tags->get(1).second);
+        }
+        else
+        {
+            for (lem::Container::size_type i = 0; i < sorted_tags->size(); ++i)
+            {
+                if (i > 0) s += L' ';
+                s += lem::format_str(L"%d %d", sorted_tags->get(i).first, sorted_tags->get(i).second);
+            }
+        }
+
+        const int id = db->AddTagSet(s);
+
+        id2tags.insert(std::make_pair(id, sorted_tags));
+        tag_ptr.push_back(sorted_tags);
+        tagset_id.push_back(id);
+
+        return id;
+    }
+    else
+    {
+        delete sorted_tags;
+        return tagset_id[i];
+    }
+}
+
+
+
+
+SG_TagsList TagSets::operator[](int id)
+{
+    if (id == 0)
+        return nullptr;
+
+#if defined LEM_THREADS
+    lem::Process::CritSecLocker lock(&cs);
+#endif
+
+    std::map<int, SG_TagsList>::const_iterator it = id2tags.find(id);
+    if (it == id2tags.end())
+    {
+        lem::UFString s;
+        db->GetTagSet(id, s);
+
+        lem::Collect<lem::UFString> vals;
+        lem::parse(s, vals, L" ");
+        lem::MCollect< std::pair<int, int> > *lst = new lem::MCollect< std::pair<int, int> >();
+        for (lem::Container::size_type i = 0; i < vals.size(); i += 2)
+        {
+            const int id_tag = lem::to_int(vals[i]);
+            const int ivalue = lem::to_int(vals[i + 1]);
+            lst->push_back(std::make_pair(id_tag, ivalue));
+        }
+
+        tag_ptr.push_back(lst);
+        tagset_id.push_back(id);
+        id2tags.insert(std::make_pair(id, lst));
+        return lst;
+    }
+    else
+    {
+        return it->second;
+    }
 }

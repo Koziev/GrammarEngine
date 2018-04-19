@@ -5,7 +5,7 @@
 
  namespace Solarix
  {
-  typedef const lem::MCollect< std::pair<int/*id_tag*/,int/*ivalue*/> >* SG_TagsList;
+  using SG_TagsList = const lem::MCollect< std::pair<int/*id_tag*/,int/*ivalue*/> >*;
 
   class SynGram;
   extern void PrintTags( SG_TagsList tags, lem::UFString &str, SynGram &sg );

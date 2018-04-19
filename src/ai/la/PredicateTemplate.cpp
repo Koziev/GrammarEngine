@@ -9,96 +9,96 @@ PredicateTemplate::PredicateTemplate() : id(UNKNOWN)
 {
 }
 
-PredicateTemplate::PredicateTemplate( const PredicateTemplate & x ) : id(x.id), src(x.src), params(x.params)
+PredicateTemplate::PredicateTemplate(const PredicateTemplate & x) : id(x.id), src(x.src), params(x.params)
 {}
 
 
 
-PredicateTemplate::PredicateTemplate( int _id, const lem::UFString & _src, const lem::UFString & _params )
- : id(_id), src(_src)
+PredicateTemplate::PredicateTemplate(int _id, const lem::UFString & _src, const lem::UFString & _params)
+    : id(_id), src(_src)
 {
- LEM_CHECKIT_Z(id!=UNKNOWN);
- LEM_CHECKIT_Z(!src.empty());
+    LEM_CHECKIT_Z(id != UNKNOWN);
+    LEM_CHECKIT_Z(!src.empty());
 
- lem::parse( _params, params, false );
+    lem::parse(_params, params, false);
 
- return;
+    return;
 }
 
 
 
-void PredicateTemplate::operator=( const PredicateTemplate & x )
+void PredicateTemplate::operator=(const PredicateTemplate & x)
 {
- id = x.id;
- src = x.src;
- params = x.params;
+    id = x.id;
+    src = x.src;
+    params = x.params;
 }
 
 
 
-bool PredicateTemplate::operator==( const PredicateTemplate & x ) const
+bool PredicateTemplate::operator==(const PredicateTemplate & x) const
 {
- return src==x.src && params==x.params;
+    return src == x.src && params == x.params;
 }
 
 
-bool PredicateTemplate::operator!=( const PredicateTemplate & x ) const
+bool PredicateTemplate::operator!=(const PredicateTemplate & x) const
 {
- return src!=x.src || params!=x.params;
+    return src != x.src || params != x.params;
 }
 
 
 #if defined SOL_LOADTXT && defined SOL_COMPILER
-void PredicateTemplate::LoadTxt( Dictionary & dict, lem::Iridium::Macro_Parser & txtfile, const PredicateTemplateParams & param_list )
+void PredicateTemplate::LoadTxt(Dictionary & dict, lem::Iridium::Macro_Parser & txtfile, const PredicateTemplateParams & param_list)
 {
- int open_paren=1; // инициализируем 1-цей, чтобы считать начало предиката вида xxx( ....
+    int open_paren = 1; // инициализируем 1-цей, чтобы считать начало предиката вида xxx( ....
 
- while( !txtfile.eof() )
- {
-  lem::Iridium::BethToken t = txtfile.read();
+    while (!txtfile.eof())
+    {
+        lem::Iridium::BethToken t = txtfile.read();
 
-  src += L' ';
-  src += t.string().c_str();
+        src += L' ';
+        src += t.string().c_str();
 
-  if( t==B_OROUNDPAREN )
-   open_paren++;
-  else if( t==B_CROUNDPAREN )
-   {
-    open_paren--;
-    if( open_paren==1 )
-     break;
-   }
-  else
-   {
-    if( param_list.IsParam( t.string() ) )
-     params.push_back( t.string() );
-   }
- }
+        if (t == B_OROUNDPAREN)
+            open_paren++;
+        else if (t == B_CROUNDPAREN)
+        {
+            open_paren--;
+            if (open_paren == 1)
+                break;
+        }
+        else
+        {
+            if (param_list.IsParam(t.string()))
+                params.push_back(t.string());
+        }
+    }
 
- return;
+    return;
 }
 #endif
 
 
 
-int PredicateTemplate::Store( LexiconStorage * storage )
+int PredicateTemplate::Store(LexiconStorage * storage)
 {
- id = storage->StorePredicateTemplate( src, params );
- return id;
+    id = storage->StorePredicateTemplate(src, params);
+    return id;
 }
 
 
-void PredicateTemplate::SaveBin( lem::Stream & bin ) const
+void PredicateTemplate::SaveBin(lem::Stream & bin) const
 {
- src.SaveBin(bin);
- params.SaveBin(bin);
- return;
+    src.SaveBin(bin);
+    params.SaveBin(bin);
+    return;
 }
 
 
-void PredicateTemplate::LoadBin( lem::Stream & bin )
+void PredicateTemplate::LoadBin(lem::Stream & bin)
 {
- src.LoadBin(bin);
- params.LoadBin(bin);
- return;
+    src.LoadBin(bin);
+    params.LoadBin(bin);
+    return;
 }

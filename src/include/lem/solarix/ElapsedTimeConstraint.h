@@ -14,36 +14,36 @@
 
 namespace Solarix
 {
- class ElapsedTimeConstraint : lem::NonCopyable
- {
-  private:
-   #if defined LEM_WINDOWS
-   HANDLE hTimerQueue, hTimer;
-   static VOID CALLBACK TimerCallback( PVOID lpParameter, BOOLEAN TimerOrWaitFired );
-   #elif defined LEM_LINUX
-   bool timer_is_armed;
-   static volatile int time_seq;
-   timer_t timerid;
-   struct sigevent sev;
-   struct itimerspec its;
-   struct sigaction sa;
-   static void timer_routine( int sig, siginfo_t * si, void * uc );
-   #else
-   lem::Process::Thread * thread;
-   static void ThreadFunction( void * data );
-   #endif
+    class ElapsedTimeConstraint : lem::NonCopyable
+    {
+    private:
+#if defined LEM_WINDOWS
+        HANDLE hTimerQueue, hTimer;
+        static VOID CALLBACK TimerCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired);
+#elif defined LEM_LINUX
+        bool timer_is_armed;
+        static volatile int time_seq;
+        timer_t timerid;
+        struct sigevent sev;
+        struct itimerspec its;
+        struct sigaction sa;
+        static void timer_routine(int sig, siginfo_t * si, void * uc);
+#else
+        lem::Process::Thread * thread;
+        static void ThreadFunction(void * data);
+#endif
 
-   int max_stack_depth;
-   int max_elapsed_millisec;
-   volatile bool exceeded;
-   
-  public:
-   ElapsedTimeConstraint( int _max_elapsed_millisec, int _max_stack_depth );
-   ~ElapsedTimeConstraint();
+        int max_stack_depth;
+        int max_elapsed_millisec;
+        volatile bool exceeded;
 
-   int GetTimeout() const { return max_elapsed_millisec; }
-   inline bool Exceeded( int current_recursion_depth ) const { return exceeded || max_stack_depth<current_recursion_depth; }
- };
+    public:
+        ElapsedTimeConstraint(int _max_elapsed_millisec, int _max_stack_depth);
+        ~ElapsedTimeConstraint();
+
+        int GetTimeout() const { return max_elapsed_millisec; }
+        inline bool Exceeded(int current_recursion_depth) const { return exceeded || max_stack_depth < current_recursion_depth; }
+    };
 }
 
 #endif
