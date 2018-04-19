@@ -317,8 +317,8 @@ UFString& UFString::operator+=(const char *s)
         return *this;
     }
 
-    wchar_t * str = new wchar_t[l + 1];
-    std::unique_ptr<wchar_t[]> g(str);
+    wchar_t * str = new wchar_t[l + sl + 1];
+    std::unique_ptr<wchar_t> g(str);
 
     lem_strcpy(str, c_str());
     lem_strcat(str, s);

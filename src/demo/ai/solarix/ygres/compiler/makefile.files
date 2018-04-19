@@ -18,7 +18,7 @@ OBJS =  $(OBJDIR)/PatternNGramTreeScorer.o $(OBJDIR)/ModelTagMatcher.o $(OBJDIR)
 all: compiler
 
 compiler: $(OBJS)
-	$(CXX) $(LFLAGS) $(OBJS) $(LEM_LIBS) -l ncurses -l pthread -l sqlite3 -l boost_regex -o $(EXEDIR)/compiler
+	$(CXX) $(LFLAGS) $(OBJS) $(LEM_LIBS) -l ncurses -l pthread -l sqlite3 -l boost_regex -ggdb -o $(EXEDIR)/compiler
 
 $(OBJDIR)/ModelCodeBook.o: $(LEM_PATH)/ai/la/ModelCodeBook.cpp
 		$(CXX) $(CXXFLAGS) $(LEM_PATH)/ai/la/ModelCodeBook.cpp -o $(OBJDIR)/ModelCodeBook.o
