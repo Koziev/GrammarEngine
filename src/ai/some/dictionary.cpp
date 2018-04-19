@@ -503,6 +503,7 @@ bool Dictionary::LoadModules(
 
     lem::UFString solarix_version(p.Get_By_Path(L"dataroot.solarix_version"));
 
+
     lem::UFString sdv(p.Get_By_Path(L"dataroot.dictionary_version"));
     if (!sdv.empty() && !solarix_version.empty())
     {
@@ -1943,6 +1944,7 @@ bool Dictionary::Check_Binary_File_Header(
 
     if (!ok)
     {
+
         if (do_stop)
         {
             if (lem::LogFile::IsOpen())
@@ -1965,11 +1967,13 @@ bool Dictionary::Check_Binary_File_Header(
         if (do_stop)
         {
             if (lem::LogFile::IsOpen())
+             {
                 lem::LogFile::logfile->printf(
                     "Binary file [%us] has been created by incompatible translator\n"
                     , bin.GetName().GetUnicode().c_str()
                 );
             LEM_STOPIT_A("Dictionary file has unknown or incompatible format");
+           }
         }
 
         return false;
@@ -1986,6 +1990,7 @@ bool Dictionary::Check_Binary_File_Header(
     {
         if (do_stop)
         {
+
             if (lem::LogFile::IsOpen())
                 lem::LogFile::logfile->printf(
                     "Incompatible debug mode was used by the Translator "

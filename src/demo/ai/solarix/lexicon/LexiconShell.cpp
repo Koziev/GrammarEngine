@@ -228,6 +228,11 @@ void LexiconShell::LoadDictionary(const lem::Path &_dict_path)
     {
         ok = sol_id->LoadModules(dict_path, opt);
     }
+    catch( const lem::E_BaseException &ex )
+    {
+     mout->printf("%us\n", ex.what());
+     ok = false;
+    }
     catch (...)
     {
         ok = false;

@@ -812,13 +812,13 @@ void Save_Results( Compiler *C )
      p3.ConcateLeaf( lem::Path(L"seeker.bin") );
 
      // Возможно, сохраняем в отдельном файле справочник лексем.
-/*
+
      if( save_seeker )
       {
        BinaryWriter bin3(p3);
        C->SaveSeeker(bin3);
       }
-*/
+
 
      Path pes_path;
      if( save_prefix_entry_searcher )
