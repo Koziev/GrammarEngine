@@ -1,4 +1,4 @@
-// LC->31.03.2018
+// LC->20.04.2018
 
 #include <boost/algorithm/string.hpp>
 #include <lem/streams.h>
@@ -318,7 +318,7 @@ UFString& UFString::operator+=(const char *s)
     }
 
     wchar_t * str = new wchar_t[l + sl + 1];
-    std::unique_ptr<wchar_t> g(str);
+    std::unique_ptr<wchar_t[]> g(str);
 
     lem_strcpy(str, c_str());
     lem_strcat(str, s);
@@ -548,7 +548,7 @@ bool UFString::eqi(const wchar_t *x) const
     size_t len = length();
     if (!len)
     {
-        return x == NULL || *x == 0;
+        return x == nullptr || *x == 0;
     }
 
     if (!x || !*x)

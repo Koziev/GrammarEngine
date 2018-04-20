@@ -1,4 +1,4 @@
-// LC->30.03.2018
+// LC->20.04.2018
 
 #include <lem/streams.h>
 #include <lem/conversions.h>
@@ -44,7 +44,7 @@ const FString lem::add_spaces(const FString& s, int n)
 
 void FString::re_clear(void)
 {
-    if (this->c_str() == NULL)
+    if (this->c_str() == nullptr)
     {
         this->operator=("");
     }

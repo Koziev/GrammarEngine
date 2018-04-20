@@ -3,23 +3,23 @@
 #include <lem/streams.h>
 #include <lem/startup.h>
 
-static lem::CP_Initialized *cp_init = NULL;
+static lem::CP_Initialized *cp_init = nullptr;
 
-void lem::Init(void)
+void lem::Init()
 {
- if( cp_init==NULL )
-  cp_init = new lem::CP_Initialized;
+    if (cp_init == nullptr)
+        cp_init = new lem::CP_Initialized;
 
 
- // ... other initializations ...
+    // ... other initializations ...
 
- return;
+    return;
 }
 
 
-void lem::Leave(void)
+void lem::Leave()
 {
- delete cp_init;
- cp_init=NULL;
+    delete cp_init;
+    cp_init = nullptr;
 }
 

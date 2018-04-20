@@ -4,10 +4,8 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
 //
 // Content:
-// LEM C++ library  http://www.solarix.ru
 // Вспомогательные операции над C-строками. Используются для классов UString
 // и UFString, или автономно. Частично перекрывают стандартные C-функции
 // работы со строками для новых 2-х байтовых символов wchar_t.
@@ -28,7 +26,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->01.09.1997
-// LC->16.07.2009
+// LC->19.04.2018
 // --------------
 
 #include <stdio.h>
@@ -190,6 +188,7 @@ int lem::lem_find(const wchar_t *s, wchar_t ch, int nentry)
     const int l = lem_strlen(s);
     int n = 1;
     for (int i = 0; i < l; i++)
+    {
         if (s[i] == ch)
         {
             if (n == nentry)
@@ -197,6 +196,7 @@ int lem::lem_find(const wchar_t *s, wchar_t ch, int nentry)
             else
                 n++;
         }
+    }
 
     return UNKNOWN;
 }
@@ -218,12 +218,15 @@ int lem::lem_find(const wchar_t *s, const char *f, int nentry)
     char f0 = f[0];
 
     for (int i = 0; i < l1; i++)
+    {
         if (s[i] == SOL_INT_TO_CHAR(f0))
         {
             bool eq = true;
             int ii = i + 1, j = 1;
             for (; eq && f[j] && j < l2; j++, ii++)
+            {
                 eq = (s[ii] == SOL_INT_TO_CHAR(f[j]));
+            }
 
             if (eq)
             {
@@ -233,6 +236,7 @@ int lem::lem_find(const wchar_t *s, const char *f, int nentry)
                     n++;
             }
         }
+    }
 
     return UNKNOWN;
 }
@@ -249,13 +253,14 @@ int lem::lem_find(const wchar_t *s, const wchar_t *f, int nentry)
     if (nentry == 1)
     {
         const wchar_t *where = wcsstr(s, f);
-        return where == NULL ? UNKNOWN : int(where - s);
+        return where == nullptr ? UNKNOWN : int(where - s);
     }
 
     int n = 1;
     wchar_t f0 = f[0];
 
     for (int i = 0; i < l1; i++)
+    {
         if (s[i] == f0)
         {
             bool eq = true;
@@ -271,6 +276,7 @@ int lem::lem_find(const wchar_t *s, const wchar_t *f, int nentry)
                     n++;
             }
         }
+    }
 
     return UNKNOWN;
 }
@@ -288,6 +294,7 @@ int lem::lem_findi(const wchar_t *s, const wchar_t *f, int nentry)
     wchar_t f0 = lem::to_uupper(f[0]);
 
     for (int i = 0; i < l1; i++)
+    {
         if (to_uupper(s[i]) == f0)
         {
             bool eq = true;
@@ -303,6 +310,7 @@ int lem::lem_findi(const wchar_t *s, const wchar_t *f, int nentry)
                     n++;
             }
         }
+    }
 
     return UNKNOWN;
 }
@@ -320,6 +328,7 @@ int lem::lem_find(const char *s, const wchar_t *f, int nentry)
     wchar_t f0 = f[0];
 
     for (int i = 0; i < l1; i++)
+    {
         if (s[i] == (char)f0)
         {
             bool eq = true;
@@ -335,6 +344,7 @@ int lem::lem_find(const char *s, const wchar_t *f, int nentry)
                     n++;
             }
         }
+    }
 
     return UNKNOWN;
 }
@@ -513,57 +523,6 @@ void lem::lem_strncpy(char *dest, const wchar_t *src, int n)
 
 
 
-/*************************************************************************
- Возвращаем 0 если строки лексически совпадают, иначе 1.
-*************************************************************************/
-/*
-int lem::lem_strcmp( const wchar_t *a, const wchar_t *b )
-{
- if( !(a) )
-  return b==a ? 0 : 1;
-
- if( !(b) )
-  return 1;
-
- int i=0;
- while( SOL_ISNT_NC(a[i]) && SOL_ISNT_NC(b[i]) && a[i]==b[i] )
-  i++;
-
- return a[i]!=b[i] ? 1 : 0;
-}
-
-int lem::lem_strcmp( const wchar_t *a, const char *b )
-{
- if( !(a) )
-  return !(b) ? 0 : 1;
-
- if( !(b) )
-  return 1;
-
- int i=0;
- while( SOL_ISNT_NC(a[i]) && (b[i]) && a[i]==SOL_INT_TO_CHAR(b[i]) )
-  i++;
-
- return a[i]!=b[i] ? 1 : 0;
-}
-
-int lem::lem_strcmp( const char *a, const wchar_t *b )
-{
- if( !(a) )
-  return !(b) ? 0 : 1;
-
- if( !(b) )
-  return 1;
-
- int i=0;
- while( a[i] && b[i] && SOL_INT_TO_CHAR(a[i])==b[i] )
-  i++;
-
- return a[i]!=b[i] ? 1 : 0;
-}
-*/
-
-
 /***********************************************************************
  Отыскиваем символ ch в строке s, заканчивающейся нулевым символом, и
  возвращаем либо NULL (не найден), либо указатель на найденную позицию.
@@ -577,11 +536,13 @@ const wchar_t* lem::lem_strrchr(const wchar_t *s, wchar_t ch)
     {
         int i = 0;
         while (s[i])
+        {
             if (s[i++] == ch)
                 return s + i - 1;
+        }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*************************************************************************
@@ -1064,6 +1025,7 @@ int lem::lem_find_from(const char *s, const wchar_t *f, int start_pos)
         return UNKNOWN;
 
     for (int i = start_pos; i < l1; i++)
+    {
         if (s[i] == f0)
         {
             bool eq = true;
@@ -1074,6 +1036,7 @@ int lem::lem_find_from(const char *s, const wchar_t *f, int start_pos)
             if (eq)
                 return i;
         }
+    }
 
     return -1;
 }
@@ -1093,6 +1056,7 @@ int lem::lem_find_from(const wchar_t *s, const wchar_t *f, int start_pos)
         return UNKNOWN;
 
     for (int i = start_pos; i < l1; i++)
+    {
         if (s[i] == f0)
         {
             bool eq = true;
@@ -1103,6 +1067,7 @@ int lem::lem_find_from(const wchar_t *s, const wchar_t *f, int start_pos)
             if (eq)
                 return i;
         }
+    }
 
     return -1;
 }
@@ -1122,6 +1087,7 @@ int lem::lem_find_from(const wchar_t *s, const char *f, int start_pos)
         return UNKNOWN;
 
     for (int i = start_pos; i < l1; i++)
+    {
         if (s[i] == f0)
         {
             bool eq = true;
@@ -1132,6 +1098,7 @@ int lem::lem_find_from(const wchar_t *s, const char *f, int start_pos)
             if (eq)
                 return i;
         }
+    }
 
     return -1;
 }
@@ -1170,10 +1137,12 @@ void lem::lem_strip_final_spaces(wchar_t *str)
     int i = lem_strlen(str) - 1;
 
     while (i >= 0)
+    {
         if (str[i] == L' ' || str[i] == L'\t' || str[i] == L'\r' || str[i] == L'\n')
             str[i--] = '\0';
         else
             break;
+    }
 
     return;
 }
@@ -1358,45 +1327,17 @@ void lem::lem_remove_char(wchar_t *str, wchar_t chs)
 }
 
 
-/*
-const UFString lem::encode_chars_to_html( const UFString &str )
-{
- UFString res;
-
- for( UFString::const_iterator i=str.begin(); i!=str.end(); i++ )
-  {
-   wchar_t ch = *i;
-
-   if( ch == L'&' )
-    res += L"&amp;";
-   else if( ch == L'<' )
-    res += L"&lt;";
-   else if( ch == L'>' )
-    res += L"&gt;";
-   else if( ch == L'"' )
-    res += L"&quot;";
-   else if( ch == 0x00a7 )
-    res += L"&sect;";
-   else if( ch == 0x00ab )
-    res += L"&raquo;";
-   else if( ch == 0x00bb )
-    res += L"&laquo;";
-   else
-    res += ch;
-  }
-
- return res;
-}
-*/
 
 const UFString lem::encode_chars_to_xml(const UFString &str)
 {
     UFString res;
     char nnnn[10];
-    for (UFString::const_iterator i = str.begin(); i != str.end(); i++)
+    for (auto i = str.begin(); i != str.end(); i++)
     {
         if (is_lat(*i) || is_udigit(*i))
+        {
             res += *i;
+        }
         else
         {
             uint16_to_str(*i, nnnn, 10);
@@ -1410,45 +1351,12 @@ const UFString lem::encode_chars_to_xml(const UFString &str)
     return res;
 }
 
-/*
-// Строка из кодировки SGML (с представлением некоторых символов через
-// последовательности &entity;) преобразуется к обычному виду.
-const UFString lem::encode_html_to_chars( const UFString &str )
-{
- UFString res;
- for( UFString::const_iterator i=str.begin(); i!=str.end(); i++ )
-  {
-   if( *i == L'&' )
-    {
-     // Читаем имя SGML entity - до символа ;
-     FString entity;
-     i++;
-
-     for( ; i!=str.end(); i++ )
-      {
-       if( *i == L';' )
-        {
-         break;
-        }
-
-       entity += static_cast<char>(*i);
-      }
-
-     res += CodeConverter::Sgml_2_Char( entity.c_str() );
-    }
-   else
-    res += *i;
-  }
-
- return res;
-}
-*/
 
 const UFString lem::encode_str_to_sql(const UFString &str)
 {
     UFString res;
 
-    for (UFString::const_iterator i = str.begin(); i != str.end(); i++)
+    for (auto i = str.begin(); i != str.end(); i++)
     {
         wchar_t ch = *i;
 
@@ -1464,48 +1372,6 @@ const UFString lem::encode_str_to_sql(const UFString &str)
 }
 
 
-/*
-UFString lem::wildcards_to_regex( const UFString &str, bool supress_front_asterix )
-{
- UFString res;
-
- bool first_wc=true;
-
- UFString::const_iterator END = str.end();
-
- if( str.length()==1 )
-  return res;
-
- for( UFString::const_iterator i=str.begin(); i!=END; i++ )
-  {
-   wchar_t ch = *i;
-
-   switch(ch)
-   {
-    case L'\\': res += L"\\\\"; break;
-    case L'.':  res += L"\\.";  break;
-
-    case L'*':
-     if( !first_wc || !supress_front_asterix )
-      res += L"(.*)";
-     break;
-
-    case L'?':
-     if( !first_wc || !supress_front_asterix )
-      res += L".";
-     break;
-
-    default:
-     res += ch;
-     first_wc=false;
-     break;
-   }
-  }
-
- return res;
-}
-*/
-
 
 
 bool lem::lem_eq_begin(const wchar_t *a1, const wchar_t *a2)
@@ -1520,34 +1386,12 @@ bool lem::lem_eq_begin(const wchar_t *a1, const wchar_t *a2)
 
 
 
-/*
-void lem::split( const UFString &s, Collect<UFString> &list, wchar_t delim )
-{
- const int l = s.length();
- for( int i=0; i<l; )
-  {
-   UFString ss;
-
-   while( s[i]!=delim && s[i]!=0 )
-    ss.AddDirty(s[i++]);
-
-   ss.calc_hash();
-   list.push_back(ss);
-
-   i++;
-  }
-
- return;
-}
-*/
-
-
 // *****************************************************
 // Срисовано с соответствующего участка кода в wxWindows
 // *****************************************************
 FString lem::format_str(const char *fmt, ...)
 {
-    if (fmt == NULL)
+    if (fmt == nullptr)
         return FString();
 
     va_list argptr;
@@ -1557,7 +1401,7 @@ FString lem::format_str(const char *fmt, ...)
     // По историческим причинам класс OFormatter использует спецификатор %us для вывода широких
     // строк и %uc для широких символов. Для sprintf это недопустимые спецификаторы, приводящие
     // к неправильному выводу.
-    if (strstr(fmt, "%us") != NULL || strstr(fmt, "%uc") != NULL)
+    if (strstr(fmt, "%us") != nullptr || strstr(fmt, "%uc") != nullptr)
     {
         LEM_STOPIT;
     }
@@ -1565,7 +1409,7 @@ FString lem::format_str(const char *fmt, ...)
 
     int size = 1024;
 
-    char *buf = NULL;
+    char *buf = nullptr;
     while (true)
     {
         buf = (char*)malloc(sizeof(char)*(size + 1));
@@ -1606,7 +1450,7 @@ FString lem::format_str(const char *fmt, ...)
 
 UFString lem::format_str(const wchar_t *fmt, ...)
 {
-    if (fmt == NULL)
+    if (fmt == nullptr)
         return UFString();
 
     va_list argptr;
@@ -1616,7 +1460,7 @@ UFString lem::format_str(const wchar_t *fmt, ...)
     // По историческим причинам класс OFormatter использует спецификатор %us для вывода широких
     // строк и %uc для широких символов. Для sprintf это недопустимые спецификаторы, приводящие
     // к неправильному выводу.
-    if (wcsstr(fmt, L"%us") != NULL || wcsstr(fmt, L"%uc") != NULL)
+    if (wcsstr(fmt, L"%us") != nullptr || wcsstr(fmt, L"%uc") != nullptr)
     {
         LEM_STOPIT;
     }
@@ -1624,7 +1468,7 @@ UFString lem::format_str(const wchar_t *fmt, ...)
 
     int size = 1024;
 
-    wchar_t *buf = NULL;
+    wchar_t *buf = nullptr;
     while (true)
     {
         buf = (wchar_t*)malloc(sizeof(wchar_t)*(size + 1));
