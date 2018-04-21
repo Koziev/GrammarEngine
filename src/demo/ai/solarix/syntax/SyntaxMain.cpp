@@ -77,7 +77,7 @@ int main( int argc, char *argv[] )
  bool AllowReconstructor=false;
  bool AllowModel=false;
  bool Semantics=false;
- int MaxAlt=0;
+ int MaxAlt=40;  // prevent too deep syntax analysis
  int MaxSkipToken=0;
 
  verbose = true;
