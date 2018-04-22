@@ -5,7 +5,7 @@
 // 06.09.2010 - исправлена ошибка сортировки списка паттернов для распознавания неделимых токенов,
 //              порядок сортировки должен быть обратный.
 //
-// LC->02.04.2018
+// LC->21.04.2018
 
 #include <lem/conversions.h>
 #include <lem/solarix/dictionary.h>
@@ -1133,7 +1133,7 @@ bool EuroSentenceTokenizer::IsTokenDelimiter(wchar_t c) const
     if (delimiters.empty() && (lem::is_udelim(c) || lem::is_uspace(c) || c == L'\r' || c == L'\n') || c == 151)
         return true;
 
-    if (!delimiters.empty() && delimiters.find(c) != 0)
+    if (!delimiters.empty() && delimiters.find_char(c) != 0)
         return true;
 
     return false;

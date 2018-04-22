@@ -126,7 +126,7 @@ static const TCHAR* makepath( const TCHAR *org )
 
  const TCHAR* subst = _T("?");
  const TCHAR* xxpos = _tcsstr(org,subst);
- if( xxpos==NULL )
+ if( xxpos==nullptr )
   return org;
 
  TCHAR* buf = new TCHAR[ _tcslen(org)+subst_len+1 ];
@@ -162,13 +162,13 @@ int main( int argc, const char *argv[] )
  cout << " or   http://solarix.ru/for_developers/api/grammar-engine-en.shtml (English)\n\n";
 
  // Первоначальная инициализация движка.
- HGREN hEngine = NULL;
+ HGREN hEngine = nullptr;
 
  int MajorVer, MinorVer, BuildNum;
  int rc = sol_GetVersion( hEngine, &MajorVer, &MinorVer, &BuildNum );
 
  // http://www.solarix.ru/api/en/sol_CreateGrammarEngine.shtml
- hEngine = sol_CreateGrammarEngine(NULL);
+ hEngine = sol_CreateGrammarEngine(nullptr);
 
  // Когда работаем с локальным словарем, надо заранее резервировать память под
  // добавляемые статьи - см. функцию sol_AddWord.
@@ -183,12 +183,12 @@ int main( int argc, const char *argv[] )
 
  int load_status=0;
 
- const char *dict_path=NULL;
- const char *morph_samples=NULL;
- const char *syntax_samples=NULL;
- const char *segmenter_samples=NULL;
- const char *syllabs_samples=NULL;
- const char *lang_name = NULL;
+ const char *dict_path=nullptr;
+ const char *morph_samples=nullptr;
+ const char *syntax_samples=nullptr;
+ const char *segmenter_samples=nullptr;
+ const char *syllabs_samples=nullptr;
+ const char *lang_name = nullptr;
  bool lazy_lexicon=false;
  bool test_threads=false;
  bool use_model=false;
@@ -255,7 +255,7 @@ int main( int argc, const char *argv[] )
  int InstanceFlags = 0;
  if( lazy_lexicon ) InstanceFlags |= SOL_GREN_LAZY_LEXICON;
 
- if( dict_path==NULL )
+ if( dict_path==nullptr )
   {
    #if defined MYSQL_DICTIONARY
    if( exists( makepath(_T("..\\..\\..\\..\\..\\bin-windows?\\dictionary-mysql.xml"))) )
@@ -299,7 +299,7 @@ int main( int argc, const char *argv[] )
   {
    cout << "Error loading dictionary file dictionary.xml\n"
            "You have to download the latest dictionary build\n"
-           "from http://sourceforge.net/project/solarix";
+           "from https://github.com/Koziev/GrammarEngine";
 
    int l = sol_GetErrorLen8(hEngine);
    char *err = new char[ l+1 ];
@@ -331,7 +331,7 @@ int main( int argc, const char *argv[] )
 
  int id_language=-1;
 
- if( lang_name!=NULL )
+ if( lang_name!=nullptr )
   {
    id_language = sol_FindLanguage8( hEngine, lang_name );
    if( id_language==-1 )
@@ -343,7 +343,7 @@ int main( int argc, const char *argv[] )
 
  sol_SetLanguage( hEngine, id_language );
  
- time_t t1 = time(NULL);
+ time_t t1 = time(nullptr);
 
  const bool write_errors=true;
 
@@ -351,19 +351,19 @@ int main( int argc, const char *argv[] )
   {
    Test_Threading( hEngine, id_language, morph_samples, syntax_samples );
   }
- else if( morph_samples!=NULL )
+ else if( morph_samples!=nullptr )
   {
    TestMorphologicalAnalyzer( hEngine, id_language, default_beam_size, morph_samples, write_errors || !use_model, use_model, -1 );
   }
- else if( syntax_samples!=NULL )
+ else if( syntax_samples!=nullptr )
   {
    TestSyntacticAnalyzer( hEngine, id_language, default_beam_size, syntax_samples, write_errors, -1 );
   }
- else if( segmenter_samples!=NULL )
+ else if( segmenter_samples!=nullptr )
   {
    TestSegmenter( hEngine, id_language, segmenter_samples, write_errors, -1 );
   }
- else if( syllabs_samples!=NULL )
+ else if( syllabs_samples!=nullptr )
   {
    TestSyllabicBreaks( hEngine, id_language, syllabs_samples, write_errors, -1 );
   }
@@ -395,7 +395,7 @@ int main( int argc, const char *argv[] )
 
  cout << "All done";
 
- time_t t2 = time(NULL);
+ time_t t2 = time(nullptr);
  double elapsed = difftime(t2,t1);
  cout << ", elapsed_time=" << elapsed;
 

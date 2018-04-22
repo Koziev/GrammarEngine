@@ -1,4 +1,4 @@
-// LC->11.12.2014
+п»ї// LC->11.12.2014
 
 #include <lem/solarix/la_autom.h>
 #include <lem/solarix/sg_autom.h>
@@ -11,994 +11,999 @@
 using namespace lem;
 using namespace Solarix;
 
-static const int MAX_SENTENCE_LENGTH=1024;
-// для внутреннего использования - специальные маркеры конца предложения и конца абзаца.
+static const int MAX_SENTENCE_LENGTH = 1024;
+// РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ - СЃРїРµС†РёР°Р»СЊРЅС‹Рµ РјР°СЂРєРµСЂС‹ РєРѕРЅС†Р° РїСЂРµРґР»РѕР¶РµРЅРёСЏ Рё РєРѕРЅС†Р° Р°Р±Р·Р°С†Р°.
 #define EOS_MARKER_CODE L'\x1D'
 #define EOP_MARKER_CODE L'\x1E'
 
 SentenceBroker::SentenceBroker(void) : eof(true), LanguageID(UNKNOWN)
 {
- Prepare( NULL, UNKNOWN );
- return;
+    Prepare(NULL, UNKNOWN);
+    return;
 }
 
-SentenceBroker::SentenceBroker( Dictionary &dict, int language ): eof(true)
+SentenceBroker::SentenceBroker(Dictionary &dict, int language) : eof(true)
 {
- Prepare( &dict, language );
- return;
-}
-
-
-SentenceBroker::SentenceBroker( lem::Char_Stream::WideStream &_stream /*non-deleteable*/, Dictionary * dict, int language )
-{
- Open(_stream);
- Prepare( dict, language );
- return;
-}
-
-SentenceBroker::SentenceBroker( const wchar_t *text, Dictionary * dict, int language )
- : max_sentence_length(MAX_SENTENCE_LENGTH)
-{
- Open( lem::Ptr<lem::Char_Stream::WideStream>( new lem::Char_Stream::UTF16_MemReader(text) ) );
- Prepare( dict, language );
- return;
-}
-
-SentenceBroker::SentenceBroker( const lem::UFString &text, Dictionary * dict, int language )
- : max_sentence_length(MAX_SENTENCE_LENGTH)
-{
- Open( lem::Ptr<lem::Char_Stream::WideStream>( new lem::Char_Stream::UTF16_MemReader(text) ) );
- Prepare( dict, language );
- return;
-}
-
-SentenceBroker::SentenceBroker( lem::Ptr<lem::Char_Stream::WideStream> _stream, Dictionary * dict, int language )
- :  max_sentence_length(MAX_SENTENCE_LENGTH), stream(_stream)
-{
- Open(_stream);
- Prepare( dict, language );
- return;
+    Prepare(&dict, language);
+    return;
 }
 
 
-void SentenceBroker::Prepare( Dictionary * dict, int language )
+SentenceBroker::SentenceBroker(lem::Char_Stream::WideStream &_stream /*non-deleteable*/, Dictionary * dict, int language)
 {
- cur_paragraph_id = 0;
- last_paragraph_id = 0;
- LanguageID = language;
+    Open(_stream);
+    Prepare(dict, language);
+    return;
+}
 
- max_sentence_length = MAX_SENTENCE_LENGTH;
+SentenceBroker::SentenceBroker(const wchar_t *text, Dictionary * dict, int language)
+    : max_sentence_length(MAX_SENTENCE_LENGTH)
+{
+    Open(lem::Ptr<lem::Char_Stream::WideStream>(new lem::Char_Stream::UTF16_MemReader(text)));
+    Prepare(dict, language);
+    return;
+}
 
- const wchar_t *sent_delims_raw[] = { L".", L"?", L"!", L";", L"...", L"?!", L"\x1D", NULL };
- int i=0;
- while( sent_delims_raw[i]!=NULL )
-  {
-   if( sent_delims_raw[i][1]==0 )
-    sent_delims1.push_back( sent_delims_raw[i][0] );
+SentenceBroker::SentenceBroker(const lem::UFString &text, Dictionary * dict, int language)
+    : max_sentence_length(MAX_SENTENCE_LENGTH)
+{
+    Open(lem::Ptr<lem::Char_Stream::WideStream>(new lem::Char_Stream::UTF16_MemReader(text)));
+    Prepare(dict, language);
+    return;
+}
 
-   sent_delims.push_back( sent_delims_raw[i] ); 
-   i++;
-  }
+SentenceBroker::SentenceBroker(lem::Ptr<lem::Char_Stream::WideStream> _stream, Dictionary * dict, int language)
+    : max_sentence_length(MAX_SENTENCE_LENGTH), stream(_stream)
+{
+    Open(_stream);
+    Prepare(dict, language);
+    return;
+}
 
- la = NULL;
- sg = NULL;
 
- #if defined SOL_CAA && !defined SOL_NO_AA
- if( dict!=NULL )
-  {
-   tokenizer = dict->GetSentenceTokenizer(language);
-   seeker = dict->seeker;
-   la = & dict->GetLexAuto(); 
-   sg = & dict->GetSynGram();
+void SentenceBroker::Prepare(Dictionary * dict, int language)
+{
+    cur_paragraph_id = 0;
+    last_paragraph_id = 0;
+    LanguageID = language;
 
-   if( language!=UNKNOWN )
+    max_sentence_length = MAX_SENTENCE_LENGTH;
+
+    const wchar_t *sent_delims_raw[] = { L".", L"?", L"!", L";", L"...", L"?!", L"\x1D", NULL };
+    int i = 0;
+    while (sent_delims_raw[i] != NULL)
     {
-     const SG_Language & lang = dict->GetSynGram().languages()[language];
+        if (sent_delims_raw[i][1] == 0)
+            sent_delims1.push_back(sent_delims_raw[i][0]);
 
-     const int ip1 = lang.FindParam(L"SentenceBrokerFlags");
-     if( ip1!=UNKNOWN )
-      {
-       for( lem::Container::size_type i=0; i<lang.params[ip1]->values.size(); ++i )
-        {
-         const UFString &v = lang.params[ip1]->values[i];
-         if( v.eqi(L"UseLexicon") )
-          use_lexicon = true;
-         else if( v.eq_begi(L"MinFormLen=") )
-          {
-           const int k = v.search(L'=');
-           if( k!=UNKNOWN )
-            min_wordform_len = lem::to_int( v.c_str()+k+1 );
-          }
-        }
-      }
-
-     const int ip11 = lang.FindParam(L"CasingSentBroker");
-     if( ip11!=UNKNOWN )
-      {
-       casing_sent_delim.clear();
-       for( lem::Container::size_type q=0; q<lang.params[ip11]->values.size(); ++q )
-        casing_sent_delim.push_back( lem::UCString(lang.params[ip11]->values[q].c_str()) );
-
-       CharCasingCoord = dict->GetSynGram().FindCoord(L"CharCasing").GetIndex();
-       if( CharCasingCoord!=UNKNOWN )
-        {
-         LowerCasingState = dict->GetSynGram().coords()[CharCasingCoord].FindState(L"lower");
-        }
-      }
-
-     const int ip2 = lang.FindParam( L"SentenceDelimiters" );
-     if( ip2!=UNKNOWN )
-      {
-       sent_delims.clear();
-       sent_delims.push_back( lem::UCString(EOS_MARKER_CODE) );
-       sent_delims.push_back( lem::UCString(EOP_MARKER_CODE) );
-
-       sent_delims1.push_back( EOS_MARKER_CODE );
-       sent_delims1.push_back( EOS_MARKER_CODE );
-
-       for( lem::Container::size_type q=0; q<lang.params[ip2]->values.size(); ++q )
-        {
-         const lem::UFString &s = lang.params[ip2]->values[q];
-         sent_delims.push_back( lem::UCString(s.c_str()) );
-
-         if( s.length()==1 )
-          sent_delims1.push_back( s.front() );
-        }
-      }
-
-     const int ip3 = lang.FindParam( L"MaxSentenceLen" );
-     if( ip3!=UNKNOWN )
-      {
-       max_sentence_length = lem::to_int(lang.params[ip3]->values.front());
-      }
+        sent_delims.push_back(sent_delims_raw[i]);
+        i++;
     }
-  }
- #endif
 
- return;
+    la = NULL;
+    sg = NULL;
+
+#if defined SOL_CAA && !defined SOL_NO_AA
+    if (dict != NULL)
+    {
+        tokenizer = dict->GetSentenceTokenizer(language);
+        seeker = dict->seeker;
+        la = &dict->GetLexAuto();
+        sg = &dict->GetSynGram();
+
+        if (language != UNKNOWN)
+        {
+            const SG_Language & lang = dict->GetSynGram().languages()[language];
+
+            const int ip1 = lang.FindParam(L"SentenceBrokerFlags");
+            if (ip1 != UNKNOWN)
+            {
+                for (lem::Container::size_type i = 0; i < lang.params[ip1]->values.size(); ++i)
+                {
+                    const UFString &v = lang.params[ip1]->values[i];
+                    if (v.eqi(L"UseLexicon"))
+                        use_lexicon = true;
+                    else if (v.eq_begi(L"MinFormLen="))
+                    {
+                        const int k = v.search(L'=');
+                        if (k != UNKNOWN)
+                            min_wordform_len = lem::to_int(v.c_str() + k + 1);
+                    }
+                }
+            }
+
+            const int ip11 = lang.FindParam(L"CasingSentBroker");
+            if (ip11 != UNKNOWN)
+            {
+                casing_sent_delim.clear();
+                for (lem::Container::size_type q = 0; q < lang.params[ip11]->values.size(); ++q)
+                    casing_sent_delim.push_back(lem::UCString(lang.params[ip11]->values[q].c_str()));
+
+                CharCasingCoord = dict->GetSynGram().FindCoord(L"CharCasing").GetIndex();
+                if (CharCasingCoord != UNKNOWN)
+                {
+                    LowerCasingState = dict->GetSynGram().coords()[CharCasingCoord].FindState(L"lower");
+                }
+            }
+
+            const int ip2 = lang.FindParam(L"SentenceDelimiters");
+            if (ip2 != UNKNOWN)
+            {
+                sent_delims.clear();
+                sent_delims.push_back(lem::UCString(EOS_MARKER_CODE));
+                sent_delims.push_back(lem::UCString(EOP_MARKER_CODE));
+
+                sent_delims1.push_back(EOS_MARKER_CODE);
+                sent_delims1.push_back(EOS_MARKER_CODE);
+
+                for (lem::Container::size_type q = 0; q < lang.params[ip2]->values.size(); ++q)
+                {
+                    const lem::UFString &s = lang.params[ip2]->values[q];
+                    sent_delims.push_back(lem::UCString(s.c_str()));
+
+                    if (s.length() == 1)
+                        sent_delims1.push_back(s.front());
+                }
+            }
+
+            const int ip3 = lang.FindParam(L"MaxSentenceLen");
+            if (ip3 != UNKNOWN)
+            {
+                max_sentence_length = lem::to_int(lang.params[ip3]->values.front());
+            }
+        }
+    }
+#endif
+
+    return;
 }
 
 
-void SentenceBroker::Open( lem::Char_Stream::WideStream &_stream /*non-deleteable*/ )
+void SentenceBroker::Open(lem::Char_Stream::WideStream &_stream /*non-deleteable*/)
 {
- stream = lem::Ptr<lem::Char_Stream::WideStream>( &_stream, lem::null_deleter() );
- return;
+    stream = lem::Ptr<lem::Char_Stream::WideStream>(&_stream, lem::null_deleter());
+    return;
 }
 
 
-void SentenceBroker::Open( lem::Ptr<lem::Char_Stream::WideStream> _stream )
+void SentenceBroker::Open(lem::Ptr<lem::Char_Stream::WideStream> _stream)
 {
- stream = _stream;
- return;
+    stream = _stream;
+    return;
 }
 
 
 
-bool SentenceBroker::IsEndOfSentenceMarker( wchar_t c )
+bool SentenceBroker::IsEndOfSentenceMarker(wchar_t c)
 {
- return c==EOS_MARKER_CODE || c==EOP_MARKER_CODE;
+    return c == EOS_MARKER_CODE || c == EOP_MARKER_CODE;
 }
 
 
-bool SentenceBroker::IsEndOfParagraphMarker( wchar_t c )
+bool SentenceBroker::IsEndOfParagraphMarker(wchar_t c)
 {
- return c==EOP_MARKER_CODE;
+    return c == EOP_MARKER_CODE;
 }
 
 
 
 wchar_t SentenceBroker::GetChar(void)
 {
- if( !chars.empty() )
-  return chars.pop();
+    if (!chars.empty())
+        return chars.pop();
 
- wchar_t c = stream->wget();
+    wchar_t c = stream->wget();
 
- if( c==WEOF )
-  {
-   eof=true;
-   return WEOF;
-  }
-
- if( c=='\n' )
-  {
-   // Если следом идет еще один перевод строки, значит перед нами двойной перевод строки, который
-   // мы считаем разделителем предложений.
-   lem::Stream::pos_type backpos = stream->tellp();
-
-   wchar_t c2 = stream->wget();
-   if( c2==L'\r' || c2==L'\n' )
-    c=EOP_MARKER_CODE;
-   else if( lem::is_uspace(c2) )
+    if (c == WEOF)
     {
-     // может идти цепочка пробельных символов, а после них - символ перевода строки.
-     while( !stream->eof() )
-     {
-      wchar_t c3 = stream->wget();
-      if( c3==L'\r' || c3==L'\n' )
-       {
-        c=EOP_MARKER_CODE;
-        break;
-       }
-      else if( lem::is_uspace(c3) )
-       continue;
-      else
-       break;
-     }
+        eof = true;
+        return WEOF;
     }
 
-   // В любом случае возвращаем курсор чтения.
-   stream->seekp(backpos);
-  }
- else if( lem::is_uspace(c) || c==L'\r' || c==L'\t' )
-  c = L' ';
+    if (c == '\n')
+    {
+        // Р•СЃР»Рё СЃР»РµРґРѕРј РёРґРµС‚ РµС‰Рµ РѕРґРёРЅ РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё, Р·РЅР°С‡РёС‚ РїРµСЂРµРґ РЅР°РјРё РґРІРѕР№РЅРѕР№ РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё, РєРѕС‚РѕСЂС‹Р№
+        // РјС‹ СЃС‡РёС‚Р°РµРј СЂР°Р·РґРµР»РёС‚РµР»РµРј РїСЂРµРґР»РѕР¶РµРЅРёР№.
+        lem::Stream::pos_type backpos = stream->tellp();
 
- return c;
+        wchar_t c2 = stream->wget();
+        if (c2 == L'\r' || c2 == L'\n')
+            c = EOP_MARKER_CODE;
+        else if (lem::is_uspace(c2))
+        {
+            // РјРѕР¶РµС‚ РёРґС‚Рё С†РµРїРѕС‡РєР° РїСЂРѕР±РµР»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ, Р° РїРѕСЃР»Рµ РЅРёС… - СЃРёРјРІРѕР» РїРµСЂРµРІРѕРґР° СЃС‚СЂРѕРєРё.
+            while (!stream->eof())
+            {
+                wchar_t c3 = stream->wget();
+                if (c3 == L'\r' || c3 == L'\n')
+                {
+                    c = EOP_MARKER_CODE;
+                    break;
+                }
+                else if (lem::is_uspace(c3))
+                    continue;
+                else
+                    break;
+            }
+        }
+
+        // Р’ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ РІРѕР·РІСЂР°С‰Р°РµРј РєСѓСЂСЃРѕСЂ С‡С‚РµРЅРёСЏ.
+        stream->seekp(backpos);
+    }
+    else if (lem::is_uspace(c) || c == L'\r' || c == L'\t')
+        c = L' ';
+
+    return c;
 }
 
 
 wchar_t SentenceBroker::PeekChar(void)
 {
- if( !chars.empty() )
-  return chars.top();
+    if (!chars.empty())
+        return chars.top();
 
- return stream->wpeek();
-} 
+    return stream->wpeek();
+}
 
 
-void SentenceBroker::UngetChar( wchar_t c )
+void SentenceBroker::UngetChar(wchar_t c)
 {
- chars.push_back(c);
- return;
+    chars.push_back(c);
+    return;
 }
 
 bool SentenceBroker::Fetch(void)
 {
- return Fetch(last_sentence,last_paragraph_id);
+    return Fetch(last_sentence, last_paragraph_id);
 }
 
-bool SentenceBroker::IsTokenDelimiter( wchar_t c ) const
+bool SentenceBroker::IsTokenDelimiter(wchar_t c) const
 {
- return tokenizer.NotNull() ?
-         tokenizer->IsTokenDelimiter(c) :
-         (lem::is_uspace(c) || lem::is_udelim(c) || c==L'\r' || c==L'\n' || c==EOS_MARKER_CODE || c==EOP_MARKER_CODE);
+    return tokenizer.NotNull() ?
+        tokenizer->IsTokenDelimiter(c) :
+        (lem::is_uspace(c) || lem::is_udelim(c) || c == L'\r' || c == L'\n' || c == EOS_MARKER_CODE || c == EOP_MARKER_CODE);
 }
 
 
 
-bool SentenceBroker::Fetch( lem::UFString &line, int & line_paragraph_id )
+bool SentenceBroker::Fetch(lem::UFString &line, int & line_paragraph_id)
 {
- line.clear();
- line_paragraph_id = cur_paragraph_id;
+    line.clear();
+    line_paragraph_id = cur_paragraph_id;
 
- if( eof )
-  return false;
+    if (eof)
+        return false;
 
- int n_quote=0; // для учета символов "
+    int n_quote = 0; // РґР»СЏ СѓС‡РµС‚Р° СЃРёРјРІРѕР»РѕРІ "
 
- // Пропустим начальные пробелы.
- while( !eof )
-  {
-   wchar_t c = GetChar();
-
-   if( c==WEOF )
+    // РџСЂРѕРїСѓСЃС‚РёРј РЅР°С‡Р°Р»СЊРЅС‹Рµ РїСЂРѕР±РµР»С‹.
+    while (!eof)
     {
-     break;
-    }
+        wchar_t c = GetChar();
 
-   if( !lem::is_uspace(c) || IsEndOfSentenceMarker(c) )
-    {
-     UngetChar(c);
-     break;
-    }
-  }
-
-
- while( !eof || !chars.empty() )
-  {
-   wchar_t c = GetChar();
-
-   if( c==WEOF )
-    {
-     eof = true;
-     return true;
-    }
-   else if( c==L' ' )
-    {
-     line += c;
-     continue;
-    }
-   else if( IsEndOfSentenceMarker(c) )
-    {
-     line += c;
-     break;
-    }
-
-   bool line_ready=false;
-
-   if(
-      ( line.empty() || IsTokenDelimiter(line.back()) || IsTokenDelimiter(c)) &&
-      tokenizer.NotNull() && tokenizer->IsUnbreakableFront(c)
-     )
-    {
-     // Возможно далее идет исключительный случай. Выбираем символы из входного потока в 
-     // попытке сконструировать максимально длинное исключение.
-     lem::UCString substr;
-     substr = c;
-
-     while( !eof )
-      {
-       wchar_t c2 = GetChar();
-       if( c2==WEOF )
+        if (c == WEOF)
         {
-         // Достигли конца файла. Считали полный исключительный случай?
-         if( tokenizer->IsMatched(substr) )
-          {
-           // Да!
-           line += substr.c_str();
-           c = c2;
-
-           // Считанный токен является разделителем предложений (типа ...)
-           if( sent_delims.find(substr)!=UNKNOWN )
-            {
-             line.trim();
-
-             if( !line.empty() && (n_quote%2)==0 )
-              {  
-               count++;
-               return true;
-              }
-            }
-          }
-         else
-          {
-           // нет - вернем накопленные символы в поток чтения
-           for( int k=substr.length()-1; k>=0; --k )
-            UngetChar( substr[k] );
-
-           c = GetChar();
-          }
-
-         break;
+            break;
         }
 
-       substr += c2; // добавили еще один символ.
-
-       // С символов substr начинается хоть одно исключение?
-       if( !tokenizer->IsUnbreakableFront(substr) || substr.length()==lem::UCString::max_len)
+        if (!lem::is_uspace(c) || IsEndOfSentenceMarker(c))
         {
-         // Возможно, предыдущая подстрока является исключительной ситуацией.
-         UCString substr1 = lem::left( substr, substr.length()-1 );
-         if( tokenizer->IsMatched(substr1) && IsTokenDelimiter(substr.back()) )
-          {
-           // Да!
-           line += substr1.c_str();
+            UngetChar(c);
+            break;
+        }
+    }
 
-           // Считанный токен является разделителем предложений (типа ...)
-           if( sent_delims.find(substr1)!=UNKNOWN )
+
+    while (!eof || !chars.empty())
+    {
+        wchar_t c = GetChar();
+
+        if (c == WEOF)
+        {
+            eof = true;
+            return true;
+        }
+        else if (c == L' ')
+        {
+            line += c;
+            continue;
+        }
+        else if (IsEndOfSentenceMarker(c))
+        {
+            line += c;
+            break;
+        }
+
+        bool line_ready = false;
+
+        if (
+            (line.empty() || IsTokenDelimiter(line.back()) || IsTokenDelimiter(c)) &&
+            tokenizer.NotNull() && tokenizer->IsUnbreakableFront(c)
+            )
+        {
+            // Р’РѕР·РјРѕР¶РЅРѕ РґР°Р»РµРµ РёРґРµС‚ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№. Р’С‹Р±РёСЂР°РµРј СЃРёРјРІРѕР»С‹ РёР· РІС…РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєР° РІ 
+            // РїРѕРїС‹С‚РєРµ СЃРєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РґР»РёРЅРЅРѕРµ РёСЃРєР»СЋС‡РµРЅРёРµ.
+            lem::UCString substr;
+            substr = c;
+
+            while (!eof)
             {
-             if( (n_quote%2)==0 )
-              {
-               line.trim();
-
-               if( !line.empty() )
-                {   
-                 UngetChar(c2);
-                 count++;
-                 return true;
-                }
-              }
-             else
-              {
-               if( c2==L'"' )
+                wchar_t c2 = GetChar();
+                if (c2 == WEOF)
                 {
-                 // Ситуация типа Кошка говорит "Мяу!" Собака говорит "Гав!"
-                 bool continuation_found=true;
-                 lem::MCollect<wchar_t> tmp_chars;
-                 while( !eof || !chars.empty() )
-                  {
-                   const wchar_t c4 = GetChar();
-                   tmp_chars.push_back(c4);
-                   if( !lem::is_uspace(c4) )
+                    // Р”РѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° С„Р°Р№Р»Р°. РЎС‡РёС‚Р°Р»Рё РїРѕР»РЅС‹Р№ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№?
+                    if (tokenizer->IsMatched(substr))
                     {
-                     if( IsUpperChar(c4) )
-                      {
-                       continuation_found=false;
-                      }
- 
-                     break;
+                        // Р”Р°!
+                        line += substr.c_str();
+                        c = c2;
+
+                        // РЎС‡РёС‚Р°РЅРЅС‹Р№ С‚РѕРєРµРЅ СЏРІР»СЏРµС‚СЃСЏ СЂР°Р·РґРµР»РёС‚РµР»РµРј РїСЂРµРґР»РѕР¶РµРЅРёР№ (С‚РёРїР° ...)
+                        if (sent_delims.find(substr) != UNKNOWN)
+                        {
+                            line.trim();
+
+                            if (!line.empty() && (n_quote % 2) == 0)
+                            {
+                                count++;
+                                return true;
+                            }
+                        }
                     }
-                  }
+                    else
+                    {
+                        // РЅРµС‚ - РІРµСЂРЅРµРј РЅР°РєРѕРїР»РµРЅРЅС‹Рµ СЃРёРјРІРѕР»С‹ РІ РїРѕС‚РѕРє С‡С‚РµРЅРёСЏ
+                        for (int k = substr.length() - 1; k >= 0; --k)
+                            UngetChar(substr[k]);
 
-                 for( int k=CastSizeToInt(tmp_chars.size())-1; k>=0; --k )
-                  UngetChar( tmp_chars[k] );
+                        c = GetChar();
+                    }
 
-                 if( !continuation_found )
-                  {
-                   line += c2;
-                   return true;
-                  }
+                    break;
                 }
-              }
-            }
 
-           #if defined SOL_CAA
-           // Если считанный токен делит предложения в случае, когда за ним
-           // идет слово с первой заглавной буквой.
-           if( use_lexicon && casing_sent_delim.find( to_lower(substr1) )!=UNKNOWN && CharCasingCoord!=UNKNOWN && LowerCasingState!=UNKNOWN )
-            {
-             Lexem next_token = PickNextToken();
-             if( IsUpperChar(next_token.front()) )
-              {
-               la->TranslateLexem( next_token );
+                substr += c2; // РґРѕР±Р°РІРёР»Рё РµС‰Рµ РѕРґРёРЅ СЃРёРјРІРѕР».
 
-               int ie=UNKNOWN;
-               if( seeker!=NULL )
+                // РЎ СЃРёРјРІРѕР»РѕРІ substr РЅР°С‡РёРЅР°РµС‚СЃСЏ С…РѕС‚СЊ РѕРґРЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ?
+                if (!tokenizer->IsUnbreakableFront(substr) || substr.length() == lem::UCString::max_len)
                 {
-                 ie = seeker->Find(next_token,false);
+                    // РќРµС‚.
+                    // Р’РѕР·РјРѕР¶РЅРѕ, РїСЂРµРґС‹РґСѓС‰Р°СЏ РїРѕРґСЃС‚СЂРѕРєР° СЏРІР»СЏРµС‚СЃСЏ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕР№ СЃРёС‚СѓР°С†РёРµР№.
+                    UCString substr1 = lem::left(substr, substr.length() - 1);
+                    if (tokenizer->IsMatched(substr1) && IsTokenDelimiter(substr.back()))
+                    {
+                        // Р”Р°!
+                        line += substr1.c_str();
+
+                        // РЎС‡РёС‚Р°РЅРЅС‹Р№ С‚РѕРєРµРЅ СЏРІР»СЏРµС‚СЃСЏ СЂР°Р·РґРµР»РёС‚РµР»РµРј РїСЂРµРґР»РѕР¶РµРЅРёР№ (С‚РёРїР° ...)
+                        if (sent_delims.find(substr1) != UNKNOWN)
+                        {
+                            if ((n_quote % 2) == 0)
+                            {
+                                line.trim();
+
+                                if (!line.empty())
+                                {
+                                    UngetChar(c2);
+                                    count++;
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                if (c2 == L'"')
+                                {
+                                    // РЎРёС‚СѓР°С†РёСЏ С‚РёРїР° РљРѕС€РєР° РіРѕРІРѕСЂРёС‚ "РњСЏСѓ!" РЎРѕР±Р°РєР° РіРѕРІРѕСЂРёС‚ "Р“Р°РІ!"
+                                    bool continuation_found = true;
+                                    lem::MCollect<wchar_t> tmp_chars;
+                                    while (!eof || !chars.empty())
+                                    {
+                                        const wchar_t c4 = GetChar();
+                                        tmp_chars.push_back(c4);
+                                        if (!lem::is_uspace(c4))
+                                        {
+                                            if (IsUpperChar(c4))
+                                            {
+                                                continuation_found = false;
+                                            }
+
+                                            break;
+                                        }
+                                    }
+
+                                    for (int k = CastSizeToInt(tmp_chars.size()) - 1; k >= 0; --k)
+                                        UngetChar(tmp_chars[k]);
+
+                                    if (!continuation_found)
+                                    {
+                                        line += c2;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+
+#if defined SOL_CAA
+                        // Р•СЃР»Рё СЃС‡РёС‚Р°РЅРЅС‹Р№ С‚РѕРєРµРЅ РґРµР»РёС‚ РїСЂРµРґР»РѕР¶РµРЅРёСЏ РІ СЃР»СѓС‡Р°Рµ, РєРѕРіРґР° Р·Р° РЅРёРј
+                        // РёРґРµС‚ СЃР»РѕРІРѕ СЃ РїРµСЂРІРѕР№ Р·Р°РіР»Р°РІРЅРѕР№ Р±СѓРєРІРѕР№.
+                        if (use_lexicon && casing_sent_delim.find(to_lower(substr1)) != UNKNOWN && CharCasingCoord != UNKNOWN && LowerCasingState != UNKNOWN)
+                        {
+                            Lexem next_token = PickNextToken();
+                            if (IsUpperChar(next_token.front()))
+                            {
+                                la->TranslateLexem(next_token);
+
+                                int ie = UNKNOWN;
+                                if (seeker != NULL)
+                                {
+                                    ie = seeker->Find(next_token, false);
+                                }
+                                else
+                                {
+                                    MCollect<Word_Coord> found_list;
+                                    la->ProjectWord(next_token, found_list, LanguageID);
+                                    if (!found_list.empty())
+                                        ie = found_list.front().GetEntry();
+                                }
+
+                                if (ie != UNKNOWN)
+                                {
+                                    const Solarix::SG_Entry &e = sg->GetEntry(ie);
+
+                                    const int casing = e.attrs().FindOnce(Solarix::GramCoordAdr(CharCasingCoord));
+                                    if (casing == LowerCasingState || casing == UNKNOWN)
+                                    {
+                                        UngetChar(c2);
+                                        count++;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+#endif
+
+                        c = c2;
+                    }
+                    else
+                    {
+                        // Р’РѕР·РІСЂР°С‰Р°РµРј РІСЃРµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹Рµ СЃРёРјРІРѕР»С‹ РѕР±СЂР°С‚РЅРѕ РІ РїРѕС‚РѕРє.
+                        for (int k = substr.length() - 1; k >= 0; --k)
+                            UngetChar(substr[k]);
+
+                        c = GetChar();
+                    }
+
+                    break;
                 }
-               else
-                {
-                 MCollect<Word_Coord> found_list;
-                 la->ProjectWord( next_token, found_list, LanguageID );
-                 if( !found_list.empty() )
-                  ie = found_list.front().GetEntry();
-                }
-
-               if( ie!=UNKNOWN )
-                {
-                 const Solarix::SG_Entry &e = sg->GetEntry(ie);
-
-                 const int casing = e.attrs().FindOnce( Solarix::GramCoordAdr(CharCasingCoord) );
-                 if( casing==LowerCasingState || casing==UNKNOWN )
-                  {
-                   UngetChar(c2);
-                   count++;
-                   return true;
-                  }
-                }
-              }
             }
-           #endif
-
-           c = c2;           
-          }
-         else
-          {
-           // Возвращаем все загруженные символы обратно в поток.
-           for( int k=substr.length()-1; k>=0; --k )
-            UngetChar( substr[k] );
-
-           c = GetChar();
-          } 
-
-         break;
         }
-      }
-    }
 
-   if( c==WEOF )
-    {
-     // закончился исходный текст, принудительно прерываем текущее предложение.
-     eof = true;
-     return true;
-    }
-
-   const bool ItIsSentDelim = sent_delims1.find(c)!=UNKNOWN;
-   if( ItIsSentDelim )
-    {
-     if( IsEndOfSentenceMarker(c) )
-      break;
-
-     // Обычный конец предложения. Для точки надо проверять, если сразу после точки идет цифра
-     // или символ в нижнем регистре, то это НЕ конец предложения.
-     bool breaker=false; 
-     bool add_char=true;
-
-     // Если у нас есть незакрытая пара ", то проверим следующий непустой символ.
-     if( (n_quote%2)!=0 )
-      {
-       const wchar_t c2 = GetChar();
-       // Если это закрывающая "
-       if( c2==L'"' )
+        if (c == WEOF)
         {
-         n_quote++;
-         line += c;
-         line += c2;
-
-         const wchar_t c4 = GetChar();
-         if( sent_delims1.find(c4)!=UNKNOWN )
-          {
-           line += c4;
-           count++;
-           return true;
-          }
-         else
-          {
-           UngetChar(c4);
-          }
-
-         // если дальше - пробел, и после него идет символ в нижнем регистре, то это не конец предложения.
-         bool continuation_found=true;
-         UFString tmp_chars;
-         while( !eof )
-          {
-           const wchar_t c5 = GetChar();
-           if( c5==WEOF )
-            {
-             break;
-            }
-
-           tmp_chars += c5;
-           if( !lem::is_uspace(c5) )
-            {
-             // найден не-пробельный символ.
-             if( IsUpperChar(c5) )
-              {
-               continuation_found=false;
-              }
-
-              break;
-            }
-          }
-
-         // возвращаем все символы обратно
-         for( int i=CastSizeToInt(tmp_chars.size())-1; i>=0; --i )
-          UngetChar( tmp_chars[i] );
-
-         if( !continuation_found )
-          {
-           // обрываем предложение.
-           line.trim();
-           count++;
-           return true;
-          }
+            // Р·Р°РєРѕРЅС‡РёР»СЃСЏ РёСЃС…РѕРґРЅС‹Р№ С‚РµРєСЃС‚, РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РїСЂРµСЂС‹РІР°РµРј С‚РµРєСѓС‰РµРµ РїСЂРµРґР»РѕР¶РµРЅРёРµ.
+            eof = true;
+            return true;
         }
-       else
-        {
-         // нет - продолжим считывание символов предложения.
-         line += c;
-         line += c2;
-        }
-      }
-     else
-      {
-       #if defined SOL_CAA
-       if( tokenizer.NotNull() && seeker.NotNull() && use_lexicon && c==L'.' )
-        {
-         // надо выделить слово, предшествующее точке. идем влево до разделителя токенов.
-         int icur = line.length()-1;
-         while( icur>=0 )
-          {
-           if( tokenizer->IsTokenDelimiter(line[icur]) )
-            break; // нашли начало последнего слова
-           else
-            icur--; // сдвигаемся влево
-          }
-    
-         Solarix::Lexem last_word;
-         for( int j=icur+1; j<line.length(); ++j )
-          last_word.Add_Dirty( line[j] );
-    
-         last_word.calc_hash();
 
-         la->TranslateLexem( last_word );
-    
-         if( seeker->Find(last_word,false)!=UNKNOWN )
-          {
-           breaker=true;
-          }
-        }
-       #endif 
-    
-       if( !breaker )
+        const bool ItIsSentDelim = sent_delims1.find(c) != UNKNOWN;
+        if (ItIsSentDelim)
         {
-         breaker = true; 
-         wchar_t c2 = PeekChar();
-         if( c==L'.' )
-          {
-           if( lem::is_udigit(c2) )
-            {
-             breaker=false;
-            }
-           else if( IsLowerChar(c2) ) 
-            {
-             breaker=false;
-            }
-           else if( c2==L',' )
-            {
-             breaker=false;
-            }
-           else if( lem::is_uspace(c2) )
-            {
-             // Дойдем до первого не-пробельного символа.
-             line += c;
-    
-             add_char=false;
-             while( c!=WEOF )
-              {
-               c = GetChar();
-               line += c;
-               if( IsEndOfSentenceMarker(c) )
+            if (IsEndOfSentenceMarker(c))
                 break;
 
-               c = PeekChar();
-    
-               if( !lem::is_uspace(c) )
+            // РћР±С‹С‡РЅС‹Р№ РєРѕРЅРµС† РїСЂРµРґР»РѕР¶РµРЅРёСЏ. Р”Р»СЏ С‚РѕС‡РєРё РЅР°РґРѕ РїСЂРѕРІРµСЂСЏС‚СЊ, РµСЃР»Рё СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ С‚РѕС‡РєРё РёРґРµС‚ С†РёС„СЂР°
+            // РёР»Рё СЃРёРјРІРѕР» РІ РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ, С‚Рѕ СЌС‚Рѕ РќР• РєРѕРЅРµС† РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
+            bool breaker = false;
+            bool add_char = true;
+
+            // Р•СЃР»Рё Сѓ РЅР°СЃ РµСЃС‚СЊ РЅРµР·Р°РєСЂС‹С‚Р°СЏ РїР°СЂР° ", С‚Рѕ РїСЂРѕРІРµСЂРёРј СЃР»РµРґСѓСЋС‰РёР№ РЅРµРїСѓСЃС‚РѕР№ СЃРёРјРІРѕР».
+            if ((n_quote % 2) != 0)
+            {
+                const wchar_t c2 = GetChar();
+                // Р•СЃР»Рё СЌС‚Рѕ Р·Р°РєСЂС‹РІР°СЋС‰Р°СЏ "
+                if (c2 == L'"')
                 {
-                 if( IsLowerChar(c) )
-                  {
-                   breaker = false;
-                  }
-    
-                 break; 
+                    n_quote++;
+                    line += c;
+                    line += c2;
+
+                    const wchar_t c4 = GetChar();
+                    if (sent_delims1.find(c4) != UNKNOWN)
+                    {
+                        line += c4;
+                        count++;
+                        return true;
+                    }
+                    else
+                    {
+                        UngetChar(c4);
+                    }
+
+                    // РµСЃР»Рё РґР°Р»СЊС€Рµ - РїСЂРѕР±РµР», Рё РїРѕСЃР»Рµ РЅРµРіРѕ РёРґРµС‚ СЃРёРјРІРѕР» РІ РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ, С‚Рѕ СЌС‚Рѕ РЅРµ РєРѕРЅРµС† РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
+                    bool continuation_found = true;
+                    UFString tmp_chars;
+                    while (!eof)
+                    {
+                        const wchar_t c5 = GetChar();
+                        if (c5 == WEOF)
+                        {
+                            break;
+                        }
+
+                        tmp_chars += c5;
+                        if (!lem::is_uspace(c5))
+                        {
+                            // РЅР°Р№РґРµРЅ РЅРµ-РїСЂРѕР±РµР»СЊРЅС‹Р№ СЃРёРјРІРѕР».
+                            if (IsUpperChar(c5))
+                            {
+                                continuation_found = false;
+                            }
+
+                            break;
+                        }
+                    }
+
+                    // РІРѕР·РІСЂР°С‰Р°РµРј РІСЃРµ СЃРёРјРІРѕР»С‹ РѕР±СЂР°С‚РЅРѕ
+                    for (int i = CastSizeToInt(tmp_chars.size()) - 1; i >= 0; --i)
+                        UngetChar(tmp_chars[i]);
+
+                    if (!continuation_found)
+                    {
+                        // РѕР±СЂС‹РІР°РµРј РїСЂРµРґР»РѕР¶РµРЅРёРµ.
+                        line.trim();
+                        count++;
+                        return true;
+                    }
                 }
-              }
-    
-             c=L'.';
+                else
+                {
+                    // РЅРµС‚ - РїСЂРѕРґРѕР»Р¶РёРј СЃС‡РёС‚С‹РІР°РЅРёРµ СЃРёРјРІРѕР»РѕРІ РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
+                    line += c;
+                    line += c2;
+                }
             }
-    
-           wchar_t c0 = c;
-           c2 = PeekChar();
-           if( c2==c0 )
+            else
             {
-             line += c;
-             add_char=false;
-             while( c!=WEOF && c==c0 )
-              {
-               c = GetChar();
-               line += c;
-               c = PeekChar();
-              } 
-            }    
-          }
-         else if( c=='!' || c=='?' )
-          {
-           wchar_t c0 = c;
-           c2 = PeekChar();
-           if( c2==L'?' || c2==L'!' ) // То есть токены типа !!! и !?
-            {
-             line += c;
-             add_char=false;
-             while( c!=WEOF && (c==L'!' || c==L'?') )
-              {
-               c = GetChar();
-               line += c;
-               c = PeekChar();
-              } 
+#if defined SOL_CAA
+                if (tokenizer.NotNull() && seeker.NotNull() && use_lexicon && c == L'.')
+                {
+                    // РЅР°РґРѕ РІС‹РґРµР»РёС‚СЊ СЃР»РѕРІРѕ, РїСЂРµРґС€РµСЃС‚РІСѓСЋС‰РµРµ С‚РѕС‡РєРµ. РёРґРµРј РІР»РµРІРѕ РґРѕ СЂР°Р·РґРµР»РёС‚РµР»СЏ С‚РѕРєРµРЅРѕРІ.
+                    int icur = line.length() - 1;
+                    while (icur >= 0)
+                    {
+                        if (tokenizer->IsTokenDelimiter(line[icur]))
+                            break; // РЅР°С€Р»Рё РЅР°С‡Р°Р»Рѕ РїРѕСЃР»РµРґРЅРµРіРѕ СЃР»РѕРІР°
+                        else
+                            icur--; // СЃРґРІРёРіР°РµРјСЃСЏ РІР»РµРІРѕ
+                    }
+
+                    Solarix::Lexem last_word;
+                    for (int j = icur + 1; j < line.length(); ++j)
+                        last_word.Add_Dirty(line[j]);
+
+                    last_word.calc_hash();
+
+                    la->TranslateLexem(last_word);
+
+                    if (seeker->Find(last_word, false) != UNKNOWN)
+                    {
+                        breaker = true;
+                    }
+                }
+#endif 
+
+                if (!breaker)
+                {
+                    breaker = true;
+                    wchar_t c2 = PeekChar();
+                    if (c == L'.')
+                    {
+                        if (lem::is_udigit(c2))
+                        {
+                            breaker = false;
+                        }
+                        else if (IsLowerChar(c2))
+                        {
+                            breaker = false;
+                        }
+                        else if (c2 == L',')
+                        {
+                            breaker = false;
+                        }
+                        else if (lem::is_uspace(c2))
+                        {
+                            // Р”РѕР№РґРµРј РґРѕ РїРµСЂРІРѕРіРѕ РЅРµ-РїСЂРѕР±РµР»СЊРЅРѕРіРѕ СЃРёРјРІРѕР»Р°.
+                            line += c;
+
+                            add_char = false;
+                            while (c != WEOF)
+                            {
+                                c = GetChar();
+                                line += c;
+                                if (IsEndOfSentenceMarker(c))
+                                    break;
+
+                                c = PeekChar();
+
+                                if (!lem::is_uspace(c))
+                                {
+                                    if (IsLowerChar(c))
+                                    {
+                                        breaker = false;
+                                    }
+
+                                    break;
+                                }
+                            }
+
+                            c = L'.';
+                        }
+
+                        wchar_t c0 = c;
+                        c2 = PeekChar();
+                        if (c2 == c0)
+                        {
+                            line += c;
+                            add_char = false;
+                            while (c != WEOF && c == c0)
+                            {
+                                c = GetChar();
+                                line += c;
+                                c = PeekChar();
+                            }
+                        }
+                    }
+                    else if (c == '!' || c == '?')
+                    {
+                        wchar_t c0 = c;
+                        c2 = PeekChar();
+                        if (c2 == L'?' || c2 == L'!') // РўРѕ РµСЃС‚СЊ С‚РѕРєРµРЅС‹ С‚РёРїР° !!! Рё !?
+                        {
+                            line += c;
+                            add_char = false;
+                            while (c != WEOF && (c == L'!' || c == L'?'))
+                            {
+                                c = GetChar();
+                                line += c;
+                                c = PeekChar();
+                            }
+                        }
+                    }
+                }
+
+                if (c == WEOF)
+                {
+                    eof = true;
+                    add_char = false;
+                }
+
+                if (breaker)
+                {
+                    line_ready = true;
+                }
+
+                if (add_char)
+                    line += c;
             }
-          }
         }
-    
-       if( c==WEOF )  
+        else if (line.length() > max_sentence_length && (lem::is_uspace(c) || c == L',' || c == L'-' || c == L';' || c == L':'))
         {
-         eof = true;
-         add_char=false;
-        } 
-    
-       if( breaker )
-        {
-         line_ready=true;
+            // РЎР»РёС€РєРѕРј РґР»РёРЅРЅС‹Рµ РїСЂРµРґР»РѕР¶РµРЅРёСЏ РѕР±СЂС‹РІР°РµРј РЅР° Р±РµР·РѕРїР°СЃРЅС‹С… СЃРёРјРІРѕР»Р°С….
+            line_ready = true;
+            line += c;
         }
-    
-       if( add_char )
-        line += c;
-      }
-    }
-   else if( line.length()>max_sentence_length && (lem::is_uspace(c) || c==L',' || c==L'-' || c==L';' || c==L':' ) )
-    {
-     // Слишком длинные предложения обрываем на безопасных символах.
-     line_ready=true;
-     line += c;
-    }
-   else if( c==L'\r' || c==L'\n' || c==L'\t' || c==L'\b' )
-    {
-     // некоторые управляющие символы заменяем пробелами
-     line += L' ';
-    }
-   else
-    {
-     line += c;
-   
-     if( c==L'"' )
-      n_quote++;
-     else if( c==L'(' )
-      {
-       // если предложение начинается с (, то надо смотреть, какой токен будет перед ), и если это терминатор - обрывать предложение.
-       if( line.size()==1 )
+        else if (c == L'\r' || c == L'\n' || c == L'\t' || c == L'\b')
         {
-         if( ReadCharsUntilClosingParen( line ) )
-          {
-           line.trim();
-           return true;
-          }
+            // РЅРµРєРѕС‚РѕСЂС‹Рµ СѓРїСЂР°РІР»СЏСЋС‰РёРµ СЃРёРјРІРѕР»С‹ Р·Р°РјРµРЅСЏРµРј РїСЂРѕР±РµР»Р°РјРё
+            line += L' ';
         }
-       else
+        else
         {
-         ReadCharsUntilClosingParen( line );
+            line += c;
+
+            if (c == L'"')
+                n_quote++;
+            else if (c == L'(')
+            {
+                // РµСЃР»Рё РїСЂРµРґР»РѕР¶РµРЅРёРµ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ (, С‚Рѕ РЅР°РґРѕ СЃРјРѕС‚СЂРµС‚СЊ, РєР°РєРѕР№ С‚РѕРєРµРЅ Р±СѓРґРµС‚ РїРµСЂРµРґ ), Рё РµСЃР»Рё СЌС‚Рѕ С‚РµСЂРјРёРЅР°С‚РѕСЂ - РѕР±СЂС‹РІР°С‚СЊ РїСЂРµРґР»РѕР¶РµРЅРёРµ.
+                if (line.size() == 1)
+                {
+                    if (ReadCharsUntilClosingParen(line))
+                    {
+                        line.trim();
+                        return true;
+                    }
+                }
+                else
+                {
+                    ReadCharsUntilClosingParen(line);
+                }
+            }
         }
-      }
+
+        if (line_ready)
+        {
+            if (line.length() > 0 && IsEndOfParagraphMarker(line.last_char()))
+            {
+                line.remove(line.length() - 1);
+                cur_paragraph_id++;
+            }
+
+            line.trim();
+
+            if (!line.empty())
+                count++;
+
+            return true;
+        }
     }
-     
-   if( line_ready ) 
+
+    if (line.length() > 0 && IsEndOfParagraphMarker(line.last_char()))
     {
-     if( line.length()>0 && IsEndOfParagraphMarker( line.last_char() ) )
-      {
-       line.remove( line.length()-1 );
-       cur_paragraph_id++;
-      }
-
-     line.trim();
-
-     if( !line.empty() )
-      count++;
-
-     return true;
+        line.remove(line.length() - 1);
+        cur_paragraph_id++;
     }
-  }
 
- if( line.length()>0 && IsEndOfParagraphMarker( line.last_char() ) )
-  {
-   line.remove( line.length()-1 );
-   cur_paragraph_id++;
-  }
+    line.trim();
 
- line.trim();
+    if (!line.empty())
+        count++;
 
- if( !line.empty() )
-  count++;
-
- return true;
+    return true;
 }
 
 
-// Считываем символы до закрывающей )
-// Возвращает true, если последний токен перед ) был терминатором предложения.
-bool SentenceBroker::ReadCharsUntilClosingParen( lem::UFString & line )
+// РЎС‡РёС‚С‹РІР°РµРј СЃРёРјРІРѕР»С‹ РґРѕ Р·Р°РєСЂС‹РІР°СЋС‰РµР№ )
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё РїРѕСЃР»РµРґРЅРёР№ С‚РѕРєРµРЅ РїРµСЂРµРґ ) Р±С‹Р» С‚РµСЂРјРёРЅР°С‚РѕСЂРѕРј РїСЂРµРґР»РѕР¶РµРЅРёСЏ.
+bool SentenceBroker::ReadCharsUntilClosingParen(lem::UFString & line)
 {
- int n_paren=1;
+    int n_paren = 1;
 
- lem::UCString unbreakable;
- bool last_is_sentence_terminator=false; 
+    lem::UCString unbreakable;
+    bool last_is_sentence_terminator = false;
 
- while( !Eof() || !chars.empty() )
-  {
-   wchar_t c = GetChar();
-   if( c==WEOF )
+    while (!Eof() || !chars.empty())
     {
-     eof=true;
-     break;
+        wchar_t c = GetChar();
+        if (c == WEOF)
+        {
+            eof = true;
+            break;
+        }
+
+        if (lem::is_uspace(c))
+        {
+            line += L' ';
+
+            if (line.length() >= max_sentence_length)
+                break;
+        }
+        else
+        {
+            // СЃС‡РёС‚Р°РµРј СЃРёРјРІРѕР» РёР»Рё РіСЂСѓРїРїСѓ РЅРµСЂР°Р·СЂС‹РІРЅС‹С… СЃРёРјРІРѕР»РѕРІ.
+            ReadCharOrUnbreakable(c, unbreakable);
+
+            if (unbreakable == L')')
+            {
+                line += unbreakable.front();
+                n_paren--;
+                if (!n_paren)
+                    break;
+            }
+            else if (unbreakable == L'(')
+            {
+                line += unbreakable.front();
+                n_paren++;
+                last_is_sentence_terminator = false;
+            }
+            else
+            {
+                line += unbreakable.c_str();
+                last_is_sentence_terminator = sent_delims.find(unbreakable) != UNKNOWN;
+            }
+
+            if (line.length() >= max_sentence_length * 2)
+                break;
+        }
     }
 
-   if( lem::is_uspace(c) )
-    {
-     line += L' ';
-
-     if( line.length()>=max_sentence_length )
-      break;
-    }
-   else
-    {
-     // считаем символ или группу неразрывных символов.
-     ReadCharOrUnbreakable(c,unbreakable);
-
-     if( unbreakable==L')' )
-      {
-       line += unbreakable.front();
-       n_paren--;
-       if( !n_paren )
-        break;
-      }
-     else if( unbreakable==L'(' )
-      {
-       line += unbreakable.front();
-       n_paren++;
-       last_is_sentence_terminator=false;
-      }
-     else
-      {
-       line += unbreakable.c_str();
-       last_is_sentence_terminator = sent_delims.find(unbreakable)!=UNKNOWN;
-      }
-
-     if( line.length()>=max_sentence_length*2 )
-      break;
-    }
-  }
-
- return last_is_sentence_terminator;
+    return last_is_sentence_terminator;
 }
 
 
 
 bool SentenceBroker::Eof(void) const
-{ return eof; }
+{
+    return eof;
+}
 
 int SentenceBroker::Count(void) const
-{ return count; }
-
-
-// *********************************************************************
-// Возвращает следующий полный токен из входного потока, не перемещая
-// курсор чтения.
-// *********************************************************************
-lem::UCString SentenceBroker::PickNextToken(void)
 {
- UFString buffer;
- UCString res;
-
- // Сначала пропустим пробелы
- while(true)
-  {
-   const wchar_t c = GetChar();
-   if( c==WEOF )
-    break;
-
-   buffer += c;
-   if( !lem::is_uspace(c) )
-    {
-     res = c;
-     break;  
-    }
-  }
-
- // Теперь считываем символы до любого разделителя
- while(true)
-  {
-   const wchar_t c = GetChar();
-   if( c==WEOF )
-    break;
-   
-   buffer += c;
-
-   if( tokenizer->IsTokenDelimiter(c) )
-    break;
-
-   res += c;  
-  }
-
- // Возвращаем обратно все считанные символы.
- for( int i=buffer.length()-1; i>=0; --i )
-  UngetChar( buffer[i] );
-
- return res;
+    return count;
 }
 
 
-void SentenceBroker::ReadCharOrUnbreakable( wchar_t first_char, lem::UCString &buffer )
+// *********************************************************************
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃР»РµРґСѓСЋС‰РёР№ РїРѕР»РЅС‹Р№ С‚РѕРєРµРЅ РёР· РІС…РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєР°, РЅРµ РїРµСЂРµРјРµС‰Р°СЏ
+// РєСѓСЂСЃРѕСЂ С‡С‚РµРЅРёСЏ.
+// *********************************************************************
+lem::UCString SentenceBroker::PickNextToken(void)
 {
- if( tokenizer.IsNull() )
-  {
-   buffer = first_char;
-  }
- else
-  {
-   wchar_t c = first_char;
-   if( tokenizer->IsUnbreakableFront(c) )
+    UFString buffer;
+    UCString res;
+
+    // РЎРЅР°С‡Р°Р»Р° РїСЂРѕРїСѓСЃС‚РёРј РїСЂРѕР±РµР»С‹
+    while (true)
     {
-     // загрузим неразрывную группу символов
-     lem::UCString substr;
-     substr = c;
+        const wchar_t c = GetChar();
+        if (c == WEOF)
+            break;
 
-     while( !eof || !chars.empty() )
-      {
-       wchar_t c2 = GetChar();
-       if( c2==WEOF )
+        buffer += c;
+        if (!lem::is_uspace(c))
         {
-         // Достигли конца файла. Считали полный исключительный случай?
-         if( tokenizer->IsMatched(substr) )
-          {
-           // Да!
-           buffer = substr.c_str();
-          }
-         else
-          {
-           // нет - вернем накопленные символы в поток чтения
-           for( int k=substr.length()-1; k>=0; --k )
-            UngetChar( substr[k] );
-
-           c = GetChar();
-          }
-
-         break;
+            res = c;
+            break;
         }
-
-       substr += c2; // добавили еще один символ.
-
-       // С символов substr начинается хоть одно исключение?
-       if( !tokenizer->IsUnbreakableFront(substr) || substr.length()==lem::UCString::max_len )
-        {
-         // Возможно, предыдущая подстрока является исключительной ситуацией.
-         UCString substr1 = lem::left( substr, substr.length()-1 );
-         if( tokenizer->IsMatched(substr1) )
-          {
-           // да.
-           buffer = substr1;
-           UngetChar(c2);
-           return;
-          }
-         else
-          {
-           // возвращаем все символы обратно, первый символ будет единственным в группе.
-           for( int k=substr.length()-1; k>=1; --k )
-            UngetChar( substr[k] );
-
-           buffer=first_char;
-           return;           
-          }
-        }
-       else if( tokenizer->IsMatched(substr) )
-        {
-         buffer = substr;
-         return;
-        }
-      }
-
-     buffer = substr;
     }
-   else
-    {
-     buffer=c;
-    }    
-  }
 
- return;
+    // РўРµРїРµСЂСЊ СЃС‡РёС‚С‹РІР°РµРј СЃРёРјРІРѕР»С‹ РґРѕ Р»СЋР±РѕРіРѕ СЂР°Р·РґРµР»РёС‚РµР»СЏ
+    while (true)
+    {
+        const wchar_t c = GetChar();
+        if (c == WEOF)
+            break;
+
+        buffer += c;
+
+        if (tokenizer->IsTokenDelimiter(c))
+            break;
+
+        res += c;
+    }
+
+    // Р’РѕР·РІСЂР°С‰Р°РµРј РѕР±СЂР°С‚РЅРѕ РІСЃРµ СЃС‡РёС‚Р°РЅРЅС‹Рµ СЃРёРјРІРѕР»С‹.
+    for (int i = buffer.length() - 1; i >= 0; --i)
+        UngetChar(buffer[i]);
+
+    return res;
+}
+
+
+void SentenceBroker::ReadCharOrUnbreakable(wchar_t first_char, lem::UCString &buffer)
+{
+    if (tokenizer.IsNull())
+    {
+        buffer = first_char;
+    }
+    else
+    {
+        wchar_t c = first_char;
+        if (tokenizer->IsUnbreakableFront(c))
+        {
+            // Р·Р°РіСЂСѓР·РёРј РЅРµСЂР°Р·СЂС‹РІРЅСѓСЋ РіСЂСѓРїРїСѓ СЃРёРјРІРѕР»РѕРІ
+            lem::UCString substr;
+            substr = c;
+
+            while (!eof || !chars.empty())
+            {
+                wchar_t c2 = GetChar();
+                if (c2 == WEOF)
+                {
+                    // Р”РѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° С„Р°Р№Р»Р°. РЎС‡РёС‚Р°Р»Рё РїРѕР»РЅС‹Р№ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№?
+                    if (tokenizer->IsMatched(substr))
+                    {
+                        // Р”Р°!
+                        buffer = substr.c_str();
+                    }
+                    else
+                    {
+                        // РЅРµС‚ - РІРµСЂРЅРµРј РЅР°РєРѕРїР»РµРЅРЅС‹Рµ СЃРёРјРІРѕР»С‹ РІ РїРѕС‚РѕРє С‡С‚РµРЅРёСЏ
+                        for (int k = substr.length() - 1; k >= 0; --k)
+                            UngetChar(substr[k]);
+
+                        c = GetChar();
+                    }
+
+                    break;
+                }
+
+                substr += c2; // РґРѕР±Р°РІРёР»Рё РµС‰Рµ РѕРґРёРЅ СЃРёРјРІРѕР».
+
+                // РЎ СЃРёРјРІРѕР»РѕРІ substr РЅР°С‡РёРЅР°РµС‚СЃСЏ С…РѕС‚СЊ РѕРґРЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ?
+                if (!tokenizer->IsUnbreakableFront(substr) || substr.length() == lem::UCString::max_len)
+                {
+                    // Р’РѕР·РјРѕР¶РЅРѕ, РїСЂРµРґС‹РґСѓС‰Р°СЏ РїРѕРґСЃС‚СЂРѕРєР° СЏРІР»СЏРµС‚СЃСЏ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕР№ СЃРёС‚СѓР°С†РёРµР№.
+                    UCString substr1 = lem::left(substr, substr.length() - 1);
+                    if (tokenizer->IsMatched(substr1))
+                    {
+                        // РґР°.
+                        buffer = substr1;
+                        UngetChar(c2);
+                        return;
+                    }
+                    else
+                    {
+                        // РІРѕР·РІСЂР°С‰Р°РµРј РІСЃРµ СЃРёРјРІРѕР»С‹ РѕР±СЂР°С‚РЅРѕ, РїРµСЂРІС‹Р№ СЃРёРјРІРѕР» Р±СѓРґРµС‚ РµРґРёРЅСЃС‚РІРµРЅРЅС‹Рј РІ РіСЂСѓРїРїРµ.
+                        for (int k = substr.length() - 1; k >= 1; --k)
+                            UngetChar(substr[k]);
+
+                        buffer = first_char;
+                        return;
+                    }
+                }
+                else if (tokenizer->IsMatched(substr))
+                {
+                    buffer = substr;
+                    return;
+                }
+            }
+
+            buffer = substr;
+        }
+        else
+        {
+            buffer = c;
+        }
+    }
+
+    return;
 }
 
 
 void SentenceBroker::LoadUpperAndLowerChars(void)
 {
- chars_loaded = true;
+    chars_loaded = true;
 
- const SG_Language &lang = sg->languages()[LanguageID];
- const lem::MCollect<int> &ids = lang.GetAlphabets();
- for( lem::Container::size_type i=0; i<ids.size(); ++i )
-  {
-   const int id_alphabet = ids[i];
+    const SG_Language &lang = sg->languages()[LanguageID];
+    const lem::MCollect<int> &ids = lang.GetAlphabets();
+    for (lem::Container::size_type i = 0; i < ids.size(); ++i)
+    {
+        const int id_alphabet = ids[i];
 
-   // для этого алфавита надо получить список букв в верхнем регистре
-   // ... TODO
-  }
+        // РґР»СЏ СЌС‚РѕРіРѕ Р°Р»С„Р°РІРёС‚Р° РЅР°РґРѕ РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє Р±СѓРєРІ РІ РІРµСЂС…РЅРµРј СЂРµРіРёСЃС‚СЂРµ
+        // ... TODO
+    }
 
- return;
+    return;
 }
 
 
-bool SentenceBroker::IsUpperChar( wchar_t c )
+bool SentenceBroker::IsUpperChar(wchar_t c)
 {
- if( LanguageID!=UNKNOWN && sg!=NULL )
-  {
-   if( !chars_loaded )
+    if (LanguageID != UNKNOWN && sg != NULL)
     {
-     LoadUpperAndLowerChars();
+        if (!chars_loaded)
+        {
+            LoadUpperAndLowerChars();
+        }
+
+        if (!upper_chars.empty())
+        {
+            return upper_chars.find(c) != upper_chars.end();
+        }
     }
 
-   if( !upper_chars.empty() )
-    {
-     return upper_chars.find(c)!=upper_chars.end();
-    }
-  }
-
- // упрощенная проверка.
- return lem::is_ualpha(c) && lem::is_uupper(c);
+    // СѓРїСЂРѕС‰РµРЅРЅР°СЏ РїСЂРѕРІРµСЂРєР°.
+    return lem::is_ualpha(c) && lem::is_uupper(c);
 }
 
 
-bool SentenceBroker::IsLowerChar( wchar_t c )
+bool SentenceBroker::IsLowerChar(wchar_t c)
 {
- if( LanguageID!=UNKNOWN && sg!=NULL )
-  {
-   if( !chars_loaded )
+    if (LanguageID != UNKNOWN && sg != NULL)
     {
-     LoadUpperAndLowerChars();
+        if (!chars_loaded)
+        {
+            LoadUpperAndLowerChars();
+        }
+
+        if (!lower_chars.empty())
+        {
+            return lower_chars.find(c) != lower_chars.end();
+        }
     }
 
-   if( !lower_chars.empty() )
-    {
-     return lower_chars.find(c)!=lower_chars.end();
-    }
-  }
-
- // упрощенная проверка.
- return lem::is_ualpha(c) && lem::is_ulower(c);
+    // СѓРїСЂРѕС‰РµРЅРЅР°СЏ РїСЂРѕРІРµСЂРєР°.
+    return lem::is_ualpha(c) && lem::is_ulower(c);
 }
