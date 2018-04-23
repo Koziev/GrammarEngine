@@ -47,8 +47,8 @@ namespace SolarixGrammarEngineNET
     public sealed class GrammarEngine
     {
 
-        private const string gren_dll = "libgren.so";
-        //private const string gren_dll = "solarix_grammar_engine.dll";
+        //private const string gren_dll = "libgren.so";
+        private const string gren_dll = "solarix_grammar_engine.dll";
 
 
         /// <summary>
@@ -443,6 +443,9 @@ namespace SolarixGrammarEngineNET
         // http://www.solarix.ru/api/ru/sol_CountRoots.shtml
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
         public static extern int sol_CountRoots(System.IntPtr hPack, int iGraf);
+
+        [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]
+        public static extern int sol_GetGrafScore(System.IntPtr hPack, int iGraf);
 
         // http://www.solarix.ru/api/ru/sol_GetRoot.shtml
         [DllImport(gren_dll, CallingConvention = CallingConvention.StdCall)]

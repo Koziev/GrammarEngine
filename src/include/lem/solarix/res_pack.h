@@ -4,191 +4,128 @@
 // (c) Koziev Elijah
 //
 // Content:
-// Класс Res_Pack - пачка решений, список вариаторов (клонов класса
-// Variator), используется в Итерациях SOL_CAA. Пачки решений хранятьс
-// в списке внутри клона класса SolPhrasoBlock.
+// РљР»Р°СЃСЃ Res_Pack - РїР°С‡РєР° СЂРµС€РµРЅРёР№, СЃРїРёСЃРѕРє РІР°СЂРёР°С‚РѕСЂРѕРІ (РєР»РѕРЅРѕРІ РєР»Р°СЃСЃР°
+// Variator), РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РС‚РµСЂР°С†РёСЏС… SOL_CAA. РџР°С‡РєРё СЂРµС€РµРЅРёР№ С…СЂР°РЅСЏС‚СЊСЃ
+// РІ СЃРїРёСЃРєРµ РІРЅСѓС‚СЂРё РєР»РѕРЅР° РєР»Р°СЃСЃР° SolPhrasoBlock.
 // -----------------------------------------------------------------------------
 //
 // CD->07.09.1997
-// LC->11.02.2012
+// LC->23.04.2018
 // --------------
 
 #if !defined( SOL_RESPACK__H ) && !defined SOL_NO_AA
 #define SOL_RESPACK__H
 #pragma once
 
- #include <lem/math/fp1.h>
- #include <lem/stl.h>
+#include <lem/math/fp1.h>
+#include <lem/stl.h>
 
- #include <lem/solarix/variator.h>
+#include <lem/solarix/variator.h>
 
- namespace Solarix
- {
-  using lem::MCollect;
- /***********************************************************************
-  Пачка Решений - набор вариаторов для Синтаксических Итераций ЦАА.
-  По своему смыслу эти вариаторы являются альтернативными путями анализа
-  входной фразы. Объединять вариаторы в обном списке заставляет их общий
-  генезис - из одной исходной фразы, и удобство поддержки параллельной
-  обработки вариаторов - можно легко избегать дублирования вариаторов
-  при слиянии путей анализа.
- ************************************************************************/
- class SynGram;
+namespace Solarix
+{
+    using lem::MCollect;
+    /***********************************************************************
+     РџР°С‡РєР° Р РµС€РµРЅРёР№ - РЅР°Р±РѕСЂ РІР°СЂРёР°С‚РѕСЂРѕРІ РґР»СЏ РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєРёС… РС‚РµСЂР°С†РёР№ Р¦РђРђ.
+     РџРѕ СЃРІРѕРµРјСѓ СЃРјС‹СЃР»Сѓ СЌС‚Рё РІР°СЂРёР°С‚РѕСЂС‹ СЏРІР»СЏСЋС‚СЃСЏ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹РјРё РїСѓС‚СЏРјРё Р°РЅР°Р»РёР·Р°
+     РІС…РѕРґРЅРѕР№ С„СЂР°Р·С‹. РћР±СЉРµРґРёРЅСЏС‚СЊ РІР°СЂРёР°С‚РѕСЂС‹ РІ РѕР±РЅРѕРј СЃРїРёСЃРєРµ Р·Р°СЃС‚Р°РІР»СЏРµС‚ РёС… РѕР±С‰РёР№
+     РіРµРЅРµР·РёСЃ - РёР· РѕРґРЅРѕР№ РёСЃС…РѕРґРЅРѕР№ С„СЂР°Р·С‹, Рё СѓРґРѕР±СЃС‚РІРѕ РїРѕРґРґРµСЂР¶РєРё РїР°СЂР°Р»Р»РµР»СЊРЅРѕР№
+     РѕР±СЂР°Р±РѕС‚РєРё РІР°СЂРёР°С‚РѕСЂРѕРІ - РјРѕР¶РЅРѕ Р»РµРіРєРѕ РёР·Р±РµРіР°С‚СЊ РґСѓР±Р»РёСЂРѕРІР°РЅРёСЏ РІР°СЂРёР°С‚РѕСЂРѕРІ
+     РїСЂРё СЃР»РёСЏРЅРёРё РїСѓС‚РµР№ Р°РЅР°Р»РёР·Р°.
+    ************************************************************************/
+    class SynGram;
 
- class Res_Pack
- {
-  private:
-   MCollect<Variator*> list; // Список вариаторов.
+    class Res_Pack
+    {
+    private:
+        MCollect<Variator*> list; // РЎРїРёСЃРѕРє РІР°СЂРёР°С‚РѕСЂРѕРІ.
 
-   void Init( const Res_Pack &rp );
+        void Init(const Res_Pack &rp);
 
-  public:
-   Res_Pack(void);
-   Res_Pack( const Res_Pack &rp );
-   ~Res_Pack(void);
+    public:
+        Res_Pack();
+        Res_Pack(const Res_Pack &rp);
+        ~Res_Pack();
 
-   void Delete(void);
+        void Delete();
 
-   void Clear(void);
+        void Clear();
 
-   inline void reserve( int n ) { list.reserve(n); }
+        inline void reserve(int n) { list.reserve(n); }
 
-   void operator=( const Res_Pack &rp );
+        void operator=(const Res_Pack &rp);
 
-   inline       MCollect<Variator*>& vars(void)       { return list; }
-   inline const MCollect<Variator*>& vars(void) const { return list; }
+        inline       MCollect<Variator*>& vars() { return list; }
+        inline const MCollect<Variator*>& vars() const { return list; }
 
-/*
-   int FindVarByKey( int Key ) const;
-   void DeleteByKey( int Key );
-   void DeleteVariator( int var_idx );
-   bool IsThereMultiplicator( SynGram &sg ) const;
+#if defined SOL_LOADBIN
+        void LoadBin(lem::Stream &binfile);
+#endif
 
-   bool Find( SynGram &sg, const Variator& t, bool strict_position ) const;
-*/
+        void SaveBin(lem::Stream &binfile) const;
 
-/*
-   #if defined SOL_CAA
-   void Doublicate( SynGram &sg, Variator *variator, bool strict_position );
-   void CutParents( MCollect<Variator*> &trash );
-   void OnIterEnd(void);
-   void MarkUsed(void);
-   void DoRemark(void);
-   void Unfroze(void);
-   void Squeeze( Real1 k );
-   bool HasBeenChanged(void);
-   inline void WasChange(void) { was_a_change=true; }
-   void MulVal( Real1 Val );
-   void FreshVarsUp(void);
-   void DropParents(void);
-   #endif
-*/
+        void Add(Variator *to_add);
+        void AddFirst(Variator *to_add);
 
-   #if defined SOL_LOADBIN
-   void LoadBin( lem::Stream &binfile );
-   #endif
+        inline Res_Pack& operator<<(Variator *to_add)
+        {
+            Add(to_add); return *this;
+        }
 
-   void SaveBin( lem::Stream &binfile ) const;
+        void ForgetPtr(int i);
+        inline void SetPtr(int i, Variator *Var) { list[i] = Var; }
 
-   void Add( Variator *to_add );
-   void AddFirst( Variator *to_add );
+        void Print(
+            OFormatter &s,
+            SynGram &s_gram,
+            bool detailed = false
+        ) const;
 
-   inline Res_Pack& operator<<( Variator *to_add )
-   { Add(to_add); return *this; }
+        void PrintRoots(
+            OFormatter &s,
+            bool Decoration = true,
+            bool EntryKeys = true
+        ) const;
 
-   void ForgetPtr( int i );
-   inline void SetPtr( int i, Variator *Var ) { list[i]=Var; }
+        // РљРѕРїРёСЂСѓРµС‚ СЃРѕРґРµСЂР¶РёРјРѕРµ (РІР°СЂРёР°С‚РѕСЂС‹) РёР· РїР°С‡РєРё СЂРµС€РµРЅРёСЏ - Р·Р°Р±РёСЂР°РµС‚ СѓРєР°Р·Р°С‚РµР»Рё.
+        void Recevoire(Res_Pack *src);
 
-   void Print(
-              OFormatter &s,
-              SynGram &s_gram,
-              bool detailed=false
-             ) const;
+        // Р’РѕР·РІСЂР°С‰Р°РµС‚ С‡РёСЃР»Рѕ РєРѕСЂРЅРµРІС‹С… СѓР·Р»РѕРІ РІ СЃР°РјРѕРј РєРѕРјРїР°РєС‚РЅРѕРј РІР°СЂРёР°С‚РѕСЂРµ
+        int GetShortestVar() const;
 
-   void PrintRoots(
-                   OFormatter &s,
-                   bool Decoration=true,
-                   bool EntryKeys=true
-                  ) const;
+        // РћСЃС‚Р°РІР»СЏРµС‚ С‚РѕР»СЊРєРѕ РІР°СЂРёР°С‚РѕСЂС‹ СЃ РјРёРЅРёРјР°Р»СЊРЅС‹Рј С‡РёСЃР»РѕРј РєРѕСЂРЅРµР№.
+        void Save_Shortest_Vars();
 
-/*
-   #if defined SOL_CAA
-   void DoDestructVariatorByKey(
-                                int Var_Key,
-                                std::vector<PA_PrologSpace*> &pa_spaces,
-                                PrologAutomat &pa
-                               );
-   #endif
-*/
-
-   // Копирует содержимое (вариаторы) из пачки решения - забирает указатели.
-   void Recevoire( Res_Pack *src );
-
-   // Возвращает число корневых узлов в самом компактном вариаторе
-   int GetShortestVar(void) const;
-
-   // Оставляет только вариаторы с минимальным числом корней.
-   void Save_Shortest_Vars(void);
-
-   // пересортируем так, чтобы сначала шли самые короткие варианты
-   void SortByLengthDescending(void);
- };
+        // РїРµСЂРµСЃРѕСЂС‚РёСЂСѓРµРј С‚Р°Рє, С‡С‚РѕР±С‹ СЃРЅР°С‡Р°Р»Р° С€Р»Рё СЃР°РјС‹Рµ РєРѕСЂРѕС‚РєРёРµ РІР°СЂРёР°РЅС‚С‹
+        void SortByLengthDescending();
+    };
 
 
-/*
- #if defined SOL_CAA
- inline bool Res_Pack::HasBeenChanged(void)
- {
-  const bool ret = was_a_change;
-  was_a_change=false;
-  return ret;
- }
- #endif
-*/
+    inline void Res_Pack::Add(Variator *to_add)
+    {
+        list.push_back(to_add);
+    }
 
- inline void Res_Pack::Add( Variator *to_add )
- {
-  list.push_back( to_add );
-  #if defined SOL_CAA
-//  was_a_change=true;
-  #endif
-  return;
- }
+    inline void Res_Pack::AddFirst(Variator *to_add)
+    {
+        list.Insert(0, to_add);
+    }
 
- inline void Res_Pack::AddFirst( Variator *to_add )
- {
-  list.Insert( 0, to_add );
-  #if defined SOL_CAA
-//  was_a_change=true;
-  #endif
-  return;
- }
+    inline void Res_Pack::Clear()
+    {
+        list.clear();
+    }
 
- inline void Res_Pack::Clear(void)
- {
-  list.clear();
+    /*****************************************************************
+     РњРѕРґРёС„РёРєР°С†РёСЏ СЃРїРёСЃРєР° СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РІР°СЂРёР°С‚РѕСЂС‹: СѓРєР°Р·Р°С‚РµР»СЊ СЃ РёРЅРґРµРєСЃРѕРј
+     iVar Р·Р°РјРµРЅСЏРµС‚СЃСЏ РЅР° NULL, СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ С„Р»Р°Рі РёР·РјРµРЅРµРЅРЅРѕСЃС‚Рё РїР°С‡РєРё.
+     РЈРґР°Р»РµРЅРёСЏ СЃС‚Р°СЂРѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ РїРѕ РёРЅРґРµРєСЃСѓ iVar РЅРµ РїСЂРѕРёСЃС…РѕРґРёС‚.
+    ******************************************************************/
+    inline void Res_Pack::ForgetPtr(int iVar)
+    {
+        list[iVar] = nullptr;
+    }
 
-  #if defined SOL_CAA
-//  was_a_change=false;
-  #endif
-
-  return;
- }
-
- /*****************************************************************
-  Модификация списка указателей на вариаторы: указатель с индексом
-  iVar заменяется на NULL, устанавливается флаг измененности пачки.
-  Удаления старого указателя по индексу iVar не происходит.
- ******************************************************************/
- inline void Res_Pack::ForgetPtr( int iVar )
- {
-  list[iVar]=NULL;
-  #if defined SOL_CAA
-//  was_a_change=true;
-  #endif
-  return;
- }
-
- } // namespace 'Solarix'
+} // namespace 'Solarix'
 
 #endif

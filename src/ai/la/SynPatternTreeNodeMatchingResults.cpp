@@ -513,12 +513,15 @@ Res_Pack * SynPatternTreeNodeMatchingResults::GenerateFilteredPaths(
                 );
 
                 Variator * new_var = new Variator(tree_nodes);
+                // 23.04.2018 переносим оценку качества разбора 
+                new_var->AddScore(selected_result->res.GetNGramFreq().Composite());
                 pack->Add(new_var);
             }
             else
             {
                 // Для морфологического анализа достаточно создать вариатор из этих узлов.
                 Variator * new_var = new Variator(tree_nodes);
+                new_var->AddScore(selected_result->res.GetNGramFreq().Composite());
                 pack->Add(new_var);
             }
         }

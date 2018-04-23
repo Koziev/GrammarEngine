@@ -235,3 +235,4 @@ sol_AddBeginMarker
 sol_AddEndMarker
 sol_AddNodeToLinkage
 sol_CreateTreeNodeW
+sol_GetGrafScore

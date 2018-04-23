@@ -2864,9 +2864,9 @@ GREN_API(HGREN_RESPACK) sol_SyntaxAnalysis(
     if (!hEngine || !HandleEngine(hEngine)->dict || Sentence == nullptr)
         return nullptr;
 
-    DEMO_SINGLE_THREAD(hEngine)
+    DEMO_SINGLE_THREAD(hEngine);
 
-        try
+    try
     {
         const bool Allow_Fuzzy = (MorphologicalFlags & SOL_GREN_ALLOW_FUZZY) == SOL_GREN_ALLOW_FUZZY;
         const bool CompleteAnalysisOnly = (MorphologicalFlags & SOL_GREN_COMPLETE_ONLY) == SOL_GREN_COMPLETE_ONLY;
@@ -2973,9 +2973,7 @@ GREN_API(void) sol_DeleteResPack(HGREN_RESPACK hPack)
 {
     try
     {
-#if !defined SOL_NO_AA
         delete (Solarix::Res_Pack*)hPack;
-#endif
     }
     catch (...)
     {
@@ -3345,14 +3343,10 @@ GREN_API(int) sol_CountCoordStates(HGREN hEngine, int CoordID)
 // ***************************************************
 GREN_API(int) sol_CountGrafs(HGREN_RESPACK hPack)
 {
-#if !defined SOL_NO_AA
     if (hPack == nullptr)
         return 0;
 
     return CastSizeToInt(((Res_Pack*)hPack)->vars().size());
-#else
-    return 0;
-#endif
 }
 
 
@@ -3363,7 +3357,6 @@ GREN_API(int) sol_CountRoots(HGREN_RESPACK hPack, int iGraf)
 {
     try
     {
-#if !defined SOL_NO_AA
         if (hPack == nullptr)
             return 0;
 
@@ -3371,15 +3364,33 @@ GREN_API(int) sol_CountRoots(HGREN_RESPACK hPack, int iGraf)
             return -1;
 
         return ((Res_Pack*)hPack)->vars()[iGraf]->size();
-#else
-        return 0;
-#endif
     }
     catch (...)
     {
         return -1;
     }
 }
+
+
+
+GREN_API(int) sol_GetGrafScore(HGREN_RESPACK hPack, int iGraf)
+{
+    try
+    {
+        if (hPack == nullptr)
+            return 0;
+
+        if (iGraf < 0 || iGraf >= CastSizeToInt(((Res_Pack*)hPack)->vars().size()))
+            return -1;
+
+        return ((Res_Pack*)hPack)->vars()[iGraf]->GetScore();
+    }
+    catch (...)
+    {
+        return -1;
+    }
+}
+
 
 
 // *****************************************************
