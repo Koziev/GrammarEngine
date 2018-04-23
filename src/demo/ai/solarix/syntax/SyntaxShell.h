@@ -18,7 +18,7 @@ using namespace Solarix;
 class SyntaxShell
 {
 public:
-    typedef enum { MorphologyMode, SyntaxMode, TokenizerMode, SegmenterMode, LemmatizerMode, SpeakerMode } RunMode;
+    enum class RunMode { MorphologyMode, SyntaxMode, TokenizerMode, SegmenterMode, LemmatizerMode, SpeakerMode };
 
     void SetMode(RunMode new_mode);
 
@@ -49,6 +49,7 @@ private:
     int MaxAlt;
     bool FindFacts;
 
+    lem::Path dict_dir;
     lem::ElapsedTime elapsed;
 
     lem::Collect< std::pair<UCString /*tag*/, UCString /*value*/> > tags; // тэги для фильтрации переводов
@@ -67,15 +68,15 @@ private:
 
     const lem::UFString enter_cmd(const char *Prompt) const;
     bool TryCommand(const lem::UFString &str);
-    void ShowHelp(void) const;
-    void Exiting(void);
+    void ShowHelp() const;
+    void Exiting();
     void Tokenize(const UFString & s);
     void Lemmatize(const UFString & str);
     void Speak(const UFString & str);
     void Segmentize(const UFString & s);
 
 
-    void ShowDictionaryInfo(void);
+    void ShowDictionaryInfo();
 
     bool PerformSyntacticAnalysis(const UFString &sent);
     UFString VarToStr(const Solarix::Variator &var) const;
@@ -84,19 +85,16 @@ private:
     void PrintLexerPerformance(Solarix::BasicLexer & lexer, const LexerTextPos * token);
 
 public:
-    lem::Path dict_dir;
-
-public:
-    SyntaxShell(void);
-    ~SyntaxShell(void);
+    SyntaxShell();
+    ~SyntaxShell();
 
     void SetDebug(bool f);
     void SetPhrase(const lem::UFString &x);
 
     void LazyLexicon(bool _lazy_lexicon);
-    void LoadDictionary();
+    void LoadDictionary(const lem::Path & dict_path);
 
-    void main_loop(void);
+    void main_loop();
     void SetLanguage(const UCString &lang_name);
     void SetThesaurusTags(const lem::Collect< std::pair<UCString /*tag*/, UCString /*value*/> > & Tags);
     void SetEnvParams(const lem::Collect< std::pair<UCString /*param*/, UCString /*value*/> > & Params);

@@ -34,7 +34,7 @@ private:
 
     void LoadDictionary(const lem::Path &dict_path);
 
-    LexiconDebugger* GetDebugger(void);
+    LexiconDebugger* GetDebugger();
 
     int ShowMenu();
     void ExecuteMenu(int choice);
@@ -42,14 +42,14 @@ private:
 
 
     const lem::UFString enter_cmd(const char *Prompt) const;
-    void ShowHelp(void) const;
+    void ShowHelp() const;
     void SetMode(const lem::UFString &str);
-    void Exiting(void);
-    void TestStemmer(void);
-    void TestFlexer(void);
-    void ShowParadigma(void);
+    void Exiting();
+    void TestStemmer();
+    void TestFlexer();
+    void ShowParadigma();
     void TestThesaurus();
-    void TestLexiconLookUp(void);
+    void TestLexiconLookUp();
     void TestNGrams();
     void SearchByIE();
     void FullMorphologyAnalysis(
@@ -69,17 +69,17 @@ private:
     );
 
     void PrintPhrase(Solarix::SynGram &sg, Solarix::SG_Phrase & frz);
-    void SearchByName(void);
+    void SearchByName();
 
-    void ShowStatistics(void);
-    void ShowThesaurusStatistics(void);
-    void ShowLexiconStatistics(void);
-    void ShowSyllabicBreaks(void);
+    void ShowStatistics();
+    void ShowThesaurusStatistics();
+    void ShowLexiconStatistics();
+    void ShowSyllabicBreaks();
 
 
 public:
     LexiconShell(const lem::Path &dict_path, bool batch = false, bool write_unfound_entries = false);
-    ~LexiconShell(void);
+    ~LexiconShell();
 
     void main_loop(bool show_menu, const lem::MCollect<int>& menu);
     void ProcessFile(const lem::Path &filename);

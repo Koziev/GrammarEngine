@@ -31,7 +31,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->25.02.2003
-// LC->02.04.2018
+// LC->23.04.2018
 // --------------
 
 #include <lem/keyboard.h>
@@ -228,10 +228,10 @@ void LexiconShell::LoadDictionary(const lem::Path &_dict_path)
     {
         ok = sol_id->LoadModules(dict_path, opt);
     }
-    catch( const lem::E_BaseException &ex )
+    catch (const lem::E_BaseException &ex)
     {
-     mout->printf("%us\n", ex.what());
-     ok = false;
+        mout->printf("%us\n", ex.what());
+        ok = false;
     }
     catch (...)
     {
@@ -1429,7 +1429,9 @@ void LexiconShell::TestNGrams()
             if (words.size() != 1)
             {
                 for (lem::Container::size_type i = 0; i < words.size(); ++i)
+                {
                     lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1441,13 +1443,13 @@ void LexiconShell::TestNGrams()
             float w;
             int iw;
 
-            if (sol_id->ngrams->FindRawNGrams(words[0], w, iw))
+            if (sol_id->ngrams->FindRawNGrams(words.front(), w, iw))
             {
                 found = true;
                 lem::mout->printf("RAW:     number of occurences=%vfE%8d%vn normalized weight=%vfE%f%vn\n", iw, w);
             }
 
-            if (sol_id->ngrams->FindLiteralNGrams(words[0], w, iw))
+            if (sol_id->ngrams->FindLiteralNGrams(words.front(), w, iw))
             {
                 found = true;
                 lem::mout->printf("LITERAL: number of occurences=%vfE%8d%vn normalized weight=%vfE%f%vn\n", iw, w);
@@ -1462,8 +1464,10 @@ void LexiconShell::TestNGrams()
         {
             if (words.size() != 2)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1496,8 +1500,10 @@ void LexiconShell::TestNGrams()
         {
             if (words.size() != 3)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1530,8 +1536,10 @@ void LexiconShell::TestNGrams()
         {
             if (words.size() != 4)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1564,8 +1572,10 @@ void LexiconShell::TestNGrams()
         {
             if (words.size() != 5)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1600,8 +1610,10 @@ void LexiconShell::TestNGrams()
 
             if (words.size() != 1)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1616,9 +1628,8 @@ void LexiconShell::TestNGrams()
 
             lem::MCollect<std::pair<int/*ientry*/, float> > ies;
 
-            for (lem::Container::size_type i = 0; i < ies1.size(); ++i)
+            for (auto ientry : ies1)
             {
-                const int ientry = ies1[i];
                 sol_id->ngrams->FindLinkedWords(ientry, ies);
             }
 
@@ -1626,10 +1637,10 @@ void LexiconShell::TestNGrams()
             {
                 lem::mout->printf("There are %vfE%d%vn linked words:\n", CastSizeToInt(ies.size()));
 
-                for (lem::Container::size_type i = 0; i < ies.size(); i++)
+                for (auto& p : ies)
                 {
-                    const int ie = ies[i].first;
-                    const float we = ies[i].second;
+                    const int ie = p.first;
+                    const float we = p.second;
                     const lem::UCString& ename = SG->GetEntry(ie).GetName();
                     lem::mout->printf(" %vfE%us%vn(%5.2f)", ename.c_str(), we);
                 }
@@ -1680,8 +1691,10 @@ void LexiconShell::TestNGrams()
 
             if (words.size() != 1)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -1754,8 +1767,10 @@ void LexiconShell::TestNGrams()
         {
             if (words.size() != 1)
             {
-                for (lem::Container::size_type i = 0; i < words.size(); ++i)
-                    lem::mout->printf("[%vfE%us%vn] ", words[i].c_str());
+                for (auto& word : words)
+                {
+                    lem::mout->printf("[%vfE%us%vn] ", word.c_str());
+                }
 
                 lem::mout->eol();
 
@@ -2027,13 +2042,13 @@ void LexiconShell::ShowParadigma(void)
 }
 
 
-void LexiconShell::ShowLexiconStatistics(void)
+void LexiconShell::ShowLexiconStatistics()
 {
     const int nentry = SG->GetnEntry();
     const int nphrase = SG->GetnPhrase();
     const int nlinks = SG->Get_Net().CountAllLinks();
     const int nsynonyms = SG->Get_Net().CountLinks(Tree_Link(SYNONYM_link));
-    const lem::int64_t ngrams = sol_id->GetNgrams() == NULL ? 0 : sol_id->GetNgrams()->TotalCount();
+    const lem::int64_t ngrams = sol_id->GetNgrams().IsNull() ? 0 : sol_id->GetNgrams()->TotalCount();
 
     const int ntransl = SG->Get_Net().CountLinks(Tree_Link(TO_RUSSIAN_link)) +
         SG->Get_Net().CountLinks(Tree_Link(TO_ENGLISH_link)) +
@@ -2049,9 +2064,10 @@ void LexiconShell::ShowLexiconStatistics(void)
 
     // подсчитаем распределение статей по языкам
 
-    lem::MCollect< lem::triple<int/*language id*/, UCString/*language name*/, int /*# of entries*/> > entry_counts;
+    //lem::MCollect< lem::triple<int/*language id*/, UCString/*language name*/, int /*# of entries*/> > entry_counts;
+    lem::MCollect< std::tuple<int/*language id*/, UCString/*language name*/, int /*# of entries*/> > entry_counts;
 
-    lem::Ptr<WordEntryEnumerator> wenum(SG->GetEntries().ListEntries());
+    std::unique_ptr<WordEntryEnumerator> wenum(SG->GetEntries().ListEntries());
     while (wenum->Fetch())
     {
         const int ekey = wenum->GetId();
@@ -2060,7 +2076,9 @@ void LexiconShell::ShowLexiconStatistics(void)
         nforms += CastSizeToInt(e.forms().size());
 
         for (lem::Container::size_type p = 0; p < e.forms().size(); ++p)
+        {
             lexems.insert(e.forms()[p].name());
+        }
 
         if (e.GetName() != Solarix::SOL_UNKNOWN_ENTRY_NAME)
         {
@@ -2072,15 +2090,19 @@ void LexiconShell::ShowLexiconStatistics(void)
                 {
                     bool found = false;
                     for (lem::Container::size_type j = 0; j < entry_counts.size(); ++j)
-                        if (entry_counts[j].first == id_lang)
+                    {
+                        if (std::get<0>(entry_counts[j]) == id_lang)
                         {
-                            entry_counts[j].third++;
+                            std::get<2>(entry_counts[j])++;
                             found = true;
                             break;
                         }
+                    }
 
                     if (!found)
-                        entry_counts.push_back(lem::make_triple(id_lang, SG->languages()[id_lang].GetName(), 1));
+                    {
+                        entry_counts.emplace_back(id_lang, SG->languages()[id_lang].GetName(), 1);
+                    }
                 }
             }
         }
@@ -2092,13 +2114,16 @@ void LexiconShell::ShowLexiconStatistics(void)
 
     mout->printf("%4h %vfE%8d%vn phrases\n", nphrase);
 
-    std::sort(entry_counts.begin(), entry_counts.end(), lang_sorter);
+    std::sort(entry_counts.begin(), entry_counts.end(), [](const std::tuple<int, UCString, int> &a, const std::tuple<int, UCString, int> &b)
+    { return std::get<2>(a) > std::get<2>(b); });
 
     for (lem::Container::size_type i = 0; i < entry_counts.size(); ++i)
-        if (entry_counts[i].third > 0)
+    {
+        if (std::get<2>(entry_counts[i]) > 0)
         {
-            lem::mout->printf("%4h %vfA%8d%vn %us entries\n", entry_counts[i].third, entry_counts[i].second.c_str());
+            lem::mout->printf("%4h %vfA%8d%vn %us entries\n", std::get<2>(entry_counts[i]), std::get<1>(entry_counts[i]).c_str());
         }
+    }
 
     mout->printf(
         "%4h %vfE%8d%vn thesaurus records (%vfE%d%vn synonyms, %vfE%d%vn translations)\n"
@@ -2161,21 +2186,21 @@ void LexiconShell::ShowThesaurusStatistics(void)
     int nsynword = 0;
     std::set<int> dummy;
     lem::MCollect<Tree_Link> syn_links;
-    syn_links.push_back(Tree_Link(SYNONYM_link));
+    syn_links.emplace_back(SYNONYM_link);
 
     // Для анализа кол-ва переводов
     int ntranslated = 0;
     lem::MCollect<Tree_Link> tr_links;
-    tr_links.push_back(Tree_Link(TO_RUSSIAN_link));
-    tr_links.push_back(Tree_Link(TO_ENGLISH_link));
-    tr_links.push_back(Tree_Link(TO_JAPANESE_link));
-    tr_links.push_back(Tree_Link(TO_FRENCH_link));
-    tr_links.push_back(Tree_Link(TO_CHINESE_link));
-    tr_links.push_back(Tree_Link(TO_SPANISH_link));
-    tr_links.push_back(Tree_Link(TO_GERMAN_link));
-    tr_links.push_back(Tree_Link(TO_PORTUGUAL_link));
+    tr_links.emplace_back(TO_RUSSIAN_link);
+    tr_links.emplace_back(TO_ENGLISH_link);
+    tr_links.emplace_back(TO_JAPANESE_link);
+    tr_links.emplace_back(TO_FRENCH_link);
+    tr_links.emplace_back(TO_CHINESE_link);
+    tr_links.emplace_back(TO_SPANISH_link);
+    tr_links.emplace_back(TO_GERMAN_link);
+    tr_links.emplace_back(TO_PORTUGUAL_link);
 
-    lem::Ptr<WordEntryEnumerator> wenum(SG->GetEntries().ListEntries());
+    std::unique_ptr<WordEntryEnumerator> wenum(SG->GetEntries().ListEntries());
     while (wenum->Fetch())
     {
         const int ekey = wenum->GetId();
@@ -2199,7 +2224,7 @@ void LexiconShell::ShowThesaurusStatistics(void)
     return;
 }
 
-void LexiconShell::ShowStatistics(void)
+void LexiconShell::ShowStatistics()
 {
     ShowThesaurusStatistics();
     ShowLexiconStatistics();
@@ -2208,7 +2233,7 @@ void LexiconShell::ShowStatistics(void)
 
 
 
-void LexiconShell::SearchByName(void)
+void LexiconShell::SearchByName()
 {
     LexicalAutomat &la = sol_id->GetLexAuto();
 
@@ -2246,7 +2271,7 @@ void LexiconShell::SearchByName(void)
             else
             {
                 str.to_upper();
-                pes->Search(lem::left(str, str.length() - 1).c_str(), ientries);
+                pes->Search(str.substr(0, str.length() - 1).c_str(), ientries);
             }
         }
         else
@@ -2278,7 +2303,7 @@ void LexiconShell::SearchByName(void)
                 );
 
                 // выведем дополнительные данные для статьи, если они есть.
-                lem::Ptr<LS_ResultSet> aux = SG->GetStorage().ListAuxEntryData(e.GetKey());
+                std::unique_ptr<LS_ResultSet> aux(SG->GetStorage().ListAuxEntryData(e.GetKey()));
                 while (aux->Fetch())
                 {
                     int id_aux_type = aux->GetInt(1);
@@ -2294,7 +2319,7 @@ void LexiconShell::SearchByName(void)
 }
 
 
-LexiconDebugger* LexiconShell::GetDebugger(void)
+LexiconDebugger* LexiconShell::GetDebugger()
 {
     if (debugger.IsNull())
         return nullptr;
@@ -2306,7 +2331,7 @@ LexiconDebugger* LexiconShell::GetDebugger(void)
 
 
 
-void LexiconShell::ShowSyllabicBreaks(void)
+void LexiconShell::ShowSyllabicBreaks()
 {
     LexicalAutomat &la = sol_id->GetLexAuto();
     GraphGram &gg = sol_id->GetGraphGram();

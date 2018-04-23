@@ -21,7 +21,7 @@ public:
         int freq,
         int id_word1,
         const lem::UCString &word1
-    );
+    ) override;
 
     virtual bool Do(
         Solarix::Ngrams & ngrams,
@@ -31,7 +31,7 @@ public:
         int id_word2,
         const lem::UCString &word1,
         const lem::UCString &word2
-    );
+    ) override;
 
     virtual bool Do(
         Solarix::Ngrams &ngrams,
@@ -43,7 +43,7 @@ public:
         const lem::UCString &word1,
         const lem::UCString &word2,
         const lem::UCString &word3
-    );
+    ) override;
 
     virtual bool Do(
         Solarix::Ngrams &ngrams,
@@ -57,7 +57,7 @@ public:
         const lem::UCString &word2,
         const lem::UCString &word3,
         const lem::UCString &word4
-    );
+    ) override;
 
     virtual bool Do(
         Solarix::Ngrams &ngrams,
@@ -73,7 +73,7 @@ public:
         const lem::UCString &word3,
         const lem::UCString &word4,
         const lem::UCString &word5
-    );
+    ) override;
 };
 
 #endif
