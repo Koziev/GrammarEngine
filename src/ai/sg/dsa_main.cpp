@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 //
 // CD->11.03.1997
-// LC->07.04.2018
+// LC->24.04.2018
 // --------------
 
 #include <lem/conversions.h>
@@ -483,7 +483,7 @@ void SG_DeclensionAutomat::Save_SQL(lem::OFormatter &out, lem::OFormatter &alter
         for (auto& name : p->GetNames())
         {
             out.printf("INSERT INTO paradigma_name( id, id_paradigma, name, uname ) VALUES ( %d, %d, '%us', '%us' );\n",
-                id_name, id, name.c_str(), lem::to_upper(name).c_str());
+                id_name++, id, name.c_str(), lem::to_upper(name).c_str());
         }
 
         for (lem::Container::size_type i = 0; i < p->GetForms().size(); ++i, ++id_form)
