@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     lem::LemInit initer;
 
 
-    SyntaxShell::RunMode selected_mode = SyntaxShell::SyntaxMode; // по умолчанию запустимся в режиме синтаксического разбора.
+    SyntaxShell::RunMode selected_mode = SyntaxShell::RunMode::SyntaxMode; // по умолчанию запустимся в режиме синтаксического разбора.
 
 
     lem::zbool debug, verbose;

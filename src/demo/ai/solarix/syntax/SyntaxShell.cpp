@@ -87,7 +87,7 @@ SyntaxShell::SyntaxShell()
     FindFacts = false;
     MaxSkipToken = UNKNOWN; // по умолчанию запрещаем пропускать токены
 
-    run_mode = SyntaxMode;
+    run_mode = RunMode::SyntaxMode;
 
     return;
 }
@@ -227,7 +227,7 @@ void SyntaxShell::LoadDictionary(const lem::Path & dictdir)
     }
     catch (const std::exception & ex)
     {
-        mout->printf("\n\nDictionary loading error: %s\n", ex.what);
+        mout->printf("\n\nDictionary loading error: %s\n", ex.what());
         ok = false;
     }
     catch (const lem::E_BaseException & ex)
@@ -525,7 +525,7 @@ bool SyntaxShell::TryCommand(const lem::UFString &_str)
 
     if (_str.eqi(L"#connect"))
     {
-        LoadDictionary();
+        LoadDictionary(lem::Path());
         return true;
     }
 
@@ -1010,12 +1010,12 @@ void SyntaxShell::Lemmatize(const UFString & str)
     Solarix::Sentence sent;
     sent.Parse(str, false, sol_id.get(), default_language, nullptr);
 
-    words.push_back(L"~~BEGIN~~");
+    words.emplace_back(L"~~BEGIN~~");
     for (int i = 0; i < CastSizeToInt(sent.size()); ++i)
     {
         words.push_back(sent.GetWord(i));
     }
-    words.push_back(L"~~END~~");
+    words.emplace_back(L"~~END~~");
 
     lem::MCollect<lem::UCString> lemmas;
     LemmatizatorStorage & lemm = sol_id->GetLemmatizer();
