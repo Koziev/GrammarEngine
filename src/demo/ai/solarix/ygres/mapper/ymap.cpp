@@ -4,7 +4,7 @@
 // (c) by Koziev Elijah     all rights reserved 
 //
 // SOLARIX Intellectronix Project http://www.solarix.ru
-//                                http://sourceforge.net/projects/solarix  
+//                                https://github.com/Koziev/GrammarEngine
 // 
 // Licensed under the terms of GNU Lesser GPL
 //
@@ -45,10 +45,11 @@
 // 26.03.2010 - поправлен баг - в XML файлы выгрузки вставлялся BOM
 // 08.06.2011 - выгружаются правила морфологического и синтаксического анализа,
 //              трансформации и синтеза.
+// 25.04.2018 - рефакторинг кода с фичами C++11, устранение старых корявостей.
 // -----------------------------------------------------------------------------
 //
 // CD->12.04.2003
-// LC->02.07.2012
+// LC->25.04.2018
 // --------------
 
 #include <lem/console_application.h>
@@ -71,29 +72,23 @@ using namespace lem;
 using namespace lem::Char_Stream;
 using namespace Solarix;
 
-#define OK { mout->printf("%vfEOK%vn"); mout->flush(); }
 
 struct XML_ExportParameters
 {
-    int max_entry_count;
+    int max_entry_count = lem::int_max;
 
-    XML_ExportParameters()
-    {
-        max_entry_count = lem::int_max;
-    }
+    XML_ExportParameters() {}
 
     void Parse(const char * str)
     {
         lem::MCollect<lem::CString> tokens;
         lem::parse(lem::FString(str), tokens, false);
 
-        for (lem::Container::size_type i = 0; i < tokens.size(); ++i)
+        for (auto& token : tokens)
         {
-            const lem::CString &token = tokens[i];
-
-            if (lem::is_int(tokens[i].c_str()))
+            if (lem::is_int(token.c_str()))
             {
-                max_entry_count = lem::to_int(tokens[i]);
+                max_entry_count = lem::to_int(token);
             }
             else
             {
@@ -106,7 +101,7 @@ struct XML_ExportParameters
     }
 };
 
-class Ymap : public Base_Application
+class Decompiler : public Base_Application
 {
 public:
     lem::zbool dump; // различная статобработка содержимого словаря
@@ -118,20 +113,20 @@ public:
     lem::zbool export_sql; // экспортировать в SQL
     SQL_Production sql_version; // параметры версии сервера СУБД для экспорта
 
+    void OK() { mout->printf("%vfEOK%vn"); mout->flush(); }
+
 public:
-    Ymap(void) : Base_Application(), sql_version("") {}
+    Decompiler() : Base_Application(), sql_version("") {}
 
     void PrintBanner(OFormatter &txt, bool versbose = false);
     void Print_Heap(OFormatter &txt);
     void Echo(OFormatter &txt);
-    void Help(void);
+    void Help();
     void Go(const lem::Path &dict, const lem::Path &outdir);
 };
 
 
-
-
-void Ymap::PrintBanner(OFormatter &txt, bool verbose)
+void Decompiler::PrintBanner(OFormatter &txt, bool verbose)
 {
     txt.printf("%vfEDecompiler%vn version %vfF%s%vn\n", sol_get_version().c_str());
     Print_Project_Info(txt);
@@ -143,7 +138,7 @@ void Ymap::PrintBanner(OFormatter &txt, bool verbose)
 // ************************************
 // Вывод короткой справки о программе.
 // ************************************
-void Ymap::Help(void)
+void Decompiler::Help()
 {
     mout->printf(
         "\nSome default values for options are listed in %vfAdecompiler.ini%vn file.\n"
@@ -161,25 +156,23 @@ void Ymap::Help(void)
 // **********************************************************
 // Печать отметки о времени создания в генерируемых файлах.
 // **********************************************************
-void Ymap::Print_Heap(OFormatter &txt)
+void Decompiler::Print_Heap(OFormatter &txt)
 {
     Echo(txt);
     PrintBanner(txt);
     txt.printf("Created %us\n", timestamp().c_str());
-    return;
 }
 
 
-void Ymap::Echo(OFormatter &txt)
+void Decompiler::Echo(OFormatter &txt)
 {
     mout->printf("\nWriting %vfA%us%vn...", txt.GetStream()->GetName().GetUnicode().c_str());
     mout->flush();
-    return;
 }
 
 
 
-void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
+void Decompiler::Go(const lem::Path &dict, const lem::Path &outdir)
 {
     std::unique_ptr<OFormatter> nul_tty(new OFormatter(lem::Path(NULL_DEVICE))); // пустой поток (устройство NUL:)
 
@@ -317,7 +310,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         p2.ConcateLeaf(lem::Path("lexicon.xsd"));
         OFormatter xsd(p2);
         sol_id->GetSynGram().Dump_XML(xml, xsd, xml_params.max_entry_count);
-        OK;
+        OK();
 
         // Чтобы не получился один XML файл гигантского размера, неудобный для
         // обработки утилитой xml2sol, разобъем список статей на блоки.
@@ -329,7 +322,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         pe.ConcateLeaf(L"export");
         lem::OUFormatter export_list(pe);
 
-        lem::Ptr<WordEntryEnumerator> wenum(sol_id->GetSynGram().GetEntries().ListEntries());
+        std::unique_ptr<WordEntryEnumerator> wenum(sol_id->GetSynGram().GetEntries().ListEntries());
 
         int ientry = 0;
         for (int iblock = 0; iblock < nblock && ientry < nentry; iblock++)
@@ -384,7 +377,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         OUFormatter map(p);
         Print_Heap(map);
         sol_id->MapAlphabet(map);
-        OK;
+        OK();
     }
 
     if (dump)
@@ -394,7 +387,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         OUFormatter map(p);
         Print_Heap(map);
         sol_id->MapLexicon(map);
-        OK;
+        OK();
     }
 
     if (decompile)
@@ -406,7 +399,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         Print_Heap(txt);
         txt.printf("*/\n\n");
         sol_id->GetSynGram().SaveTxt(txt);
-        OK;
+        OK();
     }
 
     if (dump)
@@ -416,7 +409,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
         OUFormatter map(p);
         Print_Heap(map);
         sol_id->MapTransformer(map);
-        OK;
+        OK();
     }
 
     mout->printf("\n%vfAAll done.%vn\n");
@@ -427,7 +420,7 @@ void Ymap::Go(const lem::Path &dict, const lem::Path &outdir)
 int main(int argc, char *argv[])
 {
     lem::LemInit initer;
-    Ymap app;
+    Decompiler app;
 
     app.Read_Ini(lem::Path("ymap.ini"));
 
@@ -463,16 +456,16 @@ int main(int argc, char *argv[])
                     s.strip_apostrophes();
                     outdir = lem::Path(s);
                 }
-                else if (lem_eq(argv[i], "-decompile"))
+                else if (lem_eq(argv[i] + 1, "decompile"))
                 {
                     app.dump = false;
                     app.decompile = true;
                 }
-                else if (lem_eq(argv[i], "-dump"))
+                else if (lem_eq(argv[i] + 1, "dump"))
                 {
                     app.dump = true;
                 }
-                else if (lem_eq(argv[i], "-export") || lem_eq(argv[i], "-xml"))
+                else if (lem_eq(argv[i] + 1, "export") || lem_eq(argv[i] + 1, "xml"))
                 {
                     app.dump = false;
                     app.decompile = false;
@@ -480,7 +473,7 @@ int main(int argc, char *argv[])
                     app.xml_params.Parse(argv[i + 1]);
                     i++;
                 }
-                else if (lem_eq(argv[i], "-sql"))
+                else if (lem_eq(argv[i] + 1, "sql"))
                 {
                     app.dump = false;
                     app.decompile = false;
@@ -495,20 +488,27 @@ int main(int argc, char *argv[])
                 dict = lem::Path(argv[i]);
             }
         }
-    }
-    LEM_CATCH;
 
-    if (!dict.DoesExist())
-    {
-        merr->printf("Dictionary configuration file not found.");
-        return 1;
-    }
+        if (!dict.DoesExist())
+        {
+            merr->printf("Dictionary configuration file not found.");
+            return 1;
+        }
 
-    try
-    {
         app.Go(dict, outdir);
     }
-    LEM_CATCH;
+    catch (const lem::E_BaseException &ex)
+    {
+        merr->printf("Error: %us\n", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        merr->printf("Error: %s\n", ex.what());
+    }
+    catch (...)
+    {
+        merr->printf("Error\n");
+    }
 
     return 0;
 }
