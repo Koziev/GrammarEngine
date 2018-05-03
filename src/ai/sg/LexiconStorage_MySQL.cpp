@@ -3971,8 +3971,7 @@ int LexiconStorage_MySQL::StoreFact( const KB_Facts &facts, const KB_Fact * fact
                " id_entry1, id_entry2, id_entry3, id_entry4, id_entry5 )"
                " VALUES ( %d, %d,"
                " %s, %s, %s, %s, %s )"
-                , fact->GetGroupId()
-                , id
+                , fact->GetGroupId(), id
                 , id_entry1.c_str(), id_entry2.c_str(), id_entry3.c_str(), id_entry4.c_str(), id_entry5.c_str() );
     
        Execute( mem.string() );

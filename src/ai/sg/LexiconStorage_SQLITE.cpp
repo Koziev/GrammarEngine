@@ -4712,7 +4712,11 @@ int LexiconStorage_SQLITE::StoreFact(const KB_Facts & facts, const KB_Fact * fac
     const int id = ExecuteAndReturnId(mem.string());
 
     for (int i = 0; i < fact->CountArgs(); ++i)
+    {
         StoreFactArgument(id, i, fact->GetArg(i));
+    }
+
+    
 
     if (facts.IsQueryableByEntries())
     {
@@ -4760,8 +4764,7 @@ int LexiconStorage_SQLITE::StoreFact(const KB_Facts & facts, const KB_Fact * fac
                     " id_entry1, id_entry2, id_entry3, id_entry4, id_entry5 )"
                     " VALUES ( %d, %d,"
                     " %s, %s, %s, %s, %s )"
-                    , fact->GetGroupId()
-                    , id
+                    , fact->GetGroupId(), id
                     , id_entry1.c_str(), id_entry2.c_str(), id_entry3.c_str(), id_entry4.c_str(), id_entry5.c_str());
 
                 Execute(mem.string());
