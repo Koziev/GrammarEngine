@@ -34,11 +34,25 @@ struct ParsingResult_Token : lem::NonCopyable
 };
 
 
+struct ParsingResult_Edge : lem::NonCopyable
+{
+    bool is_root;
+    bool is_orphant;
+    std::wstring word;
+    int word_pos;
+    std::wstring edge_name;
+    int parent_index;
+    std::wstring parent_word_str;
+};
+
+
 struct ParsingResult_Sentence
 {
     boost::ptr_vector<ParsingResult_Token> tokens;
+    boost::ptr_vector<ParsingResult_Edge> edges;
 
     void AddToken(ParsingResult_Token * token) { tokens.push_back(token); }
+    void AddEdge(ParsingResult_Edge * edge) {edges.push_back(edge); }
 };
 
 

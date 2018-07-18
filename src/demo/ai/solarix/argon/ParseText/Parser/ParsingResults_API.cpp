@@ -113,12 +113,12 @@ void ParsingResults_API::PrintTreeRendering(const wchar_t * tree_rendering)
 
 void ParsingResults_API::StartSyntaxTree()
 {
-    NotImplementedMethod();
+    assert(sentence_being_created!=nullptr);
 }
 
 void ParsingResults_API::EndSyntaxTree()
 {
-    NotImplementedMethod();
+    assert(sentence_being_created!=nullptr);
 }
 
 void ParsingResults_API::PrintSyntaxNode(
@@ -130,6 +130,16 @@ void ParsingResults_API::PrintSyntaxNode(
     int parent_index,
     const wchar_t * parent_word_str)
 {
-    NotImplementedMethod();
+    assert(sentence_being_created!=nullptr);
+
+    auto edge = new ParsingResult_Edge();
+    edge->is_root = is_root;
+    edge->is_orphant = is_orphant;
+    edge->word = word;
+    edge->word_pos = word_pos;
+    edge->parent_index = parent_index;
+    if(edge_name != nullptr) edge->edge_name = edge_name;
+    if(parent_word_str!=nullptr) edge->parent_word_str = parent_word_str;
+    sentence_being_created->AddEdge(edge);
 }
 

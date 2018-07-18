@@ -86,39 +86,64 @@ namespace http {
                 std::stringstream buf;
                 buf << "{\n";
 
-                buf << " \"tokens\":[\n";
+                buf << " \"tokens\":[";
 
                 for (auto it = sent.tokens.begin(); it != sent.tokens.end(); ++it)
                 {
                     if (it != sent.tokens.begin())
                     {
-                        buf << ",";
+                        buf << ",\n";
                     }
 
-                    buf << "  {\n";
+                    buf << "  { ";
                     const ParsingResult_Token & token = *it;
 
-                    buf << " \"word\": \"" << conv.to_bytes(token.word) << "\",";
-                    buf << " \"lemma\": \"" << conv.to_bytes(token.lemma) << "\",";
-                    buf << " \"part_of_speech\": \"" << conv.to_bytes(token.part_of_speech) << "\",";
+                    buf << "\"word\": \"" << conv.to_bytes(token.word) << "\", ";
+                    buf << "\"lemma\": \"" << conv.to_bytes(token.lemma) << "\", ";
+                    buf << "\"part_of_speech\": \"" << conv.to_bytes(token.part_of_speech) << "\", ";
 
-                    buf << " \"tags\": [ ";
+                    buf << "\"tags\": [ ";
 
                     for (auto jt = token.tags.begin(); jt != token.tags.end(); ++jt)
                     {
                         if (jt != token.tags.begin())
                         {
-                            buf << ",";
+                            buf << ", ";
                         }
                         buf << "\"" << conv.to_bytes(jt->tag_name) << "\": \"" << conv.to_bytes(jt->tag_value) << "\"";
                     }
 
-                    buf << " ]\n";
+                    buf << " ]";
 
-                    buf << "  }\n";
+                    buf << " }";
                 }
 
+                buf << "\n ],\n";
+
+                // Вывод ребер синтаксического дерева.
+                buf << " \"edges\":[";
+                for (auto it = sent.edges.begin(); it != sent.edges.end(); ++it)
+                {
+                    if (it != sent.edges.begin())
+                    {
+                        buf << ",\n";
+                    }
+
+                    auto &edge = *it;
+                    buf << "  {";
+
+                    buf << "\"word_pos\": " << edge.word_pos << ", ";
+                    buf << "\"word\": \"" << conv.to_bytes(edge.word) << "\",";
+                    buf << "\"edge_name\": \"" << conv.to_bytes(edge.edge_name) << "\", ";
+                    buf << "\"is_root\": " << edge.is_root << ", ";
+                    buf << "\"is_orphant\": " << edge.is_orphant << ", ";
+                    buf << "\"parent_index\": " << edge.parent_index << ", ";
+                    buf << "\"parent_word\": \"" << conv.to_bytes(edge.parent_word_str) << "\" ";
+
+                    buf << "}";
+                }
                 buf << " ]\n";
+
 
                 buf << "}";
 
