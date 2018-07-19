@@ -102,7 +102,7 @@ namespace http {
                     buf << "\"lemma\": \"" << conv.to_bytes(token.lemma) << "\", ";
                     buf << "\"part_of_speech\": \"" << conv.to_bytes(token.part_of_speech) << "\", ";
 
-                    buf << "\"tags\": [ ";
+                    buf << "\"tags\": { ";
 
                     for (auto jt = token.tags.begin(); jt != token.tags.end(); ++jt)
                     {
@@ -113,7 +113,7 @@ namespace http {
                         buf << "\"" << conv.to_bytes(jt->tag_name) << "\": \"" << conv.to_bytes(jt->tag_value) << "\"";
                     }
 
-                    buf << " ]";
+                    buf << " }";
 
                     buf << " }";
                 }

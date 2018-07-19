@@ -12,33 +12,17 @@
 
 int main(int argc, char* argv[])
 {
+    // Инициализация некоторых статических объектов, используемых библиотекой LEM.
     lem::LemInit initer;
 
     try
     {
-        /*
-                // Check command line arguments.
-                if (argc != 4)
-                {
-                    std::cerr << "Usage: http_server <address> <port> <doc_root>\n";
-                    std::cerr << "  For IPv4, try:\n";
-                    std::cerr << "    receiver 0.0.0.0 80 .\n";
-                    std::cerr << "  For IPv6, try:\n";
-                    std::cerr << "    receiver 0::0 80 .\n";
-                    return 1;
-                }
-
-                // Initialise the server.
-                http::server::server s(argv[1], argv[2], argv[3]);
-
-                // Run the server until stopped.
-                s.run();
-        */
-
-
         lem::Path dict_path("dictionary.xml");
 
-        bool emit_morph = false;
+        // Нужно ли выдавать список морфологических тегов для каждого токена
+        // в результатах частеречной разметки. 
+        //bool emit_morph = false;
+
         bool allow_fuzzy_recognition = false;
         std::string language_name;
 
@@ -95,10 +79,13 @@ int main(int argc, char* argv[])
                     {
                         lemmatizer_type = lem::to_int(argv[++i]);
                     }
+                    /*
                     else if (strcmp(opt, "emit_morph") == 0)
                     {
+                        // Чтобы выдавать полный список морфологических тегов в результатах
+                        // частеречной разметки, нужно указать опцию -emit_morph 1
                         emit_morph = lem::to_int(argv[++i]) == 1;
-                    }
+                    }*/
                     else if (strcmp(opt, "fuzzy_wordrecog") == 0)
                     {
                         allow_fuzzy_recognition = lem::to_int(argv[++i]) == 1;
