@@ -1093,6 +1093,20 @@ pattern ГруппаСущ1
  ВалентностьСущ(n)
 }
 
+// Ее же сердце разрывалось от боли.
+// ^^^^^
+pattern ГруппаСущ1
+{
+ adj=ПРИТЯЖ_ЧАСТИЦА:*{}
+ p=ЧАСТИЦА:*{ТИП_ЧАСТИЦЫ:ПОСТФИКС}
+ n=Сущ0 : export{ РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CHARCASING ПАДЕЖВАЛ node:root_node }
+}
+: links { n.<ATTRIBUTE>adj.<POSTFIX_PARTICLE>p }
+: ngrams
+{
+ adj_noun_score( adj, n )
+ ВалентностьСущ(n)
+}
 
 
 

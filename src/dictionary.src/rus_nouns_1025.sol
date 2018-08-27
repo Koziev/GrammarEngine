@@ -40,6 +40,7 @@ automat sg
  entry СОЧИ : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:FirstCapitalized }
  entry ТБИЛИСИ : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:FirstCapitalized }
  entry СССР : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:Upper }
+ entry СИЗО : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:ДА ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:Upper }
  entry НКВД : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:Upper }
  entry КГБ : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:Upper }
  entry ФСБ : СУЩЕСТВИТЕЛЬНОЕ { РОД:МУЖ ПЕРЕЧИСЛИМОСТЬ:НЕТ ОДУШ:НЕОДУШ paradigm Сущ_1025 CharCasing:Upper }

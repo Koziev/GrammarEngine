@@ -1,4 +1,4 @@
-﻿// CD->04.09.2016
+﻿// CD->01.08.2018
 
 #define possess_adj(a) tag ПРИЛАГАТЕЛЬНОЕ:a { ТИП_ПРИЛ:ПРИТЯЖ }
 
@@ -65,6 +65,7 @@ possess_adj("мартышкин")
 possess_adj("матушкин")
 possess_adj("митькин")
 possess_adj("мишин")
+possess_adj("васин")
 possess_adj("мишкин")
 possess_adj("мужнин")
 possess_adj("надькин")
