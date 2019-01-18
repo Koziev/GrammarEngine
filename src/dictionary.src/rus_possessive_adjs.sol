@@ -1,4 +1,4 @@
-﻿// CD->01.08.2018
+﻿// CD->22.10.2018
 
 #define possess_adj(a) tag ПРИЛАГАТЕЛЬНОЕ:a { ТИП_ПРИЛ:ПРИТЯЖ }
 
@@ -121,6 +121,7 @@ possess_adj("толин")
 possess_adj("толькин")
 possess_adj("тятькин")
 possess_adj("филькин")
+possess_adj("Костин")
 
 possess_adj("мой")
 possess_adj("твой")
