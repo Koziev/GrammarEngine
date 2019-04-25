@@ -4,7 +4,7 @@
 // Словарные статьи http://www.solarix.ru/for_developers/docs/entries.shtml#words
 //
 // LC->11.10.2010
-// LC->20.01.2019
+// LC->24.04.2019
 
 #include "sg_defs.h"
 
@@ -221,6 +221,7 @@ automat sg
  entry УСОБИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
  entry МЫЛЬНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
  entry ЛЕЧЕБНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
+ entry ГЕЛИОЛЕЧЕБНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
  entry ПЛЕВАТЕЛЬНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
  entry КАПЕЛЬНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }
  entry СТОЛЕШНИЦА : СУЩЕСТВИТЕЛЬНОЕ { paradigm Сущ_2018 РОД:ЖЕН  ПЕРЕЧИСЛИМОСТЬ:ДА  flag flexer { "pl" }    }

@@ -3,7 +3,7 @@
 // Особенности описания существительных http://www.solarix.ru/russian_grammar_dictionary/russian-noun-declension.shtml
 // Словарные статьи http://www.solarix.ru/for_developers/docs/entries.shtml#words
 //
-// LC->03.09.2016
+// LC->24.04.2019
 
 #include "sg_defs.h"
 
@@ -43,6 +43,7 @@ automat sg
  n( КНИГОВЫДАЧА )
  n( РАДИОПЕРЕДАЧА )
  n( ДОБЫЧА )
+ n( ГИДРОДОБЫЧА )
  n( КРЫША )
  n( УДАЧА )
  n( НЕУДАЧА )
