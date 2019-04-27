@@ -4017,7 +4017,7 @@ pattern НачНаречнойГруппы_ДоПосле
 
 pattern ГруппаНареч1
 {
- a=НачНаречнойГруппы_ДоПосле:export { node:root_node }
+ a=НачНаречнойГруппы_ДоПосле:export { node:root_node ТИП_МОДИФ }
  prepos=@or(предлог:до{},предлог:после{})
  n=СущСРодДоп{ Падеж:РОД }
 } : links { a.<PREPOS_ADJUNCT>prepos.<OBJECT>n }

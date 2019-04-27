@@ -49,7 +49,7 @@ pattern ЭтоКакЧастица
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-patterns ГруппаНареч1 export { node:root_node }
+patterns ГруппаНареч1 export { node:root_node ТИП_МОДИФ }
 
 
 

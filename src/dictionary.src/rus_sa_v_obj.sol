@@ -2900,3 +2900,9 @@ fact v_obj_score
   then return 5
 }
 
+// Ей в буквальном смысле свело живот.
+fact v_obj_score
+{
+ if context { rus_verbs:свести{} местоимение:я{ лицо:3 падеж:твор число:ед } }
+  then return -10
+}

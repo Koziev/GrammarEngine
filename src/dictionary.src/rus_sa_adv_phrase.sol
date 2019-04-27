@@ -192,7 +192,7 @@ pattern МодифНареч
 
 pattern Нареч0
 {
- наречие:*{} : export { СТЕПЕНЬ node:root_node }
+ наречие:*{} : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 }
 
 /*
@@ -212,17 +212,17 @@ pattern Нареч0
 
 // ----------------------------------------------------------------
 
-patterns Нареч1 export { СТЕПЕНЬ node:root_node }
+patterns Нареч1 export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 
 pattern Нареч1
 {
- Нареч0 : export { СТЕПЕНЬ node:root_node }
+ Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 }
 
 pattern Нареч1
 {
  not=частица:не{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 } : links { a.<NEGATION_PARTICLE>not }
 : ngrams { 1 }
 
@@ -244,7 +244,7 @@ pattern Нареч1
 pattern Нареч1
 {
  p=частица:*{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 } : links { a.<PREFIX_PARTICLE>p }
 : ngrams { -10 }
 
@@ -255,7 +255,7 @@ pattern Нареч1
 pattern Нареч1
 {
  not=частица:не{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  t='-'
  p=частица:то{}
 } : links
@@ -274,7 +274,7 @@ pattern Нареч1
 pattern Нареч1
 {
  not=частица:не{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=ЧастицаЛи
 } : links
 {
@@ -291,7 +291,7 @@ pattern Нареч1
 pattern Нареч1
 {
  not=частица:ну{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 } : links { a.<PREFIX_PARTICLE>not }
 
 
@@ -300,7 +300,7 @@ pattern Нареч1
 //     ^^^^^^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  t='-'
  a2=Нареч0
 }
@@ -312,7 +312,7 @@ pattern Нареч1
 // ^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=частица:ли{}
 } : links { a.<POSTFIX_PARTICLE>p }
 : ngrams { 1 }
@@ -322,7 +322,7 @@ pattern Нареч1
 // ^^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  t='-'
  p=частица:то{}
 } : links { a.<POSTFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>p }
@@ -333,7 +333,7 @@ pattern Нареч1
 // ^^^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=частица:вот{}
 } : links { a.<POSTFIX_PARTICLE>p }
   : ngrams { -1 }
@@ -343,7 +343,7 @@ pattern Нареч1
 // ^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=ЧастицаЖеУж
 } : links { a.<POSTFIX_PARTICLE>p }
   : ngrams { 1 }
@@ -353,7 +353,7 @@ pattern Нареч1
 //   ^^^^^^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=ЧастицаЖеУж
  p2=ЧастицаБы
 } : links { a.{ <POSTFIX_PARTICLE>p <POSTFIX_PARTICLE>p2 } }
@@ -366,7 +366,7 @@ pattern Нареч1
 pattern Нареч1
 {
  p0=частица:все{}
- a=наречие:так{} : export { СТЕПЕНЬ node:root_node }
+ a=наречие:так{} : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=частица:же{}
 }
 : links { a.{ <PREFIX_PARTICLE>p0 <POSTFIX_PARTICLE>p } }
@@ -381,7 +381,7 @@ pattern Нареч1
 // ^^^^^^
 pattern Нареч1
 {
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
  p=ЧастицаБы
 } : links { a.<POSTFIX_PARTICLE>p }
 
@@ -393,7 +393,7 @@ pattern Нареч1
 pattern Нареч1
 {
  p=частица:и{}
- a=Нареч0 : export { СТЕПЕНЬ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ ТИП_МОДИФ node:root_node }
 } : links { a.<PREFIX_PARTICLE>p }
   : ngrams { -3 }
 
@@ -406,7 +406,7 @@ wordentry_set НаречиеКвантификатор=наречие:{ лишь
 pattern Нареч1
 {
  mod=НаречиеКвантификатор
- a=Нареч0 : export { СТЕПЕНЬ:АТРИБ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ:АТРИБ ТИП_МОДИФ node:root_node }
 }
 : links { a.<ATTRIBUTE>mod }
 : ngrams { -2 }
@@ -418,7 +418,7 @@ pattern Нареч1
 pattern Нареч1
 {
  mod=наречие:*{ ~НаречиеКвантификатор }
- a=Нареч0 : export { СТЕПЕНЬ:АТРИБ node:root_node }
+ a=Нареч0 : export { СТЕПЕНЬ:АТРИБ ТИП_МОДИФ node:root_node }
 }
 : links { a.<ATTRIBUTE>mod }
 : ngrams { -11 }
@@ -428,7 +428,7 @@ pattern Нареч1
 
 pattern ГруппаНареч1
 {
- Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ}
 }
 
 
@@ -436,7 +436,7 @@ pattern ГруппаНареч1
 //    ^^^^^^^^^^^^^
 pattern ГруппаНареч1
 {
- a=наречие:очень{} : export { node:root_node }
+ a=наречие:очень{} : export { node:root_node ТИП_МОДИФ}
  conj=союз:и{}
  a2=наречие:очень{}
 } : links { a.<RIGHT_LOGIC_ITEM>conj.<NEXT_COLLOCATION_ITEM>a2 }
@@ -445,7 +445,7 @@ pattern ГруппаНареч1
 // очень даже может быть!
 pattern ГруппаНареч1
 {
- mod=наречие:очень{}
+ mod=наречие:очень{} : export {ТИП_МОДИФ}
  a=наречие:даже{} : export { node:root_node }
 } : links { a.<ATTRIBUTE>mod }
 
@@ -458,7 +458,7 @@ wordentry_set НемодифНареч = { наречие:уж{}, наречие
 pattern ГруппаНареч1
 {
  mod=МодифНареч
- a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod }
 : ngrams
@@ -477,7 +477,7 @@ pattern ГруппаНареч1
 {
  mod=наречие:совсем{}
  mod2=наречие:уже{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod.<ATTRIBUTE>mod2 }
 : ngrams
@@ -492,7 +492,7 @@ pattern ГруппаНареч1
 {
  mod=наречие:очень{}
  mod2=наречие:даже{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod.<ATTRIBUTE>mod2 }
 : ngrams
@@ -508,7 +508,7 @@ pattern ГруппаНареч1
 {
  p=частица:вот{}
  mod=МодифНареч
- a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ ~НемодифНареч } : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod.<PREFIX_PARTICLE>p }
 : ngrams
@@ -524,7 +524,7 @@ pattern ГруппаНареч1
 pattern ГруппаНареч1
 {
  mod=наречие:еще{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod }
 : ngrams
@@ -541,7 +541,7 @@ pattern ГруппаНареч1
 {
  mod1=наречие:*{ТИП_МОДИФ:НАРЕЧ0}
  mod2=МодифНареч
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod2.<ATTRIBUTE>mod1 }
 : ngrams
@@ -557,7 +557,7 @@ pattern ГруппаНареч1
 {
  mod1=наречие:уже{}
  mod2=наречие:совсем{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod2.<ATTRIBUTE>mod1 }
 : ngrams
@@ -575,7 +575,7 @@ pattern ГруппаНареч1
 {
  mod1=МодифБолееМенее
  mod2=БолееМенее
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod2.<ATTRIBUTE>mod1 }
 : ngrams
@@ -591,7 +591,7 @@ pattern ГруппаНареч1
 {
  mod=МодифНареч
  not=частица:не{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.{
              <ATTRIBUTE>mod
@@ -609,7 +609,7 @@ pattern ГруппаНареч1
 pattern ГруппаНареч1
 {
  q1=ОткрывающаяКавычка
- x=ГруппаНареч1 : export { node:root_node }
+ x=ГруппаНареч1 : export { node:root_node ТИП_МОДИФ }
  q2=ЗакрывающаяКавычка
 } : links
 {
@@ -625,7 +625,7 @@ pattern ГруппаНареч1
 {
  not=частица:не{}
  mod=МодифНареч
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 }
 : links { a.<ATTRIBUTE>mod.<NEGATION_PARTICLE>not }
 : ngrams
@@ -641,12 +641,12 @@ pattern ГруппаНареч1
  mod1=наречие:*{ ТИП_МОДИФ:НАРЕЧ0 }
  not=частица:не{}
  mod2=МодифНареч
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ }
 } : links {
            a.<ATTRIBUTE>mod2.{
-                                   <NEGATION_PARTICLE>not
-                                   <ATTRIBUTE>mod1
-                                  }
+                              <NEGATION_PARTICLE>not
+                              <ATTRIBUTE>mod1
+                             }
           }
 : ngrams
 {
@@ -661,7 +661,7 @@ pattern ГруппаНареч1
  mod1=наречие:*{ ТИП_МОДИФ:НАРЕЧ0 }
  mod2=МодифНареч
  not=частица:не{}
- a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node }
+ a=Нареч1{СТЕПЕНЬ:АТРИБ} : export { node:root_node ТИП_МОДИФ}
 } : links { a.{
                <NEGATION_PARTICLE>not
                <ATTRIBUTE>mod2.<ATTRIBUTE>mod1
@@ -687,14 +687,14 @@ collocation_set НаречныеСловосочетания=
  "сразу же"
 }
 
-pattern ГруппаНареч1
+pattern ГруппаНареч1 export { node:root_node (ТИП_МОДИФ) }
 {
  a="весь"{ падеж:вин }
  n="день"{ class:существительное падеж:вин } : export { node:root_node }
 } : links { n.<ATTRIBUTE>a }
 
 
-pattern ГруппаНареч1
+pattern ГруппаНареч1 export { node:root_node (ТИП_МОДИФ) }
 {
  НаречныеСловосочетания : export { node:root_node }
 }
@@ -708,7 +708,7 @@ pattern ГруппаНареч1
 pattern ГруппаНареч1
 {
  mod=Нареч0{ СТЕПЕНЬ:АТРИБ }
- a=Нареч1{ СТЕПЕНЬ:АТРИБ adv_adv_colloc(mod,_) } : export { node:root_node }
+ a=Нареч1{ СТЕПЕНЬ:АТРИБ adv_adv_colloc(mod,_) } : export { node:root_node ТИП_МОДИФ}
 }
 : links { a.<ATTRIBUTE>mod }
 : ngrams
@@ -767,7 +767,7 @@ pattern ГруппаНареч2
 
 // Дождь промочил его сверху донизу.
 //                    ^^^^^^^^^^^^^
-pattern ГруппаНареч1
+pattern ГруппаНареч1 export { node:root_node (ТИП_МОДИФ)}
 {
  a1=наречие:сверху{} : export { node:root_node }
  a2=наречие:донизу{}

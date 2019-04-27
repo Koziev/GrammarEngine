@@ -7706,6 +7706,20 @@ tree_scorer ВалентностьГлагола language=Russian generic
   then 1
 }
 
+// Ей вдруг захотелось закричать от разочарования.
+tree_scorer ВалентностьГлагола language=Russian generic
+{
+ if context { инфинитив:*{}.{ <OBJECT>"ей"{ падеж:твор } безлич_глагол:*{ МОДАЛЬНЫЙ } } }
+  then -2
+}
+
+// Ей было приятно думать об этом.
+tree_scorer ВалентностьГлагола language=Russian generic
+{
+ if context { инфинитив:*{}.{ <OBJECT>"ей"{ падеж:твор } } }
+  then -1
+}
+
 
 
 // ------------------------------------------------------
@@ -8843,6 +8857,13 @@ tree_scorer ВалентностьГлагола language=Russian generic
 tree_scorer ВалентностьГлагола language=Russian
 {
  if context { rus_verbs:смотреть{}.предлог:на{}.прилагательное:*{ падеж:предл } }
+  then -5
+}
+
+// Ей в глаза смотрела дама червей.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:смотреть{}.{ предлог:в{} "ей"{падеж:твор} } }
   then -5
 }
 
