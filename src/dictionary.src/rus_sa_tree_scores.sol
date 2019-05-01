@@ -8867,6 +8867,157 @@ tree_scorer ВалентностьГлагола language=Russian
   then -5
 }
 
+// Ей даже передалось его нервное напряжение.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:передаться{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей ничего не приходило на ум.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:приходить{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей и так все было ясно.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "было"."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей отвели пять часов на раздумья.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:отвести{}."ей"{падеж:твор} }
+  then -5
+}
+
+
+// Ей смертельно надоели эти смертельные игры.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:надоесть{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей пришлось нелегко в прошлом году.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:прийтись{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей отвечали только изумленные печальные взгляды.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:отвечать{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей просто дали пипка под зад.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:дать{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей все виделось в черном цвете.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:видеться{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей в голову пришла одна мысль.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:прийти{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей становилось трудно даже держаться прямо;
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:становиться{}."ей"{падеж:твор} }
+  then -5
+}
+
+
+// Ей бы и не дали вернуться.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:дать{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей всегда доставляло удовольствие плести интриги.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:доставлять{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей доставило немало удовольствия унизить меня.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:доставить{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей отдается вся энергия творящего артиста.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:отдаваться{}."ей"{падеж:твор} }
+  then -5
+}
+
+
+// Ей заранее был известен результат взрыва.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { прилагательное:*{краткий}."ей"{падеж:твор} }
+  then -2
+}
+
+// Ей ставят капельницы и делают уколы.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:ставить{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей вызвали «скорую помощь».
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:вызвать{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей подражали все девушки Советского Союза.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:подражать{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей разрешили оформить опеку над Сашей!
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:разрешить{}."ей"{падеж:твор} }
+  then -5
+}
+
+// Ей Самсонова подавай, шофера автобазы!
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:подавать{}."ей"{падеж:твор} }
+  then -5
+}
+
+
 
 // ----------------------------------------------------------------
 

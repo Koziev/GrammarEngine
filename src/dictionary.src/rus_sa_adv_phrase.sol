@@ -3244,6 +3244,21 @@ pattern Обст
 : ngrams { -2 }
 
 
+// Ему было все  равно, куда ехать.
+//          ^^^^^^^^^^^^^^^^^^^^^^
+pattern Обст
+{
+ adv=НАРЕЧИЕ:*{} : export { node:root_node }
+ comma1=','
+ adv2=НАРЕЧИЕ:*{}
+ v=ИНФИНИТИВ:*{}
+ comma2=@coalesce('.')
+}
+: links 
+{ 
+ adv.<PUNCTUATION>comma1.{ <SUBORDINATE_CLAUSE>v.<ATTRIBUTE>adv2 ~<PUNCTUATION>comma2}
+}
+: ngrams { -2 }
 
 
 
