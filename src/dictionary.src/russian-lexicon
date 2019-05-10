@@ -1,5 +1,8 @@
 "rus_sg_quantors.sol"
 
+"rus_compound_adj_prefixes.sol"
+"rus_compound_noun_prefixes.sol"
+
 "rus_adverbs_paradigmas.sol"
 "rus_adjectives_paradigmas.sol"
 "rus_verb_paradigmas.sol"
@@ -261,9 +264,6 @@
 "rus_measure_unit.sol"
 "rus_introductions.sol"
 "rus_prepositions.sol"
-
-"rus_compound_adj_prefixes.sol"
-"rus_compound_noun_prefixes.sol"
 
 "rus_pronouns.sol"
 "rus_prononciation.sol"

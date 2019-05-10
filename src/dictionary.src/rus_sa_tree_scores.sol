@@ -1124,7 +1124,38 @@ tree_scorer language=Russian
 }
 
 
+// Аллах сотворил всякое животное из воды.
+//       ^^^^^^^^                 ^^^^^^^
+tree_scorer language=Russian
+{
+ if context { rus_verbs:сотворить{}.предлог:из{} }
+  then 2
+}
 
+// Аллегра не сводила глаз с мужа.
+//            ^^^^^^^^^^^^^^
+tree_scorer language=Russian
+{
+ if context { rus_verbs:сводить{}.{ <OBJECT>"глаз"{число:мн} предлог:с{}.*{падеж:твор} } }
+  then 2
+}
+
+// А вы были помолвлены с Лиллианой.
+//           ^^^^^^^^^^^^^^^^^^^^^^
+tree_scorer language=Russian
+{
+ if context { прилагательное:помолвленный{}.предлог:с{}.*{падеж:твор} }
+  then 2
+}
+
+
+// А ты с ним плохо обращаешься?
+//      ^^^^^       ^^^^^^^^^^^
+tree_scorer language=Russian
+{
+ if context { rus_verbs:обращаться{}.предлог:с{}.*{падеж:твор} }
+  then 2
+}
 
 
 
@@ -9015,6 +9046,75 @@ tree_scorer ВалентностьГлагола language=Russian
 {
  if context { rus_verbs:подавать{}."ей"{падеж:твор} }
   then -5
+}
+
+// Ему это с рук не сойдет.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:сойти{}."с"."рук" }
+  then 5
+}
+
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "это"."с"."рук" }
+  then -10
+}
+
+
+// Ему хотелось душу из нее вытрясти.
+//              ~~~~~~~~~~~
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { существительное:душа{}."из".местоимение:*{} }
+  then -10
+}
+
+
+// Ему просто не приходилось этого делать.
+//                           ^^^^^^^^^^^^
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:делать{}."этого"{падеж:вин} }
+  then -10
+}
+
+
+// Ему хотелось драки, хотелось убить.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "хотелось".<OBJECT>существительное:*{число:мн падеж:вин} }
+  then -5
+}
+
+// А что со мной могло случиться?
+//   ~~~~~~~~~~~
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "что".предлог:с{} }
+  then -10
+}
+
+
+// А раньше-то что молчал?
+//             ~~~
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "молчал".<OBJECT>"что" }
+  then -100
+}
+
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { "молчал".<SUBJECT>"что" }
+  then -100
+}
+
+// А ты с ними по-русски говори.
+tree_scorer ВалентностьГлагола language=Russian
+{
+ if context { rus_verbs:говорить{}.ПРЕДЛОГ:С{}.МЕСТОИМЕНИЕ:*{ПАДЕЖ:ТВОР} }
+  then 1
 }
 
 

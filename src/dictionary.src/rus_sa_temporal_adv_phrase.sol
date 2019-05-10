@@ -1205,18 +1205,31 @@ wordentry_set МодифДляЧисл=наречие:{ уже, ровно, то
 // 5 лет подряд
 pattern ОбстФраза0
 {
- mod1=@optional(МодифДляЧисл)
  c=num_word:*{}
  n=СчетнСущДляНареч{ [-1]падеж:род } : export { node:root_node }
 } : links
 {
  n.{
-    ~<ATTRIBUTE>mod1
     <ATTRIBUTE>c
    }
 }
 : ngrams { 4 }
 
+// Ему сегодня исполнилось ровно 9 лет.
+//                         ^^^^^^^^^^^
+pattern ОбстФраза0
+{
+ mod1=МодифДляЧисл
+ c=num_word:*{}
+ n=СчетнСущДляНареч{ [-1]падеж:род } : export { node:root_node }
+} : links
+{
+ n.{
+    <ATTRIBUTE>mod1
+    <ATTRIBUTE>c
+   }
+}
+: ngrams { 5 }
 
 // Женщина минут 15 сидела и плакала.
 //         ^^^^^^^^
@@ -1251,12 +1264,34 @@ pattern ОбстФраза0
 }
 : ngrams { 5 }
 
+patterns NumAsAttr0 export { ПАДЕЖ РОД node:root_node }
+
+// пятнадцать лет подряд
+// ^^^^^^^^^^
+pattern NumAsAttr0
+{
+ n1=числительное:*{} : export { ПАДЕЖ РОД node:root_node }
+}
+
+// Ему скоро минет семьдесят четыре года.
+//                 ^^^^^^^^^^^^^^^^
+pattern NumAsAttr0
+{
+ n1=числительное:*{} : export { ПАДЕЖ РОД node:root_node }	
+ n2=числительное:*{ [-1]=n1:ПАДЕЖ }
+}
+: links
+{
+ n1.<NEXT_COLLOCATION_ITEM>n2
+}
+: ngrams { 5 }
+
 
 // пятнадцать лет подряд
 pattern ОбстФраза0
 {
  mod1=@optional(МодифДляЧисл)
- c=числительное:*{ падеж:вин }
+ c=NumAsAttr0{ падеж:вин }
  n=СчетнСущДляНареч
  mod2=КакНаречиеПодряд : export { node:root_node }
 } : links
@@ -1273,7 +1308,7 @@ pattern ОбстФраза0
 //                                           ^^^^^^^
 pattern ОбстФраза0
 {
- c=числительное:*{ падеж:вин }
+ c=NumAsAttr0{ падеж:вин }
  n=СчетнСущДляНареч{ [-1]=c:РОД } : export { node:root_node }
 } : links
 {
@@ -1282,12 +1317,33 @@ pattern ОбстФраза0
 : ngrams { 3 }
 
 
+
+
+
+// Ему нужно выдержать всего два дня.
+//                     ^^^^^^^^^^^^^
+pattern ОбстФраза0
+{
+ mod=НАРЕЧИЕ:*{ТИП_МОДИФ:СУЩ2}
+ c=NumAsAttr0{ падеж:вин }
+ n=СчетнСущДляНареч{ [-1]=c:РОД } : export { node:root_node }
+} : links
+{
+ n.<ATTRIBUTE>c.<ATTRIBUTE>mod
+}
+: ngrams { 8 }
+
+
+
+
 // Говорили часа полтора.
 //          ^^^^^^^^^^^^
+// Ему лет пятьдесят, определила Кристи.
+//     ^^^^^^^^^^^^^
 pattern ОбстФраза0
 {
  n=СчетнСущДляНареч{} : export { node:root_node }
- c=числительное:*{  [-1]=c:РОД падеж:вин }
+ c=NumAsAttr0{  [-1]=n:РОД падеж:вин }
 } : links
 {
  n.<ATTRIBUTE>c
@@ -1301,7 +1357,7 @@ pattern ОбстФраза0
 pattern ОбстФраза0
 {
  mod1=МодифДляЧисл
- c=числительное:*{ падеж:вин }
+ c=NumAsAttr0{ падеж:вин }
  n=СчетнСущДляНареч{ [-1]=c:РОД } : export { node:root_node }
 } : links
 {
@@ -2577,6 +2633,35 @@ pattern ОбстФраза0
  -2
  СущКакОбстВремени(n)
 }
+
+
+
+patterns ComparAdvHead export {node:root_node}
+
+pattern ComparAdvHead
+{
+ БолееМенееНаречВремя : export {node:root_node}
+}
+
+pattern ComparAdvHead
+{
+ n=ЧАСТИЦА:НЕ{}	
+ a=БолееМенееНаречВремя : export {node:root_node}
+} : links { a.<NEGATION_PARTICLE>n }
+
+
+
+// Ему было не больше восемнадцати лет.
+//          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+pattern ОбстФраза0
+{
+ head=ComparAdvHead : export {node:root_node}
+ obj=ЧислСущ{ПАДЕЖ:РОД}
+}
+: links { head.<OBJECT>obj }
+: ngrams { 2 }
+
+
 
 
 // ----------------------------------

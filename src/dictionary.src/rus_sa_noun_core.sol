@@ -1,4 +1,7 @@
-﻿// *********************
+﻿// 09.05.2019 добавлено правило для существительного в именительном
+//            падеже в роли префикса составного существительного.
+
+// *********************
 // СУЩЕСТВИТЕЛЬНОЕ
 // *********************
 patterns Сущ0 { language=Russian } export { РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CharCasing ПАДЕЖВАЛ node:root_node }
@@ -332,25 +335,6 @@ pattern Сущ0 export { РОД ПАДЕЖ ЧИСЛО ОДУШ (МОДАЛЬНЫ
 }
 
  
-// Бизнес-план мини-гостиницы
-//             ^^^^^^^^^^^^^^
-pattern Сущ0
-{
- w1='мини'
- w2='-'{ /*tokenizer_flag:word_conjunction*/ }
- n=существительное:* {} :export { node:root_node РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ ПАДЕЖВАЛ CharCasing }
-} : links { n.<NEXT_COLLOCATION_ITEM>w2.<NEXT_COLLOCATION_ITEM>w1 }
-
-// в первой половине невероятным образом промахнулся экс-форвард московского ЦСКА
-//                                                   ^^^^^^^^^^^
-pattern Сущ0
-{
- w1='экс'
- w2='-'{ /*tokenizer_flag:word_conjunction*/ }
- n=существительное:* { одуш:одуш } :export { node:root_node РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ ПАДЕЖВАЛ CharCasing }
-} : links { n.<NEXT_COLLOCATION_ITEM>w2.<NEXT_COLLOCATION_ITEM>w1 }
-
-
 // Составные существительные с известными префиксами:
 // квази-обезьяны
 // ^^^^^^^^^^^^^^
@@ -362,6 +346,20 @@ pattern Сущ0
 }
 : links { n.<PREFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>prefix }
 : ngrams { 1 }
+
+// Существительное в именительном падеже в роли префикса
+// составного существительного:
+// "бизнес-гостиница"
+pattern Сущ0
+{
+ prefix=СУЩЕСТВИТЕЛЬНОЕ:*{ПАДЕЖ:ИМ [-2]ЧИСЛО:ЕД}
+ t='-'{ [-1]tokenizer_flag:word_conjunction }
+ n=существительное:*{} : export { РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CharCasing ПАДЕЖВАЛ node:root_node }
+}
+: links { n.<PREFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>prefix }
+: ngrams { 1 }
+
+
 
 
 // составные существительные с неизвестными префиксами:
@@ -1041,6 +1039,63 @@ pattern ГруппаСущ1
  adj_noun_score( adj2, n )
  ВалентностьСущ(n)
 }
+
+
+patterns ПритяжЧастица export { node:root_node }
+
+// Я вижу ее зеленую бабочку
+//        ^^^^^^^^^^^^^^^^^^
+pattern ГруппаСущ1
+{
+ adj1=ПритяжЧастица
+ adj2=ГруппаПрил2{ ~RuAdjCannotModifNoun }
+ n=Сущ0{ [-7]=Adj2:ЧИСЛО [-7]=Adj2:ПАДЕЖ [-7]=Adj2:РОД [-2]=Adj2:ОДУШ }:export{ РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CHARCASING ПАДЕЖВАЛ node:root_node }
+}
+: links { n.{ <ATTRIBUTE>adj1 <ATTRIBUTE>adj2 } }
+: ngrams
+{
+ adj_noun_score( adj2, n )
+ ВалентностьСущ(n)
+}
+
+// Продам ее пышное свадебное платье.
+//        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+pattern ГруппаСущ1
+{
+ adj1=ПритяжЧастица
+ adj2=ГруппаПрил2{ ~RuAdjCannotModifNoun }
+ adj3=ГруппаПрил2{ =Adj2:ЧИСЛО =Adj2:ПАДЕЖ =Adj2:ОДУШ =Adj2:РОД ~RuAdjCannotModifNoun }
+ n=Сущ0{ [-7]=Adj2:ЧИСЛО [-7]=Adj2:ПАДЕЖ [-7]=Adj2:РОД [-2]=Adj2:ОДУШ }:export{ РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CHARCASING ПАДЕЖВАЛ node:root_node }
+}
+: links { n.{ <ATTRIBUTE>adj1 <ATTRIBUTE>adj2 <ATTRIBUTE>adj3 } }
+: ngrams
+{
+ adj_noun_score( adj1, n )
+ adj_noun_score( adj2, n )
+ adj_noun_score( adj3, n )
+ ВалентностьСущ(n)
+}
+
+
+// Продам ее новое пышное свадебное платье.
+//        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pattern ГруппаСущ1
+{
+ adj1=ПритяжЧастица
+ adj2=ГруппаПрил2{ ~RuAdjCannotModifNoun }
+ adj3=ГруппаПрил2{ =Adj2:ЧИСЛО =Adj2:ПАДЕЖ =Adj2:ОДУШ =Adj2:РОД ~RuAdjCannotModifNoun }
+ adj4=ГруппаПрил2{ =Adj2:ЧИСЛО =Adj2:ПАДЕЖ =Adj2:ОДУШ =Adj2:РОД ~RuAdjCannotModifNoun }
+ n=Сущ0{ [-7]=Adj2:ЧИСЛО [-7]=Adj2:ПАДЕЖ [-7]=Adj2:РОД [-2]=Adj2:ОДУШ }:export{ РОД ПАДЕЖ ЧИСЛО ОДУШ МОДАЛЬНЫЙ CHARCASING ПАДЕЖВАЛ node:root_node }
+}
+: links { n.{ <ATTRIBUTE>adj1 <ATTRIBUTE>adj2 <ATTRIBUTE>adj3 <ATTRIBUTE>adj4 } }
+: ngrams
+{
+ adj_noun_score( adj2, n )
+ adj_noun_score( adj3, n )
+ adj_noun_score( adj4, n )
+ ВалентностьСущ(n)
+}
+
 
 
 // Продам новое белое пышное свадебное платье.
