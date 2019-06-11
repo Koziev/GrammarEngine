@@ -299,6 +299,17 @@ pattern Подлежащее export { ЛИЦО ЧИСЛО (РОД) node:root_nod
 } : links { n.<ATTRIBUTE>a }
   : ngrams { 1 }
 
+  
+// Его приближенные выстроились в четыре ряда.
+// ^^^^^^^^^^^^^^^^
+pattern Подлежащее export { ЛИЦО ЧИСЛО (РОД) node:root_node }
+{
+ a=притяж_частица:*{}
+ n=ПричОборот2{ ПАДЕЖ:ИМ ЧИСЛО:МН ~CanAdjModifByAdv }:export { ЛИЦО:3 ЧИСЛО node:root_node }
+} : links { n.<ATTRIBUTE>a }
+  : ngrams { -1 }
+
+  
 
 // двое солдат вышли вслед за ним.
 // ^^^^^^^^^^^

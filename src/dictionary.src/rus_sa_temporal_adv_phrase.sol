@@ -1326,7 +1326,7 @@ pattern ОбстФраза0
 {
  mod=НАРЕЧИЕ:*{ТИП_МОДИФ:СУЩ2}
  c=NumAsAttr0{ падеж:вин }
- n=СчетнСущДляНареч{ [-1]=c:РОД } : export { node:root_node }
+ n=СчетнСущДляНареч{ [-1]=c:РОД [-2]ПАДЕЖ:РОД } : export { node:root_node }
 } : links
 {
  n.<ATTRIBUTE>c.<ATTRIBUTE>mod

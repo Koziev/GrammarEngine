@@ -30,35 +30,18 @@ pattern МестоимСПостфиксом
  p=ПостфиксМестоим
 } : links { n.<POSTFIX_PARTICLE>p }
 
+// Ему-таки удалось ее завести.
+// ^^^^^^^^
+// Он-де извинился
+// ^^^^^
 // тебя-то
 pattern МестоимСПостфиксом
 {
  n=местоимение:я{} : export { ПАДЕЖ ЧИСЛО РОД ЛИЦО node:root_node }
  t='-'
- p=частица:то{}
+ p=частица:*{ТИП_ЧАСТИЦЫ:ПОСТФИКС}
 } : links { n.<POSTFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>p }
 : ngrams { 1 }
-
-
-pattern МестоимСПостфиксом
-{
- n=местоимение:я{} : export { ПАДЕЖ ЧИСЛО РОД ЛИЦО node:root_node }
- t='-'
- p=частица:ка{}
-} : links { n.<POSTFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>p }
-: ngrams { 1 }
-
-
-// Он-де извинился
-// ^^^^^
-pattern МестоимСПостфиксом
-{
- n=местоимение:я{} : export { ПАДЕЖ ЧИСЛО РОД ЛИЦО node:root_node }
- t='-'
- p=частица:де{}
-} : links { n.<POSTFIX_PARTICLE>t.<NEXT_COLLOCATION_ITEM>p }
-
-
 
 // -----------------------------------------------------
 
