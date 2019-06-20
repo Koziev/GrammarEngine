@@ -234,6 +234,13 @@ tree_scorer language=Russian
 }
 
 
+// Стали слышны крики играющих детей
+// ^^^^^^^^^^^^
+tree_scorer language=Russian
+{
+ if context { прилагательное:*{}.<OBJECT>существительное:сталь{падеж:дат} }
+  then -10
+}
 
 
 
