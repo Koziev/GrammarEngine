@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataroot>
  <solarix_version>pro</solarix_version>
- <dictionary_version>226</dictionary_version>
+ <dictionary_version>264</dictionary_version>
  <alphabet>alphabet&#46;bin</alphabet>
  <morphology>diction&#46;bin</morphology>
  <lexicon_provider>sqlite</lexicon_provider>
