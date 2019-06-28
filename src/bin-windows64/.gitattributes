@@ -1,0 +1,2 @@
+lexicon.db filter=lfs diff=lfs merge=lfs -text
+diction.bin filter=lfs diff=lfs merge=lfs -text
