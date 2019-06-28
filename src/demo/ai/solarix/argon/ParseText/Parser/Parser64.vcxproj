@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -119,7 +119,7 @@ copy $(TargetPath) "e:\MVoice\lem\exe\"
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\..\..\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\DeSR\libdesr\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>e:\boost_1_68;$(ProjectDir)..\..\..\..\..\..\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\DeSR\libdesr\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CONSOLE;LEM_UNICODE_EX;DLL_EXPORTS;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_GM_ENGLISH;SOL_SQLITE_NGRAMS;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -134,7 +134,7 @@ copy $(TargetPath) "e:\MVoice\lem\exe\"
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;libdesrd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Parser.exe</OutputFile>
-      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.68\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)Parser.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -190,7 +190,7 @@ copy e:\mvoice\lem\lib\libdesr.dll $(OutDir)
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\..\..\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\DeSR\libdesr\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\boost.1.68;$(ProjectDir)..\..\..\..\..\..\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\CRFSuite\crfsuite-0.12\include;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\MaxEnt\win32\MaxentTaggerLib\;$(ProjectDir)..\..\..\..\..\..\demo\ai\solarix\DeSR\libdesr\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CONSOLE;LEM_UNICODE_EX;DLL_EXPORTS;SOL_CAA;SOL_LOADBIN;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOLARIX_PRO;SOLARIX_PREMIUM;SOLARIX_GRAMMAR_ENGINE;GM_THESAURUS;GM_STEMMER;SOL_GM_ENGLISH;SOL_SQLITE_NGRAMS;BOOST_THREAD_BUILD_LIB;SOL_CRF_MODEL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -206,7 +206,7 @@ copy e:\mvoice\lem\lib\libdesr.dll $(OutDir)
     <Link>
       <AdditionalDependencies>libcrf.lib;cqdb.lib;libLBFGS.lib;libdesr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Parser.exe</OutputFile>
-      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\boost.1.68\stage\lib;..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

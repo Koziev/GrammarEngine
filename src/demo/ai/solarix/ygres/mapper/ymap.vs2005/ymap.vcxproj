@@ -36,7 +36,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -53,7 +53,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -231,41 +231,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(LEM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;LEM_CONSOLE;BOOST_ALL_NO_LIB;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;LEM_WIN98;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>false</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader />
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat />
-      <CallingConvention>Cdecl</CallingConvention>
-      <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-    </ClCompile>
-    <Link>
-      <OutputFile>$(LEM_PATH)\exe64\ymap-pro.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(LEM_PATH)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention />
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
-    <ClCompile>
-      <Optimization>Full</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;LEM_CONSOLE;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_EXPORT_SQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -284,8 +249,46 @@
       <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
+      <OutputFile>$(LEM_PATH)\exe64\ymap-pro.exe</OutputFile>
+      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(OutDir)decompiler.exe  $(LEM_PATH)\exe\decompiler.exe</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>E:\boost.1.68\;$(ProjectDir)..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LEM_CONSOLE;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_CAA;SOL_REPORT;SOL_SAVETXT;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_EXPORT_SQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4995;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
       <OutputFile>$(OutDir)\decompiler.exe</OutputFile>
-      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>e:\boost.1.68\stage\lib;$(ProjectDir)..\..\..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />

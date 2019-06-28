@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
@@ -265,7 +265,7 @@
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\boost.1.68\;$(ProjectDir)..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;SOL_SAVETXT;SOL_REPORT;SOL_CAA;SOLARIX_PRO;SOLARIX_PREMIUM;SOL_LOADBIN;SOL_SQLITE_NGRAMS;SOL_SAVEBIN;SOL_SAVEBIN_PA;SOL_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -281,7 +281,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)Lexicon.exe</OutputFile>
-      <AdditionalLibraryDirectories>e:\boost.1.66\stage\lib;$(ProjectDir)..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\boost.1.68\stage\lib;$(ProjectDir)..\..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

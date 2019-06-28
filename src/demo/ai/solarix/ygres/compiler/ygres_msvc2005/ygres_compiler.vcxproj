@@ -34,12 +34,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -87,8 +87,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(TMP)\Compiler\Release-Pro64\</OutDir>
-    <IntDir>$(TMP)\Ygres\Release-Pro64\</IntDir>
+    <OutDir>e:\tmp\Compiler\Release-Pro64\Intermediate</OutDir>
+    <IntDir>e:\tmp\Compiler\Release-Pro64\Final</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -222,7 +222,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(BOOST_PATH);$(ProjectDir)..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\boost.1.68\;$(ProjectDir)..\..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEM_UNICODE_CONSOLE;SOL_LOADBIN;SOL_SAVEBIN;SOL_COMPILER;SOL_LOADTXT;SOL_SAVETXT;SOLARIX_PRO;SOL_NO_NGRAMS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
@@ -243,7 +243,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)\compiler.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\lib64;e:\boost.1.66\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\lib64;E:\boost.1.68\stage\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -253,7 +253,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(OutDir)compiler.exe  $(LEM_PATH)\exe64\compiler.exe</Command>
+      <Command>copy $(OutDir)compiler.exe e:\mvoice\lem\exe64\compiler.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
