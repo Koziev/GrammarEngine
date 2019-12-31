@@ -1729,7 +1729,6 @@ pattern ГлНастИнфВосх_Сказ
 }
 : links { v.<RIGHT_LOGIC_ITEM>comma.<NEXT_COLLOCATION_ITEM>v2 }
 
-
 // Он будет учиться, но не будет работать
 //                 ^^^^^^^^^^^^^^^^^^^^^^
 pattern ГлНастИнфВосх_Сказ

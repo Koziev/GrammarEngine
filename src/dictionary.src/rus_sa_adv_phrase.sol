@@ -1941,6 +1941,26 @@ pattern Обст
 }
 
 
+// Инфинитивная группа в роли сложного обстоятельства:
+// Ушки встанут, если подклеить.
+pattern Обст
+{
+ comma=','
+ conj=ПодчинСоюз : export { node:root_node }
+ p=Инф
+ @noshift(ПравыйОграничительОборота)
+ comma2=@optional(',')
+} : links
+{
+ conj.{
+       <PUNCTUATION>comma
+       <SUBORDINATE_CLAUSE>p.~<PUNCTUATION>comma2
+      }
+}
+
+
+
+
 // --------------------------------------------------------
 
 
@@ -2598,6 +2618,26 @@ pattern Обст
         ~<PUNCTUATION>comma2
 }
 : ngrams { 5 }
+
+// Пропущена запятая:
+// Пластинка играет лучше чем выглядит.
+pattern Обст
+{
+ adv=ГруппаСрНареч2 : export { node:root_node }
+ conj=союз:чем{}
+ p=ПридаточноеВОбороте
+ @noshift(ПравыйОграничительОборота)
+ comma2=@coalesce(',')
+}
+: links
+{
+ adv.<SUBORDINATE_CLAUSE>conj.
+      <NEXT_COLLOCATION_ITEM>p.
+       ~<PUNCTUATION>comma2
+}
+: ngrams { 1 }
+
+
 
 // Гул всё более и более утихал.
 //     ^^^^^^^^^^^^^^^^^
