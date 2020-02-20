@@ -14,6 +14,7 @@
 
 
 "rus_infinitives.sol"
+
 "rus_verbs_omonyms.sol"
 "rus_verb_omonym_2.sol"
 "rus_verb_omonym_3.sol"
@@ -30,6 +31,10 @@
 "rus_inf_aot.sol"
 "rus_infinitives_nesov.sol"
 "rus_infinitives_sov.sol"
+
+"rus_verbs_omonyms_gr.sol"
+
+
 "rus_verb_tags.sol"
 
 
@@ -40,7 +45,7 @@
 "rus_deepr_part3.sol"
 "rus_deepr_part4.sol"
 "rus_deepr_part5.sol"
-
+"rus_converbs_gr.sol"
 
 "rus_adverbs.sol"
 "rus_adverbs_part2.sol"
@@ -50,6 +55,7 @@
 "rus_v3.sol"
 
 
+"rus_verbs_gr.sol"
 "rus_verbs_aot_part0.sol"
 "rus_verbs_aot_part1.sol"
 "rus_verbs_aot_part2.sol"
@@ -157,6 +163,7 @@
 "rus_adj_tags.sol"
 
 
+"rus_nouns_gr.sol"
 "rus_nouns_part2.sol"
 "rus_nouns_part3.sol"
 "rus_nouns_part4.sol"
@@ -240,22 +247,31 @@
 "rus_wiki_nouns_1003.sol"
 "rus_wiki_nouns_1010.sol"
 "rus_wiki_nouns_1018.sol"
+"rus_wiki_nouns_1018__2.sol"
 "rus_wiki_nouns_1042.sol"
 "rus_wiki_nouns_1044.sol"
+"rus_wiki_nouns_1044__2.sol"
 "rus_wiki_nouns_1046.sol"
+"rus_wiki_nouns_1046__2.sol"
 "rus_wiki_nouns_1092.sol"
 "rus_wiki_nouns_1094.sol"
+"rus_wiki_nouns_1094__2.sol"
 "rus_wiki_nouns_2003.sol"
+"rus_wiki_nouns_2003__2.sol"
 "rus_wiki_nouns_2006.sol"
+"rus_wiki_nouns_2006__2.sol"
 "rus_wiki_nouns_2007.sol"
 "rus_wiki_nouns_2008.sol"
 "rus_wiki_nouns_2010.sol"
 "rus_wiki_nouns_2015.sol"
+"rus_wiki_nouns_2015__2.sol"
 "rus_wiki_nouns_2020.sol"
 "rus_wiki_nouns_3003.sol"
 "rus_wiki_nouns_3006.sol"
 "rus_wiki_nouns_3009.sol"
+"rus_wiki_nouns_3009__2.sol"
 "rus_wiki_nouns_3012.sol"
+"rus_wiki_nouns_3012__2.sol"
 "rus_noun_tags.sol"
 "rus_nouns_proper.sol"
 
