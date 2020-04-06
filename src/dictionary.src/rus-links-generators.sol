@@ -45,5 +45,14 @@
  link generator Прилагательное <увелич> Прилагательное -> <нейтрал>
  link generator Наречие <увелич> Наречие -> <нейтрал>
 
+
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> ИНФИНИТИВ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> СУЩЕСТВИТЕЛЬНОЕ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> ПРИЛАГАТЕЛЬНОЕ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> НАРЕЧИЕ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> ДЕЕПРИЧАСТИЕ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> ПРЕФИКС_СОСТАВ_ПРИЛ -> <cognate>
+ link generator СУЩЕСТВИТЕЛЬНОЕ <cognate> ГЛАГОЛ -> <cognate>
+
 }
 
