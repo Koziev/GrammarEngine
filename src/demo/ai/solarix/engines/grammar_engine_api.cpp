@@ -6961,13 +6961,13 @@ GREN_API(void*) sol_LoadSyntaxTree(HGREN hEngine, void * file_handle)
 	}
 	catch (const lem::E_BaseException &x)
 	{
-		HandleEngine(hengine)->error = x.what();
+		HandleEngine(hEngine)->error = x.what();
 		//MessageBoxW(NULL, x.what(), L"ERROR@6965", MB_OK);
 		return nullptr;
 	}
 	catch (const std::exception &y)
 	{
-		HandleEngine(hengine)->error = lem::to_unicode(y.what());
+		HandleEngine(hEngine)->error = lem::to_unicode(y.what());
 		//MessageBoxA(NULL, y.what(), "ERROR@6971", MB_OK);
 	}
 	catch (...)
